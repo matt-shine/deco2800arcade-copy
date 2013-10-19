@@ -63,8 +63,8 @@ public class BurningSkies extends GameClient {
 		menuScreen = new MenuScreen(this);
 		optionsScreen = new OptionsScreen(this);
 		helpScreen = new HelpScreen(this);
-		scoreScreen = new ScoreScreen(this);
-		gameOverScreen = new GameOverScreen(this);
+		scoreScreen = new ScoreScreen(this, networkClient);
+		gameOverScreen = new GameOverScreen(this, networkClient);
 	}
 	
 	public void playSong(String songName, boolean loop) {

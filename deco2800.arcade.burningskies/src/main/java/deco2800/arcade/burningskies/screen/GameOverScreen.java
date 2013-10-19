@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import deco2800.arcade.burningskies.BurningSkies;
 import deco2800.arcade.burningskies.Configuration;
 import deco2800.arcade.client.ArcadeInputMux;
+import deco2800.arcade.client.highscores.HighscoreClient;
+import deco2800.arcade.client.network.NetworkClient;
 
 public class GameOverScreen implements Screen {
 
@@ -28,13 +30,15 @@ public class GameOverScreen implements Screen {
 	private MenuInputProcessor processor;
 	private TextField playerNameInput;
 	private static long score;
+	private NetworkClient networkClient;
 
 	private int width = BurningSkies.SCREENWIDTH;
     private int height = BurningSkies.SCREENHEIGHT;
 
     
-	public GameOverScreen( BurningSkies game){
+	public GameOverScreen( BurningSkies game, NetworkClient networkClient){
 		this.game = game;	
+		this.networkClient = networkClient;
 	}
 
 	@Override
@@ -80,6 +84,7 @@ public class GameOverScreen implements Screen {
 		batch = new SpriteBatch();
 		skin = new Skin(Gdx.files.internal("images/menu/uiskin32.json"));
         background = new Image(new Texture(Gdx.files.internal("images/menu/game_over.png")));
+        final HighscoreClient player = new HighscoreClient(game.getPlayerName(), "Burning Skies", networkClient);
         
         stage = new Stage(width, height, true);
         ArcadeInputMux.getInstance().addProcessor(stage);
@@ -112,6 +117,8 @@ public class GameOverScreen implements Screen {
             	}
             	
             	Configuration.addScore(name, score);
+       
+            	player.storeScore("Number", (int) score);
             	game.setScreen(game.scoreScreen);
             }
 		});

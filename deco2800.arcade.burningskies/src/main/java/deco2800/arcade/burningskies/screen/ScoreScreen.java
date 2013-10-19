@@ -1,5 +1,6 @@
 package deco2800.arcade.burningskies.screen;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -23,6 +24,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import deco2800.arcade.burningskies.BurningSkies;
 import deco2800.arcade.burningskies.Configuration;
 import deco2800.arcade.client.ArcadeInputMux;
+import deco2800.arcade.client.highscores.Highscore;
+import deco2800.arcade.client.highscores.HighscoreClient;
+import deco2800.arcade.client.network.NetworkClient;
 
 public class ScoreScreen implements Screen {
 	private BurningSkies game;
@@ -43,13 +47,18 @@ public class ScoreScreen implements Screen {
 	private Label globalLabel;
 	private Label[] localNameLabelArray = new Label[5];
 	private Label[] localScoreLabelArray = new Label[5];
+	private Label[] globalNameLabelArray = new Label[5];
+	private Label[] globalScoreLabelArray = new Label[5];
 	private Map<Long, String> localScoresMap = new TreeMap<Long, String>();
+	private NetworkClient networkClient;
+	List<Highscore> topPlayers;
     
     int width = BurningSkies.SCREENWIDTH;
     int height = BurningSkies.SCREENHEIGHT;
 	
-	public ScoreScreen(BurningSkies game) {
+	public ScoreScreen(BurningSkies game, NetworkClient networkClient) {
 		this.game = game;
+		this.networkClient = networkClient;
 	}
 
 	@Override
@@ -104,7 +113,13 @@ public class ScoreScreen implements Screen {
         black = new BitmapFont(Gdx.files.internal("images/menu/font.fnt"), false);
         background = new Image(new Texture(Gdx.files.internal("images/menu/menu_background.png")));
         scoreTableImage = new Image(new Texture(Gdx.files.internal("images/menu/dual_score_table.png")));
+        HighscoreClient player = new HighscoreClient(game.getPlayerName(), "Burning Skies", networkClient);
+        
+        topPlayers = player.getGameTopPlayers(10, true, "Number");
 
+        System.out.println(topPlayers.get(0).playerName);
+        System.out.println(topPlayers.get(0).score);
+        
         stage = new Stage(width, height, true);
 	
         ArcadeInputMux.getInstance().addProcessor(stage);
@@ -142,11 +157,17 @@ public class ScoreScreen implements Screen {
 	    stage.addActor(localLabel);
 	    stage.addActor(globalLabel);
 	    
-	    int scoreLimit = localScoresMap.size();
-	    
-	    for (int i = 0; i < scoreLimit; i++) {	    
+	    int localScoreLimit = localScoresMap.size();
+	    int globalScoreLimit = topPlayers.size();
+	    		
+	    for (int i = 0; i < localScoreLimit; i++) {	    
 	    	stage.addActor(localNameLabelArray[i]);
 	    	stage.addActor(localScoreLabelArray[i]);
+	    }
+	    
+	    for (int i = 0; i < globalScoreLimit; i++) {	    
+	    	stage.addActor(globalNameLabelArray[i]);
+	    	stage.addActor(globalScoreLabelArray[i]);
 	    }
 	    
 	    background.toBack();    
@@ -198,6 +219,23 @@ public class ScoreScreen implements Screen {
 			localScoreLabelArray[i].setWidth(115);
 			
 			i++;
+		}
+		
+		for (int j = 0; j < topPlayers.size() && j < 5; j++) {
+			
+			String playerName = topPlayers.get(j).playerName;
+			if (playerName.length() > 6) playerName = playerName.substring(0,6);
+        	
+			globalNameLabelArray[j] = new Label(playerName, ls);
+			globalNameLabelArray[j].setX(685);
+			globalNameLabelArray[j].setY(720 - 225 - 70 - 66*j);
+			globalNameLabelArray[j].setWidth(115);
+			
+			globalScoreLabelArray[j] = new Label(String.valueOf(topPlayers.get(j).score), ls);
+			globalScoreLabelArray[j].setX(845);
+			globalScoreLabelArray[j].setY(720 - 225 - 70 - 66*j);
+			globalScoreLabelArray[j].setWidth(115);
+			
 		}
 	}
 }

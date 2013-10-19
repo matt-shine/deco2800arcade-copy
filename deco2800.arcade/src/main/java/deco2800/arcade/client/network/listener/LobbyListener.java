@@ -9,6 +9,8 @@ import deco2800.arcade.protocol.lobby.ClearListRequest;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.lobby.CreateMatchResponse;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponse;
+import deco2800.arcade.protocol.lobby.LobbyMessageRequest;
+import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
 import deco2800.arcade.protocol.lobby.RemovedMatchDetails;
 
 public class LobbyListener extends NetworkListener {
@@ -62,6 +64,9 @@ public class LobbyListener extends NetworkListener {
 				break;
 			
 			}
+		} else if (object instanceof LobbyMessageResponse) {
+			LobbyMessageResponse request = (LobbyMessageResponse) object;
+			ArcadeSystem.getCurrentGame().displayChat(request);
 		}
 	}
 }

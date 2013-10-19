@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.serializers.BlowfishSerializer;
 import com.esotericsoftware.kryo.serializers.FieldSerializer;
+import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Icon;
@@ -49,6 +50,8 @@ import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponseType;
 import deco2800.arcade.protocol.lobby.JoinLobbyResponseType;
 import deco2800.arcade.protocol.lobby.LobbyRequestType;
 import deco2800.arcade.protocol.lobby.NewLobbyRequest;
+import deco2800.arcade.protocol.lobby.LobbyMessageRequest;
+import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
 import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
 import deco2800.arcade.protocol.multiplayerGame.NewMatchmakingRequest;
@@ -155,6 +158,8 @@ public class Protocol {
 		kryo.register(ChatHistory.class);
 		kryo.register(TextMessage.class);
 		kryo.register(VoiceMessage.class);
+		kryo.register(LobbyMessageRequest.class);
+		kryo.register(LobbyMessageResponse.class);
 		
 		//Multiplayer Messages
 		kryo.register(NewMultiGameRequest.class);
@@ -163,6 +168,9 @@ public class Protocol {
 		kryo.register(GameStateUpdateRequest.class);
 		kryo.register(NewMultiSessionResponse.class);
 		kryo.register(NewMatchmakingRequest.class);
+		
+		//Multiplayer Pong Messages
+		kryo.register(com.badlogic.gdx.math.Vector2.class);
 
 		// Package Manager
 		kryo.register(GameUpdateCheckRequest.class);

@@ -94,8 +94,8 @@ public class junglejump extends GameClient implements InputProcessor {
 	public static int lives = 3;
 
 //	public int currentLevelIndex = 0;
-	private static LevelContainer currentCont = new LevelContainer();
-	public static Level currentLevel = LevelContainer.getLevel(LevelContainer.getCurrentLevel());
+	private static LevelContainer currentCont;
+	public static Level currentLevel;// = LevelContainer.getLevel(LevelContainer.getCurrentLevel());
 //	public static int currentWorld = 0;
 
 	public static float monkeyDefaultX;
@@ -145,7 +145,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyYoriginal = 0f;
 		// Replace "file" with chosen music
 		
-		URL path = this.getClass().getResource("/");
+		/*URL path = this.getClass().getResource("/");
 		
 		try {
 			String resource = path.toString().replace(".arcade/build/classes/main/", 
@@ -179,7 +179,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			menuSound.open(audioIn2);
 		} catch (Exception e) {
 			// IO Exception or problem with sound format
-		}
+		}*/
 
 		createWorld();
 
@@ -217,9 +217,9 @@ public class junglejump extends GameClient implements InputProcessor {
 		levelNumText = new Texture(Gdx.files.internal("1.png"));
 		//platform = new Texture("platform.png");
 
-
+// Commented out for lag
 		/* ACHIEVEMENT STUFF */
-		AchievementClient achClient = this.getAchievementClient();
+		/*AchievementClient achClient = this.getAchievementClient();
 		Game myGame = this.getGame();
 
 		achievementArray = new ArrayList<Achievement>();
@@ -238,7 +238,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		achievementNameFont        = new BitmapFont(false);
 		achievementDescriptionFont = new BitmapFont(false);
 		achievementThresholdFont   = new BitmapFont(false);
-		achievementIconTexture     = new Texture(("monkeySit.png"));
+		achievementIconTexture     = new Texture(("monkeySit.png"));*/
 
 		Gdx.app.log(junglejump.messages, "Launching Game");
 		camera = new OrthographicCamera();

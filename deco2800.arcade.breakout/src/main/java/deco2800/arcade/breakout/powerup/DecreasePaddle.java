@@ -13,17 +13,17 @@ import deco2800.arcade.breakout.screens.GameScreen;
 public class DecreasePaddle extends Powerup{
 
 	private final String img = "decreasepaddle.png";
-	private Sprite sprite = new Sprite(new Texture(Gdx.files.classpath("imgs/" + img)));
 	private GameScreen context;
 	//A variable for comparing floats
 	private final float EPSILON = 0.0001f;
-	
+	Sprite sprite;
 	/**
 	 * Instantiate a new instance of the decrease paddle class
 	 * @param gs - The current game screen
 	 */
 	public DecreasePaddle(GameScreen gs) {
 		context = gs;
+		setSprite();
 	}
 
 	/**
@@ -42,5 +42,10 @@ public class DecreasePaddle extends Powerup{
 	 */
 	public Sprite getSprite() {
 		return this.sprite;
+	}
+	
+	public Sprite setSprite(){
+		this.sprite = new Sprite(new Texture(Gdx.files.classpath("imgs/" + img)));
+		return sprite;
 	}
 }

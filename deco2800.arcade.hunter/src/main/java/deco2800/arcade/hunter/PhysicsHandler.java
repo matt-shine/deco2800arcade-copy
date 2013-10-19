@@ -61,6 +61,10 @@ public class PhysicsHandler {
         Iterator<Entity> i = entities.iterator();
         while (i.hasNext()) {
             Entity e = i.next();
+            boolean wasGrounded = false;
+            if (e.getCollider().bottom) {
+                wasGrounded = true;
+            }
             e.getCollider().clear();
 
             int mid, colTop;
@@ -68,17 +72,10 @@ public class PhysicsHandler {
 
             //Handle collision between the bottom of the entity and the map
             colTop = foregroundLayer.getColumnTop(mid);
-            if (colTop > e.getY()) {
+            if (colTop > e.getY() || wasGrounded) {
                 e.setY(colTop);
                 e.getCollider().bottom = true;
             }
-
-            // Check for entities going outside the bounds of the map
-//            int pane = foregroundLayer.getPane(e.getX());
-//            if (pane != -1 && e.getY() <= foregroundLayer.getPaneOffset(pane)) {
-//                System.out.println("Animal: ("+ e.getX() + ", " + e.getY() + ")");
-//                i.remove();
-//            }
         }
     }
 }

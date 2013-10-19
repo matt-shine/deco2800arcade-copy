@@ -175,23 +175,18 @@ public class Player extends Entity {
     public void update(float delta) {
         // Everything depends on everything else here, may have to rearrange, or
         // even double up on checks
+        setJumpVelocity(getJumpVelocity() - delta * Hunter.State.gravity);
+        setX(getX() + delta * Hunter.State.playerVelocity.x);
+
         if (state != State.DEAD) {
-            setX(getX() + delta * Hunter.State.playerVelocity.x);
-            setJumpVelocity(getJumpVelocity() - delta * Hunter.State.gravity);
-            setY(getY() + getJumpVelocity());
-
-            if (collider.top && Hunter.State.playerVelocity.y > 0) {
-                setJumpVelocity(0);
-            }
-
             if (collider.bottom && Hunter.State.playerVelocity.y < 0) {
                 setJumpVelocity(0);
                 setY(gamescreen.getForeground().getColumnTop(getX()));
+            } else {
+                setY(getY() + getJumpVelocity());
             }
 
-            if (collider.right) {
-                Hunter.State.playerVelocity.x = 0;
-            } else if (Hunter.State.playerVelocity.x < Hunter.State.gameSpeed) {
+            if (Hunter.State.playerVelocity.x < Hunter.State.gameSpeed) {
                 Hunter.State.playerVelocity.x += 100 * delta;
             }
 

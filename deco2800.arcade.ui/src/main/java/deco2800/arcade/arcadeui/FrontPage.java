@@ -376,6 +376,21 @@ public class FrontPage implements Screen {
         final Label logo = new Label("VAPOR", skin, "cgothic");
         logo.setAlignment(Align.left);
         
+        
+        logo.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	    	
+            	logo.setWidth(490);
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	logo.setWidth(465);
+        }}));   
+          
+        logo.addListener(((new ChangeListener() {
+                public void changed (ChangeEvent event, Actor actor) {
+                	ArcadeSystem.goToGame("main");
+                }
+            })));
+       
         final Label username = new Label(pName , skin, "cgothic");
         
         if (username.getText() != pName){

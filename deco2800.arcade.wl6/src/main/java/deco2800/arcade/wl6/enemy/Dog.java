@@ -1,7 +1,6 @@
 package deco2800.arcade.wl6.enemy;
 
 import deco2800.arcade.wl6.DoodadInfo;
-import deco2800.arcade.wl6.GameModel;
 
 public class Dog extends Enemy {
 
@@ -11,17 +10,17 @@ public class Dog extends Enemy {
     public Dog(int uid, DoodadInfo d) {
         super(uid);
 
-        setState(STATES.PATH);
         setHealth(STARTING_HEALTH);
-        this.setTextureName(d.texture);
+        setFaceDir(d.direction);
+        setPathing(true);
+        setState(STATES.PATH);
+        setPathSpeed(1500);
+        setChaseSpeed(1536);
+        setPain(false);
+        setDamage(0);
+
+        setTextureName(d.texture);
     }
-
-    @Override
-    public void tick(GameModel gameModel) {
-        super.tick(gameModel);
-
-    }
-
 
     @Override
     public int calcDamage(int dist, boolean speed, boolean look) {

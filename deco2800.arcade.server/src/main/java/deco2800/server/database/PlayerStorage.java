@@ -42,7 +42,7 @@ public class PlayerStorage {
 			if (!tableData.next()) {
 				Statement statement = connection.createStatement();
 				statement
-						.execute("CREATE TABLE PLAYERS(playerID INT PRIMARY KEY,"
+						.execute("CREATE TABLE PLAYERS(playerID INT NOT NULL PRIMARY KEY,"
 								+ "username VARCHAR(30) NOT NULL,"
 								+ "name VARCHAR(30),"
 								+ "email VARCHAR(30),"
@@ -109,7 +109,7 @@ public class PlayerStorage {
 	}
 
 	/**
-	 * Searches through a ResultSet for a player's information.
+	 * Searches through a ResultSet for for a player's information.
 	 * 
 	 * @param playerID
 	 *            The player's playerID
@@ -204,6 +204,20 @@ public class PlayerStorage {
 			throws DatabaseException {
 		updateField(playerID, newValue, "name");
 	}
+	
+	/**
+	 * Sets a player's age to the provided name.
+	 * 
+	 * @param playerID
+	 *            The player's playerID.
+	 * @param newValue
+	 *            The player's new age.
+	 * @throws DatabaseException
+	 */
+	public void updateAge(int playerID, String newValue)
+			throws DatabaseException {
+		updateField(playerID, newValue, "age");
+	}
 
 	/**
 	 * Updates a database field, given a playerID, the field to be updated and
@@ -252,5 +266,11 @@ public class PlayerStorage {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void addPlayer(int parseInt, String string, String string2,
+			String string3, String string4, String string5, String string6) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -89,6 +89,7 @@ public class Controller extends KeyAdapter{
 	}
 
 	public void StartRun(){
+		//FIXME big method
 		new Thread(){
 			public void run(){
 				int count = 0;      

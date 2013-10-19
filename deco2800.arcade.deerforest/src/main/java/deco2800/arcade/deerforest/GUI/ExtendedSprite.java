@@ -8,8 +8,13 @@ import com.badlogic.gdx.math.Rectangle;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.cards.AbstractMonster;
 
+/**
+ * A representation of a sprite specific to the main game. This sprite stores
+ * its own data (attack, picture file path, defence, etc...)
+ */
 public class ExtendedSprite extends Sprite {
 
+    //Variables for the sprites own knowledge of itself and the game
 	private Rectangle originZone;
 	private int player;
 	private boolean field;
@@ -34,6 +39,11 @@ public class ExtendedSprite extends Sprite {
     private float scaleTimeToMove;
     private float scaleCurrentMoveTime;
 
+    /**
+     * Initialises the ExtendedSprite, setting the correct selection settings
+     * and the movement settings
+     * @param t the texture the extended sprite uses when drawing itself
+     */
 	public ExtendedSprite(Texture t) {
 		super(t);
 		setOrigin(0,0);
@@ -56,7 +66,12 @@ public class ExtendedSprite extends Sprite {
         this.currentMoveTime = 0;
 	}
 
-    //Create a duplicate extended sprite from given extended sprite
+    /**
+     * Create a duplicate extended sprite from given extended sprite, note that
+     * it is a shallow copy, that is the texture used for the given sprite is
+     * the same as the one used for the copy
+     * @param s the extended sprite to duplicate
+     */
     public ExtendedSprite(ExtendedSprite s) {
         super(s.getTexture());
         setOrigin(0, 0);
@@ -72,6 +87,12 @@ public class ExtendedSprite extends Sprite {
         game = DeerForestSingletonGetter.getDeerForest().mainGame;
     }
 
+    /**
+     * Tests whether the sprite currently contains the given x,y point
+     * @param x the x part of the point
+     * @param y the y part of the point
+     * @return true is the sprite contains the point, false otherwise
+     */
 	public boolean containsPoint(int x, int y) {
 		
 		Rectangle r = this.getBoundingRectangle();
@@ -87,10 +108,13 @@ public class ExtendedSprite extends Sprite {
 		return false;
 	}
 
-    //Override the draw method to also draw atk / health
+    /**
+     * Override the draw method to also draw atk / health as well as glowing
+     * if the sprite is defined as being 'selected'
+     * @param batch the batch to draw the sprite with
+     */
     @Override
     public void draw(SpriteBatch batch) {
-
         //Make color selected card (if it is a card
         if(this.getCard() != null) {
             if(this.isSelected) {
@@ -118,7 +142,27 @@ public class ExtendedSprite extends Sprite {
 
         super.draw(batch);
 
-        //Draw card attack / health
+        //Draw the stats of the monster
+        drawStats(batch);
+
+        //Update moving to point
+        if(currentMoveTime < timeToMove) {
+            this.setPosition(this.getX()+deltaX/timeToMove, this.getY()+deltaY/timeToMove);
+            currentMoveTime++;
+        }
+
+        //Update scaling
+        if(scaleCurrentMoveTime < scaleTimeToMove) {
+            this.setScale(this.getScaleX()+scaleDeltaX/scaleTimeToMove, this.getScaleY()+scaleDeltaY/scaleTimeToMove);
+            scaleCurrentMoveTime++;
+        }
+    }
+
+    /**
+     * Draws the sprites stats if it is an instance of a monster card
+     * @param batch
+     */
+    private void drawStats(SpriteBatch batch) {
         if(this.card instanceof AbstractMonster) {
             AbstractMonster m = (AbstractMonster) this.getCard();
             Rectangle r = this.getBoundingRectangle();
@@ -142,34 +186,38 @@ public class ExtendedSprite extends Sprite {
             game.font.setColor(Color.WHITE);
             game.font.setScale(0.5f);
         }
-
-        //Update moving to point
-        if(currentMoveTime < timeToMove) {
-            this.setPosition(this.getX()+deltaX/timeToMove, this.getY()+deltaY/timeToMove);
-            currentMoveTime++;
-        }
-
-        //Update scaling
-        if(scaleCurrentMoveTime < scaleTimeToMove) {
-            this.setScale(this.getScaleX()+scaleDeltaX/scaleTimeToMove, this.getScaleY()+scaleDeltaY/scaleTimeToMove);
-            scaleCurrentMoveTime++;
-        }
     }
 
-    //Moves the sprite to the point over given time t
-    public void moveTo(float x, float y, int time) {
+    /**
+     * Moves the sprite to the point x,y over given time t
+     * @param x the x point to move the sprite to
+     * @param y the y point to move the sprite to
+     * @param t how long the sprite should take to move to the point
+     */
+    public void moveTo(float x, float y, int t) {
         this.deltaX = x - this.getX();
         this.deltaY = y - this.getY();
-        this.timeToMove = time;
+        this.timeToMove = t;
         this.currentMoveTime = 0;
     }
 
-    public void scaleTo(float xScale, float yScale, int time) {
+    /**
+     * Scales the sprite to the given scale over time t
+     * @param xScale the xScale to scale the sprite to
+     * @param yScale the yScale point to scale the sprite to
+     * @param t how long the sprite should take to scale
+     */
+    public void scaleTo(float xScale, float yScale, int t) {
         this.scaleDeltaX = xScale - this.getScaleX();
         this.scaleDeltaY = yScale - this.getScaleY();
-        this.scaleTimeToMove = time;
+        this.scaleTimeToMove = t;
         this.scaleCurrentMoveTime = 0;
     }
+
+    /**
+     * Getters and Setters for all variables that people may have to use
+     * when dealing with extended sprites
+     */
 
     public void setCard(AbstractCard c) {
         this.card = c;

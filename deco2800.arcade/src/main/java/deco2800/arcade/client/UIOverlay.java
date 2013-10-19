@@ -1,6 +1,7 @@
 package deco2800.arcade.client;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
 
 /**
  * This interface provides a way for games to talk to the overlay without the ui package being
@@ -19,16 +20,23 @@ public interface UIOverlay {
 	void setListeners(Screen l);
 	
 	
-	public static interface PopupMessage {
-		String getMessage();
-		//TODO: icon
+	public static abstract class PopupMessage {
+	    public abstract String getMessage();
+	    
+	    public Texture getTexture() {
+		return null;
+	    }
+
+	    public float displayTime() {
+		return 1.0f;
+	    }
 		//TODO: onclick behaviour
 	}
 	
 	
 	/**
 	 * For achievements, chat messages, etc.
-	 * @param s
+	 * @param p
 	 */
 	void addPopup(PopupMessage p);
 	

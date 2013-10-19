@@ -2,11 +2,18 @@ package deco2800.arcade.client;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.math.Vector2;
 
 public class ArcadeInputMux extends InputMultiplexer {
 
 	public static InputMultiplexer inst = null;
 	
+	private ArcadeInputMux() {
+		super();
+	}
+	
+	//FIXME this seems like a broken version of static singleton?
 	public static InputMultiplexer getInstance() {
 		if (inst == null) {
 			inst = new ArcadeInputMux();
@@ -14,5 +21,8 @@ public class ArcadeInputMux extends InputMultiplexer {
 		}
 		return inst;
 	}
+	
+	
+	
 	
 }

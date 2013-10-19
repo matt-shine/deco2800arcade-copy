@@ -19,7 +19,11 @@ public abstract class Paddle {
 	private float renderColourAlpha;
 	
 	Rectangle bounds = new Rectangle(); // The position (x,y) and dimensions (width,height) of the paddle
-	
+    
+    // we use this to keep track of what way we're moving so that
+    // we can award the Slider achievement
+    public float direction = 0;
+
 	/**
 	 * Basic constructor for paddle
 	 * @param position the initial position of the paddle
@@ -36,7 +40,8 @@ public abstract class Paddle {
 	 * @param y distance to move the paddle up (y<0 for down)
 	 */
 	public void move(float y) {
-		bounds.y += y;
+	    direction = y;
+	    bounds.y += y;		
 	}
 	
 	/**
@@ -85,8 +90,11 @@ public abstract class Paddle {
 	 */
 	public void update(Ball ball) {
 		//Clamp paddle within screen boundaries
-    	if (bounds.y > Pong.SCREENHEIGHT - bounds.height) bounds.y = Pong.SCREENHEIGHT - bounds.height;
-    	if (bounds.y < 0) bounds.y = 0;
+    	if (bounds.y > Pong.SCREENHEIGHT - bounds.height) {
+    		bounds.y = Pong.SCREENHEIGHT - bounds.height;
+    	} else if (bounds.y < 0) { 
+    		bounds.y = 0;
+    	}
 	}
 	
 }

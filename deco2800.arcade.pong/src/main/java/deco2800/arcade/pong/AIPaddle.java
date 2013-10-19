@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class AIPaddle extends Paddle {
 
-	public static final int AIPADDLESPEED = 150;
+	public static final int AIPADDLESPEED = 120;
 	
 	/**
 	 * Initialise paddle at specified position.

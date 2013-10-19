@@ -1,7 +1,9 @@
 {
     com.badlogic.gdx.graphics.g2d.BitmapFont: {
-        alt: { file: FreeSans_16.fnt },
-        default: { file: manteka_18.fnt }
+        default: { file: Fonts/Manteka18.fnt },
+        default-small: { file: Fonts/Manteka14.fnt },
+        default-large: { file: Fonts/Manteka34.fnt },
+        textbox: { file: Fonts/CenturyGothic20Bold.fnt }
     },
     com.badlogic.gdx.graphics.Color: {
         red:    { a: 1, r: 1, g: 0, b: 0 },
@@ -13,15 +15,25 @@
     },
     com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
         default: { font: default, fontColor: white },
+        error: { font: default, fontColor: red },
+		cgothic: { font: textbox, fontColor: white},
+        default-large: { font: default-large, fontColor: white },
         error: { font: default, fontColor: red }
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
-        default: { font: default, fontColor: white, selection: selection, cursor: cursor, background: textfield }
+        default: { font: textbox, fontColor: white, selection: selection, cursor: cursor, background: textbox }
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
-        default: { font: default, fontColor: white, up: default-round, down: default-round-down }
+        default: { font: default, fontColor: white, up: buttonGrey, down: buttonGrey, over: buttonGreen },
+        default-green: { font: default, fontColor: white, up: buttonGrey, down: buttonGrey, over: buttonGreen },
+        default-red: { font: default, fontColor: white, up: buttonGrey, down: buttonGrey, over: buttonRed },
+        default-blue: { font: default, fontColor: white, up: buttonGrey, down: buttonGrey, over: buttonBlue },
+        default-green-smallfont: { font: default-small, fontColor: white, up: buttonGrey, down: buttonGrey, over: buttonGreen },
+	    blue: { font: default, fontColor: white, up: iconBlue, down: iconBlue, over: iconBlue_plus },
+	    magenta: { font: default, fontColor: white, up: iconMagenta, down: iconMagenta, over: iconMagenta_plus },
+	    green: { font: default, fontColor: white, up: iconGreen, down: iconGreen, over: iconGreen_plus }
     },
     com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
-        default: { checkboxOn: check-on, checkboxOff: check-off, font: default, fontColor: white }
+    	default: { font: default, fontColor: white, checkboxOn: checkbox_checked, checkboxOff: checkbox_unchecked }
     }
 }

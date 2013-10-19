@@ -1,7 +1,7 @@
 package deco2800.arcade.arcadeui;
 
-import com.badlogic.gdx.Screen;
-
+import deco2800.arcade.arcadeui.store.StoreHome;
+import deco2800.arcade.arcadeui.store.StoreScreen;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -9,6 +9,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
+
 
 /**
  * This class is the main interface for the arcade.
@@ -19,46 +20,57 @@ import deco2800.arcade.model.Player;
 @ArcadeGame(id="arcadeui")
 public class ArcadeUI extends GameClient {
 	
-	private LoginScreen login = null;
-	private StoreScreen store = null;
-	private HomeScreen home = null;
-    @SuppressWarnings("unused")
-    private RegisterScreen register = null;
-	
-	private Screen current = null;
+	LoginScreen login = null;
+	StoreHome store = null;
+	HomeScreen home = null;
+    FrontPage main = null;
+    RegisterScreen register = null;
+    MultiplayerLobby lobby = null;
+    BettingWindow betting = null;
 
 	public ArcadeUI(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 	}
 
-    private void chooseScreen() {
-		if (player == null) {
-			current = login;
-		} else if (player.getUsername() == "store") {
-			current = store;
-			// Guys, I have no freaking clue, soz. -Addison(GameHost)
-		} else {
-			current = home;
-		}
-    }
-	
-	@Override
-	public void create() {
-		ArcadeSystem.openConnection();
-        login = new LoginScreen();
-        home = new HomeScreen();
-        store = new StoreScreen();
-        register = new RegisterScreen();
+    @Override
+    public void create() {
+        // TODO Move this to somewhere more appropriate.
+        // FIXME This really needs to be fixed.
+        // The connection should be attempted to be opened after a user has pressed login on the loginScreen
+        // But I don't know the best way or place to do this - abbjohn
+        ArcadeSystem.openConnection();
 
-        chooseScreen();
-		this.setScreen(current);
-		super.create();
-	}
+        // Initialise the different screens.
+        login = new LoginScreen(this);
+
+        home = new HomeScreen(this);
+        store = new StoreHome(this);
+        main = new FrontPage(this);
+
+        register = new RegisterScreen(this);
+        lobby = new MultiplayerLobby(this);
+        betting = new BettingWindow(this);
+
+        // Check to see if a user is logged in.
+        if (ArcadeSystem.isLoggedIn()) {
+            this.setScreen(main);
+        } else {
+            this.setScreen(login);
+        }
+        
+        if (ArcadeSystem.isMultiplayerEnabled()) {
+        	this.setScreen(lobby);
+        }
+
+        super.create();
+    }
+    
+    
+    
 
 	@Override
 	public void dispose() {
 		super.dispose();
-		current.dispose();
 	}
 	
 	@Override
@@ -86,5 +98,19 @@ public class ArcadeUI extends GameClient {
 	public Game getGame() {
 		return game;
 	}
-		
+	
+	public HomeScreen getHome() {
+		return home;
+	}
+	
+	public StoreHome getStore() {
+		return store;
+	}
+	
+	public MultiplayerLobby getLobby() {
+		return lobby;
+	}
+	public BettingWindow getBetting() {
+		return betting;
+	}
 }

@@ -56,7 +56,9 @@ public class ReplaySystemDemo {
 	    Thread.sleep( 1000 );
 	
 	    //Start the session with a game id and username
-	    replayHandler.startSession(123, "max_koopman");
+	    replayHandler.startSession("replay_handler_demo", "max_koopman");
+	    
+	    Thread.sleep( 1000 );
 	    
 		replayHandler.startRecording();
 		
@@ -94,45 +96,32 @@ public class ReplaySystemDemo {
 
 		Thread.sleep( 500 );
 
+		//You can get the session ID from the current session...
+		@SuppressWarnings("unused")
 		Integer session = replayHandler.getSessionId();
 		
-		replayHandler.endSession( replayHandler.getSessionId() );
+		//End the current session
+		replayHandler.endCurrentSession();
 		
 		Thread.sleep( 1000 );
 		
-		replayHandler.requestEventsForSession( session );
-	
+		//Playback the last session that was recorded
+		replayHandler.playbackLastSession();
+		
+		/* playbackFinished is a class variable that is set by the 
+		 * replayEventListener when the playback is complete. This is
+		 * just for the purposes of this demo, when implemented into a 
+		 * the runLoop() call just goes somewhere in the render code.
+		 */
 		playbackFinished = false;
 		while (!playbackFinished) {
+			/* While you are playing back, call runLoop to make sure 
+			 * the replay events fire.
+			 */
 			replayHandler.runLoop();
 		}
 		
 		System.out.println( "Exiting demo." );
-		/*
-		 
-		//Can still create nodes the old way too.
-		ReplayNode node;
-		node = new ReplayNode( "piece_move" );
-		node.addItem( "piece_id", new ReplayItem( new Integer( 12 ) ) ); //New integer is unnecessary.
-		node.addItem( "new_x", new ReplayItem( new Integer( 3 ) ) );
-		node.addItem( "new_y", new ReplayItem( new Integer( 4 ) ) );
-		replayHandler.pushEvent( node );
 		
-		Thread.sleep( 100 );
-		
-		node = new ReplayNode( "piece_move" );
-		node.addItem( "piece_id", new ReplayItem( new Integer( 3 ) ) );
-		node.addItem( "new_x", new ReplayItem( new Integer( 8 ) ) );
-		node.addItem( "new_y", new ReplayItem( new Integer( 4 ) ) );
-		replayHandler.pushEvent( node );
-		
-		
-		System.out.println( "Recording complete" );
-		Thread.sleep( 2000 );
-		System.out.println( "Starting playback" );
-		
-		replayHandler.startPlayback();
-		
-		*/
 	}
 }

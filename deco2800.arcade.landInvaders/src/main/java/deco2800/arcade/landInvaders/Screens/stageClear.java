@@ -20,10 +20,12 @@ public class stageClear extends JFrame{
 	private JLabel t = new JLabel();
 	private JButton next = new JButton();
 	private JFrame s = this;
+	private Invaders i;
  
-	public stageClear(){
+	public stageClear(Invaders invaders, int score){
 		super("stageClear");
 		this.add(p);
+		i = invaders;
 		p.add(t);
 		t.setIcon(new ImageIcon(
 				((new ImageIcon(this.getClass().getResource("/image/Level.png"))).getImage()).getScaledInstance(
@@ -63,7 +65,7 @@ public class stageClear extends JFrame{
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			Invaders m = new Invaders();
+			i.nextStage();
 			s.dispose();
 
 		}
@@ -96,7 +98,5 @@ public class stageClear extends JFrame{
 
 	
 
-	public static void main (String args[]) throws IOException {
-		stageClear w = new stageClear();
-	}
+
 }

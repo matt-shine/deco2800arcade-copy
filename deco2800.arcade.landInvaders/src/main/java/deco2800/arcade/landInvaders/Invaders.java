@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 
+import deco2800.arcade.landInvaders.Screens.stageClear;
+
 import java.util.ArrayList;
 
 public class Invaders extends JFrame implements Runnable {
@@ -35,14 +37,15 @@ public class Invaders extends JFrame implements Runnable {
 	private ArrayList<enemyShot> Eshots;
 
 	/**
-	 * Initialize objects in the game and allocate values to player, score and level
+	 * Initialize objects in the game and allocate values to player, score and
+	 * level
 	 */
 	public Invaders() {
 
 		super("Land Invaders");
 		bglevel = 1;
 		WallList = new ArrayList<blockWall>();
-		
+
 		healthBar = 3;
 		score = 0;
 		totalLevel = 1;
@@ -53,13 +56,13 @@ public class Invaders extends JFrame implements Runnable {
 		WallList.add(new blockWall(180, 480, 4, 8, imgString + "WallD.png"));
 		WallList.add(new blockWall(380, 480, 4, 8, imgString + "WallD.png"));
 		WallList.add(new blockWall(580, 480, 4, 8, imgString + "WallD.png"));
-		shotsNmb = 6;
+		shotsNmb = 100;
 		level = 1;
 		shots = new ArrayList<tankshot>();
 		Eshots = new ArrayList<enemyShot>();
-		
+
 		frame = new javax.swing.ImageIcon(this.getClass().getResource(
-				  "/image/Frame.png")).getImage();
+				"/image/Frame.png")).getImage();
 
 		addKeyListener(tank);
 		move = 0;
@@ -67,7 +70,7 @@ public class Invaders extends JFrame implements Runnable {
 		moveDown = false;
 
 		bg = new BufferedImage(Width, Height, BufferedImage.TYPE_INT_RGB);
-		
+
 		mains = bg.getGraphics();
 		mains.drawImage(background, 0, 0, Width, Height, panel);
 		mains.drawImage(frame, 0, 0, Width, 1000, panel);
@@ -79,17 +82,31 @@ public class Invaders extends JFrame implements Runnable {
 	}
 
 	/**
-	 * @param type selection of game sprite to be used in game
+	 * @param type
+	 *            selection of game sprite to be used in game
 	 * 
-	 * Sets the game theme and sprites for different stages
+	 *            Sets the game theme and sprites for different stages
 	 */
 	public void setGameImg(String type) {
-		
+
 		enemyG = new enemyGroup(3, 6, 50, 83, type + "TankE.png");
-		tank = new tank(type +"TankP.png");
+		tank = new tank(type + "TankP.png");
 		addKeyListener(tank);
 		background = new javax.swing.ImageIcon(this.getClass().getResource(
 				type + "BGD.png")).getImage();
+	}
+
+	public void showStageClear() {
+		isPause = false;
+		stageClear s = new stageClear(this, score);
+		this.setVisible(false);
+
+	}
+
+	public void nextStage() {
+
+		isPause = true;
+		this.setVisible(true);
 	}
 
 	/**
@@ -102,14 +119,14 @@ public class Invaders extends JFrame implements Runnable {
 	}
 
 	public void paint(Graphics g) {
-		
+
 		mains.setColor(Color.white);
-		mains.setFont(new Font("Algerian",1,28));
-		
+		mains.setFont(new Font("Algerian", 1, 28));
+
 		mains.clearRect(0, 0, Width, Height);
 		mains.drawImage(background, 0, 0, Width, Height, panel);
 		mains.drawImage(frame, 10, 20, Width, 662, panel);
-		
+
 		mains.drawString(score + "", 420, 54);
 		mains.drawString(healthBar + "", 150, 659);
 		mains.drawString(totalLevel + "", 580, 54);
@@ -135,7 +152,9 @@ public class Invaders extends JFrame implements Runnable {
 	}
 
 	/**
-	 * Constantly check if shots made by both player and enemy have hit an object, if it does not hit anything then the shots will be removed once it's out of the frame
+	 * Constantly check if shots made by both player and enemy have hit an
+	 * object, if it does not hit anything then the shots will be removed once
+	 * it's out of the frame
 	 */
 	public void shotUpdate() {
 		for (int i = 0; i < shots.size(); i++) {
@@ -155,7 +174,9 @@ public class Invaders extends JFrame implements Runnable {
 	}
 
 	/**
-	 * Check if shots made by player have hit an enemy based on location of shot and enemy object. If the shot hit an enemy, remove both enemy and shot objects.
+	 * Check if shots made by player have hit an enemy based on location of shot
+	 * and enemy object. If the shot hit an enemy, remove both enemy and shot
+	 * objects.
 	 */
 	public void hitEnemy() {
 
@@ -171,7 +192,8 @@ public class Invaders extends JFrame implements Runnable {
 	}
 
 	/**
-	 * Check if any shots made by enemy and player hit a wall. If the condition is met, remove a part of the wall
+	 * Check if any shots made by enemy and player hit a wall. If the condition
+	 * is met, remove a part of the wall
 	 * 
 	 * 
 	 */
@@ -193,8 +215,12 @@ public class Invaders extends JFrame implements Runnable {
 	}
 
 	/**
-	 * @param count determine the amount of time before enemy object change position
-	 * @param moveD determines the boolean condition if the enemy group is allowed to move down or not
+	 * @param count
+	 *            determine the amount of time before enemy object change
+	 *            position
+	 * @param moveD
+	 *            determines the boolean condition if the enemy group is allowed
+	 *            to move down or not
 	 */
 	public void enemyMove(int count, boolean moveD) {
 
@@ -216,9 +242,10 @@ public class Invaders extends JFrame implements Runnable {
 	}
 
 	/**
-	 * @param count determine the level of the game
+	 * @param count
+	 *            determine the level of the game
 	 * 
-	 * Select the action level of the game. Game has 3 levels.
+	 *            Select the action level of the game. Game has 3 levels.
 	 */
 	public void levelSelect(int count) {
 
@@ -240,10 +267,11 @@ public class Invaders extends JFrame implements Runnable {
 	}
 
 	/**
-	 * Check if any enemies are left. If no enemies are left and level is not 3, increase the action level of the game.
+	 * Check if any enemies are left. If no enemies are left and level is not 3,
+	 * increase the action level of the game.
 	 */
 	public void levelCheck() {
-		
+
 		if (enemyG.isEmpty() == true) {
 			if (level != 3) {
 				level++;
@@ -251,99 +279,109 @@ public class Invaders extends JFrame implements Runnable {
 				level = 1;
 			}
 			restart();
+			showStageClear();
 
 		}
 	}
 
-	
 	/**
 	 * Restart the games and reset sprites for the new game level
 	 */
 	public void restart() {
-		boolean createWall =false;
-		if(bglevel != 3 && level ==1){
-			bglevel ++;
+		boolean createWall = false;
+		if (bglevel != 3 && level == 1) {
+			bglevel++;
 			createWall = true;
-			
+
 		}
-		if(bglevel ==3 && level ==1){
+		if (bglevel == 3 && level == 1) {
 			WallList = new ArrayList<blockWall>();
 		}
 		shots = new ArrayList<tankshot>();
 		Eshots = new ArrayList<enemyShot>();
-		if(bglevel==1) {
+		if (bglevel == 1) {
 			imgString = "/tank/";
 		}
-		if(bglevel==2){
+		if (bglevel == 2) {
 			imgString = "/plane/";
 
 		}
-		if(bglevel==3){
+		if (bglevel == 3) {
 			imgString = "/ship/";
 			bglevel = 1;
 
 		}
-		
-		if(createWall==true){
+
+		if (createWall == true) {
 			WallList = new ArrayList<blockWall>();
 			WallList.add(new blockWall(180, 480, 4, 8, imgString + "WallD.png"));
 			WallList.add(new blockWall(380, 480, 4, 8, imgString + "WallD.png"));
 			WallList.add(new blockWall(580, 480, 4, 8, imgString + "WallD.png"));
-			createWall =false;
+			createWall = false;
 		}
 		setGameImg(imgString);
 		move = 0;
 		direction = 1;
 		moveDown = false;
 	}
-	
 
 	/**
-	 * @param count controls the rate of shots fired by enemy sprites
+	 * @param count
+	 *            controls the rate of shots fired by enemy sprites
 	 */
 	public void levelTwo(int count) {
 
 		Eshots.addAll(enemyG.enemyShot(count));
 
 	}
-	
-	public void hitPlayer(){
-		for(int i= 0; i< Eshots.size(); i ++){
-			if((tank.PositionX()+ tank.width()> Eshots.get(i).positionX())&&
-					(Eshots.get(i).positionX()> (tank.PositionX() - Eshots.get(i).width()))&&
-					(Eshots.get(i).positionY() > (tank.PositionY() - Eshots.get(i).height()))&&
-					(Eshots.get(i).positionY()< tank.PositionY() + tank.height())
-					){
+
+	public void hitPlayer() {
+		for (int i = 0; i < Eshots.size(); i++) {
+			if ((tank.PositionX() + tank.width() > Eshots.get(i).positionX())
+					&& (Eshots.get(i).positionX() > (tank.PositionX() - Eshots
+							.get(i).width()))
+					&& (Eshots.get(i).positionY() > (tank.PositionY() - Eshots
+							.get(i).height()))
+					&& (Eshots.get(i).positionY() < tank.PositionY()
+							+ tank.height())) {
 				Eshots.remove(i);
 				healthBar--;
-				
+
 			}
 		}
 	}
-	
 
 	@Override
 	public void run() {
 		int count = 0;
-		while (isPause) {
-			tank.tankMove();
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException ie) {
-			}
-			hitPlayer();
-			if (tank.shotCheck() == true) {
-				if (shots.size() < shotsNmb)
-					shots.add(new tankshot(tank.PositionX(), tank.PositionY()));
-				tank.finishShot();
-			}
+		while (true) {
+			if (isPause) {
+				tank.tankMove();
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException ie) {
+				}
+				hitPlayer();
+				if (tank.shotCheck() == true) {
+					if (shots.size() < shotsNmb)
+						shots.add(new tankshot(tank.PositionX(), tank
+								.PositionY()));
+					tank.finishShot();
+				}
 
-			shotUpdate();
-			levelSelect(count);
-			hitEnemy();
-			hitwall();
-			repaint();
-			count++;
+				shotUpdate();
+				levelSelect(count);
+				hitEnemy();
+				hitwall();
+				repaint();
+				count++;
+			}else{
+				try {  
+                    Thread.sleep(2000);  
+                } catch (InterruptedException e) {  
+                    e.printStackTrace();  
+                }  
+			}
 		}
 
 	}

@@ -319,9 +319,9 @@ public class MultiplayerLobby implements Screen {
 		 */
 
 		if (Gdx.input.isKeyPressed(Keys.B)) {
-			dispose();
-			ArcadeSystem.setPlayerBetting(true);
-			arcadeUI.setScreen(arcadeUI.getBetting());
+			//dispose();
+			//ArcadeSystem.setPlayerBetting(true);
+			//arcadeUI.setScreen(arcadeUI.getBetting());
 		}
 		if (Gdx.input.isKeyPressed(Keys.L)) {
 

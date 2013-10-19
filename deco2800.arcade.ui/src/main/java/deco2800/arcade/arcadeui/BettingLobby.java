@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
@@ -100,8 +101,36 @@ public class BettingLobby implements Screen {
 				arcadeUI.setScreen(arcadeUI.getLobby());
 			}
 		});
+		
+		updateButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				gamesTable.clear();
+
+				if (matches.size() > 0) {
+					for (int i = 0; i < matches.size(); i++) {
+						Label matchLabel = new Label("GameId: "
+								+ matches.get(i).gameId, skin2);
+						Label player = new Label("Player: "
+								+ matches.get(i).hostPlayerId, skin2);
+						final TextButton button5 = new TextButton("Join", skin);
+						final int matchId = matches.get(i).matchId;
+
+						table2.center().left();
+						table2.add(matchLabel).width(130).padTop(5)
+								.padLeft(150);
+						table2.add(player).width(130).padTop(5).padLeft(130);
+						table2.add(button5).width(130).height(20).padTop(5);
+						table2.row();
+
+						button5.addListener(new JoinGameListener(matchId, lobby));
+					}
+				}
+			}
+		});
 
 	}
+	
+	
 
 	@Override
 	public void show() {

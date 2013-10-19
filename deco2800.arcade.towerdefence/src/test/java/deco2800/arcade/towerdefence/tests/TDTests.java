@@ -100,12 +100,12 @@ public class TDTests {
 		//Create a grid
 		Grid grid = new Grid(100, 100, "grid", 10, null, new Vector2(9,4));
 		//Add some obstacles
-		grid.buildObject(new GridObject(1,2,grid));
-		grid.buildObject(new GridObject(1,3,grid));
-		grid.buildObject(new GridObject(1,4,grid));
-		grid.buildObject(new GridObject(1,5,grid));
-		grid.buildObject(new GridObject(3,5,grid));
-		grid.buildObject(new GridObject(3,6,grid));
+		grid.buildObject(new GridObject(1,2,grid, null, null));
+		grid.buildObject(new GridObject(1,3,grid, null, null));
+		grid.buildObject(new GridObject(1,4,grid, null, null));
+		grid.buildObject(new GridObject(1,5,grid, null, null));
+		grid.buildObject(new GridObject(3,5,grid, null, null));
+		grid.buildObject(new GridObject(3,6,grid, null, null));
 		//Try finding a path
 		Path path = grid.pathfinder().findPath(null, 0, 4, 9, 4);
 		Assert.assertEquals(9, path.getStep(path.getLength()-1).getX());

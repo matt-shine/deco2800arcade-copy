@@ -1,0 +1,36 @@
+<achievements>
+	<achievement id="deerforest.winGame">
+		  <name>Winner!</name>
+		  <description>Win a game of Deer Forest</description>
+		  <awardThreshold>1</awardThreshold>
+		  <icon>deerforest.winGame.png</icon>
+	</achievement>
+	
+	<achievement id="deerforest.draw">
+		  <name>Draw A Card</name>
+		  <description>Wow.</description>
+		  <awardThreshold>1</awardThreshold>
+		  <icon>deerforest.draw.png</icon>
+	</achievement>
+	
+	<achievement id="deerforest.killer">
+		  <name>Killer</name>
+		  <description>Kill a monster</description>
+		  <awardThreshold>1</awardThreshold>
+		  <icon>deerforest.killer.png</icon>
+	</achievement>
+	
+	<achievement id="deerforest.sweetSilence">
+		  <name>Sweet Silence</name>
+		  <description>Mute the background music</description>
+		  <awardThreshold>1</awardThreshold>
+		  <icon>deerforest.VolumeToggler.png</icon>
+	</achievement>
+	
+	<achievement id="deerforest.drawMaster">
+		  <name>Draw Master</name>
+		  <description>Draw 20 cards in a single game</description>
+		  <awardThreshold>1</awardThreshold>
+		  <icon>deerforest.drawMaster.png</icon>
+	</achievement>
+</achievements>

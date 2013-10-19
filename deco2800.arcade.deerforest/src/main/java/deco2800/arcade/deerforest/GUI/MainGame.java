@@ -195,6 +195,12 @@ public class MainGame extends Game {
         this.effectsMuted = !effectsMuted;
         if(bgLoop.isPlaying()) {
             bgLoop.pause();
+            
+         // Give the sweet silence card achievement
+    		if (DeerForestSingletonGetter.getDeerForest() != null) {
+    			DeerForestSingletonGetter.getDeerForest().incrementAchievement("deerforest.sweetSilence");
+    		}        
+            
         } else {
             bgLoop.play();
         }

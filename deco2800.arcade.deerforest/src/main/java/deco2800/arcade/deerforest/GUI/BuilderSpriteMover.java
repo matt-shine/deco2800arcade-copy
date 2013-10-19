@@ -172,10 +172,10 @@ public class BuilderSpriteMover {
 
 	    	Map<String,Set<BuilderSprite>> spriteMap = deerForest.deckBuilderView.getSpriteMap();
 	    	
-	    	System.out.println("Up to keys");
+	    	DeerForest.logger.info("Up to keys");
 	    	
 	    	for(String key : Keys) {
-	    		System.out.println("Key is: " + key);
+	    		DeerForest.logger.info("Key is: " + key);
 	    		for(BuilderSprite s : spriteMap.get(key)) {
 	    			if(s.containsPoint(x, y)) {
 	    				return s;

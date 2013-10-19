@@ -34,6 +34,8 @@ public class MainInputProcessor implements InputProcessor {
     private boolean gameFinished;
     private boolean drawn;
     private boolean gameStarted;
+    
+    private int cardsDrawn;
 
     SpellLogic spellHandler;
 
@@ -56,6 +58,8 @@ public class MainInputProcessor implements InputProcessor {
         this.gameStarted = false;
         //Set up a spellLogic handler
         spellHandler = new SpellLogic(game, view, this);
+        
+        cardsDrawn = 0;
 	}
 
     /**
@@ -159,6 +163,22 @@ public class MainInputProcessor implements InputProcessor {
         if(!drawn && game.getPhase().equals("DrawPhase")) {
             if(view.deckAtPoint(x, y)) {
                 doDraw();
+                
+                cardsDrawn++;
+                DeerForest.logger.info("Cards drawn: " + cardsDrawn);
+                
+                if (cardsDrawn == 30) {
+            		// Give the draw master card achievement
+            		if (DeerForestSingletonGetter.getDeerForest() != null) {
+            			DeerForestSingletonGetter.getDeerForest().incrementAchievement("deerforest.drawMaster");
+            		}
+                }
+                
+        		// Give the draw card achievement
+        		if (DeerForestSingletonGetter.getDeerForest() != null) {
+        			DeerForestSingletonGetter.getDeerForest().incrementAchievement("deerforest.draw");
+        		}
+                
                 this.drawn = true;
             }
         }
@@ -418,6 +438,7 @@ public class MainInputProcessor implements InputProcessor {
 		//Set to hand rectangle
 		Rectangle r = view.getArena().getAvailableZones(player, false, false).get(0);
 		SpriteLogic.setCurrentSelectionToRectangle(r);
+		
 	}
 
     /**

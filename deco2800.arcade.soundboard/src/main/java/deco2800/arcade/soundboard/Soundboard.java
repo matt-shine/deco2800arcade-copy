@@ -69,14 +69,14 @@ public class Soundboard extends GameClient {
      */
     private void fetchLoops() {
         HashMap<String, String> loopsSetup = new HashMap<String, String>();
-        loopsSetup.put("creepy_loop.wav", "Creepy");
-        loopsSetup.put("dub_loop.wav", "Dubstep");
-        loopsSetup.put("funk_loop.wav", "Funk");
-        loopsSetup.put("house_loop.wav", "House");
-        loopsSetup.put("minimal_loop.wav", "Minimal Electro");
-        loopsSetup.put("techno_loop.wav", "Techno");
-        loopsSetup.put("dial_up_loop.wav", "Dial Up");
-        loopsSetup.put("click_loop.wav", "Clicks");
+        loopsSetup.put("creepy_loop.mp3", "Creepy");
+        loopsSetup.put("dub_loop.mp3", "Dubstep");
+        loopsSetup.put("funk_loop.mp3", "Funk");
+        loopsSetup.put("house_loop.mp3", "House");
+        loopsSetup.put("minimal_loop.mp3", "Minimal Electro");
+        loopsSetup.put("techno_loop.mp3", "Techno");
+        loopsSetup.put("dial_up_loop.mp3", "Dial Up");
+        loopsSetup.put("click_loop.mp3", "Clicks");
 
 
         for (Map.Entry<String, String> file : loopsSetup.entrySet()) {
@@ -90,20 +90,20 @@ public class Soundboard extends GameClient {
      */
     private void fetchSamples() {
         HashMap<String, String> samplesSetup = new HashMap<String, String>();
-        samplesSetup.put("hat.wav", "Hat");
-        samplesSetup.put("huge.wav", "HUGE!");
-        samplesSetup.put("beta.wav", "Beta");
-        samplesSetup.put("arcade.wav", "Arcade");
-        samplesSetup.put("pluck.wav", "Pluck");
-        samplesSetup.put("drum.wav", "Low Drum");
-        samplesSetup.put("bat.wav", "Bat");
-        samplesSetup.put("haha.wav", "Laugh");
-        samplesSetup.put("okay.wav", "Okay");
-        samplesSetup.put("sneeze.wav", "Sneeze");
-        samplesSetup.put("deco2800.wav", "DECO2800");
-        samplesSetup.put("umso.wav", "Umm.. So");
-        samplesSetup.put("down.wav", "Down");
-        samplesSetup.put("up.wav", "Up");
+        samplesSetup.put("hat.mp3", "Hat");
+        samplesSetup.put("huge.mp3", "HUGE!");
+        samplesSetup.put("beta.mp3", "Beta");
+        samplesSetup.put("arcade.mp3", "Arcade");
+        samplesSetup.put("pluck.mp3", "Pluck");
+        samplesSetup.put("drum.mp3", "Low Drum");
+        samplesSetup.put("bat.mp3", "Bat");
+        samplesSetup.put("haha.mp3", "Laugh");
+        samplesSetup.put("okay.mp3", "Okay");
+        samplesSetup.put("sneeze.mp3", "Sneeze");
+        samplesSetup.put("deco2800.mp3", "DECO2800");
+        samplesSetup.put("umso.mp3", "Umm.. So");
+        samplesSetup.put("down.mp3", "Down");
+        samplesSetup.put("up.mp3", "Up");
 
         for (Map.Entry<String, String> file : samplesSetup.entrySet()) {
             SoundFileHolder soundFileHolder = new SoundFileHolder("SoundboardAssets/samples/" + file.getKey(), file.getValue(), false);

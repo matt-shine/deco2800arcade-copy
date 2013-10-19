@@ -11,6 +11,7 @@ import com.badlogic.gdx.files.FileHandle;
 import deco2800.arcade.snakeLadder.SnakeLadder;
 import deco2800.arcade.snakeLadderGameState.*;
 import deco2800.arcade.snakeLadderModel.*;
+import deco2800.arcade.snakeLadderRulePlugin.ScoreRule;
 
 public class RuleExcutingTest {
 

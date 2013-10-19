@@ -28,8 +28,8 @@ public class Door extends Doodad {
         }
         
         //update collisions
-        g.getCollisionGrid().setSolidAt((int) this.getPos().x, (int) this.getPos().y, openness > 0.9f ? 0 : 1);
-
+        g.getCollisionGrid().setSolidAt((int) this.getPos().x, (int) this.getPos().y, openness >= 0.8f ? 0 : 1);
+        
     }
 
 

@@ -1,5 +1,6 @@
 package deco2800.server.webserver;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
@@ -8,14 +9,19 @@ import org.simpleframework.http.Response;
 public class LogoResponder implements WebResponder {
 
     public LogoResponder() {
-        // TODO Auto-generated constructor stub
+		super();
     }
 
     @Override
-    public void respond(Response response, String param) throws Exception {
+    public void respond(Response response, String param) throws IOException {
         
+    	// Specify that we will be returning a png image
         ArcadeWebserver.setResponseValues(response, "image/png");
         
+        /*
+         * Attempt to serve the image file from the logo resources folder, 
+         * serving the default image if this fails.
+         */
         try
         {
             ByteBuffer file = FileReader.readBinaryFile("../deco2800.arcade.ui/src/main/resources/logos/" + param);

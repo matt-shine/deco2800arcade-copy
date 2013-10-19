@@ -6,6 +6,7 @@ import deco2800.arcade.mixmaze.domain.WallModel;
 import deco2800.arcade.mixmaze.domain.WallModelObserver;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -29,6 +30,7 @@ public final class TileViewModel extends Group implements TileModelObserver {
 	static final TextureRegion BRICK_REGION;
 	static final TextureRegion EMPTY_PICK_REGION;
 	static final TextureRegion EMPTY_TNT_REGION;
+	static final TextureRegion BOX_REGION;
 
 	static {
 		Texture texture = new Texture(Gdx.files.internal("item.png"));
@@ -39,27 +41,27 @@ public final class TileViewModel extends Group implements TileModelObserver {
 		SELECTION_REGION = new TextureRegion(texture, 768, 0, 256, 256);
 		BRICK_REGION = new TextureRegion(texture, 1024, 0, 256, 256);
 		UNKNOWN_REGION = new TextureRegion(texture, 1280, 0, 256, 256);
-		EMPTY_TNT_REGION = new TextureRegion(texture, 1536, 0,
-				256, 256);
-		EMPTY_PICK_REGION = new TextureRegion(texture, 1792, 0,
-				256, 256);
+		EMPTY_TNT_REGION = new TextureRegion(texture, 1536, 0, 256, 256);
+		EMPTY_PICK_REGION = new TextureRegion(texture, 1792, 0, 256, 256);
 		WHITE_REGION = new TextureRegion(texture, 2048, 0, 256, 256);
+
+		texture = new Texture(Gdx.files.internal("box.png"));
+		BOX_REGION = new TextureRegion(texture);
 	}
 
-	private final class WallWatcher implements WallModelObserver
-	{
+	private final class WallWatcher implements WallModelObserver {
 		private boolean isBuilt;
-		
+
 		public boolean IsBuilt() {
 			return isBuilt;
 		}
-		
+
 		@Override
 		public void updateWall(boolean isBuilt) {
 			this.isBuilt = isBuilt;
 		}
 	}
-	
+
 	private final float tileSize;
 	private final float offset;
 	private final ShapeRenderer renderer;
@@ -71,8 +73,10 @@ public final class TileViewModel extends Group implements TileModelObserver {
 	/**
 	 * Constructor
 	 *
-	 * @param renderer	the renderer
-	 * @param tileSize	the graphical size of the tile
+	 * @param renderer
+	 *            the renderer
+	 * @param tileSize
+	 *            the graphical size of the tile
 	 */
 	public TileViewModel(int x, int y, float tileSize, ShapeRenderer renderer) {
 		this.tileSize = tileSize;
@@ -80,17 +84,17 @@ public final class TileViewModel extends Group implements TileModelObserver {
 		this.renderer = renderer;
 		boxerId = 0;
 		type = NONE;
-		
+
 		wallWatchers = new WallWatcher[4];
-		for(int direction = 0; direction < 4; ++direction) {
+		for (int direction = 0; direction < 4; ++direction) {
 			wallWatchers[direction] = new WallWatcher();
 		}
 	}
-	
+
 	public void watchWall(int direction, WallModel wall) {
 		wall.addObserver(wallWatchers[direction]);
 	}
-	
+
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		batch.end();
@@ -108,7 +112,7 @@ public final class TileViewModel extends Group implements TileModelObserver {
 		drawItem(batch);
 		resetTransform(batch);
 	}
-	
+
 	@Override
 	public void updateBoxer(int id) {
 		boxerId = id;
@@ -151,8 +155,8 @@ public final class TileViewModel extends Group implements TileModelObserver {
 		renderer.setColor(0f, 0f, 0f, 1f);
 		renderer.filledRect(0, 0, offset, offset);
 		renderer.filledRect(0, tileSize - offset, offset, offset);
-		renderer.filledRect(tileSize - offset, tileSize - offset,
-				offset, offset);
+		renderer.filledRect(tileSize - offset, tileSize - offset, offset,
+				offset);
 		renderer.filledRect(tileSize - offset, 0, offset, offset);
 		renderer.end();
 	}

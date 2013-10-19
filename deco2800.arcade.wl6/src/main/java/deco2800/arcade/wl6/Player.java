@@ -2,6 +2,10 @@ package deco2800.arcade.wl6;
 
 import java.util.HashSet;
 
+import com.badlogic.gdx.math.Vector2;
+
+import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
+
 public class Player extends Mob {
 
     public static final float SPEED = 3f;
@@ -11,8 +15,9 @@ public class Player extends Mob {
     private int points = 0;
     private int currentGun = 1;
     private HashSet<Integer> guns = new HashSet<Integer>();
-    private int ammo = 10;
-
+    private int ammo = 16;
+    private HashSet<KEY_TYPE> keys = new HashSet<KEY_TYPE>();
+	
     
 
 
@@ -28,25 +33,56 @@ public class Player extends Mob {
         if (renderer.isDebugMode()) {
             renderer.drawBasicSprite(getTextureName(), getPos().x, getPos().y, -getAngle());
         }
+
         //no super call
     }
 
+    
+    
     @Override
     public void tick(GameModel model) {
-        super.tick(model);
+    	
+        //detect the end of a level
+        Vector2 blockPos = getBlockPos();
+        int neighbours = 0;
+        if (model.getMap().getTerrainAt((int) blockPos.x + 1, (int) blockPos.y) == WL6Meta.ELEVATOR) {
+        	neighbours++;
+        }
+        
+        if (model.getMap().getTerrainAt((int) blockPos.x - 1, (int) blockPos.y) == WL6Meta.ELEVATOR) {
+        	neighbours++;
+        }
+        
+        if (model.getMap().getTerrainAt((int) blockPos.x, (int) blockPos.y + 1) == WL6Meta.ELEVATOR) {
+        	neighbours++;
+        }
+        
+        if (model.getMap().getTerrainAt((int) blockPos.x, (int) blockPos.y - 1) == WL6Meta.ELEVATOR) {
+        	neighbours++;
+        }
+        
+        if (neighbours >= 3) {
+        	//if we're standing on a secret elevator, go to secret floor, also if we're if this
+        	//magic position (10, 51) because the secret elevator isn't in the map file on the first level
+        	//for god knows why. It looks like the real wolfenstein game hard codes this too.
+        	if (model.getMap().getTerrainAt((int) blockPos.x, (int) blockPos.y) == WL6Meta.SECRET_ELEVATOR ||
+        			(model.getChapter().equals("1") && ((int) blockPos.x) == 10 && ((int) blockPos.y) == 51)) {
+        		model.secretLevel();
+        	} else {
+        		model.nextLevel();
+        	}
+        	
+        }
+        
+        
+    	
+    	super.tick(model);
     }
+    
 
-
-	/*public void setHealth(int health, boolean overheal) {
-		this.health = Math.min(this.health + health, overheal ? 150 : 100);
-	}
-	
-	
-	public void addHealth(int health, boolean overheal) {
-		setHealth(this.health + health, overheal);
-	}*/
+    
     public void addHealth(int health, boolean overheal) {
-        setHealth(Math.min(this.health + health, overheal ? 150 : 100));
+        setHealth(Math.min(this.getHealth() + health, overheal ? 150 : 100));
     }
 
 
@@ -113,6 +149,67 @@ public class Player extends Mob {
 		this.guns.add(gun);
 		
 	}
+	
+	
+	public void addKey(KEY_TYPE k) {
+		keys.add(k);
+	}
+	
+	public boolean hasKey(KEY_TYPE k) {
+		return keys.contains(k);
+	}
+
+    @Override
+    public void doDamage(GameModel gameModel) {
+        // FIXME this is currently doing damage to yourself :P
+        float dist = this.getPos().dst(gameModel.getPlayer().getPos());
+        int damage = calcDamage((int)dist);
+        gameModel.getPlayer().takeDamage(gameModel, damage);
+    }
+
+    @Override
+    public void takeDamage(GameModel model, int damage) {
+        if (model.getDifficulty() == 1) {
+            setHealth(getHealth() - (damage / 4));
+        }
+        else {
+            setHealth(getHealth() - damage);
+        }
+    }
+
+    /**
+     * Damage Calculation
+     *
+     * @param dist Distance between enemy and player (in number of squares)
+     * @return Damage to be dealt.
+     */
+    public int calcDamage(int dist) {
+        boolean hit = false;
+        if (dist > 4) {
+            if (randInt(0, 255, getRand()) / 12 < dist) {
+                hit = true;
+            }
+        }
+        else {
+            hit = true;
+        }
+
+        int damage = randInt(0, 255, getRand());
+
+        if (hit) {
+            if (dist < 2) {
+                damage = damage / 4;
+            }
+            else {
+                damage = damage / 6;
+            }
+        }
+        else {
+            damage = 0;
+        }
+
+        return damage;
+    }
 	
 }
 

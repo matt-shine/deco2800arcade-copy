@@ -21,9 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.towerdefence.TowerDefence;
 
-/* A screen for the lore of the game
- * @author Tuddz
- */
 public class LoreScreen implements Screen{
 	
 	private final TowerDefence game;
@@ -112,13 +109,12 @@ public class LoreScreen implements Screen{
 		
 		words = new Label("", new Label.LabelStyle(white, WHITE));
 		words.setWrap(true);
-		words.setText("The year is 2800, and humanity has spread across the stars, \n"
-				+ "colonising many worlds across the galaxy. 2 months ago, Earth lost contact\n"
-				+ " with several isolated planets, and a Defence of Earth Colonies Organization\n"
-				+ " (DECO) vessel, the Arcadia, was sent to investigate. After the entire crew \n"
-				+ "was killed by a strange alien bio-weapon and the ship crippled during an ambush,\n"
-				+ " it is up to you, the AI of the Arcadia, to prevent hordes of monstrous aliens\n"
-				+ " from reaching the portal to Earth on the bridge of the ship.");
+		words.setText("LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n" +
+				"LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n" +
+				"LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n" +
+				"LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n" +
+				"LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n" +
+				"LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n");
 		
 		table.add(backButton).top().right();
 		table.row();

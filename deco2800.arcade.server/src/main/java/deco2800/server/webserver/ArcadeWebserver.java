@@ -8,7 +8,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +21,8 @@ import org.simpleframework.transport.Server;
 import org.simpleframework.transport.connect.Connection;
 import org.simpleframework.transport.connect.SocketConnection;
 
+import deco2800.arcade.model.Game;
+
 public class ArcadeWebserver implements Container {
 
 	private static final int SERVER_PORT = 8080;
@@ -28,6 +30,7 @@ public class ArcadeWebserver implements Container {
 	
 	/**
 	 * Set HTTP headers easily.
+	 * 
 	 * @param response
 	 * @param contentType The HTTP content type
 	 */
@@ -41,16 +44,7 @@ public class ArcadeWebserver implements Container {
         response.setDate("Last-Modified", time);
 	}
 	
-	/**
-	 * Get File contents as a UTF-8 String
-	 * @param path Path to file
-	 * @return File contents
-	 * @throws IOException
-	 */
-	private String fileContents(String path) throws IOException
-	{
-	    return FileReader.readFile( path, Charset.forName("UTF-8" ) );
-	}
+	
 	
 	private class Route
 	{
@@ -67,8 +61,6 @@ public class ArcadeWebserver implements Container {
         if (s.length > 1) r.route = s[1];
         if (s.length > 2) r.param = s[2];
         
-        System.out.println("route: " + r.route + ", param: " + r.param);
-        
         return r;
 	}
 	
@@ -81,28 +73,26 @@ public class ArcadeWebserver implements Container {
 		    Route r = processPath(request.getPath().toString());
 		    
 		    //If we have a request to serve a page, use the appropriate responder
-			if ( responders.containsKey(r.route) ) {
+			if ( responders.containsKey( r.route ) ) {
 			    
-				responders.get(r.route).respond( response, r.param );
+				responders.get( r.route ).respond( response, r.param );
 				
 			} else if ( request.getPath().toString().contains( "js" ) ) {
 			    
 				PrintStream body = response.getPrintStream();
 				setResponseValues(response, "text/javascript");
 
-				body.println( fileContents( "webserver/javascript" + request.getPath() ) );
+				body.println( FileReader.readFileUtf8( "webserver/javascript" + request.getPath() ) );
 				body.close();
 				
-				//System.out.println( "Served js: " + "webserver/javascript" + request.getPath() );
 			} else if ( request.getPath().toString().contains( "css" ) ){
 				
 				PrintStream body = response.getPrintStream();
 				setResponseValues(response, "text/css");
 
-				body.println( fileContents("webserver/style" + request.getPath()) );
+				body.println( FileReader.readFileUtf8("webserver/style" + request.getPath()) );
 				body.close();
 				
-				//System.out.println( "Served css: " + "webserver/style" + request.getPath() );
 			//Serve an image if one is requested
 			} else if ( request.getPath().toString().matches( "(?i).*\\.(jpg|jpeg|png|gif)" ) ){
                 
@@ -122,7 +112,6 @@ public class ArcadeWebserver implements Container {
                     badRequest(response);
                 }
                 
-                //System.out.println( "Served img: " + "webserver/image" + request.getPath() );
             } else {
 			    
                 badRequest(response);
@@ -140,6 +129,28 @@ public class ArcadeWebserver implements Container {
         body.println( "404 Not Found" );
         body.close();
 	}
+
+	/**
+	 * Simple comparator to sort the games in alphabetical order, as GameStorageDatabase 
+	 * getServerGames() returns an unordered map.
+	 */
+	
+	/**
+	 * Simple comparator to sort the games in alphabetical order
+	 * @return a comparator to alphabetically sort games by name
+	 */
+	public static Comparator<Game> alphabeticalGameComparator() {
+		return new Comparator<Game>() {
+	        @Override  
+	        public int compare(Game o1, Game o2) {  
+	            int rval = Integer.valueOf( ( o1.name ).compareTo( o2.name) );  
+	            if ( rval != 0 ) {
+	            	return rval;  
+	            }
+	            return o1.compareTo( o2 );  
+	        }  
+	    };
+	}
 	
 	/**
 	 * Given a response and a file path to an image, set the HTTP content type appropriately.
@@ -148,12 +159,18 @@ public class ArcadeWebserver implements Container {
 	 */
 	private void setAppropriateImageMimeType(Response response, String path)
 	{
-        int lastDot = path.lastIndexOf('.');
+        int lastDot = path.lastIndexOf( '.' );
         String ext = path.substring(lastDot + 1);
         
-        if (ext.matches("(?i).*\\.(jpg|jpeg)")) setResponseValues(response, "image/jpeg");
-        if (ext.matches("(?i).*\\.(png)")) setResponseValues(response, "image/png");
-        if (ext.matches("(?i).*\\.(gif)")) setResponseValues(response, "image/gif");
+        if ( ext.matches( "(?i).*\\.(jpg|jpeg)" ) ) {
+        	setResponseValues(response, "image/jpeg" );
+        }
+        if ( ext.matches( "(?i).*\\.(png)" ) ) {
+        	setResponseValues(response, "image/png" );
+        }
+        if ( ext.matches( "(?i).*\\.(gif)" ) ) {
+        	setResponseValues(response, "image/gif" );
+        }
 	}
 	
 	/**
@@ -167,6 +184,7 @@ public class ArcadeWebserver implements Container {
 	    responders.put("replays", new ReplayResponder());
 	    responders.put("games", new GameResponder());
 	    responders.put("logo", new LogoResponder());
+	    responders.put("achievement_icon", new AchievementIconResponder());
 	}
 
 	public static void startServer( ) {

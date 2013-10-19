@@ -58,8 +58,6 @@ public class WL6InputProcessor implements InputProcessor {
         	model.setDifficulty(model.getDifficulty() - 1);
         }
 
-
-
         if (c == Keys.W || c == Keys.S || c == Keys.A || c == Keys.D) {
             updatePlayerSpeed();
         }
@@ -102,7 +100,7 @@ public class WL6InputProcessor implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int x, int y) {
-        Gdx.input.setCursorCatched(true);
+        //Gdx.input.setCursorCatched(true);
         Gdx.input.setCursorPosition(game.getWidth() / 2, game.getHeight() / 2);
         float lookOffset = x - (game.getWidth() / 2);
         float newLook = model.getPlayer().getAngle() - (lookOffset * MOUSE_SENSITIVITY);
@@ -119,7 +117,8 @@ public class WL6InputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
-        // TODO Auto-generated method stub
+        Player p = model.getPlayer();
+        p.doDamage(model);
         return false;
     }
 

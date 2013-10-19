@@ -1,18 +1,23 @@
 package deco2800.arcade.protocol;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.serializers.BlowfishSerializer;
 import com.esotericsoftware.kryo.serializers.FieldSerializer;
+import com.badlogic.gdx.math.Vector2;
 
-import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Icon;
-import deco2800.arcade.protocol.achievement.*;
-import deco2800.arcade.protocol.image.*;
-import deco2800.arcade.protocol.communication.ChatRequest;
+import deco2800.arcade.protocol.achievement.AchievementsForGameRequest;
+import deco2800.arcade.protocol.achievement.AchievementsForGameResponse;
+import deco2800.arcade.protocol.achievement.AchievementsForIDsRequest;
+import deco2800.arcade.protocol.achievement.AchievementsForIDsResponse;
+import deco2800.arcade.protocol.achievement.IncrementProgressRequest;
+import deco2800.arcade.protocol.achievement.IncrementProgressResponse;
+import deco2800.arcade.protocol.achievement.ProgressForPlayerRequest;
+import deco2800.arcade.protocol.achievement.ProgressForPlayerResponse;
+import deco2800.arcade.protocol.communication.ChatHistory;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.communication.ContactListUpdate;
 import deco2800.arcade.protocol.communication.TextMessage;
@@ -21,11 +26,20 @@ import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceResponse;
+import deco2800.arcade.protocol.game.GameLibraryRequest;
+import deco2800.arcade.protocol.game.GameLibraryResponse;
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
+import deco2800.arcade.protocol.highscore.AddScoreRequest;
+import deco2800.arcade.protocol.highscore.GetScoreRequest;
+import deco2800.arcade.protocol.highscore.GetScoreResponse;
+import deco2800.arcade.protocol.image.GetImageRequest;
+import deco2800.arcade.protocol.image.GetImageResponse;
+import deco2800.arcade.protocol.image.SetImageRequest;
+import deco2800.arcade.protocol.image.SetImageResponse;
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.ClearListRequest;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
@@ -36,21 +50,18 @@ import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponseType;
 import deco2800.arcade.protocol.lobby.JoinLobbyResponseType;
 import deco2800.arcade.protocol.lobby.LobbyRequestType;
 import deco2800.arcade.protocol.lobby.NewLobbyRequest;
+import deco2800.arcade.protocol.lobby.LobbyMessageRequest;
+import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
 import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
 import deco2800.arcade.protocol.multiplayerGame.NewMatchmakingRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
-import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
-import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
-import deco2800.arcade.protocol.packman.GameUpdateCheckResponse;
 import deco2800.arcade.protocol.packman.FetchGameRequest;
 import deco2800.arcade.protocol.packman.FetchGameResponse;
-import deco2800.arcade.protocol.game.*;
-import deco2800.arcade.protocol.highscore.AddScoreRequest;
-import deco2800.arcade.protocol.highscore.GetScoreRequest;
-import deco2800.arcade.protocol.highscore.GetScoreResponse;
+import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
+import deco2800.arcade.protocol.packman.GameUpdateCheckResponse;
 import deco2800.arcade.protocol.replay.EndSessionRequest;
 import deco2800.arcade.protocol.replay.EndSessionResponse;
 import deco2800.arcade.protocol.replay.GetEventsRequest;
@@ -61,9 +72,8 @@ import deco2800.arcade.protocol.replay.PushEventRequest;
 import deco2800.arcade.protocol.replay.PushEventResponse;
 import deco2800.arcade.protocol.replay.StartSessionRequest;
 import deco2800.arcade.protocol.replay.StartSessionResponse;
-import deco2800.arcade.protocol.replay.demo.ReplayRequest;
-import deco2800.arcade.protocol.replay.demo.ReplayResponse;
 import deco2800.arcade.protocol.replay.types.Session;
+import deco2800.arcade.model.Achievement;
 
 public class Protocol {
 	
@@ -119,8 +129,6 @@ public class Protocol {
 		kryo.register(GetScoreResponse.class);
 		
 		//Replay messages
-		kryo.register(ReplayRequest.class);
-		kryo.register(ReplayResponse.class);
 		kryo.register(StartSessionRequest.class);
 		kryo.register(StartSessionResponse.class);
 		kryo.register(EndSessionRequest.class);
@@ -147,9 +155,11 @@ public class Protocol {
 		// Communication messages
 		kryo.register(CommunicationRequest.class);
 		kryo.register(ContactListUpdate.class);
-		kryo.register(ChatRequest.class);
+		kryo.register(ChatHistory.class);
 		kryo.register(TextMessage.class);
 		kryo.register(VoiceMessage.class);
+		kryo.register(LobbyMessageRequest.class);
+		kryo.register(LobbyMessageResponse.class);
 		
 		//Multiplayer Messages
 		kryo.register(NewMultiGameRequest.class);
@@ -158,11 +168,14 @@ public class Protocol {
 		kryo.register(GameStateUpdateRequest.class);
 		kryo.register(NewMultiSessionResponse.class);
 		kryo.register(NewMatchmakingRequest.class);
+		
+		//Multiplayer Pong Messages
+		kryo.register(com.badlogic.gdx.math.Vector2.class);
 
 		// Package Manager
 		kryo.register(GameUpdateCheckRequest.class);
-    kryo.register(FetchGameRequest.class);
-    kryo.register(FetchGameResponse.class);
+		kryo.register(FetchGameRequest.class);
+		kryo.register(FetchGameResponse.class);
 		
 		//Lobby classes
 		kryo.register(NewLobbyRequest.class);

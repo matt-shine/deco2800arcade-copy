@@ -2,7 +2,6 @@ package deco2800.arcade.burningskies.screen;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -10,10 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
@@ -34,7 +30,6 @@ public class MenuScreen implements Screen {
     private TextButton scoresButton;
     private TextButton helpButton;
     private TextButton exitButton;
-    private Label label;
     private Image background;
     // Used to check whether to display dotted selection box around buttons
 	private static Boolean keyboardSelection;
@@ -123,20 +118,12 @@ public class MenuScreen implements Screen {
 	    buttonDimensions();
 	    buttonPosition(width, height);
 	    listeners();
-	    
-	    LabelStyle ls = new LabelStyle(white, Color.WHITE);
-	    label = new Label("Are you ready?", ls);
-	    label.setX(0);
-	    label.setY((float)(height*0.95));
-	    label.setWidth(width);
-	    label.setAlignment(Align.center);
-	   	
+	    	   	
 	    stage.addActor(startButton);
 	    stage.addActor(optionsButton);
 	    stage.addActor(scoresButton);
 	    stage.addActor(helpButton);
 	    stage.addActor(exitButton);
-	    stage.addActor(label);
 	    stage.addActor(background);
 	    background.toBack();
 	}

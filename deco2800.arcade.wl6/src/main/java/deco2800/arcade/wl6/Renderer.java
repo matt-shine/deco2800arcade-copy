@@ -140,7 +140,7 @@ public class Renderer {
         //projection
         float aspect = Gdx.graphics.getWidth() / (float)Gdx.graphics.getHeight();
         Matrix4 projection = new Matrix4();
-        projection.setToProjection(0.01f, 200.0f, 60.0f, aspect);
+        projection.setToProjection(0.01f, 200.0f, 45.0f, aspect);
 
         //view
         Matrix4 view = debugMode ? getDebugCameraTransform() : getCameraTransform();
@@ -164,12 +164,12 @@ public class Renderer {
         Gdx.gl.glClearColor(0.48f, 0.48f, 0.48f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.graphics.getGL20().glEnable(GL20.GL_TEXTURE_2D);
-        Gdx.gl20.glEnable(GL20.GL_BLEND);
         texture.bind();
 
         IngameUI.drawCeiling(getCeilingColor(), wl6.getWidth(), wl6.getHeight());
         Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT);
-
+        Gdx.gl20.glEnable(GL20.GL_BLEND);
+        
 
         //draw terrain
         terrainShader.begin();
@@ -367,7 +367,7 @@ public class Renderer {
      * @return
      */
     public Matrix4 getDebugCameraTransform() {
-        return new Matrix4().idt().trn(-32, 32, -60.0f).rotate(1, 0, 0, 180);
+        return new Matrix4().idt().trn(-32, 32, -80.0f).rotate(1, 0, 0, 180);
     }
 
     /**

@@ -19,14 +19,37 @@ body > footer img {
     left: 2px;
 }
 
+/*
 div.img.avatar {
     height: 46px;
     width: 46px;
     float: left;
     margin: 1%;
 }
+*/
+
+td {
+	vertical-align: middle;
+}
 
 .game-icon {
-	width: 64px;
-	height: 64px;
-}	
+	width: 30%;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.game-content {
+	width: 65%;
+	margin-left: 4%;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+img.achievement-icon {
+	width: 32px;
+	height: 32px;
+}
+
+.achievement-icon-holder {
+	width: 32px;
+}

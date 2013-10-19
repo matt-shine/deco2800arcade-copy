@@ -15,8 +15,8 @@ import static com.badlogic.gdx.Input.Keys.ANY_KEY;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
 /**
- * This is the entry of the game application, and the next
- * should be the menu screen.
+ * This is the entry of the game application, and the next should be the menu
+ * screen.
  */
 final class SplashScreen implements Screen {
 
@@ -36,7 +36,8 @@ final class SplashScreen implements Screen {
 	/**
 	 * Constructor.
 	 *
-	 * @param game	the MixMaze game
+	 * @param game
+	 *            the MixMaze game
 	 */
 	SplashScreen(final MixMaze game) {
 		this.game = game;
@@ -48,8 +49,8 @@ final class SplashScreen implements Screen {
 	public void render(float delta) {
 		if (TimeUtils.millis() - showTime > MIN_SHOW_TIME
 				&& Gdx.input.isKeyPressed(ANY_KEY)) {
-			logger.debug("switch to menu screen");
-			game.setScreen(game.menuScreen);
+			logger.debug("switch to settings screen");
+			game.setScreen(game.settingsScreen);
 		}
 
 		Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);

@@ -3,142 +3,233 @@ wl6Atlas.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-armour
+ammo
   rotate: false
   xy: 1, 1611
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-candywall
+armour
   rotate: false
   xy: 1, 1289
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-cell
+blank
   rotate: false
   xy: 323, 1611
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-door
+bluebrick
   rotate: false
   xy: 1, 967
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-frame_bp
+candywall
   rotate: false
   xy: 323, 1289
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-frame_erp
+cell
   rotate: false
   xy: 645, 1611
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-frame_lsp
+clownnurse
   rotate: false
   xy: 1, 645
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-frame_pb
+door
   rotate: false
   xy: 323, 967
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-frame_rp
+frame_bp
   rotate: false
   xy: 645, 1289
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-frame_wp
+frame_erp
   rotate: false
   xy: 967, 1611
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-greybrick
+frame_lsp
   rotate: false
   xy: 1, 323
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-health
+frame_pb
   rotate: false
   xy: 323, 645
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-icewall
+frame_rp
   rotate: false
   xy: 645, 967
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-lemongrab
+frame_wp
   rotate: false
   xy: 967, 1289
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-dog
+gold_door
   rotate: false
   xy: 1289, 1611
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-guard
+greybrick
   rotate: false
   xy: 1, 1
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-steel
+headstone
   rotate: false
   xy: 323, 323
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-unknown
+health
   rotate: false
   xy: 645, 645
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-woodwall
+iceking
   rotate: false
   xy: 967, 967
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-worm
+icekingboss
   rotate: false
   xy: 1289, 1289
+  size: 320, 320
+  orig: 320, 320
+  offset: 0, 0
+  index: -1
+iceking_clone
+  rotate: false
+  xy: 1611, 1611
+  size: 320, 320
+  orig: 320, 320
+  offset: 0, 0
+  index: -1
+icewall
+  rotate: false
+  xy: 323, 1
+  size: 320, 320
+  orig: 320, 320
+  offset: 0, 0
+  index: -1
+lemongrab
+  rotate: false
+  xy: 645, 323
+  size: 320, 320
+  orig: 320, 320
+  offset: 0, 0
+  index: -1
+manfried
+  rotate: false
+  xy: 967, 645
+  size: 320, 320
+  orig: 320, 320
+  offset: 0, 0
+  index: -1
+penguin
+  rotate: false
+  xy: 1289, 967
+  size: 320, 320
+  orig: 320, 320
+  offset: 0, 0
+  index: -1
+plant
+  rotate: false
+  xy: 1611, 1289
+  size: 320, 320
+  orig: 320, 320
+  offset: 0, 0
+  index: -1
+redbrick
+  rotate: false
+  xy: 645, 1
+  size: 320, 320
+  orig: 320, 320
+  offset: 0, 0
+  index: -1
+silver_door
+  rotate: false
+  xy: 967, 323
+  size: 320, 320
+  orig: 320, 320
+  offset: 0, 0
+  index: -1
+snowman
+  rotate: false
+  xy: 1289, 645
+  size: 320, 320
+  orig: 320, 320
+  offset: 0, 0
+  index: -1
+steel
+  rotate: false
+  xy: 1611, 967
+  size: 320, 320
+  orig: 320, 320
+  offset: 0, 0
+  index: -1
+unknown
+  rotate: false
+  xy: 967, 1
+  size: 320, 320
+  orig: 320, 320
+  offset: 0, 0
+  index: -1
+woodwall
+  rotate: false
+  xy: 1289, 323
+  size: 320, 320
+  orig: 320, 320
+  offset: 0, 0
+  index: -1
+worm
+  rotate: false
+  xy: 1611, 645
   size: 320, 320
   orig: 320, 320
   offset: 0, 0

@@ -16,13 +16,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
 import deco2800.arcade.burningskies.BurningSkies;
 import deco2800.arcade.client.ArcadeInputMux;
 
 public class ScoreScreen implements Screen {
-	
 	private BurningSkies game;
     private Stage stage;
     private BitmapFont black;
@@ -30,9 +28,18 @@ public class ScoreScreen implements Screen {
     private Skin skin;
     private SpriteBatch batch;
     private TextButton backButton;
-    private Label label;
     private Image background;
 	private MenuInputProcessor processor;
+	private Image scoreTableImage;
+	private Label nameLabelOne;
+	private Label nameLabelTwo;
+	private Label scoreLabelOne;
+	private Label scoreLabelTwo;
+	private Label localLabel;
+	private Label globalLabel;
+    
+    int width = BurningSkies.SCREENWIDTH;
+    int height = BurningSkies.SCREENHEIGHT;
 	
 	public ScoreScreen(BurningSkies game) {
 		this.game = game;
@@ -89,9 +96,9 @@ public class ScoreScreen implements Screen {
         white = new BitmapFont(Gdx.files.internal("images/menu/whitefont.fnt"), false);
         black = new BitmapFont(Gdx.files.internal("images/menu/font.fnt"), false);
         background = new Image(new Texture(Gdx.files.internal("images/menu/menu_background.png")));
+        scoreTableImage = new Image(new Texture(Gdx.files.internal("images/menu/dual_score_table.png")));
         
-        int width = BurningSkies.SCREENWIDTH;
-        int height = BurningSkies.SCREENHEIGHT;
+
         
         stage = new Stage(width, height, true);
 	
@@ -100,6 +107,8 @@ public class ScoreScreen implements Screen {
         processor = new MenuInputProcessor(game);
     	ArcadeInputMux.getInstance().addProcessor(processor);
 	    
+    	addLabels();
+    	
 	    backButton = new TextButton("Back", skin);
 	    backButton.setWidth(200);
 	    backButton.setHeight(50);
@@ -116,16 +125,49 @@ public class ScoreScreen implements Screen {
             }
 	    });
 	    
-	    LabelStyle ls = new LabelStyle(white, Color.WHITE);
-	    label = new Label("Scores", ls);
-	    label.setX(0);
-	    label.setY((float)(height*0.95));
-	    label.setWidth(width);
-	    label.setAlignment(Align.center);
-	    
-	    stage.addActor(backButton);
-	    stage.addActor(label);	
 	    stage.addActor(background);
+	    stage.addActor(scoreTableImage);
+	    stage.addActor(backButton);
+	    stage.addActor(nameLabelOne);
+	    stage.addActor(nameLabelTwo);
+	    stage.addActor(scoreLabelOne);
+	    stage.addActor(scoreLabelTwo);
+	    stage.addActor(localLabel);
+	    stage.addActor(globalLabel);
 	    background.toBack();    
+	}
+	
+	private void addLabels() {
+		LabelStyle ls = new LabelStyle(white, Color.WHITE);
+		
+		nameLabelOne = new Label("NAME", ls);
+		nameLabelOne.setX(65);
+		nameLabelOne.setY(720 - 225);
+		nameLabelOne.setWidth(115);
+		
+		nameLabelTwo = new Label("NAME", ls);
+		nameLabelTwo.setX(620 + 65);
+		nameLabelTwo.setY(720 - 225);
+		nameLabelTwo.setWidth(115);
+		
+		scoreLabelOne = new Label("SCORE", ls);
+		scoreLabelOne.setX(225);
+		scoreLabelOne.setY(720 - 225);
+		scoreLabelOne.setWidth(115);
+		
+		scoreLabelTwo = new Label("SCORE", ls);
+		scoreLabelTwo.setX(225 + 620);
+		scoreLabelTwo.setY(720 - 225);
+		scoreLabelTwo.setWidth(115);
+		
+		localLabel = new Label("Local Scores", ls);
+		localLabel.setX(width/4 - localLabel.getWidth()/2 + 15);
+		localLabel.setY(720 - 175);
+		localLabel.setWidth(115);
+		
+		globalLabel = new Label("Global Scores", ls);
+		globalLabel.setX((3*width)/4 - globalLabel.getWidth()/2 - 10);
+		globalLabel.setY(720 - 175);
+		globalLabel.setWidth(115);
 	}
 }

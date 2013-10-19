@@ -15,43 +15,43 @@ public class DoodadInfo {
     }
 
 
-    public static DoodadInfo treasurePickup(String texture, int value) {
+    public static DoodadInfo treasurePickup(String texture, int value, int health) {
         return new DoodadInfo(false, texture, value, 0, 0,
-                0, EnemyType.NOT_AN_ENEMY, 0, null);
+                0, EnemyType.NOT_AN_ENEMY, 0, null, false);
     }
 
     public static DoodadInfo healthPickup(String texture, int value, int difficulty) {
         return new DoodadInfo(false, texture, 0, 0, value,
-                difficulty, EnemyType.NOT_AN_ENEMY, 0, null);
+                difficulty, EnemyType.NOT_AN_ENEMY, 0, null, false);
     }
 
     public static DoodadInfo ammoPickup(String texture, int value, int difficulty) {
         return new DoodadInfo(false, texture, 0, value, 0,
-                difficulty, EnemyType.NOT_AN_ENEMY, 0, null);
+                difficulty, EnemyType.NOT_AN_ENEMY, 0, null, false);
     }
 
     public static DoodadInfo gunPickup(String texture, int what, int difficulty) {
         return new DoodadInfo(false, texture, 0, 0, 0,
-                difficulty, EnemyType.NOT_AN_ENEMY, what, null);
+                difficulty, EnemyType.NOT_AN_ENEMY, what, null, false);
     }
 
     public static DoodadInfo solidScenery(String texture) {
         return new DoodadInfo(true, texture, 0, 0, 0,
-                0, EnemyType.NOT_AN_ENEMY, 0, null);
+                0, EnemyType.NOT_AN_ENEMY, 0, null, false);
     }
 
     public static DoodadInfo nonsolidScenery(String texture) {
         return new DoodadInfo(false, texture, 0, 0, 0,
-                0, EnemyType.NOT_AN_ENEMY, 0, null);
+                0, EnemyType.NOT_AN_ENEMY, 0, null, false);
     }
 
     public static DoodadInfo wayPoint(DIRS d) {
         return new DoodadInfo(false, null, 0, 0, 0,
-                0, EnemyType.NOT_AN_ENEMY, 0, d);
+                0, EnemyType.NOT_AN_ENEMY, 0, d, false);
     }
 
     public DoodadInfo(boolean solid, String texture, int points, int ammo,
-            int health, int difficulty, EnemyType enemytype, int gun, DIRS direction) {
+            int health, int difficulty, EnemyType enemytype, int gun, DIRS direction, boolean pathing) {
         super();
         this.solid = solid;
         this.texture = texture;
@@ -62,6 +62,7 @@ public class DoodadInfo {
         this.enemytype = enemytype;
         this.gun = gun;
         this.direction = direction;
+        this.pathing = pathing;
         this.special = false;
     }
 
@@ -72,7 +73,7 @@ public class DoodadInfo {
                 solid, texture,
                 points, ammo,
                 health, difficulty,
-                enemytype, gun, direction);
+                enemytype, gun, direction, pathing);
         d.special = this.special;
         return d;
     }
@@ -133,6 +134,12 @@ public class DoodadInfo {
      * The direction this item is facing
      */
     public DIRS direction;
+
+    /**
+     * The direction this item is travelling
+     * Null if the item is stationary
+     */
+    public boolean pathing;
 
     /**
      * Indicates that this object should not be handled automatically

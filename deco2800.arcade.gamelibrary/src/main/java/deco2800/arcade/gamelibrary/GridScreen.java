@@ -11,11 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.LibraryStyle;
 import deco2800.arcade.model.Player;
-
 
 /**
  * GDX Screen class for Grid View
@@ -166,11 +167,18 @@ public class GridScreen implements Screen, LibraryScreen {
         userProfileButton.setX(500);
         userProfileButton.setY(650);
         userProfileButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
-
+        
         stage.addActor(homeButton);
         stage.addActor(storeButton);
         stage.addActor(userProfileButton);
-        Gdx.input.setInputProcessor(stage);
+        
+        //you cannot use this method
+        //Gdx.input.setInputProcessor(stage);
+        //use this instead
+        ArcadeInputMux.getInstance().addProcessor(stage);
+        //you need to remove this listener when you're done with it.
+        //-Simon
+        
     }
 
     @Override
@@ -210,6 +218,7 @@ public class GridScreen implements Screen, LibraryScreen {
 
     @Override
     public void dispose() {
+    	ArcadeInputMux.getInstance().removeProcessor(stage);
         stage.dispose();
         batch.dispose();
     }

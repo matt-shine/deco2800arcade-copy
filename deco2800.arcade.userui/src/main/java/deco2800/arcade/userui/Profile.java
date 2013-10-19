@@ -52,7 +52,6 @@ public class Profile extends GameClient {
 		game.name = "Profile UI";
 	}
 
-	@Override
 	public Game getGame() {
 		return game;
 	}

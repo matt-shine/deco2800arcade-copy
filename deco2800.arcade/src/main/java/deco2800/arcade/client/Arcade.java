@@ -1,8 +1,11 @@
 package deco2800.arcade.client;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Constructor;
@@ -16,6 +19,8 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 import org.reflections.Reflections;
 
@@ -33,6 +38,7 @@ import deco2800.arcade.client.network.listener.LobbyListener;
 import deco2800.arcade.client.network.listener.MultiplayerListener;
 import deco2800.arcade.client.network.listener.PackmanListener;
 import deco2800.arcade.communication.CommunicationNetwork;
+import deco2800.arcade.communication.CommunicationView;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Game;
@@ -446,8 +452,15 @@ public class Arcade extends JFrame {
 		Object mon = new Object();
 		synchronized (mon) {
 			proxy.setThreadMonitor(mon);
-			this.add(this.canvas.getCanvas());
+			
+			CommunicationView view = new CommunicationView();
 
+			Container container = this.getContentPane();
+			container.add(this.canvas.getCanvas(), BorderLayout.WEST);
+			container.add(view, BorderLayout.EAST);
+			
+			this.pack();
+			
 			try {
 				mon.wait();
 			} catch (InterruptedException e) {
@@ -463,7 +476,8 @@ public class Arcade extends JFrame {
 	 */
 	public void removeCanvas() {
 
-		this.remove(this.canvas.getCanvas());
+		//this.remove(this.canvas.getCanvas());
+		this.remove(this.getContentPane());
 
 	}
 

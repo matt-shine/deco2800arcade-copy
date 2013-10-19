@@ -17,39 +17,31 @@ import javax.swing.JTextArea;
 
 import deco2800.arcade.model.ChatNode;
 
-public class CommunicationView extends JFrame {
+public class CommunicationView extends JPanel {
 
 	private JScrollPane scrollPane;
 	private JTextArea inputArea;
 	private JButton sendButton;
-	private Container container;
-	private JLabel testLabel;
 	private JPanel scrollablePanel;
-	private JLabel testLabel2;
 
 	public CommunicationView() {
-		setBounds(400, 200, 100, 740);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-		container = getContentPane();
-		container.setBackground(Color.WHITE);
+		
+		setPreferredSize(new Dimension(250, 500));
 
 		scrollablePanel = new JPanel();
 		scrollablePanel.setLayout(new BoxLayout(scrollablePanel,
 				BoxLayout.Y_AXIS));
 
 		scrollPane = new JScrollPane(scrollablePanel);
-		scrollPane.setPreferredSize(new Dimension(100, 400));
+		scrollPane.setPreferredSize(new Dimension(250, 400));
 
 		inputArea = new JTextArea();
 		sendButton = new JButton("Send");
-		sendButton.setPreferredSize(new Dimension(100, 100));
+		sendButton.setPreferredSize(new Dimension(250, 100));
 
-		container.add(scrollPane, BorderLayout.NORTH);
-		container.add(inputArea, BorderLayout.CENTER);
-		container.add(sendButton, BorderLayout.SOUTH);
-
-//		setVisible(true);
+		this.add(scrollPane, BorderLayout.NORTH);
+		this.add(inputArea, BorderLayout.CENTER);
+		this.add(sendButton, BorderLayout.SOUTH);
 
 	}
 

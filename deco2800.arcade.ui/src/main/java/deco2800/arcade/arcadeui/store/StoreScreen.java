@@ -16,7 +16,7 @@ public interface StoreScreen {
 
     /**
      * Get currently logged in player.
-     * @return Player currentPlayer
+     * @return Player
      */
     Player getPlayer();
 
@@ -38,10 +38,24 @@ public interface StoreScreen {
     Game getSelected();
 
     /**
-     * Adds 'amount' tokens to players account, for the game 'game'.
-     * @return boolean success
+     * Adds 'amount' tokens to players account.
+     * @return boolean
      * @param int amount
+     */
+    boolean buyTokens(int amount);
+    
+    /**
+     * Buys 'game' on players account.
+     * @return boolean
      * @param Game game
      */
-    boolean buyTokens(int amount, Game game);
+    boolean buyGame(Game game);
+    
+    /**
+     * Adds/removes 'game' to current players wishlist. Returns true upon
+     * adding, and false upon removing.
+     * @return boolean
+     * @param Game game
+     */
+    boolean addWishlist(Game game);
 }

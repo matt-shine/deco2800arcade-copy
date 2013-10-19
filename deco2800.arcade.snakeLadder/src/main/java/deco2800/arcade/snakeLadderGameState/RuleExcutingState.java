@@ -9,8 +9,7 @@ public class RuleExcutingState extends GameState {
 
 	@Override
 	public void handleInput(SnakeLadder context) {
-		int turn=context.getturns();
-		int playerIndex = turn%context.gamePlayers.length;
+		int playerIndex=context.getturns();
 		String rule = context.getMap().getTileList()[context.gamePlayers[playerIndex].newposition()].getRule();
 		
 		//if no rules specified in this position, transit to waiting state
@@ -31,7 +30,7 @@ public class RuleExcutingState extends GameState {
 				if(rule.startsWith("L"))
 				{
 					//check if the player is local player instead of AI
-					if (playerIndex == 0) {
+					if (!context.gamePlayers[playerIndex].isAI()) {
 						//add one achievement to reachLadder achievement
 				    	context.incrementAchievement("snakeLadder.reachLadder");
 				    }
@@ -41,7 +40,7 @@ public class RuleExcutingState extends GameState {
 			else if(!rule.equals("."))
 			{
 				try {
-					Rule r = (Rule) Class.forName("deco2800.arcade.snakeLadderModel."+context.getRuleMapping().get(rule).getImplementationClass()).newInstance();
+					Rule r = (Rule) Class.forName("deco2800.arcade.snakeLadderRulePlugin."+context.getRuleMapping().get(rule).getImplementationClass()).newInstance();
 					r.excuteRules(playerIndex, rule, context);
 				} catch (InstantiationException e) {
 					// TODO Auto-generated catch block
@@ -55,34 +54,5 @@ public class RuleExcutingState extends GameState {
 				}
 			}
 		}
-		
-		
-	}
-
-	/***
-	 * Updating the score of the game player and print it out on the scoreLabel
-	 * 
-	 */
-	public void excuteRules(int playerNum, String rule, SnakeLadder context,GamePlayer context2){
-		if (isScore(rule))
-		{
-			context.gamePlayers[playerNum].setScore(Integer.parseInt(rule));
-			context.getScoreLabels().get(playerNum).setText(""+context.gamePlayers[playerNum].getScore());
-		}
-	}
-	
-	/***
-	 * Check whether the rule is score related or not
-	 * @param rule The rule of the tile the player is currently in
-	 * @return true if the rule have something to do with score, false otherwise
-	 */
-	private boolean isScore (String rule) {
-	    try { 
-	        Integer.parseInt(rule); 
-	    } catch(NumberFormatException e) { 
-	        return false; 
-	    }
-	    // only got here if we didn't return false
-	    return true;
 	}
 }

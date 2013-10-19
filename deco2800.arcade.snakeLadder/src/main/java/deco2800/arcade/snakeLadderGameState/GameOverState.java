@@ -9,8 +9,7 @@ public class GameOverState extends GameState {
 
 	@Override
 	public void handleInput(SnakeLadder context) {
-		int turn=context.getturns();
-		int playerIndex = turn%context.gamePlayers.length;
+		int playerIndex=context.getturns();
 		context.statusMessage = context.gamePlayers[playerIndex].getPlayerName() +" Win! ";
 		//setting the scores
 		context.player1.storeScore("Number", context.gamePlayers[0].getScore());

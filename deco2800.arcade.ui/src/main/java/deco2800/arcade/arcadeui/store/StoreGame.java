@@ -32,7 +32,8 @@ public class StoreGame implements Screen, StoreScreen {
 	
 	/**
 	 * @author Addison Gourluck
-	 * @param ui
+	 * @param ArcadeUI ui
+	 * @param Game featuredGame
 	 */
 	public StoreGame(ArcadeUI ui, Game featuredGame) {
 		featured = featuredGame;
@@ -46,7 +47,7 @@ public class StoreGame implements Screen, StoreScreen {
 		final Label ratingTitle = new Label("Ratings + Reviews", skin, "default-28");
 		final Label ratingScore = new Label("0.0", skin, "rating-score");
 		final Label ratingScoreText = new Label("Average Rating", skin, "default-14");
-		final Table star_bg = new Table();
+		final Table starbg = new Table();
 		final Button homeButton = new Button(skin, "home");
 		final Button buyButton = new Button(skin, "buy");
 		final Button reviewButton = new Button(skin, "review");
@@ -65,7 +66,7 @@ public class StoreGame implements Screen, StoreScreen {
 		
 		// Title of the featured game, located center of screen.
 		gameTitle.setSize(380, 40);
-		gameTitle.setPosition(96, 513);
+		gameTitle.setPosition(96, 515);
 		stage.addActor(gameTitle);
 		
 		// Main text body, located in center of screen.
@@ -125,14 +126,14 @@ public class StoreGame implements Screen, StoreScreen {
 		reviewButton.setPosition(863, 335);
 		stage.addActor(reviewButton);
 		
-		skin.add("star_bg", new Texture(Gdx.files.internal("store/big_stars.png")));
-		star_bg.setBackground(skin.getDrawable("star_bg"));
-		star_bg.setColor(0.5f, 0.5f, 0.5f, 1);
-		star_bg.setPosition(881, 414);
-		star_bg.setSize(142, 23);
-		stage.addActor(star_bg);
+		skin.add("starbg", new Texture(Gdx.files.internal("store/big_stars.png")));
+		starbg.setBackground(skin.getDrawable("starbg"));
+		starbg.setColor(0.5f, 0.5f, 0.5f, 1);
+		starbg.setPosition(881, 414);
+		starbg.setSize(142, 23);
+		stage.addActor(starbg);
 		
-		placeRatingStars(stage, skin);
+		placeRatingStars();
 		
 		homeButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
@@ -149,7 +150,9 @@ public class StoreGame implements Screen, StoreScreen {
 		
 		wishButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("wish");
+				System.out.println("wishlist");
+				//dispose();
+				//arcadeUI.setScreen(new StoreWishlist(arcadeUI));
 			}
 		});
 		
@@ -160,7 +163,7 @@ public class StoreGame implements Screen, StoreScreen {
 		});
 	}
 	
-	private void placeRatingStars(Stage stage, Skin skin) {
+	private void placeRatingStars() {
 		for (int i = 5; i >= 1; --i) {
 			final CheckBox star = new CheckBox("", skin, "star" + i);
 			star.setSize(i * 28.4f, 23);
@@ -226,12 +229,17 @@ public class StoreGame implements Screen, StoreScreen {
 	public Game getSelected() {
 		return featured;
 	}
-
+	
 	@Override
-	public boolean buyTokens(int amount, Game game) {
+	public boolean buyTokens(int amount) {
 		return false;
 	}
-
+	
+	@Override
+	public boolean buyGame(Game game) {
+		return false;
+	}
+	
 	@Override
 	public void setSelected(String game) {
 		for (Game search : ArcadeSystem.getArcadeGames()) {
@@ -240,5 +248,10 @@ public class StoreGame implements Screen, StoreScreen {
 				return;
 			}
 		}
+	}
+	
+	@Override
+	public boolean addWishlist(Game game) {
+		return true;
 	}
 }

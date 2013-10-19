@@ -1,9 +1,9 @@
 package deco2800.arcade.chess;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
+import deco2800.arcade.chess.Board;
 import deco2800.arcade.chess.pieces.Piece;
 
 public class MovementTest {
@@ -150,6 +150,41 @@ public class MovementTest {
 		//move black pawn and check its whites turn
 		board.movePiece(blackPawn, blackPawnLastPos);
 		Assert.assertTrue(!board.whoseTurn());
+	}
+	
+	@Test
+	public void kingCastleSwapTest() {
+		Board board = new Board();
+		//Test white teams king castle swap
+		int[] wp7 = {2,6}, wk2 = {2,5}, wb2 = {2,7}, swapMove = {0,6};
+		
+		board.movePiece(board.whitePawn7, wp7);
+		board.movePiece(board.whiteKnight2, wk2);
+		board.movePiece(board.whiteBishop2, wb2);
+		board.movePiece(board.whiteKing, swapMove);
+		
+		int[] expKing = {0,6}, expRook = {0,5};
+		
+		Assert.assertEquals(expKing[0], board.findPiece(board.whiteKing)[0]);
+		Assert.assertEquals(expKing[1], board.findPiece(board.whiteKing)[1]);
+		Assert.assertEquals(expRook[0], board.findPiece(board.whiteRook2)[0]);
+		Assert.assertEquals(expRook[1], board.findPiece(board.whiteRook2)[1]);
+		
+		//Test white teams king castle swap
+		board = new Board();
+		int[] bp7 = {5,6}, bk2 = {5,5}, bb2 = {5,7}, swapMove2 = {7,6};
+
+		board.movePiece(board.blackPawn7, bp7);
+		board.movePiece(board.blackKnight2, bk2);
+		board.movePiece(board.blackBishop2, bb2);
+		board.movePiece(board.blackKing, swapMove2);
+
+		int[] expKing2 = {7,6}, expRook2 = {7,5};
+
+		Assert.assertEquals(expKing2[0], board.findPiece(board.blackKing)[0]);
+		Assert.assertEquals(expKing2[1], board.findPiece(board.blackKing)[1]);
+		Assert.assertEquals(expRook2[0], board.findPiece(board.blackRook2)[0]);
+		Assert.assertEquals(expRook2[1], board.findPiece(board.blackRook2)[1]);
 	}
 
 }

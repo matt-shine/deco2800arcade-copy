@@ -1,7 +1,7 @@
 package deco2800.arcade.chess;
 
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import org.junit.Test;
 

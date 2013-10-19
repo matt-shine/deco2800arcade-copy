@@ -32,7 +32,7 @@ public class WL6 extends GameClient {
         super(player, networkClient);
         this.networkClient = networkClient;
         this.achievementClient = new AchievementClient(networkClient);
-        highscoreClient = new HighscoreClient(player.getUsername(), "Wolfenstein", networkClient);
+        //highscoreClient = new HighscoreClient(player.getUsername(), "Wolfenstein", networkClient);
     }
 
     /**

@@ -1,11 +1,14 @@
 package deco2800.arcade.wl6.enemy;
 
 import com.badlogic.gdx.math.Vector2;
+
 import deco2800.arcade.wl6.GameModel;
 import deco2800.arcade.wl6.Mob;
 import deco2800.arcade.wl6.WL6Meta;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class Enemy extends Mob {
 
@@ -26,61 +29,130 @@ public class Enemy extends Mob {
 
     // current state
     private STATES state = STATES.NO_STATE;
+    // State tick
+    private float stateTime;
+    private float tick;
+    private STATES nextState;
     //
-    protected float pathSpeed;
+    private WL6Meta.DIRS faceDir;
     //
-    protected float chaseSpeed;
+    private boolean pathing;
     //
-    protected Vector2 faceDir = new Vector2();
-
-
+    private float pathSpeed;
+    //
+    private float chaseSpeed;
+    //
+    private int pathGoal = 1;
+    @SuppressWarnings("unused")
+	private int pathLast = 0;
+    @SuppressWarnings("unused")
+	private int pathLoopStart = 0;
+    
+    
     // path list
-    protected LinkedList<Vector2> path;
+    private List<Vector2> path;
     // suffers from pain (they have an animation that they do nothing in when they get hit, interrupts their current action)
-    protected boolean pain;
+    private boolean pain;
     // damage
-    protected int damage;
+    private int damage;
 
 
     public Enemy(int uid) {
         super(uid);
+        tick = 0;
+        stateTime = 0;
+        nextState = null;
+    }
+
+    @Override
+    public void init(GameModel model) {
+        super.init(model);
+        if (pathing) {
+            calculatePath(model);
+        }
+
     }
 
     @Override
     public void tick(GameModel gameModel) {
         super.tick(gameModel);
+
+        tick += gameModel.delta();
+        stateTime += gameModel.delta();
+        if (stateTime > 1 && nextState != null) {
+            setState(nextState);
+            nextState = null;
+        }
+
+        if (tick > 0.5 && state == STATES.PATH && path != null && path.size() != 0) {
+            path();
+        }
+
         detectPlayer(gameModel);
+        if (state == STATES.ATTACK) {
+            attackPlayer(gameModel);
+        }
+
         if (this.getHealth() <= 0) {
-            changeStates(STATES.DIE, 0);
+            setState(STATES.DIE);
             gameModel.destroyDoodad(this);
         }
     }
 
-    public void setState(STATES state) {
-        this.state = state;
+    public WL6Meta.DIRS getFaceDir() {
+        return faceDir;
+    }
+
+    public void setFaceDir(WL6Meta.DIRS dir) {
+        faceDir = dir;
+    }
+
+    public void setPathing(boolean pathing) {
+        this.pathing = pathing;
     }
 
     /**
      * Tells the enemy to change states
-     * @param State state to change the enemy to
-     * @param delay time taken to change states
-     *              (e.g. An officer takes less time to go CHASE -> ATTACK then a guard)
+     * @param state state to change the enemy to
      */
-    public void changeStates(STATES State, int delay) {
-        setState(State);
+    public void setState(STATES state) {
+        this.state = state;
+        stateTime = 0;
     }
 
     // follow patrol path
     public void path() {
-
+    	//if we've passed the next pathing node...
+    	
+    	//this code is for clean navigation through paths but is broken right now
+    	
+    	/*if (path.get(pathLast).dst(path.get(pathGoal)) <= 
+    			path.get(pathLast).dst(getPos())) {
+    		
+    		setPos(new Vector2(path.get(pathGoal)).add(0.5f, 0.5f));
+    		pathLast++;
+    		pathGoal++;
+    		if (pathGoal >= path.size()) {
+    			pathGoal = this.pathLoopStart;
+    		}
+    	}
+    	this.setVel(
+    			new Vector2().add(path.get(pathGoal)).sub(path.get(pathLast)).nor().mul(0.2f)
+    	);*/
+    	
+    	
+    	//rough navigation through path
+    	pathGoal++;
+    	pathGoal = pathGoal % path.size();
+    	setPos(new Vector2(path.get(pathGoal)).add(0.5f, 0.5f));
+        tick = 0;
+		
     }
 
     // detect player
     public void detectPlayer(GameModel gameModel) {
         if (canSee(gameModel.getPlayer(), gameModel)) {
-            changeStates(STATES.ATTACK, 0);
-            doDamage(gameModel);
-            changeStates(STATES.CHASE, 0);
+            nextState = STATES.ATTACK;
         }
     }
 
@@ -91,30 +163,37 @@ public class Enemy extends Mob {
 
 
     // attack player
-
+    public void attackPlayer(GameModel gameModel) {
+        doDamage(gameModel);
+        setState(STATES.CHASE);
+    }
 
     // react to pain
 
 
     @Override
-    public void takeDamage(int damage) {
-        if (pain) {
-            changeStates(STATES.PAIN, 0);
-            setHealth(getHealth() - damage);
-            changeStates(STATES.CHASE, 0);
+    public void takeDamage(GameModel model, int damage) {
+        int d = damage;
+        if (state == STATES.STAND || state == STATES.PATH) {
+            d = d * 2;
+        }
+        if (isPain()) {
+            setState(STATES.PAIN);
+            setHealth(getHealth() - d);
+            setState(STATES.CHASE);
         }
         else {
-            setHealth(getHealth() - damage);
+            setHealth(getHealth() - d);
         }
     }
 
-    
+    @Override
     public void doDamage(GameModel gameModel) {
         float dist = this.getPos().dst(gameModel.getPlayer().getPos());
-        boolean speed = false;
-        boolean look = false;
+        boolean speed = true;
+        boolean look = true;
         int damage = calcDamage((int)dist, speed, look);
-        gameModel.getPlayer().takeDamage(damage);
+        gameModel.getPlayer().takeDamage(gameModel, damage);
     }
 
     /**
@@ -131,87 +210,125 @@ public class Enemy extends Mob {
             hit = true;
         }
 
-        damage = randInt(0, 255, getRand());
+        setDamage(randInt(0, 255, getRand()));
 
         if (hit) {
             if (dist < 2) {
-                damage = damage / 4;
+                setDamage(getDamage() / 4);
             }
             else if (dist >= 2 && dist < 4) {
-                damage = damage / 8;
+                setDamage(getDamage() / 8);
             }
             else if (dist >= 4) {
-                damage = damage / 16;
+                setDamage(getDamage() / 16);
             }
             else {
-                damage = 0;
+                setDamage(0);
             }
         }
         else {
-            damage = 0;
+            setDamage(0);
         }
 
-        return damage;
+        return getDamage();
     }
 
-    // Ugly mess that I need to change.  Working on it atm
     public void calculatePath(GameModel gameModel) {
-        path = new LinkedList<Vector2>();
-        WL6Meta.DIRS[][] waypoints = gameModel.getWapoints();
+        path = new ArrayList<Vector2>();
+        HashSet<Vector2> usedWaypoints = new HashSet<Vector2>();
 
         int x = (int)getPos().x;
         int y = (int)getPos().y;
         int angle = (int)this.getAngle();
-        path.addFirst(new Vector2(x, y));
+        path.add(new Vector2(x, y));
 
         boolean complete = false;
 
         while (!complete) {
             switch (angle) {
                 case 0:
-                    x = x + 1;
-                    y = y + 0;
+                    x = x + 0;
+                    y = y - 1;
                     break;
                 case 45:
-                    x = x + 1;
-                    y = y + 1;
+                    x = x - 1;
+                    y = y - 1;
                     break;
                 case 90:
-                    x = x + 0;
-                    y = y + 1;
+                    x = x - 1;
+                    y = y + 0;
                     break;
                 case 135:
-                    x = x - 1;
+                	x = x - 1;
                     y = y + 1;
                     break;
                 case 180:
-                    x = x - 1;
-                    y = y + 0;
+                    x = x + 0;
+                    y = y + 1;
                     break;
                 case 225:
-                    x = x - 1;
-                    y = y - 1;
+                	x = x + 1;
+                    y = y + 1;
                     break;
                 case 270:
-                    x = x + 0;
-                    y = y - 1;
+                    x = x + 1;
+                    y = y + 0;
                     break;
                 case 315:
-                    x = x + 1;
+                	x = x + 1;
                     y = y - 1;
                     break;
             }
-
-            if (waypoints[x][y] != null) {
-                if(path.contains(new Vector2(x, y))) {
+            if (path.size() > 10000) {
+            	System.out.println("infinite loop in a path");
+                return;
+            }
+            if (WL6Meta.block(gameModel.getMap().getTerrainAt(x, y)).texture != null) {
+                System.out.println("waypoints led into a wall");
+                return;
+            }
+            path.add(new Vector2(x, y));
+            if (gameModel.getWaypoint(x, y) != null) {
+                if(usedWaypoints.contains(new Vector2(x, y))) {
+                	pathLoopStart = path.indexOf(new Vector2(x, y));
                     complete = true;
-                }
-                else {
-                    path.add(new Vector2(x, y));
-                    angle = (int)WL6Meta.dirToAngle(waypoints[x][y]);
+                } else {
+                    angle = (int)WL6Meta.dirToAngle(gameModel.getWaypoint(x, y));
                 }
             }
         }
     }
+
+	public float getPathSpeed() {
+		return pathSpeed;
+	}
+
+	public void setPathSpeed(float pathSpeed) {
+		this.pathSpeed = pathSpeed;
+	}
+
+	public boolean isPain() {
+		return pain;
+	}
+
+	public void setPain(boolean pain) {
+		this.pain = pain;
+	}
+
+	public float getChaseSpeed() {
+		return chaseSpeed;
+	}
+
+	public void setChaseSpeed(float chaseSpeed) {
+		this.chaseSpeed = chaseSpeed;
+	}
+
+	public int getDamage() {
+		return damage;
+	}
+
+	public void setDamage(int damage) {
+		this.damage = damage;
+	}
 }
 

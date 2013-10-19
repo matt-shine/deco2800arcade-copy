@@ -29,7 +29,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.NetworkException;
 import deco2800.arcade.client.network.listener.CommunicationListener;
-import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.FileServerListener;
 import deco2800.arcade.client.network.listener.GameListener;
@@ -98,6 +97,14 @@ public class Arcade extends JFrame {
 	private static boolean multiplayerEnabled;
 
 	private static boolean playerBetting;
+
+	private static boolean matchMaking;
+
+	private static boolean matchMaking2;
+
+	private static boolean gameWaiting;
+
+	private static boolean bettingLobby;
 
 	private static ArrayList<ActiveMatchDetails> matches = new ArrayList<ActiveMatchDetails>();
 
@@ -209,8 +216,7 @@ public class Arcade extends JFrame {
 	/**
 	 * Attempt to initiate a connection with the server.
 	 * 
-	 * @throws ArcadeException
-	 *             if the connection failed.
+	 * @throws ArcadeException: if the connection failed.
 	 */
 	public void connectToServer() throws ArcadeException {
 		try {
@@ -229,32 +235,28 @@ public class Arcade extends JFrame {
 		}
 	}
 
-	/**
-	 * Attempt to initiate a connection with the file server.
-	 * 
-	 * @throws ArcadeException
-	 *             if the connection failed.
-	 */
-	public void connectToFileServer() throws ArcadeException {
-		try {
-			// TODO allow server/port as optional runtime arguments xor user
-			// inputs.
-			System.out.println("connecting to file server");
-			fileClient = new NetworkClient(serverIPAddress, FILE_TCP_PORT);
-			addFileClientListeners();
-		} catch (NetworkException e) {
-			throw new ArcadeException(
-					"Unable to connect to Arcade File Server ("
-							+ serverIPAddress + ")", e);
-		}
-		fetchGameJar("pong", "1.0");
-	}
+	  /**
+	    * Attempt to initiate a connection with the file server.
+	    *
+	    * @throws ArcadeException
+	    *             if the connection failed.
+	    */
+	  public void connectToFileServer() throws ArcadeException {
+	      try {
+	          // TODO allow server/port as optional runtime arguments xor user inputs.
+	          System.out.println("connecting to file server");
+	          fileClient = new NetworkClient(serverIPAddress, FILE_TCP_PORT);
+	          addFileClientListeners();
+	      } catch (NetworkException e) {
+	          throw new ArcadeException("Unable to connect to Arcade File Server ("
+	                  + serverIPAddress + ")", e);
+	      }
+	  }
 
 	/**
 	 * Add Listeners to the network client
 	 */
 	private void addListeners() {
-		this.client.addListener(new ConnectionListener());
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
 		this.client
@@ -264,21 +266,25 @@ public class Arcade extends JFrame {
 		this.client.addListener(new LobbyListener());
 		this.client.addListener(new LibraryResponseListener());
 	}
+	
+    /**
+     * Add Listeners to the network client
+     */
+    private void addFileClientListeners() {
+        this.fileClient.addListener(new FileServerListener());
+    }
 
-	/**
-	 * Add Listeners to the network client
-	 */
-	private void addFileClientListeners() {
-		this.fileClient.addListener(new FileServerListener());
-	}
+    public void connectAsUser(String username, String password) {
+    	System.out.println(password);
+		ConnectionRequest connectionRequest = new ConnectionRequest();
+		connectionRequest.username = username;
+		connectionRequest.password = password;
+		connectionRequest.register = false;
+		if (!password.equals("")) {
+			this.client.sendNetworkObject(connectionRequest);
+		}
 
-	public void connectAsUser(String username) {
-
-		/**
-		 * We should have our playerID at this point (connectAsUser(int playerID, String username)), but alas, we do not.
-		 * Until that is ready, we will use a random ID as follows.
-		 * 
-		 */
+		//For testing purposes, a specific ID number is given to debug users and random users get a random ID
 		int myID = 1 + (int)(Math.random() * ((500 - 1) + 1));
 		if (username.equals("debug")){
 			myID = 999;
@@ -288,8 +294,11 @@ public class Arcade extends JFrame {
 			myID = 777;
 		}
 		
-		PlayerClient pc = new PlayerClient(this.client);
-		Player myPlayer = pc.loadPlayer(myID);
+		//For some reason this makes the arcade hang at login
+		//PlayerClient pc = new PlayerClient(this.client);
+		//Player myPlayer = pc.loadPlayer(myID);
+		Player myPlayer = null;
+
 		if (myPlayer == null){  //As previously mentioned, due to playerID shortages at this time, a null Player is almost guaranteed
 			List<String> details = new ArrayList<String>();
 			details.add(username);
@@ -312,13 +321,7 @@ public class Arcade extends JFrame {
 		this.player = myPlayer;
 		this.communicationNetwork.loggedIn(this.player, this.view);
 
-		ConnectionRequest connectionRequest = new ConnectionRequest();
-		connectionRequest.playerID = myID;
-		connectionRequest.username = myPlayer.getUsername();
-		//This breaks network communication at the moment!
-		//Protocol.registerEncrypted(connectionRequest); 
-
-		this.client.sendNetworkObject(connectionRequest);
+		System.out.println("My playerID is: " + myID);
 
 		CommunicationRequest communicationRequest = new CommunicationRequest();
 		communicationRequest.playerID = myID;
@@ -329,7 +332,7 @@ public class Arcade extends JFrame {
 		creditBalanceRequest.playerID = myID;
 		creditBalanceRequest.username = myPlayer.getUsername();
 		this.client.sendNetworkObject(creditBalanceRequest);
-		
+	
 		
 		if (player.getID() == 888){ //This ID belongs to debug1 
 			List<Integer> chat = new ArrayList<Integer>(); 
@@ -345,7 +348,6 @@ public class Arcade extends JFrame {
 			this.communicationNetwork.createChat(chat); 
 		}
 		
-
 		// TODO move this call to be internal to Packman class
 		// TODO iterate over actual game ids rather than just
 		// using pong
@@ -361,13 +363,29 @@ public class Arcade extends JFrame {
 			getCurrentGame().setPlayer(this.player);
 			getCurrentGame().setThisNetworkClient(this.client);
 		}
+       
+        if (getCurrentGame() != null) {
+        	getCurrentGame().setPlayer(this.player);
+            getCurrentGame().setThisNetworkClient(this.client);
+            
+        }
 
-		// This is how you fetch game JARs
-		// fetchGameJar("pong", "1.0");
+        // This is how you fetch game JARs
+        //fetchGameJar("pong", "1.0");
 
-		System.out.println("[CLIENT] GameUpdateCheckResponse received: "
-				+ resp.md5);
+        System.out.println("[CLIENT] GameUpdateCheckResponse received: " + resp.md5);
 	}
+
+    public void registerAsUser(String username, String password) {
+		ConnectionRequest connectionRequest = new ConnectionRequest();
+		connectionRequest.username = username;
+		connectionRequest.password = password;
+		connectionRequest.register = true;
+
+		if (!password.equals("")) {
+			this.client.sendNetworkObject(connectionRequest);
+		}
+    }
 
 	/**
 	 * Fetch the JAR for a given game/version from the server
@@ -387,8 +405,7 @@ public class Arcade extends JFrame {
 	/**
 	 * Ask the server to play a given game.
 	 * 
-	 * @param gameClient
-	 *            the type of game to play
+	 * @param gameClient: the type of game to play
 	 */
 	public void requestGameSession(GameClient gameClient) {
 		NewGameRequest newGameRequest = new NewGameRequest();
@@ -426,13 +443,33 @@ public class Arcade extends JFrame {
 		proxy.setTarget(new DummyApplicationListener());
 	}
 
+	/**
+	 * Whether the arcade is currently being used for a multiplayer game
+	 * 
+	 * @return True if the arcade is being used for a multiplayer game
+	 */
 	public boolean isMultiplayerEnabled() {
 		return multiplayerEnabled;
 	}
 
+	/**
+	 * Sets the variable defining whether the arcade is being used for
+	 * multiplayer games
+	 * 
+	 * @param multiplayerEnabled:
+	 *            Whether or not the arcade is being used for multiplayer
+	 */
 	public void setMultiplayerEnabled(boolean multiplayerEnabled) {
 		Arcade.multiplayerEnabled = multiplayerEnabled;
 	}
+    
+    /**
+     * Get the network client
+     * @return client
+     */
+    public NetworkClient getClient() {
+        return client;
+    }
 
 	/**
 	 * returns true if the player exists
@@ -548,8 +585,8 @@ public class Arcade extends JFrame {
 	/**
 	 * Get a GameClient Instance of a game
 	 * 
-	 * @param id
-	 *            Game id
+	 * @param id: Game id
+	 * 
 	 * @return GameClient
 	 */
 	public GameClient getInstanceOfGame(String id) {
@@ -604,9 +641,9 @@ public class Arcade extends JFrame {
 	/**
 	 * Adds a lobby match to the clients list of matches.
 	 * 
-	 * @param response
-	 *            - The match to add.
+	 * @param response: The match to add.
 	 */
+//>>>>>>> master
 	public static void addToMatchList(ActiveMatchDetails response) {
 		matches.add(response);
 	}
@@ -621,8 +658,7 @@ public class Arcade extends JFrame {
 	/**
 	 * Removes a match from the client's list of lobby matches.
 	 * 
-	 * @param response
-	 *            - The match to remove.
+	 * @param response: The match to remove.
 	 */
 	public static void removeFromMatchList(RemovedMatchDetails response) {
 		if (matches.contains(response)) {
@@ -639,6 +675,11 @@ public class Arcade extends JFrame {
 		return matches;
 	}
 
+	/**
+	 * Forwards on a request for a new Multiplayer game to the client
+	 * 
+	 * @param request
+	 */
 	public void createMultiplayerGame(NewMultiGameRequest request) {
 		request.playerID = player.getID();
 		this.client.sendNetworkObject(request);
@@ -660,6 +701,7 @@ public class Arcade extends JFrame {
 	public void populateMatchList() {
 		NewLobbyRequest request = new NewLobbyRequest();
 		request.requestType = LobbyRequestType.POPULATE;
+		request.playerID = player.getID();
 		this.client.sendNetworkObject(request);
 	}
 
@@ -698,10 +740,55 @@ public class Arcade extends JFrame {
 	}
 
 	/**
+	 * Whether the client is currently involved in a matchmaking game
+	 * 
+	 * @return True if the client is in a matchmaking game
+	 */
+	public boolean isMatchMaking() {
+		return matchMaking;
+	}
+
+	/**
+	 * Sets whether the client is involved in a matchmaking game
+	 * 
+	 * @param matchMaking:
+	 *            True if the game is matchmaking, false otherwise
+	 */
+	public void setMatchMaking(boolean matchMaking) {
+		Arcade.matchMaking = matchMaking;
+	}
+
+	/**
+	 * Returns whether the game is paused waiting for a multiplayer opponent
+	 * 
+	 * @return True if the game is paused, false otherwise
+	 */
+	public boolean isGameWaiting() {
+		return gameWaiting;
+	}
+
+	/**
+	 * Sets whether the game should be waiting for an opponent
+	 * 
+	 * @param gameWaiting:
+	 *            Whether or not to wait for opponent
+	 */
+	public void setGameWaiting(boolean gameWaiting) {
+		Arcade.gameWaiting = gameWaiting;
+	}
+
+	public boolean isMatchMaking2() {
+		return matchMaking2;
+	}
+
+	public void setMatchMaking2(boolean matchMaking2) {
+		Arcade.matchMaking2 = matchMaking2;
+	}
+
+	/**
 	 * Set selected game client
 	 * 
-	 * @param gameClient
-	 *            GameClient
+	 * @param gameClient: GameClient
 	 */
 	public void setGame(GameClient gameClient) {
 		selectedGame = gameClient;
@@ -743,4 +830,14 @@ public class Arcade extends JFrame {
 		GameLibraryRequest gameLibraryRequest = new GameLibraryRequest();
 		client.sendNetworkObject(gameLibraryRequest);
 	}
+
+	public void setBettingLobby(boolean b) {
+		Arcade.bettingLobby = b;
+
+	}
+
+	public boolean isBettingLobby() {
+		return bettingLobby;
+	}
+
 }

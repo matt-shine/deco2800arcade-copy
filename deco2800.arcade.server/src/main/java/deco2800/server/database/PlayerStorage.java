@@ -1,8 +1,6 @@
-
 package deco2800.server.database;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -37,21 +35,21 @@ public class PlayerStorage {
 
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
-		
+
 		try {
-			ResultSet tableData = connection.getMetaData().getTables(null, null, "PLAYERS", null);
-						
+			ResultSet tableData = connection.getMetaData().getTables(null,
+					null, "PLAYERS", null);
 			if (!tableData.next()) {
 				Statement statement = connection.createStatement();
-				statement.execute("CREATE TABLE PLAYERS(playerID INT PRIMARY KEY,"
+				statement
+						.execute("CREATE TABLE PLAYERS(playerID INT NOT NULL PRIMARY KEY,"
 								+ "username VARCHAR(30) NOT NULL,"
 								+ "name VARCHAR(30),"
 								+ "email VARCHAR(30),"
 								+ "program VARCHAR(30)," + "bio VARCHAR(200))");
 			}
-			
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			throw new DatabaseException("Unable to create players table", e);
 		}
 		initialised = true;
@@ -77,44 +75,20 @@ public class PlayerStorage {
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
 
-		//Statement statement = null;
-		PreparedStatement ps = null;
+		Statement statement = null;
 		ResultSet resultSet = null;
 		try {
-			//statement = connection.createStatement();
-			/*
-			resultSet = statement.executeQuery("SELECT * FROM PLAYERS");
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SELECT * from PLAYERS;");
 			data.add(findPlayerInfo(playerID, resultSet, "username"));
 			data.add(findPlayerInfo(playerID, resultSet, "name"));
 			data.add(findPlayerInfo(playerID, resultSet, "email"));
 			data.add(findPlayerInfo(playerID, resultSet, "program"));
 			data.add(findPlayerInfo(playerID, resultSet, "bio"));
-			*/
-			//resultSet = statement.executeQuery("SELECT * FROM PLAYERS WHERE playerID ="+playerID);
-			
-			/**
-			 * What happened here? Excellent question! Read on:
-			 * 
-			 * The default statement was upgraded to a preparedStatement and the method below
-			 * can effectively replace the findPlayerInfo(...) method:
-			 * 
-			 * The things that were changed have been left in //comments
-			 */
-			
-			ps = connection.prepareStatement("SELECT * FROM PLAYERS WHERE playerID = ?");
-			ps.setInt(1, playerID);
-			resultSet = ps.executeQuery();
-			while (resultSet.next()){
-				data.add(resultSet.getString("username"));
-				data.add(resultSet.getString("name"));
-				data.add(resultSet.getString("email"));
-				data.add(resultSet.getString("program"));
-				data.add(resultSet.getString("bio"));
-			}
 
 			return data;
 		} catch (SQLException e) {
-			//e.printStackTrace();
+			e.printStackTrace();
 			throw new DatabaseException(
 					"Unable to get player informtion from database", e);
 		} finally {
@@ -122,11 +96,8 @@ public class PlayerStorage {
 				if (resultSet != null) {
 					resultSet.close();
 				}
-				//if (statement != null) {
-				//	statement.close();
-				//}
-				if (ps != null) {
-					ps.close();
+				if (statement != null) {
+					statement.close();
 				}
 				if (connection != null) {
 					connection.close();
@@ -153,7 +124,6 @@ public class PlayerStorage {
 	private String findPlayerInfo(int playerID, ResultSet results, String field)
 			throws SQLException {
 		String result = null;
-		
 		while (results.next()) {
 			String user = results.getString("playerID");
 			if (user.equals(playerID)) {
@@ -234,6 +204,20 @@ public class PlayerStorage {
 			throws DatabaseException {
 		updateField(playerID, newValue, "name");
 	}
+	
+	/**
+	 * Sets a player's age to the provided name.
+	 * 
+	 * @param playerID
+	 *            The player's playerID.
+	 * @param newValue
+	 *            The player's new age.
+	 * @throws DatabaseException
+	 */
+	public void updateAge(int playerID, String newValue)
+			throws DatabaseException {
+		updateField(playerID, newValue, "age");
+	}
 
 	/**
 	 * Updates a database field, given a playerID, the field to be updated and
@@ -283,33 +267,9 @@ public class PlayerStorage {
 			}
 		}
 	}
-	
-	/**
-	 * TEMPORARY: Add a player to the database
-	 * @param playerID
-	 * @param username
-	 * @throws DatabaseException
-	 */
-	public void addPlayer(int playerID, String username, String name, String email, String program, String bio) throws DatabaseException {
-		// Get a connection to the database
-		Connection connection = Database.getConnection();
-		
-		try{
-			String insert = "INSERT INTO PLAYERS (playerID, username, name, email, program, bio) VALUES (?, ?, ?, ?, ?, ?)";
-			PreparedStatement statement = connection.prepareStatement(insert);
-			statement.setInt(1, playerID);
-			statement.setString(2, username);
-			statement.setString(3, name);
-			statement.setString(4, email);
-			statement.setString(5, program);
-			statement.setString(6, bio);
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			throw new DatabaseException("There was an error adding the player to the database", e);
-		}
-	}
 
-	public void updateAge(int playerID, String age) {
+	public void addPlayer(int parseInt, String string, String string2,
+			String string3, String string4, String string5, String string6) {
 		// TODO Auto-generated method stub
 		
 	}

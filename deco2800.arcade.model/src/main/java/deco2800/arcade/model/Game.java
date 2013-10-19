@@ -47,6 +47,15 @@ public class Game implements Comparable<Game> {
 	}
 	
 	
+	/*
+	 * Returns the id of the game
+	 * @return id
+	 */
+	public String getID() {
+		return id;
+	}
+	
+
 	/**
 	 * Sets the description for a game
 	 * @param description Game Description
@@ -86,7 +95,7 @@ public class Game implements Comparable<Game> {
     public void setIcon(Icon icon) {
         this.icon = icon;
     }
-
+    
     /**
      * Get Icon
      * @return icon

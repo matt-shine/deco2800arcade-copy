@@ -50,4 +50,12 @@ public interface StoreScreen {
      * @param Game game
      */
     boolean buyGame(Game game);
+    
+    /**
+     * Adds/removes 'game' to current players wishlist. Returns true upon
+     * adding, and false upon removing.
+     * @return boolean
+     * @param Game game
+     */
+    boolean addWishlist(Game game);
 }

@@ -14,7 +14,7 @@ public class Tile {
 											// same for all tiles
 	private List<Mover> moversHere; // list of pacman/ghosts for whom this is
 									// the current tile
-	private GameMap gameMap;
+	protected GameMap gameMap;
 
 	// thinking gameMap should become the model- currently Tile only has it
 	// because it needs it for the toString() method, but most eveyrthing else

@@ -24,6 +24,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
 /**
+ * TODO describe.
  * @author Addison Gourluck
  */
 public class StoreTransactions implements Screen, StoreScreen {
@@ -41,7 +42,7 @@ public class StoreTransactions implements Screen, StoreScreen {
 		
 		final Table bg = new Table();
 		final Button homeButton = new Button(skin, "home");
-		final Label Title = new Label("Buy More Coins", skin, "default-34");
+		final Label title = new Label("Buy More Coins", skin, "default-34");
 		final Button searchButton = new Button(skin, "search");
 		final TextField searchField = new TextField("", skin);
 		final Label searchResult = new Label("", skin);
@@ -50,7 +51,8 @@ public class StoreTransactions implements Screen, StoreScreen {
 		final TextButton wishlistButton = new TextButton("Wishlist", skin);
 		
 		// The background for the store.
-		skin.add("background", new Texture(Gdx.files.internal("store/transactions_bg.png")));
+		skin.add("background", new Texture(
+				Gdx.files.internal("store/transactions_bg.png")));
 		bg.setFillParent(true);
 		bg.setBackground(skin.getDrawable("background"));
 		stage.addActor(bg);
@@ -61,9 +63,9 @@ public class StoreTransactions implements Screen, StoreScreen {
 		stage.addActor(homeButton);
 		
 		// Title "Buy More Coins", located center of screen.
-		Title.setSize(380, 40);
-		Title.setPosition(96, 515);
-		stage.addActor(Title);
+		title.setSize(380, 40);
+		title.setPosition(96, 515);
+		stage.addActor(title);
 		
 		// Entry field for search term. Will update the featured game, as well.
 		// as the search result located below it.
@@ -141,10 +143,16 @@ public class StoreTransactions implements Screen, StoreScreen {
 		});
 	}
 	
+	/**
+	 * Adds the coin icons, text, and buy button for each of the 5 coin packs,
+	 * as well as the listener for the buy button.
+	 * @author Addison Gourluck
+	 */
 	private void addCoins() {
 		int i = 0;
 		for (int check : Arrays.asList(5, 10, 20, 50, 100)) {
-			skin.add("coin" + check, new Texture(Gdx.files.internal("store/coin_" + check + ".png")));
+			skin.add("coin" + check, new Texture(
+					Gdx.files.internal("store/coin_" + check + ".png")));
 			
 			// Buy options icons.
 			final Table coins = new Table();
@@ -177,9 +185,11 @@ public class StoreTransactions implements Screen, StoreScreen {
 			buyButton.setName(check + "");
 			stage.addActor(buyButton);
 			
+			// Buy button Listener, which will buy tokens for user on click.
 			buyButton.addListener(new ChangeListener() {
 				public void changed(ChangeEvent event, Actor actor) {
-					System.out.println("buying " + Integer.parseInt(actor.getName()));
+					System.out.println("buying "
+							+ Integer.parseInt(actor.getName()));
 					buyTokens(Integer.parseInt(actor.getName()));
 				}
 			});
@@ -250,5 +260,10 @@ public class StoreTransactions implements Screen, StoreScreen {
 	@Override
 	public void setSelected(String game) {
 		// No selected game for transactions screen.
+	}
+	
+	@Override
+	public boolean addWishlist(Game game) {
+		return true;
 	}
 }

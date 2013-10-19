@@ -19,9 +19,9 @@ public class PacController implements InputProcessor {
 	private PacChar player;
 	private GameMap gameMap;
 	
-	public PacController(PacChar player, GameMap gameMap) {
-		this.player = player;
-		this.gameMap = gameMap;
+	public PacController(PacModel model) {
+		this.player = model.getPlayer();
+		this.gameMap = model.getGameMap();
 	}
 	
 		
@@ -37,15 +37,13 @@ public class PacController implements InputProcessor {
 			facing = Dir.UP;
 		} else if (key == Keys.DOWN){ 
 			facing = Dir.DOWN;	
-		} else if (key == Keys.ENTER) {
-			facing = Dir.TEST;			
 		} else {
 			// if not one of the arrow keys
 			return false;
 		}
 		// check for collisions
 		Tile pTile = player.getTile();
-		Dir tempFacing = player.getFacing();
+//		Dir tempFacing = player.getFacing();
 		player.setFacing(facing);
 		System.out.println("Can pacman move? Next tile is " + 
 							player.nextTile(pTile, 1));
@@ -64,20 +62,6 @@ public class PacController implements InputProcessor {
 //		}
 		//checkGhostCollision(pTile);			
 		return true;
-	}
-
-	private void checkGhostCollision(Tile pTile) {	
-		List<Mover> colList = pTile.getMovers();
-		if (colList.size() > 1) {
-			for (int i=0; i < colList.size(); i++) {
-				if (colList.get(i).getClass() == Ghost.class) {
-					System.out.println("Pacman hit a ghost!");
-					//TODO some death thing
-					player.setCurrentState(PacState.DEAD);
-				}
-			}
-		}
-		
 	}
 	
 	

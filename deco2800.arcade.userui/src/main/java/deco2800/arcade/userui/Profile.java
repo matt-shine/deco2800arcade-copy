@@ -50,6 +50,7 @@ public class Profile extends GameClient {
 		game = new Game();
 		game.id = "profileui";
 		game.name = "Profile UI";
+		game.description = "The player profile page";
 	}
 
 	public Game getGame() {

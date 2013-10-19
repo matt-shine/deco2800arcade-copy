@@ -62,7 +62,7 @@ public class AchievementScreen extends JFrame{
 	
 	//Declare Images here
 	private ImageIcon picavatar,piclocked, picunlocked, piceditbutton, 
-	piconline, picoffline, select, selecthover, logo;
+	piconline, select, selecthover, logo;
 	private ImageIcon home, homehover, forum, forumhover, store, storehover,
 	library, libraryhover, profile, profilehover;
 			
@@ -93,8 +93,6 @@ public class AchievementScreen extends JFrame{
 		piclocked = new ImageIcon("assets/images/achievement_locked.png");
 		picunlocked = new ImageIcon("assets/images/achievement_unlocked.png");
 		piceditbutton = new ImageIcon("assets/images/edit_button.png");
-		piconline = new ImageIcon("assets/images/online.png");
-		picoffline = new ImageIcon("assets/images/offline.png");
 		homehover = new ImageIcon("assets/images/homehover.png");
 		home = new ImageIcon("assets/images/home.png");
 		storehover = new ImageIcon("assets/images/storehover.png");

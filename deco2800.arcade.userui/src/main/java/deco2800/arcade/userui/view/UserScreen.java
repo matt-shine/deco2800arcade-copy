@@ -37,7 +37,7 @@ public class UserScreen extends JFrame{
 	private JScrollPane friendscroll;
 	
 	//Declare Buttons 
-	private JButton addfriendbutton, removefriendbutton, editbutton, statusbutton;
+	private JButton addfriendbutton, removefriendbutton, editbutton, statusbutton, blockbutton;
 	private JButton achievementbar;
 	private JButton homelink, storelink, librarylink, forumlink, myprofilelink;
 	private JButton invitesbutton;
@@ -46,9 +46,8 @@ public class UserScreen extends JFrame{
 	private JLabel avatar;
 	private JLabel playername, playerlastonline, realname, program, description;
 	private JLabel aboutbar, friendbar, historybar;
-	private JLabel history1, history2, history3, history4, history5;
-	private JLabel achievement1, achievement2, achievement3, achievement4, achievement5, 
-	achievement6;
+	private JLabel history1, history2, history3;
+	private JLabel achievement1, achievement2, achievement3;
 	
 	//Declare Text Areas
 	private JTextArea historyarea;
@@ -275,6 +274,11 @@ public class UserScreen extends JFrame{
 	    removefriendbutton.setForeground(Color.RED);
 	    removefriendbutton.setBorder(BorderFactory.createEmptyBorder());
 	    removefriendbutton.setContentAreaFilled(false);
+	    blockbutton = new JButton("Block List");
+	    blockbutton.setFont(blacksmall);
+	    blockbutton.setForeground(Color.white);
+	    blockbutton.setBorder(BorderFactory.createEmptyBorder());
+	    blockbutton.setContentAreaFilled(false);
 	    invitesbutton = new JButton("Invites");
 	    invitesbutton.setFont(blacksmall);
 	    invitesbutton.setForeground(Color.white);
@@ -284,10 +288,12 @@ public class UserScreen extends JFrame{
 		//Add Elements to Panel
 	    friendpanel = new ImagePanel(new ImageIcon("assets/images/Blue_Box.png").getImage());
         friendpanel.setLayout(new MigLayout());
+		friendpanel.setOpaque(false);
 	    friendpanel.add(friendbar, "gap left 10px, gap bottom 110px");
 	    friendpanel.add(addfriendbutton,"gap left 10px");
 	    friendpanel.add(removefriendbutton,"gap left 10px");
-	    friendpanel.add(invitesbutton,"gap left 110px");
+	    friendpanel.add(invitesbutton,"gap left 50px");
+	    friendpanel.add(blockbutton,"gap left 30px");
         friendpanel.add(friendscroll, "width :500px, height :100px, gap top 30px");    
 		
 	}
@@ -336,24 +342,44 @@ public class UserScreen extends JFrame{
 	    achievement1 = new JLabel();
 	    achievement2 = new JLabel();
 	    achievement3 = new JLabel();
-	    achievement4 = new JLabel();
-	    achievement5 = new JLabel();
-	    achievement6 = new JLabel();
 	    
 	    achievement1.setIcon(piclocked);
 	    achievement2.setIcon(piclocked);
 	    achievement3.setIcon(piclocked);
-	    achievement4.setIcon(piclocked);
-	    achievement5.setIcon(piclocked);
-	    achievement6.setIcon(piclocked);
 	    
-	    JPanel achievementtext1 = new JPanel(new MigLayout());
-	    JPanel achievementtext2 = new JPanel(new MigLayout());
-	    JPanel achievementtext3 = new JPanel(new MigLayout());
-	    JPanel achievementtext4 = new JPanel(new MigLayout());
-	    JPanel achievementtext5 = new JPanel(new MigLayout());
-	    JPanel achievementtext6 = new JPanel(new MigLayout());
-	    
+	    JLabel achievement1name = new JLabel("Master of Paddle");
+	    achievement1name.setFont(linkbold);
+	    achievement1name.setForeground(Color.white);
+        JLabel achievement2name = new JLabel("Off the Wall");
+        achievement2name.setFont(linkbold);
+        achievement2name.setForeground(Color.white);
+        JLabel achievement3name = new JLabel("What a Rally");
+        achievement3name.setFont(linkbold);
+        achievement3name.setForeground(Color.white);
+        
+        JLabel achievement1time = new JLabel("Score 5 Points");
+        achievement1time.setFont(blacknormal);
+        achievement1time.setForeground(Color.white);
+        JLabel achievement2time = new JLabel("Win 3 games Straight");
+        achievement2time.setFont(blacknormal);
+        achievement2time.setForeground(Color.white);
+        JLabel achievement3time = new JLabel("Over 20 hits");
+        achievement3time.setFont(blacknormal);
+        achievement3time.setForeground(Color.white);
+
+        JPanel achievementtext1 = new JPanel(new MigLayout());
+        achievementtext1.setOpaque(false);
+        achievementtext1.add(achievement1name,"wrap");
+        achievementtext1.add(achievement1time);
+        JPanel achievementtext2 = new JPanel(new MigLayout());
+        achievementtext2.setOpaque(false);
+        achievementtext2.add(achievement2name,"wrap");
+        achievementtext2.add(achievement2time);
+        JPanel achievementtext3 = new JPanel(new MigLayout());
+        achievementtext3.setOpaque(false);
+        achievementtext3.add(achievement3name,"wrap");
+        achievementtext3.add(achievement3time);
+        
 	    JPanel achievementbarpanel = new JPanel(new MigLayout());
 	    JPanel achievementlistpanel = new JPanel(new MigLayout());
 	    
@@ -376,12 +402,6 @@ public class UserScreen extends JFrame{
         achievementlistpanel.add(achievementtext2,"growy, width :110");
         achievementlistpanel.add(achievement3);
         achievementlistpanel.add(achievementtext3,"wrap, growy, width :110");
-        achievementlistpanel.add(achievement4);
-        achievementlistpanel.add(achievementtext4,"growy, width :110");
-        achievementlistpanel.add(achievement5);
-        achievementlistpanel.add(achievementtext5,"growy, width :110");
-        achievementlistpanel.add(achievement6);
-        achievementlistpanel.add(achievementtext6,"growy, width :110");
         
         achievementlistpanel.setOpaque(false);
 		
@@ -585,6 +605,16 @@ public class UserScreen extends JFrame{
 	}
 	
 	/**
+	 * Block a friend
+	 * @param listenForBlockButton
+	 */
+	public void addBlockListener(ActionListener listenForBlockButton){
+		
+		blockbutton.addActionListener(listenForBlockButton);
+		
+	}
+	
+	/**
 	 * Set the status button to specified ImageIcon
 	 * @param icon ImageIcon of status
 	 */
@@ -594,7 +624,12 @@ public class UserScreen extends JFrame{
 		
 	}
 	
+	/**
+	 *  Update the friends list
+	 */
 	public void updateFriends(){
+		
+		
 		
 	}
 	

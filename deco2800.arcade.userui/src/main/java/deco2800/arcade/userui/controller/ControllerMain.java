@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.userui.Model;
 import deco2800.arcade.userui.view.AchievementScreen;
+import deco2800.arcade.userui.view.BlockScreen;
 import deco2800.arcade.userui.view.EditScreen;
 import deco2800.arcade.userui.view.AddFriendScreen;
 import deco2800.arcade.userui.view.InviteScreen;
@@ -25,6 +26,7 @@ public class ControllerMain {
 	private RemoveFriendScreen removefriendView;
 	private InviteScreen inviteView;
 	private AchievementScreen achievementView;
+	private BlockScreen blockView;
 	private Model theModel;
 	
 	/**
@@ -48,6 +50,7 @@ public class ControllerMain {
 		this.userView.addFriendListener(new AddFriendListener());
 		this.userView.addRemoveFriendListener(new RemoveFriendListener());
 		this.userView.addInviteListener(new InviteListener());
+		this.userView.addBlockListener(new BlockListener());
 					
 		checkstatus();
 			
@@ -233,6 +236,22 @@ public class ControllerMain {
 			//Open invites Screen
 			inviteView = new InviteScreen(theModel);
 			Invite invite = new Invite(theModel, inviteView, userView);
+			
+		}
+		
+	}
+	
+	/**
+	 *  Lists the Blocked users
+	 */
+	class BlockListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+			//Open Blocked users Screen
+			blockView = new BlockScreen(theModel);
+			BlockFriend block = new BlockFriend(theModel, userView, blockView);
 			
 		}
 		

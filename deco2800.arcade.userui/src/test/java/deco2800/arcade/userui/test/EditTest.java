@@ -19,20 +19,10 @@ import deco2800.arcade.userui.view.UserScreen;
 
 public class EditTest {
 	
-	private Player player;
-	private EditScreen editView;
-	private UserScreen userView;
-	private ControllerEdit editController;
-	private Model theModel;
-	
+	private Player player;	
 
 	@Before
 	public void initialise() {
-		
-		this.theModel = new Model();
-		this.editView = new EditScreen(theModel);
-		this.editController = new ControllerEdit(theModel, editView, userView);
-		
 		
 		List<String> info = new ArrayList<String>();
 		info.add("Foo");

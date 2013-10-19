@@ -15,9 +15,9 @@ public class Level1EnemyPattern extends BulletPattern {
 	
 	private PlayerShip player;
 	
-	public Level1EnemyPattern(Ship emitter, PlayerShip player, PlayScreen screen) {
+	public Level1EnemyPattern(Ship emitter, PlayerShip player, PlayScreen screen, int difficulty) {
 		super(emitter, screen);
-		interval = 3f;
+		interval = 3f/difficulty;
 		this.player = player;
 	}
 	

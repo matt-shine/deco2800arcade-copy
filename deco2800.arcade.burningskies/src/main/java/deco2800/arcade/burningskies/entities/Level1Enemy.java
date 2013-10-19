@@ -11,12 +11,17 @@ public class Level1Enemy extends Enemy {
 	
 	private Level1EnemyPattern pattern;
 	
-	public Level1Enemy(int health, Texture image, Vector2 pos, Vector2 dir, PlayScreen screen, PlayerShip player, long points) {
+	public Level1Enemy(int health, Texture image, Vector2 pos, Vector2 dir, PlayScreen screen, 
+			PlayerShip player, long points, int difficulty) {
 		super(health, image, pos, dir, screen, player, points);
 
 		homing = true;
-		accelIntensity = (float) 0.65;
-		pattern = new Level1EnemyPattern(this, player, screen);
+		if (difficulty < 3) {
+			accelIntensity = 0.65f;
+		} else {
+			accelIntensity = 0.35f +  0.1f*(difficulty%5);
+		}
+		pattern = new Level1EnemyPattern(this, player, screen, difficulty);
 		pattern.start();
 	}
 	

@@ -15,8 +15,8 @@ public class PacModel {
 		GAMEOVER
 	}
  
-	public final int SCREENHEIGHT;
-	public final int SCREENWIDTH;
+	public final int SCREEN_HEIGHT;
+	public final int SCREEN_WIDTH;
 	
 	private GameState gameState;
 	private PacChar player;
@@ -25,14 +25,13 @@ public class PacModel {
 	private String mapName; // name of level map
 	private GameMap gameMap;
 	
-	public PacModel(int SCREENHEIGHT, int SCREENWIDTH) {
-		this.SCREENHEIGHT = SCREENHEIGHT;
-		this.SCREENWIDTH = SCREENWIDTH;
+	public PacModel(int SCREENWIDTH, int SCREENHEIGHT, int NUM_GHOSTS) {
+		this.SCREEN_HEIGHT = SCREENHEIGHT;
+		this.SCREEN_WIDTH = SCREENWIDTH;
 		// level map file
 		mapName = "levelMap.txt";
 		//initialise gamemap
-		//TODO move offset to PacView
-		gameMap = new GameMap(SCREENHEIGHT, SCREENWIDTH);			
+		gameMap = new GameMap(SCREEN_WIDTH, SCREEN_HEIGHT, NUM_GHOSTS);			
 		gameMap.createTiles(gameMap.readMap(mapName));
 		//initialise pacman
 		player = new PacChar(gameMap);
@@ -79,11 +78,11 @@ public class PacModel {
 	}
 	
 	public int getSCREENHEIGHT() {
-		return SCREENHEIGHT;
+		return SCREEN_HEIGHT;
 	}
 
 	public int getSCREENWIDTH() {
-		return SCREENWIDTH;
+		return SCREEN_WIDTH;
 	}
 	
 }

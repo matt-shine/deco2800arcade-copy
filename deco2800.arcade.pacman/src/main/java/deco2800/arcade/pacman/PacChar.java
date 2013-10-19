@@ -15,10 +15,6 @@ public class PacChar extends Mover{
 	private PacState currentState;
 	private static int widthVal = 26;
 	private static int heightVal = 26;
-	
-	// the distance pacman moves each frame
-	private float moveDist;
-	private int spritePos;
 
 
 	private Animation walkAnimation;
@@ -130,18 +126,6 @@ public class PacChar extends Mover{
 
 	public void setCurrentState(PacState currentState) {
 		this.currentState = currentState;
-	}
-
-	public float getMoveDist() {
-		return moveDist;
-	}
-
-	public void setMoveDist(float moveDist) {
-		this.moveDist = moveDist;
-	}
-
-	public int getSpritePos() {
-		return spritePos;
 	}
 	
 	public String toString() {

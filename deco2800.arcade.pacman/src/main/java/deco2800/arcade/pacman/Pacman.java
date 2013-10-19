@@ -1,7 +1,6 @@
 package deco2800.arcade.pacman;
 
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.utils.Logger;
 
 import deco2800.arcade.client.ArcadeInputMux;
@@ -11,8 +10,6 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.pacman.PacChar.PacState;
-import deco2800.arcade.pacman.Ghost.GhostName;
 
 /**
  * The main Pacman game class, which sets up the model, view and controller 
@@ -22,8 +19,9 @@ import deco2800.arcade.pacman.Ghost.GhostName;
 @ArcadeGame(id="Pacman")
 public class Pacman extends GameClient {
 	
-	public final int SCREENHEIGHT = 720;
-	public final int SCREENWIDTH = 1280;	
+	public final int SCREEN_HEIGHT = 720;
+	public final int SCREEN_WIDTH = 1280;	
+	private final int NUM_GHOSTS = 4;
 	
 	private PacModel model; // model for Pacman	
 	private PacView view; // view for Pacman	
@@ -85,7 +83,7 @@ public class Pacman extends GameClient {
         });           
 		super.create();		
 		viewNotSetUp = true;		
-		model = new PacModel(SCREENHEIGHT, SCREENWIDTH);		
+		model = new PacModel(SCREEN_WIDTH, SCREEN_HEIGHT, NUM_GHOSTS);		
 		//initialise receiver for input- use the Arcade Multiplexer
 		controller = new PacController(model);
 		ArcadeInputMux.getInstance().addProcessor(controller);

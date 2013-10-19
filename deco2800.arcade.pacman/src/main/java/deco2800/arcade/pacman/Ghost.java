@@ -24,26 +24,32 @@ public class Ghost extends Mover {
 
 	// the distance ghost moves each frame
 	private PacChar player;
-	private float moveDist;
 	private Tile targetTile;
 	private Tile previousTile;
 	// private Animation walkAnimation; this should move to PacView
-	private int spritePos;
 
 	public Ghost(GameMap gameMap, GhostName ghost, PacChar player) {
 		super(gameMap);
 		this.player = player;
 		this.ghostName = ghost;
-		currentTile = gameMap.getFruitLeft(); // CHANGE TO appropriate ghost
-												// start
+		int num;
+		switch (ghost) {
+		case PINKY: num = 1; break;
+		case INKY: num = 2; break;
+		case CLYDE: num = 3; break;
+		default: num = 0; break;
+		}
+		currentTile = gameMap.getGhostStarts()[num];
 		// makes the previous tile the one to right, since he's facing left
 		Point current = gameMap.getTilePos(currentTile);
 		previousTile = gameMap.getGrid()[current.getX() + 1][current.getY()];
 		// set up ghost to be drawn in the right place- this is defintely right
-		drawX = gameMap.getTileCoords(currentTile).getX() + 8; // drawX % 16 was
+		//NOEWSDY I altered the +8 to nothing because when he starts in the ghost pen
+		// he otherwise ends up on a wallTile
+		drawX = gameMap.getTileCoords(currentTile).getX(); // drawX % 16 was
 																// 6, so make it
 																// 8
-		drawY = gameMap.getTileCoords(currentTile).getY() + 8; // was 0, so make
+		drawY = gameMap.getTileCoords(currentTile).getY(); // was 0, so make
 																// it 8
 
 		facing = Dir.LEFT;
@@ -51,25 +57,7 @@ public class Ghost extends Mover {
 		System.out.println("drawX % 16 is: " + (drawX % 16)
 				+ ", drawY % 16 is: " + (drawY % 16));
 
-		// this section should be deleted once I check it works with the view,
-		// or merged into it or something.
-		String file = "";
-		switch (ghost) {
-		case BLINKY:
-			file = "redghostmove.png";
-			break;
-		case PINKY:
-			file = "pinkghostmove.png";
-			break;
-		case INKY:
-			file = "tealghostmove.png";
-			break;
-		case CLYDE:
-			file = "orangeghostmove.png";
-			break;
-		}
-
-		// initialise some variables
+		
 		currentState = GhostState.CHASE;
 
 		width = widthVal;
@@ -311,32 +299,12 @@ public class Ghost extends Mover {
 		//
 	}
 
-	public int getSpritePos() {
-		return spritePos;
-	}
-
-	public Dir getFacing() {
-		return facing;
-	}
-
-	public void setFacing(Dir facing) {
-		this.facing = facing;
-	}
-
 	public GhostState getCurrentState() {
 		return currentState;
 	}
 
 	public void setCurrentState(GhostState currentState) {
 		this.currentState = currentState;
-	}
-
-	public float getMoveDist() {
-		return moveDist;
-	}
-
-	public void setMoveDist(float moveDist) {
-		this.moveDist = moveDist;
 	}
 
 }

@@ -14,9 +14,10 @@ public class Boss extends Enemy {
 	private static Texture tex = new Texture(Gdx.files.internal("images/ships/boss1.png"));
 	private boolean intro = true;
 	private float pauseTimer = 1f;
+	private static int bossMaxHealth = 100000;
 	
 	public Boss(PlayScreen screen, PlayerShip player) {
-		super(100000, tex, 
+		super(bossMaxHealth, tex, 
 		new Vector2(640, 880), new Vector2(0,0), screen, player, 10000000000L);
 
 		pattern = new BossPattern(this, player, screen);
@@ -44,5 +45,9 @@ public class Boss extends Enemy {
 	@Override
 	protected void fire(float delta) {
 		pattern.onRender(delta);
+	}
+	
+	public static int getBossMaxHealth() {
+		return bossMaxHealth;
 	}
 }

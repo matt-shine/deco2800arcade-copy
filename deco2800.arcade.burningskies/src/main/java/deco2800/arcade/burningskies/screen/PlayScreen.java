@@ -37,6 +37,7 @@ public class PlayScreen implements Screen
 	private OrthographicCamera camera;
 	private Stage stage;
 	private ShapeRenderer healthBar;
+	private ShapeRenderer bossHealthBar;
 	private PlayerInputProcessor processor;
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
@@ -52,6 +53,10 @@ public class PlayScreen implements Screen
 	private static final int width = BurningSkies.SCREENWIDTH;
     private static final int height = BurningSkies.SCREENHEIGHT;
     
+    private PlayerShip player;
+	public Level level;
+	private Enemy boss;
+    
 	private float health = 100;
 	private int healthBarLengthMultiplier = 7;
 	private int healthBarStaticHeight = 100 * healthBarLengthMultiplier;
@@ -59,6 +64,13 @@ public class PlayScreen implements Screen
 	private float healthBarWidth = (float) (height * 0.02);
 	private float healthBarX = (float) (width * 0.985);
 	private float healthBarY = height/2 - (healthBarHeight)/2;
+	
+	private float bossHealth;
+	private float bossMaxHealth = Boss.getBossMaxHealth();
+	private float bossHealthBarHeight = (float) (width * 0.005);
+	private float bossHealthBarWidth;
+	private float bossHealthBarX;
+	private float bossHealthBarY;
 	
 	private int noDeaths = 0;
 	private int lives = 3;
@@ -73,8 +85,7 @@ public class PlayScreen implements Screen
 			new Texture(Gdx.files.internal("images/ships/jet.png")),
 			new Texture(Gdx.files.internal("images/ships/secret.cim"))
 	};
-	private PlayerShip player;
-	public Level level;
+	
 	
 	private boolean bossActive = false;
 	private SpawnList sp;
@@ -108,6 +119,9 @@ public class PlayScreen implements Screen
     	
     	healthBar = new ShapeRenderer();
     	healthBar.setProjectionMatrix(camera.combined);
+    	
+    	bossHealthBar = new ShapeRenderer();
+    	bossHealthBar.setProjectionMatrix(camera.combined);
     	
         game.playSong("level" + (int)(Math.random()+0.5));
     	
@@ -167,7 +181,8 @@ public class PlayScreen implements Screen
     		if(!bossActive && (levelTimer > 60 || Gdx.input.isKeyPressed(Keys.B))) { //unleash the beast
     			bossActive = true;
     			game.playSong("boss");
-    			addEnemy(new Boss(this, player));
+    			boss = new Boss(this, player);
+    			addEnemy(boss);
     		}
 
     		if(!bossActive) {
@@ -232,17 +247,14 @@ public class PlayScreen implements Screen
 		    batch.draw(lifeIcon, lifePositionX + lifePositionOffset*i, lifePositionY);
 		    batch.end();
 	    }
-	    	
+	    score += 131;
+	    
 	    healthBar.begin(ShapeType.FilledRectangle);
-	    	
-	//    score += 131;
 	    health = player.getHealth();
 	    lives = player.getLives();
 	    scoreLabel.setText("Scores: " + score);
 	    	
 	    healthBarHeight = Math.max(0, healthBarStaticHeight * (player.getHealth()/player.getMaxHealth()) );
-	    	
-	//    System.out.println("health: " + healthBarHeight + ",  player health: " + player.getHealth()  );
 	    	
 	   	if (player.getHealth() <= (player.getMaxHealth()/4) ) {
 	   		healthBar.setColor(healthBarRed);
@@ -254,6 +266,25 @@ public class PlayScreen implements Screen
 	    	
 	    healthBar.filledRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);    	
 	    healthBar.end();
+	    
+	    if (bossActive) {
+	    	bossHealthBar.begin(ShapeType.FilledRectangle);
+	    	bossHealth = boss.getHealth();
+	    	bossHealthBarWidth = Math.max(0, 320 * (bossHealth/bossMaxHealth));
+	    	bossHealthBarX = boss.getX();
+	    	bossHealthBarY = boss.getY() + boss.getHeight();
+	    	
+	    	if (bossHealth <= (bossMaxHealth/4) ) {
+		   		bossHealthBar.setColor(healthBarRed);
+		   	} else if (bossHealth > (bossMaxHealth/4) && bossHealth <= (bossMaxHealth*3/4)) {
+		   		bossHealthBar.setColor(healthBarOrange);
+		    } else {
+		    	bossHealthBar.setColor(healthBarGreen);
+		    }
+		    	
+		    bossHealthBar.filledRect(bossHealthBarX, bossHealthBarY, bossHealthBarWidth, bossHealthBarHeight);    	
+		    bossHealthBar.end();
+	    }
   
 	}
 	    

@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 //THE ACCOLADE ID WILL NO LONGER BE AN AUTO INCRMENT - instead it will be the gameID.xx ie, 1.01, 1.02 
 //(either assigned by gamedev or automatically through our code)
 
+
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
@@ -132,7 +133,9 @@ public class Accolade {
 	private String parseString(String message){
 		String s = message.replace("%VALUE", "%s").replace("%UNIT", "%s");
 		String firstReplace, secondReplace;
-		Double value = this.value*this.modifier;
+		String sValue;
+		Long value = (long) (this.value*this.modifier);
+
 		
 		//In some instances the unit might occur before the value
 		if( message.indexOf("%VALUE")< message.indexOf("%UNIT")){
@@ -140,11 +143,11 @@ public class Accolade {
 			secondReplace = this.unit;
 		} else {
 			firstReplace = this.unit;
-			secondReplace = value.toString();;
+			secondReplace =  value.toString();
 		}
 		
 		if(value > 1){
-		value = Math.ceil(value);
+		value = (long) Math.ceil(value);
 		//It's expected that if the value is smaller than 1 the developer intended it to be small
 		}
 		return String.format(s, firstReplace, secondReplace);

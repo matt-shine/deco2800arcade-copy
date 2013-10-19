@@ -3,6 +3,9 @@ import java.text.DecimalFormat;
 import java.util.NoSuchElementException;
 //TODO Add in a popup string method
 
+//THE ACCOLADE ID WILL NO LONGER BE AN AUTO INCRMENT - instead it will be the gameID.xx ie, 1.01, 1.02 
+//(either assigned by gamedev or automatically through our code)
+
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
@@ -12,10 +15,11 @@ public class Accolade {
 	
 	//BASE variables - IE the accolade must at the very least have these
 	private int  popup;
-	private double modifier;
+	private Double modifier;
 	private String name, message, popupMessage, unit, tag, imagePath;
 	//OPTIONAL variables - these are assigned as needed through .setX commands
-	private Integer id, gameID, value;
+	private Integer gameID, value;
+	private Double id;
 	private Accolade next, prev; //FOR THE ACCOLADECONTAINER
 	
 	
@@ -23,7 +27,7 @@ public class Accolade {
 	 * @param Name The plain name identifier
 	 * @param Message The display string that will be used to make toString
 	 * @param Unit The unit to be used as part of toString
-	 * @param modifier This is to modify the accolade into something interesting,
+	 * @param f This is to modify the accolade into something interesting,
 	 * 			eg grenades as tonnes of TNT etc
 	 * @param tag Combined tag that is used as part of Global_Accolades.Table
 	 * @param popup When the accolade is a multiple of this a message overlays on screen
@@ -31,13 +35,13 @@ public class Accolade {
 	 * @param image The location of the associated accolade image.
 	 */
 	public Accolade(String name, String message, int popup, String popupMessage, 
-			double modifier, String unit, String tag, String imagePath){
+			Double f, String unit, String tag, String imagePath){
 		this.name = name;
 		this.message = message;
 		this.popup = popup;
 		this.popupMessage = popupMessage;
 		//.replace("%VALUE", "{0}").replace("%%UNIT", "{1}")
-		this.modifier = modifier;
+		this.modifier = f;
 		this.unit = unit;
 		this.tag = tag; 
 		this.imagePath = imagePath; //this might end up being stored as a directory type.
@@ -46,15 +50,21 @@ public class Accolade {
 		//this.modifiedValue = resolveValue();
 	}
 	
+	public Accolade(String name, String message, int popup, String popupMessage, 
+			int modifier, String unit, String tag, String imagePath){
+		this(name, message, popup, popupMessage, modifier*1.0, unit, tag, imagePath);
+	}
+	
 	//SET STUFF
-	public Accolade setID(int key){
+	public Accolade setID(Double key){
 		this.id = key;
 		return this;
 	}
-	
-	public String getRawString(){
-		return this.message;
+	public Accolade setID(int key){
+		return setID(key * 1.0);
 	}
+	
+	
 	
 	public Accolade setValue(int value){
 		this.value = value;
@@ -67,39 +77,47 @@ public class Accolade {
 	}
 	
 	//GET STUFF
-	public int getID(){
-		return this.id;}
+	public Double getID(){
+		return this.id;
+		}
+	public String getRawString(){
+		return this.message;
+		}
 	
 	public int getValue(){
-		return this.value;}
+		return this.value;
+		}
 	
 	public int getGameID(){
 		//TODO add in error throwing for a nullpointer exception
-		return this.gameID;}
+		return this.gameID;
+		}
 	
 	public String getName(){
-		return this.name;}
+		return this.name;
+		}
 	
 	public String getUnit(){
 		return this.unit;
-	}
+		}
 	
-	public double getModifier(){
+	public Double getModifier(){
 		return this.modifier;
-	}
-	
+		}
 	public String getTag(){
 		return this.tag;
-	}
+		}
 	public String getImagePath(){
 		return this.imagePath;
-	}
+		}
 	
 	public String toString(){
-		return parseString(this.message);}
+		return parseString(this.message);
+		}
 	
 	public String getPopup(){
-		return parseString(this.popupMessage);}
+		return parseString(this.popupMessage);
+		}
 	
 	//HAS STUFF
 	
@@ -114,15 +132,15 @@ public class Accolade {
 	private String parseString(String message){
 		String s = message.replace("%VALUE", "%s").replace("%UNIT", "%s");
 		String firstReplace, secondReplace;
-		double value = this.value*this.modifier;
+		Double value = this.value*this.modifier;
 		
 		//In some instances the unit might occur before the value
 		if( message.indexOf("%VALUE")< message.indexOf("%UNIT")){
-			firstReplace = String.valueOf((long) value);
+			firstReplace = value.toString();
 			secondReplace = this.unit;
 		} else {
 			firstReplace = this.unit;
-			secondReplace = String.valueOf((long) value);
+			secondReplace = value.toString();;
 		}
 		
 		if(value > 1){

@@ -129,7 +129,7 @@ public class AccoladeStorage{
 									resultSet.getString("description"),
 									resultSet.getInt("popup"), 
 									resultSet.getString("popupMessage"),
-									resultSet.getFloat("modifier"),
+									resultSet.getDouble("modifier"),
 									resultSet.getString("unit"),
 									resultSet.getString("tag"),
 									resultSet.getString("imagepath")

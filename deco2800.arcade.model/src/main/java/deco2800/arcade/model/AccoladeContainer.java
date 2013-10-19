@@ -1,5 +1,7 @@
 package deco2800.arcade.model;
 import java.util.*;
+
+import javax.sql.rowset.*;
  
 public class AccoladeContainer implements Iterable<Accolade> {
  
@@ -23,6 +25,7 @@ public class AccoladeContainer implements Iterable<Accolade> {
      * TODO implmenet server communication and return non-dummydata
      */
     public void populateAccoladesPlayer(int playerID){
+    	//TODO implement populateAccoladesPlayer
     	this.playerID = playerID;
     	BUILDDUMMYDATA();
     }
@@ -31,8 +34,14 @@ public class AccoladeContainer implements Iterable<Accolade> {
      * TODO implmenet server communication and return non-dummydata
      */
     public void populateAccoladesGame(int gameID){
+    	//TODO implement the populateAccoldesGame
     	this.gameID = gameID;
     	BUILDDUMMYDATA();
+    }
+    
+    public AccoladeContainer setGameID(int gameID){
+    	this.gameID =  gameID;
+    	return this;
     }
     
     /**Clears the list of accolades ready for repopulation
@@ -62,7 +71,7 @@ public class AccoladeContainer implements Iterable<Accolade> {
 	 * @param image The location of the associated accolade image.
 	 */
     public Accolade addAccolade(String name, String message, int popup, String popupMessage, 
-			int modifier, String unit, String tag, String imagePath) {
+			double modifier, String unit, String tag, String imagePath) {
         Accolade accolade = new Accolade(name, message, popup, popupMessage, 
     			 modifier, unit, tag, imagePath);
         if (!hasHead()) {
@@ -75,7 +84,12 @@ public class AccoladeContainer implements Iterable<Accolade> {
         this.size++;
 		return accolade;
     }
-    
+    /** TODO implement this sodding thing
+    public WebRowSet toWebRowSet(){
+
+    	return tnew rowSet;
+    }
+    **/
     /**
      * Add accolade into accolade container
      */
@@ -94,10 +108,9 @@ public class AccoladeContainer implements Iterable<Accolade> {
      * Testing stuff *
      */
     public void BUILDDUMMYDATA() {
-    	
+    	//TODO REMOVE THIS
 //Accolade accolade = new Accolade(ID,Value,Name,String,Unit,Modifier,Tag,Image);
-    	//TODO Add in the dummb data stuff
-       
+    	//TODO Add in the dumb data stuff
     }
     public int getGameID(){
     	return this.gameID;

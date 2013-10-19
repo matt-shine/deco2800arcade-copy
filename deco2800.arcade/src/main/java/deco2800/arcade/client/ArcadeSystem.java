@@ -90,6 +90,15 @@ public class ArcadeSystem {
 	public static void login(String username, String password) {
 		arcade.connectAsUser(username, password);
 	}
+	
+	/**
+     * Login to arcade
+     * @param username User to login
+     * @param password password for login
+     */
+	public static void registerUser(String username, String password) {
+		arcade.registerAsUser(username, password);
+	}
 
     /**
      * Request Games from arcade

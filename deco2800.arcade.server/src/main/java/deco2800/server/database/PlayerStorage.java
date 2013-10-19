@@ -42,7 +42,7 @@ public class PlayerStorage {
 			if (!tableData.next()) {
 				Statement statement = connection.createStatement();
 				statement
-						.execute("CREATE TABLE PLAYERS(playerID INT PRIMARY KEY,"
+						.execute("CREATE TABLE PLAYERS(playerID INT NOT NULL PRIMARY KEY,"
 								+ "username VARCHAR(30) NOT NULL,"
 								+ "name VARCHAR(30),"
 								+ "email VARCHAR(30),"

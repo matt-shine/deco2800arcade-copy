@@ -100,27 +100,34 @@ public class LoginScreen implements Screen {
         		super.idle(connection);
         	}
 
-        	@Override
-        	public void received(Connection connection, Object object) {
-        		super.received(connection, object);
-        		
-        		if (object instanceof ConnectionResponse){
-        			
+			@Override
+			public void received(Connection connection, Object object) {
+				super.received(connection, object);
 
-        			ConnectionResponse connectionResponse = (ConnectionResponse)object;
-        			
-        			if (connectionResponse.playerID >= 0) {
-        				FrontPage.setName(usernameText.getText());
-        				arcadeUI.setScreen(arcadeUI.main);
-        			}
-        			if (connectionResponse.playerID == -2) {
-                        errorLabel.setText("Error loggin in");
-        			} else if (connectionResponse.playerID == -1) {
-                        errorLabel.setText("Incorrect password");
-        			}
-        		}
-        	}
+				if (object instanceof ConnectionResponse) {
 
+					ConnectionResponse connectionResponse = (ConnectionResponse) object;
+					if (connectionResponse.register) {
+						errorLabel.setText("User registered!");
+						arcadeUI.setScreen(arcadeUI.login);
+					} else {
+						if (connectionResponse.playerID >= 0) {
+							FrontPage.setName(usernameText.getText());
+							arcadeUI.setScreen(arcadeUI.main);
+						}
+					}
+					if (connectionResponse.playerID == -2) {
+						errorLabel.setText("Error loggin in");
+						arcadeUI.setScreen(arcadeUI.login);
+					} else if (connectionResponse.playerID == -1) {
+						errorLabel.setText("Incorrect password");
+						arcadeUI.setScreen(arcadeUI.login);
+					} else if (connectionResponse.playerID == -3) {
+						errorLabel.setText("Cannot register user. User already exists.");
+						arcadeUI.setScreen(arcadeUI.login);
+					}
+				}
+			}
         	
         }
         

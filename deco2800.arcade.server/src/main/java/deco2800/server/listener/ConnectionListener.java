@@ -11,19 +11,16 @@ import deco2800.server.database.DatabaseException;
 import deco2800.server.database.HashStorage;
 import deco2800.server.database.PlayerDatabaseManager;
 
-
 public class ConnectionListener extends Listener {
-	//list of all connected users
+	// list of all connected users
 	private Set<String> connectedUsers;
 	private boolean initialised = false;
 	private HashStorage hashStorage = new HashStorage();
 
-    
-	
-	public ConnectionListener(Set<String> connectedUsers){
+	public ConnectionListener(Set<String> connectedUsers) {
 		this.connectedUsers = connectedUsers;
 	}
-	
+
 	@Override
 	/**
 	 * takes Connection object called connection and an Object called object
@@ -37,7 +34,8 @@ public class ConnectionListener extends Listener {
 		if (object instanceof ConnectionRequest) {
 			ConnectionRequest request = (ConnectionRequest) object;
 			ConnectionResponse response = new ConnectionResponse();
-            
+			response.register = false;
+
 			if (initialised == false) {
 				try {
 					hashStorage.initialise();
@@ -48,23 +46,34 @@ public class ConnectionListener extends Listener {
 				}
 				initialised = true;
 			}
-			
-			try {
-				if (hashStorage.checkPassword(request.username, request.password) == true) {
-					response.playerID = hashStorage.getPlayerID(request.username);
+
+			if (request.register) {
+				try {
+					response.playerID = hashStorage.registerUser(request.username, request.password);
+					response.register = true;
 					connection.sendTCP(response);
-					connectedUsers.add(request.username);
-				} else {
-					response.playerID = -1;
-					connection.sendTCP(response);
+				} catch (DatabaseException e) {
+					e.printStackTrace();
 				}
-			} catch (DatabaseException e) {
-				response.playerID = -2;
-				connection.sendTCP(response);
-				e.printStackTrace();
+			} else {
+				try {
+					if (hashStorage.checkPassword(request.username,
+							request.password) == true) {
+						response.playerID = hashStorage
+								.getPlayerID(request.username);
+						connection.sendTCP(response);
+						connectedUsers.add(request.username);
+					} else {
+						response.playerID = -1;
+						connection.sendTCP(response);
+					}
+				} catch (DatabaseException e) {
+					response.playerID = -2;
+					connection.sendTCP(response);
+					e.printStackTrace();
+				}
 			}
 		}
 	}
 
-	
 }

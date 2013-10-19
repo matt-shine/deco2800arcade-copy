@@ -56,7 +56,7 @@ public class HashStorage {
 			if (!tableData.next()) {
 				Statement statement = connection2.createStatement();
 				statement
-						.execute("CREATE TABLE PLAYERS(playerID INT PRIMARY KEY,"
+						.execute("CREATE TABLE PLAYERS(playerID INT NOT NULL PRIMARY KEY,"
 								+ "username VARCHAR(30) NOT NULL,"
 								+ "name VARCHAR(30),"
 								+ "email VARCHAR(30),"
@@ -88,6 +88,33 @@ public class HashStorage {
 			close(connection);
 		}
 		
+		Connection connection4 = Database.getConnection();
+		try {
+			PreparedStatement statement = null;
+			statement = connection4.prepareStatement("DELETE FROM AUTH "
+					+ "WHERE playerID = ?");
+			statement.setInt(1, 1337);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable register user", e);
+		} finally {
+			close(connection4);
+		}
+		
+		Connection connection3 = Database.getConnection();
+		try {
+			PreparedStatement statement = null;
+			statement = connection3.prepareStatement("DELETE FROM PLAYERS "
+					+ "WHERE playerID = ?");
+			statement.setInt(1, 1337);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable register user", e);
+		} finally {
+			close(connection3);
+		}
 		
 		registerUser("admin", "admin");
 	}
@@ -120,7 +147,6 @@ public class HashStorage {
 			statement.setBytes(3, salt);
 			statement.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DatabaseException("Unable register password", e);
 		} finally {
 			close(connection);
@@ -137,75 +163,44 @@ public class HashStorage {
 	 * 
 	 * @require no record for this user exists in the password database already
 	 */
-	public void registerUser(String username, String password)
+	public int registerUser(String username, String password)
 			throws DatabaseException {
 		// Get a connection to the database
-		Connection connection4 = Database.getConnection();
+		int id = 0;
+		Connection connection1 = Database.getConnection();
 		try {
 			PreparedStatement statement = null;
-			statement = connection4.prepareStatement("DELETE FROM AUTH "
-					+ "WHERE playerID = ?");
-			statement.setInt(1, 1337);
-			statement.executeUpdate();
+			statement = connection1.prepareStatement("SELECT * FROM PLAYERS");
+			ResultSet result = statement.executeQuery();
+			while (result.next()) {
+				if (result.getString("username").equals(username)) {
+					return -3;
+				}
+				id = result.getInt("playerId");
+			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DatabaseException("Unable register user", e);
 		} finally {
-			close(connection4);
+			close(connection1);
 		}
 		
-		Connection connection3 = Database.getConnection();
-		try {
-			PreparedStatement statement = null;
-			statement = connection3.prepareStatement("DELETE FROM PLAYERS "
-					+ "WHERE playerID = ?");
-			statement.setInt(1, 1337);
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Unable register user", e);
-		} finally {
-			close(connection3);
-		}
-		
-		Connection connection2 = Database.getConnection();
-		try {
-			PreparedStatement statement = null;
-			statement = connection2.prepareStatement("INSERT INTO PLAYERS "
-					+ "(playerID, username, email, program, bio) values ("
-					+ "?, ?, ?, ?, ?)");
-			statement.setInt(1, 1337);
-			statement.setString(2, username);
-			statement.setString(3, "leethaxor@gmail.com");
-			statement.setString(4, "1337 program");
-			statement.setString(5, "biography of example user!");
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Unable register user", e);
-		} finally {
-			close(connection2);
-		}
-		
-		byte[] salt = generateSalt();
-		byte[] hash = generateHash(password, salt);
-		// Get a connection to the database
 		Connection connection = Database.getConnection();
 		try {
 			PreparedStatement statement = null;
-			statement = connection.prepareStatement("INSERT INTO AUTH "
-					+ "(playerID, hash, salt) values ("
-					+ "?, ?, ?)");
-			statement.setInt(1, 1337);
-			statement.setBytes(2, hash);
-			statement.setBytes(3, salt);
+			statement = connection.prepareStatement("INSERT INTO PLAYERS "
+					+ "(playerId, username) values (?, ?)");
+			statement.setInt(1, id + 1);
+			statement.setString(2, username);
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new DatabaseException("Unable register password", e);
+			throw new DatabaseException("Unable register user", e);
 		} finally {
 			close(connection);
 		}
+		
+		registerPassword(username, password);
+		return id;
 	}
 	
 	/**

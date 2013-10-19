@@ -262,6 +262,7 @@ public class Arcade extends JFrame {
 		ConnectionRequest connectionRequest = new ConnectionRequest();
 		connectionRequest.username = username;
 		connectionRequest.password = password;
+		connectionRequest.register = false;
 		//This should really GET the player with the details that were provided at login, not create a new player!
 		//For testing purposes, a specific ID number is given to debug users and random users get a random ID
 		int myID = 1 + (int)(Math.random() * ((500 - 1) + 1));
@@ -347,7 +348,17 @@ public class Arcade extends JFrame {
 
         System.out.println("[CLIENT] GameUpdateCheckResponse received: " + resp.md5);
 	}
-	
+
+    public void registerAsUser(String username, String password) {
+		ConnectionRequest connectionRequest = new ConnectionRequest();
+		connectionRequest.username = username;
+		connectionRequest.password = password;
+		connectionRequest.register = true;
+
+		if (!password.equals("")) {
+			this.client.sendNetworkObject(connectionRequest);
+		}
+    }
 
     /**
      * Fetch the JAR for a given game/version from the server

@@ -35,7 +35,6 @@ public class GameOverScreen implements Screen {
 	private int width = BurningSkies.SCREENWIDTH;
     private int height = BurningSkies.SCREENHEIGHT;
 
-    
 	public GameOverScreen( BurningSkies game, NetworkClient networkClient){
 		this.game = game;	
 		this.networkClient = networkClient;
@@ -83,7 +82,9 @@ public class GameOverScreen implements Screen {
 	public void show() {
 		batch = new SpriteBatch();
 		skin = new Skin(Gdx.files.internal("images/menu/uiskin32.json"));
-        background = new Image(new Texture(Gdx.files.internal("images/menu/game_over.png")));
+		
+		background = PlayScreen.getGoodEnd() ? new Image(new Texture(Gdx.files.internal("images/menu/game_over_win.png"))) : new Image(new Texture(Gdx.files.internal("images/menu/game_over.png")));
+		
         final HighscoreClient player = new HighscoreClient(game.getPlayerName(), "Burning Skies", networkClient);
         
         stage = new Stage(width, height, true);

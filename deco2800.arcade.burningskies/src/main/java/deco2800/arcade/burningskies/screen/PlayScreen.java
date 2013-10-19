@@ -34,7 +34,6 @@ import deco2800.arcade.client.ArcadeInputMux;
 public class PlayScreen implements Screen
 {
 	private BurningSkies game;
-	
 	private OrthographicCamera camera;
 	private Stage stage;
 	private ShapeRenderer healthBar;
@@ -57,6 +56,7 @@ public class PlayScreen implements Screen
     private PlayerShip player;
 	public Level level;
 	private Enemy boss;
+	private static Boolean goodEnd = false;
     
 	private float health = 100;
 	private int healthBarLengthMultiplier = 7;
@@ -86,13 +86,11 @@ public class PlayScreen implements Screen
 			new Texture(Gdx.files.internal("images/ships/secret.cim"))
 	};
 	
-	
 	private boolean bossActive = false;
 	private SpawnList sp;
 
 	private float respawnTimer = 0f;
 	private float levelTimer = 0f;
-	
 	
 	public PlayScreen(BurningSkies game){
 		this.game = game;
@@ -101,7 +99,6 @@ public class PlayScreen implements Screen
     @Override
     public void show()
     {
-    	// Initialising variables
 		this.stage = new Stage( BurningSkies.SCREENWIDTH, BurningSkies.SCREENHEIGHT, true);
 		white = new BitmapFont(Gdx.files.internal("images/menu/whitefont.fnt"), false);
 
@@ -136,7 +133,6 @@ public class PlayScreen implements Screen
     	ArcadeInputMux.getInstance().addProcessor(processor);
     	
     	sp = new SpawnList(this, (Configuration.getDifficulty() + 1));
-    
     }
     
     @Override
@@ -146,8 +142,7 @@ public class PlayScreen implements Screen
     }
     
     @Override
-    public void render(float delta)
-    {
+    public void render(float delta) {
     	Gdx.gl.glClearColor(0, 0, 0, 1);
     	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	
@@ -183,6 +178,13 @@ public class PlayScreen implements Screen
     			addEnemy(boss);
     		}
 
+    		if(bossActive && boss.getHealth() <= 0) {
+    			goodEnd = true;
+    			game.playSong("gameover");
+				GameOverScreen.setScore(score);
+				game.setScreen(game.gameOverScreen);
+    		}
+    		
     		if(!bossActive) {
     			sp.checkList(delta);
     		}
@@ -353,5 +355,9 @@ public class PlayScreen implements Screen
 	
 	public int zalgo() {
 		return game.zalgo;
+	}
+	
+	public static boolean getGoodEnd() {
+		return goodEnd;
 	}
 }

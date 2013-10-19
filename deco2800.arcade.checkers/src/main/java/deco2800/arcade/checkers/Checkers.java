@@ -646,8 +646,10 @@ public class Checkers extends GameClient {
 	private static final Game game;
 	static {
 		game = new Game();
-		game.id = "checkers";
+		game.id = "Checkers";
 		game.name = "Checkers";
+		game.description = "A classical game, passed down through the ages, and"
+				+ "now digitalized, for competitive, but original strategy.";
 	}
 	
 	public Game getGame() {

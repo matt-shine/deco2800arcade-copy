@@ -59,7 +59,7 @@ public class PackageClient {
 	 * @param jarPath
 	 * @return true for success, false for failed
 	 */
-	private Boolean addJar(String jarPath) {
+	public static Boolean addJar(String jarPath) {
 		
 		URL jarURL;
 		

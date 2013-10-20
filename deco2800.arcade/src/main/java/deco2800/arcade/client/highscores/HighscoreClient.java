@@ -444,6 +444,13 @@ public class HighscoreClient {
 	}
 	
 	/**
+	 * Get scores currently stored in the queue.
+	 */
+	public LinkedList<String> getMultiScoreQueue() {
+		return this.scoreQueue;
+	}
+	
+	/**
 	 * Returns the number of scores that are currently queued up to be sent to 
 	 * the database.
 	 */

@@ -2,6 +2,8 @@ package deco2800.arcade.client.highscores.test;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.After;
@@ -15,18 +17,18 @@ import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.highscores.UnsupportedScoreTypeException;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.highscore.*;
+import deco2800.arcade.client.network.NetworkClient;
 
 public class HighscoreClientTest {
 	
-	/*It's actually really hard to test this class, as HighscoreClient must be 
+	/** It's actually really hard to test this class, as HighscoreClient must be 
 	 * instantiated with a non-null NetworkClient object. And, this object 
 	 * can't be created without the server running. So, I can really only test 
 	 * that the initiliser throws the correct exception for null valued 
 	 * paramaters.*/
-	private HighscoreClient highscoreClient;	
+	private HighscoreClient playerTeamA;	
 	private Player player;
-	private GetScoreRequest getScoreRequest;
-	private boolean[] privacy = {false, false, false, false, false, false, false, false};
+	private boolean[] privacy = { true, true, true, true, true, true, true };
 	
 	/**
 	 * Create a new highscore class object
@@ -34,20 +36,57 @@ public class HighscoreClientTest {
 	 * @throws Exception
 	 */
 	@Before
-	public void setUp() throws Exception {
-		this.player = new Player(0, "Player One", "", privacy);
-		this.player.setUsername("Player One");
-		HighscoreClient highscoreClient = new HighscoreClient("Dylan", "Pong");
+	public void setUp() throws Exception {	    
+		List<String> playerInfo = new ArrayList<String>();
+		playerInfo.add("TeamA");
+		playerInfo.add("Team A Testing");
+		playerInfo.add("teama@uq.edu.au");
+		playerInfo.add("ITEE");
+		playerInfo.add("#TeamA");
+		playerInfo.add("2");
+		this.player = new Player(123, null, playerInfo, null,
+				null, null, null, privacy);
+		
+		playerTeamA = new HighscoreClient("TeamA", "Pong");
 	}
 	
+	/**
+	 * Tests creation on a new player
+	 */
+	@Test
+	public void testPlayerInit() {
+		assertEquals("Team A Testing", player.getName());
+		assertEquals(123, player.getID());
+	}
 	
+	/**
+	 * Test is currently redundant while trying to figure out a way to test while the
+	 * server is not running.
+	 */
 	@Test (expected=NullPointerException.class)
-	public void TestGetGameTopPlayers() {
-		List<Highscore> listHighscore = highscoreClient.getGameTopPlayers(10, true, "Point");
+	public void testGetGameTopPlayers() {
+		List<Highscore> listHighscore = playerTeamA.getGameTopPlayers(10, true, "Number");
+		System.out.print("List: " + listHighscore.toString());
+	}
+	
+	/**
+	 * Tests adding multiple scores to a queue.
+	 */
+	@Test
+	public void testAddMultiScoreItem() {
+		LinkedList<String> lsTest = new LinkedList<String>();
+		lsTest.add("Distance");
+		lsTest.add("12");
+		lsTest.add("Number");
+		lsTest.add("1290193");
+		playerTeamA.addMultiScoreItem("Distance", 12);
+		playerTeamA.addMultiScoreItem("Number", 1290193);
+		assertEquals(lsTest, playerTeamA.getMultiScoreQueue());
+		assertEquals(2, playerTeamA.queuedScoreCount());
 	}
 
-	/* 
-	 * Test for unsupported score type
+	/**
+	 * Tests for unsupported score type exception.
 	 */
 	@Test
 	public void testVaildScoreType() {
@@ -61,14 +100,14 @@ public class HighscoreClientTest {
 			assertEquals(true, true);
 		}
 	}
-
-	/* 
-	 * Test Network Client is not null
+	
+	/**
+	 * Tests when the server is down and Highscore Client Network Client is null
 	 */
 	@Test
-	public void initTest2() {
+	public void testHighscoreClientInit() {
 		try {
-			HighscoreClient hsc = new HighscoreClient(null, "TestGame", null);
+			HighscoreClient playerDylan = new HighscoreClient(null, "TestGame", null);
 			assertEquals(false, false);
 		} catch(NullPointerException e) {
 			assertEquals(true, true);

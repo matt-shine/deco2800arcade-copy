@@ -17,6 +17,12 @@ public class PlayerPrivacyGlob {
 	public static final int GAMES_PRIVACY_ID = 6;
 	public static final int ACHIEVMENTS_PRIVACY_ID = 7;
 	
+	/*
+	 * Zero-arg Constructor for Kryo
+	 */
+	public PlayerPrivacyGlob(){
+	}
+	
 	public PlayerPrivacyGlob(boolean[] privacy) {
 		this.namePrivacy = privacy[NAME_PRIVACY_ID - 1];
 		this.emailPrivacy = privacy[EMAIL_PRIVACY_IDNAME_ID - 1];

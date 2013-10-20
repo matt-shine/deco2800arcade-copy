@@ -71,9 +71,12 @@ public class CommunicationTest {
 		comm2.loggedIn(player2, view);
 		comm3 = new CommunicationNetwork(player3, null);
 		comm3.loggedIn(player3, view);
-		listener1 = new CommunicationListener(comm1);
-		listener2 = new CommunicationListener(comm2);
-		listener3 = new CommunicationListener(comm3);
+		//listener1 = new CommunicationListener(comm1);
+		//listener2 = new CommunicationListener(comm2);
+		//listener3 = new CommunicationListener(comm3);
+		listener1 = new CommunicationListener(comm1, null);
+		listener2 = new CommunicationListener(comm2, null);
+		listener3 = new CommunicationListener(comm3, null);
 	}
 
 	/**

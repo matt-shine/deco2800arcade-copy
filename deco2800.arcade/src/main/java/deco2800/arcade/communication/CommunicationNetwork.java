@@ -50,6 +50,7 @@ public class CommunicationNetwork {
 	public void createChat(List<Integer> chatParticipants) {
 		if(!chatNodes.containsKey(chatParticipants.hashCode())) {
 			ChatNode node = new ChatNode(chatParticipants);
+			node.setOwner(player.getUsername());
 			chatNodes.put(chatParticipants.hashCode(), node);
 			currentChat = node;
 			
@@ -188,9 +189,9 @@ public class CommunicationNetwork {
 	 * @param receivedHistory
 	 */
 	public void receiveChatHistory(ChatHistory receivedHistory) {
-		chatNodes = receivedHistory.getChatHistory();		
+		chatNodes = receivedHistory.getChatHistory();
 		for (Entry<Integer, ChatNode> entry : chatNodes.entrySet()) {
-			view.addChatNode(entry.getValue(), entry.getValue().getChatHistory().peek().substring(entry.getValue().getChatHistory().peek().indexOf('-') + 2, entry.getValue().getChatHistory().peek().indexOf(':')-1)); //This doesn't know who sent it yet
+			view.addChatNode(entry.getValue(), entry.getValue().getOwner());
 		}
 	}
 	

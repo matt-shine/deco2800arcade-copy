@@ -14,6 +14,7 @@ public class ChatNode {
 
 	private List<Integer> participants;
 	private Queue<String> chatHistory;
+	private String owner;
 	
 	/**
 	 * Zero-arg Constructor for Kryo
@@ -82,6 +83,14 @@ public class ChatNode {
 	
 	public Queue<String> getChatHistory(){
 		return chatHistory;
+	}
+
+	public void setOwner(String username) {
+		owner = username;
+	}
+
+	public String getOwner() {
+		return owner;
 	}
 
 }

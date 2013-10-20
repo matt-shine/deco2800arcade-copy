@@ -1,15 +1,24 @@
 package deco2800.server.listener;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import deco2800.arcade.model.ChatNode;
+import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.communication.ChatHistory;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.communication.TextMessage;
 import deco2800.server.ArcadeServer;
+import deco2800.server.database.Database;
+import deco2800.server.database.DatabaseException;
 
 public class CommunicationListener extends Listener {
 	
@@ -49,6 +58,7 @@ public class CommunicationListener extends Listener {
 		if(object instanceof TextMessage){
 			textMessage = (TextMessage) object;
 
+			/*
 			//In the mean time, forward the message without checking if blocked:
 			for (int recipientID : textMessage.getRecipients()){
 				ArcadeServer.instance().getChatStorage().addChatHistory(textMessage, recipientID);				
@@ -56,29 +66,39 @@ public class CommunicationListener extends Listener {
 					server.sendToTCP(connectedUsers.get(recipientID), textMessage);
 				}
 			}
-
-			
-			/*
-			//This stuff was for the case where userAliases was <playerID, Player> but that broke the network passing around Players for some reason
-			
-			for (int recipientID : textMessage.recipients){
-				//Check if the recipient has the sender blocked before forwarding the message
-				//This should come from a persistent database, not just a list that gets populated as the users login!
-				if (userAliases.get(recipientID) != null){ //This shouldn't happen with a database, but can as per the comment above
-					if (userAliases.get(recipientID).isBlocked(userAliases.get(textMessage.senderID))){ //Blocked
-						//Don't need to do anything here, because the sender won't have themselves blocked, so the message will appear as sent anyway below:
-					} else { //Not blocked
-						if (connectedUsers.get(recipientID) == null){ //Need a better check than this, unless connectedUsers removes a user when they go offline?
-							//that player is offline, store the message in their chat history (database)
-						} else {
-							//that player is online, send the message directly
-							textMessage.senderName = userAliases.get(textMessage.senderID).getUsername();
-							server.sendToTCP(connectedUsers.get(recipientID), textMessage);
-						}
-					}					
-				}	
-			}
 			*/
+
+			java.sql.Connection dbconn;
+			Statement statement = null;
+			ResultSet resultSet = null;
+			List<Integer> blockedIDs = new ArrayList<Integer>();
+			
+			for (int recipientID : textMessage.getRecipients()){
+				//For each recipient, get their blocked list and check that the sender is not in it
+				try {
+					dbconn = Database.getConnection();
+					statement = dbconn.createStatement();
+					resultSet = statement.executeQuery("SELECT * FROM FRIENDS" 
+													+" WHERE U1=" + recipientID 
+													+ " AND BLOCKED=1");
+					while (resultSet.next()){
+						blockedIDs.add(resultSet.getInt("U2"));
+					}
+				} catch (DatabaseException e) {
+					//Failed
+				} catch (SQLException e) {
+					//Failed
+				}
+				
+				//If the sender is not in the recipient's blocked list, then proceed
+				if (!blockedIDs.contains(textMessage.getSenderID())){
+					ArcadeServer.instance().getChatStorage().addChatHistory(textMessage, recipientID);				
+					if (connectedUsers.containsKey(recipientID)){
+						server.sendToTCP(connectedUsers.get(recipientID), textMessage);
+					}
+				}
+			}
+			
 		}
 	}
 }

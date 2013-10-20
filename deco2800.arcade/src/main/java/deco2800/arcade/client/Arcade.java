@@ -59,6 +59,8 @@ import deco2800.arcade.protocol.lobby.RemovedMatchDetails;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckResponse;
+import deco2800.arcade.protocol.player.FriendInvitesUpdateRequest;
+import deco2800.arcade.protocol.player.FriendsUpdateRequest;
 
 /**
  * The client application for running arcade games.
@@ -260,7 +262,7 @@ public class Arcade extends JFrame {
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
 		this.client
-				.addListener(new CommunicationListener(communicationNetwork));
+				.addListener(new CommunicationListener(communicationNetwork, this));
 		this.client.addListener(new PackmanListener());
 		this.client.addListener(new MultiplayerListener(this));
 		this.client.addListener(new LobbyListener());
@@ -273,80 +275,81 @@ public class Arcade extends JFrame {
     private void addFileClientListeners() {
         this.fileClient.addListener(new FileServerListener());
     }
+    
+    /**
+     * Uses the PlayerClient to get a Player Object from a playerID
+     * @param playerID
+     */
+    public void loadPlayer(int playerID){
+    	Player myPlayer = null;
+		PlayerClient pc = new PlayerClient(this.client);
+		myPlayer = pc.loadPlayer(playerID);
+    }
 
-    public void connectAsUser(String username, String password) {
-    	System.out.println(password);
-		ConnectionRequest connectionRequest = new ConnectionRequest();
-		connectionRequest.username = username;
-		connectionRequest.password = password;
-		connectionRequest.register = false;
-		if (!password.equals("")) {
-			this.client.sendNetworkObject(connectionRequest);
-		}
-
-		//For testing purposes, a specific ID number is given to debug users and random users get a random ID
-		int myID = 1 + (int)(Math.random() * ((500 - 1) + 1));
-		if (username.equals("debug")){
-			myID = 999;
-		} else if (username.equals("debug1")) {
-			myID = 888;
-		} else if (username.equals("debug2")) {
-			myID = 777;
-		}
-		
-		//For some reason this makes the arcade hang at login
-		//PlayerClient pc = new PlayerClient(this.client);
-		//Player myPlayer = pc.loadPlayer(myID);
-		Player myPlayer = null;
-
-		if (myPlayer == null){  //As previously mentioned, due to playerID shortages at this time, a null Player is almost guaranteed
-			List<String> details = new ArrayList<String>();
-			details.add(username);
-			details.add(username + " Smith");
-			details.add(username + "@arcade.com");
-			details.add("debugging");
-			details.add("debugger 4 lyfe");
-			details.add("21");
-			Set<User> friendsSet = new HashSet<User>();
-			friendsSet.add(new User(1));
-			Set<User> invitesSet = new HashSet<User>();
-			invitesSet.add(new User(2));
-			Set<User> blockedSet = new HashSet<User>();
-			blockedSet.add(new User(3));
-			Set<Game> gameSet = new HashSet<Game>();
-			boolean[] privacy = {false, false, false, false, false, false, false};
-			myPlayer = new Player(myID, null, details, friendsSet, invitesSet, blockedSet, gameSet, privacy);
-		}
-
-		this.player = myPlayer;
+    /**
+     * Final stage of connecting to the arcade
+     * Player object is typically received via client listener
+     * @param myPlayer
+     */
+    public void connectAsUser(Player myPlayer) {    	
+    	this.player = myPlayer;
+    	int myID = this.player.getID();
+    	String myUsername = this.player.getUsername();
+    	
+    	/*
+    	 * Unfortunately this doesn't seem to do anything at the moment
+    	 * 
+    	//Friend adding for debugChats:
+    	if (myID == 1601){
+    		player.addInvite(1600); //debugChat1 is adding debugChat
+    		FriendInvitesUpdateRequest request = new FriendInvitesUpdateRequest();
+    		request.setAdd(true);
+    		request.setPlayerID(1601);
+    		request.setFriendID(1600);
+    		this.client.sendNetworkObject(request);
+    	}
+    	if (myID == 1600){
+    		player.acceptFriendInvite(1601);
+    		FriendsUpdateRequest request = new FriendsUpdateRequest();
+    		request.setAdd(true);
+    		request.setPlayerID(1600);
+    		request.setFriendID(1601);
+    		this.client.sendNetworkObject(request);
+    	}
+    	    	
+    	//Test blocking debugChat1 from sending you messages (you are debugChat)
+    	if (myID == 1600){
+    		player.blockPlayer(1601); //debugChat1
+    	}
+    	*/
+    	
 		this.communicationNetwork.loggedIn(this.player, this.view);
-
-		System.out.println("My playerID is: " + myID);
 
 		CommunicationRequest communicationRequest = new CommunicationRequest();
 		communicationRequest.playerID = myID;
-		communicationRequest.username = myPlayer.getUsername();
+		communicationRequest.username = myUsername;
 		this.client.sendNetworkObject(communicationRequest);
 
 		CreditBalanceRequest creditBalanceRequest = new CreditBalanceRequest();
 		creditBalanceRequest.playerID = myID;
-		creditBalanceRequest.username = myPlayer.getUsername();
+		creditBalanceRequest.username = myUsername;
 		this.client.sendNetworkObject(creditBalanceRequest);
 	
-		
-		if (player.getID() == 888){ //This ID belongs to debug1 
+		if (myID == 1601){ //This ID belongs to debugChat1
 			List<Integer> chat = new ArrayList<Integer>(); 
-			chat.add(999); //debug
-			chat.add(888); //debug1 
+			chat.add(1600); //debugChat
+			chat.add(1601); //debugChat1 
 			this.communicationNetwork.createChat(chat);
 		}
 		
-		if (player.getID() == 777){ //This ID belongs to debug2 
+		if (myID == 1602){ //This ID belongs to debugChat2 
 			List<Integer> chat = new ArrayList<Integer>(); 
-			chat.add(999); //debug
-			chat.add(777); //debug2 
+			chat.add(1600); //debugChat
+			chat.add(1602); //debugChat2 
 			this.communicationNetwork.createChat(chat); 
 		}
+		
+		// TODO Add the user to the Arcade chat lobby
 		
 		// TODO move this call to be internal to Packman class
 		// TODO iterate over actual game ids rather than just
@@ -354,10 +357,9 @@ public class Arcade extends JFrame {
 		GameUpdateCheckRequest gameUpdateCheckRequest = new GameUpdateCheckRequest();
 		gameUpdateCheckRequest.gameID = "pong";
 
-		BlockingMessage r = BlockingMessage.request(client.kryoClient(),
-				gameUpdateCheckRequest);
-
-		GameUpdateCheckResponse resp = (GameUpdateCheckResponse) r;
+		//These blocking messages freeze the client???
+		//BlockingMessage r = BlockingMessage.request(client.kryoClient(), gameUpdateCheckRequest);
+		//GameUpdateCheckResponse resp = (GameUpdateCheckResponse) r;
 
 		if (getCurrentGame() != null) {
 			getCurrentGame().setPlayer(this.player);
@@ -373,7 +375,7 @@ public class Arcade extends JFrame {
         // This is how you fetch game JARs
         //fetchGameJar("pong", "1.0");
 
-        System.out.println("[CLIENT] GameUpdateCheckResponse received: " + resp.md5);
+        //System.out.println("[CLIENT] GameUpdateCheckResponse received: " + resp.md5);
 	}
 
     public void registerAsUser(String username, String password) {

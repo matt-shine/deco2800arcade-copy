@@ -35,11 +35,13 @@ public class ChatStorage {
 				node.addMessage(chatLine);
 			} else { // Fairly certain test does not cover this branch yet 
 				ChatNode node = new ChatNode(textMessage.getRecipients());
+				node.setOwner(textMessage.getSenderUsername());
 				node.addMessage(chatLine);
 				chatStorage.get(playerID).put(nodeID, node);
 			}
 		} else {
 			ChatNode node = new ChatNode(textMessage.getRecipients());
+			node.setOwner(textMessage.getSenderUsername());
 			node.addMessage(chatLine);
 			chatHistory.put(nodeID, node);
 			chatStorage.put(playerID, chatHistory);	

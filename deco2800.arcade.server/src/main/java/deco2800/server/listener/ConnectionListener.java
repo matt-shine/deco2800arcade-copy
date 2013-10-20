@@ -61,6 +61,16 @@ public class ConnectionListener extends Listener {
 							request.password) == true) {
 						response.playerID = hashStorage
 								.getPlayerID(request.username);
+						
+						//For testing:
+						if (request.username.equals("debug1")){
+							response.playerID = 888;
+						} else if (request.username.equals("debug")){
+							response.playerID = 999;
+						} else if (request.username.equals("debug2")){
+							response.playerID = 777;
+						}						
+						
 						connection.sendTCP(response);
 						connectedUsers.add(request.username);
 					} else {

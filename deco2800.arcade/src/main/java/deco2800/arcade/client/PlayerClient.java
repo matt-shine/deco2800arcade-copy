@@ -13,7 +13,6 @@ public class PlayerClient extends NetworkListener {
 	
 	
 	public PlayerClient(NetworkClient networkClient) {
-		//TODO
 		this.networkClient = networkClient;
 	}
 
@@ -38,10 +37,15 @@ public class PlayerClient extends NetworkListener {
 
 		PlayerRequest request = new PlayerRequest();
 		request.setPlayerID(playerID);
-		PlayerResponse response = (PlayerResponse)BlockingMessage.request(
-				networkClient.kryoClient(), request);
-
-		return response.getPlayer();
+		
+		//BlockingMessage msg = BlockingMessage.request(networkClient.kryoClient(), request);
+		//PlayerResponse response = (PlayerResponse) msg;
+		
+		this.networkClient.sendNetworkObject(request);
+		return null; //Can make this method return void if all the changes go ahead
+		
+		//return response.getPlayer();
+		
 	}
 
 

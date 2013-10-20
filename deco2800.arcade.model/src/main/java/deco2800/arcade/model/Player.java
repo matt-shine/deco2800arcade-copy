@@ -414,6 +414,13 @@ public class Player extends User {
 			clearChanged();
 		}
 	}
+	
+	public void acceptFriendInvite(int playerID){
+		this.friends.add(new User(playerID));
+		setChanged();
+		notifyObservers(friends);
+		clearChanged();
+	}
 
 	/**
 	 * Remove a friend from the player's friends list.
@@ -468,6 +475,14 @@ public class Player extends User {
 			clearChanged();
 		}
 	}
+	
+	//Testing this
+	public void addInvite(int playerID){
+		this.friendInvites.add(new User(playerID));
+		setChanged();
+		notifyObservers(friendInvites);
+		clearChanged();
+	}
 
 	/**
 	 * Remove an invite from the player's invite list.
@@ -521,6 +536,14 @@ public class Player extends User {
 			clearChanged();
 		}
 	}
+	
+	//Testing this
+	public void blockPlayer(int playerID) {
+		this.blocked.add(new User(playerID));
+		setChanged();
+		notifyObservers(blocked);
+		clearChanged();
+	}
 
 	/**
 	 * Remove a player from the player's blocked list.
@@ -536,6 +559,13 @@ public class Player extends User {
 			notifyObservers(blocked);
 			clearChanged();
 		}
+	}
+	
+	public void removeBlocked(int playerID){
+		this.blocked.remove(new User(playerID));
+		setChanged();
+		notifyObservers(blocked);
+		clearChanged();
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package deco2800.server.database;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -75,17 +76,32 @@ public class PlayerStorage {
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
 
+		PreparedStatement ps = null;
 		Statement statement = null;
 		ResultSet resultSet = null;
 		try {
+			/*
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT * from PLAYERS");
+			resultSet = statement.executeQuery("SELECT * from PLAYERS;");
 			data.add(findPlayerInfo(playerID, resultSet, "username"));
 			data.add(findPlayerInfo(playerID, resultSet, "name"));
 			data.add(findPlayerInfo(playerID, resultSet, "email"));
 			data.add(findPlayerInfo(playerID, resultSet, "program"));
 			data.add(findPlayerInfo(playerID, resultSet, "bio"));
-
+			*/
+			ps = connection.prepareStatement("SELECT * FROM PLAYERS WHERE playerID = ?");
+			ps.setInt(1, playerID);
+			resultSet = ps.executeQuery();
+			while (resultSet.next()){
+				data.add(resultSet.getString("username"));
+				data.add(resultSet.getString("name"));
+				data.add(resultSet.getString("email"));
+				data.add(resultSet.getString("program"));
+				data.add(resultSet.getString("bio"));
+			}
+			//This last field isn't in the database yet for some reason, so add it manually
+			data.add("21");
+			
 			return data;
 		} catch (SQLException e) {
 			e.printStackTrace();

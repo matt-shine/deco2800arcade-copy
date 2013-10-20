@@ -19,8 +19,9 @@ public class PlayerListener extends Listener {
 	@Override
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
-
-		if (object instanceof PlayerNetworkObject) {
+		
+		//This check never seems to pass at the moment
+		//if (object instanceof PlayerNetworkObject) {
 			if (object instanceof BioUpdateRequest) {
 				BioUpdateRequest request = (BioUpdateRequest) object;
 				PlayerDatabaseManager pdm = new PlayerDatabaseManager();
@@ -92,11 +93,11 @@ public class PlayerListener extends Listener {
 				PlayerResponse response = new PlayerResponse();
 				int playerID = request.getPlayerID();
 				PlayerDatabaseManager pdm = new PlayerDatabaseManager();
-
 				try {
 					// update database
 					response.setPlayer(pdm.loadPlayer(playerID));
-					BlockingMessage.respond(connection, request, response);
+					//BlockingMessage.respond(connection, request, response);
+					connection.sendTCP(response);
 				} catch (DatabaseException e) {
 					e.printStackTrace();
 					// can't let the client keep blocking, just send an empty
@@ -112,7 +113,7 @@ public class PlayerListener extends Listener {
 				 */
 			}
 
-		}
+		//}
 
 	}
 }

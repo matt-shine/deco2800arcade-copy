@@ -2,16 +2,21 @@ package deco2800.arcade.client.network.listener;
 
 import com.esotericsoftware.kryonet.Connection;
 
+import deco2800.arcade.client.Arcade;
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.protocol.communication.ChatHistory;
 import deco2800.arcade.protocol.communication.TextMessage;
+import deco2800.arcade.protocol.connect.ConnectionResponse;
+import deco2800.arcade.protocol.player.PlayerResponse;
 
 public class CommunicationListener extends NetworkListener {
 
 	CommunicationNetwork communicationNetwork;
+	private Arcade arcade = null;
 
-	public CommunicationListener(CommunicationNetwork communicationNetwork) {
+	public CommunicationListener(CommunicationNetwork communicationNetwork, Arcade arcade) {
 		this.communicationNetwork = communicationNetwork;
+		this.arcade = arcade;
 	}
 
 	@Override
@@ -22,6 +27,32 @@ public class CommunicationListener extends NetworkListener {
 	@Override
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
+		
+		/**
+		 * Server is replying to our login attempt
+		 */
+		if (object instanceof ConnectionResponse){
+			System.out.println("Client got connectionResponse");
+			ConnectionResponse response = (ConnectionResponse) object;
+			if (response.playerID >= 0){
+				if (response.register == false){
+					arcade.loadPlayer(response.playerID);
+				}
+			} else if (response.playerID == -1){
+				System.out.println("Incorrect password");
+			}
+		}
+		
+		/**
+		 * PlayerClient is replying to our loadPlayer call
+		 */
+		if (object instanceof PlayerResponse){
+			PlayerResponse response = (PlayerResponse) object;
+			if (response.getPlayer() != null){
+				arcade.connectAsUser(response.getPlayer());
+			}
+		}
+		
 
 		/**
 		 * If a text message is received, the message is added to the

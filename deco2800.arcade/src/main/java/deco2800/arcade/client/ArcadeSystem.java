@@ -6,6 +6,7 @@ import deco2800.arcade.model.Game;
 import java.util.ArrayList;
 import java.util.Set;
 
+import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
@@ -83,7 +84,7 @@ public class ArcadeSystem {
      * @param username User to login
      */
 	public static void login(String username) {
-		arcade.connectAsUser(username, "");
+
 	}
 	
 	/**
@@ -92,7 +93,13 @@ public class ArcadeSystem {
      * @param password password for login
      */
 	public static void login(String username, String password) {
-		arcade.connectAsUser(username, password);
+		ConnectionRequest connectionRequest = new ConnectionRequest();
+		connectionRequest.username = username;
+		connectionRequest.password = password;
+		connectionRequest.register = false;
+		if (!password.equals("")) {
+			arcade.getClient().sendNetworkObject(connectionRequest);
+		}
 	}
 	
 	/**

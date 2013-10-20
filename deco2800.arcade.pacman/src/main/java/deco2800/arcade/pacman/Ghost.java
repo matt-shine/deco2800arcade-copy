@@ -79,11 +79,6 @@ public final class Ghost extends Mover {
 			spritePos = 7;
 		} 
 		
-		// Check ghost wall collision
-		if (!checkNoWallCollision()){
-			facing = Dir.LEFT; // why this?
-		}
-		
 		// Check whether energised
 		if (gameMap.isEnergized() && currentState == GhostState.CHASE){
 			System.out.println("Ghosts scatter!");
@@ -108,18 +103,33 @@ public final class Ghost extends Mover {
 				drawY -= moveDist;
 			} 
 			updatePosition();
+		} else if (currentState == GhostState.SCATTER) {
+			if (facing == Dir.LEFT) {
+				drawX -= moveDist/1.25;
+			} else if (facing == Dir.RIGHT) {
+				drawX += moveDist/1.25;
+			} else if (facing == Dir.UP) {
+				drawY += moveDist/1.25;
+			} else if (facing == Dir.DOWN) {
+				drawY -= moveDist/1.25;
+			} 
+			updatePosition();
 		}
 	}
 
 	/** Updates the target tile for the ghost. So far only does Blinky 
 	 * and Pinky's targeting schemes */
 	private void updateTargetTile() {
-		if (ghostName == GhostName.BLINKY) {
-			targetTile = player.getCurTile();
-		} else if (ghostName == GhostName.PINKY) {
-			targetTile = player.nextTile(player.getCurTile(), 4);
-		} else {
-			targetTile = player.getCurTile();
+		if (currentState == GhostState.CHASE) {
+			if (ghostName == GhostName.BLINKY) {
+				targetTile = player.getCurTile();
+			} else if (ghostName == GhostName.PINKY) {
+				targetTile = player.nextTile(player.getCurTile(), 4);
+			} else {
+				targetTile = player.getCurTile();
+			}
+		} else if (currentState == GhostState.SCATTER){
+			targetTile = gameMap.getGhostDoors().get(0);
 		}
 	}
 

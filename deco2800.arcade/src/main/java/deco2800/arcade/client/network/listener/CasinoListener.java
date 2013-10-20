@@ -2,7 +2,7 @@ package deco2800.arcade.client.network.listener;
 
 import com.esotericsoftware.kryonet.Connection;
 
-import deco2800.arcade.client.Arcade;
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.protocol.game.CasinoServerUpdate;
 
@@ -27,7 +27,7 @@ public class CasinoListener extends NetworkListener {
 		super.received(connection, object);
 		
 		if (object instanceof CasinoServerUpdate) {
-			GameClient gc = Arcade.getInstance().getCurrentGame();
+			GameClient gc = ArcadeSystem.getCurrentGame();
 			
 			gc.updateCasinoState((CasinoServerUpdate)object);
 		}

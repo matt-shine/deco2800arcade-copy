@@ -51,8 +51,8 @@ public class Blackjack extends GameClient {
 	//Reusable list of achievements
 	private static Set<Achievement> achievements = new HashSet<Achievement>();
 	static {
-		Achievement randomAchievement = new Achievement("Create these later");
-		achievements.add(randomAchievement);
+		//Achievement randomAchievement = new Achievement("Create these later");
+		//achievements.add(randomAchievement);
 	}
 	
 	

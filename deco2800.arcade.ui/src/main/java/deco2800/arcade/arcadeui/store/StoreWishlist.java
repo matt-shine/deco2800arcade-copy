@@ -22,6 +22,10 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
 /**
+ * The Store's wishlist page, featuring the currently logged in users games
+ * wishlist, and all of their ratings. From this page they can search to
+ * navigate to any other games page, and can click on any game to bring up the
+ * transactions screen.
  * @author Addison Gourluck
  */
 public class StoreWishlist implements Screen, StoreScreen {
@@ -42,7 +46,7 @@ public class StoreWishlist implements Screen, StoreScreen {
 		
 		final Table bg = new Table();
 		final Button homeButton = new Button(skin, "home");
-		final Label Title = new Label("Wish List", skin, "default-34");
+		final Label title = new Label("Wish List", skin, "default-34");
 		final Button searchButton = new Button(skin, "search");
 		final TextField searchField = new TextField("", skin);
 		final Label searchResult = new Label("", skin);
@@ -60,9 +64,9 @@ public class StoreWishlist implements Screen, StoreScreen {
 		stage.addActor(homeButton);
 		
 		// Title "Buy More Coins", located center of screen.
-		Title.setSize(380, 40);
-		Title.setPosition(96, 515);
-		stage.addActor(Title);
+		title.setSize(380, 40);
+		title.setPosition(96, 515);
+		stage.addActor(title);
 		
 		// Entry field for search term. Will update the featured game, as well.
 		// as the search result located below it.
@@ -81,6 +85,7 @@ public class StoreWishlist implements Screen, StoreScreen {
 		searchResult.setPosition(860, 475);
 		stage.addActor(searchResult);
 		
+		// The transactions button, located right of screen.
 		transactionsButton.setSize(360, 95);
 		transactionsButton.setPosition(834, 353);
 		stage.addActor(transactionsButton);
@@ -101,6 +106,7 @@ public class StoreWishlist implements Screen, StoreScreen {
 			}
 		});
 		
+		// Listener to update the search prediction result as the user types.
 		searchField.setTextFieldListener(new TextFieldListener() {
 			public void keyTyped(TextField textField, char key) {
 				Game result = Utilities.helper.search(searchField.getText());
@@ -112,6 +118,8 @@ public class StoreWishlist implements Screen, StoreScreen {
 			}
 		});
 		
+		// Searchbutton listener, which will attempt to redirect to a game based
+		// upon the searchfield's text, else will set the result as invalid.
 		searchButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				try {
@@ -147,15 +155,14 @@ public class StoreWishlist implements Screen, StoreScreen {
 	 */
 	private void populateWishlist(int index) {
 		for (int i = 0; i < 6; ++i) {
-			Game game = (Game)ArcadeSystem.getArcadeGames().toArray()
+			final Game game = (Game)ArcadeSystem.getArcadeGames().toArray()
 					[(index + i)%ArcadeSystem.getArcadeGames().size()];
 			final Button gameGridGlow = new Button(skin, "icon");
 			gameGridGlow.setSize(122, 122);
-			gameGridGlow.setName(game.id);
 			
+			// Retrieve icon for the game.
 			final Button gameGridIcon = new Button(skin.getDrawable(game.id));
 			gameGridIcon.setSize(110, 110);
-			gameGridIcon.setName(game.id);
 			
 			final Table star = new Table();
 			star.setBackground(skin.getDrawable("big_star"));
@@ -164,7 +171,7 @@ public class StoreWishlist implements Screen, StoreScreen {
 			final Label gameName;
 			if (game.name.length() > 12) {
 				gameName = new Label(game.name, skin, "default-22");
-			} else {
+			} else { // Games with long names use smaller font.
 				gameName = new Label(game.name, skin, "default-24");
 			}
 			gameName.setSize(200, 40);
@@ -187,12 +194,14 @@ public class StoreWishlist implements Screen, StoreScreen {
 			}
 			gameGridGlow.addListener(new ChangeListener() {
 				public void changed(ChangeEvent event, Actor actor) {
-					//
+					dispose();
+					arcadeUI.setScreen(new StoreGame(arcadeUI, game));
 				}
 			});
 			gameGridIcon.addListener(new ChangeListener() {
 				public void changed(ChangeEvent event, Actor actor) {
-					//
+					dispose();
+					arcadeUI.setScreen(new StoreGame(arcadeUI, game));
 				}
 			});
 			stage.addActor(gameGridGlow);

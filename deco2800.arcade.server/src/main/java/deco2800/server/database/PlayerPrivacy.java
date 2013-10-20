@@ -50,8 +50,9 @@ public class PlayerPrivacy {
 						.execute("CREATE TABLE PLAYERPRIVACY( "
 								+ "playerID INT NOT NULL, "
 								+ "name INT NOT NULL, email INT, program INT, "
-								+ "bio INT,"
+								+ "bio INT, "
 								+ "games INT, achievements INT, "
+								+ "age INT, "
 								+ "PRIMARY KEY (playerID), "
 								+ "FOREIGN KEY (playerID) REFERENCES PLAYER(playerID);");
 			}
@@ -110,6 +111,7 @@ public class PlayerPrivacy {
 			data.add(findPlayerInfo(playerID, resultSet, "bio"));
 			data.add(findPlayerInfo(playerID, resultSet, "games"));
 			data.add(findPlayerInfo(playerID, resultSet, "achievements"));
+			data.add(findPlayerInfo(playerID, resultSet, "age"));
 
 			return data;
 		} catch (SQLException e) {
@@ -288,6 +290,27 @@ public class PlayerPrivacy {
 			updateField(playerID, FRIENDS_ONLY, "achievements");
 		}
 	}
+	
+	/**
+	 * Sets a player's age privacy setting to the provided modes.
+	 *  
+	 * @param playerID
+	 *            The player's playerID.
+	 * @param privacySetting
+	 *            True if information is public, false if information is for
+	 *            friends only.
+	 * @throws DatabaseException
+	 */
+	public void updateAge(int playerID, boolean privacySetting)
+			throws DatabaseException {
+
+
+		if(privacySetting){
+			updateField(playerID, PUBLIC, "age");
+		} else {
+			updateField(playerID, FRIENDS_ONLY, "age");
+		}
+	}
 
 	/**
 	 * Updates a database field, given a playerID, the field to be updated and
@@ -322,6 +345,46 @@ public class PlayerPrivacy {
 			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException(
 					"Unable to update player username in database", e);
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				 Logger logger = LoggerFactory.getLogger(PlayerPrivacy.class);
+				 logger.error(e.getStackTrace().toString());
+			}
+		}
+	}
+	
+	/**
+	 * Drops all tables from the database for clean testing.
+	 */
+	public void dropTables() throws DatabaseException {
+		
+		if (!initialised) {
+			initialise();
+		}
+		
+		Connection connection = Database.getConnection();
+		
+		Statement statement = null;
+		ResultSet resultSet = null;
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("DROP TABLE *;");
+
+		} catch (SQLException e) {
+			 Logger logger = LoggerFactory.getLogger(PlayerPrivacy.class);
+			 logger.error(e.getStackTrace().toString());
+			throw new DatabaseException(
+					"Unable to drop tables from the database.", e);
 		} finally {
 			try {
 				if (resultSet != null) {

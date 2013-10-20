@@ -115,6 +115,8 @@ public class TowerDefence extends GameClient {
 		game = new Game();
 		game.id = "towerdefence";
 		game.name = "Tower Defence";
+		game.description = "Defend your towers with wit and strategy."
+				+ "Endless, fun, fast paced gameplay!";
 	}
 
 	public Game getGame() {

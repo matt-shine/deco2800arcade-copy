@@ -69,7 +69,7 @@ public class GameScreen implements Screen {
 	public GameScreen(TowerDefence game) {
 		this.game = game;
 		stage = new Stage();
-		stage.setViewport(4000, 4000, true);
+		stage.setViewport(4166, 4166, true);
 		hudStage = new Stage();
 		hudStage.setViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
 				true);
@@ -176,7 +176,7 @@ public class GameScreen implements Screen {
 				camera.translate(-3, 0, 0);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			if (camera.position.x < 4000)
+			if (camera.position.x < 4166)
 				camera.translate(3, 0, 0);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
@@ -184,7 +184,7 @@ public class GameScreen implements Screen {
 				camera.translate(0, -3, 0);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			if (camera.position.y < 4000)
+			if (camera.position.y < 4166)
 				camera.translate(0, 3, 0);
 		}
 	}
@@ -195,7 +195,7 @@ public class GameScreen implements Screen {
 			hudStage = new Stage(width, height, true);
 		}
 		if (stage == null) {
-			stage = new Stage(4000, 4000, true);
+			stage = new Stage(4166, 4166, true);
 		}
 		hudStage.clear();
 		stage.clear();
@@ -359,7 +359,7 @@ public class GameScreen implements Screen {
 		/* adding actors for the camera */
 		stage.addActor(gridMap);
 		/* Set camera to the middle */
-		camera.position.set(2000, 2000, 0);
+		camera.position.set(2083, 2083, 0);
 	}
 
 	@Override

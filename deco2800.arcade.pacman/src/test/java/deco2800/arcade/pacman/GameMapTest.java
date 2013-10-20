@@ -59,7 +59,7 @@ public class GameMapTest {
 		try {
 			((OpenALAudio) app.getAudio()).dispose();
 		} catch (UnsatisfiedLinkError e) {
-		}
+		} 
 	}
 	
 	@Test
@@ -70,6 +70,8 @@ public class GameMapTest {
 		Assert.assertEquals(16, map.getTileSideLength());
 		Assert.assertEquals(1280, map.SCREEN_WIDTH);
 		Assert.assertEquals(720, map.SCREEN_HEIGHT);
+		Assert.assertArrayEquals(new Tile[4], map.getGhostStarts());
+		Assert.assertEquals(new ArrayList<Tile>(), map.getAfterTeleports());
 	}
 	
 	@Test
@@ -152,6 +154,10 @@ public class GameMapTest {
 		ghostDoors.add((WallTile) grid[17][22]);
 		ghostDoors.add((WallTile) grid[18][22]);
 		Assert.assertEquals(ghostDoors, map.getGhostDoors());
+		ArrayList<Tile> afterTeleports = new ArrayList<Tile>();
+		afterTeleports.add(grid[3][20]);
+		afterTeleports.add(grid[32][20]);
+		Assert.assertEquals(afterTeleports, map.getAfterTeleports());
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				Assert.assertNotNull(grid[i][j]);				

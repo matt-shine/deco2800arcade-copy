@@ -131,8 +131,18 @@ public class Pacman extends GameClient {
 		if (viewNotSetUp) {
 			view = new PacView(model);
 			viewNotSetUp = false;
-		}
-		
+		}		
+		updateAchievements();		
+		// make changes in the model to prepare for rendering if overlay
+		// not active
+		if (!gamePaused) {
+			model.prepareDraw();
+		}		
+		view.render();
+		super.render();		
+	}
+	
+	private void updateAchievements() {
 		// Update checks for achievements
 		if (getModel().getGameMap().getDotsEaten() == 100){
 			this.incrementAchievement("pacman.insatiable");
@@ -146,20 +156,6 @@ public class Pacman extends GameClient {
 		if (getModel().getGameMap().getGhostsEaten() >= 1){
 			this.incrementAchievement("pacman.ghostbuster");
 		}
-		
-		// make changes in the model to prepare for rendering if overlay
-		// not active
-		if (!gamePaused) {
-			model.prepareDraw();
-		}
-		
-		view.render();
-		super.render();		
-	}
-	
-	private void startGame() {	
-		logger.debug("Game is now running");		
-		//gameState = GameState.RUNNING;	
 	}
 		
 	@Override

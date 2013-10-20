@@ -20,9 +20,9 @@ import deco2800.arcade.model.Player;
 // THE OFFENDING ONES ARE COMMENTED OUT
 
 /**
- * A main test class for Pacman
- * OCCASIONALLY causes Unsatisfied Link Exceptions in the tearDown() code. But 
- * usually doesn't. It's very confusing. Everything still runs fine either way.
+ * A main test class for Pacman, also testing the model. 
+ * It should also be noted here that the View cannot 
+ * be tested as JUnit causes errors if Textures are loaded
  */
 
 public class MainTest {
@@ -71,12 +71,25 @@ public class MainTest {
 		gameMap.readMap(model.getMapName());
 	}	
 	
-	/** Checks to see if the multiplexer still exists properly */
 	@Test
+	/** Checks to see if the multiplexer still exists properly */
 	public void checkMultiplexerExists() {
 		ArcadeInputMux.getInstance().addProcessor(pacGame.getController());
 		Array<InputProcessor> processors = ArcadeInputMux.getInstance().getProcessors();
 		Assert.assertTrue(processors.contains(pacGame.getController(), false));
+	}
+	
+	@Test
+	/** Tests the initialisation of the model */	
+	public void modelInit() {
+		PacModel pModel = new PacModel(1280, 720, 4);
+		Assert.assertEquals("levelMap.txt", pModel.getMapName());
+		Assert.assertEquals(720, pModel.getSCREENHEIGHT());
+		Assert.assertEquals(1280, pModel.getSCREENWIDTH());
+		Assert.assertNotNull(pModel.getGameMap());
+		Assert.assertNotNull(pModel.getPlayer());
+		Assert.assertNotNull(pModel.getBlinky());
+		Assert.assertNotNull(pModel.getPinky());
 	}
 	
 }

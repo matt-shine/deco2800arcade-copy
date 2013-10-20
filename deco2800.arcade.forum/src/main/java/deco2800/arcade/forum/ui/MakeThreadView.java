@@ -77,7 +77,7 @@ public class MakeThreadView {
 		   
 		   
 		   this.CategoryCBox = new JComboBox();
-		   this.CategoryCBox.setModel(new DefaultComboBoxModel(new String[] {"General Discussion", "Tutorial", "Report Bug", "Others"}));
+		   this.CategoryCBox.setModel(new DefaultComboBoxModel(new String[] {"General_Discussion", "Tutorial", "Report_Bug", "Others"}));
 		   this.CategoryCBox.setBounds(748, 321, 142, 22);
 		   this.f.getContentPane().add(CategoryCBox);
 		      

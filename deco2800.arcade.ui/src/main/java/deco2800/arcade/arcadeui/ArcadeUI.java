@@ -23,7 +23,7 @@ public class ArcadeUI extends GameClient {
 	LoginScreen login = null;
 	StoreHome store = null;
 	HomeScreen home = null;
-    FrontPage main = null;
+    frontPage main = null;
     RegisterScreen register = null;
     MultiplayerLobby lobby = null;
     BettingWindow betting = null;
@@ -45,7 +45,7 @@ public class ArcadeUI extends GameClient {
 
         home = new HomeScreen(this);
         store = new StoreHome(this);
-        main = new FrontPage(this);
+        main = new frontPage(this);
 
         register = new RegisterScreen(this);
         lobby = new MultiplayerLobby(this);

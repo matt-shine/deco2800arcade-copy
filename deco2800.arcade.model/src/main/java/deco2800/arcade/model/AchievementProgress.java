@@ -35,6 +35,11 @@ public class AchievementProgress {
     }
     
     /**
+     * Needed for Kryonet, do not use.
+     */
+    public AchievementProgress() {}
+    
+    /**
      * Returns the progress in a given achievement.
      *
      * @param achievement The achievement in question

@@ -18,7 +18,6 @@ public final class PacChar extends Mover{
 	private static int widthVal = 26;
 	private static int heightVal = 26;
 
-
 	private Animation walkAnimation;
 	
 	public PacChar(GameMap gameMap) {
@@ -33,9 +32,10 @@ public final class PacChar extends Mover{
 		drawFacing = Dir.LEFT; // the way pacman appears
 		width = widthVal;
 		height = heightVal;
+		spritePos = 3;
 		currentTile.addMover(this);
 		updatePosition();
-		moveDist = 1.5f;
+		moveDist = 1;
 		//System.out.println(this);
 //		animation not necessary unless Pacman moving		
 //		walkAnimation = new Animation(0.025f, pacmanFrames);
@@ -110,8 +110,12 @@ public final class PacChar extends Mover{
 						System.out.println("Yummy ghost");
 					} else if(((Ghost)colList.get(i)).getCurrentState() == GhostState.CHASE){
 						System.out.println("Disaster!! Pacman hit a ghost!");
-						//TODO some death thing
-						this.setCurrentState(PacState.DEAD);
+						if (getLives() <= 1){
+							this.setCurrentState(PacState.DEAD);
+							// Do gameover stuff
+						} else {
+							setLives(getLives() - 1);
+						}
 					}
 				}
 			}

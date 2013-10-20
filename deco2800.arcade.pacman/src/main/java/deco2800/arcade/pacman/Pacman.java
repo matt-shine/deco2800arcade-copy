@@ -153,7 +153,7 @@ public class Pacman extends GameClient {
 			this.incrementAchievement("pacman.completionist");
 		}
 		
-		if (getModel().getGameMap().getGhostsEaten() == 1){
+		if (getModel().getGameMap().getGhostsEaten() >= 1){
 			this.incrementAchievement("pacman.ghostbuster");
 		}
 		

@@ -55,9 +55,9 @@ public final class Ghost extends Mover {
 		currentState = GhostState.CHASE;
 		width = widthVal;
 		height = heightVal;
+		moveDist = 1;
 		currentTile.addMover(this);
 		updatePosition();
-		moveDist = 1;
 		// System.out.println(this);
 		// animation not necessary unless Pacman moving
 		// walkAnimation = new Animation(0.025f, pacmanFrames);
@@ -70,14 +70,29 @@ public final class Ghost extends Mover {
 	public void prepareDraw() {		
 		updateTargetTile();
 		facing = getNextTileDirection();
-		spritePos = 3;
-		if (facing == Dir.RIGHT) {
-			spritePos = 1;
-		} else if (facing == Dir.UP) {
+		
+		if (currentState == GhostState.CHASE) {
+			spritePos = 3;
+			if (facing == Dir.RIGHT) {
+				spritePos = 1;
+			} else if (facing == Dir.UP) {
+				spritePos = 5;
+			} else if (facing == Dir.DOWN) {
+				spritePos = 7;
+			} 
+		} else if (currentState == GhostState.SCATTER){
+			spritePos = 0;
+		}  else if (currentState == GhostState.DEAD){
 			spritePos = 5;
-		} else if (facing == Dir.DOWN) {
-			spritePos = 7;
-		} 
+			if (facing == Dir.RIGHT) {
+				spritePos = 4;
+			} else if (facing == Dir.UP) {
+				spritePos = 6;
+			} else if (facing == Dir.DOWN) {
+				spritePos = 7;
+			} 
+		}
+		
 		
 		// Check whether energised
 		if (gameMap.isEnergized() && currentState == GhostState.CHASE){
@@ -89,10 +104,15 @@ public final class Ghost extends Mover {
 			currentState = GhostState.CHASE;
 		}
 		
+		// Update draw sprites
+		
+		
 		
 		// checks if ghost is moving, and if so keeps him moving in that
 		// direction
-		if (currentState == GhostState.CHASE) {
+		
+		if (currentState == GhostState.CHASE ||
+				currentState == GhostState.SCATTER) {
 			if (facing == Dir.LEFT) {
 				drawX -= moveDist;
 			} else if (facing == Dir.RIGHT) {
@@ -101,24 +121,19 @@ public final class Ghost extends Mover {
 				drawY += moveDist;
 			} else if (facing == Dir.DOWN) {
 				drawY -= moveDist;
-			} 
-			updatePosition();
-		} else if (currentState == GhostState.SCATTER) {
+			}
+		} else if (currentState == GhostState.DEAD) {
 			if (facing == Dir.LEFT) {
-//				drawX -= moveDist/1.25;
 				drawX -= moveDist;
 			} else if (facing == Dir.RIGHT) {
-//				drawX += moveDist/1.25;
 				drawX += moveDist;
 			} else if (facing == Dir.UP) {
-//				drawY += moveDist/1.25;
 				drawY += moveDist;
 			} else if (facing == Dir.DOWN) {
-//				drawY -= moveDist/1.25;
 				drawY -= moveDist;
-			} 
-			updatePosition();
+			}
 		}
+		updatePosition();
 	}
 
 	/** Updates the target tile for the ghost. So far only does Blinky 

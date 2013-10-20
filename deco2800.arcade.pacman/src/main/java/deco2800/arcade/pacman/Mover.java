@@ -3,6 +3,8 @@ package deco2800.arcade.pacman;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
+import deco2800.arcade.pacman.Ghost.GhostState;
+
 /**
  * An abstract class for objects that can move and collide *
  */
@@ -116,6 +118,16 @@ public abstract class Mover {
 			this.drawX = ((TeleportTile) nextTile(tile, 1)).getTargetX();
 			this.drawY = ((TeleportTile) nextTile(tile, 1)).getTargetY();
 		}
+		
+		if (this.getClass() == Ghost.class){
+			if (tile == gameMap.getGhostDoors().get(0) &&
+					((Ghost)this).getCurrentState() == GhostState.DEAD){
+				// Move ghost and revive!
+				((Ghost)this).setCurrentState(GhostState.CHASE);
+				currentTile = gameMap.getGhostStarts()[0];
+			}
+		}
+		
 		// Only Pac man can eat dots!
 		if (this.getClass() != PacChar.class) {return;} 
 		if (tile.getClass() == DotTile.class) {

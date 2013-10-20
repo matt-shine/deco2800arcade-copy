@@ -46,31 +46,31 @@ public final class Sounds {
 		return INSTANCE;
 	}
 
-	private void _playMenu() {
+	private void playMenu1() {
 		if (playing != SoundType.Menu) {
-			_stop();
+			stop1();
 			playing = SoundType.Menu;
 			menuLoop.play();
 		}
 	}
 
 	public static void playMenu() {
-		getInstance()._playMenu();
+		getInstance().playMenu1();
 	}
 
-	private void _playAction() {
+	private void playAction1() {
 		if (playing != SoundType.Action) {
-			_stop();
+			stop1();
 			playing = SoundType.Action;
 			actionLoop.play();
 		}
 	}
 
 	public static void playAction() {
-		getInstance()._playAction();
+		getInstance().playAction1();
 	}
 
-	private void _stop() {
+	private void stop1() {
 		if (playing == SoundType.Menu) {
 			menuLoop.stop();
 		} else if (playing == SoundType.Action) {
@@ -80,33 +80,33 @@ public final class Sounds {
 	}
 
 	public static void stop() {
-		getInstance()._stop();
+		getInstance().stop1();
 	}
 	
-	private void _playBuild() {
+	private void playBuild1() {
 		long id = buildSound.play();
 		buildSound.setVolume(id, 1.0f);
 	}
 	
 	public static void playBuild() {
-		getInstance()._playBuild();
+		getInstance().playBuild1();
 	}
 	
-	private void _playDestroy() {
+	private void playDestroy1() {
 		long id = destroySound.play();
 		destroySound.setVolume(id, 1.0f);
 	}
 	
 	public static void playDestroy() {
-		getInstance()._playDestroy();
+		getInstance().playDestroy1();
 	}
 	
-	private void _playTNT() {
+	private void playTNT1() {
 		long id = tntSound.play();
 		tntSound.setVolume(id, 1.0f);
 	}
 	
 	public static void playTNT() {
-		getInstance()._playTNT();
+		getInstance().playTNT1();
 	}
 }

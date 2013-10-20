@@ -15,6 +15,9 @@ import deco2800.arcade.protocol.AsymmetricSealer;
  * 
  */
 public class ServerKeyExchange {
+	/**
+	 * Stores the server's public key
+	 */
 	public SealedObject serverPublicKey;
 
 	/**

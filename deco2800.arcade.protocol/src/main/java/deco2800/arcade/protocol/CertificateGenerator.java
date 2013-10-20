@@ -30,7 +30,7 @@ public class CertificateGenerator {
 
 	/**
 	 * Generate the server certificate keys
-	 * 
+	 * @param args
 	 */
 	public static void main(String[] args) {
 		// TODO add automated gradle task to generate the certificates
@@ -41,6 +41,7 @@ public class CertificateGenerator {
 	 * Generate server and client certificates
 	 * 
 	 * The certificate keys are written to predetermined files.
+	 * @return KeyPair keyPair
 	 */
 	public static KeyPair generateCertificates() {
 		// TODO allow the file paths to be specified

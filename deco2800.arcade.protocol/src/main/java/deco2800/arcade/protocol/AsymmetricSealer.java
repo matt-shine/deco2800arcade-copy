@@ -11,10 +11,14 @@ import java.security.Key;
  * 
  */
 public class AsymmetricSealer extends Sealer {
-	// FIXME: class only has either Public or Private key
-	// so only one of seal/unSeal will work as expected.
-	// This should be made clearer or another implementation used.
-
+	
+	/**
+	 * Keeps track of the 'secret' used when transmitting objects.
+	 * Also stores the type of algorithm used in transmission.
+	 * Class only has either Public or Private key
+	 * so only one of seal/unSeal will work as expected.
+	 * @param secret
+	 */
 	public AsymmetricSealer(Key secret) {
 		this.secret = secret;
 		this.algorithm = "RSA";

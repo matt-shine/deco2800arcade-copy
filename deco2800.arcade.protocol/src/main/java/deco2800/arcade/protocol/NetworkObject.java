@@ -15,39 +15,63 @@ public abstract class NetworkObject implements Serializable {
     private static int nextUniqueID = 0;
     private int id = 0;
 
+    /**
+     * Increments id variable to keep it unique
+     */
     public void makeUnique() {
-	id = nextUniqueID++;
+    	id = nextUniqueID++;
     }
 
+    /**
+     * Creates a response with the same id as the given request
+     * @param request
+     */
     public void makeResponse(NetworkObject request) {
-	id = request.id;
+    	id = request.id;
     }
 
+    /**
+     * Returns true if the given request is a response to the calling request.
+     * @param request
+     * @return true if id == request.id
+     */
     public boolean isResponse(NetworkObject request) {
-	return id == request.id;
+    	return id == request.id;
     }
 
-    public static AsyncFuture<NetworkObject> request(final Connection conn, final NetworkObject req) {
+    /**
+     * @param conn
+     * @param req
+     * @return AsyncFuture NetworkObject
+     */
+    public static AsyncFuture<NetworkObject> 
+    request(final Connection conn, final NetworkObject req) {
 		req.makeUnique();
-	final AsyncFuture<NetworkObject> future = new AsyncFuture<NetworkObject>();
-
-	conn.addListener(new Listener() {
-             public void received(Connection conn, Object obj) {
-		 if (obj instanceof NetworkObject) {
-		     NetworkObject resp = (NetworkObject)obj;
-		     if (resp.isResponse(req)) {
-			 future.provide(resp);
-			 conn.removeListener(this);
+		final AsyncFuture<NetworkObject> future = new AsyncFuture<NetworkObject>();
+	
+		conn.addListener(new Listener() {
+	             public void received(Connection conn, Object obj) {
+			 if (obj instanceof NetworkObject) {
+			     NetworkObject resp = (NetworkObject)obj;
+			     if (resp.isResponse(req)) {
+				 future.provide(resp);
+				 conn.removeListener(this);
+			     }
+			 }
 		     }
-		 }
-	     }
-	});
-
-	conn.sendTCP(req);
-	return future;
+		});
+	
+		conn.sendTCP(req);
+		return future;
     }
     
-    public static void respond(Connection conn, NetworkObject request, NetworkObject response) {
+    /**
+     * @param conn
+     * @param request
+     * @param response
+     */
+    public static void respond(
+    		Connection conn, NetworkObject request, NetworkObject response) {
 	response.makeResponse(request);
 	conn.sendTCP(response);
     }

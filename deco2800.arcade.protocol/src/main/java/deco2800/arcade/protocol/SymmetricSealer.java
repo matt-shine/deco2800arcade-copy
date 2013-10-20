@@ -11,6 +11,11 @@ import java.security.Key;
  */
 public class SymmetricSealer extends Sealer {
 
+	/**
+	 * Keeps track of the 'secret' used when transmitting objects.
+	 * Also stores the type of algorithm used in transmission.
+	 * @param secret
+	 */
 	public SymmetricSealer(Key secret) {
 		this.secret = secret;
 		this.algorithm = "AES";

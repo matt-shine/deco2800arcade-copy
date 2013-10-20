@@ -18,6 +18,9 @@ public abstract class Sealer {
 	
 	/**
 	 * Securely seals the given object.
+	 * @param object 
+	 * @return SealedObject
+	 * @throws Exception
 	 */
 	public SealedObject seal(Serializable object) throws Exception {
 		Cipher cipher = Cipher.getInstance(algorithm);
@@ -29,6 +32,9 @@ public abstract class Sealer {
 
 	/**
 	 * Extracts object from the given sealed object.
+	 * @param sealedObject 
+	 * @return Object
+	 * @throws Exception 
 	 */
 	public Object unSeal(SealedObject sealedObject) throws Exception {
 		Cipher cipher = Cipher.getInstance(algorithm);

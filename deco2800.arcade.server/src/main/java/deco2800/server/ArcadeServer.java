@@ -1,13 +1,8 @@
 package deco2800.server;
 
 import java.io.IOException;
-import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import java.net.BindException;
 
 import com.esotericsoftware.kryonet.Server;
@@ -22,7 +17,6 @@ import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.LobbyListener;
 import deco2800.server.listener.MultiplayerListener;
 import deco2800.server.listener.ReplayListener;
-import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
 import deco2800.server.listener.PackmanListener;
@@ -46,16 +40,12 @@ public class ArcadeServer {
 	// TODO We only need one of these (probably SessionManager), but I wasn't
 	// 		sure which one to keep
 	SessionManager sessionManager = new SessionManager();
-	private Set<String> connectedUsers = new HashSet<String>();
-	
 	//Replay data
 	private ReplayStorage replayStorage;
 	
 	//singleton pattern
 	private static ArcadeServer instance;
 
-	// Public and private key pair help handshake with clients
-	private KeyPair keyPair;
 	private String algorithm = "RSA";
 	
 	private MatchmakerQueue matchmakerQueue;
@@ -70,9 +60,7 @@ public class ArcadeServer {
 	private static final int UDP_PORT = 54777;
     private static final int FILE_TCP_PORT = 54666;
 
-    private Server fileServer;
-	
-	/**
+    /**
 	 * Retrieve the singleton instance of the server
 	 * 
 	 * @return game server instance
@@ -147,6 +135,7 @@ public class ArcadeServer {
 	
 	/**
 	 * Access the server's high score storage
+	 * @return Instance of the highscores database
 	 */
 	public HighscoreDatabase getHighscoreDatabase() {
 		return this.highscoreDatabase;
@@ -295,12 +284,8 @@ public class ArcadeServer {
 		}
 		if (kpg != null) {
 			kpg.initialize(2048);
-			KeyPair keyPair = kpg.generateKeyPair();
-
-			this.keyPair = keyPair;
+			kpg.generateKeyPair();
 		} else {
-			// Something went wrong
-			this.keyPair = null;
 		}
 	}
 

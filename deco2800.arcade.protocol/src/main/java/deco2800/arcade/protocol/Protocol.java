@@ -5,9 +5,6 @@ import javax.crypto.SealedObject;
 import java.util.ArrayList;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.serializers.BlowfishSerializer;
-import com.esotericsoftware.kryo.serializers.FieldSerializer;
-
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Icon;
 import deco2800.arcade.protocol.achievement.AchievementsForGameRequest;
@@ -77,13 +74,17 @@ import deco2800.arcade.protocol.replay.demo.ReplayResponse;
 import deco2800.arcade.protocol.replay.types.Session;
 import deco2800.arcade.model.Achievement;
 
+/**
+ * This class is shared by the client and server. It registers the classes
+ * that are going to be sent over the network with the kryo instance
+ * @author Team Mashup
+ */
 public class Protocol {
 
 //	private static List<Class<?>> registeredClasses = new ArrayList<Class<?>>();
 	
 	/**
-	 * Registers the classes that will be sent over the network. Classes 
-	 * registered in this method will not be encrypted.
+	 * Registers the classes that will be sent over the network.
 	 * @param kryo
 	 */
 	public static void register(Kryo kryo) {
@@ -191,19 +192,4 @@ public class Protocol {
         kryo.register(java.util.HashSet.class);
         kryo.register(java.awt.image.BufferedImage.class);
 	}
-	
-//	/**
-//	 * Sends ConnectionRequest over network using encryption rather than 
-//	 * plaintext
-//	 * @param connectionRequest
-//	 */
-//	public static void registerEncrypted(ConnectionRequest connectionRequest) {		
-//		connectionRequest.generateKey();
-//		
-//		// Ensures any ConnectionRequests are sent over the network using the 
-//		// Blowfish encryption algorithm
-//		kryo.register(ConnectionRequest.class, new BlowfishSerializer(
-//				new FieldSerializer(kryo, ConnectionRequest.class), connectionRequest.getKey()));
-//	}
-
 }

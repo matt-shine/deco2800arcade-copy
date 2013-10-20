@@ -44,12 +44,12 @@ import com.badlogic.gdx.Input.Keys;
 
 @ArcadeGame(id = "chess")
 public class Chess extends GameClient implements InputProcessor, Screen {
-	private static final Game game;
+	private static final Game Game;
 	static {
-		game = new Game();
-		game.id = "chess";
-		game.name = "Chess";
-		game.description = "A game of Chess, where 2 players, dubbed white"
+		Game = new Game();
+		Game.id = "chess";
+		Game.name = "Chess";
+		Game.description = "A game of Chess, where 2 players, dubbed white"
 				+ "or black, aim to CheckMate their opponent before being"
 				+ "CheckMated themselves."; 
 	}
@@ -103,7 +103,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	private TextButton replayButton, startreplayButton, 
 						newGameButton , backButton;
 	private Stage stage;
-	private BitmapFont BmFontB;
+	private BitmapFont bmFontB;
 	private TextureAtlas map;
 	private Skin skin;
 	private Texture splashTexture;
@@ -124,11 +124,11 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	// Tracks whether the game is paused
 	private boolean paused = false;
 	// Tracks level of single player mode
-	public boolean EasyComputerOpponent;
-	public boolean HardComputerOpponent;
+	public boolean easyComputerOpponent;
+	public boolean hardComputerOpponent;
 
 	// Tracks if multiplayer is on
-	private boolean Multiplayer = false;
+	private boolean multiplayer = false;
 
 	// Network client for communicating with the server.
 	// Should games reuse the client of the arcade somehow? Probably!
@@ -285,7 +285,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		makeButtons();
 		replayHandler.startSession("chess", player.getUsername());
 		// Pause game and wait for connection if multiplayer is selected
-		if (Multiplayer) {
+		if (multiplayer) {
 			paused = true;
 		}
 	}
@@ -398,18 +398,12 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		drawButton();
 	}
 
-
-	@Override
-	public void resume() {
-		super.resume();
-	}
-
 	/**
 	 * Ends the game and allows replay if the last game was recorded
 	 */
 	private void finishGame(boolean loser, boolean stalemate) {
 		System.err.println("GAME OVER");
-		if (!Multiplayer) {
+		if (!multiplayer) {
 			if ((!stalemate) && (loser)) {
 				player1.logWin();
 				this.incrementAchievement("chess.winGame");
@@ -540,7 +534,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 					 * If the easy computer opponent is playing, and black teams
 					 * turn (computer controlled team)
 					 */
-					if (EasyComputerOpponent && board.whoseTurn()) {
+					if (easyComputerOpponent && board.whoseTurn()) {
 						Piece AIPiece = board.chooseAIPiece();
 						List<int[]> allowed = board.allowedMoves(AIPiece);
 						System.out.println("AI is: " + AIPiece);
@@ -791,8 +785,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	 */
 	void movePieceGraphic() {
 		
-		ArrayList<Piece> whiteGraveyard = board.getGraveyard(false);
-		ArrayList<Piece> blackGraveyard = board.getGraveyard(true);
+		List<Piece> whiteGraveyard = board.getGraveyard(false);
+		List<Piece> blackGraveyard = board.getGraveyard(true);
 
 		for (FixedSizeList<Piece> row : board.getBoardState()) {
 			for (Piece piece : row) {
@@ -1366,7 +1360,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		map = new TextureAtlas("b.pack");
 		skin = new Skin();
 		skin.addRegions(map);
-		BmFontB = new BitmapFont(Gdx.files.internal("imgs/gameFont2.fnt"),
+		bmFontB = new BitmapFont(Gdx.files.internal("imgs/gameFont2.fnt"),
 				false);
 
 		int width = Chess.SCREENWIDTH;
@@ -1379,7 +1373,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = skin.getDrawable("buttonnormal");
 		style.down = skin.getDrawable("buttonpressed");
-		style.font = BmFontB;
+		style.font = bmFontB;
 
 		backButton = new TextButton("Quit to Menu", style);
 		backButton.setWidth(200);
@@ -1481,14 +1475,14 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 					replayButton.setVisible(true);
 				}
 				
-				if(EasyComputerOpponent){
-					EasyComputerOpponent = true;
+				if(easyComputerOpponent){
+					easyComputerOpponent = true;
 					recording = false;
 					board = new Board();
 					movePieceGraphic();
 				}
 				else {
-				EasyComputerOpponent = false;
+				easyComputerOpponent = false;
 				recording = false;
 				board = new Board();
 				movePieceGraphic();

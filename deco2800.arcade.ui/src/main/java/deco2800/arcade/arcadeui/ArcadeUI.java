@@ -1,99 +1,89 @@
 package deco2800.arcade.arcadeui;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-
+import deco2800.arcade.arcadeui.store.StoreHome;
+import deco2800.arcade.arcadeui.store.StoreTransactions;
+import deco2800.arcade.arcadeui.store.StoreWishlist;
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
-import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
+import deco2800.arcade.model.Game.InternalGame;
+import deco2800.arcade.model.Player;
+import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
 
 /**
- * This class is the main interface for the arcade. It can be run as a game,
- * but normally it will be run in parallel with another game as an overlay.
+ * This class is the main interface for the arcade.
+ * 
  * @author Simon
- *
+ * 
  */
-@ArcadeGame(id="arcadeui")
+@InternalGame
+@ArcadeGame(id = "arcadeui")
 public class ArcadeUI extends GameClient {
-	   
-	private ShapeRenderer shapeRenderer;
-	private boolean isOverlay = false;
-	private OrthographicCamera camera;
-	private float width, height;
-	private boolean hasTabPressedLast = false;
-	private boolean isUIOpen = false;
-	
-	
-	
-	public ArcadeUI(Player player, NetworkClient networkClient, Boolean isOverlay){
+
+	LoginScreen login = null;
+	HomeScreen home = null;
+	FrontPage main = null;
+	RegisterScreen register = null;
+	MultiplayerLobby lobby = null;
+	BettingWindow betting = null;
+	MultiGamelist multigame = null;
+	Gamewaiting wait = null;
+	MultiGamelist2 multigame2 = null;
+	BettingLobby bettingLobby = null;
+	private StoreHome storeHome = null;
+	private StoreTransactions storeTransactions = null;
+	private StoreWishlist storeWishlist = null;
+
+	public ArcadeUI(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		this.isOverlay = isOverlay;
-	}
-	
-	public ArcadeUI(Player player, NetworkClient networkClient){
-		this(player, networkClient, false);
 	}
 
 	@Override
 	public void create() {
-		camera = new OrthographicCamera();
-		camera.setToOrtho(true, width, height);
-		shapeRenderer = new ShapeRenderer();
+		// TODO Move this to somewhere more appropriate.
+		// FIXME This really needs to be fixed.
+		// The connection should be attempted to be opened after a user has
+		// pressed login on the loginScreen
+		// But I don't know the best way or place to do this - abbjohn
+		ArcadeSystem.openConnection();
+
+		// Initialise the different screens.
+		login = new LoginScreen(this);
+		register = new RegisterScreen(this);
+		home = new HomeScreen(this);
+		main = new FrontPage(this);
 		
+		System.out.println("PLAYER: " + player);
+		lobby = new MultiplayerLobby(this, player);
+		betting = new BettingWindow(this);
+		multigame = new MultiGamelist(this);
+		wait = new Gamewaiting(this);
+		multigame2 = new MultiGamelist2(this);
+		bettingLobby = new BettingLobby(this);
+		
+		storeHome = new StoreHome(this, player);
+		storeTransactions = new StoreTransactions(this, player);
+		storeWishlist = new StoreWishlist(this, player);
+
+		// Check to see if a user is logged in.
+		if (ArcadeSystem.isLoggedIn()) {
+			this.setScreen(main);
+		} else {
+			this.setScreen(login);
+		}
+
+		if (ArcadeSystem.isMultiplayerEnabled()) {
+			this.setScreen(lobby);
+		}
+
 		super.create();
 	}
 
 	@Override
-	public void render() {
-		//no call to super.render intentionally
-		
-		camera.update();
-		
-		//we don't want to clear the screen if we're the overlay. We do if we're running on our own.
-		if (!isOverlay) {
-			Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-			Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		}
-	    
-		//toggles isUIOpen on tab key down
-		if (Gdx.input.isKeyPressed(Keys.TAB) != hasTabPressedLast && (hasTabPressedLast = !hasTabPressedLast)) {
-			isUIOpen = !isUIOpen;
-		}
-		
-		//draw a placeholder shape
-		if (isUIOpen) {
-		    shapeRenderer.begin(ShapeType.FilledRectangle);
-		    
-		    shapeRenderer.filledRect(100,
-		        100,
-		        width - 200,
-		        height - 200);
-		    
-		    shapeRenderer.end();
-		    
-		}
-	}
-	
-	@Override
 	public void dispose() {
 		super.dispose();
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		super.resize(width, height);
-		this.width = width;
-		this.height = height;
 	}
 
 	@Override
@@ -102,25 +92,81 @@ public class ArcadeUI extends GameClient {
 	}
 
 	@Override
+	public void render() {
+		super.render();
+	}
+
+	@Override
 	public void resume() {
 		super.resume();
 	}
 
-	
-	//there are no achievements for this
-	private static Set<Achievement> achievements = new HashSet<Achievement>();
-
-
 	private static final Game game;
 	static {
 		game = new Game();
-		game.gameId = "arcadeui";
+		game.id = "arcadeui";
 		game.name = "Arcade UI";
-		game.availableAchievements = achievements;
 	}
 
 	public Game getGame() {
 		return game;
 	}
-		
+
+	public HomeScreen getHome() {
+		return home;
+	}
+
+	public StoreHome getStoreHome() {
+		storeHome.show();
+		return storeHome;
+	}
+
+	public StoreTransactions getStoreTransactions() {
+		storeTransactions.show();
+		return storeTransactions;
+	}
+
+	public StoreWishlist getStoreWishlist() {
+		storeWishlist.show();
+		return storeWishlist;
+	}
+
+	public MultiplayerLobby getLobby() {
+		return lobby;
+	}
+
+	public BettingWindow getBetting() {
+		return betting;
+	}
+
+	public MultiGamelist getMultigame() {
+		return multigame;
+	}
+
+	public Gamewaiting getWait() {
+		return wait;
+	}
+
+	public MultiGamelist2 getMultigame2() {
+		return multigame2;
+	}
+
+	public BettingLobby getBettingLobby() {
+		return bettingLobby;
+	}
+	
+	public void displayChat(LobbyMessageResponse response) {
+		lobby.displayChat(response);
+	}
+	
+	public void setPlayer(Player player) {
+		this.player = player;
+		if (lobby != null) { 
+			lobby.setPlayer(player);
+		}
+	}
+	public Player getPlayer() {
+		return this.player;
+	}
+
 }

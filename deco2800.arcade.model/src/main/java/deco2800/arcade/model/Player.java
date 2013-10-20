@@ -1,92 +1,192 @@
 package deco2800.arcade.model;
 
-import java.io.IOException;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public class Player {
+public class Player extends User {
 
-	// TODO shared between server & client?
-	
-	private int playerID;
+	public static final int USERNAME_ID = 1;
+	public static final int NAME_ID = 2;
+	public static final int EMAIL_ID = 3;
+	public static final int PROGRAM_ID = 4;
+	public static final int BIO_ID = 5;
+	public static final int AGE_ID = 6;
 
-	private String username;
+	public static final int NAME_PRIVACY_ID = 1;
+	public static final int EMAIL_PRIVACY_IDNAME_ID = 2;
+	public static final int PROGRAM_PRIVACY_ID = 3;
+	public static final int BIO_PRIVACY_ID = 4;
+	public static final int FRIENDS_PRIVACY_ID = 5;
+	public static final int GAMES_PRIVACY_ID = 6;
+	public static final int ACHIEVMENTS_PRIVACY_ID = 7;
 
-	private Set<Achievement> achievements;
-	
-	private Set<Game> games;
-	
-	private Set<Player> friends;
-	
-	private Set<Player> friendInvites;
-	
-	private Icon icon;
+	private Field username;
 
-	public Player() {
+	private Field name;
+	private Field email;
+	private Field program;
+	private Field bio;
+	private Field age;
 
+	private PrivacyField namePrivacy;
+	private PrivacyField emailPrivacy;
+	private PrivacyField programPrivacy;
+	private PrivacyField bioPrivacy;
+	private PrivacyField friendsPrivacy;
+	private PrivacyField gamesPrivacy;
+	private PrivacyField achievementsPrivacy;
+	
+	private PlayerPrivacyGlob playerPrivacy;
+
+	private Games games;
+	private Friends friends;
+	private Blocked blocked;
+	private FriendInvites friendInvites;
+
+	private LibraryStyle libraryStyle;
+
+
+	@Deprecated
+	/**
+	 * DO NOT USE THIS METHOD, AT ALL, EVER.
+	 */
+	public Player(int playerID, String username, String filepath) {
+		super(playerID);
+		this.username = new Field(USERNAME_ID, username);
+		this.games = new Games();
+		this.friends = new Friends();
+		this.friendInvites = new FriendInvites();
+		this.blocked = new Blocked();
+
+		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, false);
+		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID, false);
+		this.programPrivacy = new PrivacyField(PROGRAM_PRIVACY_ID, false);
+		this.bioPrivacy = new PrivacyField(BIO_PRIVACY_ID, false);
+		this.friendsPrivacy = new PrivacyField(FRIENDS_PRIVACY_ID, false);
+		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, false);
+		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
+				false);
+		this.libraryStyle = new LibraryStyle();
 	}
 
 	@Deprecated
 	/**
-	 * Sets the name of the Player
-	 * 
-	 * @param username
+	 * DO NOT USE THIS
 	 */
-	public Player(String username) {
-		/*
-		 * Do we want this to be mutable? If so we're going to want to have some
-		 * form of immutable playerID.
-		 */
-		this.username = username;
-	}
+	public Player(int playerID, String username, String filepath,
+			boolean[] privacy) {
+		super(playerID);
+		this.username = new Field(USERNAME_ID, username);
+		this.games = new Games();
+		this.friends = new Friends();
+		this.friendInvites = new FriendInvites();
+		this.blocked = new Blocked();
+		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, privacy[0]);
+		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID,
+				privacy[1]);
+		this.programPrivacy = new PrivacyField(PROGRAM_PRIVACY_ID, privacy[2]);
+		this.bioPrivacy = new PrivacyField(BIO_PRIVACY_ID, privacy[3]);
+		this.friendsPrivacy = new PrivacyField(FRIENDS_PRIVACY_ID, privacy[4]);
+		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, privacy[5]);
+		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
+				privacy[6]);
+		this.libraryStyle = new LibraryStyle();
 
-	/**
-	 * Creates a new Player given a name, achievement set and icon filename.
-	 *
-	 * @param playerID
-	 *            The Player's nameID
-	 * @param username
-	 *            The Player's name
-	 * @param achievments
-	 *            The Player's achievements
-	 * @param filepath
-	 *            The Player's icon filepath
-	 * @throws IOException
-	 *             Throws exception when the image cannot be found at the
-	 *             designated filepath.
-	 */
-	public Player(int playerID, String username, Set<Achievement> achievements,
-			String filepath) throws IOException {
-		// TODO: Validate username input
-
-		// TODO validate filepath
-
-		// TODO validate achievements set
-		
-		// TODO validate playerID
-		
-		this.playerID = playerID;
-
-		this.username = username;
-		this.achievements = new HashSet<Achievement>(achievements);
-		this.games = new HashSet<Game>();
-		this.friends = new HashSet<Player>();
-		this.friendInvites = new HashSet<Player>();
 		/*
 		 * Note that exception handling could be done in-method, however if it
 		 * cannot be loaded there is no way (other than changing the return type
 		 * to boolean/int and specifying error range) to communicate this.
 		 */
-		this.icon = new Icon(filepath);
+
+		// TODO: UTILISE REVIDES ICON API TO AVOID EXCEPTIONS - DEFAULT TO
+		// PLACEHOLDER
+		// this.icon = new Icon(filepath);
+		/*
+		 * @throws IOException Throws exception when the image cannot be found
+		 * at the designated filepath.
+		 */
+
 	}
-	
+
 	/**
-	 * Access method for  playerID
-	 * @return	Returns the playerID
+	 * Creates a new Player given a name, achievement set and icon filename.
+	 * 
+	 * @param playerID
+	 *            The Player's nameID
+	 * @param filepath
+	 *            The Player's icon filepath
+	 * @param details
+	 *            An array of strings containing the player's username, name,
+	 *            email, program, bio and age.
+	 * @param friendsList
+	 * 			A set of Users which represents a Player's friends list.
+	 * @param friendRequestsList
+	 * 			A set of Users which represents a Player's 
+	 * 			received friend request list.
+	 * @param blockedList
+	 * 			A set of Users which represents a Player's blocked list.
+	 * @param gamesList
+	 * 			A set of Games which represent a Player's games.
+	 * @param privacy
+	 *            A boolean array of privacy settings.
+	 * @require There are at least 7 elements in privacy array. Elements 1
+	 *          through 7 (indexes 0 through 6) represent name, email, program,
+	 *          bio, friends, games and achievements' privacy settings
+	 *          respectively.
+	 * 
+	 *          There are 5 elements in the details array. Elements 1 through 5
+	 *          (indexes 0 to 4) represent username, name, email, program and
+	 *          bio of the player.
 	 */
-	public int getPlayerID(){
-		return this.playerID;
+	public Player(int playerID, String filepath, List<String> details,
+			Set<User> friendsList, Set<User> friendRequestsList,
+			Set<User> blockedList, Set<Game> gamesList, boolean[] privacy) {
+		super(playerID);
+		this.username = new Field(USERNAME_ID, details.get(0));
+		this.name = new Field(NAME_ID, details.get(1));
+		this.email = new Field(EMAIL_ID, details.get(2));
+		this.program = new Field(PROGRAM_ID, details.get(3));
+		this.bio = new Field(BIO_ID, details.get(4));
+		this.age = new Field(AGE_ID, details.get(5));
+
+		this.games = new Games();
+		if (gamesList != null) {
+			this.games.addAll(gamesList);
+		}
+
+		this.friends = new Friends();
+		if (friendsList != null) {
+			this.friends.addAll(friendsList);
+		}
+
+		this.friendInvites = new FriendInvites();
+		if (friendRequestsList != null) {
+			this.friendInvites.addAll(friendRequestsList);
+		}
+
+		this.blocked = new Blocked();
+		if (blockedList != null) {
+			this.blocked.addAll(blockedList);
+		}
+		
+		this.playerPrivacy = new PlayerPrivacyGlob(privacy);
+		this.libraryStyle = new LibraryStyle();
+
+		/*
+		 * Note that exception handling could be done in-method, however if it
+		 * cannot be loaded there is no way (other than changing the return type
+		 * to boolean/int and specifying error range) to communicate this.
+		 */
+
+		// TODO: UTILISE REVIDES ICON API TO AVOID EXCEPTIONS - DEFUALT TO
+		// PLACEHOLDER
+		// this.icon = new Icon(filepath);
+		/*
+		 * @throws IOException Throws exception when the image cannot be found
+		 * at the designated filepath.
+		 */
 	}
+
 
 	/**
 	 * getUsername returns a string of the player created
@@ -94,126 +194,138 @@ public class Player {
 	 * @return a string of the username
 	 */
 	public String getUsername() {
-		return username;
+		return username.getValue();
 	}
 
 	/**
 	 * Sets the name of the user.
 	 * 
 	 * @param username
+	 *            string of username
 	 */
 	public void setUsername(String username) {
-		//TODO Validate
-		this.username = username;
+		if (username != null) {
+			this.username.setValue(username);
+			setChanged();
+			notifyObservers(this.username);
+			clearChanged();
+		}
 	}
 
 	/**
-	 * Access method for player's achievements.
+	 * getEmail is an access method for the players email
 	 * 
-	 * @return Returns a set containing the player's Achievements.
+	 * @return a string of email
 	 */
-	public Set<Achievement> getAchievements() {
-		/*
-		 * Cloning this.achievements to preserve immutability
-		 */
-		Set<Achievement> clone = new HashSet<Achievement>(this.achievements);
-		return clone;
+	public String getEmail() {
+		return email.getValue();
 	}
 
 	/**
-	 * Sets the Player's achievements to those supplied
+	 * Sets the email of the player
 	 * 
-	 * @param achievements
-	 *            The player's achievements.
+	 * @param email
 	 */
-	public void setAchievements(Set<Achievement> achievements) {
-		/* TODO Validate not null
-		 * Preserving immutability
-		 */
-		this.achievements = new HashSet<Achievement>(achievements);
+	public void setEmail(String email) {
+		this.email.setValue(email);
+		setChanged();
+		notifyObservers(this.email);
+		clearChanged();
+		// TODO
+		// Do we want to add in any checking for valid email format here?
 	}
 
 	/**
-	 * Adds an achievement to the player's achievements.
+	 * getBio is an access method for the players biography
 	 * 
-	 * @param achievement
-	 *            The achievement to be added.
-	 * @ensure this.achievement.contains(achievement)
+	 * @return a string of the players biography
 	 */
-	public void addAchievement(Achievement achievement) {
-		//TODO Validate not null
-		this.achievements.add(new Achievement(achievement));
+	public String getBio() {
+		return bio.getValue();
 	}
 
 	/**
-	 * Removes and achievement from the player's achievements.
+	 * Sets the biography of the player
 	 * 
-	 * @param achievement
-	 *            The achievement to be removed
-	 * @ensure !this.achievement.contains(achievement)
+	 * @param bio
 	 */
-	public void removeAchievement(Achievement achievement) {
-		this.achievements.remove(achievement);
+	public void setBio(String bio) {
+		this.bio.setValue(bio);
+		setChanged();
+		notifyObservers(this.bio);
+		clearChanged();
 	}
 
 	/**
-	 * Checks if the player has an Achievement.
+	 * An access method for the players name
 	 * 
-	 * @param achievement
-	 *            The achievement to be checked.
-	 * @return Returns true if player has specified achievement, false
-	 *         otherwise.
+	 * @return a String of the players name
 	 */
-	public boolean hasAchievement(Achievement achievement) {
-		return this.achievements.contains(achievement);
+	public String getName() {
+		return name.getValue();
 	}
 
 	/**
-	 * Access method for the Player's icon
+	 * Sets the name of the player
 	 * 
-	 * @return The Player's icon
+	 * @param name
 	 */
-	public Icon getIcon() {
-		return this.icon.clone();
+	public void setName(String name) {
+		this.name.setValue(name);
+		setChanged();
+		notifyObservers(this.name);
+		clearChanged();
 	}
 
 	/**
-	 * Sets the Player's icon that the provided icon.
+	 * An access method for the players age
 	 * 
-	 * @param icon
-	 *            The icon to set to the Player.
-	 * @require icon != null
+	 * @return a String of the players age
 	 */
-	public void setIcon(Icon icon) {
-		this.icon = icon.clone();
+	public String getAge() {
+		return age.getValue();
 	}
-	
+
+	/**
+	 * Set the players age
+	 * 
+	 * @param age
+	 */
+	public void setAge(String age) {
+		this.age.setValue(age);
+		setChanged();
+		notifyObservers(this.age);
+		clearChanged();
+	}
+
+	/**
+	 * An access method for the players program
+	 * 
+	 * @return a String of the players program
+	 */
+	public String getProgram() {
+		return program.getValue();
+	}
+
+	/**
+	 * Sets the players program
+	 * 
+	 * @param program
+	 */
+	public void setProgram(String program) {
+		this.program.setValue(program);
+		setChanged();
+		notifyObservers(this.program);
+		clearChanged();
+	}
+
 	/**
 	 * Access method for player's Games set.
 	 * 
 	 * @return Returns a set containing the player's games.
 	 */
 	public Set<Game> getGames() {
-		/*
-		 * Cloning this.games to preserve immutability
-		 */
-		Set<Game> clone = new HashSet<Game>(this.games);
-		return clone;
-	} 
-	
-	/**
-	 * Sets the Player's games to the set provided
-	 * 
-	 * @param games
-	 *            The player's games.
-	 */
-	public void setGames(Set<Game> games) {
-		/* 
-		 * Preserving immutability
-		 */
-		if (games != null) {
-			this.games = new HashSet<Game>(games);
-		}
+		return games.getSet();
 	}
 
 	/**
@@ -224,10 +336,12 @@ public class Player {
 	 * @ensure this.games.contains(game)
 	 */
 	public void addGame(Game game) {
-		if (game != null && !this.hasGame(game)) {
+		if (game != null) {
 			this.games.add(game);
+			setChanged();
+			notifyObservers(games);
+			clearChanged();
 		}
-		/*TODO Throw exception if game already in game set */
 	}
 
 	/**
@@ -238,10 +352,10 @@ public class Player {
 	 * @ensure !this.games.contains(game)
 	 */
 	public void removeGame(Game game) {
-		if (this.hasGame(game)) {
-			this.games.remove(game);
-		}
-		/*TODO throw exception if game doesn't exist*/
+		this.games.remove(game);
+		setChanged();
+		notifyObservers(games);
+		clearChanged();
 	}
 
 	/**
@@ -255,140 +369,369 @@ public class Player {
 	public boolean hasGame(Game game) {
 		return this.games.contains(game);
 	}
-	
 
-	
 	/**
 	 * Access method for player's friends list
+	 * 
 	 * @return A set containing the player's friends.
 	 */
-	public Set<Player> getFriends() {
-		Set<Player> clone = new HashSet<Player>(this.friends);
-		return clone;
+	public Set<User> getFriends() {
+		return friends.getSet();
 	}
-	
-	/**
-	 * Sets the player's friends to the set provided.
-	 * 
-	 * @param friends
-	 * 			A set containing the player's friends.
-	 */
-	public void setFriends(Set<Player> friends) {
-		if (friends != null) {
-			this.friends = new HashSet<Player>(friends);
-		}
-	}
-	
+
 	/**
 	 * Checks if the player is already friends with the specified player
 	 * 
-	 * @param friend
-	 * 			The player that is being verified as a friend.
-	 * @return
-	 * 		True if the player is friends with the specified player, 
-	 * 		false otherwise.
+	 * @param player
+	 *            The player that is being verified as a friend.
+	 * @return True if the player is friends with the specified player, false
+	 *         otherwise.
 	 */
-	public boolean isFriend(Player player) {
+	public boolean isFriend(User player) {
 		return this.friends.contains(player);
 	}
-	
+
 	/**
-	 * Adds a friend to the player's friends set.
+	 * Adds a friend to the player's friends set, given that
+	 * player.hasInvite(friend).
 	 * 
 	 * @param friend
-	 * 			The friend to be added to the friends set.
+	 *            The friend to be added to the friends set.
 	 * @ensure this.friends.contains(friend)
 	 */
-	public void addFriend(Player friend) {
-		if (friend != null && !this.isFriend(friend)) {
+	public void acceptFriendInvite(User friend) {
+		if (friend != null  && this.hasInvite(friend)) {
 			this.friends.add(friend);
+			setChanged();
+			notifyObservers(friends);
+			clearChanged();
 		}
-		//TODO: throw exception if friend is already in friends list
 	}
-	
+
 	/**
 	 * Remove a friend from the player's friends list.
 	 * 
 	 * @param friend
-	 * 			Friend to be removed.
+	 *            Friend to be removed.
 	 * @ensure !this.friends.contains(friend)
 	 */
-	public void removeFriend(Player friend) {
-		//TODO: add option to add friend to block list
-		if (this.isFriend(friend)) {
+	public void removeFriend(User friend) {
+		if (friend != null) {
 			this.friends.remove(friend);
+			setChanged();
+			notifyObservers(friends);
+			clearChanged();
 		}
-		//TODO: throw exception if friend is not in friend's list
 	}
-	
+
 	/**
 	 * Access method for player's invite list.
 	 * 
 	 * @return A set containing the player's invites.
 	 */
-	public Set<Player> getInvites() {
-		Set<Player> clone = new HashSet<Player>(this.friendInvites);
-		return clone;
+	public Set<User> getInvites() {
+		return this.friendInvites.getSet();
 	}
-	
-	/**
-	 * Sets the player's invites to the set provided.
-	 * 
-	 * @param invites
-	 * 			A set containing the player's invites.
-	 */
-	public void setInvites(Set<Player> invites) {
-		if (invites != null) {
-			this.friendInvites = new HashSet<Player>(invites);
-		}
-	}
-	
+
 	/**
 	 * Checks if the player is already has an invite from the specified player.
 	 * 
 	 * @param player
-	 * 			The player that is sending the invite.
-	 * @return
-	 * 			True if the player already has an invite from the specified 
-	 * 			player, otherwise false.
+	 *            The player that is sending the invite.
+	 * @return True if the player already has an invite from the specified
+	 *         player, otherwise false.
 	 */
-	public boolean hasInvite(Player player) {
+	public boolean hasInvite(User player) {
 		return this.friendInvites.contains(player);
 	}
-	
+
 	/**
 	 * Adds a player to the player's invite set.
 	 * 
 	 * @param player
-	 * 			The player to be added to the player's invite set.
+	 *            The player to be added to the player's invite set.
 	 * 
 	 * @ensure this.friendInvites.contains(player)
 	 */
-	public void addInvite(Player player) {
-		if (player != null && !this.hasInvite(player)) {
-			this.friendInvites.add(player);
+	public void addInvite(User player) {
+		if (player != null) {
+			this.friendInvites.add(new User(player.getID()));
+			setChanged();
+			notifyObservers(friendInvites);
+			clearChanged();
 		}
-		//TODO: throw exception if player is already in invites list
 	}
-	
+
 	/**
 	 * Remove an invite from the player's invite list.
 	 * 
-	 * @param friend
-	 * 			Friend to be removed.
-	 * @ensure
-	 * 			!this.friendInvites.contains(player)
+	 * @param player
+	 *            Friend to be removed.
+	 * @ensure !this.friendInvites.contains(player)
 	 */
-	public void removeInvite(Player player) {
-		//TODO: add option to add friend to block list
-		if (this.hasInvite(player)) {
+	public void removeInvite(User player) {
+		if (player != null) {
 			this.friendInvites.remove(player);
+			setChanged();
+			notifyObservers(friendInvites);
+			clearChanged();
 		}
-		//TODO: throw exception if player is not in invite list
 	}
-	
-	
-	
-	
-	
+
+	/**
+	 * Access method for player's blocked list
+	 * 
+	 * @return A set containing the player's blocked list.
+	 */
+	public Set<User> getBlockedList() {
+		return this.blocked.getSet();
+	}
+
+	/**
+	 * Checks if the player has already blocked the specified player
+	 * 
+	 * @param player
+	 *            The player that is being verified as blocked.
+	 * @return True if the player has blocked the specified player, false
+	 *         otherwise.
+	 */
+	public boolean isBlocked(User player) {
+		return this.blocked.contains(player);
+	}
+
+	/**
+	 * Adds a player to the player's blocked set.
+	 * 
+	 * @param player
+	 *            The player to be added to the blocked set.
+	 * @ensure this.blocked.contains(player)
+	 */
+	public void blockPlayer(User player) {
+		if (player != null) {
+			this.blocked.add(new User(player.getID()));
+			setChanged();
+			notifyObservers(blocked);
+			clearChanged();
+		}
+	}
+
+	/**
+	 * Remove a player from the player's blocked list.
+	 * 
+	 * @param player
+	 *            player to be removed from blocked list.
+	 * @ensure !this.blocked.contains(player)
+	 */
+	public void removeBlocked(User player) {
+		if (player != null) {
+			this.blocked.remove(player);
+			setChanged();
+			notifyObservers(blocked);
+			clearChanged();
+		}
+	}
+
+	/**
+	 * Set's a Player's name privacy setting
+	 * 
+	 * @param v
+	 *            True if the Player's name is to be publicly visible, false for
+	 *            friends only.
+	 */
+	public void setNamePrivacy(boolean v) {
+		this.playerPrivacy.setNamePrivacy(v);
+		setChanged();
+		notifyObservers(this.playerPrivacy);
+		clearChanged();
+	}
+
+	/**
+	 * Access method for the Player's name privacy setting.
+	 * 
+	 * @return True if the Player's name is to be publicly visible, false for
+	 *         friends only.
+	 */
+	public boolean getNamePrivacy() {
+		return this.playerPrivacy.isNamePrivacy();
+	}
+
+	/**
+	 * Set's a Player's email privacy setting
+	 * 
+	 * @param v
+	 *            True if the Player's email is to be publicly visible, false
+	 *            for friends only.
+	 */
+	public void setEmailPrivacy(boolean v) {
+		this.playerPrivacy.setEmailPrivacy(v);
+		setChanged();
+		notifyObservers(this.playerPrivacy);
+		clearChanged();
+	}
+
+	/**
+	 * Access method for the Player's email privacy setting.
+	 * 
+	 * @return True if the Player's email is to be publicly visible, false for
+	 *         friends only.
+	 */
+	public boolean getEmailPrivacy() {
+		return this.playerPrivacy.isEmailPrivacy();
+	}
+
+	/**
+	 * Set's a Player's email program setting
+	 * 
+	 * @param v
+	 *            True if the Player's program is to be publicly visible, false
+	 *            for friends only.
+	 */
+	public void setProgramPrivacy(boolean v) {
+		this.playerPrivacy.setProgramPrivacy(v);
+		setChanged();
+		notifyObservers(this.playerPrivacy);
+		clearChanged();
+	}
+
+	/**
+	 * Access method for the Player's program privacy setting.
+	 * 
+	 * @return True if the Player's program is to be publicly visible, false for
+	 *         friends only.
+	 */
+	public boolean getProgramPrivacy() {
+		return this.playerPrivacy.isProgramPrivacy();
+	}
+
+	/**
+	 * Set's a Player's bio program setting
+	 * 
+	 * @param v
+	 *            True if the Player's bio is to be publicly visible, false for
+	 *            friends only.
+	 */
+	public void setBioPrivacy(boolean v) {
+		this.playerPrivacy.setBioPrivacy(v);
+		setChanged();
+		notifyObservers(this.playerPrivacy);
+		clearChanged();
+	}
+
+	/**
+	 * Access method for the Player's bio privacy setting.
+	 * 
+	 * @return True if the Player's bio is to be publicly visible, false for
+	 *         friends only.
+	 */
+	public boolean getBioPrivacy() {
+		return this.playerPrivacy.isBioPrivacy();
+	}
+
+	/**
+	 * Set's a Player's friends privacy setting
+	 * 
+	 * @param v
+	 *            True if the Player's friends is to be publicly visible, false
+	 *            for friends only.
+	 */
+	public void setFriendsPrivacy(boolean v) {
+		this.playerPrivacy.setFriendsPrivacy(v);
+		setChanged();
+		notifyObservers(this.playerPrivacy);
+		clearChanged();
+
+	}
+
+	/**
+	 * Access method for the Player's friends privacy setting.
+	 * 
+	 * @return True if the Player's friends is to be publicly visible, false for
+	 *         friends only.
+	 */
+	public boolean getFriendsPrivacy() {
+		return this.playerPrivacy.isFriendsPrivacy();
+	}
+
+	/**
+	 * Set's a Player's games privacy setting
+	 * 
+	 * @param v
+	 *            True if the Player's games is to be publicly visible, false
+	 *            for friends only.
+	 */
+	public void setGamesPrivacy(boolean v) {
+		this.playerPrivacy.setGamesPrivacy(v);
+		setChanged();
+		notifyObservers(this.playerPrivacy);
+		clearChanged();
+	}
+
+	/**
+	 * Access method for the Player's games privacy setting.
+	 * 
+	 * @return True if the Player's games is to be publicly visible, false for
+	 *         friends only.
+	 */
+	public boolean getGamesPrivacy() {
+		return this.playerPrivacy.isGamesPrivacy();
+	}
+
+	/**
+	 * Set's a Player's achievements privacy setting
+	 * 
+	 * @param v
+	 *            True if the Player's achievements is to be publicly visible,
+	 *            false for friends only.
+	 */
+	public void setAchievementsPrivacy(boolean v) {
+		this.playerPrivacy.setAchievementsPrivacy(v);
+		setChanged();
+		notifyObservers(this.playerPrivacy);
+		clearChanged();
+	}
+
+	/**
+	 * Access method for the Player's achievements privacy setting.
+	 * 
+	 * @return True if the Player's achievements is to be publicly visible,
+	 *         false for friends only.
+	 */
+	public boolean getAchievementsPrivacy() {
+		return this.playerPrivacy.isAchievementsPrivacy();
+	}
+
+	/**
+	 * Update Player's library style
+	 * 
+	 * @param style
+	 *            Library Style
+	 */
+	public void updateLibraryLayout(int style) {
+		libraryStyle.setLayout(style);
+		setChanged();
+		notifyObservers(libraryStyle);
+		clearChanged();
+	}
+
+	/**
+	 * Update Player's library colour
+	 * 
+	 * @param colour
+	 *            Colour Scheme
+	 */
+	public void updateLibraryColour(int colour) {
+		libraryStyle.setColourScheme(colour);
+		setChanged();
+		notifyObservers(libraryStyle);
+		clearChanged();
+	}
+
+	/**
+	 * Get Player's Library Style
+	 * 
+	 * @return libraryStyle
+	 */
+	public LibraryStyle getLibraryStyle() {
+		return libraryStyle;
+	}
 }

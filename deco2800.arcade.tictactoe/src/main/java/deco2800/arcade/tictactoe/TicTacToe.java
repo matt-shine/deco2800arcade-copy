@@ -1,10 +1,8 @@
 package deco2800.arcade.tictactoe;
 
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
-
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -20,7 +18,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -48,6 +45,7 @@ public class TicTacToe extends GameClient {
 		super(player, networkClient);
 		//this.gameId = "TicTacToe";
 		//this.name = "Tic Tac Toe";
+		
 	}
    
 	/** 
@@ -59,6 +57,43 @@ public class TicTacToe extends GameClient {
 	@Override
 	public void create() {
 		super.create();
+		
+        //add the overlay listeners
+        this.getOverlay().setListeners(new Screen() {
+
+			@Override
+			public void dispose() {
+			}
+
+			@Override
+			public void hide() {
+				//TODO: unpause tictactoe
+			}
+
+			@Override
+			public void pause() {
+			}
+
+			@Override
+			public void render(float arg0) {
+			}
+
+			@Override
+			public void resize(int arg0, int arg1) {
+			}
+
+			@Override
+			public void resume() {
+			}
+
+			@Override
+			public void show() {
+				//TODO: unpause tictactoe
+			}
+			
+        });
+        
+		
 		
 		// load the images for the droplet and the bucket, 64x64 pixels each
 		dropImage = new Texture(Gdx.files.classpath("resources/droplet.png"));
@@ -199,21 +234,12 @@ public class TicTacToe extends GameClient {
 		super.resume();
 	}
 
-	
-	//Reusable list of achievements
-	private static Set<Achievement> achievements = new HashSet<Achievement>();
-	static {
-		Achievement winGame = new Achievement("Win a game of Tic Tac Toe");
-		achievements.add(winGame);
-	}
-
-
 	private static final Game game;
 	static {
 		game = new Game();
-		game.gameId = "tictactoe";
+		game.id = "tictactoe";
 		game.name = "Tic Tac Toe";
-		game.availableAchievements = achievements;
+		game.description = "The game nobody can lose, and nobody can win.";
 	}
 
 	public Game getGame() {

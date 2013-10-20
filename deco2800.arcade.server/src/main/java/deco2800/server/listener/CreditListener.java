@@ -14,11 +14,11 @@ public class CreditListener extends Listener {
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
 
-		if (object instanceof CreditBalanceRequest){
+		if (object instanceof CreditBalanceRequest) {
 			CreditBalanceRequest creditBalanceRequest = (CreditBalanceRequest) object;
-			String username = creditBalanceRequest.username;
+			int playerID = creditBalanceRequest.playerID;
 			try {
-				Integer result = ArcadeServer.instance().getCreditStorage().getUserCredits(username);
+				Integer result = ArcadeServer.instance().getCreditStorage().getUserCredits(playerID);
 
 				CreditBalanceResponse creditBalanceResponse = new CreditBalanceResponse();
 

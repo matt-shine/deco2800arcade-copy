@@ -1,79 +1,95 @@
 package deco2800.arcade.model;
 
-import java.io.IOException;
+import deco2800.arcade.model.Icon;
+
+/**
+ * An immutable struct-like class used for storing information about an
+ * achievement. Note that while the fields are public, they're also final
+ * (to enforce immutability) which removes any invariant issues.
+ *
+ * It's invalid for two Achievements to have equal ids without the
+ * rest of the fields being equal as well.
+ */
 
 public class Achievement {
+    
+	public String id;
+	public String name;
+	public String description;
+    public int awardThreshold;
+	public String icon; //Temporarily using string for debugging
+    
+    // USED BY KRYONET - don't use it yourself
+    public Achievement() {}
 
-	// TODO shared between server & client?
-
-	private String description;
-
-	private final Icon icon;
-
-	/**
-	 * Creates a new Achievement given the description.
+        /**
+	 * Constructs an Achievement from the supplied arguments.
 	 * 
-	 * @param description
-	 *            The Achievement's description.
+	 * @param id	         The achievement's id.
+	 * @param name	         The achievement's name.
+	 * @param description    The achievement's description.
+	 * @param awardThreshold The achievement's awardThreshold.
+	 * @param icon	         The achievement's icon.
 	 */
-	public Achievement(String description) {
+	public Achievement(String id, 
+			String name, 
+	    		String description,
+	    		int awardThreshold, 
+	    		String icon) {
+		this.id = id;
+		this.name = name;
 		this.description = description;
-		this.icon = null;
+		this.awardThreshold = awardThreshold;
+		this.icon = icon;
 	}
-
+	
 	/**
-	 * Creates a new Achievement given the description and icon.
+	 * Returns the name of an Achievement
+	 * @author PeterHsieh 
 	 * 
-	 * @param description
-	 *            The Achievement's description.
-	 * @param filepath
-	 *            The filepath to the Achievement's icon image file.
-	 * @throws IOException
-	 *             Throws exception when the image cannot be found at the
-	 *             designated filepath.
+	 * @return String
+	 * 
 	 */
-	public Achievement(String description, String filepath) throws IOException {
-		/*
-		 * Note that exception handling could be done in-method, however if it
-		 * cannot be loaded there is no way (other than changing the return type
-		 * to boolean/int and specifying error range) to communicate this.
-		 */
-		this.description = description;
-		icon = new Icon(filepath);
-
+	
+	// Just used for debugging purposes
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Achievement)) {
+			return false;
+		}
+		
+		Achievement ach = (Achievement)obj;
+		// equality is based on id - we don't need to check the rest
+		return this.id.equals(ach.id);
 	}
 
-	/**
-	 * Creates an achievement identical to another.
-	 * 
-	 * @param achievement
-	 *            The original Achievement to be copied.
-	 */
-	public Achievement(Achievement achievement) {
-		/*
-		 * Preserving immutability.
-		 */
-		this.description = achievement.getDescription();
-		this.icon = achievement.getIcon().clone();
-
+	@Override
+	public int hashCode() {
+		// because equality's only based on the id we don't actually
+		// need to hash the rest
+		return id.hashCode();
 	}
 
-	/**
-	 * Access method for Achievement's description.
-	 * 
-	 * @return The Achievement's description.
-	 */
-	public String getDescription() {
-		return description;
-	}
+    @Override
+    public String toString() {
+        return "(" + id + ", " + name + ", " + description + ", " + awardThreshold + ")";
+    }
 
-	/**
-	 * Access method for the Achievement's icon.
-	 * 
-	 * @return The Achievement's icon.
-	 */
-	public Icon getIcon() {
-		return icon.clone();
-	}
+    // Static helper stuff
+    public static String idForComponentID(String componentID) {
+	if (!isComponentID(componentID)) // don't bother if it's not a component id already
+	    return componentID;
 
+        String[] parts = componentID.split("\\.");
+        return parts[0] + "." + parts[1];
+    }
+
+    public static boolean isComponentID(String componentID) {
+        return (componentID.split("\\.").length == 3);
+    }
 }

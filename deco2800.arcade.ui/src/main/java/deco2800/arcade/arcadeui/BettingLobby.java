@@ -27,6 +27,12 @@ import deco2800.arcade.client.ArcadeSystem;
 
 import java.util.*;
 
+/**
+ * 
+ * @author Carl Beaverson
+ * 
+ */
+
 public class BettingLobby implements Screen {
 	
 	private static String pName = "user";

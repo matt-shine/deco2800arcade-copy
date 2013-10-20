@@ -11,8 +11,7 @@ public class SS extends Enemy {
         super(uid);
 
         setHealth(STARTING_HEALTH);
-        setPathSpeed(512);
-        setChaseSpeed(1536);
+        setSpeed(512);
         setPain(true);
         setDamage(0);
         this.setStateChangeTime(0.33f);

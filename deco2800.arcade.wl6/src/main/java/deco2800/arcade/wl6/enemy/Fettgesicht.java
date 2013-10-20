@@ -14,8 +14,7 @@ public class Fettgesicht extends Enemy {
         super(uid);
 
         setHealth(STARTING_HEALTH);
-        setPathSpeed(512);
-        setChaseSpeed(1536);
+        setSpeed(512);
         setPain(false);
         setDamage(0);
 

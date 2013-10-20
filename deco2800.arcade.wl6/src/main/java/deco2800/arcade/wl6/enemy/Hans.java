@@ -14,8 +14,7 @@ public class Hans extends Enemy {
         super(uid);
 
         setHealth(STARTING_HEALTH);
-        setPathSpeed(512);
-        setChaseSpeed(1536);
+        setSpeed(512);
         setPain(false);
         setDamage(0);
         this.setStateChangeTime(0.1f);

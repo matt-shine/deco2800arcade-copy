@@ -14,8 +14,7 @@ public class Dog extends Enemy {
         super(uid);
 
         setHealth(STARTING_HEALTH);
-        setPathSpeed(1500);
-        setChaseSpeed(1536);
+        setSpeed(1500);
         setPain(false);
         setDamage(0);
 

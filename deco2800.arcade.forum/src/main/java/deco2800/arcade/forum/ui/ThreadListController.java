@@ -21,7 +21,6 @@ public class ThreadListController {
 		this.view = v;
 		this.model = m;
 		this.connection = new ClientConnection("", 0, 0);
-		
 		System.out.println("Request load");
 		GetParentThreadsRequest request = new GetParentThreadsRequest();
 		request.start = 0;
@@ -32,6 +31,8 @@ public class ThreadListController {
 		System.out.println("Request sent");		
 		this.connection.getClient().sendTCP(request);
 		System.out.println("pThread request is sent");
+		this.view.btnNextButton.addActionListener(new NextTenListener());
+		this.view.btnPrevButton.addActionListener(new PrevTenListener());
 		
 		this.connection.addListener(new Listener() {
 			public void received(Connection con, Object object) {
@@ -58,7 +59,48 @@ public class ThreadListController {
 				}
 				return;
 			}
-		});
+		});		
 	}
 
+	
+	
+	private void nextTen() {
+		System.out.println("Request load");
+		GetParentThreadsRequest request = new GetParentThreadsRequest();
+		request.start = this.model.get_thread(this.model.get_size()).getId() - 1;
+		request.end = 0;
+		request.limit = 10;
+		request.category = this.model.get_category();
+		request.userId = 0;
+		System.out.println("Request sent");		
+		this.connection.getClient().sendTCP(request);
+		System.out.println("pThread request is sent");
+	}
+	
+	private void prevTen() {
+		System.out.println("Request load");
+		GetParentThreadsRequest request = new GetParentThreadsRequest();
+		request.start = 0;
+		request.end = this.model.get_thread(0).getId() + 1;
+		request.limit = 10;
+		request.category = this.model.get_category();
+		request.userId = 0;
+		System.out.println("Request sent");		
+		this.connection.getClient().sendTCP(request);
+		System.out.println("pThread request is sent");
+	}
+	
+	private class NextTenListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			nextTen();
+		}
+	}
+	
+	private class PrevTenListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			prevTen();
+		}
+	}
+	
+	
 }

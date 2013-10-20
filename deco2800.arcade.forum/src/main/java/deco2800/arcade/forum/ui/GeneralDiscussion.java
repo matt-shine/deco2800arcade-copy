@@ -36,7 +36,6 @@ public class GeneralDiscussion {
 	private JPanel panel_1;
 	private JPanel panel;
 	private JPanel ThreadPanel;
-	private JPanel InnerThreadPanel;
 	private JTextArea textArea_1;
 	private JTextArea textArea;
 	private JLabel lblNewLabel;
@@ -49,8 +48,8 @@ public class GeneralDiscussion {
 	private JButton btnSearch;
 	private JFrame f;
 	private int threadCount;
-	private JButton btnPrevButton;
-	private JButton btnNextButton;
+	public JButton btnPrevButton;
+	public JButton btnNextButton;
 	
 
 	public GeneralDiscussion(JFrame window) {

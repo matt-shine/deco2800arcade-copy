@@ -14,6 +14,7 @@ import com.esotericsoftware.kryonet.Connection;
 import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.communication.CommunicationView;
+import deco2800.arcade.model.ChatNode;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.communication.ChatHistory;
 import deco2800.arcade.protocol.communication.TextMessage;
@@ -134,11 +135,29 @@ public class CommunicationTest {
 	 * Tests the chat history. Mostly just tests the transferring of ChatHistory
 	 * object between CommunicationListener -> CommunicationNetwork
 	 */
-	//@Test
+	// @Test
 	public void chatHistory() {
+		Connection connection = null;
 		ChatHistory chathistory = new ChatHistory();
-		HashMap<Integer, List<String>> history = new HashMap<Integer, List<String>>();
-
+		HashMap<Integer, ChatNode> history = new HashMap<Integer, ChatNode>();
+		ChatNode node1 = new ChatNode(player1.getID());
+		ChatNode node2 = new ChatNode(player2.getID());
+		ChatNode node3 = new ChatNode(player3.getID());
+		
+		node1.addMessage("12:30 PM - Rick Astley: Testing chat", "Rick Astley");
+		node1.addMessage("12:35 PM - Rick Astley: Testing chat2", "Rick Astley");
+		
+		node2.addMessage("12:36 PM - Stewie Griffin: Testing chat3", "Stewie Griffin");
+		node3.addMessage("12:50 PM - Stewie Griffin: Testing chat5", "Stewie Griffin");
+		
+		node3.addMessage("12:49 PM - Paul Wade: Testing chat4", "Paul Wade");
+		history.put(player1.getID(), node1);
+		history.put(player2.getID(), node2);
+		history.put(player3.getID(), node3);
+		chathistory.setChatHistory(history);
+		listener1.received(connection, chathistory);
+		listener2.received(connection, chathistory);
+		listener3.received(connection, chathistory);
 	}
 
 	/**
@@ -177,7 +196,7 @@ public class CommunicationTest {
 		listener1.received(connection, message2);
 		listener2.received(connection, message1);
 		listener3.received(connection, message2);
-		
+
 		// Tests two methods of getting data (using chatID
 		// (participants.hashcode()) and using current chat (the chat that the
 		// last message recieved belongs to.
@@ -188,8 +207,7 @@ public class CommunicationTest {
 				comm2.getCurrentChats().get(message1.getChatID())
 						.getParticipants());
 		assertEquals(comm1.getCurrentChats().get(message1.getChatID())
-				.getChatHistory().toString(),
-				comm2.getCurrentChats().get(message1.getChatID())
-						.getChatHistory().toString());
+				.getChatHistory().peek().getMessage(), comm2.getCurrentChats()
+				.get(message1.getChatID()).getChatHistory().peek().getMessage());
 	}
 }

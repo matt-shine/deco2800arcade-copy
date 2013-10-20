@@ -13,12 +13,12 @@ import java.util.Queue;
 public class ChatNode {
 
 	private List<Integer> participants;
-	private Queue<String> chatHistory;
-	
+	private Queue<ChatMessage<String, String>> chatHistory;
+
 	/**
 	 * Zero-arg Constructor for Kryo
 	 */
-	public ChatNode(){
+	public ChatNode() {
 	}
 
 	/**
@@ -28,7 +28,7 @@ public class ChatNode {
 	 */
 	public ChatNode(List<Integer> chatParticipants) {
 		participants = new ArrayList<Integer>(chatParticipants);
-		chatHistory = new ArrayDeque<String>();
+		chatHistory = new ArrayDeque<ChatMessage<String, String>>();
 	}
 
 	/**
@@ -39,8 +39,8 @@ public class ChatNode {
 	public ChatNode(int participant) {
 		participants = new ArrayList<Integer>();
 		participants.add(participant);
+		chatHistory = new ArrayDeque<ChatMessage<String, String>>();
 	}
-
 
 	public int getID() {
 		return participants.hashCode();
@@ -76,11 +76,13 @@ public class ChatNode {
 	 * 
 	 * @param message
 	 */
-	public void addMessage(String message) {
-		chatHistory.add(message);
+	public void addMessage(String message, String name) {
+		ChatMessage<String, String> msg = new ChatMessage<String, String>(name,
+				message);
+		chatHistory.add(msg);
 	}
-	
-	public Queue<String> getChatHistory(){
+
+	public Queue<ChatMessage<String, String>> getChatHistory() {
 		return chatHistory;
 	}
 

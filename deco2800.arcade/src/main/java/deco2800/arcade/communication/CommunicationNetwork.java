@@ -4,10 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.model.ChatMessage;
 import deco2800.arcade.model.ChatNode;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.communication.ChatHistory;
@@ -47,13 +47,14 @@ public class CommunicationNetwork {
 	 * @param chatParticipants
 	 */
 	public void createChat(List<Integer> chatParticipants) {
-		
+
 		if(!chatNodes.containsKey(chatParticipants.hashCode())) {
 			ChatNode node = new ChatNode(chatParticipants);
 			chatNodes.put(chatParticipants.hashCode(), node);
 			currentChat = node;
-			
-			//This will need to be fixed. It is assumed that the chatTitle can be created when clicking on a friend in the friend's list
+
+			// This will need to be fixed. It is assumed that the chatTitle can
+			// be created when clicking on a friend in the friend's list
 			String chatTitle = "placeholder";
 			controller.addChatLabel(node, chatTitle);
 		}
@@ -88,11 +89,11 @@ public class CommunicationNetwork {
 			chatNodes.put(textMessage.getRecipients().hashCode(), node);
 			controller.addChatLabel(node, textMessage.getSenderUsername());
 		}
-		
-		//Create chat-friendly string
+
+		// Create chat-friendly string
 		date = new Date();
 		String chatLine = sdf.format(date) + " - " + textMessage.getSenderUsername() + ": " + textMessage.getText();
-		node.addMessage(chatLine);
+		node.addMessage(chatLine, textMessage.getSenderUsername());
 		
 		if (currentChat == node){
 			controller.receiveText(textMessage);
@@ -174,7 +175,7 @@ public class CommunicationNetwork {
 	 * Updates the Communication Network for the logged-in Player
 	 * 
 	 * @param player
-	 * @param view 
+	 * @param view
 	 */
 	public void loggedIn(Player player, CommunicationView view) {
 		this.player = player;
@@ -183,7 +184,7 @@ public class CommunicationNetwork {
 		this.chatHistory = new ChatHistory();
 		this.view = view;
 		this.view.setCommunicationNetwork(this);
-		//this.model = new CommunicationModel();
+		// this.model = new CommunicationModel();
 		this.controller = new CommunicationController(view, null, this);
 	}
 
@@ -194,10 +195,13 @@ public class CommunicationNetwork {
 	 * @param receivedHistory
 	 */
 	public void receiveChatHistory(ChatHistory receivedHistory) {
-		chatNodes = receivedHistory.getChatHistory();		
+		chatNodes = receivedHistory.getChatHistory();
 		for (Entry<Integer, ChatNode> entry : chatNodes.entrySet()) {
-			controller.addChatLabel(entry.getValue(), entry.getValue().getChatHistory().peek().substring(entry.getValue().getChatHistory().peek().indexOf('-') + 2, entry.getValue().getChatHistory().peek().indexOf(':')-1)); //This doesn't know who sent it yet
+
+			ChatMessage<String, String> line = entry.getValue()
+					.getChatHistory().peek();
+
+			controller.addChatLabel(entry.getValue(), line.getUsername());
 		}
 	}
-	
 }

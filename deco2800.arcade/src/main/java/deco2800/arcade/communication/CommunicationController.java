@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 import javax.swing.JLabel;
 
-import deco2800.arcade.communication.CommunicationView;
+import deco2800.arcade.model.ChatMessage;
 import deco2800.arcade.model.ChatNode;
 import deco2800.arcade.protocol.communication.TextMessage;
 
@@ -23,31 +23,33 @@ public class CommunicationController {
 	private SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
 	private HashMap<Integer, JLabel> nodeLink = new HashMap<Integer, JLabel>();
 
-	public CommunicationController(CommunicationView view, CommunicationModel model, CommunicationNetwork network){
+	public CommunicationController(CommunicationView view,
+			CommunicationModel model, CommunicationNetwork network) {
 		this.view = view;
 		this.model = model;
 		this.network = network;
 
 		view.addSendListener(new SendListener());
 	}
-	
-	
+
 	private class SendListener implements ActionListener {
 
-		public void actionPerformed(ActionEvent event) { //You pressed Send
+		public void actionPerformed(ActionEvent event) {
 			ChatNode node = network.getCurrentChat();
 
-			//This should never be null, because the chat window won't be open if it leads to nowhere... but it is during testing
-			if (node != null){
+			// This should never be null, because the chat window won't be open
+			// if it leads to nowhere... but it is during testing
+			if (node != null) {
 				TextMessage message = new TextMessage();
-				message.setChatID(node.getID()); //Is this right?
+				message.setChatID(node.getID()); // Is this right?
 				message.setSenderID(network.getPlayer().getID());
 				message.setSenderUsername(network.getPlayer().getUsername());
 				message.setText(view.getMessage());
-				
-				if (node.getParticipants() == null){
-					System.out.println("You are trying to send to nobody! This won't happen normally because a chat window will only be open if you have someone to talk to. "
-							+ "It will however, happen during testing because this chat window is open by default!");
+
+				if (node.getParticipants() == null) {
+					System.out
+							.println("You are trying to send to nobody! This won't happen normally because a chat window will only be open if you have someone to talk to. "
+									+ "It will however, happen during testing because this chat window is open by default!");
 				} else {
 					message.setRecipients(node.getParticipants());
 					network.sendTextMessage(message);
@@ -100,8 +102,8 @@ public class CommunicationController {
 
 					if (network.getCurrentChat() != node){
 						network.setCurrentChat(node);
-						for (String line : node.getChatHistory()){
-							view.appendOutputArea(line);
+						for (ChatMessage<String, String> line : node.getChatHistory()){
+							view.appendOutputArea(line.getMessage());
 						}
 					}
 				}
@@ -144,7 +146,6 @@ public class CommunicationController {
 		JLabel label = nodeLink.get(chatID);
 		view.displayNotification(label);
 	}
-	
 	
 	
 }

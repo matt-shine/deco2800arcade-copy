@@ -32,7 +32,7 @@ public final class PacChar extends Mover{
 		width = widthVal;
 		height = heightVal;
 		updatePosition();
-		moveDist = 1;
+		moveDist = 2;
 		currentTile.addMover(this);
 		//System.out.println(this);
 //		animation not necessary unless Pacman moving		
@@ -59,12 +59,12 @@ public final class PacChar extends Mover{
 		
 	
 		// If pacman is able to turn, update drawFacing
-		if (canTurn(this.getTile())) {
+		if (canTurn(this.getCurTile())) {
 			drawFacing = facing;
 			this.setCurrentState(PacState.MOVING);
 		}
 		
-		if (!this.checkNoWallCollision(this.getTile())){
+		if (!this.checkNoWallCollision(this.getCurTile())){
 			this.setCurrentState(PacState.IDLE);
 		}
 		

@@ -149,7 +149,9 @@ public class Pacman extends GameClient {
 		
 		// make changes in the model to prepare for rendering if overlay
 		// not active
-		if (!gamePaused) model.prepareDraw();
+		if (!gamePaused) {
+			model.prepareDraw();
+		}
 		
 		view.render();
 		super.render();		

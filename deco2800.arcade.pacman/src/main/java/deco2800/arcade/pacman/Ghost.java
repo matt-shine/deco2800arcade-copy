@@ -53,10 +53,8 @@ public final class Ghost extends Mover {
 		// DEBUGGING PRINT
 //		System.out.println("drawX % 16 is: " + (drawX % 16)
 //				+ ", drawY % 16 is: " + (drawY % 16));
-
 		
 		currentState = GhostState.CHASE;
-
 		width = widthVal;
 		height = heightVal;
 		updatePosition();
@@ -71,9 +69,10 @@ public final class Ghost extends Mover {
 	/**
 	 * Prepares to draw a Ghost
 	 */
-	public void prepareDraw() {
+	public void prepareDraw() {		
+		updateTargetTile();
+		facing = getNextTileDirection();
 		spritePos = 3;
-		ghost_move();
 		if (facing == Dir.RIGHT) {
 			spritePos = 1;
 		} else if (facing == Dir.UP) {
@@ -83,7 +82,7 @@ public final class Ghost extends Mover {
 		} 
 		
 		// Check ghost wall collision
-		if (!this.checkNoWallCollision(this.getTile())){
+		if (!checkNoWallCollision(getCurTile())){
 //			currentState = GhostState.SCATTER;
 			facing = Dir.LEFT;
 		}
@@ -122,21 +121,21 @@ public final class Ghost extends Mover {
 	 * Updates the target tile for the ghost so far only does blinky and pinky
 	 */
 
-	public void updateTargetTile() {
-		System.out.println("<!> " + this.ghostName + " Target is: "
-				+ player.getTile());
+	private void updateTargetTile() {
+		//System.out.println("<!> " + this.ghostName + " Target is: "
+		//		+ player.getTile());
 		if (ghostName == GhostName.BLINKY) {
-			targetTile = player.getTile();
+			targetTile = player.getCurTile();
 		} else if (ghostName == GhostName.PINKY) {
 			try {
-				targetTile = player.nextTile(player.getTile(), 4);
+				targetTile = player.nextTile(player.getCurTile(), 4);
 			} catch (ArrayIndexOutOfBoundsException e) {
-				// Trying to finda tile outside the map.
-				targetTile = player.nextTile(player.getTile(), 1);
+				// Trying to find a tile outside the map.
+				targetTile = player.nextTile(player.getCurTile(), 1);
 			}
 
 		} else {
-			targetTile = player.getTile();
+			targetTile = player.getCurTile();
 		}
 	}
 
@@ -169,12 +168,9 @@ public final class Ghost extends Mover {
 	/**
 	 * returns a list of testTiles that can be walked into. returns them in the
 	 * order of left, down, up, right
-	 * 
-	 * @param current
-	 * @return
 	 */
-	public List<Tile> getTestTiles(Tile current) {
-		Point currentPoint = gameMap.getTilePos(current);
+	public List<Tile> getTestTiles() {
+		Point currentPoint = gameMap.getTilePos(currentTile);
 		List<Tile> testTiles = new ArrayList<Tile>();
 		int currentX = currentPoint.getX();
 		int currentY = currentPoint.getY();
@@ -189,40 +185,37 @@ public final class Ghost extends Mover {
 		Tile downTile = gameMap.getGrid()[currentX][downY];
 		Tile rightTile = gameMap.getGrid()[rightX][currentY];
 		
-		if (this.nextTile(this.currentTile, 1, Dir.UP).getClass() != WallTile.class &&
-				!this.nextTile(this.currentTile, 1, Dir.UP).equals(previousTile)){
+		if (nextTile(currentTile, 1, Dir.UP).getClass() != WallTile.class &&
+				!nextTile(currentTile, 1, Dir.UP).equals(previousTile)){
 			testTiles.add(upTile);
-		} if (this.nextTile(this.currentTile, 1, Dir.DOWN).getClass() != WallTile.class &&
-				!this.nextTile(this.currentTile, 1, Dir.DOWN).equals(previousTile)){
+		} if (nextTile(currentTile, 1, Dir.DOWN).getClass() != WallTile.class &&
+				!nextTile(currentTile, 1, Dir.DOWN).equals(previousTile)){
 			testTiles.add(downTile);
-		} if (this.nextTile(this.currentTile, 1, Dir.LEFT).getClass() != WallTile.class &&
-				!this.nextTile(this.currentTile, 1, Dir.LEFT).equals(previousTile)){
+		} if (nextTile(currentTile, 1, Dir.LEFT).getClass() != WallTile.class &&
+				!nextTile(currentTile, 1, Dir.LEFT).equals(previousTile)){
 			testTiles.add(leftTile);
-		} if (this.nextTile(this.currentTile, 1, Dir.RIGHT).getClass() != WallTile.class &&
-				!this.nextTile(this.currentTile, 1, Dir.RIGHT).equals(previousTile)){
+		} if (nextTile(currentTile, 1, Dir.RIGHT).getClass() != WallTile.class &&
+				!nextTile(currentTile, 1, Dir.RIGHT).equals(previousTile)){
 			testTiles.add(rightTile);
 		}
 		
-		System.out.println("List of test tiles: " + testTiles);
+		//System.out.println("List of test tiles: " + testTiles);
 		return testTiles;
 	}
 
 	/**
 	 * returns a list of distances in the same order of the testTiles
 	 * 
-	 * @param testTiles
-	 * @param current
-	 * @return
 	 */
-	public List<Double> getDists(List<Tile> testTiles, Tile target) {
+	public List<Double> getDists(List<Tile> testTiles) {
 		double tempDist;
 		List<Double> dists = new ArrayList<Double>();
 
 		for (Tile tTile : testTiles) {
-			tempDist = calcDist(target, tTile);
+			tempDist = calcDist(targetTile, tTile);
 			dists.add(tempDist);
 		}
-		System.out.println(dists);
+		//System.out.println(dists);
 		return dists;
 	}
 
@@ -234,7 +227,7 @@ public final class Ghost extends Mover {
 	 * @param nextTile
 	 * @return
 	 */
-	public Dir getDirection() {
+	public Dir getNextTileDirection() {
 		Point currentPoint = gameMap.getTilePos(currentTile);
 		Point nextPoint = gameMap.getTilePos(getNextTile());
 		int currentX = currentPoint.getX();
@@ -242,19 +235,19 @@ public final class Ghost extends Mover {
 		int nextX = nextPoint.getX();
 		int nextY = nextPoint.getY();
 		
-		System.out.println("<<getDirection>> current: [" + currentX +
-				 "," + currentY + "]  next: [" + nextX + "," + nextY + "]");
+		//System.out.println("<<getDirection>> current: [" + currentX +
+		//		 "," + currentY + "]  next: [" + nextX + "," + nextY + "]");
 		if (nextX > currentX) {
-			System.out.println("    next tile is RIGHT");
+			//System.out.println("    next tile is RIGHT");
 			return Dir.RIGHT;
 		} else if (nextX < currentX) {
-			System.out.println("    next tile is LEFT");
+			//System.out.println("    next tile is LEFT");
 			return Dir.LEFT;
 		} else if (nextY > currentY) {
-			System.out.println("    next tile is UP");
+			//System.out.println("    next tile is UP");
 			return Dir.UP;
 		} else {
-			System.out.println("    next tile is DOWN");
+			//System.out.println("    next tile is DOWN");
 			return Dir.DOWN;
 		}
 	}
@@ -264,9 +257,9 @@ public final class Ghost extends Mover {
 	 */
 
 	public Tile getNextTile() {
-		List<Tile> testTiles = getTestTiles(currentTile);
-		List<Double> dists = getDists(testTiles, this.targetTile);
-		System.out.println(dists);
+		List<Tile> testTiles = getTestTiles();
+		List<Double> dists = getDists(testTiles);
+		//System.out.println(dists);
 		int tileNum = 0;
 		double dist = 9999;
 		double temp;
@@ -279,11 +272,6 @@ public final class Ghost extends Mover {
 			}
 		}
 		return testTiles.get(tileNum);
-	}
-
-	private void ghost_move() {
-		updateTargetTile();
-		facing = getDirection();
 	}
 
 	public GhostState getCurrentState() {

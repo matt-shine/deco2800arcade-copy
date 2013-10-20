@@ -42,7 +42,7 @@ public class PacController implements InputProcessor {
 			return false;
 		}
 		// check for collisions
-		Tile pTile = player.getTile();
+		Tile pTile = player.getCurTile();
 //		Dir tempFacing = player.getFacing();
 		player.setFacing(facing);
 		System.out.println("Can pacman move? Next tile is " + 

@@ -3,6 +3,7 @@ package deco2800.arcade.pacman;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.lwjgl.util.Point;
 
@@ -27,6 +28,7 @@ public class GameMap {
 	// same for all tiles in a GameMap
 	public final int SCREEN_HEIGHT;
 	public final int SCREEN_WIDTH;
+	private final int NUM_BUFFER_TILES; //the number of buffer tiles around the edge of the map on each side
 	
 	
 	public GameMap(int SCREEN_WIDTH, int SCREEN_HEIGHT, int numGhosts) {
@@ -36,6 +38,7 @@ public class GameMap {
 		this.SCREEN_WIDTH = SCREEN_WIDTH;
 		ghostStarts = new Tile[numGhosts];
 		tileSideLength = 16;
+		NUM_BUFFER_TILES = 4;
 	}
 	
 
@@ -132,19 +135,26 @@ public class GameMap {
 	 */
 	public void createTiles(ArrayList<char[]> map) {
 		//initialise size of map grid
-		int ySize = map.size(); // number of lines
-		int xSize = map.get(0).length; //length of each line
+		int mapSize = map.size();
+		int lineSize = map.get(0).length;
+		int ySize = mapSize + NUM_BUFFER_TILES*2; // number of lines + buffer tiles
+		int xSize = lineSize + NUM_BUFFER_TILES*2; //length of each line + buffer tiles
 		hOffset = (SCREEN_WIDTH - xSize * tileSideLength) /2;
 		vOffset = (SCREEN_HEIGHT - ySize * tileSideLength) /2;
 		grid = new Tile[xSize][ySize];
 		//set up teleport target making- currently supports any even number 
 		//of teleporters, each targeting the next one which appears in the list
 		Tile target = null;
+		//create tiles		
+		//int count = 0; //for testing
+		
+		// check if it's a buffer tile around the edge of the grid
+
+		Tile square;
 		//create tiles
 		for (int lineNum = 0; lineNum < map.size(); lineNum++) {
 			char[] line = map.get(lineNum);
 			for (int i = 0; i < line.length; i++) {
-				Tile square;
 				char type = line[i];
 				if (type == 'p' || type == 'P') {
 					square = new DotTile(this, type);
@@ -169,17 +179,108 @@ public class GameMap {
 					case '@': ghostStarts[1] = square; break;
 					case '#': ghostStarts[2] = square; break;
 					case '$': ghostStarts[3] = square; break;
-					}
-				} else {
+ 					}
+ 				} else {
 					square = new WallTile(this, type);
 					// if it's a ghost door, add it to the list
 					if (type == 'Q') {
 						ghostDoors.add((WallTile) square);
 					}
-				}
-				grid[i][lineNum] = square;
+ 				}
+				grid[i+NUM_BUFFER_TILES][lineNum+NUM_BUFFER_TILES] = square;
 			}
 		}
+		for (int x = 0; x < xSize; x++) {
+			for (int y = 0; y < ySize; y++) {
+				if (grid[x][y] == null) {
+					grid[x][y] = new Tile(this);
+				}
+			}
+		}
+				//grid[x + lineSize][y + mapSize] = new Tile(this);
+				// if into regular tiles
+//				System.out.println("x=" + x + ", y=" + y);
+//				System.out.println("i=" + i + ", Linenum=" + lineNum + " and " +
+//						"Count=" + count + " and 1 is " + (y >= NUM_BUFFER_TILES) + ", 2 is " + 
+//				(y < ySize - NUM_BUFFER_TILES) + ", 3 is " + (x >= NUM_BUFFER_TILES) + " and " +
+//						"4 is " + (x < xSize - NUM_BUFFER_TILES));
+//				if (x==28 && y==4) {
+//					System.out.println("We've arrived");
+//				}
+//				if (y >= NUM_BUFFER_TILES && y < ySize - NUM_BUFFER_TILES && 
+//						x >= NUM_BUFFER_TILES && x < xSize - NUM_BUFFER_TILES) {
+//							
+//					for (lineNum = 0; lineNum < mapSize; lineNum++) {
+//						char[] line = map.get(lineNum);
+//						if (i < line.length) {
+//							char type = line[i];
+//							if (type == 'p' || type == 'P') {
+//								square = new DotTile(this, type);
+//							} else if (type == 'T') {
+//								square = new TeleportTile(this);
+//								//set up teleport targeting between two most recently
+//								//made tiles
+//								if (target != null) {
+//									((TeleportTile) square).setTarget(target);
+//									((TeleportTile) target).setTarget(square);
+//									target = null;
+//								} else {
+//									target = square;
+//								}
+//							} else if (type == ' ' || type == 'r' || type == 's' 
+//								|| type == '!' || type == '@' || type == '#' || type == '$'){
+//								square = new Tile(this);
+//								switch(type) {
+//								case 'r': fruitRight = square; break;
+//								case 's': pacStart = square; break;
+//								case '!': ghostStarts[0] = square; break;
+//								case '@': ghostStarts[1] = square; break;
+//								case '#': ghostStarts[2] = square; break;
+//								case '$': ghostStarts[3] = square; break;
+//								}
+//							} else {
+//								square = new WallTile(this, type);
+//								// if it's a ghost door, add it to the list
+//								if (type == 'Q') {
+//									ghostDoors.add((WallTile) square);
+//								}
+//							}
+//							grid[x][y] = square;
+//							//System.out.println("Made it in- " + grid[i+NUM_BUFFER_TILES][lineNum+NUM_BUFFER_TILES] + "in grid");
+//							i++;
+//						} else if (i == line.length) {
+//							lineNum++;
+//							System.out.println("Linenum is " + lineNum);
+//							i = 0;
+//						}
+//					} else if (lineNum == mapSize) {						
+//						lineNum = 0;
+//					}
+//					}
+//						
+//						
+//				} else {
+//					grid[x][y] = new Tile(this);
+//					count++;
+//					System.out.println("Printed buffertile " + count);
+//				}
+//			}
+//		}
+//		
+//		System.out.println("Final is " + count);
+//		for (int a =0; a < grid.length; a++) {
+//			for (int b = 0; b < grid[a].length; b++) {
+//				if (grid[a][b] == null) {
+//					System.out.println(grid[a][b] + " at [" + a +"," + b + "]");
+//				} else {
+//					System.out.println(grid[a][b]);
+//				}
+//			}
+//		}
+	}
+	
+	private void createTiles() {
+		
 	}
 	
 	public List<WallTile> getGhostDoors() {
@@ -201,10 +302,10 @@ public class GameMap {
 	public Tile findMoverTile(Mover mover) {
 		int x = mover.getMidX();
 		int y = mover.getMidY();
-		for (int i = 0; i < grid.length; i++) {
+		for (int i = NUM_BUFFER_TILES; i < grid.length-NUM_BUFFER_TILES; i++) {
 			int tileX = getTileCoords(grid[i][0]).getX();
 			if (x > tileX && x <= tileX + tileSideLength) {
-				for (int j = 0; j < grid[i].length; j++) {
+				for (int j = NUM_BUFFER_TILES; j < grid[i].length-NUM_BUFFER_TILES; j++) {
 					int tileY = getTileCoords(grid[i][j]).getY(); 
 					if (y > tileY && y <= tileY + tileSideLength) {
 						return grid[i][j];

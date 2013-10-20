@@ -43,7 +43,9 @@ public abstract class Mover {
 		midY = drawY + height / 2;
 		// remove mover from tile and add it to new one if it's changed
 		Tile newTile = gameMap.findMoverTile(this);
-		// Pacman has moved!
+		if (newTile == null) {
+			System.out.println("It's null!");
+		}
 		if (!currentTile.equals(newTile)) {
 			currentTile.removeMover(this);
 			currentTile = newTile;
@@ -92,7 +94,7 @@ public abstract class Mover {
 		int y = gameMap.getTilePos(tile).getY();
 		Tile[][] grid = gameMap.getGrid();
 
-		switch(dir) {
+		switch(facing) {
 		case LEFT: x -= offset; break;
 		case RIGHT: x += offset; break;
 		case UP: y += offset; break;
@@ -126,7 +128,7 @@ public abstract class Mover {
 	 * @param tile
 	 */
 	public void checkTile(Tile tile){
-		if (this.getClass() != PacChar.class) return; // Only Pac man can use special tiles!
+		if (this.getClass() != PacChar.class) {return;} // Only Pac man can use special tiles!
 		if (tile.getClass() == DotTile.class) {
 			if (!((DotTile) tile).isEaten()) {
 				((DotTile) tile).dotEaten();
@@ -148,11 +150,11 @@ public abstract class Mover {
 	}
 
 	/**
-	 * Checks if the proposed movement will make pacman hit a wall
-	 * Returns true if he can move and false if he can't
+	 * Checks if the proposed movement will make the mover hit a wall
+	 * Returns true if it can move and false if it can't
 	 */
 	public boolean checkNoWallCollision(Tile pTile) {
-		return !(this.nextTile(pTile, 1).getClass() == WallTile.class);
+		return !(nextTile(pTile, 1).getClass() == WallTile.class);
 	}
 //	public boolean checkNoWallCollision(Tile pTile) {
 //		int x = gameMap.getTilePos(pTile).getX();
@@ -255,7 +257,7 @@ public abstract class Mover {
 		return drawFacing;
 	}
 	
-	public Tile getTile() {
+	public Tile getCurTile() {
 		return currentTile;
 	}
 	

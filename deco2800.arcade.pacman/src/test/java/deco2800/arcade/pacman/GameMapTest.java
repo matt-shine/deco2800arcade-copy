@@ -30,7 +30,7 @@ public class GameMapTest {
 	private static PacModel model;
 	private static GameMap gameMap;
 	
-	//@BeforeClass
+	@BeforeClass
 	public static void setUpBeforeClass() {
 		//necessary stuff to initialise libGdx
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
@@ -46,7 +46,7 @@ public class GameMapTest {
 	}
 	
 	/** Disposes of things. AL library still seems to cause occasional errors. */
-	//@AfterClass
+@AfterClass
 	public static void tearDown() {
 		//dispose of audio properly
 		((OpenALAudio) app.getAudio()).dispose();
@@ -62,7 +62,7 @@ public class GameMapTest {
 		Assert.assertEquals(720, map.SCREEN_HEIGHT);
 	}
 	
-	//@Test
+	@Test
 	/**
 	 * Checks if the map file is formatted correctly
 	 */
@@ -85,7 +85,7 @@ public class GameMapTest {
 		}			
 	}
 	
-	//@Test
+	@Test
 	/**
 	 * Checks if a line with vertical symmetry has its linelength doubled
 	 * Note that this doesn't actually check if symbols were changed appropriately
@@ -120,45 +120,45 @@ public class GameMapTest {
 		return files;
 	}
 	
-	//@Test
+	@Test
 	/** Tests the grid */
 	public void testGrid() {
 		GameMap map = new GameMap(1280, 720, 4);
 		map.createTiles(map.readMap("levelMap.txt"));
 		Tile[][] grid = map.getGrid();
 		for (int i = 0; i < grid.length; i++) {
-			Assert.assertEquals(31, grid[0].length);
+			Assert.assertEquals(39, grid[0].length);
 		}
-		Assert.assertEquals(28, grid.length);
-		Assert.assertEquals(416, map.getHOffset());
-		Assert.assertEquals(112, map.getVOffset());
-		Assert.assertEquals(grid[13][13], map.getFruitRight());
-		Assert.assertEquals(grid[13][7], map.getPacStart());
-		Assert.assertEquals(grid[12][17], map.getGhostStarts()[0]);
-		Assert.assertEquals(grid[15][17], map.getGhostStarts()[1]);
-		Assert.assertEquals(grid[12][16], map.getGhostStarts()[2]);
-		Assert.assertEquals(grid[15][16], map.getGhostStarts()[3]);
+		Assert.assertEquals(36, grid.length);
+		Assert.assertEquals(352, map.getHOffset());
+		Assert.assertEquals(48, map.getVOffset());
+		Assert.assertEquals(grid[17][17], map.getFruitRight());
+		Assert.assertEquals(grid[17][11], map.getPacStart());
+		Assert.assertEquals(grid[16][21], map.getGhostStarts()[0]);
+		Assert.assertEquals(grid[19][21], map.getGhostStarts()[1]);
+		Assert.assertEquals(grid[16][20], map.getGhostStarts()[2]);
+		Assert.assertEquals(grid[19][20], map.getGhostStarts()[3]);
 		ArrayList<WallTile> ghostDoors = new ArrayList<WallTile>();
-		ghostDoors.add((WallTile) grid[13][18]);
-		ghostDoors.add((WallTile) grid[14][18]);
+		ghostDoors.add((WallTile) grid[17][22]);
+		ghostDoors.add((WallTile) grid[18][22]);
 		Assert.assertEquals(ghostDoors, map.getGhostDoors());
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				Assert.assertNotNull(grid[i][j]);				
 				Assert.assertEquals(new Point(i,j), map.getTilePos(grid[i][j]));
 				int s = map.getTileSideLength();
-				Assert.assertEquals(new Point(i*s + 416, j*s + 112), map.getTileCoords(grid[i][j]));
+				Assert.assertEquals(new Point(i*s + 352, j*s + 48), map.getTileCoords(grid[i][j]));
 			}
 		}
 	}
 	
-	//@Test
+	@Test
 	/** Tests finding of Mover current tiles */
 	public void testMoverTileFinding() {
 		GameMap map = new GameMap(1280, 720, 4);
 		map.createTiles(map.readMap("levelMap.txt"));
 		Tile[][] grid = map.getGrid();
-		Assert.assertEquals(grid[14][7], map.findMoverTile(model.getPlayer()));
+		Assert.assertEquals(grid[18][11], map.findMoverTile(model.getPlayer()));
 		// these commented out while we're testing. TODO MAKE SURE THEY GET ADDED IN AGAIN!
 		//Assert.assertEquals(grid[12][17], map.findMoverTile(model.getBlinky()));
 		//Assert.assertEquals(grid[15][17], map.findMoverTile(model.getPinky()));

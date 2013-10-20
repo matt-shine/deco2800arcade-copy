@@ -184,8 +184,7 @@ public class MenuScreen implements Screen {
 					int pointer, int button) {
 				ArcadeInputMux.getInstance().removeProcessor(stage);
 				ArcadeInputMux.getInstance().removeProcessor(0);
-				ArcadeSystem.goToGame("arcadeui");
-				
+				ArcadeSystem.goToGame("arcadeui");				
 			}
 		});
 	}

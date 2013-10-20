@@ -191,7 +191,6 @@ public class EnemySpiderBoss extends Enemy {
 							case 0:
 							case 1:
 							case 3:
-								System.out.println("Firing fireballs");
 								/*Vector2 directionToShip = new Vector2(ship.position.x - position.x, ship.position.y - position.y);
 								Vector2 direction0 = new Vector2(directionToShip);
 								direction0.add(new Vector2())*/
@@ -320,7 +319,6 @@ public class EnemySpiderBoss extends Enemy {
 						} else if (phase ==2) {
 							velocity = new Vector2(0, -1f-50*rank);
 						}
-						System.out.println("Ram velocity starts at"+velocity);
 						count3 = 0f;
 						count2 = 0;
 						count = 0f;

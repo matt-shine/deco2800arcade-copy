@@ -29,7 +29,6 @@ public class Cyra extends GameClient {
 	private AchievementClient achievementClient;
 	private HighscoreClient highscoreClient;
 	private Player player;
-	
 	private boolean isPaused = false;
       
     public Cyra(Player player, NetworkClient networkClient) {
@@ -39,16 +38,19 @@ public class Cyra extends GameClient {
         this.player = player;
         this.highscoreClient = new HighscoreClient(player.getUsername(), "Cyra", networkClient);
         
-        //this.incrementAchievement("cyra.opengame");
 	}
     
+    /** 
+     * Adds a players score to the Highscore client. Called when the player dies or reaches 
+     * end of level. 
+     * @param score	- the player's score
+     */
     public void addHighscore(int score) {
     	highscoreClient.storeScore("Number", score);
     }
 
     
     public void createPopup(final String message) {
-    	System.out.println("A1");
 		this.getOverlay().addPopup(new UIOverlay.PopupMessage() {
 
 			@Override
@@ -59,6 +61,11 @@ public class Cyra extends GameClient {
 		});
 	}
     
+    /**
+     * Grabs a list of the top ten scores for the game. Returns the scores as 
+     * a list of the Highscore object.
+     * @return List of top ten highscore objects
+     */
 	public List<Highscore> getHighscores() {
 		return highscoreClient.getGameTopPlayers(10, true, "Number");
 	}
@@ -71,7 +78,7 @@ public class Cyra extends GameClient {
 	@Override
 	public void create() {		
 		super.create();
-		//Overlay
+		//Set listeners for the Overlay
 		this.getOverlay().setListeners(new Screen() {
 			@Override
 			public void hide() {
@@ -115,13 +122,10 @@ public class Cyra extends GameClient {
 	@Override
 	public void dispose() {
 		super.dispose();
-		//batch.dispose();
-		//texture.dispose();
 	}
 
 	@Override
 	public void render() {		
-		
 		super.render();
 	}
 
@@ -140,6 +144,7 @@ public class Cyra extends GameClient {
 		super.resume();
 	}
 	
+	//Providing information about the game
 	private static final Game game;
 	static {
 		game = new Game();

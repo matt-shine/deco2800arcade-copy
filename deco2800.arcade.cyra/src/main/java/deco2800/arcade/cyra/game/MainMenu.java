@@ -38,8 +38,8 @@ public class MainMenu extends AbstractScreen{
 	private int buttonframe = 0;
 	private boolean keydown = false;
 	
-	float[] difficulty = new float[3];
-	int difficultyIndex = 1;
+	private float[] difficulty = new float[3];
+	private int difficultyIndex = 1;
 	
 	public MainMenu(Cyra game) {
 		super(game);
@@ -58,11 +58,8 @@ public class MainMenu extends AbstractScreen{
 		atlas = new TextureAtlas("buttons.txt");
 		skin = new Skin();
 		skin.addRegions(atlas);
-		//blackFont = new BitmapFont(Gdx.files.internal("whitefont.fnt"), false);
 		blackFont = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);
 		//Sounds.load();
-		
-		
 	}
 	
 	@Override
@@ -78,7 +75,9 @@ public class MainMenu extends AbstractScreen{
 			framecount = 0;
 			if (framecountmax > 25) {
 				framecountmax -= 9;
-			} else framecountmax--;
+			} else {
+				framecountmax--;
+			}
 		}
 		if (++buttonframe == 9) {
 			buttonframe = 0;

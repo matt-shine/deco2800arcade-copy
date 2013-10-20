@@ -635,7 +635,7 @@ public class World {
 				}
 			}
 			
-			if(b.getExistTime() > b.MAX_EXIST_TIME) {
+			if(b.getExistTime() > b.getMAX_EXIST_TIME()) {
 				bItr.remove();
 			}
 		}

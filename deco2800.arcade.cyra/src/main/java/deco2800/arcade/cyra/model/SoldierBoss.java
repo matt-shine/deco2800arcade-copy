@@ -29,7 +29,7 @@ public class SoldierBoss extends Enemy {
 	
 	
 	
-	boolean facingRight;
+	private boolean facingRight;
 	private State state;
 	private Boolean performingTell;
 	private float stateTime;
@@ -83,7 +83,6 @@ public class SoldierBoss extends Enemy {
 		@Override
 		public Array<Enemy> advance(float delta, Player ship, float rank, OrthographicCamera cam) {
 			super.update(ship);
-			System.out.println(state + " "+performingTell);
 			if (beingHit) {
 				invincibleTime -= delta;
 				if (invincibleTime < 0) {
@@ -420,10 +419,6 @@ public class SoldierBoss extends Enemy {
 				velocity.x = 0;
 				stateTime = 1.5f-1.35f * rank;
 			}
-			//} else if (rand < grenadeChance) {
-			
-			
-			System.out.println("Picked new state: "+ state);
 		}
 	
 	
@@ -437,16 +432,9 @@ public class SoldierBoss extends Enemy {
 	@Override
 	public void handleYCollision(Rectangle tile, boolean onMovablePlatform,
 			MovablePlatform movablePlatform) {
-		System.out.println("BEFORE COLLISION pos="+position+" vel="+velocity+"***********************************");
-		Vector2 savedVelocity = new Vector2(velocity);
+
 		super.handleYCollision(tile,  onMovablePlatform, movablePlatform);
-		/*if (state==State.WALK) {
-			velocity = savedVelocity;
-			velocity.y = velocity.y * (-1);
-		}
-		position.y -= savedVelocity.y;*/
-		System.out.println("AFTER COLLISION pos="+position+" vel="+velocity+"***********************************");
-		
+
 	}
 
 	

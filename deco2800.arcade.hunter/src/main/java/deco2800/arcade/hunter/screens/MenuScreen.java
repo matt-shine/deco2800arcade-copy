@@ -69,7 +69,6 @@ public class MenuScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 System.out.println("Options worked!");
                 hunter.setScreen(new OptionScreen(hunter));
-                /*TODO fix the broken options screen, then re-enable this*/
             }
         });
 
@@ -86,7 +85,6 @@ public class MenuScreen implements Screen {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("HighScore worked!");
                 hunter.setScreen(new HighScoreScreen(hunter));
-				/*TODO Fix the broken High Score screen, then re-enable this*/
             }
         });
 
@@ -101,7 +99,6 @@ public class MenuScreen implements Screen {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("Exit Works");
                 ArcadeSystem.goToGame(ArcadeSystem.UI);
-				/*TODO Get this to quit properly, maybe take a look at how it is implemented in the Overlay to get back to the menu*/
             }
         });
         table.add(exitButton).size(300, 80).spaceBottom(20);

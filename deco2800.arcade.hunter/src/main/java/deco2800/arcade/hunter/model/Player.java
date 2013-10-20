@@ -354,12 +354,12 @@ public class Player extends Entity {
             if (Hunter.State.getPreferencesManager().isSoundEnabled()) {
                 pickup.play(Hunter.State.getPreferencesManager().getVolume());
             }
-            if (((Items) e).getItemType() == Items.Type.WEAPON) {
-                setWeapon(((Items) e).getItem());
+            if (((Item) e).getItemType() == Item.Type.WEAPON) {
+                setWeapon(((Item) e).getItem());
                 weaponAmmo = 10;
-                gamescreen.getGameReference().incrementAchievement("hunter.arsenal." + ((Items) e).getItem());
+                gamescreen.getGameReference().incrementAchievement("hunter.arsenal." + ((Item) e).getItem());
             } else {
-                applyPlayerBuff(((Items) e).getItem());
+                applyPlayerBuff(((Item) e).getItem());
             }
         } else if (e.getType().equals("Animal")) {
             if (getState() == State.ATTACK) {

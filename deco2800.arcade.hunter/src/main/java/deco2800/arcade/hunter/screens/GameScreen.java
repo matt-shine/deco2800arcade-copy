@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.hunter.EntityHandler;
 import deco2800.arcade.hunter.Hunter;
@@ -263,7 +262,7 @@ public class GameScreen implements Screen {
 	private void createItems(){
 		String[] textures = {"DoublePoints", "ExtraLife", "Invulnerability", "Coin","Bow","Spear","Trident"};
 		String item =  textures[Hunter.State.randomGenerator.nextInt(7)];
-		entities.add(new Items(new Vector2(player.getX()+Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX()+Config.PANE_SIZE_PX)), 64, 64, item,entityHandler.getItemTexture(item),this));
+		entities.add(new Item(new Vector2(player.getX()+Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX()+Config.PANE_SIZE_PX)), 64, 64, item,entityHandler.getItemTexture(item)));
 	}
 
 	/**

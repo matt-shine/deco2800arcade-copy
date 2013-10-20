@@ -52,19 +52,17 @@ public class HighScoreScreen implements Screen {
         table.add("HighScore Menu!").colspan(2);
         table.row();
 
-        table.add("HighScore 1 - " + topPlayers.get(0).playerName + " : ");
-        System.out.println("HighScore 1 - " + topPlayers.get(0).playerName + " : " + topPlayers.get(0).score);
-        table.add(String.valueOf(topPlayers.get(0).score)).colspan(2);
-        table.row();
+        for (int i = 0; i < Math.min(3, topPlayers.size()); i++) {
+            table.add("HighScore " + (i + 1) + " - " + topPlayers.get(i).playerName + " : ");
+            System.out.println("HighScore " + (i + 1) + " - " + topPlayers.get(i).playerName + " : " + topPlayers.get(i).score);
+            table.add(String.valueOf(topPlayers.get(i).score)).colspan(2);
+            table.row();
+        }
 
-        table.add("HighScore 2 - " + topPlayers.get(1).playerName + " : ");
-        System.out.println("HighScore 2 - " + topPlayers.get(1).playerName + " : " +topPlayers.get(1).score);
-        table.add(String.valueOf(topPlayers.get(1).score)).colspan(2);
-        table.row();
-
-        table.add("HighScore 3 - " + topPlayers.get(2).playerName + " : ");
-        table.add(String.valueOf(topPlayers.get(2).score)).colspan(2);
-        table.row();
+        if (topPlayers.size() == 0) {
+            table.add("No high scores have been recorded!");
+            table.row();
+        }
 
         TextButton backButton = new TextButton("Back to main menu", skin);
         backButton.addListener(new ChangeListener() {

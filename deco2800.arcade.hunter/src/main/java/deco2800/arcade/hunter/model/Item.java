@@ -11,7 +11,7 @@ import deco2800.arcade.hunter.screens.GameScreen;
 
 import java.util.ArrayList;
 
-public class Items extends Entity {
+public class Item extends Entity {
 
     /**
      * The Texture of the item
@@ -33,16 +33,10 @@ public class Items extends Entity {
      */
     private final Type type;
 
-    /**
-     * The GameScreen which the item is in
-     */
-    private final GameScreen gameScreen;
-
-    public Items(Vector2 pos, float width, float height, String item, Texture text, GameScreen gameScreen) {
+    public Item(Vector2 pos, float width, float height, String item, Texture text) {
         super(pos, width, height);
         this.item = item;
         this.texture = text;
-        this.gameScreen = gameScreen;
         //Checks the item type
         if (item.equals("DoublePoints") || item.equals("ExtraLife") || item.equals("Invulnerability") || item.equals("Coin")) {
             this.type = Type.POWERUP;

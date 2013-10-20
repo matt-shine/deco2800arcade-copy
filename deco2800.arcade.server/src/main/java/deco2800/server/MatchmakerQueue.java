@@ -236,11 +236,7 @@ public class MatchmakerQueue {
 		} else {
 			ratingDiff = p2Rating - p1Rating;
 		}
-		if (ratingDiff > timeAllowance && timeAllowance < 500) {
-			return false;
-		} else {
-			return true;
-		}
+		return (!(ratingDiff > timeAllowance && timeAllowance < 500));
 	}
 
 	/**
@@ -330,7 +326,7 @@ public class MatchmakerQueue {
 			player1Rating = getDatabase().getPlayerRating(player1ID, gameID);
 			player2Rating = getDatabase().getPlayerRating(player2ID, gameID);
 		} catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 		// Find the new ratings of each player based off the finished game
 		int[] newScore = elo(player1ID, player1Rating, player2ID,
@@ -340,7 +336,7 @@ public class MatchmakerQueue {
 			getDatabase().updatePlayerRating(player1ID, gameID, newScore[0]);
 			getDatabase().updatePlayerRating(player2ID, gameID, newScore[1]);
 		} catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 		// Remove the server from the active list
 		dropServer(session);
@@ -378,6 +374,8 @@ public class MatchmakerQueue {
 		// lost per game)
 		int k = 32;
 		int[] newElo = new int[2];
+		double player1Rating = (double) p1Rating;
+		double player2Rating = (double) p2Rating;
 		if (p1Rating < 2100 || p2Rating < 2100) {
 			k = 32;
 		} else if ((p1Rating < 2401 && p1Rating >= 2100)
@@ -395,17 +393,21 @@ public class MatchmakerQueue {
 			double diff = p1Rating - p2Rating;
 			double change = (1 - (1.0f / (Math.pow(10, ((-diff / 400) + 1)))));
 			score = k * change;
-			newElo[0] = (int) Math.floor(p1Rating += score);
+			player1Rating += score;
+			newElo[0] = (int) Math.floor(player1Rating);
 			score = -k * change;
-			newElo[1] = (int) Math.floor(p2Rating += score);
+			player2Rating += score;
+			newElo[1] = (int) Math.floor(player2Rating);
 		} else if (winner == p2ID) {
 			double score;
 			double diff = p2Rating - p1Rating;
 			double change = (1 - (1.0f / (Math.pow(10, ((-diff / 400) + 1)))));
 			score = -k * change;
-			newElo[0] = (int) Math.floor(p1Rating += score);
+			player1Rating += score;
+			newElo[0] = (int) Math.floor(player1Rating);
 			score = k * change;
-			newElo[1] = (int) Math.floor(p2Rating += score);
+			player2Rating += score;
+			newElo[1] = (int) Math.floor(player2Rating);
 		} else {
 			newElo[0] = p1Rating;
 			newElo[1] = p2Rating;

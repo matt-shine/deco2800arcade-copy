@@ -229,9 +229,7 @@ public class ArcadeSystem {
 	 * @param response: The server's response
 	 */
 	public static void newMultiplayerGame(NewMultiSessionResponse response) {
-		int playerID = response.playerID;
 		String gameID = response.gameId;
-		int session = response.sessionId;
 		goToGame(gameID);
 
 	}

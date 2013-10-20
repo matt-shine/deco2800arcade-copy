@@ -31,7 +31,7 @@ public class MultiGamelist2 implements Screen {
 	private Skin skin;
 	private FrontPageStage stage;
 
-	boolean multiplayerEnabled;
+	public boolean multiplayerEnabled;
 	private boolean bclicked;
 
 	Texture bg;
@@ -487,20 +487,12 @@ public class MultiGamelist2 implements Screen {
 
 				}
 
-				else if (mixmazeButton.getStage() != null) {
-					// Do Nothing
-				}
-
 			}
 		});
 
 		// Scroll Left
 		button4.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				if (chessButton.getStage() != null
-						|| chessButton2.getStage() != null) {
-					// Do Nothing
-				}
 
 				if (raidenButton.getStage() != null) {
 
@@ -997,7 +989,7 @@ public class MultiGamelist2 implements Screen {
 		stage.draw();
 		Table.drawDebug(stage); // Shows table debug lines
 
-		if (bclicked == true) {
+		if (bclicked) {
 			ArcadeSystem.goToGame("arcadeui");
 		}
 

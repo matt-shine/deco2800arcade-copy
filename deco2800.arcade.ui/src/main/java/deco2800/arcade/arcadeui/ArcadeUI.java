@@ -56,7 +56,6 @@ public class ArcadeUI extends GameClient {
 		main = new FrontPage(this);
 
 		register = new RegisterScreen(this);
-		System.out.println("PLAYER: " + player);
 		lobby = new MultiplayerLobby(this, player);
 		betting = new BettingWindow(this);
 		multigame = new MultiGamelist(this);

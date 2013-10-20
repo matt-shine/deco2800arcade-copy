@@ -17,7 +17,7 @@ import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
  */
 public class MultiplayerListener extends NetworkListener {
 	
-	Arcade arcade;
+	private Arcade arcade;
 	
 	/**
 	 * The constructor for the listener.
@@ -26,21 +26,6 @@ public class MultiplayerListener extends NetworkListener {
 	 */
 	public MultiplayerListener(Arcade arcade) {
 		this.arcade = arcade;
-	}
-
-	@Override
-	public void connected(Connection connection) {
-		super.connected(connection);
-	}
-
-	@Override
-	public void disconnected(Connection connection) {
-		super.disconnected(connection);
-	}
-
-	@Override
-	public void idle(Connection connection) {
-		super.idle(connection);
 	}
 
 	@Override
@@ -56,7 +41,7 @@ public class MultiplayerListener extends NetworkListener {
 		//State updates -- If it is the inital update only send it to the non-host player
 		//Otherwise send it to both
 		} else if (object instanceof GameStateUpdateRequest) {
-			if (((GameStateUpdateRequest) object).initial == false) {
+			if (!(((GameStateUpdateRequest) object).initial)) {
 				arcade.getCurrentGame().updateGameState((GameStateUpdateRequest) object);
 			} else {
 				arcade.getCurrentGame().startMultiplayerGame();

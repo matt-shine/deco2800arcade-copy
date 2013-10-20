@@ -4,14 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * Extends the Paddle class
+ * 
+ * @author Naveen
+ * 
+ */
 public class LocalPlayer extends Paddle {
 
-	public int paddleSpeed = 550;
+	// Sets the static speed that the paddle moves
+	private static final int PADDLESPEED = 550;
 
 	/**
-	 * 
+	 * Retrieves the position from the Paddle class.
 	 */
-
 	public LocalPlayer(Vector2 position) {
 		super(position);
 	}
@@ -30,18 +36,18 @@ public class LocalPlayer extends Paddle {
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY());
 
 			if (touchPos.x > Breakout.SCREENWIDTH / 2)
-				movement(paddleSpeed * Gdx.graphics.getDeltaTime());
+				movement(PADDLESPEED * Gdx.graphics.getDeltaTime());
 
 			if (touchPos.x < Breakout.SCREENWIDTH / 2)
-				movement(-paddleSpeed * Gdx.graphics.getDeltaTime());
+				movement(-PADDLESPEED * Gdx.graphics.getDeltaTime());
 		}
 
 		if (Gdx.input.isKeyPressed(Keys.RIGHT)
 				|| Gdx.input.isKeyPressed(Keys.D))
-			movement(paddleSpeed * 1.15f * Gdx.graphics.getDeltaTime());
+			movement(PADDLESPEED * 1.15f * Gdx.graphics.getDeltaTime());
 
 		if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A))
-			movement(-paddleSpeed * 1.15f * Gdx.graphics.getDeltaTime());
+			movement(-PADDLESPEED * 1.15f * Gdx.graphics.getDeltaTime());
 
 	}
 }

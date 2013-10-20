@@ -9,6 +9,9 @@ import deco2800.arcade.client.replay.exception.ReplayItemDataInvalidException;
 
 public class ReplayItemTest {
 
+	/**
+	 * Test type is correctly assigned and retrieved
+	 */
     @Test
     public void testTypes()
     {
@@ -25,12 +28,19 @@ public class ReplayItemTest {
         assertEquals(new Integer(ReplayItem.TYPE_STRING), ri.getType());
     }
     
+    /**
+     * Test providing the default constructor with an invalid type (boolean)
+     */
     @Test (expected = ReplayItemDataInvalidException.class)
     public void testInvalidType()
     {
         ReplayItem ri = new ReplayItem(true);
     }
     
+    /**
+     * Test retrieving the value of an item with the
+     * wrong getter, when the item is of type int
+     */
     @Test (expected = RuntimeException.class)
     public void testBadIntCast()
     {
@@ -38,6 +48,10 @@ public class ReplayItemTest {
         ri.floatVal();
     }
     
+    /**
+     * Another test for retrieving the wrong type, 
+     * this time for a float ReplayItem
+     */
     @Test (expected = RuntimeException.class)
     public void testBadFloatCast()
     {
@@ -45,6 +59,10 @@ public class ReplayItemTest {
         ri.stringVal();
     }
     
+    /**
+     * Another test for retrieving the wrong type, 
+     * this time for a string ReplayItem
+     */
     @Test (expected = RuntimeException.class)
     public void testBadStringCast()
     {
@@ -52,6 +70,10 @@ public class ReplayItemTest {
         ri.intVal();
     }
     
+    /**
+     * Test the toString method of a ReplayNode with each
+     * possible type
+     */
     @Test
     public void testToString()
     {
@@ -63,6 +85,53 @@ public class ReplayItemTest {
         
         ri = new ReplayItem("This is a string");
         assertEquals("This is a string", ri.toString());   
+    }
+    
+    /**
+     * Test that two equal ReplayItems have equal hashcodes
+     */
+    @Test
+    public void testHashCode()
+    {
+        ReplayItem r1 = new ReplayItem(123);
+        ReplayItem r2 = new ReplayItem(123);
+        
+        assertEquals(true, r1.equals(r2));
+        assertEquals(r1.hashCode(), r1.hashCode());
+    }
+    
+    /**
+     * Test that the equals method returns true for two 
+     * equal nodes of all possible types
+     */
+    @Test
+    public void testEquals()
+    {
+        ReplayItem r1 = new ReplayItem(123);
+        ReplayItem r2 = new ReplayItem(123);
+        
+        assertEquals(true, r1.equals(r2));
+        
+        r1 = new ReplayItem(123.0f);
+        r2 = new ReplayItem(123.0f);
+        
+        assertEquals(true, r1.equals(r2));
+
+        r1 = new ReplayItem("123");
+        r2 = new ReplayItem("123");
+        
+        assertEquals(true, r1.equals(r2));
+    }
+    
+    /**
+     * Test that calling equals between a ReplayItem and
+     * the raw value stored in it returns false
+     */
+    @Test
+    public void testInvalidEquals() 
+    {
+        ReplayItem r2 = new ReplayItem(123);
+    	assertEquals( false, r2.equals( new Integer( 123 ) ) );
     }
 
 }

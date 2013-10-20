@@ -1,5 +1,7 @@
 package deco2800.arcade.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -35,6 +37,8 @@ public class Player extends User {
 	private PrivacyField friendsPrivacy;
 	private PrivacyField gamesPrivacy;
 	private PrivacyField achievementsPrivacy;
+	
+	private PlayerPrivacyGlob playerPrivacy;
 
 	private Games games;
 	private Friends friends;
@@ -138,7 +142,7 @@ public class Player extends User {
 	 */
 	public Player(int playerID, String filepath, List<String> details,
 			Set<User> friendsList, Set<User> friendRequestsList,
-			Set<User> blockedList, Set<Game> gamesList, boolean[] privacy) {
+			Set<User> blockedList, Set<Game> gamesList, ArrayList<Boolean> privacy) {
 		super(playerID);
 		this.username = new Field(USERNAME_ID, details.get(0));
 		this.name = new Field(NAME_ID, details.get(1));
@@ -166,21 +170,8 @@ public class Player extends User {
 		if (blockedList != null) {
 			this.blocked.addAll(blockedList);
 		}
-
-		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID,
-				privacy[NAME_PRIVACY_ID - 1]);
-		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID,
-				privacy[EMAIL_PRIVACY_IDNAME_ID - 1]);
-		this.programPrivacy = new PrivacyField(PROGRAM_PRIVACY_ID,
-				privacy[PROGRAM_PRIVACY_ID - 1]);
-		this.bioPrivacy = new PrivacyField(BIO_PRIVACY_ID,
-				privacy[BIO_PRIVACY_ID - 1]);
-		this.friendsPrivacy = new PrivacyField(FRIENDS_PRIVACY_ID,
-				privacy[FRIENDS_PRIVACY_ID]);
-		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID,
-				privacy[GAMES_PRIVACY_ID]);
-		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
-				privacy[ACHIEVMENTS_PRIVACY_ID - 1]);
+		
+		this.playerPrivacy = new PlayerPrivacyGlob(privacy);
 		this.libraryStyle = new LibraryStyle();
 
 		/*
@@ -550,11 +541,10 @@ public class Player extends User {
 	 *            friends only.
 	 */
 	public void setNamePrivacy(boolean v) {
-		namePrivacy.setValue(v);
+		this.playerPrivacy.setNamePrivacy(v);
 		setChanged();
-		notifyObservers(namePrivacy);
+		notifyObservers(this.playerPrivacy);
 		clearChanged();
-
 	}
 
 	/**
@@ -564,7 +554,7 @@ public class Player extends User {
 	 *         friends only.
 	 */
 	public boolean getNamePrivacy() {
-		return namePrivacy.getValue();
+		return this.playerPrivacy.isNamePrivacy();
 	}
 
 	/**
@@ -575,12 +565,10 @@ public class Player extends User {
 	 *            for friends only.
 	 */
 	public void setEmailPrivacy(boolean v) {
-		emailPrivacy.setValue(v);
-		namePrivacy.setValue(v);
+		this.playerPrivacy.setEmailPrivacy(v);
 		setChanged();
-		notifyObservers(emailPrivacy);
+		notifyObservers(this.playerPrivacy);
 		clearChanged();
-
 	}
 
 	/**
@@ -590,7 +578,7 @@ public class Player extends User {
 	 *         friends only.
 	 */
 	public boolean getEmailPrivacy() {
-		return emailPrivacy.getValue();
+		return this.playerPrivacy.isEmailPrivacy();
 	}
 
 	/**
@@ -601,12 +589,10 @@ public class Player extends User {
 	 *            for friends only.
 	 */
 	public void setProgramPrivacy(boolean v) {
-		programPrivacy.setValue(v);
-		namePrivacy.setValue(v);
+		this.playerPrivacy.setProgramPrivacy(v);
 		setChanged();
-		notifyObservers(programPrivacy);
+		notifyObservers(this.playerPrivacy);
 		clearChanged();
-
 	}
 
 	/**
@@ -616,7 +602,7 @@ public class Player extends User {
 	 *         friends only.
 	 */
 	public boolean getProgramPrivacy() {
-		return programPrivacy.getValue();
+		return this.playerPrivacy.isProgramPrivacy();
 	}
 
 	/**
@@ -627,12 +613,10 @@ public class Player extends User {
 	 *            friends only.
 	 */
 	public void setBioPrivacy(boolean v) {
-		bioPrivacy.setValue(v);
-		namePrivacy.setValue(v);
+		this.playerPrivacy.setBioPrivacy(v);
 		setChanged();
-		notifyObservers(bioPrivacy);
+		notifyObservers(this.playerPrivacy);
 		clearChanged();
-
 	}
 
 	/**
@@ -642,7 +626,7 @@ public class Player extends User {
 	 *         friends only.
 	 */
 	public boolean getBioPrivacy() {
-		return bioPrivacy.getValue();
+		return this.playerPrivacy.isBioPrivacy();
 	}
 
 	/**
@@ -653,10 +637,9 @@ public class Player extends User {
 	 *            for friends only.
 	 */
 	public void setFriendsPrivacy(boolean v) {
-		friendsPrivacy.setValue(v);
-		namePrivacy.setValue(v);
+		this.playerPrivacy.setFriendsPrivacy(v);
 		setChanged();
-		notifyObservers(friendsPrivacy);
+		notifyObservers(this.playerPrivacy);
 		clearChanged();
 
 	}
@@ -668,7 +651,7 @@ public class Player extends User {
 	 *         friends only.
 	 */
 	public boolean getFriendsPrivacy() {
-		return friendsPrivacy.getValue();
+		return this.playerPrivacy.isFriendsPrivacy();
 	}
 
 	/**
@@ -679,12 +662,10 @@ public class Player extends User {
 	 *            for friends only.
 	 */
 	public void setGamesPrivacy(boolean v) {
-		gamesPrivacy.setValue(v);
-		namePrivacy.setValue(v);
+		this.playerPrivacy.setGamesPrivacy(v);
 		setChanged();
-		notifyObservers(gamesPrivacy);
+		notifyObservers(this.playerPrivacy);
 		clearChanged();
-
 	}
 
 	/**
@@ -694,7 +675,7 @@ public class Player extends User {
 	 *         friends only.
 	 */
 	public boolean getGamesPrivacy() {
-		return gamesPrivacy.getValue();
+		return this.playerPrivacy.isGamesPrivacy();
 	}
 
 	/**
@@ -705,12 +686,10 @@ public class Player extends User {
 	 *            false for friends only.
 	 */
 	public void setAchievementsPrivacy(boolean v) {
-		achievementsPrivacy.setValue(v);
-		namePrivacy.setValue(v);
+		this.playerPrivacy.setAchievementsPrivacy(v);
 		setChanged();
-		notifyObservers(achievementsPrivacy);
+		notifyObservers(this.playerPrivacy);
 		clearChanged();
-
 	}
 
 	/**
@@ -720,7 +699,7 @@ public class Player extends User {
 	 *         false for friends only.
 	 */
 	public boolean getAchievementsPrivacy() {
-		return achievementsPrivacy.getValue();
+		return this.playerPrivacy.isAchievementsPrivacy();
 	}
 
 	/**
@@ -736,18 +715,17 @@ public class Player extends User {
 		clearChanged();
 	}
 
-	/**
-	 * Update Player's library colour
-	 * 
-	 * @param colour
-	 *            Colour Scheme
+    /**
+	 * Update Player's library style
+	 *
+	 * @param style
+	 *            Library Style
 	 */
-	public void updateLibraryColour(int colour) {
-		libraryStyle.setColourScheme(colour);
-		setChanged();
-		notifyObservers(libraryStyle);
-		clearChanged();
+	public void setLibraryStyle(int style) {
+		libraryStyle.setLayout(style);
 	}
+
+
 
 	/**
 	 * Get Player's Library Style

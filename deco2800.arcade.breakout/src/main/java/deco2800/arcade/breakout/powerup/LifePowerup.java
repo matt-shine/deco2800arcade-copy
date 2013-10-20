@@ -4,9 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import deco2800.arcade.breakout.GameScreen;
+import deco2800.arcade.breakout.screens.GameScreen;
 
-
+/**
+ * Increases the lives for the life powerup
+ * @author Carlie Smits
+ *
+ */
 public class LifePowerup extends Powerup{
 
 	private final String img = "LIFE.png";

@@ -2,9 +2,14 @@ package deco2800.arcade.client.replay;
 
 import java.util.List;
 
+import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.*;
 
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.replay.exception.PlaybackException;
 import deco2800.arcade.protocol.replay.GetEventsRequest;
 import deco2800.arcade.protocol.replay.GetEventsResponse;
 
@@ -14,7 +19,7 @@ public class ReplayPlayback {
 	private long nextReplayTime = -1;
 	private int nextReplayIndex = -1;
 	
-	private final long CONSTANT_PLAYBACK_DEFAULT_INTERVAL = 1000;
+	private static final long CONSTANT_PLAYBACK_DEFAULT_INTERVAL = 1000;
 	
 	private long constantTimePlaybackInterval =
 	                                         CONSTANT_PLAYBACK_DEFAULT_INTERVAL;
@@ -28,11 +33,14 @@ public class ReplayPlayback {
 	private List<String> replayHistory;
 	
 	private Gson deserializer;
-	
+
+    private Logger logger = LoggerFactory.getLogger( ReplayHandler.class );
+    
 	public ReplayPlayback( ReplayHandler handler, NetworkClient client ) {
 		this.client = client;
 		this.handler = handler;
-		
+
+        PropertyConfigurator.configure( "src/main/resources/replay_log4j.properties" );
 
 	    GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
@@ -83,7 +91,7 @@ public class ReplayPlayback {
 	}
 	
 	public void playbackSession( Integer sessionId ) {
-		System.out.println( "Playing back " + sessionId );
+		logger.info( "Playing back session " + sessionId + "." );
 		requestEventsForSession( sessionId );
 	}
 	
@@ -91,8 +99,8 @@ public class ReplayPlayback {
 	 * Starts playback of game
 	 */
 	private void startPlayback() {
-		if ( this.replayHistory == null ) {
-			throw new RuntimeException( "Started replay with no data" );
+		if ( this.replayHistory == null || this.replayHistory.size() == 0 ) {
+			throw new PlaybackException( "Started replay with no data" );
 		}
 		playbackStartTime = System.currentTimeMillis();
 		lastPlaybackTime = playbackStartTime;
@@ -129,7 +137,6 @@ public class ReplayPlayback {
 	private void playNextNode()
 	{
         if ( this.nextReplayIndex < 0 ) {
-            // NOPE
             return;
         }
         ReplayNode node = deserializer.fromJson(

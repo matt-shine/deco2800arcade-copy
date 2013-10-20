@@ -5,6 +5,8 @@ import static org.mockito.Mockito.*;
 import org.junit.*;
 import org.mockito.Mockito;
 
+import deco2800.arcade.breakout.screens.GameScreen;
+
 public class ScoreTest {
 
 	GameScreen context = mock(GameScreen.class);

@@ -5,11 +5,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
-import deco2800.arcade.breakout.GameScreen;
+import deco2800.arcade.breakout.screens.GameScreen;
 
+/**
+ * Increases the number of balls on the screen for the increase number of 
+ * balls powerup
+ * @author Carlie Smits
+ *
+ */
 public class IncreaseBallNo extends Powerup{
 	private final String img = "increaseballno.png";
-	private Sprite sprite = new Sprite(new Texture(Gdx.files.classpath("imgs/" + img)));
+	private Sprite sprite = new Sprite
+			(new Texture(Gdx.files.classpath("imgs/" + img)));
 	private GameScreen context;
 	
 	/**

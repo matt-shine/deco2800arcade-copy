@@ -1,7 +1,5 @@
 package deco2800.arcade.arcadeui;
 
-
-
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
@@ -16,11 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 
-
 /**
  * 
  * @author Carl Beaverson
- *
+ * 
  */
 
 public class BettingWindow implements Screen {
@@ -31,21 +28,20 @@ public class BettingWindow implements Screen {
 	private Skin skin2;
 	private ShapeRenderer shapeRenderer;
 	private ArcadeUI arcadeUI;
-	
+
 	public BettingWindow(ArcadeUI ui) {
 		arcadeUI = ui;
 	}
-	
-	
+
 	public void show() {
 		shapeRenderer = new ShapeRenderer();
 		stage = new Stage();
 		ArcadeInputMux.getInstance().addProcessor(stage);
-        
+
 		/* Add player to servers list of lobby users */
 		ArcadeSystem.addPlayerToLobby();
-		
-		// Gui button & label Styles 		
+
+		// Gui button & label Styles
 		skin = new Skin();
 		final Skin skin = new Skin(Gdx.files.internal("loginSkin.json"));
 		skin.add("background", new Texture("homescreen_bg.png"));
@@ -75,7 +71,6 @@ public class BettingWindow implements Screen {
 		textFieldStyle.background = skin2.newDrawable("white", Color.DARK_GRAY);
 		skin2.add("default", textFieldStyle);
 
-
 		TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
 
 		textButtonStyle.up = skin2.newDrawable("white", Color.DARK_GRAY);
@@ -86,10 +81,9 @@ public class BettingWindow implements Screen {
 
 		skin2.add("default", textButtonStyle);
 
+		// Create buttons, labels and tables for layout purposes
+		// Changed open games
 
-		//Create buttons, labels and tables for layout purposes 
-		//Changed open games 
-		
 		TextButton button2 = new TextButton("Return to Lobby", skin);
 
 		TextButton button3 = new TextButton("Place Bet", skin);
@@ -98,11 +92,10 @@ public class BettingWindow implements Screen {
 
 		final Label invalidLabel = new Label("Bet not valid", skin);
 		invalidLabel.setVisible(false);
-		
+
 		final Table table = new Table();
 		final Table table2 = new Table();
 		final Table table3 = new Table();
-
 
 		final Table bettable = new Table();
 
@@ -113,27 +106,25 @@ public class BettingWindow implements Screen {
 
 		table3.setBackground(skin.getDrawable("background"));
 
-		//Add tables to stage.
+		// Add tables to stage.
 		stage.addActor(table3);
 		stage.addActor(bettable);
 		stage.addActor(table2);
 		stage.addActor(table);
 
-
 		// Add tables and set position.
-		
+
 		table3.add(betfield).width(200).height(35).padLeft(0).padTop(140);
 
 		table3.add(button3).width(100).height(35).padLeft(3).padTop(140);
-		
+
 		bettable.add(invalidLabel).padTop(250).padLeft(0);
 
 		table.add(button2).width(300).height(40).padLeft(0).padTop(600);
-	
 
 		// "Return to Menu" Button Event Listener
 		button2.addListener(new ChangeListener() {
-			public void changed (ChangeEvent event, Actor actor) {
+			public void changed(ChangeEvent event, Actor actor) {
 				dispose();
 				ArcadeSystem.setPlayerBetting(false);
 				ArcadeSystem.setMultiplayerEnabled(true);
@@ -142,39 +133,38 @@ public class BettingWindow implements Screen {
 			}
 		});
 
-		
 		button3.addListener(new ChangeListener() {
-			public void changed (ChangeEvent event, Actor actor) {
+			public void changed(ChangeEvent event, Actor actor) {
 				int bet = -1;
 				String input = betfield.getText();
 				try {
 					bet = Integer.parseInt(input);
-				} catch (Exception e) {	
+				} catch (Exception e) {
 					invalidLabel.setVisible(true);
 					return;
 				}
-				
-				if ((bet<1000) && (bet>0)) {
-					System.out.println("Bet Placed: " + betfield.getText());	
+
+				if ((bet < 1000) && (bet > 0)) {
+					System.out.println("Bet Placed: " + betfield.getText());
 					dispose();
 					ArcadeSystem.setPlayerBetting(false);
 					ArcadeSystem.setMultiplayerEnabled(true);
 					arcadeUI.setScreen(arcadeUI.getLobby());
-				}else {
+				} else {
 					System.out.println("Bet not valid");
 				}
-	
+
 			}
 		});
-		
+
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, 640, 360);
 
-		//Gdx.app.exit();
+		// Gdx.app.exit();
 	}
-	
+
 	public void refreshGames() {
-		
+
 	}
 
 	@Override
@@ -184,12 +174,11 @@ public class BettingWindow implements Screen {
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		Gdx.gl.glClearColor(0.2f, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
+
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 
 	}
-
 
 	@Override
 	public void dispose() {
@@ -215,7 +204,6 @@ public class BettingWindow implements Screen {
 	public void resize(int arg0, int arg1) {
 		// TODO Auto-generated method stub
 
-
 	}
 
 	@Override
@@ -223,7 +211,5 @@ public class BettingWindow implements Screen {
 		// TODO Auto-generated method stub
 
 	}
-	
-
 
 }

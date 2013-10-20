@@ -239,6 +239,7 @@ public class TicTacToe extends GameClient {
 		game = new Game();
 		game.id = "tictactoe";
 		game.name = "Tic Tac Toe";
+		game.description = "The game nobody can lose, and nobody can win.";
 	}
 
 	public Game getGame() {

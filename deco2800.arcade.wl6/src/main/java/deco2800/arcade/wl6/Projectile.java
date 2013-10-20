@@ -70,9 +70,20 @@ public class Projectile extends Mob {
 	
 	@Override
     public boolean isWalkableTile(GameModel model, int x, int y) {
-    	return WL6Meta.block(model.getMap().getTerrainAt(x, y)).texture == null ||
-    			((WL6Meta.hasDoorAt(x, y, model.getMap()) || WL6Meta.hasSecretDoorAt(x, y, model.getMap()) &&
-    			model.getCollisionGrid().getSolidAt(x, y) == 0));
+		boolean hasBlock = WL6Meta.block(model.getMap().getTerrainAt(x, y)).texture != null;
+		boolean hasDoor = WL6Meta.hasDoorAt(x, y, model.getMap());
+		boolean hasSecretDoor = WL6Meta.hasSecretDoorAt(x, y, model.getMap());
+		boolean isSolid = model.getCollisionGrid().getSolidAt(x, y) == 1;
+    	if (hasBlock) {
+    		return false;
+    	}
+    	if (hasDoor && isSolid) {
+    		return false;
+    	}
+    	if (hasSecretDoor && isSolid) {
+    		return false;
+    	}
+    	return true;
     }
     
     

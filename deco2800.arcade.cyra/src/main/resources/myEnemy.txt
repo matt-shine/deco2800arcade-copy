@@ -1,0 +1,137 @@
+myEnemy.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+myEnemy
+  rotate: false
+  xy: 2, 190
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: 5
+drill
+  rotate: false
+  xy: 96, 2
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: 1
+myEnemy
+  rotate: false
+  xy: 2, 96
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: 1
+myEnemy
+  rotate: false
+  xy: 378, 190
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: 9
+pentagram
+  rotate: false
+  xy: 2, 284
+  size: 127, 92
+  orig: 127, 92
+  offset: 0, 0
+  index: 0
+myEnemy
+  rotate: false
+  xy: 190, 96
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: 2
+drill
+  rotate: false
+  xy: 2, 2
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: 0
+myEnemy
+  rotate: false
+  xy: 96, 190
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: 6
+myEnemy
+  rotate: false
+  xy: 96, 96
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: 10
+pentagram
+  rotate: false
+  xy: 131, 284
+  size: 127, 92
+  orig: 127, 92
+  offset: 0, 0
+  index: 1
+myEnemy
+  rotate: false
+  xy: 284, 96
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: 3
+drill
+  rotate: false
+  xy: 284, 2
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: 3
+myEnemy
+  rotate: false
+  xy: 190, 190
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: 7
+pentagram
+  rotate: false
+  xy: 260, 284
+  size: 127, 92
+  orig: 127, 92
+  offset: 0, 0
+  index: 2
+myEnemy
+  rotate: false
+  xy: 378, 96
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: 4
+myEnemy
+  rotate: false
+  xy: 378, 2
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: 0
+drill
+  rotate: false
+  xy: 190, 2
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: 2
+myEnemy
+  rotate: false
+  xy: 284, 190
+  size: 92, 92
+  orig: 92, 92
+  offset: 0, 0
+  index: 8
+pentagram
+  rotate: false
+  xy: 2, 378
+  size: 127, 92
+  orig: 127, 92
+  offset: 0, 0
+  index: 3

@@ -332,11 +332,11 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 			batch.begin();
 			batch.draw(gameBackground, 0, 0, 800, 480);
-			
+			batch.end();
 			
 			drawLevel();
 			
-			
+			batch.begin();
 			if ((!movingLeft && !movingRight) || (movingLeft && movingRight)) {
 				batch.draw(monkeySit, monkeyX, monkeyY, 50, 50);
 			} else if (monkeyRun % 10 == 0) {

@@ -9,6 +9,7 @@ pong
 tictactoe
 ui
 breakout
+blackjack
 deerforest
 mixmaze
 minigolf
@@ -26,4 +27,3 @@ wl6
 statistics
 snakeLadder
 cyra
-blackjack

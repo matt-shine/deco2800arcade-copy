@@ -73,7 +73,7 @@ public class PacView {
 			case 3: colour = "orange"; break;
 			default: colour = "red"; break;
 			}
-			spriteSheet = new Texture(Gdx.files.internal(colour + "ghostmove.png"));
+			spriteSheet = new Texture(Gdx.files.internal(colour + "ghostmove_tran.png"));
 			// splits into columns and rows then puts them into one array in order
 			tmp = TextureRegion.split(spriteSheet, GHOST_SIDE_PIX, GHOST_SIDE_PIX);
 			for (int j = 0; j < MOVER_SPRITE_NUM; j++) {

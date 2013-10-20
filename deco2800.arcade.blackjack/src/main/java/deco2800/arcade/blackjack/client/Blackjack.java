@@ -21,7 +21,7 @@ import deco2800.arcade.client.network.listener.CasinoListener;
  * @author Dane Cousins, Kristian Zembic, Robert Macdonald, Scott Fredericks, Fionntan Shanahan
  *
  */
-@ArcadeGame(id="blackjack")
+@ArcadeGame("id=blackjack")
 public class Blackjack extends GameClient {
 	
 

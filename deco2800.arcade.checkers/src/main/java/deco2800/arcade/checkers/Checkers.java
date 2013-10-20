@@ -19,10 +19,7 @@ import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.listener.ReplayListener;
-import deco2800.arcade.client.replay.ReplayEventListener;
-import deco2800.arcade.client.replay.ReplayHandler;
-import deco2800.arcade.client.replay.ReplayNode;
-import deco2800.arcade.client.replay.ReplayNodeFactory;
+import deco2800.arcade.client.replay.*;
 /**
  * A Checkers game for testing replay feature
  * @author shewwiii
@@ -97,7 +94,8 @@ public class Checkers extends GameClient {
         //Declare an event to be registered in the factory, we can pass arrays.
         ReplayNodeFactory.registerEvent("piece_move", new String[]{"piece", "move_x_val", "move_y_val"});
         ReplayNodeFactory.registerEvent("select_piece", new String[]{"chosen", "array_i", "array_j"});
-        
+
+		replayHandler.requestSessionList(getGame().id);
       //Start session - tell the server we will be recording soon
       		replayHandler.startSession( getGame().id, player.getUsername() );
         //end code for replay API
@@ -319,12 +317,14 @@ public class Checkers extends GameClient {
 				statusMessage = players[1] + " Wins " + scores[1] + " - " + scores[0] + "!";
 				gameState = GameState.GAMEOVER;
 				//start code for replay API
+				replayHandler.finishRecording();
 				replayHandler.endCurrentSession();
 				//end code for replay API
 			} else if (scores[0] == WINNINGSCORE) {
 				statusMessage = players[0] + " Wins " + scores[0] + " - " + scores[1] + "!";
 				gameState = GameState.GAMEOVER;
 				//start code for replay API
+				replayHandler.finishRecording();
 				replayHandler.endCurrentSession();
 				//end code for replay API
 			}
@@ -357,12 +357,14 @@ public class Checkers extends GameClient {
 				statusMessage = players[1] + " Wins " + scores[1] + " - " + scores[0] + "!";
 				gameState = GameState.GAMEOVER;
 				//start code for replay API
+				replayHandler.finishRecording();
 				replayHandler.endCurrentSession();
 				//end code for replay API
 			} else if (scores[0] == WINNINGSCORE) {
 				statusMessage = players[0] + " Wins " + scores[0] + " - " + scores[1] + "!";
 				gameState = GameState.GAMEOVER;
 				//start code for replay API
+				replayHandler.finishRecording();
 				replayHandler.endCurrentSession();
 				//end code for replay API
 			}
@@ -372,7 +374,12 @@ public class Checkers extends GameClient {
 	    case GAMEOVER: //The game has been won, wait to exit
 	    	if (Gdx.input.isTouched()) {
 	    		//start code for replay API
-	    		create();
+	    		for (int i=0; i<4; i++) {
+	    			myPieces[i].bounds.set(squares[2][i].bounds.x + 10, squares[2][i].bounds.y +10, 30, 30);
+	    			theirPieces[i].bounds.set(squares[0][i].bounds.x + 10, squares[0][i].bounds.y +10, 30, 30);
+
+	    		}
+	    		
 	    		gameState = GameState.REPLAY;
 		    	//Start replay of last session
 		    	replayHandler.playbackLastSession();
@@ -478,6 +485,9 @@ public class Checkers extends GameClient {
 							}
 						}
 						movePiece(toMoveNum, 100f, -100f);
+						//start code for replay API
+						replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, 100f, -100f));
+						//end code for replay API
 						myPieces[p].bounds.y = -90;
 						System.out.println("moved 465");
 
@@ -509,6 +519,9 @@ public class Checkers extends GameClient {
 							}
 						}
 						movePiece(toMoveNum, 100f, -100f);
+						//start code for replay API
+						replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, 100f, -100f));
+						//end code for replay API
 						myPieces[p].bounds.y = -90;
 						System.out.println("moved 465");
 
@@ -549,6 +562,9 @@ public class Checkers extends GameClient {
 								}
 								// edible, has free space after
 								movePiece(toMoveNum, -100f, -100f);
+								//start code for replay API
+								replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, 100f, -100f));
+								//end code for replay API
 								myPieces[r].bounds.y = -90;
 								System.out.println("moved 457");
 								if (toMove.bounds.y == 110) { //last row
@@ -592,6 +608,9 @@ public class Checkers extends GameClient {
 									}
 									// edible, has free space after
 									movePiece(toMoveNum, -100f, -100f);
+									//start code for replay API
+									replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, -100f, -100f));
+									//end code for replay API
 									myPieces[t].bounds.y = -90;
 									System.out.println("moved 417");
 									scores[1] += 1;
@@ -637,6 +656,9 @@ public class Checkers extends GameClient {
 										}
 										// edible, has free space after
 										movePiece(toMoveNum, -100f, -100f);
+										//start code for replay API
+										replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, -100f, -100f));
+										//end code for replay API
 										myPieces[t].bounds.y = -90;
 										System.out.println("moved 457");
 										if (toMove.bounds.y == 110) { //last row
@@ -652,6 +674,9 @@ public class Checkers extends GameClient {
 								}
 							} else {
 								movePiece(toMoveNum, 100f, -100f);
+								//start code for replay API
+								replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, 100f, -100f));
+								//end code for replay API
 								myPieces[r].bounds.y = -90;
 								System.out.println("moved 465");
 
@@ -674,6 +699,9 @@ public class Checkers extends GameClient {
 			if (toMove.bounds.x == 80) { // is far left
 				// advance right
 				movePiece(toMoveNum, 50f, -50f);
+				//start code for replay API
+				replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, 50f, -50f));
+				//end code for replay API
 				System.out.println("moved 4" + toMoveNum);
 
 				if (toMove.bounds.y == 110) { //last row
@@ -687,6 +715,9 @@ public class Checkers extends GameClient {
 			} else if (toMove.bounds.x == 230) {
 				// advance left
 				movePiece(toMoveNum, -50f, -50f);
+				//start code for replay API
+				replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, -50f, -50f));
+				//end code for replay API
 				System.out.println("moved 5");
 
 				if (toMove.bounds.y == 110) { //last row
@@ -701,6 +732,9 @@ public class Checkers extends GameClient {
 				for (int q = 0; q < 4; q++) { 
 					if (toMove.bounds.y - 50 == myPieces[q].bounds.y && toMove.bounds.x + 50 == myPieces[q].bounds.x) {
 						movePiece(toMoveNum, -50f, -50f);
+						//start code for replay API
+						replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, -50f, -50f));
+						//end code for replay API
 						System.out.println("moved 6");
 
 						if (toMove.bounds.y == 110) { //last row
@@ -713,6 +747,9 @@ public class Checkers extends GameClient {
 						break outerloop;
 					} else if (toMove.bounds.y - 50 == theirPieces[q].bounds.y && toMove.bounds.x + 50 == theirPieces[q].bounds.x) {
 						movePiece(toMoveNum, -50f, -50f);
+						//start code for replay API
+						replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, -50f, -50f));
+						//end code for replay API
 						System.out.println("moved 6");
 
 						if (toMove.bounds.y == 110) { //last row
@@ -726,6 +763,9 @@ public class Checkers extends GameClient {
 					}
 				}
 				movePiece(toMoveNum, 50f, -50f);
+				//start code for replay API
+				replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, 50f, -50f));
+				//end code for replay API
 				System.out.println("moved 7");
 
 				if (toMove.bounds.y == 110) { //last row
@@ -835,7 +875,6 @@ public class Checkers extends GameClient {
 	public static void movePiece(int toMoveNum, float moveValX, float moveValY) { //created for the replay API
 		//Pieces toMove = theirPieces[toMoveNum];
 		theirPieces[toMoveNum].move(moveValX, moveValY);
-		replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("move_piece", toMoveNum, moveValX, moveValY));
 	}
 	
 	public static void selectPiece(int chosen, int i, int j) { //created for the replay API

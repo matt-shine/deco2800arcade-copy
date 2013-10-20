@@ -12,7 +12,6 @@ import deco2800.arcade.towerdefence.model.*;
 import deco2800.arcade.towerdefence.model.creationclasses.Enemy;
 import deco2800.arcade.towerdefence.model.creationclasses.Projectile;
 import deco2800.arcade.towerdefence.model.pathfinding.Path;
-import deco2800.arcade.towerdefence.model.pathfinding.Path.Step;
 
 public class TDTests {
 

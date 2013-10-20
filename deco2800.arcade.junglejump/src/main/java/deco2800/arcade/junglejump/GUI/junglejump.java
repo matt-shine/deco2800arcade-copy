@@ -289,15 +289,12 @@ public class junglejump extends GameClient implements InputProcessor {
 					isFalling = true;
 				} else isFalling = false;
 			}
-			if ((monkeyY < 3)) {
-				isFalling = false;
-			}
 			if (isFalling) {
 				if (isOnPlatform(monkeyX, monkeyY)) {
 					isFalling = false;
 				} else monkeyY += (-9.8f / 2f);
 			}
-			if(monkeyY <= 5) {
+			if(monkeyY <= 0) {
 				playDeathSound();
 				killMonkey();
 			}

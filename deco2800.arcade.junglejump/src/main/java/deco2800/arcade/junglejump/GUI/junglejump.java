@@ -145,7 +145,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyYoriginal = 0f;
 		// Replace "file" with chosen music
 		
-		/*URL path = this.getClass().getResource("/");
+		URL path = this.getClass().getResource("/");
 		
 		try {
 			String resource = path.toString().replace(".arcade/build/classes/main/", 
@@ -179,7 +179,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			menuSound.open(audioIn2);
 		} catch (Exception e) {
 			// IO Exception or problem with sound format
-		}*/
+		}
 
 		createWorld();
 
@@ -344,7 +344,7 @@ public class junglejump extends GameClient implements InputProcessor {
 				} else monkeyY += (-9.8f / 2f);
 			}
 			if(monkeyY <= 5) {
-				//playDeathSound();
+				playDeathSound();
 				killMonkey();
 			}
 			if (jumping) {
@@ -503,7 +503,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		batch.end();
 	}
 	
-/*	public  void playPickupSound() {
+	public  void playPickupSound() {
 		URL path = this.getClass().getResource("/");
 		try{ 
 			String resource = path.toString().replace(".arcade/build/classes/main/", 
@@ -538,7 +538,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			Gdx.app.log(junglejump.messages,
 					"Audio File for Death Music Not Found");
 		}
-	}*/
+	}
 
 	public boolean isOnPlatform(float x, float y) {
 		int size = currentLevel.platformAmount();
@@ -563,7 +563,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					p.setY(10000);
 					
 					// Play banana sound
-					//playPickupSound();
+					playPickupSound();
 					
 					return true;
 				} else {
@@ -736,7 +736,7 @@ public class junglejump extends GameClient implements InputProcessor {
 				
 				
 				// Play sound effect for jumping
-				/*URL path = this.getClass().getResource("/");
+				URL path = this.getClass().getResource("/");
 				try{ 
 					String resource = path.toString().replace(".arcade/build/classes/main/", 
 							".arcade.junglejump/src/main/").replace("file:", "") + 
@@ -751,7 +751,7 @@ public class junglejump extends GameClient implements InputProcessor {
 				} catch (Exception e) {
 					Gdx.app.log(junglejump.messages,
 							"Audio File for Jump Music Not Found");
-				}*/
+				}
 			}
 		}
 		if (keycode == Keys.UP) {
@@ -779,9 +779,9 @@ public class junglejump extends GameClient implements InputProcessor {
 			// Climb down
 			if (gameState != GameState.INPROGRESS) {
 				if (butY > QUIT) {
-					//menuSound.start();
+					menuSound.start();
 					butY -= 37.5;
-					//menuSound.stop();
+					menuSound.stop();
 				}
 			}
 		}

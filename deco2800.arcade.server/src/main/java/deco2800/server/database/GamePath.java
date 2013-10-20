@@ -80,7 +80,7 @@ public class GamePath {
 		try {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SELECT * FROM GAMEPATH WHERE"
-					+ " gameID=" + gameID);
+					+ " gameID='" + gameID + "'");
 			String result = findPath(resultSet, gameID);
 
 			return result;
@@ -164,7 +164,7 @@ public class GamePath {
 		try {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SELECT * FROM GAMEPATH WHERE"
-					+ " gameID=" + gameID);
+					+ " gameID='" + gameID + "'");
 			String result = findMD5(resultSet, gameID);
 
 			return result;

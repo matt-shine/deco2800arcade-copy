@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 
 import deco2800.arcade.client.ArcadeInputMux;
@@ -159,7 +160,7 @@ public class SettingsScreen implements Screen {
 		playButton.pad(20);
 		networkButton = new TextButton("Test Network", skin);
 		avatarPng = "avatars.png";
-		skin.add("background", new Texture(Gdx.files.internal("settings.png")));
+		//skin.add("mixmaze-background", new Texture(Gdx.files.internal("settings.png")));
 		difficultyList = new List(new String[] { "Beginner", "Intermediate",
 				"Advanced" }, skin);
 
@@ -284,7 +285,6 @@ public class SettingsScreen implements Screen {
 		settingsPanel.add(difficultyList).padBottom(170);
 		settingsPanel.row();
 		settingsPanel.add(playButton);
-		settingsPanel.row();
 		settingsPanel.add(networkButton);
 	}
 
@@ -306,10 +306,11 @@ public class SettingsScreen implements Screen {
 		float settingsWidth = (float) (Gdx.graphics.getWidth() / 2.56);
 		float textWidth = (float) (Gdx.graphics.getWidth() / 5.12);
 		float playerWidth = (float) (Gdx.graphics.getWidth() / 4.8301); // 256
-		Drawable background = skin.getDrawable("background");
+		Drawable background = new TextureRegionDrawable(
+				new TextureRegion(new Texture(Gdx.files.internal("settings.png"))));
 
 		rootTable.setFillParent(true);
-		rootTable.setBackground(background);
+		//rootTable.setBackground(background);
 		rootTable.top().left(); // so that cells are added from the top instead
 								// of center
 		rootTable.add(settingsPanel).width(settingsWidth).height(celHeight)

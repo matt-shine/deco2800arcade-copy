@@ -76,7 +76,6 @@ public final class Achievements {
 			gameClient.incrementAchievement(achievementID);
 		}
 		catch(Exception ex) {
-			System.out.println(String.format("Incrementing achievment %s failed.", achievementID));
 		}
 	}
 	

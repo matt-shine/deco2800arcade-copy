@@ -73,7 +73,8 @@ public class junglejump extends GameClient implements InputProcessor {
 	
 	/* Game Sate Enum - Used for Menu Handling */
 	private enum GameState {
-		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS, CONTINUE, PAUSE, OPTIONS
+		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS, CONTINUE, PAUSE, OPTIONS,
+		SELECT_LEVEL
 	}
 	private GameState gameState;
 	
@@ -122,6 +123,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	BitmapFont achievementDescriptionFont;
 	BitmapFont achievementThresholdFont;
 	Texture achievementIconTexture;
+	String levelSelectText;
 
 	public static void main(String[] args) {
 		ArcadeSystem.goToGame("junglejump");
@@ -454,6 +456,28 @@ public class junglejump extends GameClient implements InputProcessor {
 			camera.update();
 			super.render();
 			break;
+		case SELECT_LEVEL:
+			Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+			batchContinue.setProjectionMatrix(camera.combined);
+		
+			Gdx.gl.glEnable(GL10.GL_BLEND);
+			Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+			shapeRenderer.begin(ShapeType.FilledRectangle);
+			shapeRenderer.filledRect(227, 117, 266, 106, Color.BLACK,
+					Color.BLACK, Color.BLACK, Color.BLACK);
+			shapeRenderer.filledRect(230, 120, 260, 100, Color.BLUE,
+					Color.BLUE, Color.BLUE, Color.BLUE);
+			shapeRenderer.end();
+			Gdx.gl.glDisable(GL10.GL_BLEND);
+			batchContinue.begin();
+			// Prompt to Continue previous Game
+			achievementTitleFont.draw(batchContinue, levelSelectText, 240, 200);
+			achievementTitleFont.draw(batchContinue, "Press 1 to 5", 310, 150);
+
+			batchContinue.end();
+			camera.update();
+			super.render();
+			break;
 		}
 
 	}
@@ -692,6 +716,10 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 			if (butY == OPTIONS) {
 				gameState = GameState.OPTIONS;
+			}
+			if (butY == LEVEL_SELECT) {
+				levelSelectText = "Which world?";
+				gameState = GameState.SELECT_LEVEL;
 			}
 		}
 		if (keycode == Keys.BACKSPACE) {

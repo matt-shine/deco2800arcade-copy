@@ -130,6 +130,7 @@ public class CommunicationView extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				cardLayout.show(cardPanel, "1");
 				communicationNetwork.setCurrentChat(null);
+				outputArea.setText("");
 			}
 		});
 
@@ -141,9 +142,6 @@ public class CommunicationView extends JPanel {
 	}
 
 	public void addLabel(JLabel label) {
-
-		System.out.println("Attempting to addLabel");
-		
 		label.setBackground(Color.WHITE);
 		label.setOpaque(true);
 		label.setHorizontalAlignment(SwingConstants.CENTER);

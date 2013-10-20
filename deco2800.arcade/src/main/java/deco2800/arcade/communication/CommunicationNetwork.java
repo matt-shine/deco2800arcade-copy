@@ -94,7 +94,6 @@ public class CommunicationNetwork {
 		// Create chat-friendly string
 		date = new Date();
 		String chatLine = sdf.format(date) + " - " + textMessage.getSenderUsername() + ": " + textMessage.getText();
-		//node.addMessage(chatLine, textMessage.getSenderUsername());
 		node.addMessage(chatLine);
 		
 		if (currentChat == node){
@@ -199,15 +198,7 @@ public class CommunicationNetwork {
 	public void receiveChatHistory(ChatHistory receivedHistory) {
 		chatNodes = receivedHistory.getChatHistory();
 		for (Entry<Integer, ChatNode> entry : chatNodes.entrySet()) {
-			//view.addChatNode(entry.getValue(), entry.getValue().getOwner());
-
-			/*
-			ChatMessage<String, String> line = entry.getValue()
-					.getChatHistory().peek();
-			*/
-			//controller.addChatLabel(entry.getValue(), line.getUsername());
 			controller.addChatLabel(entry.getValue(), entry.getValue().getOwner());
-			
 		}
 	}
 }

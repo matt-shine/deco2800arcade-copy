@@ -340,8 +340,7 @@ public class Arcade extends JFrame {
 		creditBalanceRequest.username = myUsername;
 		this.client.sendNetworkObject(creditBalanceRequest);
 		
-		System.out.println("Connected with ID: " + myID + " and Username: " + player.getUsername());
-	
+		//Two-way Chat
 		if (myID == 1501){ //This ID belongs to debugChat1
 			List<Integer> chat = new ArrayList<Integer>(); 
 			chat.add(1500); //debugChat
@@ -349,9 +348,11 @@ public class Arcade extends JFrame {
 			this.communicationNetwork.createChat(chat);
 		}
 		
+		//Three-way Chat
 		if (myID == 1502){ //This ID belongs to debugChat2 
 			List<Integer> chat = new ArrayList<Integer>(); 
 			chat.add(1500); //debugChat
+			chat.add(1501); //debugChat1
 			chat.add(1502); //debugChat2 
 			this.communicationNetwork.createChat(chat); 
 		}

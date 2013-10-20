@@ -102,11 +102,6 @@ public class CommunicationController {
 
 					if (network.getCurrentChat() != node){
 						network.setCurrentChat(node);
-						/*
-						for (ChatMessage<String, String> line : node.getChatHistory()){
-							view.appendOutputArea(line.getMessage());
-						}
-						*/
 						for (String line : node.getChatHistory()){
 							view.appendOutputArea(line);
 						}
@@ -144,7 +139,7 @@ public class CommunicationController {
 
 	public void receiveText(TextMessage message) {
 		Date date = new Date();
-		view.appendOutputArea("\n" + sdf.format(date) + " - " + message.getSenderUsername() + ": " + message.getText());
+		view.appendOutputArea(sdf.format(date) + " - " + message.getSenderUsername() + ": " + message.getText());
 	}
 	
 	public void revieceNotification(ChatNode node) {

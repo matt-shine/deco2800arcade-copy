@@ -168,7 +168,7 @@ public class HashStorage {
 		// Get a connection to the database
 		int id = 0;
 		Connection connection1 = Database.getConnection();
-		try {
+		try {			
 			PreparedStatement statement = null;
 			statement = connection1.prepareStatement("SELECT * FROM PLAYERS");
 			ResultSet result = statement.executeQuery();

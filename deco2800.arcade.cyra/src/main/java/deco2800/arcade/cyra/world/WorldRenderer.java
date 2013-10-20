@@ -4,9 +4,7 @@ import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.TextureAtlasLoader.TextureAtlasParameter;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
@@ -23,12 +21,9 @@ import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.MathUtils;
-//import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
 import com.badlogic.gdx.utils.Array;
 import deco2800.arcade.cyra.model.*;
@@ -54,7 +49,6 @@ public class WorldRenderer {
 	Player ship;
 	Sword sword;
 	//Follower follower;
-	Walker walker;
 	private ParallaxCamera cam;
 	Integer rightCyraCount, leftCyraCount, rightFrameCounter, leftFrameCounter;
 	private BitmapFont font, fontBig;
@@ -62,21 +56,15 @@ public class WorldRenderer {
 	jumperBodyTexture, jumperFrontArmTexture, jumperFrontLegTexture, jumperFrontArmJumpingTexture,jumperFrontLegJumpingTexture,
 	wallTexture, sword1, sword2, sword3;
 	private TextureRegion cyraFrame;
-	private TextureRegion walkerRegion;
 	private TextureAtlas groundTextureAtlas, laserTextures, explosionTextures, boss1Atlas, bossRam, firestarter, myEnemy;
 	private TextureRegion boss1body, boss1head0, boss1head1, boss1arms;
-	private Animation followerAnimation, cyraRightAnimation, cyraLeftAnimation; 
+	private Animation cyraRightAnimation, cyraLeftAnimation; 
 	float width, height;
-	private Array<Bullet> bullets;
 	private Array<Enemy> enemies;
-	Iterator<Bullet> bItr;
 	Iterator<Enemy> eItr;
-	private Bullet b;
 	private Enemy e;
-	private Array<CutsceneObject> csObjects;
 	private Array<MovablePlatform> mvPlatforms;
 	private Array<BlockMaker> blockMakers;
-	//private float rotationArms;
 	private float sceneBarHeight;
 	private boolean enemyWithHealthOnScreen = false;
 	private float healthPercentage;
@@ -84,15 +72,12 @@ public class WorldRenderer {
 	private float redScreenAlpha;
 	private ParallaxLayer parallaxLayer;
 	
-	//attempting to use maps
 	TileMapRenderer tileMapRenderer;
-	//OrthogonalTiledMapRenderer oRenderer;
-	//TiledMap map;
-	//TileAtlas mapAtlas;
+	
 	
 	private boolean blinkShip;
 	
-	private static final int[] layersList = { 0 };
+	
 	
 	
 	//debug
@@ -111,26 +96,6 @@ public class WorldRenderer {
 		cam.update();
 		
 		
-		//not good
-		//world.setRenderer(this);
-		
-		//make the map NOT SURE IF GOOD
-		/*map = TiledLoader.createMap(Gdx.files.internal("level.tmx"));
-		mapAtlas = new TileAtlas(map, Gdx.files.internal("level1"));
-		
-		tileMapRenderer = new TileMapRenderer(map, mapAtlas, 32, 32, 1, 1);*/
-		
-		
-		
-		
-		
-		//was using number of tiles to show each direction
-		
-		/*width = 24;
-		height = 15;*/
-		
-		//this is important for different phone sizes. about cutting off stuff on smaller screens etc
-		//cam.setToOrtho(false, width, height);
 		
 		
 		init();
@@ -139,38 +104,17 @@ public class WorldRenderer {
 	public void render() {
 		ship = world.getShip();
 		sword = world.getSword();
-		//follower = world.getFollower();
 		enemies = world.getEnemies();
-		bullets = world.getBullets();
-		csObjects = world.getCutsceneObjects();
 		mvPlatforms = world.getMovablePlatforms();
 		blockMakers = world.getBlockMakers();
 		
-		//System.out.println("Sxy: " + ship.getPosition().x+","+ship.getPosition().y+" Cwh: "+cam.viewportWidth+","+cam.viewportHeight);
-		/*if(ship.getPosition().x > cam.viewportWidth/2 && ship.getPosition().y > cam.viewportHeight/2) {
-			cam.position.set(ship.getPosition().x, ship.getPosition().y, 0);
-		}*/
-		//cam.position.x = ship.getPosition().x;
-		//cam.position.y = ship.getPosition().y;
 		
-		/* Camera code needs to be fixed later on. Currently it's set to always
-		 * follow the sprite so that camera's updated properly when reset*/
 		
 		
 		
 		cam.update();
 		
-		//batch.setProjectionMatrix(cam.combined);
 		
-		//ANIMATIONS
-		//followerFrame = followerAnimation.getKeyFrame(e.getStateTime(), true);
-		/*System.out.println(followerAnimation);
-		System.out.println(follower.getStateTime());
-		System.out.println(followerAnimation.getKeyFrame(follower.getStateTime(), true));
-		System.out.println(followerFrame);
-		System.out.println(testRegion);*/
-		
-		//tileMapRenderer.render(cam);
 		
 		drawLevel(batch);
 		drawGameObjects(batch);
@@ -298,39 +242,14 @@ public class WorldRenderer {
 		batch.end();
 		
 		/* Draw tiled layers */
-		/*tileMapRenderer.setView(cam.calculateParallaxMatrix(0.25f, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
 		
-		tileMapRenderer.render(new int[]{0});
-		tileMapRenderer.setView(cam.calculateParallaxMatrix(0.5f, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
-		tileMapRenderer.render(new int[]{1});
-		tileMapRenderer.setView(cam.calculateParallaxMatrix(1, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
-		tileMapRenderer.render(new int[]{2});*/
-		
-		//tileMapRenderer.getProjectionMatrix().set(cam.combined);
-		//tileMapRenderer.render(cam, new int[]{0, 1, 2});
-		//tileMapRenderer.render(cam.position.x-cam.viewportWidth/2, cam.position.y-cam.viewportHeight/2,
-			//	cam.viewportWidth, cam.viewportHeight);
-		//tileMapRenderer.render(cam.position.x, cam.position.y, cam.viewportWidth*2, cam.viewportHeight*2);
-		/*tileMapRenderer.getProjectionMatrix().set(cam.calculateParallaxMatrix(0.25f, 1));
-		tileMapRenderer.render(cam, new int[]{0});
-		tileMapRenderer.getProjectionMatrix().set(cam.calculateParallaxMatrix(0.5f, 1));
-		tileMapRenderer.render(cam, new int[]{1});*/
-		//tileMapRenderer.render(cam.);
 		tileMapRenderer.getProjectionMatrix().set(cam.calculateParallaxMatrix(1, 1));
-		//tileMapRenderer.getProjectionMatrix().set(cam.combined);
 		
-		/*Vector3 tmp = new Vector3();
-		tmp.set(0,0,0);
-		cam.unproject(tmp);
-		tileMapRenderer.render((int) tmp.x, (int) tmp.y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());*/
-		//tileMapRenderer.render(cam, new int[]{3}); // THIS IS ONLY UNTIL layer 2's graphics are complete
-		//tileMapRenderer.render(cam, new int[]{2});
 		tileMapRenderer.render(cam, new int[]{0,1});
 		
 		
 		
-		//tileMapRenderer.render((int) cam.position.x-cam.viewportWidth/2, (int) cam.position.y-cam.viewportHeight/2, 999, 999,
-			//	new int[]{2});
+		
 		
 		
 		
@@ -522,17 +441,7 @@ public class WorldRenderer {
 					batch.draw(log, xPos, (e.getPosition().y + 0.6f), e.getWidth()/2, e.getHeight()/2, log.getWidth()/32f/2, log.getHeight()/32f/2,0.2f,0.2f,90,
 							0,0,log.getWidth(), log.getHeight(), se.isFacingRight(), false);
 				}
-			}
-			else if (e.getClass() == Zombie.class){
-				batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
-						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
-						shipTexture.getHeight(), false, false);				
-			}
-			else if ((e.getClass() == EnemySpiderBossPopcorn.class)){
-				batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
-						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
-						shipTexture.getHeight(), false, false);
-			} else if (e.getClass() == Zombie.class){
+			} else if ((e.getClass() == EnemySpiderBossPopcorn.class)){
 				batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
 						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
 						shipTexture.getHeight(), false, false);
@@ -699,21 +608,6 @@ public class WorldRenderer {
 				healthName = e.getHealthName();
 			}
 		}
-		bItr = bullets.iterator();
-		while(bItr.hasNext()) {
-			b = bItr.next();
-			batch.draw(bulletTexture, b.getPosition().x, b.getPosition().y, b.getWidth() /2, b.getHeight()/2,
-					b.getWidth(), b.getHeight(), 1, 1, b.getRotation(), 0, 0, bulletTexture.getWidth(),
-					bulletTexture.getHeight(), false, false);
-		}
-		
-		for (CutsceneObject csObj: csObjects) {
-			//System.out.println("Texture: "+csObj.getTexture());
-			//batch.draw(csObj.getTexture(), csObj.getPosition().x, csObj.getPosition().y);
-			batch.draw(csObj.getTexture(), csObj.getPosition().x, csObj.getPosition().y, csObj.getWidth() /2, csObj.getHeight()/2,
-					csObj.getWidth(),csObj.getHeight(), 1, 1, csObj.getRotation(), 0, 0, csObj.getTexture().getWidth(),
-					csObj.getTexture().getHeight(), false, false);
-		}
 		
 		
 		
@@ -871,17 +765,7 @@ public class WorldRenderer {
 			for (Rectangle r: e.getPlayerDamageBounds()) {
 				sr.rect(r.x, r.y, r.width, r.height);
 			}
-			if (e.getClass() == Walker.class) {
-				for (int i=0; i<8; i++) {
-					WalkerPart wp = ((Walker)e).getPart(i);
-					//System.out.println("Id: " + wp.getId() + ", (x,y): " + wp.getPosition().x + ","+wp.getPosition().y+")");
-					//System.out.println("Bounds: "+wp.getBounds().x+","+wp.getBounds().y+","+wp.getBounds().width+","+wp.getBounds().height);
-					
-					sr.rect(wp.getBounds().x, wp.getBounds().y, wp.getBounds().width, wp.getBounds().height);
-					
-					
-				}
-			} 
+			
 			sr.end();
 			sr.begin(ShapeType.Line);
 			if (e.getClass() == LaserBeam.class) {
@@ -898,14 +782,6 @@ public class WorldRenderer {
 			
 		}
 		sr.begin(ShapeType.Rectangle);
-		for (CutsceneObject csObj: csObjects) {
-			sr.rect(csObj.getPosition().x, csObj.getPosition().y, csObj.getWidth(), csObj.getHeight());
-		}
-		bItr = bullets.iterator();
-		while(bItr.hasNext()) {
-			b = bItr.next();
-			sr.rect(b.getBounds().x, b.getBounds().y, b.getBounds().width, b.getBounds().height);
-		}
 		sr.rect(world.sRec.x, world.sRec.y, world.sRec.width, world.sRec.height);
 		
 		
@@ -928,8 +804,7 @@ public class WorldRenderer {
 	}
 	
 	private void init() {
-		csObjects = new Array<CutsceneObject>();
-
+		
 		textBatch = new SpriteBatch();
 		font = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);
 		fontBig = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);

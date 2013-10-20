@@ -27,7 +27,6 @@ import deco2800.arcade.cyra.model.PartTween;
 import deco2800.arcade.cyra.model.ResultsScreen;
 import deco2800.arcade.cyra.model.Player;
 import deco2800.arcade.cyra.model.SoldierBoss;
-import deco2800.arcade.cyra.model.WalkerPart;
 import deco2800.arcade.cyra.model.WallBoss;
 import deco2800.arcade.cyra.model.WarningOverlay;
 

@@ -2,7 +2,6 @@ package deco2800.arcade.cyra.world;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import deco2800.arcade.cyra.model.CutsceneObject;
 import deco2800.arcade.cyra.model.MovableEntity;
 import deco2800.arcade.cyra.model.ResultsScreen;
 import deco2800.arcade.cyra.model.Player;

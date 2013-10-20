@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.util.Random;
 import java.util.Vector;
 
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 
@@ -112,32 +113,32 @@ public class Controller extends KeyAdapter{
 				int count = 0;      
 				while(true){
 					pplane.pplaneMove();
-					// add bullet.
+					// Add bullet. Gun upgrade.
 					if(DestoryNum < 30){
 						if(PPlane.isFired && count % 5 == 0){
-							PBullet pbullet1 =
-									new PBullet(pplane.x + 20, pplane.y + 50, 8, 15);
+							PBullet pbullet1 = new PBullet(pplane.x + 20, 
+											pplane.y + 50, 8, 15);
 							pbullets.add(pbullet1);
 						}
-					}else if(DestoryNum >= 30 && DestoryNum < 70){
+					}else if(DestoryNum >= 30 && DestoryNum < 150){
 						if(PPlane.isFired && count % 5 == 0){
-							PBullet pbullet2 =
-									new PBullet(pplane.x + 35, pplane.y + 50, 8, 15);
+							PBullet pbullet2 = new PBullet(pplane.x + 35, 
+											pplane.y + 50, 8, 15);
 							pbullets.add(pbullet2);
-							PBullet pbullet3 =
-									new PBullet(pplane.x + 5, pplane.y + 50, 8, 15);
+							PBullet pbullet3 = new PBullet(pplane.x + 5, 
+											pplane.y + 50, 8, 15);
 							pbullets.add(pbullet3);	
 						}
 					}else if(DestoryNum >= 150){
 						if(PPlane.isFired && count % 5 == 0){
-							PBullet pbullet4 =
-									new PBullet(pplane.x + 35, pplane.y + 50, 8, 15);
+							PBullet pbullet4 = new PBullet(pplane.x + 35, 
+											pplane.y + 50, 8, 15);
 							pbullets.add(pbullet4);
-							PBullet pbullet5 =
-									new PBullet(pplane.x + 5, pplane.y + 50, 8, 15);
+							PBullet pbullet5 = new PBullet(pplane.x + 5, 
+											pplane.y + 50, 8, 15);
 							pbullets.add(pbullet5);
-							PBullet pbullet6 =
-									new PBullet(pplane.x + 20, pplane.y + 50, 8, 15);
+							PBullet pbullet6 = new PBullet(pplane.x + 20, 
+											pplane.y + 50, 8, 15);
 							pbullets.add(pbullet6);
 						}
 					}
@@ -160,6 +161,7 @@ public class Controller extends KeyAdapter{
 							pbullets.remove(i);
 						}
 					}
+					//Set the number of enemy here.
 					if(DestoryNum < 30){
 						if(eplanes.size() < Global.ENEMY_NUMBER){
 							int x = random.nextInt(Global.FRAME_WIDTH);
@@ -174,8 +176,15 @@ public class Controller extends KeyAdapter{
 							EPlane eplane = new EPlane(x, y, 30, 30);
 							eplanes.add(eplane);
 						}
-					}else if(DestoryNum >= 70){
+					}else if(DestoryNum >= 70 && DestoryNum < 100){
 						if(eplanes.size() < Global.ENEMY_NUMBER + 30){
+							int x = random.nextInt(Global.FRAME_WIDTH);
+							int y = -30;
+							EPlane eplane = new EPlane(x, y, 30, 30);
+							eplanes.add(eplane);
+						}
+					}else if(DestoryNum >= 100){
+						if(eplanes.size() < Global.ENEMY_NUMBER + 50){
 							int x = random.nextInt(Global.FRAME_WIDTH);
 							int y = -30;
 							EPlane eplane = new EPlane(x, y, 30, 30);
@@ -221,12 +230,19 @@ public class Controller extends KeyAdapter{
 	}
 	/**
 	 * To see if the game is over or not.
+	 * User could choose restart game.
 	 */
 	public void JudgeLife(){
-		if(!pplane.isAlive()){
-				System.exit(0);
-				}
-		}
+	     if(!pplane.isAlive()){
+	    	 int result = JOptionPane.showConfirmDialog(gamePanel, 
+	          "Try again? :D","OK",JOptionPane.YES_OPTION);
+	    	 if(result == 0){
+	    		 newGame();
+	    		 }else{
+	    			 System.exit(0);
+	    			 }
+	    	 }
+	     }
 	/**
 	 * Reset the game.
 	 */

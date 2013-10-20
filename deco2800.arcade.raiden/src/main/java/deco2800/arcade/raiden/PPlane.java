@@ -79,15 +79,16 @@ public class PPlane extends Plane{
 	 * The move of PPlane.
 	 */
 	public void pplaneMove(){
-		if (UP)
+		if (UP && y > 0){
 			y -= Global.SPEED;
-		if (DOWN)
+		}else if (DOWN && y < 450){
 			y += Global.SPEED;
-		if (LEFT)
+		}else if (LEFT && x > 0){
 			x -= Global.SPEED;
-		if (RIGHT)
+		}else if (RIGHT && x < 550){
 			x += Global.SPEED;
-	}
+			}
+		}
 	/**
 	 * Check if the Player is alive or not.
 	 * @return boolean value

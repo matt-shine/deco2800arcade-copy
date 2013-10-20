@@ -200,7 +200,7 @@ public class ForumUi {
    
 	public void open_general_discussion() {
 	   this.f.setContentPane(new JPanel(new BorderLayout()));
-	   new GeneralDiscussion(this.f);
+	   new GeneralFrame(this.f, 0);
 	}
    
 	private void addGDLabelListener(JLabel label) {
@@ -213,7 +213,7 @@ public class ForumUi {
    
 	public void open_tutorial() {
 		this.f.setContentPane(new JPanel(new BorderLayout()));
-		new Tutorial(this.f);
+		new GeneralFrame(this.f, 1);
 	}
    
 	private void addTUTLabelListener(JLabel label) {
@@ -227,7 +227,7 @@ public class ForumUi {
    
 	public void open_Report_Bug() {
 	    this.f.setContentPane(new JPanel(new BorderLayout()));
-	    new ReportBug(this.f);
+	    new GeneralFrame(this.f, 2);
     }
    
     private void addRBLabelListener(JLabel label) {

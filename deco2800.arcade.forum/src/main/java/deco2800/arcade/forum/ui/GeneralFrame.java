@@ -36,7 +36,9 @@ import java.awt.event.MouseEvent;
  *
  * @author TeamForum
  */
-public class GeneralDiscussion {
+public class GeneralFrame {
+	private static final String[] CATEGORY = {"General Discussion", "Report Bug", "Tutorial", "Others"};
+	private int catNum;
 	private JTextField textField;
 	private JPanel panel_1;
 	private JPanel panel;
@@ -59,9 +61,16 @@ public class GeneralDiscussion {
 	private JPanel threadDisplay;
 	private ThreadListController controller;
 	public GridLayout threadGrid;
+	private JButton replyThread;
+	private ParentThread currThread;
+	private String myCategory;
+	
 	
 
-	public GeneralDiscussion(JFrame window) {
+	public GeneralFrame(JFrame window, int number) {
+		// 0 = General_Discussion, 1 = Report_Bug, 2 = Tutorial, 3 = Others
+		this.catNum = number;
+		this.myCategory = CATEGORY[number];
 		this.f = window;
 		f.getContentPane().setLayout(null);
 		threadCount = 0;
@@ -99,7 +108,7 @@ public class GeneralDiscussion {
 	    addHomeLabelListener(this.lblHome);
 	       
 	      
-	    this.lblNewLabel = new JLabel("General Discussion");
+	    this.lblNewLabel = new JLabel(this.myCategory);
 	    this.lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
 	    this.lblNewLabel.setBounds(12, 155, 163, 26);
 	    f.getContentPane().add(this.lblNewLabel);
@@ -170,13 +179,19 @@ public class GeneralDiscussion {
 	    this.scrollPane.setBounds(542, 155, 437, 541);
 	    this.f.getContentPane().add(this.scrollPane);
 	    
+	    this.replyThread = new JButton("Reply");
+	    this.replyThread.setBounds(863, 124, 116, 25);
+	    addReplyThreadListener(this.replyThread);
+	    this.replyThread.setVisible(false);
+	    this.f.getContentPane().add(this.replyThread);
+	    
 	    
 	    f.setVisible(true); 
 	    
 	    
 	    
 	    try {
-			this.controller = new ThreadListController(this, new ThreadListModel(1));
+			this.controller = new ThreadListController(this, new ThreadListModel(this.catNum));
 		} catch (ForumException e) {
 			System.out.println("Threads failed to load");
 			JOptionPane.showMessageDialog(null, "Failed to load threads", 
@@ -252,12 +267,29 @@ public class GeneralDiscussion {
 		this.f.setContentPane(new JPanel(new BorderLayout()));
 	   	new MakeThreadController(new MakeThreadView(this.f));
 	}
+	
+	public void open_ReplyThread() throws ForumException {
+		this.f.setContentPane(new JPanel(new BorderLayout()));
+	   	new ReplyThreadController(new ReplyThreadView(this.f, currThread.getTopic()), currThread.getId());
+	}
 	   	
 	private void addMakeThreadListener(JButton button) {
 		button.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				try {
 					open_MakeThread();
+				} catch (ForumException e1) {
+					System.out.println("Didnt work");
+				}
+			}
+		});
+	}
+	
+	private void addReplyThreadListener(JButton button) {
+		button.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				try {
+					open_ReplyThread();
 				} catch (ForumException e1) {
 					System.out.println("Didnt work");
 				}
@@ -283,7 +315,9 @@ public class GeneralDiscussion {
 	    	public void mousePressed(MouseEvent e) {
 	    		clear_display();
 	    		display_parent(thread);
+	    		currThread = thread;
 	    		update_display();
+	    		replyThread.setVisible(true);
 	    		controller.request_childs(thread.getId());
 	    	}
 	    });

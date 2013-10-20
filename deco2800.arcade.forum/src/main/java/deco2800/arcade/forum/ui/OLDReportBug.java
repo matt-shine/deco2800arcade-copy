@@ -29,7 +29,7 @@ import java.awt.event.MouseEvent;
  *
  * @author TeamForum
  */
-public class Tutorial {
+public class OLDReportBug {
 	private JTextField textField;
 	private JPanel panel_1;
 	private JPanel panel;
@@ -43,11 +43,11 @@ public class Tutorial {
 	private JLabel lblArcadeForum;
 	private JButton btnNewButton;
 	private JButton btnSearch;
-	private JScrollPane scrollPaneTut;
+	private JScrollPane scrollPaneRB;
 	private JFrame f;
 	
 
-	public Tutorial(JFrame window) {
+	public OLDReportBug(JFrame window) {
 		this.f = window;
 		f.getContentPane().setLayout(null);
 	      
@@ -108,16 +108,16 @@ public class Tutorial {
 	    f.getContentPane().add(this.lblHome);
 	    addHomeLabelListener(this.lblHome);
 	      
-	    this.lblNewLabel = new JLabel("Tutorial");
+	    this.lblNewLabel = new JLabel("Report Bug");
 	    this.lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
 	    this.lblNewLabel.setBounds(12, 155, 163, 26);
 	    f.getContentPane().add(this.lblNewLabel);
 	      
-	    this.scrollPaneTut = new JScrollPane(
+	    this.scrollPaneRB = new JScrollPane(
 	            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 	            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-	    this.scrollPaneTut.setBounds(542, 155, 437, 541);
-	    this.f.getContentPane().add(scrollPaneTut);	      
+	    this.scrollPaneRB.setBounds(542, 155, 437, 541);
+	    this.f.getContentPane().add(scrollPaneRB);	      
 	    f.setVisible(true); 
 	      
 

@@ -14,10 +14,10 @@ import deco2800.arcade.protocol.Protocol;
 import deco2800.arcade.protocol.forum.*;
 
 public class ThreadListController {
-	private GeneralDiscussion view;
+	private GeneralFrame view;
 	private ThreadListModel model;
 	private ClientConnection connection;
-	public ThreadListController (GeneralDiscussion v, ThreadListModel m) throws ForumException {
+	public ThreadListController (GeneralFrame v, ThreadListModel m) throws ForumException {
 		this.view = v;
 		this.model = m;
 		this.connection = new ClientConnection("", 0, 0);

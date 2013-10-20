@@ -148,6 +148,8 @@ public class Protocol {
 		kryo.register(GetChildThreadsResponse.class);
 		kryo.register(UpdateParentThreadRequest.class);
 		kryo.register(UpdateParentThreadResponse.class);
+		kryo.register(InsertChildThreadRequest.class);
+		kryo.register(InsertChildThreadResponse.class);
 
 		
 	}

@@ -5,14 +5,14 @@ import deco2800.arcade.protocol.forum.ParentThreadProtocol;
 
 import java.util.*;
 
-public class ThreadListModel {
+public class OLDThreadListModel {
 	private String category;
 	private int size;
 	private List<ParentThread> list;
 	private ChildListModel childs;
 	
 	//assume cat var is between 1-4
-	public ThreadListModel(int cat) {
+	public OLDThreadListModel(int cat) {
 		set_category(cat);
 		this.childs = new ChildListModel();
 		this.list = new ArrayList<ParentThread>();
@@ -70,16 +70,16 @@ public class ThreadListModel {
 	private void set_category(int page) {
 		//"General_Discussion", "Report_Bug", "Tutorial", "Others"
 		switch(page) {
-		case 0:
+		case 1:
 			this.category = "General_Discussion";
 			break;
-		case 1:
+		case 2:
 			this.category = "Report_Bug";
 			break;
-		case 2:
+		case 3:
 			this.category = "Tutorial";
 			break;
-		case 3:
+		case 4:
 			this.category = "Others";
 			break;
 		}

@@ -327,7 +327,7 @@ public class Arcade extends JFrame {
     		player.blockPlayer(1601); //debugChat1
     	}
     	*/
-    	
+
 		this.communicationNetwork.loggedIn(this.player, this.communicationView);
 		
 		CommunicationRequest communicationRequest = new CommunicationRequest();

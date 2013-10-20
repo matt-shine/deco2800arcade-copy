@@ -49,10 +49,12 @@ public class MakeThreadView {
 		   this.f.getContentPane().add(this.submitBtn);
 	      
 		   this.cancelBtn = new JButton("Cancel");
-		 
 		   this.cancelBtn.setBounds(516, 378, 79, 24);
 		   this.f.getContentPane().add(this.cancelBtn);
+		   addHomeLabelListener(this.cancelBtn);
+		   
 	      
+		   
 		   this.TitleTBox = new JTextField();
 		   this.TitleTBox.setBounds(42, 32, 262, 22);
 		   this.f.getContentPane().add(this.TitleTBox);
@@ -100,5 +102,19 @@ public class MakeThreadView {
 		   this.f.setContentPane(new JPanel(new BorderLayout()));
 		   new ForumUi(this.f);
 	   }
+	   
+		public void open_home() {
+			this.f.setContentPane(new JPanel(new BorderLayout()));
+			new ForumUi(this.f);
+		}
+
+	   
+		private void addHomeLabelListener(JButton cancelBtn2) {
+			cancelBtn2.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(MouseEvent e) {
+					open_home();
+				}
+			});
+		}
 }
 

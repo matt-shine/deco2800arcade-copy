@@ -128,8 +128,8 @@ public abstract class Mover {
 		if (this.getClass() != PacChar.class) return; // Only Pac man can use special tiles!
 		if (tile.getClass() == DotTile.class) {
 			if (!((DotTile) tile).isEaten()) {
-//				incrementAchievement("pacman.insatiable");
 				((DotTile) tile).dotEaten();
+				gameMap.setDotsEaten(gameMap.getDotsEaten() + 1);
 				if (((DotTile) tile).isEnergiser()) {
 					this.setScore(this.getScore() + 50);
 				} else {

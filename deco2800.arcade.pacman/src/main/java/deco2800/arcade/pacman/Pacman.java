@@ -52,7 +52,7 @@ public class Pacman extends GameClient {
 		
 	public Pacman(Player player1, NetworkClient networkClient) {
 		super(player1, networkClient);		
-		this.incrementAchievement("pacman.startgame");
+		this.incrementAchievement("pacman.onegame");
 	}	
 		
 	/**
@@ -121,8 +121,6 @@ public class Pacman extends GameClient {
 		}
 	}
 	
-	
-	
 	/**
 	 * Called when application is closed, helps tidy things up
 	 */
@@ -177,6 +175,11 @@ public class Pacman extends GameClient {
 		if (viewNotSetUp) {
 			view = new PacView(model);
 			viewNotSetUp = false;
+		}
+		
+		// Update checks for achievments
+		if (getModel().getGameMap().getDotsEaten() == 100){
+			this.incrementAchievement("pacman.insatiable");
 		}
 		
 		// make changes in the model to prepare for rendering if overlay

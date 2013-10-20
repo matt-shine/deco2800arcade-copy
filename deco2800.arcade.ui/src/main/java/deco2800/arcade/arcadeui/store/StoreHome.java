@@ -35,6 +35,9 @@ public class StoreHome implements Screen, StoreScreen {
 	private Skin skin = new Skin(Gdx.files.internal("store/storeSkin.json"));
 	private Stage stage = new Stage();
 	private static Game featured = new Game();
+	private ArcadeUI arcadeUI;
+	private Player player;
+	
 	private float fade = 1; // Used for the featured bar fade-out.
 	// Initially set to 1, so that the icon and text will fade in upon load.
 	private Label description; // featured text
@@ -43,15 +46,16 @@ public class StoreHome implements Screen, StoreScreen {
 	private Button greyOverlay = new Button(skin, "black");
 	private Button popupBox = new Button(skin, "white");
 	
-	private ArcadeUI arcadeUI;
-	
 	/**
 	 * @author Addison Gourluck
 	 * @param ui
+	 * @param Player user
 	 */
-	public StoreHome(ArcadeUI ui) {
+	public StoreHome(ArcadeUI ui, Player user) {
 		skin.add("blue_frame", new Texture(Gdx.files.internal("store/blue_frame.png")));
 		arcadeUI = ui;
+		player = user;
+		
 		Utilities.helper.loadIcons(skin);
 		
 		// The background for the store.
@@ -133,15 +137,15 @@ public class StoreHome implements Screen, StoreScreen {
 		
 		transactionsButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				arcadeUI.setScreen(new StoreTransactions(arcadeUI));
+				hide();
+				arcadeUI.setScreen(arcadeUI.getStoreTransactions());
 			}
 		});
 		
 		wishlistButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				arcadeUI.setScreen(new StoreWishlist(arcadeUI));
+				hide();
+				arcadeUI.setScreen(arcadeUI.getStoreWishlist());
 			}
 		});
 		
@@ -173,8 +177,8 @@ public class StoreHome implements Screen, StoreScreen {
 			public void changed(ChangeEvent event, Actor actor) {
 				try {
 					setSelected(Utilities.helper.search(searchResult.getText() + "").id);
-					dispose();
-					arcadeUI.setScreen(new StoreGame(arcadeUI, featured));
+					hide();
+					arcadeUI.setScreen(new StoreGame(arcadeUI, player, featured));
 				} catch (Exception e) {
 					searchResult.setText("Invalid Search");
 				}
@@ -183,8 +187,8 @@ public class StoreHome implements Screen, StoreScreen {
 		
 		featuredIcon.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				arcadeUI.setScreen(new StoreGame(arcadeUI, featured));
+				hide();
+				arcadeUI.setScreen(new StoreGame(arcadeUI, player, featured));
 			}
 		});
 	}
@@ -435,6 +439,7 @@ public class StoreHome implements Screen, StoreScreen {
 
 	@Override
 	public void show() {
+		player = arcadeUI.getPlayer();
 		ArcadeInputMux.getInstance().addProcessor(stage);
 	}
 	

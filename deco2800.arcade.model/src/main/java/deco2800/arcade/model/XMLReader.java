@@ -7,7 +7,7 @@ import java.io.InputStream;
 import javax.xml.stream.*;
 
 public class XMLReader {
-	XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+	
 	//TODO add in a general read xml file
 	
 	public AccoladeContainer getAccolades(String fileLocation){
@@ -19,12 +19,11 @@ public class XMLReader {
 		//Supply an ID signifies an existing accolade is to be changed
 		//A missing ID signifies a new accolade must be created in the server
 		//the update image flag means the image should be forced to update
-		int tmpPopup = -1, tmpValue = -1, tmpID = -1, tmpGameID = -1;
-		double tmpModifier = -1;
+		Integer tmpPopup =null, tmpValue = null, tmpID =null, tmpGameID = null;
+		Double tmpModifier = null;
 		AccoladeContainer accoladeContainer = new AccoladeContainer();
-		try {
-			XMLStreamReader xmlFile = inputFactory.createXMLStreamReader(
-					new FileInputStream(fileLocation));
+		XMLStreamReader xmlFile = readXML(fileLocation);
+		try{	
 			while(xmlFile.hasNext()){
 				if(xmlFile.isStartElement()){
 					String tag = xmlFile.getLocalName(); //Assigned here so it only needs to be fetched once
@@ -42,7 +41,7 @@ public class XMLReader {
 						tmpPopupMessage = xmlFile.getElementText();
 					} else if (tag.equals("unit")){
 						tmpUnit = xmlFile.getElementText();
-					}else if (tag.equals("tag")){
+					} else if (tag.equals("tag")){
 						tmpTag = xmlFile.getElementText();
 					} else if (tag.equals("image")){
 						tmpImage = xmlFile.getElementText();
@@ -69,23 +68,28 @@ public class XMLReader {
 							//then remove value flag from the xml
 						}
 						accoladeContainer.add(tmpAccolade);
-						//reset all the vars
-						
+						//Strings
+						tmpName = tmpMessage = tmpPopupMessage = tmpUnit = null; 
+						tmpTag = tmpImage = null;
+						//Double
+						tmpModifier = null;
+						//Integers
+						tmpPopup = tmpValue = tmpID = null;
+						//don't reset the gameID
+					} else {
+						//THROW AN ERROR HERE- the xml file must not contain all the right tags
 					}
 				}
 			}//END OF FILE              
 			if(tmpGameID!=-1){
 				accoladeContainer.setGameID(tmpGameID);
 			}else {
-				//GO NUTS MAYYYUNN< SOMETHINS IS WRONG
+				//GO NUTS MAYYYUNN. SOMETHINS IS WRONG
 				//TODO implement exception for missing gameID
 			}
-		} catch (FileNotFoundException fileNotFound){
-			//add in some sort of throw here for file not found
-			
-		}catch(Exception E){
+		} catch(XMLStreamException xmlerror){
 			//TODO add in catch statements for each exception
-		
+			//MAKE A MESSAGE ABOUT THE XMLFILE NOT BEING PROPERLY FORMATTED
 		}//END OF TRYCATCH
 		return accoladeContainer;
 	}//END OF GET ACCOLADES
@@ -101,4 +105,22 @@ public class XMLReader {
 		//exactly like resetRequest except it also removes the flag fromt he file once done
 		return false;
 	}
+	
+	public static XMLStreamReader readXML(String fileLocation){
+		//TODO Implent this and include it in the read to accolade
+		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+		XMLStreamReader xmlFile = null;
+		FileInputStream fileStream;
+		try{
+			fileStream = new FileInputStream(fileLocation);
+			xmlFile = inputFactory.createXMLStreamReader(fileStream);
+		} catch (XMLStreamException xmlError){
+			//TODO put some stuff here	
+		} catch (FileNotFoundException missingFile){
+			//TODO put some stuff here
+		}
+		return xmlFile;
+		
+	}
+	
 }

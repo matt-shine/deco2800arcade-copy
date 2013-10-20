@@ -270,10 +270,13 @@ public class MixMazeModel implements IMixMazeModel {
 	}
 
 	@Override
-	public void usePlayerAction(int id) {
+	public PlayerModel.Action usePlayerAction(int id) {
 		PlayerModel p = player[id - 1];
+		PlayerModel.Action act = p.getAction();
+		boolean res;
 
-		p.useAction(board[p.getY()][p.getX()]);
+		res = p.useAction(board[p.getY()][p.getX()]);
+		return res ? act : null; 
 	}
 
 	@Override

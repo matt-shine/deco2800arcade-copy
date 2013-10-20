@@ -72,9 +72,7 @@ public class Sounds {
 			sound.play(volume, pitch, (pan-0.5f)*2);
 		}
 		
-		public static void playtest () {
-			jump.play(1);
-		}
+		
 		
 		public static void playExplosionShort(float pan) {
 			explosion0.stop();

@@ -508,6 +508,7 @@ public class SoldierBoss extends Enemy {
 				state = State.DEATH;
 				stateFrame = 20;
 				stateTime = 0.1f;
+				velocity.x = 0;
 				
 			} else {
 				beingHit = true;

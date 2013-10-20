@@ -2,10 +2,7 @@ package deco2800.arcade.chess;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import deco2800.arcade.client.ArcadeInputMux;
-import deco2800.arcade.client.ArcadeSystem;
-
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
@@ -33,8 +30,8 @@ public class SelectScreen implements Screen {
 	private TextureAtlas map;
 	private Skin skin;
 	private SpriteBatch batch;
-	private TextButton sB, hB, eB;
-
+	private TextButton sB, hB;
+	
 	public SelectScreen(Chess game) {
 		this.game = game;
 	}

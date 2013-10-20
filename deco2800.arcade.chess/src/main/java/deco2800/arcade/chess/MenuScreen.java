@@ -185,8 +185,7 @@ public class MenuScreen implements Screen {
 				ArcadeInputMux.getInstance().removeProcessor(stage);
 				ArcadeInputMux.getInstance().removeProcessor(0);
 				ArcadeSystem.goToGame("arcadeui");
-				ArcadeInputMux.getInstance().removeProcessor(0);
-				ArcadeInputMux.getInstance().removeProcessor(stage);
+				
 			}
 		});
 	}

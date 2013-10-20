@@ -100,11 +100,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	private Texture chessBoard;
 
 	// Buttons and screens
-	TextButton replayButton;
-	private TextButton startreplayButton;
-	private TextButton backButton;
-	private TextButton newGameButton;
-	private TextButton newGameButtonEasy;
+	private TextButton replayButton, startreplayButton, 
+						newGameButton , backButton;
 	private Stage stage;
 	private BitmapFont BmFontB;
 	private TextureAtlas map;
@@ -148,7 +145,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	public Chess(Player player, NetworkClient networkClient) {
 
 		super(player, networkClient);
-		this.incrementAchievement("chess.winGame");
+		this.incrementAchievement("chess.start");
 		initPiecePos();
 		board = new Board();
 		movePieceGraphic();
@@ -171,9 +168,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		replayHandler.addReplayEventListener(initReplayEventListener());
 		ReplayNodeFactory.registerEvent("movePiece", new String[] { "start_x",
 				"start_y", "target_x", "target_y" });
-
-		// True means AI is playing, false if it isn't
-		// EasyComputerOpponent = false;
 		
 		hs = player1.getWinLoss();
 
@@ -193,7 +187,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		}
-
 		loadedStyle = 2;
 	}
 
@@ -202,11 +195,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		super.create();
 		this.getOverlay().setListeners(new Screen() {
 			@Override
-			public void hide() {
-			}
+			public void hide() {}
 			@Override
-			public void show() {
-			}
+			public void show() {}
 			@Override
 			public void pause() {}
 			@Override
@@ -216,11 +207,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			@Override
 			public void dispose() {}
 			@Override
-			public void resize(int arg0, int arg1) {
-				//arg1 = SCREENHEIGHT;
-				//arg0 =  SCREENWIDTH;
-				
-			}
+			public void resize(int arg0, int arg1) {}
 		});
 		// Initialise camera
 		camera = new OrthographicCamera();
@@ -280,7 +267,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		blackBishop2 = blackBishop1;
 		blackKnight2 = blackKnight1;
 		blackRook2 = blackRook1;
-
 		whitePawn1 = whitePawn0;
 		whitePawn2 = whitePawn0;
 		whitePawn3 = whitePawn0;
@@ -296,14 +282,12 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		blackPawn6 = blackPawn0;
 		blackPawn7 = blackPawn0;
 
-
 		makeButtons();
 		replayHandler.startSession("chess", player.getUsername());
 		// Pause game and wait for connection if multiplayer is selected
 		if (Multiplayer) {
 			paused = true;
 		}
-	
 	}
 
 	
@@ -311,7 +295,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		return new ReplayEventListener() {
 			public void replayEventReceived(String eType, ReplayNode eData) {
 				System.out.println("Got event!");
-
 				// Built in event types
 				if (eType.equals("node_pushed")) {
 					System.out.println(eType);
@@ -383,7 +366,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		int  c = a.score;
 		int d = b.score;
 		String player = players[0];
-		//String text =  Integer.toString(c)+  Integer.toString(d);
 		String wins = Integer.toString(d) + " win(s)";
 		String losses = Integer.toString(c) + " loss(es)";
 		gameInfo.draw(batch, player, 400, 80);
@@ -427,22 +409,28 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	 */
 	private void finishGame(boolean loser, boolean stalemate) {
 		System.err.println("GAME OVER");
-	
-		// loser was black i.e. not this player, increment achievement
-		// if ((loser == true) && (!stalemate)) {
-		// this.incrementAchievement("chess.winGame");
-		// }
 		if (!Multiplayer) {
 			if ((!stalemate) && (loser)) {
 				player1.logWin();
+				this.incrementAchievement("chess.winGame");
+				this.incrementAchievement("chess.youwon5");
+				this.incrementAchievement("chess.youwon10");
+				this.incrementAchievement("chess.youwon25");
+				this.incrementAchievement("chess.chessmaster");
 				hs = player1.getWinLoss();
 			}
 			if ((!stalemate) && (!loser)) {
 				player1.logLoss();
 				hs = player1.getWinLoss();
 			}
+			//These don't really work just testing them
+			if(player1.getWin().score == 5 && player1.getWin().score == 0){
+				this.incrementAchievement("chess.chessinarow5");
+			}
+			if(player1.getWin().score == 10 && player1.getWin().score == 0){
+				this.incrementAchievement("chess.chessinarow10");
+			}	
 		}
-		
 		System.err.println("wins" + " " +player1.getWin().toString());
 		if (recording) {
 			drawButton();
@@ -454,10 +442,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			replayButton.setVisible(true);
 			recording = false;
 		} else {
-			// reset board
-			board = new Board();
-			movePieceGraphic();
-			drawButton();
+			reset();
 		}
 		return;
 	}
@@ -468,8 +453,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		return null;
 	}
 
-	public void paint(Graphics g) {
-	}
+	public void paint(Graphics g) {}
 
 	public void startReplay(int num) {
 		replayHandler.playbackLastSession();
@@ -484,7 +468,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			} else {
 				loadedStyle++;
 			}
-
 			setPiecePics();
 			drawPieces();
 		}
@@ -598,22 +581,18 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				movingPiece = board.nullPiece;
 				moving = false;
 				return false;
-
 			}
 		}
 		return true;
-
 	}
 
 	@Override
 	public boolean touchDragged(int arg0, int arg1, int arg2) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -719,7 +698,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		Sprite allowedSquare = new Sprite(new Texture(
 				Gdx.files.classpath("imgs/spot2.png")));
 		List<Sprite> neededPics = new ArrayList<Sprite>();
-
+		
 		for (int i = 0; i < possibleMoves.size(); i++) {
 			neededPics.add(allowedSquare);
 			int xcoord = pieceHorizOff + horizOff + (59)
@@ -730,7 +709,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			batch.draw(neededPics.get(i), xcoord, ycoord);
 			batch.end();
 		}
-
 	}
 
 	/**
@@ -1258,6 +1236,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		}
 	}
 
+	/**
+	 * Draws the pieces on the board in correct positions
+	 */
 	void drawPieces() {
 		whiteRook2 = whiteRook1;
 		whiteBishop2 = whiteBishop1;
@@ -1287,7 +1268,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 		// Board - blue
 		batch.draw(chessBoard, horizOff, verticOff);
-
 		// black pieces - dark blue
 		batch.draw(blackRook1, blackRook1Pos[0], blackRook1Pos[1]);
 		batch.draw(blackKnight1, blackKnight1Pos[0], blackKnight1Pos[1]);
@@ -1325,7 +1305,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		batch.draw(blackPawn6, blackPawn6Pos[0], blackPawn6Pos[1]);
 		batch.draw(blackPawn7, blackPawn7Pos[0], blackPawn7Pos[1]);
 		batch.end();
-		// Im sorry i just made an even more awfulling long code longer
 
 	}
 
@@ -1359,21 +1338,19 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				+ styles.get(loadedStyle) + "/White P.png")));
 	}
 	@Override
-	public void hide() {
-
-	}
+	public void hide() {}
 
 	@Override
-	public void render(float arg0) {
-		// TODO Auto-generated method stub
-
-	}
+	public void render(float arg0) {}
 
 	@Override
 	public void show() {
 		drawButton();
 	}
-
+	
+    /**
+     * Defines button variables and colours so they can be drawn
+     */
 	public void makeButtons() {
 		splashTexture = new Texture(Gdx.files.internal("chess.png"));
 		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -1427,15 +1404,11 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		newGameButton.setHeight(50);
 		newGameButton.setX((float) (width * 0.78));
 		newGameButton.setY((float) (height * 0.28));
-
-		newGameButtonEasy = new TextButton("Easy Computer Game", style);
-		newGameButtonEasy.setWidth(300);
-		newGameButtonEasy.setHeight(50);
-		newGameButtonEasy.setX((float) (width * 0.02));
-		newGameButtonEasy.setY((float) (height * 0.70));
-
 	}
-
+ 
+	/**
+	 * Makes the buttons, adds the listeners and draws them on the screen
+	 */
 	public void drawButton() {
 		makeButtons();
 		backButton.addListener(new InputListener() {
@@ -1471,9 +1444,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 					}
 					recording = false;
 					isReplaying = true;
-
 				} catch (NullPointerException e) {
-					System.out.println("nothing to replay");
+					
 				}
 			}
 		});
@@ -1490,7 +1462,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 					replayHandler.startRecording();
 					startreplayButton.setVisible(false);
 				} catch (Exception e) {
-					System.out.println("Already Recording");
+				
 				}
 
 			}
@@ -1523,7 +1495,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 			}
 		});
-	
 		stage.addActor(replayButton);
 		replayButton.setVisible(false);
 		stage.addActor(backButton);

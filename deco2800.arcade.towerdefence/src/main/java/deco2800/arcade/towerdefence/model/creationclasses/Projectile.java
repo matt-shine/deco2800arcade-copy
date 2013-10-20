@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.towerdefence.controller.TowerDefence;
 import deco2800.arcade.towerdefence.model.Grid;
 import deco2800.arcade.towerdefence.model.GridObject;
 import deco2800.arcade.towerdefence.model.Mortal;
 import deco2800.arcade.towerdefence.model.Team;
 import deco2800.arcade.towerdefence.model.effects.Effect;
+import deco2800.arcade.towerdefence.view.GameScreen;
 
 /**
  * The class for GridObjects that can fly on any angle from a source GridObject
@@ -156,6 +159,20 @@ public class Projectile extends GridObject {
 	}
 
 	// Methods
+	/**
+	 * Start the AI and animations.
+	 */
+	public void start() {
+	// Remember to adjust the rotation before building the sprite if necessary
+	this.rotation(0);
+	
+	// Build the idle sprite list
+	List<Sprite> sprList = (GameScreen.spriteBuild(this, fileStanding()));
+	
+	// Add the list of sprites to the currently animating model
+	TowerDefence.toRender.add(sprList);
+	}
+	
 	/**
 	 * Continually move in the given vector until a collision, or the maximum
 	 * range is reached.

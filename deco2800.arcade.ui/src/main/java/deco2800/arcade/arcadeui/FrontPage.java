@@ -445,8 +445,8 @@ public class FrontPage implements Screen {
 
 		            	if (settingsClicked == false){
 		            		trial.setBackground(skin.getDrawable("toolTip"));
-		            		trial.setPosition(950,380);
-		            		trial.setSize(200, 300);
+		            		trial.setPosition(950,530);
+		            		trial.setSize(200, 150);
 		            		trial.setName("tooltip");
 		            		
 		            		final Label profile = new Label ("Profile", skin, "cgothic");
@@ -462,17 +462,18 @@ public class FrontPage implements Screen {
 		            		
 		            		stage.addActor(trial);
 		            		
-		            		trial.add(profile);
+		            		trial.add(profile).padBottom(10);
 		            		trial.row();
-		            		trial.add(space);
+		            		//trial.add(space);
+		            		//trial.row();
+		            		trial.add(forum).padBottom(10);
+		            		//trial.row();
+		            		//trial.add(space);
 		            		trial.row();
-		            		trial.add(forum);
-		            		trial.row();
-		            		trial.add(space);
-		            		trial.row();
-		            		trial.add(logout);
+		            		trial.add(logout).padBottom(10);
 		            		
 		            		logout.addListener((new ClickListener() {
+		            			
 		     	            	public void clicked (InputEvent event, float x, float y){
 		     	            		topBox.reset();
 		     	            		topBox.remove();

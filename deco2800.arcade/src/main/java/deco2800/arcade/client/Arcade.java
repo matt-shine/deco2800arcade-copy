@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Constructor;
@@ -19,9 +18,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-
 import org.reflections.Reflections;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
@@ -91,7 +87,9 @@ public class Arcade extends JFrame {
 
 	private CommunicationNetwork communicationNetwork;
 
-	private CommunicationView view;
+	private CommunicationView communicationView;
+
+	private Container container;
 
 	@SuppressWarnings("unused")
 	private static PackageClient packClient;
@@ -128,15 +126,16 @@ public class Arcade extends JFrame {
 	 */
 	public static void main(String[] args) {
 		Arcade arcade = new Arcade(args);
-
+		
 		ArcadeSystem.setArcadeInstance(arcade);
 
 		arcade.addCanvas();
-
+		
 		System.out.println("Packman opened");
 		packClient = new PackageClient();
-
+		
 		ArcadeSystem.goToGame(ArcadeSystem.UI);
+		
 	}
 
 	/**
@@ -229,7 +228,7 @@ public class Arcade extends JFrame {
 
 			client.sendNetworkObject(new GameLibraryRequest());
 
-			communicationNetwork = new CommunicationNetwork(player, this.client);
+			communicationNetwork = new CommunicationNetwork(player, client);
 			addListeners();
 		} catch (NetworkException e) {
 			throw new ArcadeException("Unable to connect to Arcade Server ("
@@ -323,8 +322,8 @@ public class Arcade extends JFrame {
     	}
     	*/
     	
-		this.communicationNetwork.loggedIn(this.player, this.view);
-
+		this.communicationNetwork.loggedIn(this.player, this.communicationView);
+		
 		CommunicationRequest communicationRequest = new CommunicationRequest();
 		communicationRequest.playerID = myID;
 		communicationRequest.username = myUsername;
@@ -376,6 +375,7 @@ public class Arcade extends JFrame {
         //fetchGameJar("pong", "1.0");
 
         //System.out.println("[CLIENT] GameUpdateCheckResponse received: " + resp.md5);
+
 	}
 
     public void registerAsUser(String username, String password) {
@@ -493,14 +493,12 @@ public class Arcade extends JFrame {
 		Object mon = new Object();
 		synchronized (mon) {
 			proxy.setThreadMonitor(mon);
-			
-			this.view = new CommunicationView();
 
-			Container container = this.getContentPane();
-			container.add(this.canvas.getCanvas(), BorderLayout.WEST);
-			container.add(this.view, BorderLayout.EAST);
+			container = this.getContentPane();
 			
-			this.pack();
+			container.add(this.canvas.getCanvas(), BorderLayout.WEST);
+			
+			pack();
 			
 			try {
 				mon.wait();

@@ -30,7 +30,6 @@ public class CommunicationListener extends Listener {
 	
 	public CommunicationListener(Server server) {
 		this.server = server;
-		this.textMessage = new TextMessage();
 		this.connectedUsers = new HashMap<Integer, Integer>();
 		this.userAliases = new HashMap<Integer, String>();
 	}

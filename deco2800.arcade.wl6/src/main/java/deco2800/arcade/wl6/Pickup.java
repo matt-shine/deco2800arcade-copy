@@ -31,7 +31,6 @@ public class Pickup extends Doodad {
         if (getPos().dst(p.getPos()) < 0.8) {
             boolean destroy = false;
             
-            
             if (p.getAmmo() < 99 && ammo > 0) {
             	p.addAmmo(ammo);
             	destroy = true;

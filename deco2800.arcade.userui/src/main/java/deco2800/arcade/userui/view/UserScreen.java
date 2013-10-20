@@ -1,7 +1,6 @@
 package deco2800.arcade.userui.view;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
 
@@ -283,7 +282,7 @@ public class UserScreen extends JFrame{
 	    friendbuttons.add(addfriendbutton,"gap left 10px");
 	    friendbuttons.add(removefriendbutton,"gap left 10px");
 	    friendbuttons.add(invitesbutton,"gap left 50px");
-	    friendbuttons.add(blockbutton,"gap left 30px");
+	    friendbuttons.add(blockbutton,"gap left 20px");
 	    
 		//Add Elements to Panel
 	    friendpanel = new ImagePanel(new ImageIcon("assets/images/Blue_Box.png").getImage());

@@ -185,7 +185,7 @@ public class InviteScreen extends JFrame{
 	 */
 	public void displayinvites(){
 		
-		invites.setText(model.player.getInvites().toString());
+		invites.setText(model.getPlayer().getInvites().toString());
 		
 	}
 
@@ -195,8 +195,8 @@ public class InviteScreen extends JFrame{
 	 */
 	public void acceptinvite(Player friend){
 		
-		model.player.acceptFriendInvite(friend);
-		invites.setText(model.player.getInvites().toString());
+		model.getPlayer().acceptFriendInvite(friend);
+		invites.setText(model.getPlayer().getInvites().toString());
 		
 	}
 	
@@ -206,8 +206,8 @@ public class InviteScreen extends JFrame{
 	 */
 	public void declineinvite(Player friend){
 		
-		model.player.removeInvite(friend);
-		invites.setText(model.player.getInvites().toString());
+		model.getPlayer().removeInvite(friend);
+		invites.setText(model.getPlayer().getInvites().toString());
 		
 	}
 	

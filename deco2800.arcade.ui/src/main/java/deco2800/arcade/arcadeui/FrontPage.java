@@ -58,7 +58,7 @@ public class FrontPage implements Screen {
         final int bX3= bX + 2*(bSize + enlarge);
         
         static boolean settingsClicked = false;
-        static Table trial = new Table();
+        static Table popUp = new Table();
         
     
         public FrontPage(ArcadeUI ui) {
@@ -444,10 +444,10 @@ public class FrontPage implements Screen {
 	            	public void clicked(InputEvent event, float x, float y) {
 
 		            	if (settingsClicked == false){
-		            		trial.setBackground(skin.getDrawable("toolTip"));
-		            		trial.setPosition(950,530);
-		            		trial.setSize(200, 150);
-		            		trial.setName("tooltip");
+		            		popUp.setBackground(skin.getDrawable("toolTip"));
+		            		popUp.setPosition(950,530);
+		            		popUp.setSize(200, 150);
+		            		popUp.setName("tooltip");
 		            		
 		            		final Label profile = new Label ("Profile", skin, "cgothic");
 		            		profile.setAlignment(Align.left);
@@ -460,25 +460,25 @@ public class FrontPage implements Screen {
 		            		
 		            		final Label space = new Label (" ", skin, "cgothic");
 		            		
-		            		stage.addActor(trial);
+		            		stage.addActor(popUp);
 		            		
-		            		trial.add(profile).padBottom(10);
-		            		trial.row();
-		            		//trial.add(space);
-		            		//trial.row();
-		            		trial.add(forum).padBottom(10);
-		            		//trial.row();
-		            		//trial.add(space);
-		            		trial.row();
-		            		trial.add(logout).padBottom(10);
+		            		popUp.add(profile).padBottom(10);
+		            		popUp.row();
+		            		//popUp.add(space);
+		            		//popUp.row();
+		            		popUp.add(forum).padBottom(10);
+		            		//popUp.row();
+		            		//popUp.add(space);
+		            		popUp.row();
+		            		popUp.add(logout).padBottom(10);
 		            		
 		            		logout.addListener((new ClickListener() {
 		            			
 		     	            	public void clicked (InputEvent event, float x, float y){
 		     	            		topBox.reset();
 		     	            		topBox.remove();
-		     	            		trial.reset();
-				            		trial.remove();
+		     	            		popUp.reset();
+				            		popUp.remove();
 				            		settingsClicked = false;
 		     	            		arcadeUI.setScreen(arcadeUI.login);
 		     	            		//ArcadeSystem.exit();
@@ -495,8 +495,8 @@ public class FrontPage implements Screen {
 		            		settingsClicked = true;
 			                      
 		            	}else{
-		            		trial.reset();
-		            		trial.remove();
+		            		popUp.reset();
+		            		popUp.remove();
 		            		settingsClicked = false;
 		            	}
 		                	

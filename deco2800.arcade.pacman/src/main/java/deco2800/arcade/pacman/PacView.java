@@ -80,6 +80,8 @@ public class PacView {
 				ghostFrames[i][j] = tmp[0][j];
 			}			
 		}
+		scoreText = new BitmapFont(Gdx.files.internal("pacfont2.fnt"), // MEMORY HOG
+		         Gdx.files.internal("pacfont2.png"), false);
 		this.gameMap = model.getGameMap();
 		this.player = model.getPlayer();
 		this.blinky = model.getBlinky();
@@ -217,8 +219,6 @@ public class PacView {
 	public void displayScore(Mover mover) {
 		// Set score text
 		CharSequence str = "Score: " + mover.getScore();
-		scoreText = new BitmapFont(Gdx.files.internal("pacfont2.fnt"),
-		         Gdx.files.internal("pacfont2.png"), false);
 		scoreText.setColor(Color.WHITE);
 		scoreText.draw(batch, str, 50, 50);
 	}

@@ -10,8 +10,7 @@ public abstract class Mover {
 		LEFT, RIGHT, UP, DOWN
 	}
 	
-	protected Dir facing; // 1: Right, 2: Left
-						// 3: Up, 4: Down
+	protected Dir facing;
 	protected Dir drawFacing;
 	
 	// the coordinates of the bottom left corner of the pacman/ghost (for

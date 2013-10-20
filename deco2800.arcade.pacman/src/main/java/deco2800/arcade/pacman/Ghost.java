@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.util.Point;
-
-import deco2800.arcade.pacman.PacChar.PacState;
 import static java.lang.Math.*;
 
 public final class Ghost extends Mover {
@@ -41,8 +39,8 @@ public final class Ghost extends Mover {
 		case CLYDE: num = 3; break;
 		default: num = 0; break;
 		}
-//		currentTile = gameMap.getGhostStarts()[num];  //This is the actual starting positon in pen
-		currentTile = gameMap.getFruitRight(); // For testing purposes
+		currentTile = gameMap.getGhostStarts()[num];  //This is the actual starting positon in pen
+//		currentTile = gameMap.getFruitRight(); // For testing purposes
 		// makes the previous tile the one to right, since he's facing left
 		Point current = gameMap.getTilePos(currentTile);
 		previousTile = gameMap.getGrid()[current.getX() + 1][current.getY()];
@@ -73,7 +71,7 @@ public final class Ghost extends Mover {
 	 */
 	public void prepareDraw() {
 		spritePos = 3;
-		ghost_move();
+		ghostMove();
 		if (facing == Dir.RIGHT) {
 			spritePos = 1;
 		} else if (facing == Dir.UP) {
@@ -90,20 +88,15 @@ public final class Ghost extends Mover {
 		
 		// checks if ghost is moving, and if so keeps him moving in that
 		// direction
-		int corr = 0;
 		if (currentState == GhostState.CHASE) {
 			if (facing == Dir.LEFT) {
 				drawX -= moveDist;
-//				drawY = gameMap.getTileCoords(currentTile).getY() - corr;
 			} else if (facing == Dir.RIGHT) {
 				drawX += moveDist;
-//				drawY = gameMap.getTileCoords(currentTile).getY() - corr;
 			} else if (facing == Dir.UP) {
 				drawY += moveDist;
-//				drawY = gameMap.getTileCoords(currentTile).getX() - corr;
 			} else if (facing == Dir.DOWN) {
 				drawY -= moveDist;
-//				drawY = gameMap.getTileCoords(currentTile).getX() - corr;
 			} else {
 				currentState = GhostState.SCATTER;
 				facing = Dir.LEFT;
@@ -269,7 +262,7 @@ public final class Ghost extends Mover {
 		return testTiles.get(tileNum);
 	}
 
-	private void ghost_move() {
+	private void ghostMove() {
 		updateTargetTile();
 		facing = getDirection();
 	}

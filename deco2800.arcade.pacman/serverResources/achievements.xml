@@ -18,7 +18,7 @@
     </achievement>
     <achievement id="pacman.insatiable">
         <name>Insatiable</name>
-        <description>Eat 15 pellets in the first 30 seconds of the game.</description>
+        <description>Eat 100 pellets.</description>
         <awardThreshold>1</awardThreshold>
         <icon>dot.png</icon>
     </achievement>

@@ -55,10 +55,8 @@ abstract class GameScreen implements Screen {
 	protected final MixMaze game;
 	private final Skin skin;
 
-	protected int[] p1Controls = { Keys.G, Keys.H, Keys.W, Keys.A, Keys.S,
-			Keys.D };
-	protected int[] p2Controls = { Keys.O, Keys.P, Keys.UP, Keys.LEFT,
-			Keys.DOWN, Keys.RIGHT };
+	protected int[] p1Controls = new int[6];
+	protected int[] p2Controls = new int[6];
 
 	/**
 	 * Constructor
@@ -137,8 +135,9 @@ abstract class GameScreen implements Screen {
 		gameArea.addListener(new InputListener() {
 			public boolean keyDown(InputEvent event, int keycode) {
 				for (Actor child : gameArea.getChildren()) {
-					if (child.notify(event, false))
+					if (child.notify(event, false)){
 						return true;
+					}
 				}
 
 				return false;
@@ -229,9 +228,10 @@ abstract class GameScreen implements Screen {
 			for (int i = 0; i < 3; i++) {
 				itemStacks[i] = new Stack();
 				this.add(itemStacks[i]).size(210, 210);
-				if (i < 2)
+				if (i < 2){
 					this.row();
-
+				}
+				
 				frameImages[i] = new Image(SELECTION_REGION);
 				itemStacks[i].add(frameImages[i]);
 			}
@@ -246,8 +246,9 @@ abstract class GameScreen implements Screen {
 			for (int i = 0; i < 10; i++) {
 				brickImages[i] = new Image(BRICK_REGION);
 				brickTable.add(brickImages[i]).size(48, 48);
-				if ((i + 1) % 4 == 0)
+				if ((i + 1) % 4 == 0){
 					brickTable.row();
+				}
 			}
 		}
 
@@ -256,14 +257,15 @@ abstract class GameScreen implements Screen {
 		}
 
 		void updateBrick(int amount) {
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < 10; i++){
 				brickImages[i].setVisible(i < amount);
+			}
 		}
 
 		void updateAction(PlayerModel.Action action) {
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < 3; i++){
 				frameImages[i].setVisible(false);
-
+			}
 			switch (action) {
 			case USE_BRICK:
 				frameImages[0].setVisible(true);
@@ -338,10 +340,11 @@ abstract class GameScreen implements Screen {
 
 	public class Settings {
 		public Settings(int[] innerP1Controls, int[] innerP2Controls) {
-			p1Controls = innerP1Controls;
-			p2Controls = innerP2Controls;
+			for(int i = 0; i<innerP1Controls.length;i++){
+				p1Controls[i] = innerP1Controls[i];
+				p2Controls[i] = innerP2Controls[i];				
+			}			
 		}
-
 		public Settings() {
 
 		}

@@ -33,11 +33,20 @@ public class Ship {
 	 * keep track of and increment/decrement as the game plays.
 	 */
 
+	// Fields
 	// The grid used by this ship
 	private Grid grid;
 	// The GameScreen that is using this ship
-	private GameScreen game;
+	private GameScreen gameScreen;
+	// The resources of the ship
+	private int resources;
+	// The Ship (player) score
+	// Perhaps a formula of units killed, wave and ship health?
+	private int score;
+	// The current wave of enemies
+	private int wave;
 
+	// Constructor
 	/**
 	 * THe constructor for the ship. Sets the game as well as creating the grid.
 	 * 
@@ -45,41 +54,113 @@ public class Ship {
 	 *            The GameScreen which this ship belongs to.
 	 * @Param targetPosition A vector representing the target (portal)
 	 */
-	public Ship(GameScreen game, Vector2 targetPosition) {
-		this.game = game;
+	public Ship(GameScreen gameScreen, Vector2 targetPosition) {
+		this.gameScreen = gameScreen;
 		this.grid = new Grid(Gdx.graphics.getHeight(), Gdx.graphics.getWidth(),
-				"shipGrid", 25, this, targetPosition);
+				"shipGrid", 25, this, targetPosition, "src/main/resources/testGrid");
 	}
 
-	public void updateGameState(Object gameState, int change) {
+	// Getters
+	/**
+	 * Grid of the ship.
+	 * 
+	 * @return grid
+	 */
+	public Grid grid() {
+		return grid;
 	}
-
+	
+	/**
+	 * GameScreen used by the ship.
+	 * 
+	 * @return gameScreen
+	 */
+	public GameScreen gameScreen() {
+		return gameScreen;
+	}
+	
 	/**
 	 * Current resources of the ship. May need to be split into types later.
 	 * 
-	 * @return
+	 * @return resources
 	 */
 	public int resources() {
-		return 0;
+		return resources;
 	}
 
 	/**
-	 * Current score for the player. Perhaps a formula of units killed, wave and
-	 * ship health?
+	 * Current score for the player.
 	 * 
-	 * @return
+	 * @return score
 	 */
 	public int score() {
-		return 0;
+		return score;
 	}
 
 	/**
 	 * Current wave the player is on.
 	 * 
-	 * @return
+	 * @return wave
 	 */
 	public int wave() {
-		return 0;
+		return wave;
+	}
+
+	// Setters
+	/**
+	 * Set the Grid of the ship.
+	 * 
+	 * @param grid
+	 */
+	public void grid(Grid grid) {
+		this.grid = grid;
+	}
+	
+	/**
+	 * Set the GameScreen used by the ship.
+	 * 
+	 * @param gameScreen
+	 */
+	public void gameScreen(GameScreen gameScreen) {
+		this.gameScreen = gameScreen;
+	}
+	
+	/**
+	 * Set the resources of the ship.
+	 * 
+	 * @param number
+	 */
+	public void resources(int number) {
+		this.resources = number;
+	}
+
+	/**
+	 * Set the score of the ship (player)
+	 * 
+	 * @param number
+	 */
+	public void score(int number) {
+		this.score = number;
+	}
+
+	/**
+	 * Set wave number, useful for save/load.
+	 * 
+	 * @param number
+	 */
+	public void wave(int number) {
+		this.wave = number;
+	}
+
+	// Methods
+	/**
+	 * Method for updating the gameState
+	 * 
+	 * @param gameState
+	 * @param change
+	 */
+	public void updateGameState(Object gameState, int change) {
+		// TODO implement
 	}
 
 	/**
@@ -99,14 +180,6 @@ public class Ship {
 	 */
 	public void nextWave() {
 
-	}
-
-	/**
-	 * Jump forward to wave n, useful for save/load.
-	 * 
-	 * @param n
-	 */
-	public void setWave(int n) {
 	}
 
 	/**

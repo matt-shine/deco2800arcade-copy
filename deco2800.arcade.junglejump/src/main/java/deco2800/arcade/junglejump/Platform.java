@@ -108,6 +108,7 @@ public class Platform {
 			platformType = "tunnel";
 			this.width = 40;
 			this.height = 60;
+			this.xPos -= 20;
 			break;
 		case 'J': // Jim
 			platformType = "banana";

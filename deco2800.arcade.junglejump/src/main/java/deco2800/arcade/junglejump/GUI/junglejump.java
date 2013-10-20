@@ -528,7 +528,7 @@ public class junglejump extends GameClient implements InputProcessor {
 
 	public boolean isOnPlatform(float x, float y) {
 		int size = currentLevel.platformAmount();
-		for (int i = 0; i < size; i++) {
+		/*for (int i = 0; i < size; i++) {
 			Platform p = currentLevel.getPlatforms().get(i);
 			// Check x and y are within the platform boundaries and monkey is on it
 			if (p.platType != '=' && x > (p.getX() - monkeyLength)
@@ -592,10 +592,11 @@ public class junglejump extends GameClient implements InputProcessor {
 						isFalling = true;
 						return false;
 					}*/
-					return true;
+					/*return true;
 				}
 			}
-		} return false;
+		} */
+		return false;
 	}
 
 	@Override

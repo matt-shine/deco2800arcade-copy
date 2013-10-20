@@ -3,20 +3,18 @@ package deco2800.arcade.cyra.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import deco2800.arcade.cyra.world.Sounds;
 
 /** This class controls the components that make up the main menu - buttons,
@@ -44,6 +42,7 @@ public class MainMenu extends AbstractScreen{
 	public MainMenu(Cyra game) {
 		super(game);
 		
+		//Set values for difficulty
 		difficulty[0] = 0.21f;
 		difficulty[1] = 0.76f;
 		difficulty[2] = 0.91f;
@@ -59,7 +58,6 @@ public class MainMenu extends AbstractScreen{
 		skin = new Skin();
 		skin.addRegions(atlas);
 		blackFont = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);
-		//Sounds.load();
 	}
 	
 	@Override
@@ -105,8 +103,8 @@ public class MainMenu extends AbstractScreen{
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = skin.getDrawable("buttonopen");
 		style.down = skin.getDrawable("buttonclose0");
-		
 		style.font = blackFont;
+		
 		button = new TextButton("START!", style);
 		button.setHeight(90);
 		button.setX(Gdx.graphics.getWidth()/2 - button.getWidth()/2);

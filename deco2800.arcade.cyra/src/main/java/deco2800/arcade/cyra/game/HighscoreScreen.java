@@ -23,6 +23,7 @@ import deco2800.arcade.client.highscores.Highscore;
  * @author Game Over
  */
 public class HighscoreScreen extends AbstractScreen{
+	
 	private Stage stage;
 	private BitmapFont blackFont;
 	private BitmapFont listFont;

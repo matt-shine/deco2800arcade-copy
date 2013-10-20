@@ -71,6 +71,7 @@ pong
 tictactoe
 ui
 breakout
+blackjack
 deerforest
 mixmaze
 minigolf
@@ -78,6 +79,7 @@ chess
 landInvaders
 junglejump
 burningskies
+hunter
 checkers
 landInvaders
 towerdefence

@@ -11,7 +11,7 @@ Thumbs.db
 
 # Gradle
 build
-.gradle
+.gradle/
 
 # emacs stuff
 *~
@@ -47,7 +47,5 @@ games/
 # Including multipart log files
 **/*.log.*
 
-
-*.bin
 
 *.bin

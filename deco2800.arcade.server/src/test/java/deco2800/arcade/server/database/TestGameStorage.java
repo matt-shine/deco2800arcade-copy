@@ -33,17 +33,15 @@ public class TestGameStorage {
 		Assert.assertEquals(0,gs.getGamePrice(15));
 		Assert.assertEquals("junglejump",gs.getGameID(15));
 		Assert.assertEquals("",gs.getIconPath(15));
+	}	
+	@Test
+	public void testOutOfBound() throws SQLException, DatabaseException {
+		GameStorage gs = new GameStorage();
+		gs.initialise();
+		Assert.assertEquals(null,gs.getGameDescription(23));
+		Assert.assertEquals(null,gs.getGameName(23));
+		Assert.assertEquals(0,gs.getGamePrice(23));
+		Assert.assertEquals(null,gs.getGameID(23));
+		Assert.assertEquals(null,gs.getIconPath(23));
 	}
-	
-//	@Test
-//	public void testOutOfBound() throws SQLException, DatabaseException {
-//		GameStorage gs = new GameStorage();
-//		gs.initialise();
-//		Assert.assertEquals(null,gs.getGameDescription(21));
-//		Assert.assertEquals(null,gs.getGameName(21));
-//		Assert.assertEquals(0,gs.getGamePrice(21));
-//		Assert.assertEquals(null,gs.getGameID(21));
-//		Assert.assertEquals(null,gs.getIconPath(21));
-//		
-//	}
 }

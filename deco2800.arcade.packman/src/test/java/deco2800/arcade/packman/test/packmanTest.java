@@ -2,13 +2,16 @@ package deco2800.arcade.packman.test;
 
 import static org.junit.Assert.*;
 
-/*import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.InputStreamReader;
-*/
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
 import org.junit.Test;
 
+import deco2800.arcade.packman.PackCompress;
 import deco2800.arcade.packman.PackageUtils;
 
 
@@ -34,26 +37,31 @@ public class packmanTest {
 		assertEquals(PackageUtils.genMD5("test.txt"), "016FD69CDBF285D51490D1FF753B7436");
 	}
 	
-/**	@Test
-	public void compressionTest() {	
-		PackCompress.Compress("slf4j-api-1.7.5.jar", "test1.tar.gz");
-		PackCompress.Expand("test1.tar.gz", "test2.jar");
-		BufferedReader bfr2 = new BufferedReader(new InputStreamReader(
-	            System.in));
-	    String s1 = "", s2 = "";
-	    String y = "", z = "";
-
-	    File file1 = new File("slf4j-api-1.7.5.jar");
-	    File file2 = new File("test2.jar");
-
-	    BufferedReader bfr = new BufferedReader(new FileReader(file1));
-	    BufferedReader bfr1 = new BufferedReader(new FileReader(file2));
-
-	    while ((z = bfr1.readLine()) != null)
-	        s2 += z;
-
-	    while ((y = bfr.readLine()) != null)
-	        s1 += y;
-        assertEquals(s1,s2);
-	}*/
+	@Test
+	public void compressionTest() throws IOException {
+		PackCompress packCompress = new PackCompress();
+		packCompress.compress("test.jar", "test1.tar.gz");
+		packCompress.expand("test1.tar.gz", "test2.jar");
+        assertEquals(getClasses("test.jar"),getClasses("test2.jar"));
+	}
+	
+	private List<String> getClasses(String path) throws IOException {
+		List<String> classNames=new ArrayList<String>();
+		ZipInputStream zip=new ZipInputStream(new FileInputStream(path));
+		for(ZipEntry entry=zip.getNextEntry();entry!=null;entry=zip.getNextEntry())
+		    if(entry.getName().endsWith(".class") && !entry.isDirectory()) {
+		        StringBuilder className=new StringBuilder();
+		        for(String part : entry.getName().split("/")) {
+		            if(className.length() != 0)
+		                className.append(".");
+		            className.append(part);
+		            if(part.endsWith(".class"))
+		                className.setLength(className.length()-".class".length());
+		        }
+		        classNames.add(className.toString());
+		    }
+		zip.close();
+		return classNames;
+	}
+	
 }

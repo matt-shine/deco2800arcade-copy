@@ -52,7 +52,7 @@ public class TestAchievementStorage {
 	 * @throws IOException
 	 */
 	private IDataSet getDataSet() throws DataSetException, IOException {
-		URL url = TestCreditStorage.class.getClassLoader().getResource("TestAchievementStorage.xml");
+		URL url = TestAchievementStorage.class.getClassLoader().getResource("TestAchievementStorage.xml");
 		FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
 		builder.setColumnSensing(true);
 		return builder.build(url);
@@ -85,91 +85,67 @@ public class TestAchievementStorage {
 	}
 	
 
-	Player testplayer = new Player(1, "Bob", "default.png");
-	Player testplayer2 = new Player(2, "Bobbie", "default.png");
+	/**
+	 * Test for numPlayerWithAchievement
+	 * @throws DatabaseException
+	 */
+	@Test
+	public void testNum() throws DatabaseException{
+		// Tests for the number of players with a certain achievement.
+		int num = achievementStorage.numPlayerWithAchievement("test.test1");
+		assertEquals(3, num);
+	}
 	
-//	@Test
-//	public void testNum() throws DatabaseException{
-//		int num = achievementStorage.numPlayerWithAchievement("pong.winGame");
-//		System.out.println(num);
-//	}
+	/**
+	 * Test for AchievementsForIDs method
+	 * @throws DatabaseException
+	 */
+	@Test
+	public void testAchievementsForIDs() throws DatabaseException {
+		// Create a mock response from database
+				ArrayList<Achievement> achievementtest = new ArrayList<Achievement>();
+				achievementtest.add(new Achievement("test.test1", "Test 1",
+						"This is a test.", 5, null));
+		
+		// Create a mock ArrayList<String> of AchievementIDs
+		ArrayList<String> test = new ArrayList<String>();
+		test.add("test.test1");
+		
+		// Compare achievement's name
+		assertEquals(achievementtest.get(0), achievementStorage.achievementsForIDs(test).get(0));
+	}
+
+	/**
+	 * Test incrementing an achievement
+	 * @throws DatabaseException
+	 */
+	@Test
+	public void testIncrementAchievement() throws DatabaseException {
+		int testProgress = achievementStorage.incrementProgress(1, "test.test1");
+		assertEquals(2, testProgress);
+	}
+
+	/**
+	 * Test progressForPlayer() function
+	 * @throws DatabaseException
+	 */
+	@Test
+	public void testProgressForPlayer() throws DatabaseException {
+		
+		ArrayList<String> mockProgress = new ArrayList<String>();
+		mockProgress.add("test.test1");
+		mockProgress.add("test.test2");
 	
-//	/**
-//	 * Test for AchievementsForIDs method
-//	 * @throws DatabaseException
-//	 */
-//	@Test
-//	public void testAchievementsForIDs() throws DatabaseException {
-//		System.out.print("Testing AchievementsForIDs method.\n================\n" +
-//				"Create a test ArrayList of AchievementIDs.\n");
-//		// Create a test ArrayList<String> of AchievementIDs
-//		ArrayList<String> test = new ArrayList<String>();
-//		test.add("pong.winthreegames");
-//		test.add("pong.winfivegames");
-//		System.out.print("Create a test example response from database " +
-//				"- ArrayList<Achievement>.\n");
-//		// Create a test response from database
-//		ArrayList<Achievement> achievementtest = new ArrayList<Achievement>();
-//		achievementtest.add(new Achievement("pong.winthreegames", "3 Times Down",
-//				"Win 3 games of Pong", 3, "master.png"));
-//		
-//		// Compare achievement's name
-//		System.out.print("Test ArrayList<Achievement>: ");
-//		System.out.print(achievementtest);
-//		System.out.print("\nFrom Method ArrayList<Achievement>: ");
-//		System.out.print(achievementStorage.achievementsForIDs(test));
-//		assertEquals(achievementtest.get(0), achievementStorage.achievementsForIDs(test).get(0));
-//		System.out.print("\nAchievementsForIDs method: PASSED\n\n\n");
-//	}
-//	
-//	
-//	/**
-//	 * Test incrementing an achievement
-//	 * @throws DatabaseException
-//	 */
-//	@Test
-//	public void testIncrementAchievement() throws DatabaseException {
-//		System.out.print("Returning initial PLAYER_ACHIEVEMENT table." +
-//				"\n================\n");
-//		achievementStorage.returnPlayersAchievement();
-//		achievementStorage.incrementProgress(testplayer.getID(), "pong.winthreegames");
-//		achievementStorage.incrementProgress(testplayer2.getID(), "pong.winthreegames");
-//		achievementStorage.incrementProgress(testplayer2.getID(), "pong.winthreegames");
-//		achievementStorage.incrementProgress(testplayer.getID(), "pong.winfivegames");
-//		System.out.print("\n- Increment Player1 with achievement Pong Win3Games\n" +
-//				"- Increment x2 Player2 with achievement Pong Win3Games\n" +
-//				"- Increment Player1 with achievement Pong Win5Games\n================\n");
-//		achievementStorage.returnPlayersAchievement();
-//		
-//		System.out.print("TEST: Testing Over Increment\n");
-//		achievementStorage.incrementProgress(testplayer.getID(), "pong.winfivegames");
-//	}
-//	
-//	/**
-//	 * Test progressForPlayer() function
-//	 * @throws DatabaseException
-//	 */
-//	@Test
-//	public void testProgressForPlayer() throws DatabaseException {
-//		System.out.println("Testing progressForPlayer method.\n================\n");
-//		achievementStorage.incrementProgress(testplayer.getID(), "pong.winthreegames");
-//		achievementStorage.incrementProgress(testplayer2.getID(), "pong.winthreegames");
-//		achievementStorage.incrementProgress(testplayer2.getID(), "pong.winthreegames");
-//		achievementStorage.incrementProgress(testplayer2.getID(), "pong.winfivegames");
-//		achievementStorage.incrementProgress(testplayer2.getID(), "pong.winfivegames");
-//		achievementStorage.incrementProgress(testplayer2.getID(), "pong.winfivegames");
-//		achievementStorage.incrementProgress(testplayer2.getID(), "pong.winfivegames");
-//		achievementStorage.incrementProgress(testplayer2.getID(), "pong.winfivegames");
-//		
-//		AchievementProgress testResult = achievementStorage.progressForPlayer(1);
-//		System.out.println("Player 1 Progress\n" +
-//				"inProgress: " + testResult.inProgressAchievementIDs() + 
-//				"\nAwarded: " + testResult.awardedAchievementIDs() + "\n");
-//		AchievementProgress testResult2 = achievementStorage.progressForPlayer(2);
-//		System.out.println("Player 2 Progress\n" +
-//				"inProgress: " + testResult2.inProgressAchievementIDs() + 
-//				"\nAwarded: " + testResult2.awardedAchievementIDs() + "\n\n");
-//		
-//	}
+		AchievementProgress testResult = achievementStorage.progressForPlayer(1);
+		ArrayList<String> testProgress = testResult.inProgressAchievementIDs();
+		assertEquals(mockProgress, testProgress);
+		
+		ArrayList<String> mockAwarded = new ArrayList<String>();
+		mockAwarded.add("test.test3");
+		
+		ArrayList<String> testAwarded = testResult.awardedAchievementIDs();
+		assertEquals(mockAwarded, testAwarded);
+		
+	}
 }
 

@@ -1,17 +1,12 @@
 package deco2800.arcade.breakout.screens;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -33,7 +28,6 @@ import deco2800.arcade.breakout.Paddle;
 import deco2800.arcade.breakout.PauseState;
 import deco2800.arcade.breakout.ReadyState;
 import deco2800.arcade.breakout.powerup.PowerupManager;
-import deco2800.arcade.client.*;
 
 /**
  * Handles the current game screen and manages the game
@@ -49,7 +43,7 @@ public class GameScreen implements Screen {
 	/*
 	 * Creates private instance variables of basic game parts
 	 */
-	public String player;
+	private String player;
 	private Paddle paddle;
 	private Ball ball;
 	private Ball powerupBall;
@@ -63,9 +57,11 @@ public class GameScreen implements Screen {
 	private int pressed = 0;
 
 	// The counting of random statistics
-	public int highScore = 0;
-	public int bumpCount = 0;
-	public int brickBreak = 0;
+	private int highScore = 0;
+	private int bumpCount = 0;
+	private int brickBreak = 0;
+	//game.getAccolade().watch(game.getAccoladeBumpCounter(), bumpCount, 60000);
+	//game.getAccolade().watch(game.getAccoladeBrickBreak(), brickBreak, 90000);
 	
 
 	// GameOver status message constructor
@@ -105,11 +101,7 @@ public class GameScreen implements Screen {
 	private float lastHitY;
 
 	// Array of Brick
-	Brick bricks[];
-
-	// variables for rendering colours
-	private int outer = 0;
-	private int inner = 0;
+	private Brick bricks[];
 
 	// Power up manager and details
 	private boolean powerupsOn = false;
@@ -152,9 +144,13 @@ public class GameScreen implements Screen {
 		music.setVolume(0.2f);
 		playMusic();
 
-		game.getAccolade().watch(game.getAccoladeBumpCounter(), bumpCount, 60000);
-		game.getAccolade().watch(game.getAccoladeBrickBreak(), brickBreak, 90000);
-		game.getAccolade().start();
+		//TODO uncomment when functionality returns
+//		game.getAccolade().watch(game.getAccoladeBumpCounter(), bumpCount, 
+//				60000);
+//		game.getAccolade().watch(game.getAccoladeBrickBreak(), brickBreak, 
+//				90000);
+
+		//game.getAccolade().start();
 		// setting the ball and paddle
 		setPaddle(new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10)));
 		setBall(new Ball());
@@ -184,12 +180,11 @@ public class GameScreen implements Screen {
 
 		/*
 		 * Tries to read the Brick layout file and sets the BrickNum value. If
-		 * there is an issue the can will dispose all files and set the value of
+		 * there is an issue then dispose all files and set the value of
 		 * gameState to GameOverState.
 		 */
 		try {
-			bricks = levelSystem.readFile("levels/level" + getLevel() + ".txt",
-					bricks, this);
+			bricks = levelSystem.readFile("levels/level" + getLevel() + ".txt");
 			setBrickNum(bricks.length);
 		} catch (Exception e) {
 			System.err.println("Error is: " + e);
@@ -224,7 +219,6 @@ public class GameScreen implements Screen {
 			Rectangle r = b.getShape();
 			getPowerupManager().handlePowerup(r.x + r.width / 2, r.y);
 		}
-
 	}
 
 	/**
@@ -264,13 +258,15 @@ public class GameScreen implements Screen {
 				setLastHitY(getBall().getY());
 			}
 		}
-		breaking.play();
+		if (breaking != null) {
+			breaking.play();
+		}
 		brickBreak++;
 		incrementScore(this.getLevel() * 2);
 		setBrickNum(getBrickNum() - 1);
 		powerupCheck(b);
 		try {
-			Thread.currentThread().sleep(35);
+			Thread.sleep(35);
 		} catch (Exception e) {
 		}
 	}
@@ -388,10 +384,8 @@ public class GameScreen implements Screen {
 			game.incrementAchievement("breakout.noob");
 			gameState = new GameOverState();
 		}
-
 		game.incrementAchievement("breakout.winGame");
 		gameState = new GameOverState();
-
 	}
 
 	/**
@@ -412,7 +406,7 @@ public class GameScreen implements Screen {
 	public void roundOver() {
 		/*
 		 * Checks whether the lives have fallen below 0 If true then the
-		 * gameState is set to GAMEOVER, Otherwise a lives is decremented and
+		 * gameState is set to GAMEOVER, Otherwise lives is decremented and
 		 * gameState is set to READY
 		 */
 		if (getLives() > 0) {
@@ -432,7 +426,7 @@ public class GameScreen implements Screen {
 
 			gameoverstatus = "Bad luck " + player + " your final score is: "
 					+ getScore();
-			game.getAccolade().stop();
+			//game.getAccolade().stop();
 			gameState = new GameOverState();
 		}
 
@@ -474,21 +468,18 @@ public class GameScreen implements Screen {
 	}
 
 	/**
-	 * 
+	 * does nothing
 	 */
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-
 	}
 
 	/**
-	 * Pauses the game
+	 * Pauses the game before the window is closed
 	 */
 	@Override
 	public void pause() {
 		game.pause();
-
 	}
 
 	/**
@@ -543,12 +534,10 @@ public class GameScreen implements Screen {
 	 */
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-
 	}
 
 	/**
-	 * 
+	 * Resume game, only works on android devices
 	 */
 	@Override
 	public void resume() {
@@ -556,12 +545,10 @@ public class GameScreen implements Screen {
 	}
 
 	/**
-	 * 
+	 * does nothing
 	 */
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-
 	}
 
 	/**
@@ -770,24 +757,6 @@ public class GameScreen implements Screen {
 	 */
 	public void setLastHitY(float lastHitY) {
 		this.lastHitY = lastHitY;
-	}
-
-	/**
-	 * Set the inner
-	 * 
-	 * @param inner
-	 */
-	public void setInner(int inner) {
-		this.inner = inner;
-	}
-
-	/**
-	 * Sets the outer
-	 * 
-	 * @param outer
-	 */
-	public void setOuter(int outer) {
-		this.outer = outer;
 	}
 
 	/**
@@ -1026,5 +995,9 @@ public class GameScreen implements Screen {
 	 */
 	public Brick[] getBrickArray() {
 		return this.bricks;
+	}
+	
+	public Level getLevelSystem() {
+		return this.levelSystem;
 	}
 }

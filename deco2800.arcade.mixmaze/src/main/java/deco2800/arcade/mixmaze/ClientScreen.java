@@ -83,12 +83,13 @@ class ClientScreen extends GameScreen {
 
 		for (int j = 0; j < boardSize; j++) {
 			for (int i = 0; i < boardSize; i++) {
-				tile = new TileViewModel(i, j, tileSize, renderer);
+				tile = new TileViewModel(tileSize, renderer);
 				tileTable.add(tile).size(tileSize, tileSize);
 				os.register(1700 + j * 100 + i, tile);
 			}
-			if (j < boardSize)
+			if (j < boardSize){
 				tileTable.row();
+			}
 		}
 
 		p1 = new PlayerViewModel(model, tileSize, 1, p1Controls, scorebar[0],

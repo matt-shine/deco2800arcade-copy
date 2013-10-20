@@ -7,16 +7,22 @@ public class UpgradePowerUp extends PowerUp {
 	
 	static final Texture texture = new Texture(Gdx.files.internal("images/items/bullet_upgrade.png"));
 	
-	//Either have all PowerUps inherit a screen, or only the BulletPattern ones.
+	
+	/**
+	 * Passes the variable to the super class (PowerUp)
+	 * @param x
+	 * @param y
+	 */
 	public UpgradePowerUp(float x, float y) {
 			super(texture, x, y);		
 	}
 	
+	/**
+	 * Calls the player.upgradeBullet() function
+	 */
 	@Override
 	public void powerOn(PlayerShip player) {
-		//Demo of these changes. These are set though and not timed at the moment.
 		player.upgradeBullets();
-		player.setMaxSpeed(600f);//2000 is quite insane speed.
 	}
 
 }

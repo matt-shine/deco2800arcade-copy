@@ -73,7 +73,8 @@ public class junglejump extends GameClient implements InputProcessor {
 	
 	/* Game Sate Enum - Used for Menu Handling */
 	private enum GameState {
-		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS, CONTINUE, PAUSE, OPTIONS
+		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS, CONTINUE, PAUSE, OPTIONS,
+		SELECT_LEVEL
 	}
 	private GameState gameState;
 	
@@ -700,6 +701,9 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 			if (butY == OPTIONS) {
 				gameState = GameState.OPTIONS;
+			}
+			if (butY == LEVEL_SELECT) {
+				
 			}
 		}
 		if (keycode == Keys.BACKSPACE) {

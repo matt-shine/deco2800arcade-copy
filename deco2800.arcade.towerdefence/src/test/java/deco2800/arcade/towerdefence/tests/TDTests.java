@@ -125,12 +125,39 @@ public class TDTests {
 	@Test
 	public void projectileTest(){
 		Grid grid = new Grid(100, 100, "grid", 10, null, null);
+		//Create a projectile with no radius dealing 50 damage
 		Projectile bullet = new Projectile(0, 0, grid, new Vector2(10,10), 200,
 			Team.Player, null, 50, 0, 0);
+		//Create a target
 		Enemy victim = new Enemy(100, 0, 30, 30, 0, grid, Team.Computer, 0, 0, 0,
 				0, 0, null, null, null, null, null);
 		grid.placeAlien(victim);
+		//Shoot the projectile
 		bullet.move();
 		Assert.assertEquals(50, ((Enemy)grid.getGridContents(3,3).get(0)).health());
+	}
+	
+	@Test
+	public void areaDamageTest(){
+		//Create grid
+		Grid grid = new Grid(100, 100, "grid", 10, null, null);
+		//Create explosive with radius 2 and 50 damage
+		Projectile explosive = new Projectile(0, 0, grid, new Vector2(10,10), 200,
+			Team.Player, null, 50, 0, 2);
+		//Create 3 targets at varying distances
+		Enemy victim1 = new Enemy(100, 0, 30, 30, 0, grid, Team.Computer, 0, 0, 0,
+				0, 0, null, null, null, null, null);
+		Enemy victim2 = new Enemy(100, 0, 40, 30, 0, grid, Team.Computer, 0, 0, 0,
+				0, 0, null, null, null, null, null);
+		Enemy victim3 = new Enemy(100, 0, 50, 30, 0, grid, Team.Computer, 0, 0, 0,
+				0, 0, null, null, null, null, null);
+		grid.placeAlien(victim1);
+		grid.placeAlien(victim2);
+		grid.placeAlien(victim3);
+		//Shoot the explosive
+		explosive.move();
+		Assert.assertEquals(50, ((Enemy)grid.getGridContents(3,3).get(0)).health());
+		Assert.assertEquals(50, ((Enemy)grid.getGridContents(4,3).get(0)).health());
+		Assert.assertEquals(50, ((Enemy)grid.getGridContents(5,3).get(0)).health());
 	}
 }

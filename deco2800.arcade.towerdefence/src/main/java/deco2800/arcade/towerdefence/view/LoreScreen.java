@@ -104,12 +104,15 @@ public class LoreScreen implements Screen {
 
 		words = new Label("", new Label.LabelStyle(white, WHITE));
 		words.setWrap(true);
-		words.setText("LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n"
-				+ "LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n"
-				+ "LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n"
-				+ "LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n"
-				+ "LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n"
-				+ "LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n");
+		words.setText("The year is 2800, and humanity has spread across the stars,\n"
+				+ "colonising many worlds across the galaxy. 2 months ago, Earth\n"
+				+ "lost contact with several isolated planets, and a Defence of\n"
+				+ "Earth Colonies Organization (DECO) vessel, the Arcadia, was\n"
+				+ "sent to investigate. After the entire crew was killed by a\n"
+				+ "strange alien bio-weapon and the ship crippled during an ambush,\n"
+				+ "it is up to you, the defense AI of the Arcadia, to prevent hordes\n"
+				+ "of monstrous aliens from reaching the portal to Earth on the bridge\n"
+				+ "of the ship.");
 
 		table.add(backButton).top().right();
 		table.row();

@@ -25,6 +25,7 @@ import deco2800.arcade.protocol.communication.TextMessage;
 import deco2800.arcade.protocol.communication.VoiceMessage;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
+import deco2800.arcade.protocol.connect.HandshakeRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceResponse;
 import deco2800.arcade.protocol.game.GameLibraryRequest;
@@ -93,6 +94,7 @@ public class Protocol {
 		
 		// Connection messages
 		kryo.register(ConnectionResponse.class);
+		kryo.register(HandshakeRequest.class);
 
 		// Credit messages
 		kryo.register(CreditBalanceRequest.class);

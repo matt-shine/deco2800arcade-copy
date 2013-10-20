@@ -1,6 +1,6 @@
 package deco2800.arcade.protocol;
 
-import javax.crypto.SecretKey;
+import java.security.Key;
 
 /**
  * Helper class for sealing and extracting secure network messages. The class
@@ -11,7 +11,7 @@ import javax.crypto.SecretKey;
  */
 public class SymmetricSealer extends Sealer {
 
-	public SymmetricSealer(SecretKey secret) {
+	public SymmetricSealer(Key secret) {
 		this.secret = secret;
 		this.algorithm = "AES";
 	}

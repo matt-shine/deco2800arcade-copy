@@ -22,6 +22,7 @@ import deco2800.arcade.protocol.NetworkObject;
 import deco2800.arcade.protocol.Protocol;
 import deco2800.arcade.protocol.SealedListenerProxy;
 import deco2800.arcade.protocol.SymmetricSealer;
+import deco2800.arcade.protocol.connect.HandshakeRequest;
 import deco2800.arcade.utils.AsyncFuture;
 
 /**
@@ -47,18 +48,18 @@ public class NetworkClient {
 	// Time before the connection is aborted
 	private static final int TIMEOUT = 5000;
 
-    /**
-     * Creates a new network client
-     *
-     * @param serverAddress
-     * @param tcpPort
-     * @throws NetworkException
-     */
-    public NetworkClient(String serverAddress, int tcpPort)
-            throws NetworkException {
-        this(serverAddress, tcpPort, -1);
-    }
-	
+	/**
+	 * Creates a new network client
+	 * 
+	 * @param serverAddress
+	 * @param tcpPort
+	 * @throws NetworkException
+	 */
+	public NetworkClient(String serverAddress, int tcpPort)
+			throws NetworkException {
+		this(serverAddress, tcpPort, -1);
+	}
+
 	/**
 	 * Creates a new network client
 	 * 
@@ -67,16 +68,16 @@ public class NetworkClient {
 	 * @param udpPort
 	 * @throws NetworkException
 	 */
-	public NetworkClient(String serverAddress, int tcpPort, int udpPort) 
-			throws NetworkException{
+	public NetworkClient(String serverAddress, int tcpPort, int udpPort)
+			throws NetworkException {
 		this.client = new Client(131072, 131072);
 		this.client.start();
 
 		try {
-            if (udpPort == -1)
-                client.connect(TIMEOUT, serverAddress, tcpPort);
-            else
-                client.connect(TIMEOUT, serverAddress, tcpPort, udpPort);
+			if (udpPort == -1)
+				client.connect(TIMEOUT, serverAddress, tcpPort);
+			else
+				client.connect(TIMEOUT, serverAddress, tcpPort, udpPort);
 			Protocol.register(client.getKryo());
 		} catch (IOException e) {
 			throw new NetworkException("Unable to connect to the server", e);
@@ -84,10 +85,6 @@ public class NetworkClient {
 
 		// FIXME need to support adding key later. Currently we never actually
 		// add the SecretKey to the sealer.
-
-		// Use sealed listener as proxy layer to encrypt/decrypt transmissions
-		sealer = new SymmetricSealer(null);
-		sealedListener = new SealedListenerProxy(sealer);
 
 		// Create session and initialise with keys
 		generateKeyPair();
@@ -98,15 +95,21 @@ public class NetworkClient {
 		// to store state information as part of the handshaking process.
 		this.client.addListener(new ConnectionListener(session));
 
+		this.client.sendTCP(new HandshakeRequest());
+
+		// Use sealed listener as proxy layer to encrypt/decrypt transmissions
+		sealer = new SymmetricSealer(session.getSessionSecret());
+		sealedListener = new SealedListenerProxy(sealer);
+
 		// Tell kryonet we want sealedListener to handle incoming messages. It
 		// unseals secure messages and forwards the message to other listeners.
 		this.client.addListener(sealedListener);
 	}
 
-    public Client kryoClient() {
-        return client;
-    }
-	
+	public Client kryoClient() {
+		return client;
+	}
+
 	/**
 	 * Sends a NetworkObject over TCP
 	 * 
@@ -118,22 +121,24 @@ public class NetworkClient {
 	public void sendNetworkObject(NetworkObject object) {
 		// Check whether we have an authenticated session yet
 		if (secret == null) {
+			System.out.println("Secret not established");
 			// TODO determine whether other teams want to check for failure.
 			// throw new NotAuthenticatedException();
-		}
+		} else {
 
-		// Encrypt the object before transmission
-		SealedObject sealedObject = null;
-		try {
-			sealedObject = sealer.seal(object);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			// Encrypt the object before transmission
+			SealedObject sealedObject = null;
+			try {
+				sealedObject = sealer.seal(object);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
-		// Send the sealed object across the network
-		// TODO may want to check that the object class has actually been
-		// registered.
-		this.client.sendTCP(sealedObject);
+			// Send the sealed object across the network
+			// TODO may want to check that the object class has actually been
+			// registered.
+			this.client.sendTCP(sealedObject);
+		}
 	}
 
 	/**
@@ -178,7 +183,7 @@ public class NetworkClient {
 		}
 	}
 
-    public AsyncFuture<NetworkObject> request(final NetworkObject req) {
-	return NetworkObject.request(client, req);
-    }
+	public AsyncFuture<NetworkObject> request(final NetworkObject req) {
+		return NetworkObject.request(client, req);
+	}
 }

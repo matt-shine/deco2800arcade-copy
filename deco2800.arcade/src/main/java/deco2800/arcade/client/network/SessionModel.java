@@ -55,6 +55,10 @@ public class SessionModel {
 	public void setSessionSecret(Key secret) {
 		this.sessionSecret = secret;
 	}
+	
+	public Key getSessionSecret() {
+		return this.sessionSecret;
+	}
 
 	public void setServerCert(PrivateKey serverCert) {
 		// FIXME do integrity checks first?

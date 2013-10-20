@@ -93,7 +93,14 @@ public class Invaders extends JFrame implements Runnable {
 	            return true;
 	        }
 	    });
-		
+	}
+	
+	public void gameVictory1()
+	{
+		if(bglevel == 2)
+		{
+			Land
+		}
 	}
 
 	/**

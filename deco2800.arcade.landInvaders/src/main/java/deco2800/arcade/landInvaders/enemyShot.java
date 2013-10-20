@@ -20,6 +20,7 @@ public class enemyShot {
 		p_y = y+30;
 		width = 5;
 		height = 10;
+		enemyShotState = true;
 
 	}
 	

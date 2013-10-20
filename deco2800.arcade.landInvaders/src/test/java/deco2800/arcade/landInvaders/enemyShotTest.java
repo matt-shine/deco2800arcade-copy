@@ -2,43 +2,22 @@ package deco2800.arcade.landInvaders;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.MockitoAnnotations;
 
 public class enemyShotTest {
 
+	@Before
+	public void Initialize() {
+		MockitoAnnotations.initMocks(this);
+	}
+	
 	@Test
-	public final void testEnemyShot() {
-		fail("Not yet implemented"); // TODO
+	public void enemyInitialize() {
+		enemyShot es = new enemyShot(10, 10);
+		assertTrue(es.getEShotState());
 	}
 
-	@Test
-	public final void testDrawshot() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	@Test
-	public final void testUpdate() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	@Test
-	public final void testPositionX() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	@Test
-	public final void testPositionY() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	@Test
-	public final void testWidth() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	@Test
-	public final void testHeight() {
-		fail("Not yet implemented"); // TODO
-	}
 
 }

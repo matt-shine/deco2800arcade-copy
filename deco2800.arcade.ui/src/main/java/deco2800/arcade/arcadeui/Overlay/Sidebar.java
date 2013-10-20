@@ -1,7 +1,6 @@
 package deco2800.arcade.arcadeui.Overlay;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,14 +21,8 @@ public class Sidebar extends Group {
     private Skin skin = null;
     private Overlay overlay;
     private NinePatch texture;
-    private static float WIDTH = 160;
-    private static float INNER_POS = -WIDTH;
-    private static float OUTER_POS = 0;
-    private float pos = INNER_POS;
-    private float vel = 0;
-    private boolean isUIOpen = true;
-    private boolean hasTabPressedLast = false;
     private Window window;
+	private boolean isUIOpen;
 
     public Sidebar(Overlay overlay, Window window) {
 
@@ -74,12 +67,16 @@ public class Sidebar extends Group {
                     if (e.toString().equals("touchDown")) {
                         if (buttonNum == 0) {
                             addAchievementsWindow();
+                        } else if(buttonNum == 1) {
+                        	addChatWindow();
                         } else if (buttonNum == 3) {
                             ArcadeSystem.goToGame(ArcadeSystem.UI);
                         }
                     }
                     if (buttonNum == 0 && e.toString().equals("touchDown")) {
                         addAchievementsWindow();
+                    } else if (buttonNum == 1 && e.toString().equals("touchDown")) {
+                        addChatWindow();
                     }
                     return true;
                 }
@@ -95,36 +92,6 @@ public class Sidebar extends Group {
 
     @Override
     public void act(float d) {
-
-        //toggles isUIOpen on tab key down
-        /*if (Gdx.input.isKeyPressed(Keys.SPACE) != hasTabPressedLast && (hasTabPressedLast = !hasTabPressedLast)) {
-            isUIOpen = !isUIOpen;
-        }
-
-        if (Gdx.input.getX() < 30) {
-            isUIOpen = true;
-        }
-
-
-        if (isUIOpen) {
-            vel += 1;
-        }
-        if (!isUIOpen) {
-            vel -= 1;
-        }
-
-        pos += vel;
-        if (pos > OUTER_POS) {
-            pos = OUTER_POS;
-            vel = 0;
-        }
-        if (pos < INNER_POS) {
-            pos = INNER_POS;
-            vel = 0;
-        }
-
-
-        this.setX(pos);*/
 
         super.act(d);
     }
@@ -146,7 +113,11 @@ public class Sidebar extends Group {
 
     public void addAchievementsWindow() {
         window.setContent(new AchievementList(overlay, skin));
-        this.isUIOpen = false;
+    }
+    
+    public void addChatWindow() {
+        window.setContent(new ChatWindow(overlay, skin));
+        this.isUIOpen = true;
     }
 
 

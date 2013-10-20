@@ -7,17 +7,21 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * 
+ * Manages the values of the paddle. Controls the size and position of the
+ * paddle as well as rendering the colour.
+ * 
  * @author Naveen
  * 
  */
 
 public abstract class Paddle {
 
-	private static final float WIDTH = 128f;
+	private float width = 128f;
 	private static final float HEIGHT = 20f;
+	private static final float STANDARDWIDTH = 128f;
 
 	Rectangle paddleShape = new Rectangle();
-	
+
 	/**
 	 * Create a new paddle at a given vector position.
 	 * 
@@ -26,23 +30,85 @@ public abstract class Paddle {
 	public Paddle(Vector2 position) {
 		this.paddleShape.x = position.x;
 		this.paddleShape.y = position.y;
-		this.paddleShape.width = WIDTH;
+		this.paddleShape.width = width;
 		this.paddleShape.height = HEIGHT;
 	}
-	
-	// Getter method for the paddles x position
+
+	/**
+	 * Return the Standard width size of the paddle
+	 * 
+	 * @return float STANDARDWIDTH
+	 */
+	public float getStandardWidth() {
+		return STANDARDWIDTH;
+	}
+
+	/**
+	 * Decreases the size of the paddle by halving the current size
+	 */
+	public void decreaseSize() {
+		this.paddleShape.width = getPaddleShapeWidth() / 2;
+	}
+
+	/**
+	 * Increases the size of the paddle by doubling the current size
+	 */
+	public void increaseSize() {
+		this.paddleShape.width = getPaddleShapeWidth() * 2;
+	}
+
+	/**
+	 * Returns the current size of the width
+	 * 
+	 * @return float width
+	 */
+	public float getPaddleShapeWidth() {
+		return this.paddleShape.width;
+	}
+
+	/**
+	 * Resizes the paddle by setting the new width value to the paddle width
+	 */
+	public void resizePaddle() {
+		this.paddleShape.width = getWidth();
+	}
+
+	/**
+	 * Returns the x position of the paddle
+	 * 
+	 * @return float x
+	 */
 	public float getPaddleX() {
 		return this.paddleShape.x;
 	}
-	
-	// Getter method for the paddles y position
+
+	/**
+	 * Returns the y position of the paddle
+	 * 
+	 * @return float y
+	 */
 	public float getPaddleY() {
 		return this.paddleShape.y;
 	}
-	
-	// Getter method for the paddles width
+
+	/**
+	 * Returns the value of the width
+	 * 
+	 * @return float width
+	 */
 	public float getWidth() {
-		return WIDTH;
+		return width;
+	}
+
+	/**
+	 * Sets given float to become the width value and calls the resizePaddle
+	 * method
+	 * 
+	 * @param width
+	 */
+	public void setWidth(float width) {
+		this.width = width;
+		resizePaddle();
 	}
 
 	/**
@@ -53,11 +119,12 @@ public abstract class Paddle {
 	}
 
 	/**
-	 * render the paddle red
+	 * Render the paddle to white
+	 * 
 	 * @param render
 	 */
 	public void render(ShapeRenderer render) {
-		render.setColor(0.7f, 0.7f, 0.7f, 0.5f);
+		render.setColor(1f, 1f, 1f, 0.5f);
 		render.filledRect(paddleShape.x, paddleShape.y, paddleShape.width,
 				paddleShape.height);
 	}

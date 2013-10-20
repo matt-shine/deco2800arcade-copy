@@ -14,7 +14,7 @@ dependencies {
 
 task(runArcade, dependsOn: "classes", type: JavaExec) {
     main = "deco2800.arcade.client.Arcade"
-    classpath = sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.ui").sourceSets.main.runtimeClasspath
+    classpath = sourceSets.main.runtimeClasspath + project(":deco2800.arcade.ui").sourceSets.main.runtimeClasspath + project(":deco2800.arcade.utils").sourceSets.main.runtimeClasspath
     String contents = file('../deco2800.arcade.packman/games.txt').getText('UTF-8');
     List games = contents.split('[\\r\\n]+');
     for (String game : games) {
@@ -27,7 +27,7 @@ task(runArcade, dependsOn: "classes", type: JavaExec) {
 task(debugArcade, dependsOn: "classes", type: JavaExec) {
     main = "deco2800.arcade.client.Arcade"
     classpath = sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.ui").sourceSets.main.runtimeClasspath
-   	jvmArgs = ["-Xdebug", "-Xnoagent", "-Djava,compiler=NONE", "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"]
+   		jvmArgs = ["-Xdebug", "-Xnoagent", "-Djava,compiler=NONE", "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"]
    
     String contents = file('../deco2800.arcade.packman/games.txt').getText('UTF-8');
     List games = contents.split('[\\r\\n]+');

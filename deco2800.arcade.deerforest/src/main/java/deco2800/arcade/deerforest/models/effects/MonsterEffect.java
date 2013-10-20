@@ -11,7 +11,7 @@ public class MonsterEffect extends AbstractEffect {
 	 * @param typeEffects Set of all the monster types that the effect affects
 	 * 			null if it can affect any type
 	 * 
-	 * @param effectCategory List of each effect category that this effect has
+	 * @param effectCategories List of each effect category that this effect has
 	 * 			must be in same order as the parameters list
 	 * 
 	 * @param effectParams List of list of parameters, with one list for each 

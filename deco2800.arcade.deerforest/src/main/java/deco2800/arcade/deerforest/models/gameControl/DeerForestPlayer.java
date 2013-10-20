@@ -6,6 +6,9 @@ import java.util.List;
 import deco2800.arcade.deerforest.models.cardContainers.*;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 
+/**
+ * Defines a player class, owns a deck, field and graveyard CardCollection
+ */
 public class DeerForestPlayer {
 
 	//Have variables for field, deck, graveyard and hand
@@ -15,8 +18,11 @@ public class DeerForestPlayer {
 	private Field field;
 	private int currentLife;
 	private int currentShield;
-	
-	//Initialise the player with deck
+
+    /**
+     * Initialise the player with deck
+     * @param playerDeck the players deck
+     */
 	public DeerForestPlayer(Deck playerDeck) {
 		this.deck = playerDeck;
 		this.hand = new Hand();
@@ -26,7 +32,11 @@ public class DeerForestPlayer {
 		this.currentShield = 0;
 	}
 
-	//draw n cards from deck to hand
+    /**
+     * draw n cards from deck to hand
+     * @param no the amount of cards to draw
+     * @return the list of the drawn cards
+     */
 	public List<AbstractCard> draw(int no) {
 		List<AbstractCard> cardsDrawn = new ArrayList<AbstractCard>();
 		while(no > 0) {
@@ -37,28 +47,47 @@ public class DeerForestPlayer {
 		return cardsDrawn;
 	}
 
-	//draw 1 card from deck to hand
+    /**
+     * draw 1 card from deck to hand
+     * @return the drawn card
+     */
 	public AbstractCard draw() {
 		AbstractCard c = this.deck.draw();
 		if(c!=null && addCard(c, this.hand)) return c;
 		return null;
 	}
-	
-	//move card to location
+
+    /**
+     * move card to location
+     * @param card the card to move
+     * @param dest the new location of the card
+     * @return true if successful, false otherwise
+     */
 	public boolean addCard(AbstractCard card, CardCollection dest) {
 		if(card == null || dest == null) return false;
 		if(dest.add(card)) return true;
 		return false;
 	}
-	
-	//move cards from location to location
+
+    /**
+     * move cards from location to location
+     *
+     * @param cardsToMove list of all the cards to move
+     * @param locSrc where the cards are currently stored
+     * @param locDest where the cards will be moved to
+     * @return true if successful, false otherwise
+     */
 	public boolean moveCards(List<AbstractCard> cardsToMove, CardCollection locSrc, CardCollection locDest) {
 		for(AbstractCard card: cardsToMove) {
 			if(!locSrc.remove(card) || !locDest.add(card)) return false;
 		}
 		return true;
 	}
-	
+
+    /**
+     * Inflicts damage to lifepoints
+     * @param damage the amount of damage to inflict
+     */
 	public void inflictDamage(int damage) {
 		//Inflict Life point damage
 		currentLife -= damage;
@@ -66,6 +95,10 @@ public class DeerForestPlayer {
 			currentLife = 0;
 		}
 	}
+
+    /**
+     * Getters
+     */
 	
 	public Field getField() {
 		return field;

@@ -7,6 +7,8 @@ unit VARCHAR(16) NOT NULL,
 modifier VARCHAR(64),
 tag VARRCHAR(32),
 image VARCHAR(32),
+popup INT(32),
+popup_message VARCHAR(64),
 PRIMARY KEY (accolade_id)
 /** //no other tables made yet, so i don't know what the foreign key 
 * //points to.

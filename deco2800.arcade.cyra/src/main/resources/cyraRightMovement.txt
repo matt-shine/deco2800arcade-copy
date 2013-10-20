@@ -1,0 +1,39 @@
+cyra-running.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+cyra
+  rotate: false
+  xy: 0, 0
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 1
+cyra
+  rotate: false
+  xy: 128, 0
+  size: 120, 128
+  orig: 120, 128
+  offset: 0, 0
+  index: 2
+cyra
+  rotate: false
+  xy: 255, 0
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 3
+cyra
+  rotate: false
+  xy: 383, 0
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 4
+cyra
+  rotate: false
+  xy: 512, 0
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 5

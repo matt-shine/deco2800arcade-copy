@@ -1,11 +1,26 @@
 package deco2800.arcade.wl6.enemy;
 
-/**
- * Created with IntelliJ IDEA.
- * User: john
- * Date: 22/09/13
- * Time: 20:50
- * To change this template use File | Settings | File Templates.
- */
-public class SS {
+import deco2800.arcade.wl6.DoodadInfo;
+
+public class SS extends Enemy {
+
+    // All difficulties = 100 health
+    private int STARTING_HEALTH = 100;
+
+    public SS(int uid, DoodadInfo d) {
+        super(uid);
+
+        setHealth(STARTING_HEALTH);
+        setPathSpeed(512);
+        setChaseSpeed(1536);
+        setPain(true);
+        setDamage(0);
+        this.setStateChangeTime(0.33f);
+        
+        initialiseFromEnemyData(d);
+        
+    }
+
+
+
 }

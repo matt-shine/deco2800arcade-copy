@@ -5,11 +5,13 @@ package deco2800.arcade.mixmaze;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import org.apache.log4j.BasicConfigurator;
 
-public class MixMazeStarter{
+public class MixMazeStarter {
 	public static void main(String[] args) {
-		LwjglApplicationConfiguration cfg =
-				new LwjglApplicationConfiguration();
+		BasicConfigurator.configure();
+
+		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 
 		cfg.title = "Mix Maze (developing)";
 		cfg.useGL20 = true;

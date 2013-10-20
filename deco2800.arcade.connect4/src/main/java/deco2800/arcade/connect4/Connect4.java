@@ -21,16 +21,14 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.client.highscores.*;
+
 import java.util.*;
 /**
- * A Connect4 game for use in the Arcade
+ * A Connect4 game for testing of replay handler
  * 
- *@author-
  */
 @ArcadeGame(id="Connect4")
 public class Connect4 extends GameClient {
-	//FIXME some big methods in this class
 	private OrthographicCamera camera;
 	
 	private Disc cursorDisc;
@@ -43,8 +41,8 @@ public class Connect4 extends GameClient {
 		GAMEOVER
 	}
 	private GameState gameState;
-	private int[] scores = new int[2];
-	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
+	// The names of the players: the local player is always players[0]
+	private String[] players = new String[2];
 	private int playerTurn = 0;
 	
 	private int[] keyCodes = new int[3];
@@ -54,13 +52,13 @@ public class Connect4 extends GameClient {
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
 	
-	private final int AI_DELAY = 500;
+	private static final int AI_DELAY = 200;
 	
-	private final int KEY_LEFT = 0;
-	private final int KEY_RIGHT = 1;
-	private final int KEY_ENTER = 2;
+	private static final int KEY_LEFT = 0;
+	private static final int KEY_RIGHT = 1;
+	private static final int KEY_ENTER = 2;
 	
-	public ShapeRenderer shapeRenderer;
+	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
 	private BitmapFont font;
 
@@ -70,15 +68,13 @@ public class Connect4 extends GameClient {
 	private ReplayListener replayListener;
 	
 	//Network client for communicating with the server.
-	//Should games reuse the client of the arcade somehow? Probably!
 	private NetworkClient networkClient;
 	
-	long nextComputerMove;
-	
-	int nextComputerCol = -1;
+	private long nextComputerMove;
+	private int nextComputerCol = -1;
 
 	/**
-	 * Basic constructor for the Checkers game
+	 * Basic constructor for the Connect4 game
 	 * @param player The name of the player
 	 * @param networkClient The network client for sending/receiving messages to/from the server
 	 */
@@ -91,38 +87,57 @@ public class Connect4 extends GameClient {
 		keyCodes[KEY_RIGHT] = 0; //Right Key
 		keyCodes[KEY_ENTER] = 0; //Enter Key
 		
-        this.networkClient = networkClient; //this is a bit of a hack  
+        this.networkClient = networkClient;
         
+        //Setup the replay handler
         replayHandler = new ReplayHandler( this.networkClient );
+        
+        //Set up the listener on this end
 		replayListener = new ReplayListener(replayHandler);
 		
+		//Let the client know about this listener
 		this.networkClient.addListener(replayListener);
 		
+		//Add an event listener for callbacks
 		replayHandler.addReplayEventListener(initReplayEventListener());
 		
 		//Declare an event to be registered in the factory, we can pass arrays.
+		//The do_move event is for recording a players move
 		ReplayNodeFactory.registerEvent("do_move",
 				                          	new String[]{"player_id",
 				                                             "col"}
 				                               );
 		//Declare an event to be registered in the factory, we can pass arrays.
+		//The cursor_move event is for recording the movement of the cursor
 		ReplayNodeFactory.registerEvent("cursor_move",
 						                    new String[]{"col"}
 						                       );
 		
-		replayHandler.startSession( 1, "replayers" );
+		//Get the list of sessions for connect4
+		replayHandler.requestSessionList(getGame().id);
+		
+		//Start session - tell the server we will be recording soon
+		replayHandler.startSession( getGame().id, players[ 0 ] );
 	}
-	
 
 	private ReplayEventListener initReplayEventListener() {
 	    return new ReplayEventListener() {
             public void replayEventReceived( String eType, ReplayNode eData ) {
-                if ( eType.equals( "node_pushed" ) ) {
+                /* 
+                 * Here you can add actions to occur when each of the replay events is received.
+                 * These are currently used for printing testing data and could
+                 * be used for running custom code relative to any game that will be
+                 * triggered when each replay event occurs.
+            	*/
+            	if ( eType.equals( "node_pushed" ) ) {
                     System.out.println( eType );
                     System.out.println( eData );
                 }
                 if ( eType.equals( "event_pushed" ) ) {
                     System.out.println( eType );
+                }
+                if ( eType.equals( "session_list" ) ) {
+                    System.out.println( eData );
                 }
                 if ( eType.equals( "replay_reset" ) ) {
                     System.out.println( "replay reset" );
@@ -133,6 +148,11 @@ public class Connect4 extends GameClient {
                 }
                 
                 if ( eType.equals( "do_move" ) ) {
+                	/* When a do_move event is received, if the gameState is in replay mode
+                	 * it will get the data required to pass into the doMove function and run that
+                	 * function.
+                	 */
+               
                 	if ( gameState == GameState.REPLAY ) {
                 		int player = eData.getItemForString( "player_id" ).intVal();
                 		doMove(player, eData.getItemForString( "col" ).intVal() );   
@@ -143,6 +163,9 @@ public class Connect4 extends GameClient {
                 }
                 
                 if ( eType.equals( "cursor_move" ) ) {
+                	/* The same occurs when a cursor_move event is received. If the gameState
+                	 * is in replay mode, it will get the data required and set the currentPos value.
+                	 */
                 	if ( gameState == GameState.REPLAY ) {
                 		cursorDisc.currentPos = eData.getItemForString( "col" ).intVal();  
                         System.out.println( "Cursor move: " + cursorDisc.currentPos );
@@ -153,21 +176,25 @@ public class Connect4 extends GameClient {
 	}
 	
 	/**
-	 * Returns random integer
+	 * Returns random integer for computer cursor
 	 */
-	
 	public static int randInt(int min, int max) {
 
-	    // Usually this can be a field rather than a method variable
 	    Random rand = new Random();
 
-	    // nextInt is normally exclusive of the top value,
-	    // so add 1 to make it inclusive
 	    int randomNum = rand.nextInt((max - min) + 1) + min;
 
 	    return randomNum;
 	}
 	
+	/**
+	 * Checks if any keys have been pressed and alters keyCodes where required.
+	 * 
+	 * The keyPressed and keyReleased states are used to ensure the related functions
+	 * for the left, right and enters keys only occur once the key has been released.
+	 * 
+	 * 0 => key up, 1 => key pressed, 2 => key released
+	 */
 	public void checkKeysPressed(){
 		if (Gdx.input.isKeyPressed(Keys.LEFT) && keyCodes[KEY_LEFT] == 0) {
 			keyCodes[0] = 1;
@@ -178,6 +205,9 @@ public class Connect4 extends GameClient {
 		}
 	}
 	
+	/**
+	 * Checks if any keys have been released and alters keyCodes where required.
+	 */
 	public void checkKeysReleased(){
 		if (!Gdx.input.isKeyPressed(Keys.LEFT) && keyCodes[KEY_LEFT] == 1) {
 			keyCodes[0] = 2;
@@ -203,7 +233,6 @@ public class Connect4 extends GameClient {
 
 			@Override
 			public void hide() {
-				//TODO: unpause connect4
 			}
 
 			@Override
@@ -224,7 +253,6 @@ public class Connect4 extends GameClient {
 
 			@Override
 			public void show() {
-				//TODO: unpause connect4
 			}
 			
         });
@@ -239,25 +267,31 @@ public class Connect4 extends GameClient {
 	}
 	
 	public void init() {
-
+		ArrayList<String> ButtonList =  new ArrayList<String>();
+		
+		//Setup the button list
+		ButtonList.add("Quit");
+		ButtonList.add("Replay");
+		
 		//Set the current player's turn
 		playerTurn = 0;
 		
 		//Create the table
 		table = new Table();
-		table.bounds.x = SCREENWIDTH/2 - Table.WIDTH/2;
-		table.SetupDiscs();
+		table.getBounds().x = SCREENWIDTH/2 - Table.WIDTH/2;
+		table.setupDiscs();
 		
 		//Create the buttons and setup
 		buttons = new Buttons();
 		buttons.setX(Gdx.graphics.getWidth());
 		buttons.setY(Gdx.graphics.getHeight() - 20);
+		buttons.AddButtonsFromList(ButtonList);
 		buttons.hide();
 		
 		//Create the cursor disc
 		cursorDisc = new Disc();
 		cursorDisc.setState( Disc.PLAYER1 );
-		cursorDisc.setPosition((table.bounds.x + cursorDisc.bounds.width + 5), (table.bounds.y + table.bounds.height + 25));
+		cursorDisc.setPosition((table.getBounds().x + cursorDisc.bounds.width + 5), (table.getBounds().y + table.getBounds().height + 25));
 		
 		//Necessary for rendering
 		shapeRenderer = new ShapeRenderer();
@@ -266,14 +300,13 @@ public class Connect4 extends GameClient {
 		batch = new SpriteBatch();
 		
 		//Initialise the scores and game state
-		scores[0] = 0;
-		scores[1] = 0;
 		gameState = GameState.READY;
 		statusMessage = "Click to start!";
 		
 	}
 	
 	public void reset() {
+		//Reset the discs and playerTurn
 		table.resetDiscs();
 		this.playerTurn = 0;
 		cursorDisc.setState( Disc.PLAYER1 );
@@ -291,29 +324,41 @@ public class Connect4 extends GameClient {
 	}
 	
 	/**
-	 * Render the cursor disc - takes current player
-	 * and renders the appropriate colour.
+	 * Render the cursor disc.
+	 * 
+	 * Determines the current player and renders the appropriate
+	 * cursor(disc) colour.
 	 */
-	
 	public void renderCursorDisc() {
+		//Set cursor position
 		cursorDisc.setPosition(
-				(table.bounds.x + cursorDisc.bounds.width + cursorDisc.currentPos * ( 5 + 2 * Table.DISCRADIUS ) + 5 ), 
-				(table.bounds.y + table.bounds.height + 25));
+				(table.getBounds().x + cursorDisc.bounds.width + cursorDisc.currentPos * ( 5 + 2 * Table.DISCRADIUS ) + 5 ), 
+				(table.getBounds().y + table.getBounds().height + 25));
+		
+		//Determine current player and set respective cursor colour.
 		if (playerTurn == 0) {
 			cursorDisc.setState( Disc.PLAYER1 );
-			
 		} else if (playerTurn == 1) {
 			cursorDisc.setState( Disc.PLAYER2 );
 		}
 		
-		//Render the cursor Disc for player 1
+		//Render the cursor Disc
 	    shapeRenderer.begin(ShapeType.FilledCircle);
 	    cursorDisc.render(shapeRenderer);
 	    shapeRenderer.end();
 	}
 	
+	/**
+	 * Moves the cursor disc to the right.
+	 * 
+	 * Calls moveRight on the cursor disc and registers
+	 * a cursor_move with the replay handler.
+	 */
 	public void moveCursorRight() {
+		//Attempt right move
 		int rightMove = cursorDisc.moveRight();
+		
+		//If right move was successful, register a cursor_move with the replay handler
 		if ( rightMove >= 0 ) {
 			replayHandler.pushEvent(
 			        ReplayNodeFactory.createReplayNode(
@@ -324,8 +369,17 @@ public class Connect4 extends GameClient {
 		}
 	}
 	
+	/**
+	 * Moves the cursor disc to the left.
+	 * 
+	 * Calls moveLeft on the cursor disc and registers
+	 * a cursor_move with the replay handler.
+	 */
 	public void moveCursorLeft() {
+		//Attempt left move
 		int leftMove = cursorDisc.moveLeft();
+		
+		//If left move was successful, register a cursor_move with the replay handler
 		if ( leftMove >= 0 ) {
 			replayHandler.pushEvent(
 			        ReplayNodeFactory.createReplayNode(
@@ -336,6 +390,10 @@ public class Connect4 extends GameClient {
 		}
 	}
 
+	/**
+	 * Renders all required text on the screen.
+	 * 
+	 */
 	public void renderScreenText() {
 		//render player names
 	    batch.begin();
@@ -386,6 +444,7 @@ public class Connect4 extends GameClient {
 		    case READY: //Ready to start a new game
 		    	if (Gdx.input.isTouched()) {
 		    		reset();
+		    		//Begin recording
 		    		replayHandler.startRecording();
 		    		startGame();
 		    	}
@@ -397,6 +456,7 @@ public class Connect4 extends GameClient {
 		    		checkKeysPressed();
 		    		checkKeysReleased();
 		    		
+		    		//If a key has been released, do required movement and reset key codes to 0.
 		    		if(keyCodes[KEY_RIGHT] == 2) {
 		    			moveCursorRight();
 		    			keyCodes[1] = 0;
@@ -445,6 +505,7 @@ public class Connect4 extends GameClient {
 		    			break;
 		    		}
 		    		
+		    		//Do computer move and register a do_move event with the replay handler
 		    		if ( doMove(playerTurn, cursorDisc.currentPos) ) {
 		    			
 			    		replayHandler.pushEvent(
@@ -478,9 +539,12 @@ public class Connect4 extends GameClient {
 				   		buttons.hide();
 			   		} else if (buttons.checkButtonsPressed(mouseX, mouseY) == 2){
 			   			//Replay button has been pressed
+			   			//reset the board
 			   			reset();
 				    	gameState = GameState.REPLAY;
-				    	replayHandler.startPlayback();
+				    	//Start replay of last session
+				    	replayHandler.playbackLastSession();
+				    	
 				    	isReplaying = true;
 				    	buttons.hide();
 			   		}
@@ -493,6 +557,7 @@ public class Connect4 extends GameClient {
 		    		statusMessage = "Replay over";
 		    		gameState = GameState.GAMEOVER;
 		    	}
+		    	//Start running the replay
 	    		replayHandler.runLoop();
 		    	break;
 	    }
@@ -505,15 +570,17 @@ public class Connect4 extends GameClient {
 		if (player == 0){
 	    	if (table.checkFieldWinner( Disc.PLAYER1 )) {
 	    		gameState = GameState.GAMEOVER;
+	    		//End session with the server
+		    	replayHandler.endCurrentSession();
 	    		endGame( 0 );
 	    	}
-	    	//renderCursorDisc(1);
 	    } else {
 	    	if (table.checkFieldWinner( Disc.PLAYER2 )) {
 	    		gameState = GameState.GAMEOVER;
+	    		//End session with the server
+		    	replayHandler.endCurrentSession();
 	    		endGame( 1 );
 	    	}
-	    	//renderCursorDisc(0);
 	    }
 		
 	}
@@ -523,6 +590,7 @@ public class Connect4 extends GameClient {
 	}
 
 	private void endGame(int winner) {
+		//Game is over - stop recording and set gameState
 		replayHandler.finishRecording();
 		gameState = GameState.GAMEOVER;
 	}
@@ -553,7 +621,6 @@ public class Connect4 extends GameClient {
 		GameStatusUpdate update = new GameStatusUpdate();
 		update.gameId = game.id;
 		update.username = players[0];
-		//TODO Should also send the score!
 		return update;
 	}
 	
@@ -578,7 +645,7 @@ public class Connect4 extends GameClient {
 		game = new Game();
 		game.id = "connect4";
 		game.name = "Connect4";
-        game.description = "Fun old connect 4!";
+        game.description = "Connect4 with replay integrated!";
 	}
 	
 	public Game getGame() {

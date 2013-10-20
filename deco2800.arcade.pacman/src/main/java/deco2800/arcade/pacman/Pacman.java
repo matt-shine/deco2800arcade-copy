@@ -1,17 +1,6 @@
 package deco2800.arcade.pacman;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Logger;
 
 import deco2800.arcade.client.ArcadeInputMux;
@@ -21,44 +10,38 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.pacman.PacChar.PacState;
 
-
-
-
-//note: no 'implements ApplicationListener is relevant anywhere in our program,
-// as GameClient extends Game which implements it. As far as I can tell
-@ArcadeGame(id="pacman")
+/**
+ * The main Pacman game class, which sets up the model, view and controller 
+ * and forms the LibGdx backend stuff.
+ *
+ */
+@ArcadeGame(id="Pacman")
 public class Pacman extends GameClient {
 	
-	private enum GameState {
-		READY,
-		RUNNING,
-		GAMEOVER
-	}
+	public final int SCREEN_HEIGHT = 720;
+	public final int SCREEN_WIDTH = 1280;	
+	private final int NUM_GHOSTS = 4;
 	
-	private OrthographicCamera camera;			
-	private GameState gameState;
-	public static final int SCREENHEIGHT = 480;
-	public static final int SCREENWIDTH = 800;	
-	private SpriteBatch batch;
-	private ShapeRenderer shaper;
-	private PacChar player;
-	//takes keyboard input
-	private InputProcessor controller;
+	private PacModel model; // model for Pacman	
+	private PacView view; // view for Pacman	
+	private PacController controller; //takes keyboard input for Pacman
+
+	/** Checks to make sure View isn't set up more than once
+	 * View can't be set up normally until the rendering starts because
+	 *  it causes NullPointers for the tests when it tries to load Textures */
+	private boolean viewNotSetUp; 
 	
 	//not used yet
 	//private NetworkClient networkClient;
 	
-	//lets us log stuff, doesn't seem to work yet
-	private Logger logger = new Logger("Pacman");
-	
-	
-	public Pacman(Player player, NetworkClient networkClient) {
-		super(player, networkClient);
-		// TODO is there stuff we need to happen here?
+	//lets us log stuff, left package private so we don't have to make a new one in each class
+	Logger logger = new Logger("Pacman");
+		
+	public Pacman(Player player1, NetworkClient networkClient) {
+		super(player1, networkClient);		
 	}	
-	
+		
 	/**
 	 * Creates the game
 	 */
@@ -69,11 +52,13 @@ public class Pacman extends GameClient {
         this.getOverlay().setListeners(new Screen() {
 
 			@Override
-			public void dispose() {				
-			}
-
-			@Override
 			public void hide() {
+				//TODO implement stuff to pause game here
+			}
+			 
+			@Override
+			public void show() {
+				//TODO implement stuff to unpause game here
 			}
 
 			@Override
@@ -93,29 +78,15 @@ public class Pacman extends GameClient {
 			}
 
 			@Override
-			public void show() {
-
-			}			
-        });   
-        
-		super.create();	
-		// this guy doesn't show up either. 
-		logger.info("Hey, I'm a log message");
-		//Initialize camera
-		camera = new OrthographicCamera();
-		// set resolution
-		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
-		// initialise spriteBatch for drawing things
-		batch = new SpriteBatch();		
-		shaper = new ShapeRenderer();
-		//initialise pacman
-		player = new PacChar();
-		//initialise receiver for input- use the multiplexer from Arcade
-		// because overlay group said to in log messages
-		controller = new PacController(player);
+			public void dispose() {				
+			}
+        });           
+		super.create();		
+		viewNotSetUp = true;		
+		model = new PacModel(SCREEN_WIDTH, SCREEN_HEIGHT, NUM_GHOSTS);		
+		//initialise receiver for input- use the Arcade Multiplexer
+		controller = new PacController(model);
 		ArcadeInputMux.getInstance().addProcessor(controller);
-		//Initialise game state
-		gameState = GameState.READY;		
 	}
 	
 	/**
@@ -125,6 +96,7 @@ public class Pacman extends GameClient {
 	public void dispose() {
 		super.dispose();
 		ArcadeInputMux.getInstance().removeProcessor(controller);
+		//TODO dispose more stuff here? Perhaps the view things?
 	}
 
 	@Override
@@ -132,7 +104,9 @@ public class Pacman extends GameClient {
 		super.pause();
 	}
 	
+	/* Commenting this out because it's not being used and is really old
 	private void makeChanges() {
+		
 		 // Respond to user input depending on the game state
 	    switch(gameState) {	    
 	    //TODO BLARH apparently this commented bit of code isn't even being reached
@@ -158,135 +132,27 @@ public class Pacman extends GameClient {
 	    	}
 	    	break;
 	    }	    
-	}
+	}*/
 	
 	/**
 	 * Called continually to draw the screen unless specifically told not to be
 	 */
 	@Override
 	public void render() {	
-		//FIXME big method
-		//make changes to location of object etc, then draw
-		makeChanges();
-		
-		//Black background
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-	    // updating camera is something we should do once per frame
-	    camera.update();
-	    //tell the spritebatch to use the coordinate system of the camera
-	    batch.setProjectionMatrix(camera.combined);	    
-	    // start the drawing
-	    batch.begin();
-	    // render player pacman 
-	    player.render(batch);
-	    //end the drawing
-	    batch.end();
-	    //initialise walls and draw them 
-	    // note, this method only allows single pixel width lines, as far as I can tell.
-	    // shouldn't be super difficult to make them thicker, but will need a different approach 
-	    // (filled shapes probably)
-	    // just testing walls at the moment, haven't arranged any
-	    
-	    // Outer Exterior West Walls
-	    Wall westWall1 = new Wall(1, 300, 50, 200);
-	    Wall westWall2 = new Wall(3, 300, 250, 125);
-	    Wall westWall3 = new Wall(1, 425, 250, 75);
-	    Wall westWall4 = new Wall(3, 300, 325, 125);
-	    Wall westWall5 = new Wall(3, 300, 375, 125);
-	    Wall westWall6 = new Wall(1, 425, 375, 75);
-	    Wall westWall7 = new Wall(3, 300, 450, 125);
-	    Wall westWall8 = new Wall(1, 300, 450, 200);
-	    
-	    // Inner Exterior West Walls
-	    Wall westWall9 = new Wall(1, 305, 55, 190);
-	    Wall westWall10 = new Wall(3, 305, 245, 125);
-	    Wall westWall11 = new Wall(1, 430, 245, 85);
-	    Wall westWall12 = new Wall(3, 300, 330, 130);
-	    Wall westWall13 = new Wall(3, 300, 370, 130);
-	    Wall westWall14 = new Wall(1, 430, 370, 85);
-	    Wall westWall15 = new Wall(3, 305, 455, 125);
-	    Wall westWall16 = new Wall(1, 305, 455, 190);
-	    
-	    // North and South Walls
-	    Wall southWall1 = new Wall(3, 300, 50, 600);
-	    Wall southWall2 = new Wall(3, 305, 55, 590);
-	    Wall northWall1 = new Wall(3, 300, 650, 600);
-	    Wall northWall2 = new Wall(3, 305, 645, 590);
-	    
-	    // Outer Exterior East Walls
-	    Wall eastWall1 = new Wall(1, 900, 50, 200);
-	    Wall eastWall2 = new Wall(3, 775, 250, 125);
-	    Wall eastWall3 = new Wall(1, 775, 250, 75);
-	    Wall eastWall4 = new Wall(3, 775, 325, 125);
-	    Wall eastWall5 = new Wall(3, 775, 375, 125);
-	    Wall eastWall6 = new Wall(1, 775, 375, 75);
-	    Wall eastWall7 = new Wall(3, 775, 450, 125);
-	    Wall eastWall8 = new Wall(1, 900, 450, 200);
-	    
-	    // Inner Exterior East Walls
-	    Wall eastWall9 = new Wall(1, 895, 55, 190);
-	    Wall eastWall10 = new Wall(3, 770, 245, 125);
-	    Wall eastWall11 = new Wall(1, 770, 245, 85);
-	    Wall eastWall12 = new Wall(3, 770, 330, 130);
-	    Wall eastWall13 = new Wall(3, 770, 370, 130);
-	    Wall eastWall14 = new Wall(1, 770, 370, 85);
-	    Wall eastWall15 = new Wall(3, 770, 455, 125);
-	    Wall eastWall16 = new Wall(1, 895, 455, 190);
-	    
-	    
-	    shaper.begin(ShapeType.Line);
-	    westWall1.render(shaper);
-	    westWall2.render(shaper);
-	    westWall3.render(shaper);
-	    westWall4.render(shaper);
-	    westWall5.render(shaper);
-	    westWall6.render(shaper);
-	    westWall7.render(shaper);
-	    westWall8.render(shaper);
-	    westWall9.render(shaper);
-	    westWall10.render(shaper);
-	    westWall11.render(shaper);
-	    westWall12.render(shaper);
-	    westWall13.render(shaper);
-	    westWall14.render(shaper);
-	    westWall15.render(shaper);
-	    westWall16.render(shaper);
-	    
-	    southWall1.render(shaper);
-	    southWall2.render(shaper);
-	    northWall1.render(shaper);
-	    northWall2.render(shaper);
-	    
-	    eastWall1.render(shaper);
-	    eastWall2.render(shaper);
-	    eastWall3.render(shaper);
-	    eastWall4.render(shaper);
-	    eastWall5.render(shaper);
-	    eastWall6.render(shaper);
-	    eastWall7.render(shaper);
-	    eastWall8.render(shaper);
-	    eastWall9.render(shaper);
-	    eastWall10.render(shaper);
-	    eastWall11.render(shaper);
-	    eastWall12.render(shaper);
-	    eastWall13.render(shaper);
-	    eastWall14.render(shaper);
-	    eastWall15.render(shaper);
-	    eastWall16.render(shaper);
-	    
-	   
-	    shaper.end();
-	    //do any stuff the superclass normally does for rendering
-		super.render();
-		
+		// makes sure view is only set up once
+		if (viewNotSetUp) {
+			view = new PacView(model);
+			viewNotSetUp = false;
+		}
+		//make changes in the model to prepare for rendering
+		model.prepareDraw();
+		view.render();
+		super.render();		
 	}
-	
-	
 	
 	private void startGame() {	
 		logger.debug("Game is now running");		
-		gameState = GameState.RUNNING;	
+		//gameState = GameState.RUNNING;	
 	}
 		
 	@Override
@@ -303,23 +169,23 @@ public class Pacman extends GameClient {
 	private static final Game game; 
 	static {
 			game = new Game();
-			game.id = "pacman";
-			game.name = "Pac man";
-			game.description = "An implementation of the classic arcade game Pac "
-			+ "man." + System.getProperty("line.separator") + "Still in progress- additional " + 
-			"features may be added later. Note: currently only displays blank screen";
+			game.id = "Pacman";
+			game.name = "Pacman";
+			game.description = "An implementation of the classic arcade game Pac-man." + 
+			System.getProperty("line.separator") + "Still in progress- additional " + 
+			"features may be added later.";
 			// game.icon- to be added later once the icon part is fully implemented
-		} //System.getProperty("line.separator")
+		} 
 	
 	public Game getGame() {
 		return game;
 	}
 
-	public GameState getGameState() {
-		return gameState;
+	public PacController getController() {
+		return controller;
 	}
-
-	public void setGameState(GameState gameState) {
-		this.gameState = gameState;
+	
+	public PacModel getModel() {
+		return model;
 	}
 }

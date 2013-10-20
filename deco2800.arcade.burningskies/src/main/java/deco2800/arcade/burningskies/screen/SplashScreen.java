@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import deco2800.arcade.burningskies.BurningSkies;
+import deco2800.arcade.burningskies.Configuration;
  
 public class SplashScreen implements Screen
 {
@@ -22,9 +23,10 @@ public class SplashScreen implements Screen
     @Override
     public void show()
     {
-        logo = new Texture(Gdx.files.internal("images/splash.png"));
+        Configuration.initialise();
+        logo = new Texture(Gdx.files.internal("images/menu/splash.png"));
         spriteBatch = new SpriteBatch();
-        game.playSong("splash", false);
+        game.playSong("splash" + (int)(Math.random()+0.5), false);
     }
     @Override
     public void hide() {

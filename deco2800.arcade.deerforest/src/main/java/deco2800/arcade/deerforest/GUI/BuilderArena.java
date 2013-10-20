@@ -133,7 +133,7 @@ public class BuilderArena extends Sprite{
 		float xScale = x / this.getWidth();
 		float yScale = y / this.getHeight();
 		this.setScale(xScale, yScale);
-		//this.resizeZones(x, y);
+		this.resizeZones(x, y);
 	}
 	
 	/**
@@ -175,10 +175,14 @@ public class BuilderArena extends Sprite{
 		
 		//Resize currently placed sprites and rectangles
 		i = 0;
+		int j = 0;
 		for(Map.Entry<Rectangle, BuilderSprite> e : zones.get("DeckZone").entrySet()) {
 			//get this zones sprite
+			if(i == 10) {
+				i = 0;
+				j++;
+			}
 			BuilderSprite s = zones.get("DeckZone").get(e.getKey());
-			int j = i/10;
 			//define new rectangle to insert
 			Rectangle r2 = new Rectangle(x*deckZonesX[i], y*deckZonesY[j], x*deckZoneWidth, y*deckZoneHeight);
 			//insert zone
@@ -195,6 +199,7 @@ public class BuilderArena extends Sprite{
 		//Resize currently placed sprites and rectangles
 		i = 0;
 		for(Map.Entry<Rectangle, BuilderSprite> e : zones.get("ZoomZone").entrySet()) {
+			
 			//get this zones sprite
 			BuilderSprite s = zones.get("ZoomZone").get(e.getKey());
 			//define new rectangle to insert
@@ -337,7 +342,7 @@ public class BuilderArena extends Sprite{
 	public Rectangle emptyZoneAtRectangle(Rectangle r, String where) {
 		
 		Map<Rectangle, BuilderSprite> mapToCheck = null;
-		System.out.println("Where: " + where);
+		
 		if(where == "DeckZone") {
 			mapToCheck = zones.get("DeckZone");
 		} else if(where == "CardZone") {

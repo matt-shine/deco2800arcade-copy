@@ -11,6 +11,7 @@ import deco2800.arcade.deerforest.models.cardContainers.CardCollectionList;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 
 public class BuilderSpriteMover {
+	//TODO Large Changes still to come with database implementation
 	
 	final static String[] Keys = {"DeckZone", "CardZone", "ZoomZone"};
 	
@@ -38,17 +39,6 @@ public class BuilderSpriteMover {
         	//reassign the currentSelection to the emptyZone in arena
     		view.getArena().removeSprite(currentSelection);
     		String newArea = view.getArena().setSpriteToZone(currentSelection, emptyZone);/*
-    		
-    		//if moved from hand to field set summoned to be true
-    		if(currentSelectionPlayer == 1) {
-        		if(newArea.equals("P1MonsterZone") && currentSelectionArea.equals("P1HandZone")) {
-        			game.setSummoned(true);
-        		}
-    		} else {
-        		if(newArea.equals("P2MonsterZone") && currentSelectionArea.equals("P2HandZone")) {
-        			game.setSummoned(true);
-        		}
-    		}*/
     		
     		//reassign the currentSelection to emptyZone in the view
     		/*view.removeSpriteFromArea(currentSelection, currentSelectionArea);*/

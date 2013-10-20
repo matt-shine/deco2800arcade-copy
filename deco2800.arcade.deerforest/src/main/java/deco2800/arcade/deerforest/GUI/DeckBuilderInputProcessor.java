@@ -68,14 +68,15 @@ public class DeckBuilderInputProcessor implements InputProcessor {
 					view.getArena().removeSprite(zoomSelection);
 					view.removeSpriteFromArea(zoomSelection, "ZoomZone");
 				}
-				zoomSelection = currentSelection;
-				zoomSelection.setArea("ZoomZone");
+				
 				AbstractCard c = currentSelection.getCard();
 				
 				//update currentSelection to be the drawn card
 				currentSelection = new BuilderSprite(view.manager.get(c.getPictureFilePath(), Texture.class));
 			    currentSelection.setCard(c);
 			    currentSelection.setArea("ZoomZone");
+			    zoomSelection = currentSelection;
+				zoomSelection.setArea("ZoomZone");
 				//set the current selection data
 			    view.setSpriteToArea(currentSelection, "ZoomZone");
 	 
@@ -109,19 +110,16 @@ public class DeckBuilderInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		System.out.println("Touch Down");
 		//Check it was a single click
 		try{
 		    if(button != Buttons.LEFT) return false;
 			
 			//Get the current Selection at point if it exists
-		    System.out.println("got here");
+
 		    currentSelection = null;
 		    if(BuilderSpriteMover.checkIntersection(x,y)!= null) {
 		    	currentSelection = BuilderSpriteMover.checkIntersection(x, y);
 		    }
-			System.out.println("Current selection is: " + currentSelection);
-			System.out.println("Current selection area is: " + currentSelection.getArea());
 			//There is a new currentSelection, set its parameters accordingly
 			if(currentSelection != null) {
 				BuilderSpriteMover.setCurrentSelectionData(x,y);
@@ -165,7 +163,6 @@ public class DeckBuilderInputProcessor implements InputProcessor {
 			} else {
 				//card was not moved, set it back to original position
 				Rectangle r = view.getArena().emptyZoneAtRectangle(currentSelection.getOriginZone(), currentSelection.getArea());
-				System.out.println("got here\n");
 	    		view.getArena().setSpriteToZone(currentSelection, r);
 			}
 			//Reset current selection 
@@ -196,6 +193,7 @@ public class DeckBuilderInputProcessor implements InputProcessor {
 	 * Loads all the initial cards
 	 */
 	public void loadAll(){
+		//Loads cards to deck area
 		for (int i = 0; i < 40; i++) {
 			AbstractCard c = game.getModel().getDeck().draw();
 				
@@ -211,6 +209,7 @@ public class DeckBuilderInputProcessor implements InputProcessor {
 			BuilderSpriteMover.setCurrentSelectionToRectangle(r);	
 		}
 		
+		//Loads cards to card area
 		for(int i = 0; i < 7; i++) {
 			AbstractCard c = game.getModel().getCards().draw();
 			

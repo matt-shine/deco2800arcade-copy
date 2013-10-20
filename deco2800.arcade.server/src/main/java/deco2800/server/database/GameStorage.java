@@ -94,7 +94,8 @@ public class GameStorage {
                 "INSERT INTO GAMES values (17, 'GuessTheWord', 'GuessTheWord', 0, 'This word guessing is popular with people of all ages. Its challenging and exciting at the same time!!', '');" +
                 "INSERT INTO GAMES values (18, 'MiniGolf', 'MiniGolf', 0, 'Search for buried treasure', '');" +
                 "INSERT INTO GAMES values (19, 'lunarlander', 'LunarLander', 0, 'Can your Lunar Lander make it to the surface safely?', '');" +
-                "INSERT INTO GAMES values (20, 'Cyra', 'Cyra', 0, 'Run, jump, swing sword.', '');";
+                "INSERT INTO GAMES values (20, 'Cyra', 'Cyra', 0, 'Run, jump, swing sword.', '');" +
+                "INSERT INTO GAMES values (21, 'hunter', 'Hunter Game', 0, 'A 2D platformer running game where you hunt animals before they eat you!', '');";
 
         String[] cmds = inserts.split(";");
 

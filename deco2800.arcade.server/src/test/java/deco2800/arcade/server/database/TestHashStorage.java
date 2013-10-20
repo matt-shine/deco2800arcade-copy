@@ -97,27 +97,27 @@ public class TestHashStorage {
 	 * 
 	 * @throws DatabaseException
 	 */
-//	@Test
-//	public void registerPasswordTest() throws DatabaseException {
-//		String password = "It's just a flesh wound.";
-//		String username = "Black_Knight";
-//
-//		hashStorage.registerPassword(username, password);
-//
-//		// Check that we successfully registered
-//		assertTrue(hashStorage.checkPassword(username, password));
-//	}
-//	
-//	@Test
-//	public void updatePasswordTest() throws DatabaseException {
-//		String password = "It's just a flesh wound.";
-//		String newPassword = "No it isn't!";
-//		String username = "Black_Knight";
-//
-//		hashStorage.registerPassword(username, password);
-//		hashStorage.updatePassword(username, newPassword);
-//
-//		// Check that we successfully registered
-//		assertTrue(hashStorage.checkPassword(username, newPassword));
-//	}
+	//@Test
+	public void registerPasswordTest() throws DatabaseException {
+		String password = "It's just a flesh wound.";
+		String username = "Black_Knight";
+
+		hashStorage.registerPassword(username, password);
+
+		// Check that we successfully registered
+		assertTrue(hashStorage.checkPassword(username, password));
+	}
+	
+	//@Test
+	public void updatePasswordTest() throws DatabaseException {
+		String password = "It's just a flesh wound.";
+		String newPassword = "No it isn't!";
+		String username = "Black_Knight";
+
+		hashStorage.registerPassword(username, password);
+		hashStorage.updatePassword(username, newPassword);
+
+		// Check that we successfully registered
+		assertTrue(hashStorage.checkPassword(username, newPassword));
+	}
 }

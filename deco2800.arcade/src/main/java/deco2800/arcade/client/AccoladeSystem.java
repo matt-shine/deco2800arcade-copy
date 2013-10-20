@@ -19,6 +19,7 @@ import deco2800.arcade.model.XMLReader;
 //TODO fix up the parameter comments for the methods
 public class AccoladeSystem {
 	//ServerCommunicator server = new ServerCommunicator();
+	//TODO add in a watcherPush for games that reset score on death
 		
 	
 	private Map<String,Integer> nameIDPairs;
@@ -113,15 +114,17 @@ public class AccoladeSystem {
 	public void push(Double accoladeID, int increment){
 		//TODO check that the increment is a positive value
 		Accolade tmpAccolade = localAccolades.get(accoladeID);
-		int progress = tmpAccolade.getValue();
+		int value = tmpAccolade.getValue();
 		int popup = tmpAccolade.getPopup();
 		
-		tmpAccolade.setValue(progress + increment);
+		if((value + increment)/popup > value/popup){
+			//TODO add the over lay stuff in here
+		}
+		tmpAccolade.setValue(value + increment);
 		if(online){
 			//TODO THe same increment to the server
 		}
-		//TODO add the over lay stuff in here
-		
+				
 	}
 	
 	/** Provides the Double version of an accolade primary key to be used in the
@@ -175,7 +178,7 @@ public class AccoladeSystem {
 		return this;
 	}
 	
-	/** 
+	/** TODO remove this as it is no longer needed
 	 * @param table The player_accolades table retrieved from the server
 	 * @return An accolade Hashmap<accolade_id, accolade_name> for local tracking of popups
 	 * @throws SQLException //TODO find out when the sql exception is thrown
@@ -203,6 +206,12 @@ public class AccoladeSystem {
 					new WatchedAccolade(accoladeID, variable, pushInterval));
 	}
 	
+	//THis i called right before a variable is reset between timer events, 
+	//it prevents losing the last bit of the variable. Useful for games where the score is reset on death.
+	public void resetWatch(double accoladeID, int newvalue){
+		this.timerTasks.get(accoladeID).setPrevValue(newvalue);//contains the push event
+	}
+	
 	/** Removes the accolade from the update schedule. Assumes that accolade exists
 	 * @param accoladeID The accolade that you do not want automatically updated anymore
 	 * @throws NullPointerException If an accolade with that accolade ID is not being watched.
@@ -218,8 +227,6 @@ public class AccoladeSystem {
 			//then removes it so it isn't initialised again
 			timerTasks.remove(accoladeID);
 		}
-		
-		
 	}
 	
 	/**
@@ -230,6 +237,7 @@ public class AccoladeSystem {
 		this.timerRunning = true;
 		
 		//Schedule all the watched variables as timertasks
+		//TODO add the types to Map.Entry
 		for(Map.Entry entry: this.watchedVariables.entrySet()){
 			//make it a little easier to handle
 			WatchedAccolade accolade = (WatchedAccolade) entry.getValue(); 
@@ -277,17 +285,19 @@ public class AccoladeSystem {
 			this.variable = variable;
 			this.prevValue = Integer.valueOf((String) variable);
 		}
+		public void setPrevValue(int value){
+			run();
+			this.prevValue = value;
+		}
 		
 		public void run(){
 			//TODO add a function that allows the developers to do a manual push 
 			// before their variable is reset (say the player dies and their score is reset to zero
 			int newValue = Integer.valueOf((String)this.variable);
-			//push different if more, or push full value if lower
-			if( newValue > this.prevValue){
+			if(newValue>this.prevValue){
 				push(this.accoladeID,newValue-this.prevValue);
-			} else {
-				push(this.accoladeID,newValue);
 			}
+
 		}
 	}//End of Timed Push
 	

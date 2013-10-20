@@ -36,7 +36,7 @@ public class Model {
 	private Friends friends;
 	private AchievementClient achievements;
 	private ArcadeSystem arcadesystem;
-	private Player player;
+	public Player player;
 	
 	//Declare Fonts
 	public Font blackbold = new Font("Century Gothic", Font.BOLD, 20);

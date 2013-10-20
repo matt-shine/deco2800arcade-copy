@@ -243,7 +243,7 @@ public class UserScreen extends JFrame{
 		
 		friendarea = new JTextArea();
 		friendarea.setOpaque(false);
-		friendarea.setFont(blacknormal);
+		friendarea.setFont(model.blacknormal);
 		friendarea.setForeground(Color.white);
 		friendscroll = new JScrollPane(friendarea);
 		friendscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

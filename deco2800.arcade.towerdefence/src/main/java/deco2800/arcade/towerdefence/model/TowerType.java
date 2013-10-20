@@ -10,5 +10,5 @@ public enum TowerType {
 	/**
 	 * Progression category of tower. e.g. FROST cannot upgrade to FIRE.
 	 */
-	STANDARD, FROST, FIRE, HOLY, PIERCING;
+	STANDARD, CRYO, FIRE, HOLY, PIERCING;
 }

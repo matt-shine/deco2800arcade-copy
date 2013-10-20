@@ -405,12 +405,12 @@ public class GameScreen implements Screen {
 	 * @param filenames
 	 * @param rotation
 	 */
-	public List<Sprite> spriteBuild(GridObject object, List<String> filenames){
+	public static List<Sprite> spriteBuild(GridObject object, List<String> files){
 		
 		List<Sprite> builtSprites = new ArrayList<Sprite>();
 		// Iterate over the list of filenames
-		for (int i=0; i<filenames.size();i++){
-			Texture texture = new Texture(Gdx.files.internal(filenames.get(i)));
+		for (int i=0; i<files.size();i++){
+			Texture texture = new Texture(Gdx.files.internal(files.get(i)));
 			Sprite sprite = new Sprite(texture);
 			sprite.setPosition(object.position().x, object.position().y);
 			sprite.setRotation(object.rotation());

@@ -41,7 +41,7 @@ public class Mortal extends GridObject {
 		this.maxHealth = maxHealth;
 		this.health = maxHealth;
 		this.armour = armour;
-		this.fileDeath = fileDeath;
+		this.fileDeath(fileDeath);
 	}
 
 	// Getters

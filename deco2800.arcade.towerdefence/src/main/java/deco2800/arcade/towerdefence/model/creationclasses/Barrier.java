@@ -5,6 +5,7 @@ import java.util.List;
 import deco2800.arcade.towerdefence.model.Grid;
 import deco2800.arcade.towerdefence.model.Mortal;
 import deco2800.arcade.towerdefence.model.Team;
+import deco2800.arcade.towerdefence.view.GameScreen;
 
 /**
  * Models GridObjects that are designed as walls or barriers to GridObjects.
@@ -36,9 +37,17 @@ public class Barrier extends Mortal {
 	}
 
 	// Getters
+	public List<String> fileStanding() {
+		return fileStanding;
+	}
 
 	// Setters
+	public void fileStanding(List<String> files) {
+		this.fileStanding = files;
+	}
 
 	// Methods
-
+	public void start(){
+		GameScreen.spriteBuild(this, fileStanding());
+	}
 }

@@ -356,7 +356,6 @@ public class GridObject {
 	 * overwrite this.
 	 */
 	public void start() {
-
 	}
 
 	@Override

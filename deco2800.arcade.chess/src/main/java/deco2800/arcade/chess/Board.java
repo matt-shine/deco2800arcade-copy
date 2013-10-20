@@ -591,7 +591,7 @@ public class Board {
 	 */
 	private boolean checkKingCastleSwap(Piece piece) {
 		// If on the black team and king and rook1 haven't moved
-		if (piece.getTeam() && !blackKing.getFirstMove()
+		if (piece.getTeam() && !blackKing.getFirstMove() && !checkForCheck(true)
 				&& !blackRook1.getFirstMove()) {
 			int[] middleSquare1 = { 7, 5 };
 			int[] middleSquare2 = { 7, 6 };
@@ -602,7 +602,7 @@ public class Board {
 		}
 
 		// If on the white team and king and rook1 haven't moved
-		if (!piece.getTeam() && !whiteKing.getFirstMove()
+		if (!piece.getTeam() && !whiteKing.getFirstMove() && !checkForCheck(false)
 				&& !whiteRook1.getFirstMove()) {
 			int[] middleSquare1 = { 0, 5 };
 			int[] middleSquare2 = { 0, 6 };

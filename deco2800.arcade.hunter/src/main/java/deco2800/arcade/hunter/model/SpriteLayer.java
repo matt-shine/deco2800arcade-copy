@@ -7,20 +7,21 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import deco2800.arcade.hunter.Hunter;
-import deco2800.arcade.hunter.platformergame.Entity;
-import deco2800.arcade.hunter.platformergame.EntityCollection;
+import deco2800.arcade.hunter.platformerGame.Entity;
+import deco2800.arcade.hunter.platformerGame.EntityCollection;
 import deco2800.arcade.hunter.screens.GameScreen;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 
 public class SpriteLayer extends Map {
     /**
      * Lists of textures for all the trees and clouds
      */
-    private final ArrayList<TextureRegion> treeSprites = new ArrayList<TextureRegion>();
-    private final ArrayList<TextureRegion> cloudSprites = new ArrayList<TextureRegion>();
+    private final List<TextureRegion> treeSprites = new ArrayList<TextureRegion>();
+    private final List<TextureRegion> cloudSprites = new ArrayList<TextureRegion>();
 
     /**
      * Collection of trees and clouds currently spawned into the world
@@ -32,14 +33,14 @@ public class SpriteLayer extends Map {
 
     /**
      * Get a random coordinate within the area of the width of the screen, and
-     * one screenHeight above and below the current camera position.
+     * one SCREEN_HEIGHT above and below the current camera position.
      * @return a random screen coordinate within the current screen space or
      *         one screen space above or below the current screen.
      */
-    public Vector2 randomScreenCoordinate() {
+    private final Vector2 randomScreenCoordinate() {
         int randX, randY;
-        randX = (int) Math.round(Math.random() * Hunter.State.screenWidth);
-        randY = (int) Math.round(Math.random() * Hunter.State.screenHeight * 3) - Hunter.State.screenHeight;
+        randX = (int) Math.round(Math.random() * Hunter.Config.SCREEN_WIDTH);
+        randY = (int) Math.round(Math.random() * Hunter.Config.SCREEN_HEIGHT * 3) - Hunter.Config.SCREEN_HEIGHT;
         return new Vector2(randX, randY);
     }
 
@@ -116,7 +117,7 @@ public class SpriteLayer extends Map {
         //Add new trees randomly
         Vector2 treeLocation = new Vector2();
         if (Math.random() < Hunter.Config.CHANCE_OF_TREES) {
-            treeLocation.x = cameraPos.x + Hunter.State.screenWidth / 2;
+            treeLocation.x = cameraPos.x + Hunter.Config.SCREEN_WIDTH / 2;
 
             int id = trees.add(new BackgroundSprite(treeLocation, 0, 0, randomTreeSpeed()));
             TextureRegion sprite = treeSprites.get(id % treeSprites.size());
@@ -135,7 +136,7 @@ public class SpriteLayer extends Map {
         Vector2 cloudLocation;
         if (Math.random() < Hunter.Config.CHANCE_OF_CLOUDS) {
             cloudLocation = randomScreenCoordinate();
-            cloudLocation.set(cameraPos.x + Hunter.State.screenWidth / 2, cloudLocation.y + cameraPos.y);
+            cloudLocation.set(cameraPos.x + Hunter.Config.SCREEN_WIDTH / 2, cloudLocation.y + cameraPos.y);
 
             int id = clouds.add(new BackgroundSprite(cloudLocation, 0, 0, randomCloudSpeed()));
             TextureRegion sprite = cloudSprites.get(id % cloudSprites.size());
@@ -155,9 +156,9 @@ public class SpriteLayer extends Map {
         Iterator<Entity> tr = trees.iterator();
         while (tr.hasNext()) {
             Entity tree = tr.next();
-            tree.update(delta * speedModifier);
-            if (tree.getX() + tree.getWidth() < cameraPos.x * speedModifier -
-                    Hunter.State.screenWidth) {
+            tree.update(delta * getSpeedModifier());
+            if (tree.getX() + tree.getWidth() < cameraPos.x * getSpeedModifier() -
+                    Hunter.Config.SCREEN_WIDTH) {
                 tr.remove();
             }
         }
@@ -174,9 +175,9 @@ public class SpriteLayer extends Map {
         Iterator<Entity> cl = clouds.iterator();
         while (cl.hasNext()) {
             Entity cloud = cl.next();
-            cloud.update(delta * speedModifier);
-            if (cloud.getX() + cloud.getWidth() < cameraPos.x * speedModifier -
-                    Hunter.State.screenWidth) {
+            cloud.update(delta * getSpeedModifier());
+            if (cloud.getX() + cloud.getWidth() < cameraPos.x * getSpeedModifier() -
+                    Hunter.Config.SCREEN_WIDTH) {
                 cl.remove();
             }
         }
@@ -198,9 +199,9 @@ public class SpriteLayer extends Map {
             Entity tree = trees.getById(t);
             batch.draw(treeSprite, tree.getX(), tree.getY(),
                     treeSprite.getRegionWidth() *
-                            ((BackgroundSprite) tree).speedModifier,
+                            ((BackgroundSprite) tree).getSpeedModifier(),
                     treeSprite.getRegionHeight() *
-                            ((BackgroundSprite) tree).speedModifier);
+                            ((BackgroundSprite) tree).getSpeedModifier());
         }
     }
 

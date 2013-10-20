@@ -2,11 +2,11 @@ package deco2800.arcade.hunter.model;
 
 import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.hunter.Hunter;
-import deco2800.arcade.hunter.platformergame.Entity;
+import deco2800.arcade.hunter.platformerGame.Entity;
 
 public class BackgroundSprite extends Entity {
     //Speed to move relative to the player
-    public final float speedModifier;
+    private final float speedModifier;
 
     /**
      *
@@ -26,6 +26,10 @@ public class BackgroundSprite extends Entity {
      */
     @Override
     public void update(float delta) {
-        setX(getX() - Hunter.State.playerVelocity.x * 0.1f * delta * speedModifier);
+        setX(getX() - Hunter.State.getPlayerVelocity().x * 0.1f * delta * speedModifier);
+    }
+
+    public float getSpeedModifier() {
+        return speedModifier;
     }
 }

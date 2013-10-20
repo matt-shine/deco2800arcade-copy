@@ -1,7 +1,6 @@
 package deco2800.arcade.userui.view;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
 
@@ -50,7 +49,7 @@ public class UserScreen extends JFrame{
 	private JLabel achievement1, achievement2, achievement3;
 	
 	//Declare Text Areas
-	private JTextArea historyarea;
+	private JTextArea historyarea, friendarea;
 	
 	//Declare Images 
 	private ImageIcon picavatar, pichistorybar, piclocked, picunlocked, piceditbutton,
@@ -241,11 +240,11 @@ public class UserScreen extends JFrame{
 	 */
 	public void addfriendpanel(){
 		
-		friendlist = new JPanel(new MigLayout());
-		friendlist.setOpaque(false);
-		friendlist.setBorder(BorderFactory.createEmptyBorder());
-		//ScrollPane
-		friendscroll = new JScrollPane(friendlist);
+		friendarea = new JTextArea();
+		friendarea.setOpaque(false);
+		friendarea.setFont(model.blacknormal);
+		friendarea.setForeground(Color.white);
+		friendscroll = new JScrollPane(friendarea);
 		friendscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		friendscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		friendscroll.setOpaque(false);
@@ -277,16 +276,20 @@ public class UserScreen extends JFrame{
 	    invitesbutton.setBorder(BorderFactory.createEmptyBorder());
 	    invitesbutton.setContentAreaFilled(false);
 	    
+	    JPanel friendbuttons = new JPanel(new MigLayout());
+	    friendbuttons.setOpaque(false);
+	    friendbuttons.add(friendbar, "gap right");
+	    friendbuttons.add(addfriendbutton,"gap left 10px");
+	    friendbuttons.add(removefriendbutton,"gap left 10px");
+	    friendbuttons.add(invitesbutton,"gap left 50px");
+	    friendbuttons.add(blockbutton,"gap left 20px");
+	    
 		//Add Elements to Panel
 	    friendpanel = new ImagePanel(new ImageIcon("assets/images/Blue_Box.png").getImage());
         friendpanel.setLayout(new MigLayout());
 		friendpanel.setOpaque(false);
-	    friendpanel.add(friendbar, "gap left 10px, gap bottom 110px");
-	    friendpanel.add(addfriendbutton,"gap left 10px");
-	    friendpanel.add(removefriendbutton,"gap left 10px");
-	    friendpanel.add(invitesbutton,"gap left 50px");
-	    friendpanel.add(blockbutton,"gap left 30px");
-        friendpanel.add(friendscroll, "width :500px, height :100px, gap top 30px");    
+		friendpanel.add(friendbuttons,"wrap,gap top -20px");
+        friendpanel.add(friendscroll, "width :400px, height :800px");    
 		
 	}
 	

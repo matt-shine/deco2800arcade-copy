@@ -21,8 +21,6 @@ public class HighScoreScreen implements Screen {
 
     private final Hunter hunter;
     private final Stage stage;
-    private final Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-    private final List<Highscore> topPlayers;
 
 
     private final Texture background;
@@ -33,11 +31,12 @@ public class HighScoreScreen implements Screen {
         stage = new Stage();
         ArcadeInputMux.getInstance().addProcessor(stage);
 
-        topPlayers = hunter.highscore.getGameTopPlayers(3, true, "Number");
+        List<Highscore> topPlayers = hunter.getHighscore().getGameTopPlayers(3, true, "Number");
         Texture.setEnforcePotImages(false);
         background = new Texture("textures/mainmenu.png");
         batch = new SpriteBatch();
 
+        Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
         Table table = new Table(skin);
         table.setFillParent(true);
         table.padRight(400f);
@@ -52,26 +51,22 @@ public class HighScoreScreen implements Screen {
         table.add("HighScore Menu!").colspan(2);
         table.row();
 
-        table.add("HighScore 1 - " + topPlayers.get(0).playerName + " : ");
-        System.out.println("HighScore 1 - " + topPlayers.get(0).playerName + " : " + topPlayers.get(0).score);
-        table.add(String.valueOf(topPlayers.get(0).score)).colspan(2);
-        table.row();
+        for (int i = 0; i < Math.min(3, topPlayers.size()); i++) {
+            table.add("HighScore " + (i + 1) + " - " + topPlayers.get(i).playerName + " : ");
+            table.add(String.valueOf(topPlayers.get(i).score)).colspan(2);
+            table.row();
+        }
 
-        table.add("HighScore 2 - " + topPlayers.get(1).playerName + " : ");
-        System.out.println("HighScore 2 - " + topPlayers.get(1).playerName + " : " +topPlayers.get(1).score);
-        table.add(String.valueOf(topPlayers.get(1).score)).colspan(2);
-        table.row();
-
-        table.add("HighScore 3 - " + topPlayers.get(2).playerName + " : ");
-        table.add(String.valueOf(topPlayers.get(2).score)).colspan(2);
-        table.row();
+        if (topPlayers.size() == 0) {
+            table.add("No high scores have been recorded!");
+            table.row();
+        }
 
         TextButton backButton = new TextButton("Back to main menu", skin);
         backButton.addListener(new ChangeListener() {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Going back to the main menu!");
                 hunter.setScreen(new MenuScreen(hunter));
             }
         });
@@ -133,6 +128,6 @@ public class HighScoreScreen implements Screen {
     }
 
     private void drawBackground() {
-        batch.draw(background, 0f, 0f, Hunter.State.screenWidth, Hunter.State.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
+        batch.draw(background, 0f, 0f, Hunter.Config.SCREEN_WIDTH, Hunter.Config.SCREEN_HEIGHT, 0, 0, background.getWidth(), background.getHeight(), false, false);
     }
 }

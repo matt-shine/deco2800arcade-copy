@@ -10,7 +10,7 @@ import deco2800.arcade.hunter.Hunter.Config;
 
 public class MapPaneRenderer {
     private static final Pixmap tileMap = new Pixmap(Gdx.files.internal("textures/tilemap.png"));
-    private static final int tileMapWidthTiles = tileMap.getWidth() / Config.TILE_SIZE;
+    private static final int TILE_MAP_WIDTH_TILES = tileMap.getWidth() / Config.TILE_SIZE;
 
     /**
      * Render the given map pane to a TextureRegion for drawing to the screen
@@ -28,8 +28,8 @@ public class MapPaneRenderer {
 
         for (int row = 0; row < Config.PANE_SIZE; row++) {
             for (int col = 0; col < Config.PANE_SIZE; col++) {
-                int tileX = (paneData[row][col] % tileMapWidthTiles) * Config.TILE_SIZE;
-                int tileY = paneData[row][col] / tileMapWidthTiles * Config.TILE_SIZE;
+                int tileX = (paneData[row][col] % TILE_MAP_WIDTH_TILES) * Config.TILE_SIZE;
+                int tileY = paneData[row][col] / TILE_MAP_WIDTH_TILES * Config.TILE_SIZE;
 
                 tile.fill();
                 //Draw the tile image to the temporary pixmap

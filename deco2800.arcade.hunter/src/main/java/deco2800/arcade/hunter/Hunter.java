@@ -14,38 +14,38 @@ import java.util.Random;
 @ArcadeGame(id = "hunter")
 public class Hunter extends PlatformerGame {
     private static PreferencesManager prefManage;
-    public final HighscoreClient highscore;
-    private final NetworkClient networkClient;
+
+    private final HighscoreClient highscore;
 
 
-    public final static class Config {
-        public final static int TILE_SIZE = 64;
-        public final static int PANE_SIZE = 16;
-        public final static int PANE_SIZE_PX = TILE_SIZE * PANE_SIZE;
-        public final static int MAX_SPEED = 1024;
-        public final static int SPEED_INCREASE_COUNTDOWN_START = 3;
-        public final static int PANES_PER_TYPE = 4; //Number of map panes each map type should be used for
+    public static final class Config {
+        public static final int TILE_SIZE = 64;
+        public static final int PANE_SIZE = 16;
+        public static final int PANE_SIZE_PX = TILE_SIZE * PANE_SIZE;
+        public static final int MAX_SPEED = 1024;
+        public static final int SPEED_INCREASE_COUNTDOWN_START = 3;
+        public static final int PANES_PER_TYPE = 4; //Number of map panes each map type should be used for
 
-        public final static float CHANCE_OF_CLOUDS = 0.05f;
-        public final static float CHANCE_OF_TREES = 0.021f;
-        public final static float CLOUD_MIN_SPEED = 0.3f;
-        public final static float CLOUD_MAX_SPEED = 0.7f;
-        public final static float TREE_MIN_SPEED = 0.4f;
-        public final static float TREE_MAX_SPEED = 0.8f;
+        public static final float CHANCE_OF_CLOUDS = 0.05f;
+        public static final float CHANCE_OF_TREES = 0.021f;
+        public static final float CLOUD_MIN_SPEED = 0.3f;
+        public static final float CLOUD_MAX_SPEED = 0.7f;
+        public static final float TREE_MIN_SPEED = 0.4f;
+        public static final float TREE_MAX_SPEED = 0.8f;
 
-        public final static int PLAYER_ATTACK_TIMEOUT = 300; // Attack timeout in msec
-        public final static int PLAYER_ATTACK_COOLDOWN = 600;
-        public final static long PLAYER_BLINK_TIMEOUT = 1000;
+        public static final int PLAYER_ATTACK_TIMEOUT = 300; // Attack timeout in msec
+        public static final int PLAYER_ATTACK_COOLDOWN = 600;
+        public static final long PLAYER_BLINK_TIMEOUT = 1000;
 
+        public static final int SCREEN_WIDTH = 1280;
+        public static final int SCREEN_HEIGHT = 720;
     }
 
     public static class State {
-        public static boolean paused = false;
-        public static final int screenWidth = 1280;
-        public static final int screenHeight = 720;
-        public static int gameSpeed = 512;
-        public static final float gravity = 2 * 9.81f;
-        public static Random randomGenerator;
+        private static boolean paused = false;
+        private static int gameSpeed = 512;
+        private static final float gravity = 2 * 9.81f;
+        private static Random randomGenerator;
         /**
          * Velocity of the player
          */
@@ -55,26 +55,57 @@ public class Hunter extends PlatformerGame {
         public static PreferencesManager getPreferencesManager() {
             return prefManage;
         }
+
+        public static boolean isPaused() {
+            return paused;
+        }
+
+        public static int getGameSpeed() {
+            return gameSpeed;
+        }
+
+        public static void setGameSpeed(int s) {
+            gameSpeed = s;
+        }
+
+        public static float getGravity() {
+            return gravity;
+        }
+
+        public static Random getRandomGenerator() {
+            return randomGenerator;
+        }
+
+        public static void setRandomGenerator(Random r) {
+            randomGenerator = r;
+        }
+
+        public static Vector2 getPlayerVelocity() {
+            return playerVelocity;
+        }
+
+        public static void setPlayerVelocity(Vector2 v) {
+            playerVelocity = v;
+        }
     }
 
-    private static final Game game;
+    private static final Game GAME;
 
     static {
-        game = new Game();
-        game.id = "hunter";
-        game.name = "Hunter Game";
-        game.description = "A 2D platformer running game where you hunt animals before they eat you!";
+        GAME = new Game();
+        GAME.id = "hunter";
+        GAME.name = "Hunter Game";
+        GAME.description = "A 2D platformer running game where you hunt animals before they eat you!";
     }
 
     @Override
     public Game getGame() {
-        return game;
+        return GAME;
     }
 
     public Hunter(Player player, NetworkClient networkClient) {
         super(player, networkClient);
         prefManage = new PreferencesManager();
-        this.networkClient = networkClient;
 		highscore = new HighscoreClient(player.getUsername(),"Hunter",networkClient);
         State.paused = false;
     }
@@ -125,5 +156,9 @@ public class Hunter extends PlatformerGame {
             }
         });
         setScreen(new SplashScreen(this));
+    }
+
+    public HighscoreClient getHighscore() {
+        return highscore;
     }
 }

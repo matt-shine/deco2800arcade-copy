@@ -66,7 +66,6 @@ public class GameOverScreen implements Screen {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Play Again");
                 hunter.setScreen(new GameScreen(hunter));
             }
         });
@@ -76,7 +75,6 @@ public class GameOverScreen implements Screen {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Going back to the main menu!");
                 hunter.setScreen(new MenuScreen(hunter));
             }
         });
@@ -131,6 +129,6 @@ public class GameOverScreen implements Screen {
     }
 
     private void drawBackground() {
-        batch.draw(background, 0f, 0f, Hunter.State.screenWidth, Hunter.State.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
+        batch.draw(background, 0f, 0f, Hunter.Config.SCREEN_WIDTH, Hunter.Config.SCREEN_HEIGHT, 0, 0, background.getWidth(), background.getHeight(), false, false);
     }
 }

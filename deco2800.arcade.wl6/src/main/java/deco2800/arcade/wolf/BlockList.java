@@ -60,7 +60,7 @@ public class BlockList {
                     new BlockInfo(true, "steel"),
 
                     //16: starysky
-                    new BlockInfo(true, "starysky"),
+                    new BlockInfo(true, "greenbrick"),
 
                     //17: red brick
                     new BlockInfo(true, "candywall"),
@@ -96,7 +96,7 @@ public class BlockList {
                     new BlockInfo(true, "greybrick"),
 
                     //28: grey brick with sign
-                    new BlockInfo(true, "greybricksign"),
+                    new BlockInfo(true, "greybrick"),
 
                     //29: brown weave
                     new BlockInfo(true, "purplewall"),
@@ -162,13 +162,13 @@ public class BlockList {
                     new BlockInfo(true, "greybrick"),
 
                     //50: fake door
-                    new BlockInfo(true, "doorfake"),
+                    new BlockInfo(true, "door"),
 
                     //51: side of door
-                    new BlockInfo(true, "unknown"),
+                    new BlockInfo(true, "door"),
 
                     //53: fake locked door
-                    new BlockInfo(true, "doorlockedfake"),
+                    new BlockInfo(true, "door"),
 
                     //54: nothing
                     new BlockInfo(),

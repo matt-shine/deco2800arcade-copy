@@ -98,7 +98,7 @@ public class Player extends Mob {
 
     public void shoot(GameModel g, boolean justDown) {
     	if (gunTimer <= 0 && ammo > 0 && (currentGun != 1 || justDown)) {
-    		Projectile bullet = new Projectile(0, 10, false, "worm");
+    		Projectile bullet = new Projectile(0, 10, false, "snowball");
         	g.addDoodad(bullet);
         	bullet.setPos(this.getPos());
         	bullet.setVel((new Vector2(0, -0.2f)).rotate(-this.getAngle()));

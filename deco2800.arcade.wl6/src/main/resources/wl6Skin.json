@@ -1,6 +1,7 @@
 {
     com.badlogic.gdx.graphics.g2d.BitmapFont: {
             default-font: { file: SFAtarianSystem40.fnt },
+            small-font: { file: SFAtarianSystem24.fnt },
     },
     com.badlogic.gdx.graphics.Color: {
         red:    { a: 1, r: 1, g: 0, b: 0 },
@@ -40,7 +41,8 @@
         default-horizontal: { background: default-slider, knob: default-slider-knob }
     },
     com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
-        default: { font: default-font, fontColor: white }
+        default: { font: default-font, fontColor: white },
+        small: { font: small-font, fontColor: white },
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
         default: { selection: selection, background: textfield, font: default-font, fontColor: white, cursor: cursor }

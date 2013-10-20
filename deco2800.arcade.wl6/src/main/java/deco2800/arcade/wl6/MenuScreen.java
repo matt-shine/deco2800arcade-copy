@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import deco2800.arcade.client.ArcadeInputMux;
+import deco2800.arcade.client.ArcadeSystem;
 
 public class MenuScreen implements Screen {
 
@@ -62,7 +63,7 @@ public class MenuScreen implements Screen {
         wl6 = game;
         model = new GameModel();
         stage = new MenuScreenStage();
-        skin = new Skin(Gdx.files.internal("menuSkin.json"));
+        skin = new Skin(Gdx.files.internal("wl6Skin.json"));
         skin.add("background", new Texture("wolf_background.png"));
 
         Table table = new Table();
@@ -103,7 +104,7 @@ public class MenuScreen implements Screen {
         });
         exit.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                // Exit to arcade
+                ArcadeSystem.goToGame(ArcadeSystem.UI);
             }
         });
     }

@@ -3,6 +3,7 @@ package deco2800.arcade.communication.communication.test;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import com.esotericsoftware.kryonet.Connection;
 import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.communication.CommunicationView;
+import deco2800.arcade.model.ChatNode;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.communication.ChatHistory;
 import deco2800.arcade.protocol.communication.TextMessage;
@@ -136,8 +138,15 @@ public class CommunicationTest {
 	 */
 	//@Test
 	public void chatHistory() {
+		Connection connection = null;
 		ChatHistory chathistory = new ChatHistory();
-		HashMap<Integer, List<String>> history = new HashMap<Integer, List<String>>();
+		HashMap<Integer, ChatNode> history = new HashMap<Integer, ChatNode>();
+		ChatNode node = new ChatNode(123);
+		node.addMessage("12:30 PM - Rick Astley: Testing chat");
+		node.addMessage("12:35 PM - Rick Astley: Testing chat2");
+		history.put(123, node);
+		chathistory.setChatHistory(history);
+		listener1.received(connection, chathistory);
 
 	}
 

@@ -39,6 +39,7 @@ public class ChatNode {
 	public ChatNode(int participant) {
 		participants = new ArrayList<Integer>();
 		participants.add(participant);
+		chatHistory = new ArrayDeque<String>();
 	}
 
 

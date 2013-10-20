@@ -42,11 +42,11 @@ public class GameScreen implements Screen {
 	//unused
 	//private static float STATUS_HEIGHT = 50f;
 	//private static float BOTTOM_HEIGHT = 150f;
-	Button frostB, fireB, holyB, darknessB, piercingB, auraB, backB,
-			randomBut1, randomBut2; 
+	Button standardB, fireB, holyB, cryoB, piercingB, barricadeB, backB; 
 	private Label towerInfo;
 	BitmapFont black;
 	BitmapFont white;
+	TextButtonStyle style;
 	Skin skin;
 	TextureAtlas atlas, barsAtlas;
 	TextureRegion healthBarRegion, attackBarRegion, costBarRegion,
@@ -63,7 +63,9 @@ public class GameScreen implements Screen {
 	int resource; /* int for player's resources. */
 
 	Texture crystalsTexture, gridMapTexture;
-	private float rotationSpeed;
+	
+	String fireStr, cryoStr, piercingStr, holyStr, attackStr, standardStr,
+			barricadeStr, defenceStr;
 
 	/*
 	 * Constructor for GameScreen, creates the platform for which the game will
@@ -76,11 +78,11 @@ public class GameScreen implements Screen {
 		hudStage = new Stage();
 		hudStage.setViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 
-		// setting style for resource textfield
+		/* setting style for resource textfield*/
 		TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
 		textFieldStyle.font = new BitmapFont(
-				Gdx.files.internal("white_font.fnt"), false);
-		textFieldStyle.fontColor = Color.WHITE;
+				Gdx.files.internal("black_font.fnt"), false);
+		textFieldStyle.fontColor = Color.BLACK;
 
 		resource = 0;
 		resourceTF = new TextField("", textFieldStyle);
@@ -92,14 +94,19 @@ public class GameScreen implements Screen {
 		gridMapTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
 		gridMap = new Image(gridMapTexture);
-		
-		//Sprite crystals = new Sprite(crystalsTexture);
 
-		towerInfo = new Label("            ", 
-				new Label.LabelStyle(new BitmapFont(), WHITE));
+		towerInfo = new Label("..............", 
+				new Label.LabelStyle(new BitmapFont(), BLACK));
 		towerInfo.setWrap(true);
 		
 		resource = 2000;
+		fireStr = "Fire I: \n" + "Cost: 200\n" + "Max Health: 100\n" + "Damage: 15";
+		cryoStr = "Cryo I: \n" + "Cost: 200\n" + "Max Health: 100\n" + "Damage: 15";
+		piercingStr = "Piercing I: \n" + "Cost: 200\n" + "Max Health: 100\n" + "Damage: 15";
+		holyStr = "Holy I: \n" + "Cost: 250\n" + "Max Health: 100\n" + "Damage: 15";
+		barricadeStr = "Barricade I: \n" + "Cost: 100\n" + "Max Health: 200\n" + "Damage: 0";
+		standardStr = "Standard I: \n"+ "Cost: 100\n" + "Max Health: 100\n" + "Damage: 10";
+		
 	}
 
 	@Override
@@ -191,16 +198,10 @@ public class GameScreen implements Screen {
 		camera.setToOrtho(false, 4000, 4000);
 		camera.position.set(2000, 2000, 0);
 
-		/* Setting the "Style of a TextButton" */
-		TextButtonStyle style = new TextButtonStyle();
-		style.up = skin.getDrawable("buttonnormal");
-		style.down = skin.getDrawable("buttonpressed");
-		style.font = white;
-
-		frostB = new TextButton("1", style);
-		frostB.setWidth(BUTTON_WIDTH);
-		frostB.setHeight(BUTTON_HEIGHT);
-		frostB.addListener(new InputListener() {
+		standardB = new TextButton("ST", style);
+		standardB.setWidth(BUTTON_WIDTH);
+		standardB.setHeight(BUTTON_HEIGHT);
+		standardB.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
 				return true;
@@ -208,13 +209,13 @@ public class GameScreen implements Screen {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				towerInfo.setText("Frost Tower\nCost: One Million Dollars >:)");
+				towerInfo.setText(standardStr);
 			}
 		});
-		frostB.setX(5);
-		frostB.setY(69);
+		standardB.setX(5);
+		standardB.setY(69);
 
-		fireB = new TextButton("2", style);
+		fireB = new TextButton("FI", style);
 		fireB.setWidth(BUTTON_WIDTH);
 		fireB.setHeight(BUTTON_HEIGHT);
 		fireB.addListener(new InputListener() {
@@ -225,13 +226,13 @@ public class GameScreen implements Screen {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				towerInfo.setText("Fire Tower\nCost: ");
+				towerInfo.setText(fireStr);
 			}
 		});
 		fireB.setX(5);
 		fireB.setY(5);
 
-		holyB = new TextButton("3", style);
+		holyB = new TextButton("HO", style);
 		holyB.setWidth(BUTTON_WIDTH);
 		holyB.setHeight(BUTTON_HEIGHT);
 		holyB.addListener(new InputListener() {
@@ -242,16 +243,16 @@ public class GameScreen implements Screen {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				towerInfo.setText("Holy Tower\nCost: ");
+				towerInfo.setText(holyStr);
 			}
 		});
-		holyB.setX(frostB.getX() + BUTTON_WIDTH + 5);
+		holyB.setX(standardB.getX() + BUTTON_WIDTH + 5);
 		holyB.setY(69);
 
-		darknessB = new TextButton("4", style);
-		darknessB.setWidth(BUTTON_WIDTH);
-		darknessB.setHeight(BUTTON_HEIGHT);
-		darknessB.addListener(new InputListener() {
+		cryoB = new TextButton("CR", style);
+		cryoB.setWidth(BUTTON_WIDTH);
+		cryoB.setHeight(BUTTON_HEIGHT);
+		cryoB.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
 				return true;
@@ -259,13 +260,13 @@ public class GameScreen implements Screen {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				towerInfo.setText("Darkness Tower\nCost: ");
+				towerInfo.setText(cryoStr);
 			}
 		});
-		darknessB.setX(fireB.getX() + BUTTON_WIDTH + 5);
-		darknessB.setY(5);
+		cryoB.setX(fireB.getX() + BUTTON_WIDTH + 5);
+		cryoB.setY(5);
 
-		piercingB = new TextButton("5", style);
+		piercingB = new TextButton("PI", style);
 		piercingB.setWidth(BUTTON_WIDTH);
 		piercingB.setHeight(BUTTON_HEIGHT);
 		piercingB.addListener(new InputListener() {
@@ -276,16 +277,16 @@ public class GameScreen implements Screen {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				towerInfo.setText("Piercing Tower\nCost: ");
+				towerInfo.setText(piercingStr);
 			}
 		});
 		piercingB.setX(holyB.getX() + BUTTON_WIDTH + 5);
 		piercingB.setY(69);
 
-		auraB = new TextButton("6", style);
-		auraB.setWidth(BUTTON_WIDTH);
-		auraB.setHeight(BUTTON_HEIGHT);
-		auraB.addListener(new InputListener() {
+		barricadeB = new TextButton("BA", style);
+		barricadeB.setWidth(BUTTON_WIDTH);
+		barricadeB.setHeight(BUTTON_HEIGHT);
+		barricadeB.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
 				return true;
@@ -293,11 +294,11 @@ public class GameScreen implements Screen {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				towerInfo.setText("Aura Tower\nCost: ");
+				towerInfo.setText(barricadeStr);
 			}
 		});
-		auraB.setX(darknessB.getX() + BUTTON_WIDTH + 5);
-		auraB.setY(5);
+		barricadeB.setX(cryoB.getX() + BUTTON_WIDTH + 5);
+		barricadeB.setY(5);
 
 		backB = new TextButton("X", style);
 		backB.setWidth(BUTTON_WIDTH);
@@ -316,49 +317,17 @@ public class GameScreen implements Screen {
 		backB.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - 5);
 		backB.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - 5);
 
-		// random buttons for testing the stage-camera movement
-		randomBut1 = new TextButton("T", style);
-		randomBut1.setWidth(BUTTON_WIDTH);
-		randomBut1.setHeight(BUTTON_HEIGHT);
-		randomBut1.addListener(new InputListener() {
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
-				return true;
-			}
-
-			public void touchUp(InputEvent event, float x, float y,
-					int pointer, int button) {
-			}
-		});
-		randomBut1.setX(200);
-		randomBut1.setY(200);
-
-		randomBut2 = new TextButton("T", style);
-		randomBut2.setWidth(BUTTON_WIDTH);
-		randomBut2.setHeight(BUTTON_HEIGHT);
-		randomBut2.addListener(new InputListener() {
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
-				return true;
-			}
-
-			public void touchUp(InputEvent event, float x, float y,
-					int pointer, int button) {
-			}
-		});
-		randomBut2.setX(300);
-		randomBut2.setY(300);
-
 		resourceTF.setX(45);
 		resourceTF.setY(Gdx.graphics.getHeight() - resourceTF.getHeight() - 15);
 		resourceTF.setDisabled(true);
 
-		towerInfo.setX(piercingB.getX() + towerInfo.getWidth() / 2 + 10);
+		towerInfo.setX(piercingB.getX() + piercingB.getWidth() + 10);
 		towerInfo.setY(69);
+		towerInfo.setWidth(128);
 
 		/* adding bars for showing information */
 		healthBar = new TexturePart(healthBarRegion, towerInfo.getX()
-				+ 50 + 20, towerInfo.getY() + 50);
+				+ towerInfo.getWidth() + 20, towerInfo.getY() + 50);
 		attackBar = new TexturePart(attackBarRegion, healthBar.getX(),
 				healthBar.getY() - 26);
 		costBar = new TexturePart(costBarRegion, healthBar.getX(),
@@ -369,11 +338,11 @@ public class GameScreen implements Screen {
 				penetrationBar.getY() - 26);
 
 		/* adding actors to the HUD */
-		hudStage.addActor(frostB);
+		hudStage.addActor(standardB);
 		hudStage.addActor(fireB);
-		hudStage.addActor(darknessB);
+		hudStage.addActor(cryoB);
 		hudStage.addActor(holyB);
-		hudStage.addActor(auraB);
+		hudStage.addActor(barricadeB);
 		hudStage.addActor(piercingB);
 		hudStage.addActor(backB);
 		hudStage.addActor(resourceTF);
@@ -397,6 +366,12 @@ public class GameScreen implements Screen {
 		skin.addRegions(atlas);
 		white = new BitmapFont(Gdx.files.internal("white_font.fnt"), false);
 		black = new BitmapFont(Gdx.files.internal("black_font.fnt"), false);
+		
+		/* Setting the "Style of a TextButton" */
+		style = new TextButtonStyle();
+		style.up = skin.getDrawable("buttonnormal");
+		style.down = skin.getDrawable("buttonpressed");
+		style.font = white;
 
 		batch = new SpriteBatch();
 

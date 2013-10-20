@@ -49,7 +49,7 @@ public class MenuScreen implements Screen {
 		this.game = game;
 		batch = new SpriteBatch();
 		/* Background texture */
-		texture = new Texture(Gdx.files.internal("TDtile.png"));
+		texture = new Texture(Gdx.files.internal("1080space.png"));
 		buttonSpacing = (Gdx.graphics.getHeight() - 7 * buttonHeight) / 6;
 		/* Sound for button press */
 		click = Gdx.audio.newSound(Gdx.files.internal("menu_click.wav"));

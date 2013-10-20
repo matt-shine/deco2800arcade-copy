@@ -693,7 +693,6 @@ public class Arcade extends JFrame {
 	 * 
 	 * @param response: The match to add.
 	 */
-//>>>>>>> master
 	public static void addToMatchList(ActiveMatchDetails response) {
 		matches.add(response);
 	}

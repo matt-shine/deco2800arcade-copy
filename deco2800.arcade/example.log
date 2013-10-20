@@ -436,3 +436,248 @@ DEBUG AWT-EventQueue-0 deco2800.arcade.mixmaze.PlayerViewModel - direction: 1
 DEBUG AWT-EventQueue-0 deco2800.arcade.mixmaze.PlayerViewModel - direction: 2
 DEBUG AWT-EventQueue-0 deco2800.arcade.mixmaze.PlayerViewModel - direction: 3
 DEBUG AWT-EventQueue-0 deco2800.arcade.mixmaze.MixMaze - paused
+DEBUG main deco2800.arcade.packman.PackageClient - Creating directory: ..\games
+DEBUG main deco2800.arcade.packman.PackageClient - Created: ..\games
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.pong/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.ui/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.cyra/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.chess/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.utils/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.gamelibrary/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.userui/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.statistics/build/libs/deco2800.arcade.statistics-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.minigolf/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.soundboard/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.gamelibrary/build/libs/deco2800.arcade.gamelibrary-1.0.jar!/
+INFO main org.reflections.Reflections - Reflections took 11256 ms to scan 31 urls, producing 141 keys and 1036 values 
+DEBUG main deco2800.arcade.packman.PackageClient - Creating directory: ..\games
+DEBUG main deco2800.arcade.packman.PackageClient - Created: ..\games
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.pong/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.ui/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.cyra/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.chess/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.utils/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.gamelibrary/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.userui/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.statistics/build/libs/deco2800.arcade.statistics-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.minigolf/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.soundboard/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.gamelibrary/build/libs/deco2800.arcade.gamelibrary-1.0.jar!/
+INFO main org.reflections.Reflections - Reflections took 1624 ms to scan 31 urls, producing 141 keys and 1036 values 
+DEBUG main deco2800.arcade.packman.PackageClient - Creating directory: ..\games
+DEBUG main deco2800.arcade.packman.PackageClient - Created: ..\games
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.pong/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.ui/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.cyra/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.chess/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.utils/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.gamelibrary/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.userui/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.statistics/build/libs/deco2800.arcade.statistics-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.minigolf/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.soundboard/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.gamelibrary/build/libs/deco2800.arcade.gamelibrary-1.0.jar!/
+INFO main org.reflections.Reflections - Reflections took 1576 ms to scan 31 urls, producing 141 keys and 1036 values 
+DEBUG main deco2800.arcade.packman.PackageClient - Creating directory: ..\games
+DEBUG main deco2800.arcade.packman.PackageClient - Created: ..\games
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.pong/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.ui/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.cyra/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.chess/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.utils/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.gamelibrary/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.userui/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.statistics/build/libs/deco2800.arcade.statistics-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.minigolf/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.soundboard/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.gamelibrary/build/libs/deco2800.arcade.gamelibrary-1.0.jar!/
+INFO main org.reflections.Reflections - Reflections took 1872 ms to scan 31 urls, producing 141 keys and 1036 values 
+DEBUG main deco2800.arcade.packman.PackageClient - Creating directory: ..\games
+DEBUG main deco2800.arcade.packman.PackageClient - Created: ..\games
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.pong/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.ui/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.cyra/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.chess/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.utils/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.gamelibrary/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.userui/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.statistics/build/libs/deco2800.arcade.statistics-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.minigolf/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.soundboard/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.gamelibrary/build/libs/deco2800.arcade.gamelibrary-1.0.jar!/
+INFO main org.reflections.Reflections - Reflections took 2318 ms to scan 31 urls, producing 141 keys and 1036 values 
+DEBUG main deco2800.arcade.packman.PackageClient - Creating directory: ..\games
+DEBUG main deco2800.arcade.packman.PackageClient - Created: ..\games
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.pong/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.ui/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.cyra/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.chess/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.utils/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.gamelibrary/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.userui/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.statistics/build/libs/deco2800.arcade.statistics-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.minigolf/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.soundboard/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.gamelibrary/build/libs/deco2800.arcade.gamelibrary-1.0.jar!/
+INFO main org.reflections.Reflections - Reflections took 1719 ms to scan 31 urls, producing 141 keys and 1036 values 
+DEBUG main deco2800.arcade.packman.PackageClient - Creating directory: ..\games
+DEBUG main deco2800.arcade.packman.PackageClient - Created: ..\games
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.pong/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.ui/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.cyra/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.chess/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.utils/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.gamelibrary/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.userui/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.statistics/build/libs/deco2800.arcade.statistics-1.0.jar!/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.minigolf/build/classes/main/
+file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.soundboard/build/classes/main/
+jar:file:/C:/Users/user/Desktop/workspace/deco2800-2013/deco2800.arcade.gamelibrary/build/libs/deco2800.arcade.gamelibrary-1.0.jar!/
+INFO main org.reflections.Reflections - Reflections took 7549 ms to scan 31 urls, producing 141 keys and 1036 values 

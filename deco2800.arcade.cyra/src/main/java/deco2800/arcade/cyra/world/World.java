@@ -95,7 +95,6 @@ public class World {
 		this.game = game;
 		curLevel = new Level(level, rank);
 		
-		
 		if (!Sounds.areSoundsLoadedYet()) {
 			Sounds.loadAll();
 		}
@@ -103,6 +102,7 @@ public class World {
 		initCount = 2.5f;
 		init(true);
 		//hardcode
+<<<<<<< HEAD
 				if(level == 1) {
 					levelScenes = new Level1Scenes(ship, cam, resultsScreen);
 				} else {
@@ -110,8 +110,15 @@ public class World {
 					
 				}
 		
+=======
+		if(level == 1) {
+			levelScenes = new Level1Scenes(ship, cam, resultsScreen);
+		} else {
+			levelScenes = new Level2Scenes(ship, cam, resultsScreen);
+			Sounds.playLevelMusic();
+		}
+>>>>>>> 2ed1e711e397f9c0d038fc94c4edc171b7a4d9cd
 	}
-	
 	
 	//Used to count number of jumps - for achievements
 	public void incrementJumps() {
@@ -122,7 +129,9 @@ public class World {
 		
 
 		//If game is in paused state immediately return
-		if (game.isPaused()) return;
+		if (game.isPaused()) {
+			return;
+		}
 		//If showing results Screen, update it and do nothing else
 		if (resultsScreen.isShowing()) {
 			score += resultsScreen.update(Gdx.graphics.getDeltaTime());
@@ -159,8 +168,6 @@ public class World {
 			
 		}
 		
-		//System.out.println("State after tiles = "+ship.getState());
-		
 
 		handleEnemies();
 		
@@ -195,12 +202,6 @@ public class World {
 		} else {
 			updateCamera();
 			if( ship.getHearts() == 0 || ship.getPosition().y < -3) {
-				/*if (--lives == 0) {
-					gameOver();
-				} else {
-					resetLevel();
-				}*/
-				//ship.setState(Player.State.DEATH);
 				ship.setHasDied();
 				System.out.println("SHIP IN BAD POSITION!!!! hearts="+ship.getHearts()+" ship.getPosition().y"+ship.getPosition().y);
 				inputHandler.cancelInput();
@@ -216,11 +217,7 @@ public class World {
 			}
 		}
 		
-		//System.out.println("End of World update " + ship.getVelocity().x);
-
-		
 		// Check if sprite has reached left/right level boundary. Changed to just left boundary
-		//if( (int)(ship.getNextPos().x) < 1 || (int)(ship.getNextPos().x) > WORLD_WIDTH )
 		if( (int)(ship.getNextPos().x) < 2)
 			ship.setCanMove(false);
 		// Check if sprite has gone out of level bounds to the bottom.
@@ -572,7 +569,6 @@ public class World {
 					eItr.remove();
 					//Enemy is dead - achievement
 					if (e.getClass() == SoldierEnemy.class) {
-						System.out.println("ACHIEVE INC");
 						game.incrementAchievement("cyra.slayer");
 					}
 					//System.out.println("removed enemy");
@@ -650,7 +646,7 @@ public class World {
 				}
 			}
 			
-			if(b.getExistTime() > b.MAX_EXIST_TIME) {
+			if(b.getExistTime() > b.getMAX_EXIST_TIME()) {
 				bItr.remove();
 			}
 		}
@@ -892,18 +888,6 @@ public class World {
 		
 		return;
 	}
-	
-	
-	public void testOverlay(String message) {
-		//overlay test
-				game.createPopup(message);
-				
-	}
-	
-	public void testAch() {
-		game.incrementAchievement("cyra.pressbutton");
-	}
-	
 
 	public void resetLevel() {
 		at.addToTime( (int)time );
@@ -931,6 +915,10 @@ public class World {
 	
 	public void gameOver() {
 		// go back to menu
+<<<<<<< HEAD
+=======
+		Sounds.stopMusic();
+>>>>>>> 2ed1e711e397f9c0d038fc94c4edc171b7a4d9cd
 		game.addHighscore(score);
 		game.setScreen(new MainMenu(game));
 
@@ -939,7 +927,12 @@ public class World {
 	
 	public void gameWin() {
 		// show some message/credits then go back to menu
+<<<<<<< HEAD
 		
+=======
+		Sounds.stopMusic();
+		game.incrementAchievement("cyra.whataplayer");
+>>>>>>> 2ed1e711e397f9c0d038fc94c4edc171b7a4d9cd
 		game.addHighscore(score);
 		game.setScreen(new MainMenu(game));
 	}

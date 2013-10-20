@@ -3,20 +3,18 @@ package deco2800.arcade.cyra.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import deco2800.arcade.cyra.world.Sounds;
 
 /** This class controls the components that make up the main menu - buttons,
@@ -25,26 +23,26 @@ import deco2800.arcade.cyra.world.Sounds;
  * @author Game Over
  */
 public class MainMenu extends AbstractScreen{
-	Stage stage;
-	BitmapFont blackFont;
-	TextureAtlas atlas;
-	Skin skin;
-	//SpriteBatch batch;
-	TextButton button;
-	TextButton button2;
-	TextButton button3;
-	Label label;
+	private Stage stage;
+	private BitmapFont blackFont;
+	private TextureAtlas atlas;
+	private Skin skin;
+	private TextButton button;
+	private TextButton button2;
+	private TextButton button3;
+	private Label label;
 	private int framecount = 0;
 	private int framecountmax = 80;
 	private int buttonframe = 0;
 	private boolean keydown = false;
 	
-	float[] difficulty = new float[3];
-	int difficultyIndex = 1;
+	private float[] difficulty = new float[3];
+	private int difficultyIndex = 1;
 	
 	public MainMenu(Cyra game) {
 		super(game);
 		
+		//Set values for difficulty
 		difficulty[0] = 0.21f;
 		difficulty[1] = 0.76f;
 		difficulty[2] = 0.91f;
@@ -59,11 +57,7 @@ public class MainMenu extends AbstractScreen{
 		atlas = new TextureAtlas("buttons.txt");
 		skin = new Skin();
 		skin.addRegions(atlas);
-		//blackFont = new BitmapFont(Gdx.files.internal("whitefont.fnt"), false);
 		blackFont = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);
-		//Sounds.load();
-		
-		
 	}
 	
 	@Override
@@ -79,7 +73,9 @@ public class MainMenu extends AbstractScreen{
 			framecount = 0;
 			if (framecountmax > 25) {
 				framecountmax -= 9;
-			} else framecountmax--;
+			} else {
+				framecountmax--;
+			}
 		}
 		if (++buttonframe == 9) {
 			buttonframe = 0;
@@ -107,8 +103,8 @@ public class MainMenu extends AbstractScreen{
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = skin.getDrawable("buttonopen");
 		style.down = skin.getDrawable("buttonclose0");
-		
 		style.font = blackFont;
+		
 		button = new TextButton("START!", style);
 		button.setHeight(90);
 		button.setX(Gdx.graphics.getWidth()/2 - button.getWidth()/2);
@@ -171,7 +167,7 @@ public class MainMenu extends AbstractScreen{
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				keydown = false;
-				//game.setScreen(new HighscoreScreen(game));
+				game.setScreen(new HighscoreScreen(game));
 			}
 		});
 		

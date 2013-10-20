@@ -16,16 +16,10 @@ import deco2800.arcade.cyra.model.Sword;
  * @author Game Over
  */
 public class InputHandler implements InputProcessor{
-	World world;
-	Player ship;
-	Sword sword;
-	Vector2 vec2Touch = new Vector2();
+	private World world;
+	private Player ship;
+	private Sword sword;
 	private boolean acceptInput;
-	Vector3 touch = new Vector3();
-	
-
-	//private static final float WALL_ATTACH_LENGTH = 4f;
-	//private float wallTime = 0;
 
 	public InputHandler(World world) {
 		this.world = world;
@@ -39,19 +33,14 @@ public class InputHandler implements InputProcessor{
 	public boolean keyDown(int keycode) {
 		
 		switch(keycode){
-			case Keys.S:
-				world.testAch();
-				break;
-			case Keys.A:
-				world.testOverlay("pressed a");
-				break;
 			case Keys.LEFT:
-				if (acceptInput) ship.moveLeft();
+				if (acceptInput) {
+					ship.moveLeft();
+				}
 				break;
 
 			case Keys.RIGHT:
 				if (acceptInput) {
-					System.out.println("telling ship to move right from InputHandler");
 					ship.moveRight();
 				}
 				break;
@@ -85,28 +74,23 @@ public class InputHandler implements InputProcessor{
 				break;
 			case Keys.SPACE:
 				if (acceptInput) {
-							/*
-							float speed,
-							float rotation,
-							Vector2 pos,
-							float width, float height,
-							Vector2 velocity
-							*/
 					int shootDir = 1;
-					if (!ship.isFacingRight()) shootDir = -1; 
+					if (!ship.isFacingRight()) {
+						shootDir = -1; 
+					}
 					world.addBullet(new Bullet(
-							Bullet.BULLET_SPEED,
+							Bullet.getBULLET_SPEED(),
 							0,
-							new Vector2(ship.getPosition().x+ship.getWidth()/2-Bullet.BULLET_SIZE/2, ship.getPosition().y+ship.getHeight()/2),
-							Bullet.BULLET_SIZE, Bullet.BULLET_SIZE,
+							new Vector2(ship.getPosition().x+ship.getWidth()/2-Bullet.getBULLET_SIZE()/2, ship.getPosition().y+ship.getHeight()/2),
+							Bullet.getBULLET_SIZE(), Bullet.getBULLET_SIZE(),
 							new Vector2( shootDir, 0),
 							false
 							));
 					world.addBullet(new Bullet(
-							Bullet.BULLET_SPEED,
+							Bullet.getBULLET_SPEED(),
 							0,
-							new Vector2(ship.getPosition().x+ship.getWidth()/2-Bullet.BULLET_SIZE/2, ship.getPosition().y+ship.getHeight()/2),
-							Bullet.BULLET_SIZE, Bullet.BULLET_SIZE,
+							new Vector2(ship.getPosition().x+ship.getWidth()/2-Bullet.getBULLET_SIZE()/2, ship.getPosition().y+ship.getHeight()/2),
+							Bullet.getBULLET_SIZE(), Bullet.getBULLET_SIZE(),
 							new Vector2( shootDir, 0),
 							true
 							));
@@ -127,23 +111,27 @@ public class InputHandler implements InputProcessor{
 	public boolean keyUp(int keycode) {
 		switch(keycode){
 			case Keys.UP:
-				if (ship.getVelocity().y == 1 && acceptInput)
+				if (ship.getVelocity().y == 1 && acceptInput) {
 					ship.getVelocity().y = 0;
+				}
 				break;
 
 			case Keys.DOWN:
-				if (ship.getVelocity().y == -1 && acceptInput)
+				if (ship.getVelocity().y == -1 && acceptInput) {
 					ship.getVelocity().y = 0;
+				}
 				break;
 
 			case Keys.LEFT:
-				if (ship.getVelocity().x < -1 && acceptInput)
+				if (ship.getVelocity().x < -1 && acceptInput) {
 					ship.getVelocity().x = 0;
+				}
 				break;
 
 			case Keys.RIGHT:
-				if (ship.getVelocity().x > 1 && acceptInput)
+				if (ship.getVelocity().x > 1 && acceptInput) {
 					ship.getVelocity().x = 0;
+				}
 				break;
 
 			case Keys.Z:
@@ -171,12 +159,6 @@ public class InputHandler implements InputProcessor{
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		//pointer is how many fingers on your touchpad
-		/*touch.set(screenX, screenY, 0);
-		world.getRenderer().getCamera().unproject(touch);
-		vec2Touch.set(touch.x, touch.y);
-		world.addBullet(new Bullet(Bullet.BULLET_SPEED, 0, new Vector2(ship.getPosition().x+ship.getWidth()/2-Bullet.BULLET_SIZE/2, ship.getPosition().y+ship.getHeight()/2),
-				Bullet.BULLET_SIZE, Bullet.BULLET_SIZE, new Vector2(vec2Touch.sub(ship.getPosition()).nor())));*/
 		return true;
 	}
 

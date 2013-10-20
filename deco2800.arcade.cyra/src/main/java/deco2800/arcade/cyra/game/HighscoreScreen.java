@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 import deco2800.arcade.client.highscores.Highscore;
+import deco2800.arcade.cyra.world.Sounds;
 
 /** This class controls the components that make up the Highscore screen - buttons
  * and labels. Gets passed highscore information from Cyra class.
@@ -23,6 +24,7 @@ import deco2800.arcade.client.highscores.Highscore;
  * @author Game Over
  */
 public class HighscoreScreen extends AbstractScreen{
+	
 	private Stage stage;
 	private BitmapFont blackFont;
 	private BitmapFont listFont;
@@ -112,6 +114,7 @@ public class HighscoreScreen extends AbstractScreen{
 			}
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				Sounds.stopMusic();
 				game.setScreen(new MainMenu(game));
 			}
 		});

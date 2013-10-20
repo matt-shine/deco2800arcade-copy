@@ -7,9 +7,9 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Bullet extends MovableEntity {
 
-	public static float BULLET_SPEED = 10f;
-	public static float BULLET_SIZE = 1f;
-	public static float MAX_EXIST_TIME = 5f;
+	private static float BULLET_SPEED = 10f;
+	private static float BULLET_SIZE = 1f;
+	private static float MAX_EXIST_TIME = 5f;
 
 	private float existTime = 0;
 	private boolean verticalInverse;
@@ -68,6 +68,30 @@ public class Bullet extends MovableEntity {
 	public void handleNoTileUnderneath() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public static float getBULLET_SPEED() {
+		return BULLET_SPEED;
+	}
+
+	public static void setBULLET_SPEED(float bULLET_SPEED) {
+		BULLET_SPEED = bULLET_SPEED;
+	}
+
+	public static float getBULLET_SIZE() {
+		return BULLET_SIZE;
+	}
+
+	public static void setBULLET_SIZE(float bULLET_SIZE) {
+		BULLET_SIZE = bULLET_SIZE;
+	}
+
+	public static float getMAX_EXIST_TIME() {
+		return MAX_EXIST_TIME;
+	}
+
+	public static void setMAX_EXIST_TIME(float mAX_EXIST_TIME) {
+		MAX_EXIST_TIME = mAX_EXIST_TIME;
 	}
 
 }

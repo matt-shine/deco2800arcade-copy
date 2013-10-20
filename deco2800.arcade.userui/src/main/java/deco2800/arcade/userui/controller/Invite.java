@@ -30,6 +30,8 @@ public class Invite {
 		this.inviteView.addAcceptListener(new AcceptListener());
 		this.inviteView.addDeclineListener(new DeclineListener());
 		
+		inviteView.displayinvites();
+		
 	}
 
 	class AcceptListener implements ActionListener{

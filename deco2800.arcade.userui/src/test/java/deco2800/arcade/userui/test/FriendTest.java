@@ -9,14 +9,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import deco2800.arcade.model.FriendInvites;
-import deco2800.arcade.model.Friends;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.model.User;
-import deco2800.arcade.userui.Model;
-import deco2800.arcade.userui.view.AchievementScreen;
-import deco2800.arcade.userui.view.StatusScreen;
-import deco2800.arcade.userui.view.UserScreen;
 
 public class FriendTest {
 

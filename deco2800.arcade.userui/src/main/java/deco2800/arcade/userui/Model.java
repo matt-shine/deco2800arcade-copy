@@ -78,26 +78,50 @@ public class Model {
 	
 	}
 	
+	/**
+	 * Get the user status
+	 * @return String of status
+	 */
 	public String getStatus() {
 		return status;	
 	}
 
+	/**
+	 * Set the user status
+	 * @param status String of status
+	 */
 	public void setStatus(String status) {
 		this.status = status;
 	}
 
+	/**
+	 * Get the status image icon
+	 * @return ImageIcon of status
+	 */
 	public ImageIcon getStatusIcon() {
 		return statusIcon;
 	}
 
+	/**
+	 * Set the status image icon
+	 * @param statusIcon ImageIcon of status
+	 */
 	public void setStatusIcon(ImageIcon statusIcon) {
 		this.statusIcon = statusIcon;
 	}
 
+	/**
+	 * Return instance of Achievement Client
+	 * @return Achievement Client
+	 */
 	public AchievementClient getAchievements() {
 		return achievements;
 	}
 
+	/**
+	 * Set the AchievementClient
+	 * @param achievements
+	 */
 	public void setAchievements(AchievementClient achievements) {
 		this.achievements = achievements;
 	}

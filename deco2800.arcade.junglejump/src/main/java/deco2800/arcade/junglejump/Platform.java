@@ -73,6 +73,7 @@ public class Platform {
 			platformType = "vine_short";
 			this.width = 20;
 			this.height = 80;
+			this.xPos -= 15;
 			break;
 		case 't': // short tree
 			platformType = "treetop_short";
@@ -257,6 +258,13 @@ public class Platform {
 				if(moveCounter > 500) {
 					moveCounter = 0;
 					moveRight = !moveRight;
+					if(moveRight) {
+						this.platText = new Texture(Gdx.files.internal(
+								"world1/jimboRight.png"));
+					} else {
+						this.platText = new Texture(Gdx.files.internal(
+								"world1/jimbo.png"));
+					}
 				}
 			
 			if(inactive) {

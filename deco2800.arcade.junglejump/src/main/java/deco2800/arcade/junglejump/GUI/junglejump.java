@@ -56,7 +56,8 @@ public class junglejump extends GameClient implements InputProcessor {
 	public float QUIT 				= (float) (242 - 37.5 * 5);
 	
 	/* Player Stats */
-	public int BANANAS_FOUND = 0;
+	public int BANANAS_FOUND = 0;	// TODO remove caps, make dynamic-er
+	public int TOTAL_BANANAS = 50; // TODO put in levelcontainer
 	public static int deaths = 0;
 	int SPEED_MULTIPLIER = 1;
 	int monkeyLength = 35;
@@ -372,7 +373,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			// Draws Instructions on Top Right and Top Left of screen
 			achievementTitleFont.draw(batch, "Press P to PAUSE", SCREENWIDTH-250, SCREENHEIGHT-10);
 			achievementTitleFont.draw(batch, "BACKSPACE for MENU", SCREENWIDTH-250, SCREENHEIGHT-30);
-			achievementTitleFont.draw(batch, ("Bananas found: " + BANANAS_FOUND), SCREENWIDTH-500, SCREENHEIGHT-10);
+			achievementTitleFont.draw(batch, ("Bananas found: " + BANANAS_FOUND + "/" + TOTAL_BANANAS), SCREENWIDTH-500, SCREENHEIGHT-10);
 
 
 			batch.end();

@@ -219,7 +219,7 @@ public class InviteScreen extends JFrame{
 		usernamefield.getText();
 		
 	}
-	
+		
 }
 
 

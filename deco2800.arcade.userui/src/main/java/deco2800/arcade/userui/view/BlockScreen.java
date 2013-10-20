@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import deco2800.arcade.model.Player;
 import deco2800.arcade.userui.Model;
 import net.miginfocom.swing.MigLayout;
 
@@ -36,7 +37,7 @@ public class BlockScreen extends JFrame{
 	private JButton blockbutton, unblockbutton;
 	
 	//Declare text
-	private JTextArea invites;
+	private JTextArea blocklist;
 	
 	//Declare Text Field
 	private JTextField usernamefield;
@@ -108,14 +109,15 @@ public class BlockScreen extends JFrame{
 	 */
 	public void addcontentpanel(){
 		
-		invites = new JTextArea();
-		invites.setEditable(false);
-		invites.setBackground(Color.white);
+		blocklist = new JTextArea();
+		blocklist.setEditable(false);
+		blocklist.setBackground(Color.white);
+		blocklist.setLineWrap(true);
 		
 		contentpanel = new JPanel(new MigLayout());
 		contentpanel.setOpaque(false);
 
-		contentpanel.add(invites, "width :400px, height :200px");
+		contentpanel.add(blocklist, "width :340px, height :200px");
 		
 	}
 	
@@ -169,13 +171,44 @@ public class BlockScreen extends JFrame{
 	}
 	
 	/**
-	 * Listener for the declinebutton
-	 * @param listenForDeclineButton
+	 * Listener for the unblock
+	 * @param listenForUnblockButton
 	 */
 	public void addUnblockListener(ActionListener listenForUnblockButton){
 		
 		unblockbutton.addActionListener(listenForUnblockButton);
 	
+	}
+	
+	public void updateblocklist(String string){
+		
+		String newline = "\n";
+		blocklist.append(string + newline);
+		
+	}
+	
+	public String getinput(){
+		
+		return usernamefield.getText();
+		
+	}
+	
+	public void removeblocklist(){
+		
+		blocklist.removeAll();
+		
+	}
+	
+	public void blockplayer(Player user){
+		
+		model.getPlayer().blockPlayer(user);
+		
+	}
+	
+	public void unblockplayer(Player user){
+		
+		model.getPlayer().removeBlocked(user);
+		
 	}
 	
 }

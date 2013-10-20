@@ -22,44 +22,43 @@ public class PacView {
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private BitmapFont scoreText; 
-	public final int SCREENHEIGHT = 720;
-	public final int SCREENWIDTH = 1280;	
-	
 	
 	// sprite sheet, divided into array of arrays of 8x8 tile images
-	private final TextureRegion[][] tileSprites = TextureRegion.split(
-			new Texture(Gdx.files.internal("wallsAndPellets.png")), 8, 8);
+	private final TextureRegion[][] tileSprites;
 	// Static variables for pulling sprites from pacman sheet
-	private static final int FRAME_COLS = 2;
-	private static final int FRAME_ROWS = 4;
-	private TextureRegion[] pacmanFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+	private static final int MOVER_SPRITE_NUM = 8;
+	private static final int PACMAN_SIDE_PIX = 13;
+	private static final int GHOST_SIDE_PIX = 14;
+	private TextureRegion[] pacmanFrames = new TextureRegion[MOVER_SPRITE_NUM];
 	private TextureRegion currentFrame; // for pacman animation
-	private static final int GHOST_LENGTH = 8;
-	private static final int GHOST_NUM = 4;
-	private TextureRegion[][] ghostFrames = new TextureRegion[GHOST_NUM][GHOST_LENGTH];
+	private static final int NUM_GHOSTS = 4;
+	private TextureRegion[][] ghostFrames = new TextureRegion[NUM_GHOSTS][MOVER_SPRITE_NUM];
 	
 	private GameMap gameMap;
 	private PacChar player;
 	private Ghost blinky;
 	
+	
 	/** TODO make the gameMap the model and have them added on to that in 
 	 * the main Pacman class, then just pass the gameMap here like it currently is.
 	 */
-	public PacView(GameMap gameMap, PacChar player, Ghost blinky) {
+	public PacView(PacModel model) {
 		//Initialize camera
 		camera = new OrthographicCamera();
 		// set resolution
-		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
+		camera.setToOrtho(false, model.getSCREENWIDTH(), model.getSCREENHEIGHT());
 		// initialise spriteBatch for drawing things
 		batch = new SpriteBatch();		
+		//get tile sprites
+			tileSprites = TextureRegion.split(
+				new Texture(Gdx.files.internal("wallsAndPellets.png")), 8, 8);		
 		//grabs file- should be pacMove2.png, pacTest marks the edges and middle pixel in red
 		Texture spriteSheet = new Texture(Gdx.files.internal("pacMove2.png"));		
 		TextureRegion[][] tmp = TextureRegion.split(spriteSheet,
-				spriteSheet.getWidth() / FRAME_COLS, spriteSheet.getHeight()
-									/ FRAME_ROWS);	
+				PACMAN_SIDE_PIX, PACMAN_SIDE_PIX);	
 		int index = 0;
-		for (int i = 0; i < FRAME_ROWS; i++) {
-			for (int j = 0; j < FRAME_COLS; j++) {
+		for (int i = 0; i < tmp.length; i++) {
+			for (int j = 0; j < tmp[i].length; j++) {
 				pacmanFrames[index++] = tmp[i][j];
 			}
 		}
@@ -74,31 +73,21 @@ public class PacView {
 			}
 			spriteSheet = new Texture(Gdx.files.internal(colour + "ghostmove.png"));
 			// splits into columns and rows then puts them into one array in order
-			tmp = TextureRegion.split(spriteSheet,
-			spriteSheet.getWidth() / GHOST_LENGTH, spriteSheet.getHeight());
-			index = 0;
-			for (int j = 0; j < GHOST_LENGTH; j++) {
-				ghostFrames[i][index++] = tmp[0][j];
+			tmp = TextureRegion.split(spriteSheet, GHOST_SIDE_PIX, GHOST_SIDE_PIX);
+			for (int j = 0; j < MOVER_SPRITE_NUM; j++) {
+				ghostFrames[i][j] = tmp[0][j];
 			}			
 		}
-		this.gameMap = gameMap;
-		this.player = player;
-		this.blinky = blinky;
-		
+		this.gameMap = model.getGameMap();
+		this.player = model.getPlayer();
+		this.blinky = model.getBlinky();
 	}
-	public void setUp(GameMap gameMap) {
-		
-	}
-
+	
 	/**
 	 * Render method for pacman- called by main Pacman class and calls all
 	 * private methods for drawing
 	 */
-	public void render(GameMap gameMap, PacChar player, Ghost blinky) {
-		//FIXME big method
-		//make changes to location of object etc, then draw
-		//makeChanges();
-		
+	public void render() {
 		//Black background
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -109,7 +98,8 @@ public class PacView {
 	    // start the drawing
 	    batch.begin();
 	    drawGameMap();
-
+	    drawPacman();
+	    drawGhost();
 	    
 	    //testing bitmap text print
 //	    scoreText.setColor(Color.WHITE);
@@ -120,8 +110,7 @@ public class PacView {
 //	    if (!player.checkNoWallCollision(player.getTile())) {
 //			player.setCurrentState(PacState.IDLE);
 //		}
-	    drawPacman();
-	    drawGhost();
+	    
 	    //end the drawing
 	    batch.end();
 	}
@@ -219,5 +208,17 @@ public class PacView {
 		batch.draw(pacmanFrames[player.getSpritePos()], player.getDrawX(), 
 				player.getDrawY(), player.getWidth(), player.getHeight());
 	}
+	
+	/**
+	 * Displays the score of the current Mover.
+	 * When support for multiple player-controlled movers is implemented, printing
+	 * will have to occur in different positions.
+	 */
+//	public void displayScore(Mover mover) {
+//		batch.begin();
+//		scoreText.setColor(Color.WHITE);
+//		scoreText.draw(batch, "Score:" + mover.getScore(), 50, 50);
+//		batch.end();
+//	}
 	
 }

@@ -21,6 +21,7 @@ public class ScoreRule implements Rule {
 	}
 
 	/**
+	 * rendering the effect after excuting scoring rule
 	 * @param playerNum
 	 * @param context
 	 */

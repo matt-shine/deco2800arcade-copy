@@ -10,8 +10,10 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.replay.exception.DeprecatedMethodException;
 import deco2800.arcade.protocol.replay.EndSessionRequest;
 import deco2800.arcade.protocol.replay.EndSessionResponse;
+import deco2800.arcade.protocol.replay.GetEventsResponse;
 import deco2800.arcade.protocol.replay.ListSessionsRequest;
 import deco2800.arcade.protocol.replay.ListSessionsResponse;
+import deco2800.arcade.protocol.replay.PushEventResponse;
 import deco2800.arcade.protocol.replay.StartSessionRequest;
 import deco2800.arcade.protocol.replay.StartSessionResponse;
 import deco2800.arcade.protocol.replay.types.Session;
@@ -69,11 +71,11 @@ public class ReplayHandler {
         this.playback = new ReplayPlayback( this, this.client );
     }
     
-    public ReplayRecorder getRecorder() {
+    private ReplayRecorder getRecorder() {
         return this.recorder;
     }
     
-    public ReplayPlayback getPlayback() {
+    private ReplayPlayback getPlayback() {
         return this.playback;
     }
     
@@ -301,6 +303,24 @@ public class ReplayHandler {
      */
     public void playbackSession( int sessionId ) {
         this.playback.playbackSession( sessionId );
+    }
+    
+    /**
+     * Send a new event to the server.
+     * @param per The Push Request
+     */
+    public void eventPushed( PushEventResponse per )
+    {
+        getRecorder().eventPushed( per );
+    }
+    
+    /**
+     * List of all events for a session have been returned by the server.
+     * @param ger The Response
+     */
+    public void eventsForSessionReceived( GetEventsResponse ger )
+    {
+        getPlayback().eventsForSessionReceived(ger);
     }
     
     /**

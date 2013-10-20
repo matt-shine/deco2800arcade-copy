@@ -1,17 +1,11 @@
 
 package deco2800.arcade.pacman;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class PacChar extends Mover{
+public final class PacChar extends Mover{
 	
 	// Describes the current state of pacman- starts IDLE
 	public enum PacState {
@@ -21,10 +15,6 @@ public class PacChar extends Mover{
 	private PacState currentState;
 	private static int widthVal = 26;
 	private static int heightVal = 26;
-	
-	// the distance pacman moves each frame
-	private float moveDist;
-	private int spritePos;
 
 
 	private Animation walkAnimation;
@@ -38,6 +28,7 @@ public class PacChar extends Mover{
 		// initialise some variables
 		currentState = PacState.IDLE;
 		facing = Dir.LEFT;
+		drawFacing = Dir.LEFT;
 		width = widthVal;
 		height = heightVal;
 		updatePosition();
@@ -54,57 +45,76 @@ public class PacChar extends Mover{
 	 */
 	public void prepareDraw() {
 		
+		// Update pacman's facing dir
 		spritePos = 3;
-		if (facing == Dir.RIGHT) {
+		if (drawFacing == Dir.RIGHT) {
 			spritePos = 1;
-		} else if (facing == Dir.UP) {
+		} else if (drawFacing == Dir.UP) {
 			spritePos = 5;
-		} else if (facing == Dir.DOWN){ 
+		} else if (drawFacing == Dir.DOWN){ 
 			spritePos = 7;
 		} else {
-			facing = Dir.LEFT;
+			drawFacing = Dir.LEFT;
 		}
 		
-		
-//		if (this.nextTile(this.getTile(), 1).getClass() == TeleportTile.class){
-//			
-//		}
-//	
-		// check collision
-		if (checkNoWallCollision(this.getTile())) {
+	
+		// If pacman is able to turn, update drawFacing
+		if (canTurn(this.getTile())) {
+			drawFacing = facing;
 			this.setCurrentState(PacState.MOVING);
-		} else {
-			this.setCurrentState(PacState.IDLE);
-			// stops pacman changing facing if he can't move in that direction
-			this.setFacing(facing);
 		}
+		
+		if (!this.checkNoWallCollision(this.getTile())){
+			this.setCurrentState(PacState.IDLE);
+		}
+		
 		
 		// checks if pacman is moving, and if so keeps him moving in that direction
 		if (currentState == PacState.MOVING) {
-			if (facing == Dir.LEFT){
+			int corr = 2; // a correction factor to ensure pacman is properly centred.
+			if (drawFacing == Dir.LEFT){
     			drawX -= moveDist;
-    			drawY = gameMap.getTileCoords(currentTile).getY() - 2;
-    		} else if (facing == Dir.RIGHT) {
+    			drawY = gameMap.getTileCoords(currentTile).getY() - corr;
+    		} else if (drawFacing == Dir.RIGHT) {
     			drawX += moveDist;
-    			drawY = gameMap.getTileCoords(currentTile).getY() - 2;
-    		} else if (facing == Dir.UP) {
+    			drawY = gameMap.getTileCoords(currentTile).getY() - corr;
+    		} else if (drawFacing == Dir.UP) {
     			drawY += moveDist;
-    			drawX = gameMap.getTileCoords(currentTile).getX() - 2;
-    		} else if (facing == Dir.DOWN){ 
+    			drawX = gameMap.getTileCoords(currentTile).getX() - corr;
+    		} else if (drawFacing == Dir.DOWN){ 
     			drawY -= moveDist;
-    			drawX = gameMap.getTileCoords(currentTile).getX() - 2;
+    			drawX = gameMap.getTileCoords(currentTile).getX() - corr;
     		} else {
     			currentState = PacState.IDLE;
     			facing = Dir.LEFT;
     		}
 //			checkTile(this.nextTile(currentTile, 1));
-			updatePosition();
     	} 
+		updatePosition();
+		checkGhostCollision(currentTile);
 	}
-	 
+	
+	
+	private void checkGhostCollision(Tile pTile) {	
+		List<Mover> colList = pTile.getMovers();
+		if (colList.size() > 1) {
+			for (int i=0; i < colList.size(); i++) {
+				if (colList.get(i).getClass() == Ghost.class) {
+					System.out.println("(*&(*&Pacman hit a ghost!");
+					//TODO some death thing
+					this.setCurrentState(PacState.DEAD);
+				}
+			}
+		}
+		
+	}
 	
 	public void setFacing(Dir facing) {
 		this.facing = facing;
+	}
+	
+	public void setdrawFacing(Dir facing) {
+		this.drawFacing = facing;
 	}
 	
 	public PacState getCurrentState() {
@@ -113,18 +123,6 @@ public class PacChar extends Mover{
 
 	public void setCurrentState(PacState currentState) {
 		this.currentState = currentState;
-	}
-
-	public float getMoveDist() {
-		return moveDist;
-	}
-
-	public void setMoveDist(float moveDist) {
-		this.moveDist = moveDist;
-	}
-
-	public int getSpritePos() {
-		return spritePos;
 	}
 	
 	public String toString() {

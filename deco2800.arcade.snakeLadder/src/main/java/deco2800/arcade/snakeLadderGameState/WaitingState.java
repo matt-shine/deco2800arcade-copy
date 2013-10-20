@@ -39,6 +39,7 @@ public class WaitingState extends GameState {
 	}
 
 	/**
+	 * Transit the game state to moving state
 	 * @param context
 	 * @param playerIndex 
 	 */

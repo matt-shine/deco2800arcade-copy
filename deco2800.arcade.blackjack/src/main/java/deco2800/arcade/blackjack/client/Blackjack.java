@@ -44,17 +44,17 @@ public class Blackjack extends GameClient {
 	 */
 	public Blackjack(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-        //this.player = player.getUsername();
-        //this.networkClient = networkClient;
-        //networkClient.addListener(new CasinoListener());
+        this.player = player.getUsername();
+        this.networkClient = networkClient;
+        networkClient.addListener(new CasinoListener());
 	}
 	
 	//Reusable list of achievements
-	private static Set<Achievement> achievements = new HashSet<Achievement>();
+	/*private static Set<Achievement> achievements = new HashSet<Achievement>();
 	static {
-		//Achievement randomAchievement = new Achievement("Create these later");
-		//achievements.add(randomAchievement);
-	}
+		Achievement randomAchievement = new Achievement("Create these later");
+		achievements.add(randomAchievement);
+	}*/
 	
 	
 	/**
@@ -65,7 +65,6 @@ public class Blackjack extends GameClient {
 		super.create();
 		MainMenuScreen = new MainMenuScreen(this);
 		JoinTableScreen = new JoinTableScreen(this);
-    	//setScreen(MainMenuScreen);
 		/*this.getOverlay().setListeners(new Screen() {
 
             @Override

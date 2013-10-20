@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import deco2800.arcade.model.Player;
 import deco2800.arcade.userui.Model;
 import net.miginfocom.swing.MigLayout;
 
@@ -160,6 +161,26 @@ public class AddFriendScreen extends JFrame{
 		
 		backbutton.addActionListener(listenForCancelButton);
 	
+	}
+	
+	/**
+	 * Add a Friend by sending invite
+	 * @param friend
+	 */
+	public void addfriend(Player friend){
+		
+		model.getPlayer().addInvite(friend);
+		
+	}
+	
+	/**
+	 * Remove a Friend
+	 * @param friend
+	 */
+	public void removefriend(Player friend){
+		
+		model.getPlayer().removeFriend(friend);
+		
 	}
 	
 }

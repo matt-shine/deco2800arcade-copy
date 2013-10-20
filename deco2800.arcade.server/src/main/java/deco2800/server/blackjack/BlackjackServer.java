@@ -54,7 +54,7 @@ public class BlackjackServer extends GameServer {
 	 * @param the user's username
 	 * @param the table's limit
 	 */
-	private void addPlayerToTable(Connection connection, String username, int limit) {
+	private void addPlayerToTable(Connection connection, int playerID, int limit) {
 		boolean foundTable = false;
 		for (BlackjackTable table : tables) {
 			if (table.getBetLimit() != limit) {
@@ -66,7 +66,7 @@ public class BlackjackServer extends GameServer {
 		}
 		if (!foundTable) {
 			BlackjackTable t = spawnNewTable(limit);
-			tables.get(tables.indexOf(t)).addPlayer(connection, username);
+			tables.get(tables.indexOf(t)).addPlayer(connection, playerID);
 		}
 	}
 	
@@ -77,10 +77,10 @@ public class BlackjackServer extends GameServer {
 		return "I am a BlackjackServer.";
 	}
 	
-	public BlackjackTable FindTable(String Username) {
+	public BlackjackTable FindTable(int playerID) {
 		BlackjackTable table = null;
 		for (int i = 0; i <tables.size(); i++) {
-			if( tables.get(i).containsUser(Username)) {
+			if( tables.get(i).containsUser(playerID)) {
 				table = tables.get(i);
 			}
 		}
@@ -93,17 +93,17 @@ public class BlackjackServer extends GameServer {
 	 */
 	public void receive(Connection connection, CasinoServerUpdate update) {
 		
-		System.out.println("Received update: " + update.username + "|" + update.message);
+		System.out.println("Received update: " + update.playerID + "|" + update.message);
 		// TODO Auto-generated method stub 
 		if (update.message.equals("addme#20")) {
-			addPlayerToTable(connection, update.username, 25);
+			addPlayerToTable(connection, update.playerID, 25);
 		} else if (update.message.equals("testme")) {
 			
 			update.message = "WHAT DO YOU GET GOOD SIR";
 			connection.sendTCP(update);
 		}
 		else {
-			BlackjackTable table = FindTable(update.username);
+			BlackjackTable table = FindTable(update.playerID);
 			table.receiveMessage(update);
 		}
 	}

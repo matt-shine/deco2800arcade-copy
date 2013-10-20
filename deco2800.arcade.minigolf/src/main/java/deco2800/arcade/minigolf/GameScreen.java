@@ -74,8 +74,7 @@ public class GameScreen implements Screen, InputProcessor {
 		this.level = hole;
 		this.fadeInOut = 0;
 		this.fadeVar = 0.0001f;
-		gamePaused = false;
-		playMusic();		
+		gamePaused = false;		
 	}
 	
 	/* get and set current level */
@@ -268,27 +267,7 @@ public class GameScreen implements Screen, InputProcessor {
 	
 	}
 	/* playus the background music while in-game */
-	private void playMusic(){	
-		URL path = this.getClass().getResource("/");
-		try {
-			System.out.println("path: \n\n" + path.toString());
-			String resource = path.toString().replace(".arcade/build/classes/main/", 
-			".arcade.minigolf/src/main/").replace("file:", "") + 
-			"resources/newHero.wav";
-			System.out.println(resource);
-			File file = new File(resource);
-			new FileHandle(file);
-			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
-			Clip clip = AudioSystem.getClip();
-			clip.open(audioIn);
-			clip.start();
-			clip.loop(Clip.LOOP_CONTINUOUSLY);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}			
 	
-	}
 	
 	/* contains a list of progressive achievements that can be obtained while playing */
 	private void progressAchievements(int nextHole){

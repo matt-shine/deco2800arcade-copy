@@ -179,6 +179,22 @@ public class MenuScreen implements Screen, InputProcessor {
 			}
 			
 			
+			
+		});
+		
+		
+		closeButton.addListener(new InputListener(){
+			public boolean touchDown(InputEvent event, float x, float y, int pointer,int button){			
+				return true;
+			}
+			
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+				golf.incrementAchievement("minigolf.no");
+								
+			}
+			
+			
+			
 		});
 		
 		// Adds the button onto stage

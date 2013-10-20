@@ -20,6 +20,13 @@
 		<icon>youwon.png</icon>
 	</achievement>
 	
+	<achievement id="minigolf.no">
+		<name>Ze Goggles do nothing!</name>
+		<description>Nothing to do here.</description>
+		<awardThreshold>1</awardThreshold>
+		<icon>youwon.png</icon>
+	</achievement>
+	
 	 <achievement id="minigolf.9hole">
         	<name>Half course Hero</name>
 			<description>Beat half the maps.</description>

@@ -34,6 +34,7 @@ public class MiniGolf extends GameClient {
 		super(player, network); 
 		this.playerName = player.getUsername();
 		this.incrementAchievement("minigolf.360");
+		this.playMusic();
 	}
 	
 	
@@ -118,6 +119,27 @@ public class MiniGolf extends GameClient {
 	}
 	public void setCall(boolean value){
 		this.firstCall = value;
+	}
+	private void playMusic(){	
+		URL path = this.getClass().getResource("/");
+		try {
+			System.out.println("path: \n\n" + path.toString());
+			String resource = path.toString().replace(".arcade/build/classes/main/", 
+			".arcade.minigolf/src/main/").replace("file:", "") + 
+			"resources/newHero.wav";
+			System.out.println(resource);
+			File file = new File(resource);
+			new FileHandle(file);
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioIn);
+			clip.start();
+			clip.loop(Clip.LOOP_CONTINUOUSLY);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}			
+	
 	}
 	
 	private static final Game game;

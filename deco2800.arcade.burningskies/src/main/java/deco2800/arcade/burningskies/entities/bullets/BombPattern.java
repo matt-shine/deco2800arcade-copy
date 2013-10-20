@@ -19,6 +19,10 @@ public class BombPattern extends BulletPattern {
 		interval = 1000f;
 	}
 	
+	/**
+	 * Fires bullet outwards as a circle shaped pattern from
+	 * the current position of the player ship
+	 */
 	public void fire(float lag, float x, float y) {
 		BombBullet bullet;
 		for(int i=0;i<360;i+=4) {

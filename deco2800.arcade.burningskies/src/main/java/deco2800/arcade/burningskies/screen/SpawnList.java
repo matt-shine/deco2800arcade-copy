@@ -34,6 +34,11 @@ public class SpawnList {
 		new Texture(Gdx.files.internal("images/ships/enemy8.png"))
 	};
 	
+	/**
+	 * Controls the spawn rate and how the enemy spawns 
+	 * @param s
+	 * @param difficulty
+	 */
 	public SpawnList(PlayScreen s, int difficulty){
 		this.screen = s;
 		currentInterval = 0;
@@ -45,7 +50,7 @@ public class SpawnList {
 	}
 		
 	/**
-	 * Main function that spawn the enemies at specified intervals and decreases
+	 * A function that spawn the enemies at specified intervals and decreases
 	 * the interval at a linear rate (currently set at 5 seconds) 
 	 */
 	public void checkList(float delta) {
@@ -64,6 +69,7 @@ public class SpawnList {
 			currentTimer -= decrementTimer;
 		}
 		
+		// Increase the timer by delta
 		currentInterval += delta;
 		currentTimer += delta;
 	}
@@ -79,7 +85,6 @@ public class SpawnList {
 			float heightC = (float) 360;
 					
 			int direction = (int) Math.ceil(Math.random() * 4);
-			
 			
 			// Determine where the enemy will start to spawn
 			switch (direction) {
@@ -105,7 +110,7 @@ public class SpawnList {
 			float vX = (float) (Math.ceil(Math.random() * (widthC - startX))/10 + (widthC - startX)/10)*difficulty;
 			float vY = (float) (Math.ceil(Math.random() * (heightC - startY))/7 + (heightC - startY)/5)*difficulty;
 
-			// Add some random enemies
+			// Add some random enemies according to the set difficulty
 			double test = Math.random();
 			int enemyL1Hp = 200 + (60*difficulty);
 			int enemy8Hp = 300 + (80*difficulty);

@@ -34,16 +34,26 @@ public abstract class Ship extends Entity {
 		} else return true;
 	}
 	
+	/**
+	 * Returns the health value
+	 * @return health
+	 */
 	public float getHealth() {
 		return health;
 	}
 	
+	/**
+	 * Renders the movement of the ship
+	 */
 	@Override
     public void act(float delta) {
 		onRender(delta);
         super.act(delta);
 	}
 	
+	/**
+	 * Calls super.remove()
+	 */
 	@Override
 	public boolean remove() {
 		return super.remove();

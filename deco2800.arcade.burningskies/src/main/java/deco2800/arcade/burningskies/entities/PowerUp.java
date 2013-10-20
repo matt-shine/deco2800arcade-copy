@@ -44,6 +44,10 @@ public abstract class PowerUp extends Entity {
 		return (float) (Math.random()*30 + 30);
 	}
 	
+	/**
+	 * Returns a positive or negative value.
+	 * @return
+	 */
 	private int randDirection() {
 		if(Math.random() > 0.5) {
 			return 1;

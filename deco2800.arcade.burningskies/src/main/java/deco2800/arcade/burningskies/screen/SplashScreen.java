@@ -20,6 +20,10 @@ public class SplashScreen implements Screen
     	this.game = game;
     }
  
+    /**
+     * Set up the screen to display an image and play background music
+     * as well adding main menu buttons
+     */
     @Override
     public void show()
     {
@@ -28,10 +32,14 @@ public class SplashScreen implements Screen
         spriteBatch = new SpriteBatch();
         game.playSong("splash" + (int)(Math.random()+0.5), false);
     }
+    
     @Override
     public void hide() {
     } 
     
+    /**
+     * Renders the image, necessary according to libGdx
+     */
     @Override
     public void render(float delta)
     {

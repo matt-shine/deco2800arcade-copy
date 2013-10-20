@@ -46,6 +46,11 @@ public class PlayerShip extends Ship {
 		hitboxScale = 0.25f; // lets the player 'just miss' bullets
 	}
 	
+	/**
+	 * Increase the players health until it reaches max
+	 * @ensure health <= maxHealth
+	 * @param healthchange
+	 */
 	@Override
 	public void heal(int healthchange) {
 		this.health += healthchange;
@@ -54,6 +59,10 @@ public class PlayerShip extends Ship {
 		}
 	}
 	
+	/**
+	 * Decrease the players health and check if the player dies
+	 * @param damage
+	 */
 	@Override
 	public void damage(float damage) {
 		super.damage(damage);
@@ -64,6 +73,10 @@ public class PlayerShip extends Ship {
 		}
 	}
 	
+	/**
+	 * Stops any bullets from firing and run the explosion animation, then remove
+	 * the player from the screen.
+	 */
 	@Override
 	public boolean remove() {
 		if(playerBullets != null) playerBullets.stop();
@@ -96,8 +109,7 @@ public class PlayerShip extends Ship {
 			}
 		}
 
-		// reset
-//		velocity.set(0, 0);
+		// increase or decrease velocity according to the user input
     	if(up) {
     		velocity.add(0, (acceleration*delta) );
     		if(velocity.y > maxVelocity)
@@ -119,13 +131,11 @@ public class PlayerShip extends Ship {
     			velocity.x = maxVelocity;
     	}
     	
+    	// decreases player's velocity (eventual at standstill)
     	decelShip(delta);
     	
-    	//normalise our velocity
-//    	velocity.nor();
-//    	velocity.mul(maxVelocity);
 		
-		// Set the position of the ship
+		// Set the position of the ship with boundary checks
     	position.add( velocity.x * delta, velocity.y * delta );
 		if (position.x + getWidth() > BurningSkies.SCREENWIDTH) {
 			position.x = BurningSkies.SCREENWIDTH - getImageWidth();
@@ -148,26 +158,46 @@ public class PlayerShip extends Ship {
 		shoot(delta);		
 	}
 	
+	/**
+	 * Set the down variable to false and up to true.
+	 * @param dir
+	 */
 	public void setUp(boolean dir) {
 		down = false;
 		up = dir;
 	}
 	
+	/**
+	 * Set the up variabel to false and down to true.
+	 * @param dir
+	 */
 	public void setDown(boolean dir) {
 		up = false;
 		down = dir;
 	}
 	
+	/**
+	 * Set the right variable to false and left to true.
+	 * @param dir
+	 */
 	public void setLeft(boolean dir) {
 		right = false;
 		left = dir;
 	}
 	
+	/**
+	 * Set the left variable to false and right to true.
+	 * @param dir
+	 */
 	public void setRight(boolean dir) {
 		left = false;
 		right = dir;
 	}
 	
+	/**
+	 * Set the shoot variable to inputed parameter
+	 * @param shooting
+	 */
 	public void setShooting(boolean shooting) {
 		this.shooting = shooting;
 	}
@@ -198,6 +228,10 @@ public class PlayerShip extends Ship {
 		}
 	}
 	
+	/**
+	 * Set the bullet pattern
+	 * @param pattern
+	 */
 	public void setBulletPattern(BulletPattern pattern) {
 		setBulletPattern(pattern, false);
 	}
@@ -219,6 +253,9 @@ public class PlayerShip extends Ship {
 		}
 	}
 	
+	/**
+	 * Respawn the player and set all the variable to default values 
+	 */
 	public void respawn() {
 		this.health = this.maxHealth;
 		setBulletPattern(null);
@@ -230,24 +267,43 @@ public class PlayerShip extends Ship {
 		position.set(getStage().getWidth()/2 - this.getOriginX(),getStage().getHeight()/2 - this.getOriginY());
 	}
 
+	/**
+	 * Upgrade bullets
+	 */
 	public void upgradeBullets() {
 		if(playerBullets instanceof PlayerPattern) {
 			((PlayerPattern)playerBullets).upgrade();
 		}
 	}
 	
+	/**
+	 * Returns remaining lives
+	 * @return lives remaining for the player
+	 */
 	public int getLives() {
 		return lives;
 	}
 	
+	/**
+	 * Returns maxHealth
+	 * @return max health of the players
+	 */
 	public float getMaxHealth() {
 		return maxHealth;
 	}
 	
+	/**
+	 * Return the player's bullet patterns
+	 * @return player's bullet pattern
+	 */
 	public BulletPattern getPattern() {
 		return this.playerBullets;
 	}
 	
+	/**
+	 * Reduces the player velocity at a constant amount until the velocity reaches zero.
+	 * @param delta
+	 */
 	private void decelShip(float delta) {
 		if (velocity.y > 0) {
 			velocity.sub(0, deceleration*delta);
@@ -273,7 +329,5 @@ public class PlayerShip extends Ship {
 				velocity.x = 0;
 			}
 		}
-		
-		
 	}
 }

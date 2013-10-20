@@ -121,7 +121,7 @@ public class Mob extends Doodad {
 
         for (int i = 0; i < WL6.MAP_DIM; i++) {
             for (int j = 0; j < WL6.MAP_DIM; j++) {
-                if (WL6Meta.block(model.getMap().getTerrainAt(i, j)).solid) {
+                if (!isTransparentTile(model, i, j)) {
                     Rectangle2D rect = new Rectangle2D.Double(i, j, 1, 1);
                     if (rect.intersectsLine(line)) {
                         return false;
@@ -132,7 +132,27 @@ public class Mob extends Doodad {
 
         return true;
     }
-
+    
+    
+    public boolean isTransparentTile(GameModel model, int x, int y) {
+		boolean hasBlock = WL6Meta.block(model.getMap().getTerrainAt(x, y)).texture != null;
+		boolean hasDoor = WL6Meta.hasDoorAt(x, y, model.getMap());
+		boolean hasSecretDoor = WL6Meta.hasSecretDoorAt(x, y, model.getMap());
+		boolean isSolid = model.getCollisionGrid().getSolidAt(x, y) == 1;
+    	if (hasBlock) {
+    		return false;
+    	}
+    	if (hasDoor && isSolid) {
+    		return false;
+    	}
+    	if (hasSecretDoor && isSolid) {
+    		return false;
+    	}
+    	return true;
+    }
+	
+	
+    
     public Vector2 getVel() {
         return vel.cpy();
     }

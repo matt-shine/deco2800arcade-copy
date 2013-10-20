@@ -37,9 +37,6 @@ public class Cyra extends GameClient {
         this.achievementClient = new AchievementClient(networkClient);
         this.player = player;
         this.highscoreClient = new HighscoreClient(player.getUsername(), "Cyra", networkClient);
-        
-
-        this.incrementAchievement("cyra.opengame");
 
 	}
     

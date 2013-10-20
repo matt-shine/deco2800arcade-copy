@@ -57,6 +57,9 @@ public class FrontPage implements Screen {
         final int bX2= bX + bSize + (enlarge);
         final int bX3= bX + 2*(bSize + enlarge);
         
+        static boolean settingsClicked = false;
+        static Table trial = new Table();
+        
     
         public FrontPage(ArcadeUI ui) {
         	
@@ -387,32 +390,46 @@ public class FrontPage implements Screen {
 	           // recentIcon.setName("recenticon");
 	            settingsIcon.setSize(15, 15);
 	            settingsIcon.addListener((new ClickListener() {
-	                public void clicked(InputEvent event, float x, float y) {
-	            	  Table trial = new Table();
-	                      trial.setBackground(skin.getDrawable("toolTip"));
-	                      trial.setPosition(950,580);
-	                      trial.setSize(200, 100);
-	                      trial.setName("tooltip");
-	                      
-	                     // final TextButton hello = new TextButton();
-	                      
-	                      stage.addActor(trial);
-	                      
-	                    /*  for (Actor actor: stage.getActors()){
-	                          if (actor.getName() == "tooltip"){
-	                    	  actor.remove();
-	                          }
-	                          System.out.println(actor.getName());
-	                      }*/
-	                     /* if(stage.getActors().contains(trial, true)){
-	                          trial.remove();
-	                          System.out.println("Its there");
-	                      }else{
-	                          System.out.println(stage.getActors());
-	                          
-	                         stage.addActor(trial);
-	                         System.out.println("Its not there");
-	                      }*/
+	            public void clicked(InputEvent event, float x, float y) {
+
+	            	if (settingsClicked == false){
+	            		trial.setBackground(skin.getDrawable("toolTip"));
+	            		trial.setPosition(950,380);
+	            		trial.setSize(200, 300);
+	            		trial.setName("tooltip");
+	            		
+	            		final Label profile = new Label ("Profile", skin, "cgothic");
+	            		profile.setAlignment(Align.left);
+	            		
+	            		final Label forum = new Label ("Forum", skin, "cgothic");
+	            		forum.setAlignment(Align.left);
+	            		
+	            		final Label logout = new Label ("Logout", skin, "cgothic");
+	            		logout.setAlignment(Align.left);
+	            		
+	            		final Label space = new Label (" ", skin, "cgothic");
+	            		
+	            		stage.addActor(trial);
+	            		
+	            		trial.add(profile);
+	            		trial.row();
+	            		trial.add(space);
+	            		trial.row();
+	            		trial.add(forum);
+	            		trial.row();
+	            		trial.add(space);
+	            		trial.row();
+	            		trial.add(logout);
+		                      
+	            		settingsClicked = true;
+		                      
+	            	}else{
+	            		trial.reset();
+	            		trial.remove();
+	            		settingsClicked = false;
+	            	}
+	                	
+	                	
 	                }
 	            })); 
 	            final Table topBox = new Table();

@@ -571,7 +571,6 @@ public class World {
 					eItr.remove();
 					//Enemy is dead - achievement
 					if (e.getClass() == SoldierEnemy.class) {
-						System.out.println("ACHIEVE INC");
 						game.incrementAchievement("cyra.slayer");
 					}
 					//System.out.println("removed enemy");
@@ -886,18 +885,6 @@ public class World {
 		
 		return;
 	}
-	
-	
-	public void testOverlay(String message) {
-		//overlay test
-				game.createPopup(message);
-				
-	}
-	
-	public void testAch() {
-		game.incrementAchievement("cyra.pressbutton");
-	}
-	
 
 	public void resetLevel() {
 		at.addToTime( (int)time );

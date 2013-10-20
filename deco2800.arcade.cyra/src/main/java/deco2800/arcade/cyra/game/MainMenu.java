@@ -25,15 +25,14 @@ import deco2800.arcade.cyra.world.Sounds;
  * @author Game Over
  */
 public class MainMenu extends AbstractScreen{
-	Stage stage;
-	BitmapFont blackFont;
-	TextureAtlas atlas;
-	Skin skin;
-	//SpriteBatch batch;
-	TextButton button;
-	TextButton button2;
-	TextButton button3;
-	Label label;
+	private Stage stage;
+	private BitmapFont blackFont;
+	private TextureAtlas atlas;
+	private Skin skin;
+	private TextButton button;
+	private TextButton button2;
+	private TextButton button3;
+	private Label label;
 	private int framecount = 0;
 	private int framecountmax = 80;
 	private int buttonframe = 0;
@@ -74,7 +73,7 @@ public class MainMenu extends AbstractScreen{
 		batch.end();
 		
 		if (framecount++ == framecountmax) {
-			Sounds.playtest();
+			//Sounds.playtest();
 			framecount = 0;
 			if (framecountmax > 25) {
 				framecountmax -= 9;

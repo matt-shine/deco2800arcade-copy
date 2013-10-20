@@ -723,7 +723,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		}
 		if (keycode == Keys.ENTER) {
 			if (butY == QUIT) {
-				this.dispose();
+				Gdx.app.exit();
 			}
 			if (butY == NEW_GAME) {
 				monkeyX = monkeyDefaultX;

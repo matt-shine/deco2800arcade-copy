@@ -176,29 +176,26 @@ public class MultiplayerLobby implements Screen {
 		bettingButtonTable.center().top().right();
 		
 		table8.center().left();
-		table8.add(joinback).width(950).height(390);
+		table8.add(joinback).width(950).height(520);
 		
 		table7.center().right();
 		table7.add(chatback).padRight(0).width(340).height(390);
 
 		// Add tables and set position.
-		table3.add(chatfield).width(200).height(35).padLeft(960).padTop(440);
+		table3.add(chatfield).width(200).height(35).padLeft(980).padTop(440);
 
-		chattable.add(label2).padTop(440).padLeft(620);
+		chattable.add(label2).padTop(440).padLeft(660);
 
 		table3.add(button3).width(45).height(35).padLeft(3).padTop(440);
 
-		table.add(createbutton).width(300).height(40).padRight(20).padTop(600);
+		table.add(createbutton).width(300).height(40).padRight(10).padTop(600);
 
-		table.add(refreshButton).width(300).height(40).padRight(20).padTop(600);
+		table.add(refreshButton).width(300).height(40).padRight(10).padTop(600);
 
-		// table.add(button).width(300).height(40).padRight(20).padLeft(20).padTop(600);
+		table.add(button4).width(300).height(40).padRight(10).padTop(600);
 
-		table.add(button4).width(300).height(40).padRight(20).padLeft(20)
-				.padTop(600);
+		table.add(button2).width(300).height(40).padLeft(0).padTop(600);
 
-		table.add(button2).width(300).height(40).padLeft(20).padTop(600);
-		
 		bettingButtonTable.add(label).width(80).height(40).padRight(560)
 				.padTop(25);
 
@@ -242,8 +239,7 @@ public class MultiplayerLobby implements Screen {
 						final int matchId = matches.get(i).matchId;
 
 						table2.center().left();
-						table2.add(matchLabel).width(130).padTop(5)
-								.padLeft(150);
+						table2.add(matchLabel).width(130).padTop(5).padLeft(150);
 						table2.add(player).width(130).padTop(5).padLeft(130);
 						table2.add(button5).width(130).height(20).padTop(5);
 						table2.row();

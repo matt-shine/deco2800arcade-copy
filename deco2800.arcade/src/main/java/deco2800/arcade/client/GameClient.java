@@ -233,7 +233,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 		if (overlay != null) {
 			overlay.resize(width, height);
 		}
-		super.resize(width, height);
+		//super.resize(width, height);
 	}
 
 	public int getWidth() {

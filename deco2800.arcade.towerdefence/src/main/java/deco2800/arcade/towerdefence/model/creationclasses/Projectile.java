@@ -133,6 +133,14 @@ public class Projectile extends GridObject {
 		float moved = 0;
 		long t0, t1;
 		while (moved < range) {
+			//Check for collisions
+			for (int i =0;i < getCurrentGrid().size(); i++){
+				if (getCurrentGrid().get(i).team() != this.team){
+					//Collision occured
+					collide(getCurrentGrid().get(i));
+				}
+			}
+			
 			t0 = System.currentTimeMillis();
 			t1 = t0;
 			// Move

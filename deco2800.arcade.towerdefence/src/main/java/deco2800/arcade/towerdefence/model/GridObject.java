@@ -320,10 +320,20 @@ public class GridObject {
 	 *         the grid.
 	 */
 	public Vector2 positionInTiles() {
-		Vector2 tilesPosition = new Vector2(position);
-		tilesPosition.x = (position.x / grid.getTileSize());
-		tilesPosition.y = (position.y /= grid.getTileSize());
+		Vector2 tilesPosition = new Vector2();
+		tilesPosition.x = position.x;
+		tilesPosition.x /= grid.getTileSize();
+		tilesPosition.y = position.y;
+		tilesPosition.y /= grid.getTileSize();
 		return tilesPosition;
+	}
+	
+	/**
+	 * Get the contents of the grid the object is currently in.
+	 * @return A list of objects in the current tile.
+	 */
+	public List<GridObject> getCurrentGrid(){
+		return grid.getGridContents((int)positionInTiles().x, (int)positionInTiles().y);
 	}
 
 	/**

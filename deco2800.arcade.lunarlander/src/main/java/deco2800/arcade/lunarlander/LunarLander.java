@@ -1,6 +1,5 @@
 package deco2800.arcade.lunarlander;
 
-import java.awt.Graphics;
 import java.util.*;
 
 import com.badlogic.gdx.Gdx;
@@ -17,12 +16,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
-
-
-
-
-
-
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -30,15 +23,13 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 
-// WELCOME to Lunar Lander! Unfortunately the game is still
-// in progress - please excuse the commented-out code and 
-// sections that aren't fully functional.
+// Welcome to Lunar Lander! 
 
 @ArcadeGame(id="lunarlander")
 public class LunarLander extends GameClient {
-	
+
 	private enum GameState {
-		AT_MENU, IN_GAME, GAME_PAUSED, CONTINUE_GAME, NEW_GAME, GAME_OVER_LOSE,
+		AT_MENU, IN_GAME, GAME_PAUSED, GAME_OVER_LOSE,
 		GAME_OVER_WIN
 	}
 	// GDX tools
@@ -63,7 +54,7 @@ public class LunarLander extends GameClient {
 	private TextureRegion backgroundTextureRegion; 
 	private BitmapFont font;
 	Sound flameSound;
-	
+
 	// lander variables
 	private float landerWidth; // the width of the lander png
 	private float landerHeight; // the height of the lander png
@@ -73,11 +64,11 @@ public class LunarLander extends GameClient {
 	private float velXleft;
 	private float velXright;
 
-	//asteroid stuff
-	private float asteroidX;
-	private float asteroidY;
-	
-	//terrain generation
+	//	//asteroid stuff
+	//	private float asteroidX;
+	//	private float asteroidY;
+		
+	// terrain generation
 	private List<List<Integer>> terrain;
 	private List<List<Integer>> asteroidArray;
 	private boolean gameOver;
@@ -89,6 +80,8 @@ public class LunarLander extends GameClient {
 	private long speed;
 	private int time;
 
+	Array<Texture> backgrounds = new Array<Texture>();
+
 	// speed of movement when lander is moved left or right 
 	private float sideSpeed = 40.0f;
 
@@ -98,19 +91,19 @@ public class LunarLander extends GameClient {
 	 * @param networkClient 
 	 * The network client for sending/receiving messages to/from the server
 	 */
-
 	public LunarLander(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		this.networkClient = networkClient;  
 	}
 
 	/**
-	 * Creates the game
+	 * Creates the game: overlay listeners, various Gdx tools,
+	 * some initial variables, initial game state.
 	 */
 	@Override
 	public void create() {
 		//add the overlay listeners
-        this.getOverlay().setListeners(new Screen() {
+		this.getOverlay().setListeners(new Screen() {
 
 			@Override
 			public void dispose() {
@@ -118,7 +111,7 @@ public class LunarLander extends GameClient {
 
 			@Override
 			public void hide() {
-				
+
 			}
 
 			@Override
@@ -139,10 +132,11 @@ public class LunarLander extends GameClient {
 
 			@Override
 			public void show() {
-				
+
 			}
-			
-        });
+
+		});
+
 		
 		// setting up various GDX tools	
 		batch = new SpriteBatch();
@@ -154,7 +148,6 @@ public class LunarLander extends GameClient {
 				("lunarlanderassets/pelican_nebula.png")); 
 		backgroundTexture4 = new Texture(Gdx.files.internal
 				("lunarlanderassets/stars.png"));
-		Array<Texture> backgrounds = new Array<Texture>();
 		backgrounds.add(backgroundTexture1);
 		backgrounds.add(backgroundTexture2);
 		backgrounds.add(backgroundTexture3);
@@ -188,13 +181,26 @@ public class LunarLander extends GameClient {
 		// setting up game variables 
 		score = 0;
 		fuel = 1000;
-		//creates the map using the method in LunarLanderTerrain file
+		//creates the map 
 		terrain = LunarLanderTerrain.createMap();
 		asteroidArray = LunarLanderTerrain.generateAsteroidArray();
 		//set game state
 		gameState = GameState.AT_MENU;
 	}
-	
+
+	/**
+	 * Creates a new random map when a player has finished a 
+	 * game and wishes to play again
+	 */
+	private void newMap() {
+		backgroundTextureRegion = new TextureRegion
+				(backgrounds.random(), 0, 0, 1200, 800);
+		terrain = LunarLanderTerrain.createMap();
+	}
+
+	/**
+	 * Re-initialises variables for a new game
+	 */
 	private void startVars(int fuel, int score) {
 		// setting up various constants 
 		landerX = 600;
@@ -204,8 +210,8 @@ public class LunarLander extends GameClient {
 		velY = 1;
 		velXleft = 0;
 		velXright = 0;
-		asteroidX = 500;
-		asteroidY = 500;
+		//asteroidX = 500;
+		//asteroidY = 500;
 		speed = 1;
 		this.fuel = fuel;
 		this.score = score;
@@ -213,29 +219,43 @@ public class LunarLander extends GameClient {
 		upKey = false;
 		gameState = GameState.IN_GAME;	
 	}
-	
+
+	/**
+	 * Draws the lunar lander texture
+	 */
 	private void drawLander() {
 		batch.begin();
 		batch.draw(landerTexture, landerX, landerY, landerWidth, landerHeight);
 		batch.end();
 	}
-	
+
+	/**
+	 * Draws the asteroids
+	 */
 	private void drawAsteroids(){
 		batch.begin();
 		for (int i = 0; i < asteroidArray.size(); i++){
-			batch.draw(asteroidTexture, asteroidArray.get(i).get(0), asteroidArray.get(0).get(1), 20, 20);
+			batch.draw(asteroidTexture, asteroidArray.get(i).get(0), 
+					asteroidArray.get(0).get(1), 20, 20);
 		}
 		batch.end();
 	}
-	
+
+	/**
+	 * Draws the planet surface terrain
+	 */
 	private void drawMap() {
 		//renders the map using the list of lists "terrain"
 		LunarLanderTerrain.renderMap(terrain);
 	}
 
-	private void drawBackground() {
+	/**
+	 * Draws the background - a texture selected randomly from
+	 * an array of PNGs
+	 */
+	private void drawBackground(TextureRegion backgroundTextureRegion) {
 		batch.begin();
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT); 
 		batch.draw(backgroundTextureRegion, 0, 0);
 		if(upKey == true) {
 			batch.draw(flames, landerX + 10, landerY - 5, 10, 10);
@@ -253,46 +273,45 @@ public class LunarLander extends GameClient {
 				SCREENWIDTH - 300, SCREENHEIGHT - 100);
 		batch.end();		
 	}
-	
+
+	/**
+	 * Detects whether the lander has collided with the terrain
+	 */
 	private void checkCollision() {
 		//check for collision
-	 	for (int i = 1; i < terrain.size(); i++){
+		for (int i = 1; i < terrain.size(); i++){
 			if (isPointBelowLine(landerX, landerY, terrain.get(i).get(0),
 					terrain.get(i).get(1), terrain.get(i).get(2), 
 					terrain.get(i).get(3)) ||
 					isPointBelowLine(landerX + landerWidth, landerY, 
 							terrain.get(i).get(0),
 							terrain.get(i).get(1), terrain.get(i).get(2), 
-							terrain.get(i).get(3)) || hasCollidedWithAsteroid(landerX, landerY)) {
-				landerTexture.dispose();
+							terrain.get(i).get(3)) || 
+							hasCollidedWithAsteroid(landerX, landerY)) {
 				gameOver = true;
-//				if (fuel > 0) {
-//					startVars(fuel, score);
-//					continue;
-//				}
 				gameState = GameState.GAME_OVER_LOSE;
 			} else if(landerX > terrain.get(0).get(0) && landerX < 
 					terrain.get(0).get(2)){
 				if(landerY - 5 < terrain.get(0).get(1)){
-					//score += 10; not incrementing properly
-					
+					score += 10; //not incrementing properly					
 					gameOver = true;
-					velY = 0;
-//					if (fuel > 0) {
-//						startVars(fuel, score);
-//						continue;
-//					}
+					velY = 0;		
 					gameState = GameState.GAME_OVER_WIN;
 				}
 			}
 		}
 	}
-	
+
+	/**
+	 * Detects whether the lander has collided with an asteroid
+	 */
 	private boolean hasCollidedWithAsteroid(float landerX2, float landerY2) {
 		for (int i = 0; i < asteroidArray.size(); i++){
-			if ((landerX2 > asteroidArray.get(i).get(0) && landerX2 < asteroidArray.get(i).get(0) + 20) &&
-				(landerY2 > asteroidArray.get(i).get(1) && landerY2 < asteroidArray.get(i).get(1) + 20)){
-				
+			if ((landerX2 > asteroidArray.get(i).get(0) && 
+					landerX2 < asteroidArray.get(i).get(0) + 20) &&
+					(landerY2 > asteroidArray.get(i).get(1) && 
+							landerY2 < asteroidArray.get(i).get(1) + 20)){
+
 				gameOver = true;
 				velY = 0;
 				gameState = GameState.GAME_OVER_LOSE;
@@ -301,9 +320,13 @@ public class LunarLander extends GameClient {
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Specifies the lander's movements upon various keys being pressed
+	 * by the player
+	 */
 	private void landerMovement() {
-		
+
 		if(!(gameOver == true)) {
 			// move lander left
 			if ((Gdx.input.isKeyPressed(Keys.A)) || 
@@ -332,7 +355,10 @@ public class LunarLander extends GameClient {
 			}
 		}
 	}
-	
+
+	/**
+	 * Specifies the velocity of the lander
+	 */
 	private void velocity() {
 		if(!(gameOver == true) ) {
 			velY += 0.005;
@@ -357,7 +383,10 @@ public class LunarLander extends GameClient {
 			}
 		}
 	}
-	
+
+	/**
+	 * Clears the current screen and displays the game's splash screen
+	 */
 	private void splashScreen() {
 		batch.begin();
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -367,7 +396,11 @@ public class LunarLander extends GameClient {
 		camera.update();
 		super.render();
 	}
-	
+
+	/**
+	 * Clears the current screen and displays the relevent screen
+	 * for losing a game; offers the option to play again or quit the game
+	 */
 	private void gameOverLoseScreen() {
 		batch.begin();
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -379,7 +412,11 @@ public class LunarLander extends GameClient {
 		camera.update();
 		super.render();
 	}
-	
+
+	/**
+	 * Clears the current screen and displays the relevent screen
+	 * for winning a game; offers the option to play again or quit the game
+	 */
 	private void gameOverWinScreen() {
 		batch.begin();
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -391,12 +428,29 @@ public class LunarLander extends GameClient {
 		camera.update();
 		super.render();
 	}
-	
+
 	/**
-	 * Render the current state of the game and process updates
+	 * Determines whether the lander texture has collided with the line
+	 * that is the limit of the terrain
+	 */
+	private boolean isPointBelowLine(double px, double py, double x1, 
+			double y1, double x2, double y2) {
+		if (px < x1 || px > x2)
+			return false;
+
+		double m = (y2 - y1)/(x2 - x1);
+		double c = y1 - (m*x1);
+		double lineY = m*px + c;
+
+		return py <= lineY;
+	}
+
+	/**
+	 * Render the game according to its state; may be at the game menu,
+	 * in the game, having lost a game, having won a game.
 	 */
 	@Override
-	public void render() {		
+	public void render() {	
 		switch (gameState) {
 		case AT_MENU: 
 			// draw splash screen
@@ -410,7 +464,7 @@ public class LunarLander extends GameClient {
 			}
 			break;
 		case IN_GAME:	
-			drawBackground();
+			drawBackground(backgroundTextureRegion);
 			drawLander();
 			drawAsteroids();
 			drawMap();
@@ -445,17 +499,15 @@ public class LunarLander extends GameClient {
 				gameState = GameState.IN_GAME;
 			}
 			break;
-		case CONTINUE_GAME:
-			break;
-		case NEW_GAME: 
-			//gameState = GameState.IN_GAME;
-			break;
 		case GAME_OVER_LOSE:
 			// game over screen
 			gameOverLoseScreen();
 			if ((Gdx.input.isKeyPressed(Keys.ENTER))) { 
-			    startVars(fuel, score);
+				fuel = 1000;
+				score = 0;
+				startVars(fuel, score);
 				Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+				newMap();
 				gameState = GameState.IN_GAME;
 			}
 			if ((Gdx.input.isKeyPressed(Keys.ESCAPE))) {
@@ -467,9 +519,10 @@ public class LunarLander extends GameClient {
 			// game over screen
 			gameOverWinScreen();
 			if ((Gdx.input.isKeyPressed(Keys.ENTER))) {
-				//fuel = 1000;
+				fuel = 1000;
 				startVars(fuel, score);
 				Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+				newMap();
 				gameState = GameState.IN_GAME;
 			}
 			if ((Gdx.input.isKeyPressed(Keys.ESCAPE))) {
@@ -478,18 +531,6 @@ public class LunarLander extends GameClient {
 			}
 			break;
 		}
-	}
-	
-	private boolean isPointBelowLine(double px, double py, double x1, 
-			double y1, double x2, double y2) {
-		if (px < x1 || px > x2)
-			return false;
-
-		double m = (y2 - y1)/(x2 - x1);
-		double c = y1 - (m*x1);
-		double lineY = m*px + c;
-
-		return py <= lineY;
 	}
 
 	@Override
@@ -507,7 +548,8 @@ public class LunarLander extends GameClient {
 		game = new Game();
 		game.id = "lunarlander";
 		game.name = "LunarLander";
-		game.description = "Can your Lunar Lander make it to the surface safely?";
+		game.description = 
+				"Can your Lunar Lander make it to the surface safely?";
 	}
 
 	public Game getGame() {
@@ -516,30 +558,3 @@ public class LunarLander extends GameClient {
 
 }
 
-
-
-
-
-// IGNORE
-
-
-////renders the map using the list of lists "terrain"
-//LunarLanderTerrain.renderMap(terrain);
-// Amy's attempts to fill the map with texture. Drawing triangle is hard!
-/*batch.begin();
-for (int i = 1; i < terrain.size(); i++){
-   	if (terrain.get(i).get(1) > terrain.get(i).get(3)){
-   		batch.draw(surfaceTexture, terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(3));
-   	} else if (terrain.get(i).get(1) < terrain.get(i).get(3)){
-   		batch.draw(surfaceTexture, terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(1));
-   	}
-}
-batch.draw(surfaceTexture, terrain.get(0).get(0), 0, terrain.get(0).get(2), terrain.get(0).get(3));
-for (int i = 1; i < terrain.size(); i++){
-   	if (terrain.get(i).get(1) > terrain.get(i).get(3)){			    	
-		batch.draw(surfaceTexture, terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3), terrain.get(i).get(0), terrain.get(i).get(3));		
-	}else if (terrain.get(i).get(1) < terrain.get(i).get(3)){
-		batch.draw(surfaceTexture, terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3), terrain.get(i).get(2), terrain.get(i).get(1));		
-	}
-}
-batch.end();*/

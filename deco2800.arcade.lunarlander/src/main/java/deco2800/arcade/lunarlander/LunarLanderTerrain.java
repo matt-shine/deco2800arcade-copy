@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
@@ -100,7 +101,7 @@ public static List<List<Integer>> createMap(){
 	    //set map to be randomly made, or not
 	    if(randomMap == true){
 	    for (int i = 0; i < terrain.size(); i++){
-	    	shapeRenderer.setColor(180, 180, 5, 1);
+	    	shapeRenderer.setColor(Color.BLACK);
 	    	shapeRenderer.line(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3));
 	    	}
 	    }else{
@@ -116,12 +117,12 @@ public static List<List<Integer>> createMap(){
 	    for (int i = 1; i < terrain.size(); i++){
 	    	if (terrain.get(i).get(1) > terrain.get(i).get(3)){
 	    		shapeRenderer.begin(ShapeType.FilledRectangle);
-			    shapeRenderer.setColor(20, 20, 20, 100);
+			    shapeRenderer.setColor(Color.GRAY);
 				shapeRenderer.filledRect(terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(3));
 				shapeRenderer.end();
 	    	}else if (terrain.get(i).get(1) < terrain.get(i).get(3)){
 	    		shapeRenderer.begin(ShapeType.FilledRectangle);
-			    shapeRenderer.setColor(20, 20, 20, 100);
+			    shapeRenderer.setColor(Color.GRAY);
 				shapeRenderer.filledRect(terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(1));		
 				shapeRenderer.end();
 	    	}
@@ -130,19 +131,19 @@ public static List<List<Integer>> createMap(){
 	    
 	    //fills underneath landing pad
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
-	    shapeRenderer.setColor(20, 20, 20, 100);
+	    shapeRenderer.setColor(Color.GRAY);
 		shapeRenderer.filledRect(terrain.get(0).get(0), 0, terrain.get(0).get(2), terrain.get(0).get(3));		
 		shapeRenderer.end();
 	    
 	    for (int i = 1; i < terrain.size(); i++){
 	    	if (terrain.get(i).get(1) > terrain.get(i).get(3)){
 		    	shapeRenderer.begin(ShapeType.FilledTriangle);
-			    shapeRenderer.setColor(20, 20, 20, 100);
+			    shapeRenderer.setColor(Color.GRAY);
 				shapeRenderer.filledTriangle(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3), terrain.get(i).get(0), terrain.get(i).get(3));		
 				shapeRenderer.end();
 	    	}else if (terrain.get(i).get(1) < terrain.get(i).get(3)){
 	    		shapeRenderer.begin(ShapeType.FilledTriangle);
-			    shapeRenderer.setColor(20, 20, 20, 100);
+			    shapeRenderer.setColor(Color.GRAY);
 				shapeRenderer.filledTriangle(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3), terrain.get(i).get(2), terrain.get(i).get(1));		
 				shapeRenderer.end();
 	    	}

@@ -59,7 +59,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	public int BANANAS_FOUND = 0;	// TODO remove caps, make dynamic-er
 	public int TOTAL_BANANAS = 50; // TODO put in levelcontainer
 	public static int deaths = 0;
-	int SPEED_MULTIPLIER = 1;
+	int SPEED_MULTIPLIER = 3;
 	int monkeyLength = 35;
 	int monkeyHeight = 40;
 	public static float monkeyX;
@@ -362,8 +362,8 @@ public class junglejump extends GameClient implements InputProcessor {
 			achievementTitleFont.draw(batch, "Press P to PAUSE", SCREENWIDTH-250, SCREENHEIGHT-10);
 			achievementTitleFont.draw(batch, "BACKSPACE for MENU", SCREENWIDTH-250, SCREENHEIGHT-30);
 			achievementTitleFont.draw(batch, ("Bananas remaining: " + (TOTAL_BANANAS - BANANAS_FOUND)), SCREENWIDTH-500, SCREENHEIGHT-10);
-			achievementTitleFont.draw(batch, ("Lives: " + lives), SCREENWIDTH-750, SCREENHEIGHT-10);
-			achievementTitleFont.draw(batch, ("Level " + (LevelContainer.getCurrentWorld()+1) + " - " + (currentLevel.getIndex()+1)%6), SCREENWIDTH-750, SCREENHEIGHT-30);
+			achievementTitleFont.draw(batch, ("Lives: " + lives), SCREENWIDTH-750, SCREENHEIGHT-30);
+			achievementTitleFont.draw(batch, ("Level " + (LevelContainer.getCurrentWorld()+1) + " - " + (currentLevel.getIndex()%5)+1), SCREENWIDTH-750, SCREENHEIGHT-10);
 
 
 			batch.end();
@@ -495,7 +495,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyX = 10;
 		lives--;
 		deaths++;
-		if(deaths > 100) {
+		if(deaths >= 100) {
 			// TODO achievement for deaths
 		}
 		if(lives > 0) {

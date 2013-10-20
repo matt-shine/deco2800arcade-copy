@@ -35,10 +35,10 @@ public class TestFriendStorage {
 	 * @throws Exception
 	 */
 	@BeforeClass
-	public static void setUpClass() throws ClassNotFoundException {
-		 databaseTester = new JdbcDatabaseTester(
-					"org.apache.derby.jdbc.EmbeddedDriver",
-					"jdbc:derby:Arcade;user=server;password=server;create=true");
+	public static void setUpClass() throws Exception {
+		databaseTester = new JdbcDatabaseTester(
+                "org.apache.derby.jdbc.EmbeddedDriver",
+                "jdbc:derby:Arcade;user=server;password=server;create=true");
 	}
 	
 	/**
@@ -66,9 +66,9 @@ public class TestFriendStorage {
 		playerStorage.initialise();
 		friendStorage = new FriendStorage();
         friendStorage.initialise();
-        
 		IDataSet ds = getDataSet();
 		// databaseTester is null here, need to fix
+
         databaseTester.setDataSet(ds);
         databaseTester.onSetup();
         
@@ -219,7 +219,6 @@ public class TestFriendStorage {
 		
 		TestFriendStorage testFriendStorage = new TestFriendStorage();
 		Map<String, List<String>> tablePrimaryKeyMap = testFriendStorage.getTablePrimaryKeyMap();
-		
 		@Override
 		public boolean accept(String tableName, Column column) {
 			if (tablePrimaryKeyMap.containsKey(tableName)) {

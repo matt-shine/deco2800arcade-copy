@@ -4,7 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -14,13 +19,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 
 public class CommunicationView extends JPanel {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2843626122426089843L;
 	private JScrollPane scrollPane;
 	private JTextArea inputArea;
@@ -35,9 +40,9 @@ public class CommunicationView extends JPanel {
 	private CommunicationNetwork communicationNetwork;
 
 	
-	public CommunicationView() {
-		setPreferredSize(new Dimension(250, 600));
-
+	public CommunicationView(int height) {
+		
+		setPreferredSize(new Dimension(250,height));
 		setLayout(cardLayout);
 		createViewOne();
 		createViewTwo();
@@ -49,7 +54,25 @@ public class CommunicationView extends JPanel {
 
 		viewOne = new JPanel(new GridLayout(1, 1, 0, 0));
 
-		scrollablePanel = new JPanel();
+		scrollablePanel = new JPanel(new FlowLayout(FlowLayout.CENTER,0,1)) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void paintComponent(Graphics grphcs) {
+				super.paintComponent(grphcs);
+				Graphics2D g2d = (Graphics2D) grphcs;
+				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		        GradientPaint gp = new GradientPaint(0, 0,
+		        		Color.MAGENTA.brighter().brighter(), 0, getHeight(),
+		        		Color.BLACK.darker().darker());
+		        g2d.setPaint(gp);
+		        g2d.fillRect(0, 0, getWidth(), getHeight()); 
+			}
+		        
+		};
+		
 		scrollPane = new JScrollPane(scrollablePanel,
 				JScrollPane.VERTICAL_SCROLLBAR_NEVER,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -60,24 +83,50 @@ public class CommunicationView extends JPanel {
 
 	private void createViewTwo() {
 
-		viewTwo = new JPanel();
+		viewTwo = new JPanel(new FlowLayout(FlowLayout.CENTER,0,1)) {
+			@Override
+			protected void paintComponent(Graphics grphcs) {
+				super.paintComponent(grphcs);
+				Graphics2D g2d = (Graphics2D) grphcs;
+				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		        GradientPaint gp = new GradientPaint(0, 0,
+		        		Color.MAGENTA.brighter().brighter(), 0, getHeight(),
+		        		Color.BLACK.darker().darker());
+		        g2d.setPaint(gp);
+		        g2d.fillRect(0, 0, getWidth(), getHeight()); 
+			}
+		};
+
 
 		outputArea = new JTextArea();
-		outputArea.setPreferredSize(new Dimension(250, 375));
+		outputArea.setBackground(Color.MAGENTA);
+		outputArea.setPreferredSize(new Dimension(250, 350));
 		outputArea.setEditable(false);
 		outputArea.setLineWrap(true);
 		outputArea.setWrapStyleWord(true);
+		outputArea.setOpaque(false);
+        outputArea.setBorder(new CompoundBorder(new EmptyBorder(10, 10, 10, 10), new LineBorder(Color.LIGHT_GRAY)));
 
 		inputArea = new JTextArea();
-		inputArea.setPreferredSize(new Dimension(250, 266));
+		inputArea.setBackground(Color.MAGENTA);
+		inputArea.setPreferredSize(new Dimension(250, 300));
 		inputArea.setLineWrap(true);
 		inputArea.setWrapStyleWord(true);
+		inputArea.setOpaque(false);
+        inputArea.setBorder(new CompoundBorder(new EmptyBorder(10, 10, 10, 10), new LineBorder(Color.LIGHT_GRAY)));
 
 		sendButton = new JButton("Send");
-		sendButton.setPreferredSize(new Dimension(250, 35));
+        sendButton.setContentAreaFilled(false);
+        sendButton.setBorderPainted(false);
+        sendButton.setOpaque(false);
+		sendButton.setPreferredSize(new Dimension(250, 30));
 
 		backButton = new JButton("< Back");
-		backButton.setPreferredSize(new Dimension(250, 25));
+        backButton.setContentAreaFilled(false);
+        backButton.setBorderPainted(false);
+        backButton.setOpaque(false);
+		backButton.setPreferredSize(new Dimension(250, 30));
 
 		backButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

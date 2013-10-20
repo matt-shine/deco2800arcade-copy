@@ -64,7 +64,7 @@ public class CommunicationTest {
 		player3 = new Player(235, "THIS IS NOT A VALID PATH.html", info3, null,
 				null, null, null, privset);
 
-		view = new CommunicationView();
+		view = new CommunicationView(600);
 
 		comm1 = new CommunicationNetwork(player1, null);
 		comm1.loggedIn(player1, view);

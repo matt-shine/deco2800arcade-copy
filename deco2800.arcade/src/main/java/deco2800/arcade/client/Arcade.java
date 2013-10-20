@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Constructor;
@@ -18,6 +20,10 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import org.reflections.Reflections;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
@@ -317,12 +323,6 @@ public class Arcade extends JFrame {
 			myPlayer = new Player(myID, null, details, friendsSet, invitesSet, blockedSet, gameSet, privacy);
 		}
 		
-		
-		communicationView = new CommunicationView();
-		container.add(communicationView, BorderLayout.EAST);
-		revalidate();
-		repaint();
-
 		this.player = myPlayer;
 		this.communicationNetwork.loggedIn(this.player, this.communicationView);
 
@@ -499,8 +499,24 @@ public class Arcade extends JFrame {
 			proxy.setThreadMonitor(mon);
 
 			container = this.getContentPane();
+			container.setLayout(new GridBagLayout());
+			communicationView = new CommunicationView(height);
+
+			GridBagConstraints c = new GridBagConstraints();
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.gridy = 1;
 			
-			container.add(this.canvas.getCanvas(), BorderLayout.WEST);
+			c.gridx = 0;
+			c.weightx = 0.8;
+			
+			container.add(this.canvas.getCanvas(), c);
+			
+			c.gridx = 1;
+			c.weightx = 0.2;
+			
+			container.add(communicationView, c);
+			
+			setResizable(false);
 			
 			pack();
 			

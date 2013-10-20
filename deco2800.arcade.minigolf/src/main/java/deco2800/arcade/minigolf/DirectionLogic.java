@@ -12,9 +12,9 @@ import com.badlogic.gdx.math.Vector2;
 public class DirectionLogic {
 	
 	private DirectionValues directController;
-	final Vector2 ballPos = new Vector2(); //holds ball position
-	Vector2 currentPos = new Vector2(); //holds current position
-	public Vector2 temp = new Vector2(); //holds updated trajectory
+	private final Vector2 ballPos = new Vector2(); //holds ball position
+	private Vector2 currentPos = new Vector2(); //holds current position
+	private Vector2 temp = new Vector2(); //holds updated trajectory
 	
 	public DirectionLogic(DirectionValues control, Vector2 ballPos){
 		this.directController = control; 

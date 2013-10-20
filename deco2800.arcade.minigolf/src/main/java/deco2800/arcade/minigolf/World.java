@@ -23,15 +23,15 @@ import java.util.Scanner;
 public class World {
 
 	// arrays which hold all blocks of a certain type to be drawn
-	Array<Block1> wallArray = new Array<Block1>();
-	Array<Block1> invWallArray = new Array<Block1>();
-	Array<Block1> capBlockArray = new Array<Block1>();
-	Array<Block1> groundArray = new Array<Block1>(); 
-	Array<Block1> cornerArray = new Array<Block1>();
-	Array<Block1> holeArray = new Array<Block1>();
-	Array<Block1> waterArray = new Array<Block1>();
-	Array<Block1> teleArray = new Array<Block1>();
-	Array<Block1> diagArray = new Array<Block1>();
+	private Array<Block1> wallArray = new Array<Block1>();
+	private Array<Block1> invWallArray = new Array<Block1>();
+	private Array<Block1> capBlockArray = new Array<Block1>();
+	private Array<Block1> groundArray = new Array<Block1>(); 
+	private Array<Block1> cornerArray = new Array<Block1>();
+	private Array<Block1> holeArray = new Array<Block1>();
+	private Array<Block1> waterArray = new Array<Block1>();
+	private Array<Block1> teleArray = new Array<Block1>();
+	private Array<Block1> diagArray = new Array<Block1>();
 	
 	// store the x and y start position of the ball
 	public int holeStartX;
@@ -181,103 +181,137 @@ public class World {
 	/* gets the width specified, returns startX position to be used based upon it*/
 	private int CreateXStartPos(int width){
 		int xPos = 0;
-		if(width >= 1 && width <= 10 )
+		if(width >= 1 && width <= 10 ){
 			xPos = 500; 
-		if(width >= 11 && width <= 20)
+		}
+		if(width >= 11 && width <= 20){
 			xPos = 450;
-		if(width >= 21 && width <= 30)
+		}
+		if(width >= 21 && width <= 30){
 			xPos = 400;
-		if(width >= 31 && width <= 40)
+		}
+		if(width >= 31 && width <= 40){
 			xPos = 350;
-		if(width >= 41 && width <= 50)
+		}
+		if(width >= 41 && width <= 50){
 			xPos = 300;
-		if(width >= 51 && width <= 100)
+		}
+		if(width >= 51 && width <= 100){
 			xPos = 250;
-		
+		}
 		return xPos;
 	}
 	/* gets the height specified, returns startY position to be used based upon it*/
 	private int CreateYStartPos(int height){
 		int yPos = 0;
-		if(height >= 1 && height <= 10 )
+		if(height >= 1 && height <= 10 ){
 			yPos = 450; 
-		if(height >= 11 && height <= 20)
+		}
+		if(height >= 11 && height <= 20){
 			yPos = 500;
-		if(height >= 21 && height <= 30)
+		}
+		if(height >= 21 && height <= 30){
 			yPos = 550;
-		if(height >= 31 && height <= 40)
+		}
+		if(height >= 31 && height <= 40){
 			yPos = 600;
-		if(height >= 41 && height <= 60)
+		}
+		if(height >= 41 && height <= 60){
 			yPos = 650;
+		}
 		
 		return yPos;
 	}
 	/* if the character found is a wall add it to the wallArray */
 	private void checkIfWall(char currentChar, int j, int i){
-		if(currentChar == 'N')//north wall
+		if(currentChar == 'N') {//north wall
 			wallArray.add(new Block1(new Vector2(j,i), BlockType.WALL, FacingDir.NORTH,0));
-		 else if(currentChar == 'S')//south wall
+		}
+		 else if(currentChar == 'S'){//south wall
 			wallArray.add(new Block1(new Vector2(j,i), BlockType.WALL, FacingDir.SOUTH,0));
-		 else if(currentChar == 'E')//east wall
+		 }
+		 else if(currentChar == 'E'){//east wall
 			wallArray.add(new Block1(new Vector2(j,i), BlockType.WALL, FacingDir.EAST,0));
-		 else if(currentChar == 'W')//west wall
+		 }
+		 else if(currentChar == 'W'){//west wall
 			wallArray.add(new Block1(new Vector2(j,i), BlockType.WALL, FacingDir.WEST,0));
+		 }
 	}
 	
 	/* if the character found is a corner add it to the cornerArray */
 	private void checkIfCorner(char currentChar, int j, int i){
-		if(currentChar == 'n')//north corner
+		if(currentChar == 'n'){//north corner
 			cornerArray.add(new Block1(new Vector2(j,i), BlockType.CORNER, FacingDir.NORTH,0));
-		 else if(currentChar == 's')//south corner
+		}
+		 else if(currentChar == 's'){//south corner
 			cornerArray.add(new Block1(new Vector2(j,i), BlockType.CORNER, FacingDir.SOUTH,0));
-		 else if(currentChar == 'e')//east corner
+		 }
+		 else if(currentChar == 'e'){//east corner
 			cornerArray.add(new Block1(new Vector2(j,i), BlockType.CORNER, FacingDir.EAST,0));
-		 else if(currentChar == 'w')//west corner
+		 }
+		 else if(currentChar == 'w'){//west corner
 			cornerArray.add(new Block1(new Vector2(j,i), BlockType.CORNER, FacingDir.WEST,0));
+		 }
 	}
 	
 	/* if the character found is a diagonal add it to the diagArray */
 	private void checkIfDiag(char currentChar, int j, int i){
-		 if(currentChar == 'L')
+		 if(currentChar == 'L'){
 			 diagArray.add(new Block1(new Vector2(j,i), BlockType.DIAGONAL, FacingDir.SOUTH,0));
-		 else if(currentChar == 'J')
+		 }
+		 else if(currentChar == 'J'){
 			 diagArray.add(new Block1(new Vector2(j,i), BlockType.DIAGONAL, FacingDir.EAST,0));
-		 else if(currentChar == 'r')
+		 }
+		 else if(currentChar == 'r'){
 			 diagArray.add(new Block1(new Vector2(j,i), BlockType.DIAGONAL, FacingDir.WEST,0));
-		 else if(currentChar == 'T')
+		 }
+		 else if(currentChar == 'T'){
 			 diagArray.add(new Block1(new Vector2(j,i), BlockType.DIAGONAL, FacingDir.NORTH,0));
+		 }
 	}
 	
 	/* if the character found is a cap block add it to the capBlockArray */
 	private void checkIfCapBlock(char currentChar, int j, int i){
-		 if(currentChar == '-')
+		 if(currentChar == '-'){
 			 invWallArray.add(new Block1(new Vector2(j,i), BlockType.INVWALL, FacingDir.NORTH,0));
-		 else if(currentChar == '|')
+		 }
+		 else if(currentChar == '|'){
 			 invWallArray.add(new Block1(new Vector2(j,i), BlockType.INVWALL, FacingDir.EAST,0));
-		 else if(currentChar == 'l')
+		 }
+		 else if(currentChar == 'l'){
 			 invWallArray.add(new Block1(new Vector2(j,i), BlockType.INVWALL, FacingDir.WEST,0));
-		 else if(currentChar == '_')
+		 }
+		 else if(currentChar == '_'){
 			 invWallArray.add(new Block1(new Vector2(j,i), BlockType.INVWALL, FacingDir.SOUTH,0));
-		 else if(currentChar == ')')
+		 }
+		 else if(currentChar == ')'){
 			 capBlockArray.add(new Block1(new Vector2(j,i), BlockType.INVWALL, FacingDir.WEST,0));
-		 else if(currentChar == '(')
+		 }
+		 else if(currentChar == '('){
 			 capBlockArray.add(new Block1(new Vector2(j,i), BlockType.INVWALL, FacingDir.EAST,0));
-		 else if(currentChar == '~')
+		 }
+		 else if(currentChar == '~'){
 			 capBlockArray.add(new Block1(new Vector2(j,i), BlockType.INVWALL, FacingDir.NORTH,0));
-		 else if(currentChar == '^')
+		 }
+		 else if(currentChar == '^'){
 			 capBlockArray.add(new Block1(new Vector2(j,i), BlockType.INVWALL, FacingDir.SOUTH,0));
+		 }
 	}
 	
 	/* if the character found is a Teleporter number add it to the TeleArray */
 	private void checkIfTele(char currentChar, int j, int i){
-		 if(currentChar == '1')
+		 if(currentChar == '1'){
 			 teleArray.add(new Block1(new Vector2(j,i), BlockType.TELEPORTER, FacingDir.NORTH,1));
-		 else if(currentChar == '2')
+		 }
+		 else if(currentChar == '2'){
 			 teleArray.add(new Block1(new Vector2(j,i), BlockType.TELEPORTER, FacingDir.NORTH,2));
-		 else if(currentChar == '3')
+		 }
+		 else if(currentChar == '3'){
 			 teleArray.add(new Block1(new Vector2(j,i), BlockType.TELEPORTER, FacingDir.NORTH,3));
-		 else if(currentChar == '4')
+		 }
+		 else if(currentChar == '4'){
 			 teleArray.add(new Block1(new Vector2(j,i), BlockType.TELEPORTER, FacingDir.NORTH,4));
+		 }
 		 else if(currentChar == '5'){
 			 teleArray.add(new Block1(new Vector2(j,i), BlockType.TELEPORTER, FacingDir.NORTH,5));
 		 }
@@ -288,12 +322,15 @@ public class World {
 	
 	/* if the character found is a water,ground or the hole add it to their arrays */
 	private void checkForRest(char currentChar, int j, int i){
-		if(currentChar == 'V')
+		if(currentChar == 'V'){ //water
 			waterArray.add(new Block1(new Vector2(j,i), BlockType.WATER, FacingDir.NORTH,0));
-		else if(currentChar == '/')//ground
+		}
+		else if(currentChar == '/'){//ground
 			groundArray.add(new Block1(new Vector2(j,i), BlockType.OPEN, FacingDir.NORTH,0));
-		else if(currentChar == 'O')//hole
+		}
+		else if(currentChar == 'O'){//hole
 			holeArray.add(new Block1(new Vector2(j,i), BlockType.HOLE, FacingDir.NORTH,0));
+		}
 	}
 	
 	/* An exception indicating that an Invalid number has been given in the map */

@@ -42,9 +42,7 @@ public class BallController {
 		this.collisionBlocks.addAll(world.getTeleBlocks());
 		this.collisionBlocks.addAll(world.getDiagBlocks());
 		this.teleBlocks = world.getTeleBlocks();
-		this.openBlocks = world.getGroundBlocks();
-		
-		
+		this.openBlocks = world.getGroundBlocks();		
 	}
 
 	public void update() {
@@ -62,7 +60,6 @@ public class BallController {
 			Boolean boundColl = Intersector.overlapConvexPolygons(ballBounds,
 					block.getBounds());
 			if (boundColl) {
-
 				
 				// If Ball collides with a WALL/INVWALL type block, apply the relevant
 				// changes. Collision is not allowed two times in a row if the specified
@@ -81,10 +78,7 @@ public class BallController {
 							ball.bounceY = ball.bounceY == true ? false : true;
 							collisionY = true;
 						}
-					}
-					
-					
-					
+					}					
 				}
 				
 				
@@ -140,10 +134,8 @@ public class BallController {
 						
 						specialCol = true;
 						
-						if (collisionX) collisionX = false;
-						
-						if (collisionY) collisionY = false;
-						
+						if (collisionX) collisionX = false;						
+						if (collisionY) collisionY = false;						
 					}
 					
 					 // Runs this code if the ball collides with a TELEPORTER
@@ -186,10 +178,15 @@ public class BallController {
 		for (Block1 groundBlock : openBlocks) {
 			if (Intersector.overlapConvexPolygons(ballBounds,
 					groundBlock.getBounds())) {				
-				if (collisionX) collisionX = false;
-				if (collisionY) collisionY = false;
-			
-				if (specialCol) specialCol = false;
+				if (collisionX){ 
+					collisionX = false;
+				}
+				if (collisionY){
+					collisionY = false;
+				}			
+				if (specialCol){
+					specialCol = false;
+				}
 				
 				
 			}

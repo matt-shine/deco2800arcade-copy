@@ -29,9 +29,9 @@ public class Ball {
 	public Boolean inHole = false;
 	public Boolean inWater = false;
 	
-	Vector2 position = new Vector2();  
-	Vector2 velocity = new Vector2(); 
-	Polygon bounds;  
+	private Vector2 position = new Vector2();  
+	private Vector2 velocity = new Vector2(); 
+	private Polygon bounds;  
 	
 	public Ball(Vector2 position) { 
 		

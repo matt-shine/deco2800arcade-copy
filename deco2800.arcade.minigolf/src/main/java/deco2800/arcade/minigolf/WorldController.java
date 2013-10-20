@@ -28,16 +28,16 @@ public class WorldController{
 	private WorldRenderer wRend;
 	private DirectionLogic directionLogic; 
 	
-	boolean leftButtonClick = false; //left mouse click
+	private boolean leftButtonClick = false; //left mouse click
 	private float deceleration = 1f;
 	private boolean notZero = true; //for power
 	private float newDirX, newDirY; 
 	
-	public int hole;
-	boolean inHole;
+	private int hole;
+	private boolean inHole;
 	private int shotNum; //shot counter
 	private int holeShots; //shots for score card
-	private ArrayList<Integer> scoreCardCopy;
+	private ArrayList<Integer> scoreCardCopy = new ArrayList<Integer>();
 	
 	
 	public WorldController(World world, int level, ArrayList<Integer> scoreCard) {
@@ -76,15 +76,16 @@ public class WorldController{
 	 */
 	public void update(float delta, float power, Vector2 dir) {
 		processInput(delta, power, dir); 
-		if (ball.inHole == true){
+		if (ball.inHole){
 			ball.getVelocity().x = 0;
 			ball.getVelocity().y = 0;
 			shotNum++;
 			holeShots = shotNum;
+			//add all scores to score-card up to hole 18
 			if(this.hole != 19){
 			scoreCardCopy.add(holeShots);
 			}			
-			if(this.inHole == false){
+			if(!this.inHole){
 				this.hole += 1; 
 				this.inHole = true;
 			}
@@ -96,17 +97,19 @@ public class WorldController{
 	 * and reverse in case of collision.
 	 */
 	private void processInput(float delta, float power, Vector2 dir) {
-		
+		float newPower = power;
 		//if player left clicks
 		if(leftButtonClick == true){
 			if(this.notZero){ //if speed doesn't equal zero
-				power -= (5.0f * deceleration); //apply deceleration
+				newPower -= (5.0f * deceleration); //apply deceleration
 				deceleration += 0.25;
 				//if power is less than 0 make it zero so ball doesn't move backwards
-				if(power <= 0 || ball.inWater){ 
+				if(newPower <= 0 || ball.inWater){ 
 					//speed is now zero, stop decelerating
-					power = 0; 
-					if (ball.inWater) shotNum++; //increment shot counter by 1 if contacts water
+					newPower = 0; 
+					if (ball.inWater){ //increment shot counter by 1 if contacts water
+						shotNum++; 
+					}
 					ball.inWater = false;
 					this.notZero = false; 
 				}
@@ -114,10 +117,16 @@ public class WorldController{
 				diagFixes(dir);
 				
 				//apply velocity and directional changes to the ball
-				if(ball.bounceX) ball.getVelocity().x = ((-(dir.x)) * power * delta ); 
-				else ball.getVelocity().x = ((dir.x) * power * delta); 
-				if(ball.bounceY) ball.getVelocity().y = ((-(dir.y)) * power * delta ) ; 
-				else ball.getVelocity().y = ((dir.y) * power * delta);
+				if(ball.bounceX){
+					ball.getVelocity().x = ((-(dir.x)) * newPower * delta ); 
+				} else {
+					ball.getVelocity().x = ((dir.x) * newPower * delta); 
+				}
+				if(ball.bounceY){
+					ball.getVelocity().y = ((-(dir.y)) * newPower * delta ) ; 
+				}else {
+					ball.getVelocity().y = ((dir.y) * newPower * delta);
+				}
 				
 				//ball has stopped moving so reset everything for next mouse click.
 			} else { 
@@ -142,12 +151,12 @@ public class WorldController{
 		     dir.y = newDirX;
 		     ball.bounceDiagX = false;
 		    }
-		    else if(ball.bounceDiagY){
+		else if(ball.bounceDiagY){
 		     newDirX = dir.x;
 		     newDirY = dir.y;     
 		     dir.x = newDirY*(-1);
 		     dir.y = newDirX*(-1);
 		     ball.bounceDiagY = false;
-		    }
+		}
 	}
 }

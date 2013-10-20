@@ -19,39 +19,42 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
  */
 public class MenuScreen implements Screen, InputProcessor {
 	
-	MiniGolf golf; 	
-	Stage stage;
-	BitmapFont font1;
+	private MiniGolf golf; 	
+	private Stage stage;
+	private BitmapFont font1;
 	private int disposeCount = 0;
 	private float fadeInOut, fadeCopy;
 		
 	//menu logo + background image
-	Texture logoTexture;
-	Sprite logoSprite;
-	Sprite menuBGSprite;
-	Texture menuBGTexture;
-	SpriteBatch logoMenuBatch;
+	private Texture logoTexture;
+	private Sprite logoSprite;
+	private Sprite menuBGSprite;
+	private Texture menuBGTexture;
+	private SpriteBatch logoMenuBatch;
 	
 	//splash screen
-	Texture splashTexture;
-	Sprite splashSprite;
-	Sprite splashBGSprite;
-	Texture splashBGTexture;
-	SpriteBatch splashBatch;
+	private Texture splashTexture;
+	private Sprite splashSprite;
+	private Sprite splashBGSprite;
+	private Texture splashBGTexture;
+	private SpriteBatch splashBatch;
 	private boolean splashYes;
 	
 	//menu buttons
-	TextureAtlas butAtlas;
-	Skin butSkin;
-	SpriteBatch butBatch;
-	TextButton mainButton;
-	TextButton closeButton;
+	private TextureAtlas butAtlas;
+	private Skin butSkin;
+	private SpriteBatch butBatch;
+	private TextButton mainButton;
+	private TextButton closeButton;
 	
 	
 	public MenuScreen(MiniGolf game, boolean firstCall){
 		this.fadeInOut = 0;
 		this.fadeCopy = -0.1f;
-		if(firstCall) this.splashYes = true;
+		//when the menu is called for the first time show splash screen
+		if(firstCall){
+			this.splashYes = true;
+		}
 		this.golf = game;  
 	}
 	
@@ -108,8 +111,7 @@ public class MenuScreen implements Screen, InputProcessor {
 		// Do this if Minigolf has just re/started. Draws the splash screen
 		// and progressively changes the alpha value to give it a fade in/out
 		// effect
-		if(splashYes){
-			
+		if(splashYes){			
 			splashBatch.begin();
 			splashBGSprite.draw(splashBatch);
 			
@@ -121,8 +123,9 @@ public class MenuScreen implements Screen, InputProcessor {
 			} else {
 				if(fadeInOut <= 0) splashYes = false;
 				fadeInOut -= 0.005;
-				if(fadeInOut <= 0){ splashYes = false; fadeInOut = 0;}
-			
+				if(fadeInOut <= 0){ 
+					splashYes = false; fadeInOut = 0;
+				}			
 			}
 			
 			splashSprite.setColor(1, 1, 1, fadeInOut);
@@ -205,7 +208,9 @@ public class MenuScreen implements Screen, InputProcessor {
 	public void dispose() { 
 		Gdx.input.setInputProcessor(null);
 		
-		if (disposeCount == 1) return;
+		if (disposeCount == 1){
+			return;
+		}
 		butBatch.dispose();
 		splashBatch.dispose();
 		logoMenuBatch.dispose();

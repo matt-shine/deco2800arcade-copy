@@ -41,7 +41,7 @@ import java.util.ArrayList;
 
 public class GameScreen implements Screen, InputProcessor {
 	
-	MiniGolf golf; 
+	private MiniGolf golf; 
 	private World world;
 	private WorldRenderer renderer; 
 	private WorldController wControl;
@@ -52,21 +52,21 @@ public class GameScreen implements Screen, InputProcessor {
 	public int level, scoreX, scoreY; //hole
 	private float power, fadeInOut, fadeVar;
 	private boolean scoreYes;
-	public boolean gamePaused;
+	boolean gamePaused;
 	
 	//Variables for the button
-	BitmapFont font1, font2, font3;
-	String holeShots, gameShots, totalScore;
-	ArrayList<Integer> scoreCard;
-	Stage stage;
-	TextureAtlas butAtlas;
-	Skin butSkin;
-	Texture scoreCardTexture, bgTexture;
- 	SpriteBatch butBatch, scoreBatch;
-	Sprite scoreCardSprite;
+	private BitmapFont font1, font2, font3;
+	private String holeShots, gameShots, totalScore;
+	private ArrayList<Integer> scoreCard;
+	private Stage stage;
+	private TextureAtlas butAtlas;
+	private Skin butSkin;
+	private Texture scoreCardTexture, bgTexture;
+	private SpriteBatch butBatch, scoreBatch;
+	private Sprite scoreCardSprite;
 
-	TextButton mainButton, resetButton;
-	int disposeCount = 0;
+	private TextButton mainButton, resetButton;
+	private int disposeCount = 0;
 	
 	public GameScreen(MiniGolf game, int hole){
 		this.scoreCard = new ArrayList<Integer>();
@@ -75,8 +75,7 @@ public class GameScreen implements Screen, InputProcessor {
 		this.fadeInOut = 0;
 		this.fadeVar = 0.0001f;
 		gamePaused = false;
-		playMusic();
-		
+		playMusic();		
 	}
 	
 	/* get and set current level */
@@ -94,7 +93,7 @@ public class GameScreen implements Screen, InputProcessor {
 			try { //opening a file in world so catch exceptions
 				world = new World(level);
 			} catch (Exception e) {
-				e.printStackTrace();
+				System.err.println("An error has occured while opening a level text file");
 			} //create hole 
 			renderer = new WorldRenderer(world, false, this.level, scoreCard); //render objects 
 			wControl = new WorldController(world, this.level, scoreCard); //initialise controller
@@ -373,7 +372,9 @@ public class GameScreen implements Screen, InputProcessor {
 		Gdx.input.setInputProcessor(null);
 		
 		//button code
-		if (disposeCount == 1) return;
+		if (disposeCount == 1) {
+			return;
+		}
 		butBatch.dispose();
 		butAtlas.dispose();
 		font1.dispose();		

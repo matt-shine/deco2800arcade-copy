@@ -37,8 +37,8 @@ public class Block1 {
 	
 	static final float SIZE = 15f;	
 	
-	Vector2 position = new Vector2();
-	Polygon bounds;
+	private Vector2 position = new Vector2();
+	private Polygon bounds;
 	
 	BlockType type = BlockType.OPEN;
 	FacingDir dir = FacingDir.WEST;

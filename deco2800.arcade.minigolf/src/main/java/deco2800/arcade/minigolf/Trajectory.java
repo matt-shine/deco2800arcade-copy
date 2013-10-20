@@ -6,19 +6,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-/**
+/*
  * This class draws the direction trajectory which the ball will travel in 
  * This class overrides some stage/actor functions to draw
  */
 
 public class Trajectory extends Actor {
 	
-	public Ball ball; 
-	public World world;
+	private Ball ball; 
+	private World world;
 	private DirectionValues controller; 
 	private Sprite trajectorySprite;
 	
-	public Vector2 startVelocity = new Vector2();  
+	private Vector2 startVelocity = new Vector2();  
 	
 	private int trajectoryPoints = 5; //number of trajectory images (circles) to appear
 	private float timeSeparation = 0.5f; //the size of separation of the trajectory images

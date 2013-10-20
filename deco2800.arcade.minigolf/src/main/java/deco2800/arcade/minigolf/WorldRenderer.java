@@ -39,7 +39,7 @@ public class WorldRenderer {
 	private DirectionValues controller;
 	private WorldController wControl;
 	private OrthographicCamera cam;	
-	ShapeRenderer debugRend = new ShapeRenderer();
+	private ShapeRenderer debugRend = new ShapeRenderer();
 	
 	private Texture ballTexture, groundTexture, closedTexture, holeTexture,
 	waterTexture, teleTexture;
@@ -68,7 +68,7 @@ public class WorldRenderer {
 	private float ppuX; //pixels/unit on width
 	private float ppuY; //pixels/unit on height
 	private boolean debug = false; 
-	public boolean renderTrajectory = true;
+	private boolean renderTrajectory = true;
 	
 	public void setSize(int w, int h) {
 		this.width = w; 
@@ -100,7 +100,7 @@ public class WorldRenderer {
 		if((ball.getVelocity().x == 0 && ball.getVelocity().y == 0 && !(ball.inHole))){
 			  stage.act(); 
 			  stage.draw();
-			}				
+		}	
 		sprite.begin();
 		    sprite.draw(backgroundTexture, 0, 0);
 			drawGround();
@@ -112,14 +112,14 @@ public class WorldRenderer {
 			drawWater();
 			drawTele();
 			drawHole();
-			drawBall();
-			
+			drawBall();	
 		sprite.end();
+		
 		if((ball.getVelocity().x == 0 && ball.getVelocity().y == 0 && !(ball.inHole))){
 		  stage.act(); 
 		  stage.draw();
 		}
-		
+		//if enabled will show outlines of the blocks bounds and position
 		if(debug) {
 			debug(); 
 		}		
@@ -132,6 +132,7 @@ public class WorldRenderer {
 	public Vector2 getDir(){
 		return directLogic.getDirection();
 	}
+	
 	
 	/* load textures from file into specific variables */
 	private void loadTextures() {
@@ -183,7 +184,9 @@ public class WorldRenderer {
 	// Draw the ball blocks
 	private void drawBall() {			
 		Ball ball = world.getBall();
-		if (ball.inHole) return;
+		if (ball.inHole){
+			return;
+		}
 		sprite.draw(ballTexture, ball.getPosition().x * ppuX, ball.getPosition().y * ppuY,
 				Ball.SIZE * ppuX, Ball.SIZE * ppuY);		
 	}
@@ -213,26 +216,25 @@ public class WorldRenderer {
 	// Draw all walls
 	private void drawWall() {
 		for(Block1 block : world.getWallBlocks()){
-			//if(block.type == BlockType.Wall)
 			//change texture position based on it's FacingDir
 			if(block.dir == FacingDir.NORTH){ //draw blocks from getWallBlocks() that face north
 				sprite.draw(wallNorthTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, 
 						Block1.SIZE * ppuX, Block1.SIZE * ppuY, 0, 0, 32, 32, false, false); 
-				}
-				if(block.dir == FacingDir.SOUTH){
-					sprite.draw(wallSouthTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, 
-							Block1.SIZE * ppuX, Block1.SIZE * ppuY, 0, 0, 32, 32, false, false);	
-				}
-				if(block.dir == FacingDir.EAST){
-					sprite.draw(wallEastTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, 
-							Block1.SIZE * ppuX, Block1.SIZE * ppuY, 0, 0, 32, 32, false, false);
-				}
-				if(block.dir == FacingDir.WEST){
-					sprite.draw(wallWestTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, 
-							Block1.SIZE * ppuX, Block1.SIZE * ppuY, 0, 0, 32, 32, false, false);
-				}
+			}
+			if(block.dir == FacingDir.SOUTH){
+				sprite.draw(wallSouthTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, 
+						Block1.SIZE * ppuX, Block1.SIZE * ppuY, 0, 0, 32, 32, false, false);	
+			}
+			if(block.dir == FacingDir.EAST){
+				sprite.draw(wallEastTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, 
+						Block1.SIZE * ppuX, Block1.SIZE * ppuY, 0, 0, 32, 32, false, false);
+			}
+			if(block.dir == FacingDir.WEST){
+				sprite.draw(wallWestTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, 
+						Block1.SIZE * ppuX, Block1.SIZE * ppuY, 0, 0, 32, 32, false, false);
 			}
 		}
+	}
 	//Draw all corners
 	private void drawCorners() {
 		for(Block1 block : world.getCornerBlocks()){
@@ -258,18 +260,22 @@ public class WorldRenderer {
 	// Draw all diagonals
 	private void drawDiags() {
 		for(Block1 block : world.getDiagBlocks()){
-			if(block.dir == FacingDir.NORTH)
+			if(block.dir == FacingDir.NORTH){
 				sprite.draw(diagNorthTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY,
 						Block1.SIZE * ppuX, Block1.SIZE * ppuY, 0,0,32,32,false,false);
-			if(block.dir == FacingDir.SOUTH)
+			}
+			if(block.dir == FacingDir.SOUTH){
 				sprite.draw(diagSouthTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY,
 						Block1.SIZE * ppuX, Block1.SIZE * ppuY, 0,0,32,32,false,false);
-			if(block.dir == FacingDir.EAST)
+			}
+			if(block.dir == FacingDir.EAST){
 				sprite.draw(diagEastTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY,
 						Block1.SIZE * ppuX, Block1.SIZE * ppuY, 0,0,32,32,false,false);
-			if(block.dir == FacingDir.WEST)
+			}
+			if(block.dir == FacingDir.WEST){
 				sprite.draw(diagWestTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY,
 						Block1.SIZE * ppuX, Block1.SIZE * ppuY, 0,0,32,32,false,false);
+			}
 		}
 	}
 	// Draw all Inverted Walls
@@ -321,10 +327,7 @@ public class WorldRenderer {
 	
 	public void dispose() { 
 		stage.dispose();
-		sprite.dispose();
-		
-		
-		
+		sprite.dispose();		
 	}
 	
 }

@@ -65,15 +65,7 @@ public class Level {
 		
 		renderer = new com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer(map, atlas, 16,16, 1, 1);
 		
-		//Debugging downgrade stuff
-		for (int x = 0; x<map.layers.size(); x++) {
-			//for (int i =0; i<map.layers.get(x).getWidth(); i++) {
-			for (int i =0; i<250; i++) {
-				for (int j = 0; j< 5; j++) {
-					//System.out.println("Lyar= "+x+ " ("+i+","+(map.height-j-1)+") = "+map.layers.get(x).tiles[j][i]);
-				}
-			}
-		}
+		
 		
 		
 		
@@ -109,14 +101,14 @@ public class Level {
 			int spawnAtOnce;
 			if (rank > 0.9) {
 				spawnAtOnce = 3;
-			} else if (rank > 0.7f){
+			} else if (rank > 0.8f){
 				spawnAtOnce = 2;
 			} else {
 				spawnAtOnce = 1;
 			}
-			//spawners.add(new EnemySpawner(c, new Vector2(0f, 3f), 4, 100, 1)); 
+			spawners.add(new EnemySpawner(c, new Vector2(0f, 3f), 4, 100, 1)); 
 			spawners.add(new EnemySpawner(c, new Vector2(0f, 8f), 4, 100, spawnAtOnce)); 
-			//spawners.add(new EnemySpawner(c, new Vector2(0f, 3f), 4, 100, 1)); 
+			spawners.add(new EnemySpawner(c, new Vector2(0f, 3f), 4, 100, 1)); 
 			spawners.add(new EnemySpawner(c, new Vector2(0f, 8f), 4, 100, spawnAtOnce));
 			boolean[] sides = {true, true, true, false};
 			

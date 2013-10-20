@@ -257,7 +257,7 @@ public class EnemySpiderBossArms extends Enemy {
 		} else if (phase == 3) {
 			//System.out.println(isAttacking + " "+moveRight + "  isReturning?="+isReturning);
 			//float phase3SpeedIncrease = 3f+6f*rank;
-			float phase3SpeedIncrease = 0f;
+			float phase3SpeedIncrease = -1.5f;
 			if (isAttacking) {
 				if (moveRight) {
 					velocity = new Vector2(thisMoveDelta / delta + phase3SpeedIncrease, 0);
@@ -267,7 +267,7 @@ public class EnemySpiderBossArms extends Enemy {
 					}
 				} else {
 					if (position.y >= 14f) {
-						velocity = new Vector2(parent.position.x + PHASE3_OFFSET_X - position.x, parent.position.y+PHASE3_OFFSET_Y-position.y).nor().mul(thisMoveDelta/delta+phase3SpeedIncrease/(10f-2f*rank));
+						velocity = new Vector2(parent.position.x + PHASE3_OFFSET_X - position.x, parent.position.y+PHASE3_OFFSET_Y-position.y).nor().mul(thisMoveDelta/delta+phase3SpeedIncrease/(10f+2f*rank));
 						isAttacking = false;
 						isReturning = true;
 					}

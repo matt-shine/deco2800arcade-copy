@@ -102,12 +102,22 @@ public class World {
 		initCount = 2.5f;
 		init(true);
 		//hardcode
+<<<<<<< HEAD
+				if(level == 1) {
+					levelScenes = new Level1Scenes(ship, cam, resultsScreen);
+				} else {
+					levelScenes = new Level2Scenes(ship, cam, resultsScreen);
+					
+				}
+		
+=======
 		if(level == 1) {
 			levelScenes = new Level1Scenes(ship, cam, resultsScreen);
 		} else {
 			levelScenes = new Level2Scenes(ship, cam, resultsScreen);
 			Sounds.playLevelMusic();
 		}
+>>>>>>> 2ed1e711e397f9c0d038fc94c4edc171b7a4d9cd
 	}
 	
 	//Used to count number of jumps - for achievements
@@ -171,7 +181,8 @@ public class World {
 				inputHandler.acceptInput();
 				
 				//if this was the final scene, the game was won
-				if (scenePosition == levelScenes.getStartValues().length) {
+				//if (scenePosition == levelScenes.getStartValues().length-1) {
+				if (levelScenes.isGameWon()) {
 					gameWin();
 				}
 			}
@@ -798,6 +809,10 @@ public class World {
 		return curLevel;
 	}
 	
+	public LevelScenes getLevelScenes() {
+		return levelScenes;
+	}
+	
 	public int getScore() {
 		return score;
 	}
@@ -859,7 +874,8 @@ public class World {
 		
 		inputHandler = new InputHandler(this);
 		Gdx.input.setInputProcessor(inputHandler);
-		
+		Sounds.stopAll();
+		Sounds.playLevelMusic();
 		
 		//enemies.add( new SoldierEnemy(new Vector2 (15f, 9f), false));
 		Texture copterTex = new Texture(Gdx.files.internal("copter.png"));
@@ -889,7 +905,7 @@ public class World {
 		levelScenes = null;
 		cam.setFollowShip(true);
 		inputHandler.acceptInput();
-
+		
 		curLevel.reloadLevel();
 		//callingInitAfterReloadLevel = true;
 		init(false);
@@ -899,7 +915,10 @@ public class World {
 	
 	public void gameOver() {
 		// go back to menu
+<<<<<<< HEAD
+=======
 		Sounds.stopMusic();
+>>>>>>> 2ed1e711e397f9c0d038fc94c4edc171b7a4d9cd
 		game.addHighscore(score);
 		game.setScreen(new MainMenu(game));
 
@@ -908,8 +927,12 @@ public class World {
 	
 	public void gameWin() {
 		// show some message/credits then go back to menu
+<<<<<<< HEAD
+		
+=======
 		Sounds.stopMusic();
 		game.incrementAchievement("cyra.whataplayer");
+>>>>>>> 2ed1e711e397f9c0d038fc94c4edc171b7a4d9cd
 		game.addHighscore(score);
 		game.setScreen(new MainMenu(game));
 	}

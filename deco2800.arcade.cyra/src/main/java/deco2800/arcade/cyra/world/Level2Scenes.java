@@ -49,6 +49,7 @@ public class Level2Scenes extends LevelScenes {
 	private LaserBeam cutsceneLaser;
 	
 	private boolean closeNextUpdate;
+	private boolean gameWon;
 	
 	private float targetPos;
 	
@@ -69,6 +70,7 @@ public class Level2Scenes extends LevelScenes {
 		doneSomethingOnce = false;
 		blockMaker = new BlockMakerSpiderBoss();
 		blockMakerWaterfall = new BlockMakerWaterfall(235, 267, 46);
+		gameWon = false;
 		
 	}
 
@@ -101,7 +103,7 @@ public class Level2Scenes extends LevelScenes {
 			//make it drop down, screen shakes, health charges up, then battle starts
 		} else if (scenePosition == 1) {
 			count = 0;
-			resultsScreen.showResults(time, ship.getHearts());
+			resultsScreen.showResults(time, ship.getHearts(), rank);
 			ship.resetHearts();
 			//destructLog.setTargetPosition(new Vector2(270, 61));
 			blockMakerWaterfall.setState(2);
@@ -115,6 +117,7 @@ public class Level2Scenes extends LevelScenes {
 			ship.getVelocity().x = Player.SPEED;
 			wallBoss = new WallBoss(new Vector2(348f, 4f));
 			output.add(wallBoss);
+			output.add(new WarningOverlay(new Vector2(cam.position.x+cam.viewportWidth/2, cam.position.y), cam.viewportWidth, 10f));
 		} else if (scenePosition == 3) {
 			//after wall boss defeated
 		} else if (scenePosition == 4) {
@@ -130,11 +133,12 @@ public class Level2Scenes extends LevelScenes {
 				
 			};
 			volume = Sounds.LEVEL1BGM_VOLUME;
+			output.add(new WarningOverlay(new Vector2(cam.position.x+cam.viewportWidth/2, cam.position.y), cam.viewportWidth, 10f));
 			//Sounds.playBossMusic();
 			Tween.to(cam, CameraTween.POSITION,(24f)/BlockMakerSpiderBoss.SPEED).target(SPIDER_BOSS_START + 24f + cam.viewportWidth/2, cam.viewportHeight/2).ease(
 					TweenEquations.easeNone).setCallback(cb).setCallbackTriggers(TweenCallback.COMPLETE).start(manager);
 			
-			
+			doneSomethingOnce = false;
 			
 			Array<MovableEntity> movingEntities = new Array<MovableEntity>();
 			movingEntities.add(ship);
@@ -165,7 +169,7 @@ public class Level2Scenes extends LevelScenes {
 					boss.getPosition().y+EnemySpiderBoss.MOUTH_OFFSET_Y), 4f, false, 3f);
 			output.add(cutsceneLaser);
 		} else if (scenePosition == 7) {
-			resultsScreen.showResults(time, ship.getHearts());
+			resultsScreen.showResults(time, ship.getHearts(), rank);
 		}
 		return output;
 	}
@@ -225,18 +229,22 @@ public class Level2Scenes extends LevelScenes {
 			ship.getPosition().x += delta * (cam.position.x - ship.getPosition().x) * 0.9f;
 			ship.getPosition().y = 4f;
 			boss.getArms().resetPosition();
-			volume -= delta;
+			volume -= delta*0.8f;
 			if (volume > 0) {
 				Sounds.setMusicVolume(volume);
 				
+			} else if (!doneSomethingOnce){
+				Sounds.playBossMusic();
+				doneSomethingOnce = true;
 			}
 			float lerp = 0.8f;
 			targetPos -= delta * 1.5;
 			boss.getPosition().x += delta* (ship.getPosition().x - 0f - boss.getPosition().x + targetPos)* lerp;
 			if (closeNextUpdate) {
-				Sounds.playBossMusic();
+				
 				isPlaying = false;
 				ship.getVelocity().x = 0;
+				doneSomethingOnce = false;
 				return true;
 			} else {
 				return false;
@@ -330,7 +338,9 @@ public class Level2Scenes extends LevelScenes {
 		} else if (scenePosition == 7) {
 			//win game scene
 			count += delta;
-			if (count >= 2f) {
+			if (count > 2f)
+			gameWon = true;
+			if (count >= 10f) {
 				isPlaying = false;
 				return true;
 			}
@@ -381,6 +391,11 @@ public class Level2Scenes extends LevelScenes {
 	public int getScenePositionAfterReload(int scene) {
 		int[] scenes = {0,0,0,2,2,4,4,4,4};
 		return scenes[scene];
+	}
+	
+	@Override
+	public boolean isGameWon() {
+		return gameWon;
 	}
 
 	
@@ -449,6 +464,8 @@ public class Level2Scenes extends LevelScenes {
 			blocksRight.clear();
 			state = 1;
 		}
+		
+		
 		
 	}
 }

@@ -156,8 +156,6 @@ public abstract class Piece {
 	 */
 	public List<int[]> removeJumps(int[] position, 
 			FixedSizeList<FixedSizeList<Piece>> board_state, int dirCase) {
-		int x = position[0];
-		int y = position[1];
 		List<int[]> noJumps = new ArrayList<int[]>();
 		for (int i = 1; i < 8; i++) {
 			//get move in direction

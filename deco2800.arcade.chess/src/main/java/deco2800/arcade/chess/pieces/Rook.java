@@ -1,7 +1,6 @@
 package deco2800.arcade.chess.pieces;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import deco2800.arcade.chess.FixedSizeList;
@@ -20,8 +19,6 @@ public class Rook extends Piece {
 
 	public List<int[]> possibleMoves(int[] currentPos, FixedSizeList<FixedSizeList<Piece>> board_state) {
 		List<int[]> moves = new ArrayList<int[]>();
-		int x = currentPos[0];// current row position
-		int y = currentPos[1];// current column position
 		//add all possible moves for directions rook can move in
 		moves.addAll(removeJumps(currentPos, board_state, 5));
 		moves.addAll(removeJumps(currentPos, board_state, 6));

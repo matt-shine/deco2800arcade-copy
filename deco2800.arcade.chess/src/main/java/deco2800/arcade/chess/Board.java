@@ -230,9 +230,9 @@ public class Board {
 	 * @param retrievalPiece
 	 *            Piece to be retrieved into play
 	 */
-	private void retrievePiece(Piece retrievalPiece) {
+	/*private void retrievePiece(Piece retrievalPiece) {
 
-	}
+	}*/
 
 	/**
 	 * Checks whether a space is currently occupied
@@ -326,8 +326,8 @@ public class Board {
 			Piece onSquare = Board_State.get(x).get(y);
 			onSquare.deActivate();
 
-			boolean temp = onSquare.getTeam() ? blackGraveyard.add(onSquare) : 
-													whiteGraveyard.add(onSquare);
+			/*boolean temp = onSquare.getTeam() ? blackGraveyard.add(onSquare) : 
+													whiteGraveyard.add(onSquare);*/
 			
 			Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
 			Board_State.get(x).add(y, piece);
@@ -480,10 +480,10 @@ public class Board {
 	/**
 	 * Undoes last move
 	 */
-	private void removeMove() {
+	/*private void removeMove() {
 		moves.remove(moves.size() - 1);
 		pieceMoved.remove(pieceMoved.size() - 1);
-	}
+	}*/
 
 	/**
 	 * Finds and returns a list of all active pieces currently on the board

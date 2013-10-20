@@ -20,8 +20,6 @@ public class Queen extends Piece {
 
 	public List<int[]> possibleMoves(int[] currentPos, FixedSizeList<FixedSizeList<Piece>> board_state) {
 		List<int[]> moves = new ArrayList<int[]>();
-		int x = currentPos[0];
-		int y = currentPos[1];
 		//add all possible moves for directions queen can move in
 		moves.addAll(removeJumps(currentPos, board_state, 1));
 		moves.addAll(removeJumps(currentPos, board_state, 2));

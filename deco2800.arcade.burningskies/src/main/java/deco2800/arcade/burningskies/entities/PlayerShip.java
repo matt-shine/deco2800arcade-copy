@@ -31,8 +31,8 @@ public class PlayerShip extends Ship {
 	private Vector2 mousePos = new Vector2();
 	
 	// movement 
-	private float acceleration = 1000f;
-	private float deceleration = 200f;
+	private float acceleration = 2000f;
+	private float deceleration = 400f;
 	private float maxVelocity = 300; //Changed from static to dynamic.
 
 	/**
@@ -99,24 +99,24 @@ public class PlayerShip extends Ship {
 		// reset
 //		velocity.set(0, 0);
     	if(up) {
+    		velocity.add(0, (acceleration*delta) );
     		if(velocity.y > maxVelocity)
     			velocity.y = maxVelocity;
-    		velocity.add(0, (acceleration*delta) );
     	}
     	if(down) {
+    		velocity.add(0, -(acceleration*delta) );
     		if (velocity.y < -maxVelocity)
     			velocity.y = -maxVelocity;
-    		velocity.add(0, -(acceleration*delta) );
     	}
     	if(left) {
+    		velocity.add(-(acceleration*delta), 0);
     		if (velocity.x < -maxVelocity)
     			velocity.x = -maxVelocity;
-    		velocity.add(-(acceleration*delta), 0);
     	}
     	if(right) {
+    		velocity.add( (acceleration*delta), 0);
     		if (velocity.x > maxVelocity)
     			velocity.x = maxVelocity;
-    		velocity.add( (acceleration*delta), 0);
     	}
     	
     	decelShip(velocity, delta);

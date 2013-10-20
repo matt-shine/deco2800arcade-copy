@@ -1686,7 +1686,6 @@ public class ForumStorage {
 	 * 
 	 * @throws DatabaseException
 	 */
-	
 	public void printAllThreads() throws DatabaseException {
 		System.out.println("Print all threads: ");
 		ParentThread[] threads = this.getParentThreads(1000, 0, 0);
@@ -1700,6 +1699,107 @@ public class ForumStorage {
 						System.out.println("        " + thread2.toString());
 					}
 				}
+			}
+		}
+		return;
+	}
+	
+	/**
+	 * Print all integrity constraints in schema.
+	 * 
+	 * @throws DatabaseException
+	 */
+	public void printConstraints() throws DatabaseException {
+		Connection con = Database.getConnection();
+		String query = "SELECT * FROM sys.sysconstraints";
+		
+		try {
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			while(rs.next()) {
+				StringBuilder sd = new StringBuilder();
+				sd.append("Constraint: ");
+				for (int i = 1; i < 8; i++) {
+					sd.append(rs.getString(i));
+					sd.append(", ");
+				}
+				System.out.println(new String(sd));
+			}
+			rs.close();
+			st.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Fail to print constraint, " + e.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException("Fail to close connection, " + e.getMessage());
+			}
+		}
+		return;
+	}
+	
+	/**
+	 * Check a integrity constraint in schema. 
+	 * 
+	 * @param constraint	constraint name
+	 * @return	return true if exist.
+	 * @throws DatabaseExcetion
+	 */
+	public boolean checkConstraint(String constraint) throws DatabaseException {
+		String query = "SELECT constraint-name FROM sys.sysconstraint";
+		boolean result = false;
+		Connection con = Database.getConnection();
+		try {
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery(query);
+			while (rs.next()) {
+				if (constraint == rs.getString(1)) {
+					result = true;
+					break;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Fail to retrive constraint, " + e.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException("Fail to close connection, " + e.getMessage());
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Drop constraint named <constraint> from a table called <tableName>
+	 * 
+	 * @param tableName	should choose parent_thread or child_thread.
+	 * @param constraint	
+	 * @throws DatabaseException
+	 */
+	public void dropConstraint(String tableName, String constraint) throws DatabaseException {
+		String query = "ALTER TABLE " + tableName + " DROP CONSTRAINT " + constraint;
+		if (!this.checkConstraint(constraint)) {
+			throw new DatabaseException("constraint does not exist");
+		}
+		Connection con = Database.getConnection();
+		try {
+			Statement st = con.createStatement();
+			st.execute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Fail to drop constraint, " + e.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException("Fail to close connection, " + e.getMessage());
 			}
 		}
 		return;

@@ -209,6 +209,12 @@ public class TestForumStorage {
 		assertEquals(5, this.forumStorage.countAllVotes());
 	}
 	
+	@Test
+	public void printConstraints() throws Exception{
+		this.forumStorage.printConstraints();
+		assertEquals(true, this.forumStorage.checkConstraint("CHK_CATEGORY"));
+	}
+	
 	private IDataSet getDataSet() throws DataSetException, IOException {
 		URL url = TestCreditStorage.class.getClassLoader().getResource("TestCreditStorage.xml");
 		FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();

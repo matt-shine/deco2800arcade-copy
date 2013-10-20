@@ -176,7 +176,7 @@ public class Mobile extends Mortal {
 		// Go into a wait-while loop changing the position 30 times per second
 		long t0, t1;
 		float distance = grid.getTileSize() * vector.len();
-		Vector2 addVector = vector.mul((float) speed / 33);
+		Vector2 addVector = vector.mul((float) speed / 30);
 		for (float i = 0; i < distance; i += addVector.len()) {
 			t0 = System.currentTimeMillis();
 			t1 = t0;

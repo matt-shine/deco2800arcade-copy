@@ -1,0 +1,25 @@
+<achievements>
+    <achievement id="pacman.onegame">
+        <name>Well that was easy!</name>
+        <description>Start a game of Pacman.</description>
+        <awardThreshold>1</awardThreshold>
+        <icon>test.png</icon>
+    </achievement>
+    <achievement id="pacman.completionist">
+        <name>Completionist</name>
+        <description>Win a game of Pacman.</description>
+        <awardThreshold>1</awardThreshold>
+        <icon>test.png</icon>
+    </achievement>
+    <achievement id="pacman.ghostbuster">
+        <name>Ghost Buster</name>
+        <description>Eat a ghost in a game of Pacman.</description>
+        <icon>test.png</icon>
+    </achievement>
+    <achievement id="pacman.insatiable">
+        <name>Insatiable</name>
+        <description>Eat 15 pellets in the first 30 seconds of the game</description>
+        <awardThreshold>15</awardThreshold>
+        <icon>test.png</icon>
+    </achievement>
+</achievements>

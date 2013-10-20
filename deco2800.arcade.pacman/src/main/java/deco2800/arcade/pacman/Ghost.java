@@ -123,8 +123,6 @@ public final class Ghost extends Mover {
 	 */
 
 	public void updateTargetTile() {
-		System.out.println("<!> " + this.ghostName + " Target is: "
-				+ player.getTile());
 		if (ghostName == GhostName.BLINKY) {
 			targetTile = player.getTile();
 		} else if (ghostName == GhostName.PINKY) {
@@ -202,8 +200,6 @@ public final class Ghost extends Mover {
 				!this.nextTile(this.currentTile, 1, Dir.RIGHT).equals(previousTile)){
 			testTiles.add(rightTile);
 		}
-		
-		System.out.println("List of test tiles: " + testTiles);
 		return testTiles;
 	}
 
@@ -222,7 +218,6 @@ public final class Ghost extends Mover {
 			tempDist = calcDist(target, tTile);
 			dists.add(tempDist);
 		}
-		System.out.println(dists);
 		return dists;
 	}
 
@@ -242,19 +237,13 @@ public final class Ghost extends Mover {
 		int nextX = nextPoint.getX();
 		int nextY = nextPoint.getY();
 		
-		System.out.println("<<getDirection>> current: [" + currentX +
-				 "," + currentY + "]  next: [" + nextX + "," + nextY + "]");
 		if (nextX > currentX) {
-			System.out.println("    next tile is RIGHT");
 			return Dir.RIGHT;
 		} else if (nextX < currentX) {
-			System.out.println("    next tile is LEFT");
 			return Dir.LEFT;
 		} else if (nextY > currentY) {
-			System.out.println("    next tile is UP");
 			return Dir.UP;
 		} else {
-			System.out.println("    next tile is DOWN");
 			return Dir.DOWN;
 		}
 	}
@@ -266,7 +255,6 @@ public final class Ghost extends Mover {
 	public Tile getNextTile() {
 		List<Tile> testTiles = getTestTiles(currentTile);
 		List<Double> dists = getDists(testTiles, this.targetTile);
-		System.out.println(dists);
 		int tileNum = 0;
 		double dist = 9999;
 		double temp;

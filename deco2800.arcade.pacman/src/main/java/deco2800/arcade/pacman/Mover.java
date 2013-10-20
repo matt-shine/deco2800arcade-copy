@@ -47,7 +47,6 @@ public abstract class Mover {
 		if (!currentTile.equals(newTile)) {
 			currentTile.removeMover(this);
 			currentTile = newTile;
-			if (this.getClass() == PacChar.class) System.out.println("\n[!] PacChar updated position!!\n");
 			// Update the way pacman is shown to be facing
 			
 			currentTile.addMover(this);
@@ -129,6 +128,7 @@ public abstract class Mover {
 		if (this.getClass() != PacChar.class) return; // Only Pac man can use special tiles!
 		if (tile.getClass() == DotTile.class) {
 			if (!((DotTile) tile).isEaten()) {
+//				incrementAchievement("pacman.insatiable");
 				((DotTile) tile).dotEaten();
 				if (((DotTile) tile).isEnergiser()) {
 					this.setScore(this.getScore() + 50);

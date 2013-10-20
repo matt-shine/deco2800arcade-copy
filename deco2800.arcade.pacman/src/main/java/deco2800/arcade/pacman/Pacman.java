@@ -49,6 +49,7 @@ public class Pacman extends GameClient {
 		
 	public Pacman(Player player1, NetworkClient networkClient) {
 		super(player1, networkClient);		
+		this.networkClient = networkClient;
 		this.incrementAchievement("pacman.onegame");
 	}	
 		
@@ -99,7 +100,8 @@ public class Pacman extends GameClient {
 		ArcadeInputMux.getInstance().addProcessor(controller);		
 		
 		// Achievement stuff
-		AchievementClient achievementClient = new AchievementClient(networkClient);
+		AchievementClient achievementClient = 
+				new AchievementClient(networkClient);
 		AsyncFuture<ArrayList<Achievement>> achievements = achievementClient.getAchievementsForGame(game);
 		AsyncFuture<AchievementProgress> playerProgress = achievementClient.getProgressForPlayer(player);
 

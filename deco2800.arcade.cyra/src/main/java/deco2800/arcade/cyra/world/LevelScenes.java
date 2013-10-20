@@ -30,5 +30,7 @@ public abstract class LevelScenes {
 	public abstract float[] getStartValues();
 	public abstract Vector2 getPlayerReloadPosition(int scene);
 	public abstract int getScenePositionAfterReload(int scene);
-	//public abstract boolean isPlaying();
+	public boolean isGameWon() {
+		return false;
+	}
 }

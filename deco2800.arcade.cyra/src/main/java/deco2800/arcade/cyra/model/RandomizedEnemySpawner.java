@@ -88,7 +88,7 @@ public class RandomizedEnemySpawner {
 									//Rectangle rect = new Rectangle((int)es.getPosition().x, (int)yChange, 1, 1);
 									//if (rect.overlaps(new Rectangle(es.getPosition().x, es.getPosition().y, 1,1))){
 										collision = true;
-										System.out.println("@@@@@@@@Collision at "+yChange+","+xRange);
+										//System.out.println("@@@@@@@@Collision at "+yChange+","+xRange);
 										break;
 									//}
 								}

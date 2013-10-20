@@ -284,23 +284,26 @@ public class Tower extends Mortal implements Ranged {
 		Projectile shot = new Projectile(projectile, projVector, position);
 		shot.move();
 	}
-	
-	public void acquireTarget(){
+
+	public void acquireTarget() {
 		Vector2 checkVector;
 		Iterator<GridObject> iterator;
 		GridObject current;
-		//Start the search from in and search outwards to the maximum range (in a square)
-		for (int i = 1; i <= range; i++){
-			//For each range
-			for (int j = -i; j <= i; j++){
-				//Search left to right
-				for (int k = -i; k <= i; k++){
-					checkVector = positionInTiles().add(j,k);
-					//Check that grid for a valid target
-					iterator = grid.getGridContents((int)checkVector.x, (int)checkVector.y).iterator();
-					while (iterator.hasNext()){
+		// Start the search from in and search outwards to the maximum range (in
+		// a square)
+		for (int i = 1; i <= range; i++) {
+			// For each range
+			for (int j = -i; j <= i; j++) {
+				// Search left to right
+				for (int k = -i; k <= i; k++) {
+					checkVector = positionInTiles().add(j, k);
+					// Check that grid for a valid target
+					iterator = grid.getGridContents((int) checkVector.x,
+							(int) checkVector.y).iterator();
+					while (iterator.hasNext()) {
 						current = iterator.next();
-						if(current instanceof Mortal && current.team() != this.team){
+						if (current instanceof Mortal
+								&& current.team() != this.team) {
 							target = current;
 							return;
 						}

@@ -3,11 +3,16 @@ package deco2800.arcade.towerdefence.model;
 import deco2800.arcade.towerdefence.model.creationclasses.Enemy;
 import deco2800.arcade.towerdefence.model.pathfinding.*;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -59,9 +64,11 @@ public class Grid implements TileBasedMap {
 	 *            The ship which this grid belongs to
 	 * @param targetPosition
 	 *            A vector representing the target (portal)
+	 * @param setupFile
+	 *            File path to the file containing grid data.
 	 */
 	public Grid(int width, int depth, String name, int tileSize, Ship ship,
-			Vector2 targetPosition) {
+			Vector2 targetPosition, String setupFile) {
 		id = UUID.randomUUID();
 		this.width = width;
 		this.depth = depth;
@@ -80,6 +87,10 @@ public class Grid implements TileBasedMap {
 		}
 		this.targetPosition = targetPosition;
 		this.pathfinder = new AStarPathFinder(this, 100, true);
+		if (setupFile != null) {
+			// Get data from file and place in grid
+			readSetupFile(setupFile);
+		}
 	}
 
 	// Getters
@@ -340,6 +351,30 @@ public class Grid implements TileBasedMap {
 		// Add it to the new one
 		gridContents.get((int) newPosition.x).get((int) newPosition.y)
 				.add(object);
+	}
+
+	private void readSetupFile(String setupFile){
+		//Read the file line by line, if the char is a '.' place a block there.
+		try{
+		BufferedReader br = new BufferedReader(new FileReader(new File(setupFile)));
+		String line;
+		int lineCount = 0;
+		while ((line = br.readLine()) != null) {
+			for (int i = 0; i < line.length(); i++) {
+				switch (line.charAt(i)) {
+				case '.':
+					GridObject block = new GridObject(i*tileSize, lineCount*tileSize, this,
+							Team.Neutral, null);
+					buildObject(block);
+
+				}
+			}
+			lineCount++;
+		}
+		br.close();
+		} catch (IOException e){
+			return;
+		} 
 	}
 
 }

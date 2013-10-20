@@ -1,11 +1,9 @@
 package deco2800.arcade.towerdefence.tests;
 
-import java.util.List;
-
+import java.io.FileNotFoundException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.towerdefence.model.*;
@@ -63,7 +61,7 @@ public class TDTests {
 
 	@Test
 	public void gridTest() {
-		Grid grid = new Grid(200, 200, "grid", 20, null, null);
+		Grid grid = new Grid(200, 200, "grid", 20, null, null, null);
 		GridObject object = new GridObject(0, 0, grid, null, null);
 		// Check the object can be placed
 		Assert.assertTrue(grid.buildObject(object));
@@ -89,7 +87,7 @@ public class TDTests {
 	@Test
 	public void mobileTest() {
 		// Create the grid and enemy to use
-		Grid grid = new Grid(200, 200, "grid", 20, null, new Vector2(19, 19));
+		Grid grid = new Grid(200, 200, "grid", 20, null, new Vector2(19, 19), null);
 		Enemy mobile = new Enemy(10, 10, 0, 0, 20, grid, null, 0, 0, 0, 0, 0,
 				null, null, null, null, null);
 		grid.buildObject(mobile);
@@ -109,7 +107,7 @@ public class TDTests {
 	@Test
 	public void pathfindingTest() {
 		// Create a grid
-		Grid grid = new Grid(100, 100, "grid", 10, null, new Vector2(9, 4));
+		Grid grid = new Grid(100, 100, "grid", 10, null, new Vector2(9, 4), null);
 		// Add some obstacles
 		grid.buildObject(new GridObject(10, 20, grid, null, null));
 		grid.buildObject(new GridObject(10, 30, grid, null, null));
@@ -125,7 +123,7 @@ public class TDTests {
 
 	@Test
 	public void projectileTest() {
-		Grid grid = new Grid(100, 100, "grid", 10, null, null);
+		Grid grid = new Grid(100, 100, "grid", 10, null, null, null);
 		// Create a projectile with no radius dealing 50 damage
 		Projectile bullet = new Projectile(0, 0, grid, new Vector2(10, 10),
 				200, Team.Player, null, 50, 0, 0);
@@ -142,7 +140,7 @@ public class TDTests {
 	@Test
 	public void areaDamageTest() {
 		// Create grid
-		Grid grid = new Grid(100, 100, "grid", 10, null, null);
+		Grid grid = new Grid(100, 100, "grid", 10, null, null, null);
 		// Create explosive with radius 2 and 50 damage
 		Projectile explosive = new Projectile(0, 0, grid, new Vector2(10, 10),
 				200, Team.Player, null, 50, 0, 2);
@@ -169,7 +167,7 @@ public class TDTests {
 	@Test
 	public void towerShootingTest() {
 		// The grid
-		Grid grid = new Grid(100, 100, "grid", 10, null, null);
+		Grid grid = new Grid(100, 100, "grid", 10, null, null, null);
 		// The projectile used by the tower
 		Projectile projectile = new Projectile(0, 0, grid, new Vector2(10, 10),
 				200, Team.Player, null, 50, 0, 0);
@@ -193,7 +191,7 @@ public class TDTests {
 	@Test
 	public void targetingTest() {
 		// The grid
-		Grid grid = new Grid(100, 100, "grid", 10, null, null);
+		Grid grid = new Grid(100, 100, "grid", 10, null, null, null);
 		//Target and tower
 		Enemy target = new Enemy(100, 0, 60, 30, 0, grid, Team.Computer, 0, 0,
 				0, 0, 0, null, null, null, null, null);
@@ -204,5 +202,16 @@ public class TDTests {
 		tower.acquireTarget();
 		//TARGET ACQUIRED, COMMANDER
 		Assert.assertEquals(target, tower.target());
+	}
+	
+	@Test
+	public void setupGridTest() throws FileNotFoundException{
+		//Create a new grid and pass it a test grid file
+		Grid grid = new Grid(20, 20, "grid", 10, null, null, "src/main/resources/testGrid");
+		//Check it was set up correctly
+		Assert.assertEquals(0, grid.getGridContents(0, 0).size());
+		Assert.assertEquals(1, grid.getGridContents(1, 0).size());
+		Assert.assertEquals(1, grid.getGridContents(0, 1).size());
+		Assert.assertEquals(0, grid.getGridContents(1, 1).size());
 	}
 }

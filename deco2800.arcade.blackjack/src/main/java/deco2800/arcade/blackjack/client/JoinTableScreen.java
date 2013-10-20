@@ -33,16 +33,16 @@ public class JoinTableScreen implements Screen{
 	private SpriteBatch batch;
 	private Texture textureBackground;
 	private Sprite background;
-	public Blackjack_UI myGame;
+	public Blackjack myGame;
 	private Stage stage;
 	JoinTable2Screen JoinTable2Screen;
 	MainMenuScreen MainMenuScreen;
 	HowToScreen HowToScreen;
 
 	public JoinTableScreen(
-	        Blackjack_UI game )
+	        Blackjack myGame )
 	    {
-		myGame = game;
+		this.myGame = myGame;
 	    }
 	@Override
     public void show()

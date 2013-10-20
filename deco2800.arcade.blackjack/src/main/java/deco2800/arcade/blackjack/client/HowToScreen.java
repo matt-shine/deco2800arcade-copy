@@ -33,15 +33,15 @@ public class HowToScreen implements Screen{
 	private SpriteBatch batch;
 	private Texture textureBackground;
 	private Sprite background;
-	public Blackjack_UI myGame;
+	public Blackjack myGame;
 	private Stage stage;
 	JoinTableScreen JoinTableScreen;
 	
 
 	public HowToScreen(
-	        Blackjack_UI game )
+	        Blackjack myGame )
 	    {
-		myGame = game;
+		this.myGame = myGame;
 	    }
 	@Override
     public void show()

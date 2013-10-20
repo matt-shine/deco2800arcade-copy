@@ -30,9 +30,15 @@ public class Blackjack extends GameClient {
     public static final int SCREENHEIGHT = 720;
     public static final int SCREENWIDTH = 1280;
     
-	private MainMenuScreen MainMenuScreen;
 	//Network client for communicating with the server.
 	private NetworkClient networkClient;
+	
+	//Menu variables
+	private MainMenuScreen MainMenuScreen;
+	
+	//Game variables
+    public String player;
+    private NetworkClient networkClient;
 	
 	/**
 	 * Basic constructor for the Blackjack game
@@ -41,8 +47,9 @@ public class Blackjack extends GameClient {
 	 */
 	public Blackjack(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		this.networkClient = networkClient; //this is a bit of a hack
-		this.networkClient.addListener(new CasinoListener());
+        this.player = player.getUsername();
+        this.networkClient = networkClient;
+        networkClient.addListener(new CasinoListener());
 	}
 	
 	//Reusable list of achievements

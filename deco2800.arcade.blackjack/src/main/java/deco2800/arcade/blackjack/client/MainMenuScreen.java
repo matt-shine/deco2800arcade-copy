@@ -33,14 +33,14 @@ public class MainMenuScreen implements Screen{
 	private SpriteBatch batch;
 	private Texture textureBackground;
 	private Sprite background;
-	public Blackjack_UI myGame;
+	public Blackjack myGame;
 	private Stage stage;
 	JoinTableScreen JoinTableScreen;
 
 	public MainMenuScreen(
-	        Blackjack blackjack )
+	        Blackjack myGame )
 	    {
-		myGame = blackjack;
+		this.myGame = myGame;
 	    }
 	@Override
     public void show()

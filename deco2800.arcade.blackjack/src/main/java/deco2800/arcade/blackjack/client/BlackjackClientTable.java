@@ -33,14 +33,14 @@ public class BlackjackClientTable implements Screen{
 	private SpriteBatch batch;
 	private Texture textureBackground;
 	private Sprite background;
-	public Blackjack_UI myGame;
+	public Blackjack myGame;
 	private Stage stage;
 	JoinTableScreen JoinTableScreen;
 
 	public BlackjackClientTable(
-	        Blackjack_UI game )
+	        Blackjack myGame )
 	    {
-		myGame = game;
+		this.myGame = myGame;
 	    }
 	@Override
     public void show()

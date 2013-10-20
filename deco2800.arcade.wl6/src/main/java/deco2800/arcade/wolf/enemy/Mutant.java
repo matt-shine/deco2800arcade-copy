@@ -16,12 +16,25 @@ public class Mutant extends Enemy {
         setHealth(STARTING_HEALTH_1);
         setSpeed(512);
         setPain(true);
-        setDamage(0);
 
         initialiseFromEnemyData(d);
         
     }
 
-
+    @Override
+    public int getStartingHealth(int difficulty) {
+        switch (difficulty) {
+            case 1:
+                return STARTING_HEALTH_1;
+            case 2:
+                return STARTING_HEALTH_2;
+            case 3:
+                return STARTING_HEALTH_3;
+            case 4:
+                return STARTING_HEALTH_4;
+        }
+        // Should never get here
+        return STARTING_HEALTH_1;
+    }
 
 }

@@ -1,5 +1,6 @@
 package deco2800.arcade.wolf.enemy;
 
+import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.wolf.DoodadInfo;
 import deco2800.arcade.wolf.GameModel;
 import deco2800.arcade.wolf.Player;
@@ -15,7 +16,6 @@ public class Dog extends Enemy {
         setHealth(STARTING_HEALTH);
         setSpeed(1500);
         setPain(false);
-        setDamage(0);
 
         initialiseFromEnemyData(d);
         
@@ -28,16 +28,16 @@ public class Dog extends Enemy {
             hit = true;
         }
         
-        setDamage(randInt(0, 255, getRand()));
+        int damage = randInt(0, 255, getRand());
 
         if (hit) {
-            setDamage(getDamage() / 16);
+            damage = damage / 16;
         }
         else {
-            setDamage(0);
+            damage = 0;
         }
 	
-        return getDamage();
+        return damage;
     }
     
     
@@ -45,8 +45,10 @@ public class Dog extends Enemy {
     public void shootAtPlayer(GameModel g) {
     	
     	Player p = g.getPlayer();
-    	if (p.getPos().dst(this.getPos()) < 1) {
-        	Projectile bullet = new Projectile(0, 10, true, "blank");
+        float dist = p.getPos().dst(this.getPos());
+        int damage = calcDamage((int)dist, p.getVel() != new Vector2(0,0), true);
+    	if (dist < 1) {
+        	Projectile bullet = new Projectile(0, damage, true, "blank");
         	g.addDoodad(bullet);
         	bullet.setPos(this.getPos());
         	bullet.setVel(p.getPos().sub(bullet.getPos()).nor().mul(0.2f));

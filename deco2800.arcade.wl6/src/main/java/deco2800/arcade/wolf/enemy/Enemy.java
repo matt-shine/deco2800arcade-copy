@@ -58,8 +58,6 @@ public class Enemy extends Mob {
     private List<Vector2> path;
     // suffers from pain (they have an animation that they do nothing in when they get hit, interrupts their current action)
     private boolean pain;
-    // damage
-    private int damage;
 	//the intermediate goal for the player chasing logic
     private Vector2 chaseGoal = null;
 	//the intermediate goal for the player chasing logic
@@ -206,7 +204,9 @@ public class Enemy extends Mob {
     
     public void shootAtPlayer(GameModel g) {
     	Player p = g.getPlayer();
-    	Projectile bullet = new Projectile(0, 10, true, "worm");
+        float dist = this.getPos().dst(p.getPos());
+        int damage = calcDamage((int)dist, false, true);
+    	Projectile bullet = new Projectile(0, damage, true, "worm");
     	g.addDoodad(bullet);
     	bullet.setPos(this.getPos());
     	bullet.setVel(p.getPos().sub(bullet.getPos()).nor().mul(0.2f));
@@ -334,16 +334,6 @@ public class Enemy extends Mob {
             setHealth(getHealth() - d);
         }
     }
-    
-
-    @Override
-    public void doDamage(GameModel gameModel) {
-        float dist = this.getPos().dst(gameModel.getPlayer().getPos());
-        boolean speed = true;
-        boolean look = true;
-        int damage = calcDamage((int)dist, speed, look);
-        gameModel.getPlayer().takeDamage(gameModel, damage);
-    }
 
     /**
      * Damage Calculation
@@ -359,27 +349,27 @@ public class Enemy extends Mob {
             hit = true;
         }
 
-        setDamage(randInt(0, 255, getRand()));
+        int damage = randInt(0, 255, getRand());
 
         if (hit) {
             if (dist < 2) {
-                setDamage(getDamage() / 4);
+                damage = damage / 4;
             }
             else if (dist >= 2 && dist < 4) {
-                setDamage(getDamage() / 8);
+                damage = damage / 8;
             }
             else if (dist >= 4) {
-                setDamage(getDamage() / 16);
+                damage = damage / 16;
             }
             else {
-                setDamage(0);
+                damage = 0;
             }
         }
         else {
-            setDamage(0);
+            damage = 0;
         }
 
-        return getDamage();
+        return damage;
     }
     
     
@@ -486,15 +476,6 @@ public class Enemy extends Mob {
 
 	public void setPain(boolean pain) {
 		this.pain = pain;
-	}
-
-
-	public int getDamage() {
-		return damage;
-	}
-
-	public void setDamage(int damage) {
-		this.damage = damage;
 	}
 	
 	public boolean isDead() {

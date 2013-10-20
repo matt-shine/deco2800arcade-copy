@@ -1,6 +1,5 @@
 package deco2800.arcade.wolf;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.badlogic.gdx.math.Vector2;
@@ -85,7 +84,8 @@ public class Player extends Mob {
 
     public void shoot(GameModel g, boolean justDown) {
     	if (gunTimer <= 0 && ammo > 0 && (currentGun != 1 || justDown)) {
-    		Projectile bullet = new Projectile(0, 10, false, "worm");
+            int damage = calcDamage(2);
+    		Projectile bullet = new Projectile(0, damage, false, "worm");
         	g.addDoodad(bullet);
         	bullet.setPos(this.getPos());
         	bullet.setVel((new Vector2(0, -0.2f)).rotate(-this.getAngle()));
@@ -188,14 +188,6 @@ public class Player extends Mob {
 	public boolean hasKey(KEY_TYPE k) {
 		return keys.contains(k);
 	}
-
-    @Override
-    public void doDamage(GameModel gameModel) {
-        // FIXME this is currently doing damage to yourself :P
-        float dist = this.getPos().dst(gameModel.getPlayer().getPos());
-        int damage = calcDamage((int)dist);
-        gameModel.getPlayer().takeDamage(gameModel, damage);
-    }
 
     @Override
     public void takeDamage(GameModel model, int damage) {

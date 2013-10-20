@@ -13,7 +13,6 @@ public class Officer extends Enemy {
         setHealth(STARTING_HEALTH);
         setSpeed(512);
         setPain(true);
-        setDamage(0);
 
         initialiseFromEnemyData(d);
         

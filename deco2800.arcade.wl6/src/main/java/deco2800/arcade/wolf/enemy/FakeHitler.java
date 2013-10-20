@@ -15,7 +15,6 @@ public class FakeHitler extends Enemy {
         setHealth(STARTING_HEALTH_1);
         setSpeed(512);
         setPain(false);
-        setDamage(0);
 
         initialiseFromEnemyData(d);
         

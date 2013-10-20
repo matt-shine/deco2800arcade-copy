@@ -87,10 +87,6 @@ public class Mob extends Doodad {
         }
     }
 
-    public void doDamage(GameModel gameModel) {
-
-    }
-
     public void takeDamage(GameModel model, int damage) {
         setHealth(getHealth() - damage);
     }

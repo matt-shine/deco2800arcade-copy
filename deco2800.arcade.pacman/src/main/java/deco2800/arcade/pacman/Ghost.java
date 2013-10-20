@@ -86,9 +86,11 @@ public final class Ghost extends Mover {
 		
 		// Check whether energised
 		if (gameMap.isEnergized() && currentState == GhostState.CHASE){
+			System.out.println("Ghosts scatter!");
 			currentState = GhostState.SCATTER;
 			// TODO: more stuff
 		} else if (!gameMap.isEnergized() && currentState == GhostState.SCATTER) {
+			System.out.println("Ghosts back to the chase!");
 			currentState = GhostState.CHASE;
 		}
 		

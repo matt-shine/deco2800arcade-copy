@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 
+import deco2800.arcade.pacman.Ghost.GhostState;
+
 public final class PacChar extends Mover{
 	
 	// Describes the current state of pacman- starts IDLE
@@ -100,9 +102,17 @@ public final class PacChar extends Mover{
 		if (colList.size() > 1) {
 			for (int i=0; i < colList.size(); i++) {
 				if (colList.get(i).getClass() == Ghost.class) {
-					System.out.println("Disaster!! Pacman hit a ghost!");
-					//TODO some death thing
-					this.setCurrentState(PacState.DEAD);
+					if (((Ghost)colList.get(i)).getCurrentState() == GhostState.SCATTER ||
+							((Ghost)colList.get(i)).getCurrentState() == GhostState.FRIGHT){
+						// Ghost is scared! Time to feast :>
+						((Ghost)colList.get(i)).setCurrentState(GhostState.DEAD);
+						gameMap.setGhostsEaten(gameMap.getGhostsEaten() + 1);
+						System.out.println("Yummy ghost");
+					} else {
+						System.out.println("Disaster!! Pacman hit a ghost!");
+						//TODO some death thing
+						this.setCurrentState(PacState.DEAD);
+					}
 				}
 			}
 		}

@@ -23,6 +23,7 @@ public class GameMap {
 	private Tile blinkyStart;
 	private Tile fruitRight; // the right tile that fruit appears on
 	private int dotsEaten;
+	private int ghostsEaten;
 	private boolean energized;
 	private int hOffset;
 	private int vOffset;
@@ -382,5 +383,15 @@ public class GameMap {
 
 	public void setEnergized(boolean energized) {
 		this.energized = energized;
+	}
+
+
+	public int getGhostsEaten() {
+		return ghostsEaten;
+	}
+
+
+	public void setGhostsEaten(int ghostsEaten) {
+		this.ghostsEaten = ghostsEaten;
 	}
 }

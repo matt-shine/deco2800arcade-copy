@@ -14,6 +14,7 @@
     <achievement id="pacman.ghostbuster">
         <name>Ghost Buster</name>
         <description>Eat a ghost in a game of Pacman.</description>
+        <awardThreshold>1</awardThreshold>
         <icon>sadghost.png</icon>
     </achievement>
     <achievement id="pacman.insatiable">

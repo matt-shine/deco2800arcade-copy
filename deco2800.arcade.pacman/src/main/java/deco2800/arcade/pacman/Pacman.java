@@ -153,6 +153,10 @@ public class Pacman extends GameClient {
 			this.incrementAchievement("pacman.completionist");
 		}
 		
+		if (getModel().getGameMap().getGhostsEaten() == 1){
+			this.incrementAchievement("pacman.ghostbuster");
+		}
+		
 		// make changes in the model to prepare for rendering if overlay
 		// not active
 		if (!gamePaused) {

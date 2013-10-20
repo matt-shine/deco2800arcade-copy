@@ -15,6 +15,10 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 	
 	public static final float SPEED = 3f;
 	
+	public static final int GROUND_TILE = 26;
+	public static final int GRASS_TILE = 0;
+	public static final int BG_TILE = 5;
+	
 	private Array<Block> blocks;
 	private Array<Block> oldBlocks;
 	private HashMap<Block, Integer> oldBlocksType;
@@ -51,7 +55,7 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 		oldBlocks = new Array<Block>();
 		oldBlocksType = new HashMap<Block, Integer>();
 		state = State.RIGHT;
-		latestBlock = new Block(new Vector2(-40,400), Block.TextureAtlasReference.LEVEL, 0);
+		latestBlock = new Block(new Vector2(-40,400), Block.TextureAtlasReference.LEVEL, GROUND_TILE);
 		firstUpdate = false;
 	}
 	
@@ -65,10 +69,10 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 	public void initBlocks() {
 		float initX = Level2Scenes.SPIDER_BOSS_START + 13f; //find a better way to get this variable
 		for (float i = 0; i < 70; i += 1f) {
-			blocks.add(new Block(new Vector2(initX + i, 0f), Block.TextureAtlasReference.LEVEL, 0));
-			blocks.add(new Block(new Vector2(initX + i, 1f), Block.TextureAtlasReference.LEVEL, 0));
-			blocks.add(new Block(new Vector2(initX + i, 2f), Block.TextureAtlasReference.LEVEL, 0));
-			blocks.add(new Block(new Vector2(initX + i, 3f), Block.TextureAtlasReference.LEVEL, 2));
+			blocks.add(new Block(new Vector2(initX + i, 0f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+			blocks.add(new Block(new Vector2(initX + i, 1f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+			blocks.add(new Block(new Vector2(initX + i, 2f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+			blocks.add(new Block(new Vector2(initX + i, 3f), Block.TextureAtlasReference.LEVEL, GRASS_TILE));
 		}
 			
 	}
@@ -86,25 +90,25 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 				float spawnX = latestBlock.getPosition().x + Block.SIZE;
 				if (loopPos > 0 && loopPos < 13) {
 					if (!(rank > 0.95f && loopPos > 4 && loopPos < 8)) {
-						blocks.add(new Block(new Vector2(spawnX, 0f), Block.TextureAtlasReference.LEVEL, 0));
-						blocks.add(new Block(new Vector2(spawnX, 1f), Block.TextureAtlasReference.LEVEL, 0));
-						blocks.add(new Block(new Vector2(spawnX, 2f), Block.TextureAtlasReference.LEVEL, 0));
-						blocks.add(new Block(new Vector2(spawnX, 3f), Block.TextureAtlasReference.LEVEL, 2));
+						blocks.add(new Block(new Vector2(spawnX, 0f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+						blocks.add(new Block(new Vector2(spawnX, 1f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+						blocks.add(new Block(new Vector2(spawnX, 2f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+						blocks.add(new Block(new Vector2(spawnX, 3f), Block.TextureAtlasReference.LEVEL, GRASS_TILE));
 					}
 				}
 				if (loopPos > 2 && loopPos < 6) {
-					blocks.add(new Block(new Vector2(spawnX, 7f), Block.TextureAtlasReference.LEVEL, 2));
-					System.out.println("%(&^*$$&(*^$(&^(&*$^(&^$(&^$ Created a block at high level");
+					blocks.add(new Block(new Vector2(spawnX, 7f), Block.TextureAtlasReference.LEVEL, GRASS_TILE));
+					
 					
 				}
 				if (loopPos > 11 && loopPos < 17 && rank < 0.85f) {
-					blocks.add(new Block(new Vector2(spawnX, 7f), Block.TextureAtlasReference.LEVEL, 2));
+					blocks.add(new Block(new Vector2(spawnX, 7f), Block.TextureAtlasReference.LEVEL, GRASS_TILE));
 				}
 				if (loopPos >= 13 && rank < 0.75f) {
-					blocks.add(new Block(new Vector2(spawnX, 0f), Block.TextureAtlasReference.LEVEL, 0));
-					blocks.add(new Block(new Vector2(spawnX, 1f), Block.TextureAtlasReference.LEVEL, 0));
-					blocks.add(new Block(new Vector2(spawnX, 2f), Block.TextureAtlasReference.LEVEL, 0));
-					blocks.add(new Block(new Vector2(spawnX, 3f), Block.TextureAtlasReference.LEVEL, 2));
+					blocks.add(new Block(new Vector2(spawnX, 0f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+					blocks.add(new Block(new Vector2(spawnX, 1f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+					blocks.add(new Block(new Vector2(spawnX, 2f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+					blocks.add(new Block(new Vector2(spawnX, 3f), Block.TextureAtlasReference.LEVEL, GRASS_TILE));
 				}
 				if (loopPos == 17) {
 					loopPos = 0;
@@ -142,13 +146,13 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 				//System.out.println("Making new block. x=" +(cam.position.x-cam.viewportWidth/2-Block.SIZE) + " camX="+ cam.position.x + " camviewwith=" + cam.viewportWidth);
 				count = 0;
 				float spawnY = latestBlock.getPosition().y	- Block.SIZE;	
-				blocks.add(new Block(new Vector2(cam.position.x-cam.viewportWidth/2, spawnY), Block.TextureAtlasReference.LEVEL, 0));
-				latestBlock = new Block(new Vector2(cam.position.x+cam.viewportWidth/2 - Block.SIZE, spawnY), Block.TextureAtlasReference.LEVEL, 0);
+				blocks.add(new Block(new Vector2(cam.position.x-cam.viewportWidth/2, spawnY), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+				latestBlock = new Block(new Vector2(cam.position.x+cam.viewportWidth/2 - Block.SIZE, spawnY), Block.TextureAtlasReference.LEVEL, GROUND_TILE);
 				blocks.add(latestBlock);
 				
 				//add the background blocks
 				for (int i = (int)(cam.position.x-cam.viewportWidth/2+1f); i< (int)(cam.position.x+cam.viewportWidth/2-1f); i++) {
-					blocks.add(new Block(new Vector2(i, spawnY), Block.TextureAtlasReference.LEVEL, 1, false));
+					blocks.add(new Block(new Vector2(i, spawnY), Block.TextureAtlasReference.LEVEL, BG_TILE, false));
 				}
 			}
 			
@@ -182,12 +186,12 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 		} else if (state == State.STATICTRANSITION) {
 			if (firstUpdate) {
 				for (float i = cam.position.x - cam.viewportWidth/2; i < cam.position.x + cam.viewportWidth/2; i+=1f) {
-					blocks.add(new Block(new Vector2(i, -1f), Block.TextureAtlasReference.LEVEL, 0));
-					blocks.add(new Block(new Vector2(i, -2f), Block.TextureAtlasReference.LEVEL, 0));
-					blocks.add(new Block(new Vector2(i, -3f), Block.TextureAtlasReference.LEVEL, 0));
-					latestBlock = new Block(new Vector2(i, -4f), Block.TextureAtlasReference.LEVEL, 0);
+					blocks.add(new Block(new Vector2(i, -1f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+					blocks.add(new Block(new Vector2(i, -2f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+					blocks.add(new Block(new Vector2(i, -3f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+					latestBlock = new Block(new Vector2(i, -4f), Block.TextureAtlasReference.LEVEL, GROUND_TILE);
 					blocks.add(latestBlock);
-					blocks.add(new Block(new Vector2(i, -5f), Block.TextureAtlasReference.LEVEL, 0));
+					blocks.add(new Block(new Vector2(i, -5f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
 				}
 				firstUpdate = false;
 			}

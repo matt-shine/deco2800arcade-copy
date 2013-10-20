@@ -566,6 +566,7 @@ public class EnemySpiderBoss extends Enemy {
 	@Override
 	public void handleDamage(boolean fromRight) {
 		if (!beingHit) {
+			Sounds.playHurtSound(0.5f);
 			if (--health == 0) {
 				changePhase();
 			} else {

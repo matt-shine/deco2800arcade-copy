@@ -207,5 +207,10 @@ public class Sounds {
 			laser3.stop();
 		}
 		
+		public static void stopAll() {
+			laser3.stop();
+			laser.stop();
+		}
+		
 		
 }

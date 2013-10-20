@@ -39,7 +39,7 @@ public class Cyra extends GameClient {
         this.player = player;
         this.highscoreClient = new HighscoreClient(player.getUsername(), "Cyra", networkClient);
         
-        //this.incrementAchievement("cyra.opengame");
+        this.incrementAchievement("cyra.opengame");
 	}
     
     public void addHighscore(int score) {

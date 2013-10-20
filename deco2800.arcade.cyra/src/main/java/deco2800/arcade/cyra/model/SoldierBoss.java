@@ -504,11 +504,13 @@ public class SoldierBoss extends Enemy {
 	@Override
 	public void handleDamage(boolean fromRight) {
 		if (!beingHit) {
+			Sounds.playHurtSound(0.5f);
 			if (--health == 0) {
 				state = State.DEATH;
 				stateFrame = 20;
 				stateTime = 0.1f;
 				velocity.x = 0;
+				
 				
 			} else {
 				beingHit = true;

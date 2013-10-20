@@ -3,6 +3,9 @@ package deco2800.arcade.deerforest.models.effects;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Provides the implementation of the Spell effect
+ */
 public class SpellEffect extends AbstractEffect {
 
 	/**

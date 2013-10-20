@@ -1,5 +1,8 @@
 package deco2800.arcade.deerforest.models.effects;
 
+/**
+ * Exception to throw when dealing with an incorrect effect
+ */
 public class IncorrectEffectException extends Exception {
 
 	/**

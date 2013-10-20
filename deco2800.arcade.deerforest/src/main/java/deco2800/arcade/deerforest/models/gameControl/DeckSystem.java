@@ -6,7 +6,9 @@ import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
 import deco2800.arcade.deerforest.models.cardContainers.Deck;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 
-
+/**
+ * Collection of helper methods for the Deck class
+ */
 public class DeckSystem {
 	
 	private Deck deck;

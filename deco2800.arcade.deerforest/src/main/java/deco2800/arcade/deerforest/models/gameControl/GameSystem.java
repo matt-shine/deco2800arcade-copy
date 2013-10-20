@@ -8,6 +8,9 @@ import deco2800.arcade.deerforest.models.cards.*;
 import deco2800.arcade.deerforest.models.effects.Attack;
 import deco2800.arcade.deerforest.models.effects.MonsterEffect;
 
+/**
+ * Collection of helper methods for the MainGame Class
+ */
 public class GameSystem {
 
 	private DeerForestPlayer p1;
@@ -180,9 +183,8 @@ public class GameSystem {
     }
 
     /**
-     * Getters
+     * Returns the CardCollection of the given player for the given area
      */
-
     public CardCollection getCardCollection(int player, String area) {
 		
 		if(area.contains("Hand")) {
@@ -198,41 +200,58 @@ public class GameSystem {
 		return null;
 	}
 
+    /**
+     * Returns true if the card is summoned or false otherwise
+     */
     public boolean getSummoned() {
         return summoned;
     }
 
-    //returns the current phase
+    /**
+     * Returns the current phase
+     */
     public String getPhase() {
         return currentPhase;
     }
 
-    //returns the player whose turn it is
+    /**
+     * Returns the player whose turn it is
+     */
     public DeerForestPlayer currentPlayer() {
         return currentPlayer;
     }
 
-    //returns the first player
+    /**
+     * returns the first player
+     */
     public DeerForestPlayer player1() {
         return p1;
     }
 
+    /**
+     * Returns the lifepoints of the given player
+     */
     public int playerLP(int player) {
         return player==1?p1.getLifePoints():p2.getLifePoints();
     }
 
     /**
-     * Setters
+     * Sets the current player
      */
-
     public void setCurrentPlayer(int player) {
         this.currentPlayer = player==1?p1:p2;
     }
 
+    /**
+     * Sets whether this is the first turn
+     */
     public void setFirstTurn(boolean b) {
         this.firstTurn = b;
     }
 
+    /**
+     * Sets whether summoned or not
+     */
     public void setSummoned(boolean b) {
         summoned = b;
     }

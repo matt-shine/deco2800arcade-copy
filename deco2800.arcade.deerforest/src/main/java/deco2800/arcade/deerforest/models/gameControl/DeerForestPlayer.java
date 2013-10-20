@@ -11,7 +11,7 @@ import deco2800.arcade.deerforest.models.cards.AbstractCard;
  */
 public class DeerForestPlayer {
 
-	//Have variables for field, deck, graveyard and hand
+	// Variables for field, deck, graveyard and hand
 	private Hand hand;
 	private Deck deck;
 	private Graveyard graveyard;
@@ -97,29 +97,43 @@ public class DeerForestPlayer {
 	}
 
     /**
-     * Getters
+     * Returns the field
      */
-	
 	public Field getField() {
 		return field;
 	}
 	
+	/**
+	 * Returns the hand
+	 */
 	public Hand getHand() {
 		return hand;
 	}
 	
+	/**
+	 * Returns the deck
+	 */
 	public Deck getDeck() {
 		return deck;
 	}
 	
+	/**
+     * Returns the current life points
+	 */
 	public int getLifePoints() {
 		return currentLife;
 	}
 	
+	/**
+	 * Returns the current shield level
+	 */
 	public int getShield() {
 		return currentShield;
 	}
 	
+	/**
+	 * Returns the graveyard
+	 */
 	public Graveyard getGraveyard() {
 		return graveyard;
 	}

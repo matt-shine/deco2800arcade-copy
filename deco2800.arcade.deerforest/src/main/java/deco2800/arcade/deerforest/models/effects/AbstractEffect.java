@@ -6,9 +6,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
+/**
+ * Provides an abstraction for the Effect Cards
+ */
 public abstract class AbstractEffect {
 
-	/* Effects can be defined as such (must follow these guidelines)
+	/**
+	 * Effects can be defined as such (must follow these guidelines)
 	 * 
 	 * typeEffects:
 	 * 	Set must either be null (no conditions), or contain a combination of:
@@ -141,7 +145,6 @@ public abstract class AbstractEffect {
 	 * 			- Amount to affect by (can be negative for losing lifepoints / shield)
 	 * 
 	 */
-
 	private Set<String> typeEffects;
 	private List<String> effectCategories;
 	private List<? extends List<Integer>> effectParams;

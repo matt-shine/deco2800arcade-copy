@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Implements the Attack effect
+ */
 public class Attack extends AbstractEffect {
 
 	private int damage;
@@ -55,11 +58,13 @@ public class Attack extends AbstractEffect {
     /**
      * Getter methods for the class
      */
-
 	public int getDamage() {
 		return this.damage;
 	}
 	
+	/**
+	 * Returns the attack type of the effect
+	 */
 	public String getAttackType() {
 		return this.typeOfAttack;
 	}

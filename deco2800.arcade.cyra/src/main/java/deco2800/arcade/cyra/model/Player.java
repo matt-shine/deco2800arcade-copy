@@ -205,7 +205,7 @@ public class Player extends MovableEntity{
 			doubleTapTime = 0.2f;
 		}
 		bounceBack(false);
-		System.out.println("telling to move right");
+		
 	}
 	/**
 	 * Make player move left

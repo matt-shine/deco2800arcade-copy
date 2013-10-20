@@ -345,7 +345,6 @@ public class SoldierEnemy extends Enemy {
 			velocity.x = 0;
 			stateTime = 1.5f-1.35f * rank;
 		
-		//} else if (rand < grenadeChance) {
 		} else {
 			state = State.GRENADE;
 			if (ship.position.x > position.x) {

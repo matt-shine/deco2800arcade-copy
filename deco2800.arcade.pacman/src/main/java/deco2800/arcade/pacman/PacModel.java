@@ -15,8 +15,8 @@ public class PacModel {
 		GAMEOVER
 	}
  
-	public final int SCREEN_HEIGHT;
-	public final int SCREEN_WIDTH;
+	private final int SCREEN_HEIGHT;
+	private final int SCREEN_WIDTH;
 	
 	private GameState gameState;
 	private PacChar player;

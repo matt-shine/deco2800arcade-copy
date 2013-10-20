@@ -127,7 +127,7 @@ public class Protocol {
 		
 		// Forum Protocols
         kryo.register(String[].class);
-		kryo.register(java.sql.Timestamp.class);
+		//kryo.register(java.sql.Timestamp.class);
         //kryo.register(java.util.Vector.class);
         kryo.register(ForumUserProtocol.class);
         kryo.register(ParentThreadProtocol.class);

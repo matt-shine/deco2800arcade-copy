@@ -156,6 +156,7 @@ public class ForumListener extends Listener {
 			GetParentThreadsRequest request = (GetParentThreadsRequest) object;
 			GetParentThreadsResponse response = new GetParentThreadsResponse();
 			response.error = "";
+			response.result = null;
 			try {
 				ParentThread[] threads;
 				if (request.userId > 0) {

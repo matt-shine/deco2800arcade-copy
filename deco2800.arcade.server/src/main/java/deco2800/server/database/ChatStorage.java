@@ -45,7 +45,7 @@ public class ChatStorage {
 				ChatNode node = chatStorage.get(playerID).get(nodeID);
 				node.addMessage(chatLine);
 
-			} else { // Fairly certain test does not cover this branch yet
+			} else {
 				ChatNode node = new ChatNode(textMessage.getRecipients());
 				node.setOwner(textMessage.getSenderUsername());
 				node.addMessage(chatLine);

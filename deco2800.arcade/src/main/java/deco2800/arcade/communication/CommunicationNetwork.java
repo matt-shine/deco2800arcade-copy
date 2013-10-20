@@ -206,7 +206,6 @@ public class CommunicationNetwork {
 		this.chatHistory = new ChatHistory();
 		this.view = view;
 		this.view.setCommunicationNetwork(this);
-		// this.model = new CommunicationModel();
 		this.controller = new CommunicationController(this.view, null, this);
 	}
 

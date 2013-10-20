@@ -495,7 +495,7 @@ public class Arcade extends JFrame {
 			this.view = new CommunicationView();
 
 			Container container = this.getContentPane();
-			container.add(this.canvas.getCanvas(), BorderLayout.CENTER);
+			container.add(this.canvas.getCanvas(), BorderLayout.WEST);
 			container.add(this.view, BorderLayout.EAST);
 			
 			this.pack();

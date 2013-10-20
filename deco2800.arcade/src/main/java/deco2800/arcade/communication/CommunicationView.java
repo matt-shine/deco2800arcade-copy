@@ -12,6 +12,7 @@ import java.awt.event.MouseListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -31,7 +32,7 @@ public class CommunicationView extends JPanel {
 	private JPanel scrollablePanel;
 	private JPanel viewOne;
 	private JPanel viewTwo;
-	private CardLayout cardLayout = new CardLayout();
+	private CardLayout cardLayout = new CardLayout(0,0);
 	private JPanel cardPanel = this;
 	private JButton backButton;
 	private Date date;
@@ -42,7 +43,7 @@ public class CommunicationView extends JPanel {
 	private CommunicationNetwork communicationNetwork;
 
 	public CommunicationView() {
-		setPreferredSize(new Dimension(250, 600)); //Top bar messes up when you remove this
+		setPreferredSize(new Dimension(250, 600));
 		
 		setLayout(cardLayout);
 		createViewOne();
@@ -52,15 +53,13 @@ public class CommunicationView extends JPanel {
 	}
 	
 	private void createViewOne() {
+		
+		viewOne = new JPanel(new GridLayout(1,1,0,0));
+		
 		scrollablePanel = new JPanel();
-		scrollablePanel.setPreferredSize(new Dimension(250, 800));
+		scrollPane = new JScrollPane(scrollablePanel, JScrollPane.VERTICAL_SCROLLBAR_NEVER,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
-		//viewOne = new JPanel(new GridLayout(1,1,0,0));
-		viewOne = new JPanel();
-		viewOne.setBorder(null);
-		viewOne.setPreferredSize(new Dimension(250, 800));
-		
-		scrollPane = new JScrollPane(scrollablePanel);
 		
 		JLabel l = new JLabel("Michael, Smith");
 		l.setBackground(Color.WHITE);
@@ -70,9 +69,7 @@ public class CommunicationView extends JPanel {
 		l.setName("test1");
 		addMouseListener(l);
 		
-		//scrollablePanel.add(l);
 		scrollablePanel.add(l, BorderLayout.PAGE_START);
-		//viewOne.add(scrollPane);
 		viewOne.add(scrollPane, BorderLayout.PAGE_START);
 		
 	}
@@ -80,7 +77,6 @@ public class CommunicationView extends JPanel {
 	private void createViewTwo() {
 		
 		viewTwo = new JPanel();
-		viewTwo.setPreferredSize(new Dimension(250, 800));
 		
 		outputArea = new JTextArea();
 		outputArea.setPreferredSize(new Dimension(250, 375));
@@ -89,15 +85,15 @@ public class CommunicationView extends JPanel {
 		outputArea.setWrapStyleWord(true);
 		
 		inputArea = new JTextArea();
-		inputArea.setPreferredSize(new Dimension(250, 250));
+		inputArea.setPreferredSize(new Dimension(250, 266));
 		inputArea.setLineWrap(true);
 		inputArea.setWrapStyleWord(true);
 		
 		sendButton = new JButton("Send");
-		sendButton.setPreferredSize(new Dimension(250, 40));
+		sendButton.setPreferredSize(new Dimension(250, 35));
 		
 		backButton = new JButton("< Back");
-		backButton.setPreferredSize(new Dimension(250, 40));
+		backButton.setPreferredSize(new Dimension(250, 25));
 		
 		backButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

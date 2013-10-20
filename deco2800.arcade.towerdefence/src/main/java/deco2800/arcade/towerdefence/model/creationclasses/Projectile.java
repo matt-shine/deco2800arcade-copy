@@ -127,7 +127,7 @@ public class Projectile extends GridObject {
 	 * Continually move in the given vector until a collision, or the maximum
 	 * range is reached.
 	 */
-	private void move() {
+	public void move() {
 		// Move at speed in the object's direction until it collides with
 		// something
 		float moved = 0;
@@ -136,7 +136,7 @@ public class Projectile extends GridObject {
 			//Check for collisions
 			for (int i =0;i < getCurrentGrid().size(); i++){
 				if (getCurrentGrid().get(i).team() != this.team){
-					//Collision occured
+					//Collision occurred
 					collide(getCurrentGrid().get(i));
 				}
 			}

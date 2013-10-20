@@ -1,5 +1,6 @@
 package deco2800.arcade.wl6;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.badlogic.gdx.math.Vector2;
@@ -8,7 +9,7 @@ import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
 
 public class Player extends Mob {
 
-    public static final float SPEED = 3f;
+    public static final float SPEED = 0.05f;
 
     
     private int STARTING_HEALTH = 100;
@@ -17,10 +18,10 @@ public class Player extends Mob {
     private HashSet<Integer> guns = new HashSet<Integer>();
     private int ammo = 16;
     private HashSet<KEY_TYPE> keys = new HashSet<KEY_TYPE>();
-	
     
-
-
+    private float gunTimer = 0;
+    
+    
 	public Player(int uid) {
         super(uid);
         setHealth(STARTING_HEALTH);
@@ -41,6 +42,8 @@ public class Player extends Mob {
     
     @Override
     public void tick(GameModel model) {
+    	
+    	this.gunTimer -= model.delta();
     	
         //detect the end of a level
         Vector2 blockPos = getBlockPos();
@@ -80,6 +83,26 @@ public class Player extends Mob {
     }
     
 
+    public void shoot(GameModel g, boolean justDown) {
+    	if (gunTimer <= 0 && ammo > 0 && (currentGun != 1 || justDown)) {
+    		Projectile bullet = new Projectile(0, 10, false, "worm");
+        	g.addDoodad(bullet);
+        	bullet.setPos(this.getPos());
+        	bullet.setVel((new Vector2(0, -0.2f)).rotate(-this.getAngle()));
+        	this.ammo = Math.max(ammo - 1, 0);
+        	
+        	if (this.currentGun == 1) {
+        		gunTimer = 0;
+        	} else if (this.currentGun == 2) {
+        		gunTimer = 0.25f;
+        	} else if (this.currentGun == 3) {
+        		gunTimer = 0.12f;
+        	}
+        	
+    	}
+    }
+    
+    
     
     public void addHealth(int health, boolean overheal) {
         setHealth(Math.min(this.getHealth() + health, overheal ? 150 : 100));
@@ -150,6 +173,13 @@ public class Player extends Mob {
 		
 	}
 	
+	public HashSet<Integer> getGuns() {
+		return new HashSet<Integer>(guns);
+	}
+	
+	public void setGuns(HashSet<Integer> newGuns) {
+		guns = new HashSet<Integer>(newGuns);
+	}
 	
 	public void addKey(KEY_TYPE k) {
 		keys.add(k);
@@ -211,6 +241,8 @@ public class Player extends Mob {
         return damage;
     }
 	
+
+    
 }
 
 

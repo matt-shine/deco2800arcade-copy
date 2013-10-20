@@ -9,6 +9,7 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
+import deco2800.arcade.towerdefence.model.AnimationsList;
 import deco2800.arcade.towerdefence.view.CreditsScreen;
 import deco2800.arcade.towerdefence.view.GameScreen;
 import deco2800.arcade.towerdefence.view.LoreScreen;
@@ -18,40 +19,53 @@ import deco2800.arcade.towerdefence.view.SplashScreen;
 
 @ArcadeGame(id = "towerdefence")
 public class TowerDefence extends GameClient {
-	Screen splashScreen;
-	public Screen menuScreen, loreScreen, gameScreen, creditsScreen,
-			optionsScreen;
+	// Fields
+	// The rendering animations list static
+	public static AnimationsList toRender = new AnimationsList();
+	// All Tower Defence screens
+	public Screen splashScreen, menuScreen, loreScreen, gameScreen,
+			creditsScreen, optionsScreen;
+	// Boolean to store if game is paused
 	private boolean isPaused = false;
+	// Create log file name
 	private static final String LOG = TowerDefence.class.getSimpleName();
 
+	// Constructor
 	public TowerDefence(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		// TODO Auto-generated constructor stub
 	}
-
+	
 	@Override
 	public void create() {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		Gdx.app.debug(LOG, "creating");
-
+		
 		super.create();
-
+		
+		// construct screens
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
 		gameScreen = new GameScreen(this);
 		loreScreen = new LoreScreen(this);
 		creditsScreen = new CreditsScreen(this);
 		optionsScreen = new OptionsScreen(this);
+		// Set initial screen
 		setScreen(splashScreen);
+		
+		// Dan insert game creation code here.
+		
+		
+		
+		// Listener controls
 		this.getOverlay().setListeners(new Screen() {
 			@Override
 			public void hide() {
-				// Unpause your game here
+				// Unpause here
 			}
 
 			@Override
 			public void show() {
-				// Pause your game here
+				// Pause here
 			}
 
 			@Override
@@ -75,15 +89,10 @@ public class TowerDefence extends GameClient {
 			}
 		});
 	}
-
+	
 	@Override
 	public void dispose() {
 		Gdx.app.debug(LOG, "disposing");
-		splashScreen.dispose();
-		menuScreen.dispose();
-		gameScreen.dispose();
-		loreScreen.dispose();
-		creditsScreen.dispose();
 		super.dispose();
 	}
 
@@ -115,8 +124,9 @@ public class TowerDefence extends GameClient {
 		game = new Game();
 		game.id = "towerdefence";
 		game.name = "Tower Defence";
-		game.description = "Defend your towers with wit and strategy."
-				+ "Endless, fun, fast paced gameplay!";
+		game.description = "Defend the Starship Arcadia and the people of "
+				+ "Earth in the Year 2800 with tower building strategy and"
+				+ "fast paced, tactical gameplay!";
 	}
 
 	public Game getGame() {

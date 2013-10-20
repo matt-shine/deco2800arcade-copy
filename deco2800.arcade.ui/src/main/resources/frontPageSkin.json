@@ -1,0 +1,36 @@
+{
+    com.badlogic.gdx.graphics.g2d.BitmapFont: {
+        default:    { file: Fonts/Manteka18.fnt },
+        default-14: { file: Fonts/Manteka14.fnt },
+        default-18: { file: Fonts/Manteka18.fnt },
+        default-22: { file: Fonts/Manteka22.fnt },
+        default-24: { file: Fonts/Manteka24.fnt },
+        default-26: { file: Fonts/Manteka26.fnt },
+        default-28: { file: Fonts/Manteka28.fnt },
+        default-34: { file: Fonts/Manteka34.fnt },
+        default-52: { file: Fonts/Manteka52.fnt },
+        cgothic:    { file: Fonts/CenturyGothic20Bold.fnt }
+    },
+    com.badlogic.gdx.graphics.Color: {
+        red:    { a: 1, r: 1, g: 0, b: 0 },
+        green:  { a: 1, r: 0, g: 1, b: 0 },
+        blue:   { a: 1, r: 0, g: 0, b: 1 },
+        white:  { a: 1, r: 1, g: 1, b: 1 },
+        black:  { a: 1, r: 0, g: 0, b: 0 },
+        grey:   { a: 1, r: 0.5, g: 0.5, b: 0.5 }
+    },
+    com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+        default-18: { font: default-18, fontColor: white },
+        default-22: { font: default-22, fontColor: white },
+        default-24: { font: default-24, fontColor: white },
+        default-26: { font: default-26, fontColor: white },
+        default-28: { font: default-28, fontColor: white },
+        default-34: { font: default-34, fontColor: white },
+		cgothic:    { font: cgothic, fontColor: white}
+    },
+    com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+        blue:    { font: default, fontColor: white, up: iconBlue, down: iconBlue, over: iconBlue_plus },
+	    magenta: { font: default, fontColor: white, up: iconMagenta, down: iconMagenta, over: iconMagenta_plus },
+	    green:   { font: default, fontColor: white, up: iconGreen, down: iconGreen, over: iconGreen_plus }
+    }
+}

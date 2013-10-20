@@ -9,6 +9,7 @@ pong
 tictactoe
 ui
 breakout
+blackjack
 deerforest
 gamelibrary
 soundboard

@@ -9,15 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-//import deco2800.server.PurchasingService;
-//import deco2800.server.database.CreditStorage;
 import deco2800.arcade.arcadeui.ArcadeUI;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
@@ -43,8 +40,6 @@ public class StoreHome implements Screen, StoreScreen {
 	private Label description; // featured text
 	private Button featuredIcon; // featured icon
 	private Button featuredbg; // featured icon glow/box
-	private Button greyOverlay = new Button(skin, "black"); // grey shadow for popup
-	private Button popupBox = new Button(skin, "white"); // popup container
 	
 	/**
 	 * @author Addison Gourluck
@@ -56,8 +51,7 @@ public class StoreHome implements Screen, StoreScreen {
 		player = user;
 		
 		// Load the Icons into the skin, with names as game id's.
-		Utilities.helper.loadIcons(skin);
-		skin.add("blue_frame", new Texture(Gdx.files.internal("store/blue_frame.png")));
+		Utilities.loadIcons(skin);
 		
 		// The background for the store.
 		skin.add("background", new Texture(Gdx.files.internal("store/main_bg.png")));
@@ -67,15 +61,20 @@ public class StoreHome implements Screen, StoreScreen {
 		stage.addActor(bg);
 		
 		final TextField searchField = new TextField("", skin);
-		final Button searchButton = new Button(skin, "search");
+		Button searchButton = new Button(skin, "search");
 		final Label searchResult = new Label("", skin);
-		final TextButton libraryButton = new TextButton("Front Page", skin);
-		final TextButton transactionsButton = new TextButton("Transactions", skin);
-		final TextButton wishlistButton = new TextButton("Wishlist", skin);
-		final TextButton reviewsButton = new TextButton("Reviews", skin);
+		TextButton libraryButton = new TextButton("Front Page", skin);
+		TextButton transactionsButton = new TextButton("Transactions", skin);
+		TextButton wishlistButton = new TextButton("Wishlist", skin);
+		TextButton reviewsButton = new TextButton("Reviews", skin);
 		
 		populateGamesBox(); // Places 8 icons in a grid, center screen.
-		generatePopup(); // Creates, but doesn't show, the transactions popup.
+		
+		skin.add("blue_frame", new Texture(Gdx.files.internal("store/blue_frame.png")));
+		final Button greyOverlay = new Button(skin, "black"); // grey shadow for popup
+		final Button popupBox = new Button(skin, "white"); // popup container
+		// Creates, but doesn't show, the transactions popup.
+		Utilities.generatePopup(greyOverlay, popupBox, skin);
 		
 		// The glowing border of the icon in the featured box.
 		featuredbg = new Button(skin, "icon_bg");
@@ -168,7 +167,7 @@ public class StoreHome implements Screen, StoreScreen {
 		searchField.setTextFieldListener(new TextFieldListener() {
 			public void keyTyped(TextField textField, char key) {
 				// Run search whenever a key is typed.
-				Game result = Utilities.helper.search(searchField.getText());
+				Game result = Utilities.search(searchField.getText());
 				if (result == null) { // No results if search returns null.
 					searchResult.setText("No results.");
 					return;
@@ -190,7 +189,7 @@ public class StoreHome implements Screen, StoreScreen {
 			public void changed(ChangeEvent event, Actor actor) {
 				try {
 					// Attempt to search for whatever is in the field.
-					setSelected(Utilities.helper.search(searchResult.getText() + "").id);
+					setSelected(Utilities.search(searchResult.getText() + "").id);
 					// On successful search, go to its page.
 					hide();
 					arcadeUI.setScreen(new StoreGame(arcadeUI, player, featured));
@@ -209,98 +208,6 @@ public class StoreHome implements Screen, StoreScreen {
 		});
 	}
 	
-	/**
-	 * This method generates the inner pieces of the popup, including the grey
-	 * overlay, and the buttons, field, slider, and listeners for them.
-	 * @author Addison Gourluck
-	 */
-	private void generatePopup() {
-		greyOverlay.setFillParent(true);
-		greyOverlay.setColor(0.5f, 0.5f, 0.5f, 0.5f);
-		
-		popupBox.getStyle().up = skin.getDrawable("blue_frame");
-		popupBox.setSize(545, 300);
-		popupBox.setPosition(368, 210);
-		
-		// Textfield describing the amount of coins to purchase.
-		final TextField buyField = new TextField("1", skin);
-		// Label displaying the cost of the transaction, without discount.
-		final Label costLabel = new Label("Cost: 1", skin);
-		// Label displaying the discount to be given on transaction.
-		final Label discountLabel = new Label("Discount: 0", skin);
-		// Label displaying the total purchase cost, including discount. 
-		final Label totalLabel = new Label("Total: 1", skin);
-		// Slider to select amount of coins to purchase.
-		final Slider slider = new Slider(1, 500, 1, false, skin);
-		
-		buyField.setTextFieldFilter(
-				new TextField.TextFieldFilter.DigitsOnlyFilter());
-		buyField.setSize(70, 50);
-		buyField.setPosition(90, 135);
-		popupBox.addActor(buyField);
-		
-		costLabel.setSize(80, 50);
-		costLabel.setPosition(160, 135);
-		popupBox.addActor(costLabel);
-		
-		discountLabel.setSize(110, 50);
-		discountLabel.setPosition(240, 135);
-		popupBox.addActor(discountLabel);
-		
-		totalLabel.setSize(80, 50);
-		totalLabel.setPosition(350, 135);
-		popupBox.addActor(totalLabel);
-		
-	    slider.setSize(365, 50);
-	    slider.setPosition(90, 80);
-		popupBox.addActor(slider);
-		
-		// Buy button at bottom of popup.
-		Button buy = new Button(skin, "buy");
-		buy.setSize(149, 62);
-		buy.setPosition(198, 10);
-		popupBox.addActor(buy);
-		
-		buyField.setTextFieldListener(new TextFieldListener() {
-			public void keyTyped(TextField textField, char key) {
-				if (buyField.getText().equals("") ||
-						Float.parseFloat(buyField.getText()) < 1) {
-					buyField.setText("1"); // Ensures that at least 1 is entered.
-				} else if (Float.parseFloat(buyField.getText()) > 500) {
-					buyField.setText("500"); // Ensures no more than 500 is entered.
-				}
-				// Sets the slider to the value entered, upon any keystroke.
-				slider.setValue(Float.parseFloat(buyField.getText()));
-				costLabel.setText("Cost: A");
-			}
-		});
-		
-		slider.addListener(new ChangeListener() {
-			public void changed(ChangeEvent event, Actor actor) {
-				// Sets the text of the field to the slider value.
-				buyField.setText((int)slider.getValue() + "");
-				// Moves cursor to end of field, to prevent typing interruption.
-				buyField.setCursorPosition(buyField.getText().length());
-				costLabel.setText("Cost: B");
-			}
-		});
-		
-		// Buy button listener.
-		buy.addListener(new ChangeListener() {
-			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("Buying " + (int)slider.getValue() + " Tokens.");
-			}
-		});
-		
-		// Make grey overlay, and transactions box disappear upon clicking away.
-		greyOverlay.addListener(new ChangeListener() {
-			public void changed(ChangeEvent event, Actor actor) {
-				popupBox.remove();
-				greyOverlay.remove();
-			}
-		});
-	}
-
 	/**
 	 * This places 8 icons into a grid pattern in the display section in the
 	 * centre of the main store page. The icons are randomly assigned a game to
@@ -364,8 +271,7 @@ public class StoreHome implements Screen, StoreScreen {
 	 * 'fade' is then reset.
 	 * 
 	 * @author Addison Gourluck
-	 * @param fade < 70
-	 * @param fade > -70
+	 * @require -60 <= fade <= 60
 	 */
 	private void textFade() {
 		if (fade <= -60) {
@@ -408,8 +314,7 @@ public class StoreHome implements Screen, StoreScreen {
 	 * it out at the same sign, then do the reverse. Also has a small pause.
 	 * 
 	 * @author Addison Gourluck
-	 * @param fade < 30
-	 * @param fade > -30
+	 * @require -30 < fade < 30
 	 */
 	private void iconFade() {
 		if (fade > -1) {

@@ -39,10 +39,7 @@ public class GameScreen implements Screen {
 	private TowerDefence game;
 
 	private Stage stage, hudStage;
-	//unused
-	//private static float STATUS_HEIGHT = 50f;
-	//private static float BOTTOM_HEIGHT = 150f;
-	Button standardB, fireB, holyB, cryoB, piercingB, barricadeB, backB; 
+	Button standardB, fireB, holyB, cryoB, piercingB, barricadeB, backB;
 	private Label towerInfo;
 	BitmapFont black;
 	BitmapFont white;
@@ -57,28 +54,27 @@ public class GameScreen implements Screen {
 	TextField resourceTF;
 	private OrthographicCamera camera;
 	private static final float BUTTON_HEIGHT = 64f;
-	//unused
-	//private static final float CAMERA_HEIGHT = (720 - STATUS_HEIGHT - BOTTOM_HEIGHT);
 	private static final float BUTTON_WIDTH = 64f;
-	int resource; /* int for player's resources. */
+	/* int for player's resources. */
+	int resource;
 
 	Texture crystalsTexture, gridMapTexture;
-	
 	String fireStr, cryoStr, piercingStr, holyStr, attackStr, standardStr,
 			barricadeStr, defenceStr;
 
 	/*
 	 * Constructor for GameScreen, creates the platform for which the game will
-	 * be played. 720p (720 x 1024) pixels
+	 * be played. 720p (720 x 1280) pixels
 	 */
 	public GameScreen(TowerDefence game) {
 		this.game = game;
 		stage = new Stage();
 		stage.setViewport(4000, 4000, true);
 		hudStage = new Stage();
-		hudStage.setViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+		hudStage.setViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
+				true);
 
-		/* setting style for resource textfield*/
+		/* setting style for resource textfield */
 		TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
 		textFieldStyle.font = new BitmapFont(
 				Gdx.files.internal("black_font.fnt"), false);
@@ -87,26 +83,33 @@ public class GameScreen implements Screen {
 		resource = 0;
 		resourceTF = new TextField("", textFieldStyle);
 
+		/* Getting textures from internal file */
 		crystalsTexture = new Texture(Gdx.files.internal("crystals.png"));
 		crystalsTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		
 		gridMapTexture = new Texture(Gdx.files.internal("gridMap.png"));
 		gridMapTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		
+
 		gridMap = new Image(gridMapTexture);
 
-		towerInfo = new Label("..............", 
-				new Label.LabelStyle(new BitmapFont(), BLACK));
+		towerInfo = new Label("..............", new Label.LabelStyle(
+				new BitmapFont(), BLACK));
 		towerInfo.setWrap(true);
-		
+
 		resource = 2000;
-		fireStr = "Fire I: \n" + "Cost: 200\n" + "Max Health: 100\n" + "Damage: 15";
-		cryoStr = "Cryo I: \n" + "Cost: 200\n" + "Max Health: 100\n" + "Damage: 15";
-		piercingStr = "Piercing I: \n" + "Cost: 200\n" + "Max Health: 100\n" + "Damage: 15";
-		holyStr = "Holy I: \n" + "Cost: 250\n" + "Max Health: 100\n" + "Damage: 15";
-		barricadeStr = "Barricade I: \n" + "Cost: 100\n" + "Max Health: 200\n" + "Damage: 0";
-		standardStr = "Standard I: \n"+ "Cost: 100\n" + "Max Health: 100\n" + "Damage: 10";
-		
+
+		fireStr = "Fire I: \n" + "Cost: 200\n" + "Max Health: 100\n"
+				+ "Damage: 15";
+		cryoStr = "Cryo I: \n" + "Cost: 200\n" + "Max Health: 100\n"
+				+ "Damage: 15";
+		piercingStr = "Piercing I: \n" + "Cost: 200\n" + "Max Health: 100\n"
+				+ "Damage: 15";
+		holyStr = "Holy I: \n" + "Cost: 250\n" + "Max Health: 100\n"
+				+ "Damage: 15";
+		barricadeStr = "Barricade I: \n" + "Cost: 100\n" + "Max Health: 200\n"
+				+ "Damage: 0";
+		standardStr = "Standard I: \n" + "Cost: 100\n" + "Max Health: 100\n"
+				+ "Damage: 10";
+
 	}
 
 	@Override
@@ -146,7 +149,6 @@ public class GameScreen implements Screen {
 		hudStage.act(delta);
 		hudStage.draw();
 
-		Table.drawDebug(hudStage);
 		if (!game.isPaused()) {
 			stage.act(delta);
 			hudStage.act(delta);
@@ -164,8 +166,9 @@ public class GameScreen implements Screen {
 
 	}
 
-	/* Input handler for navigating the map
-	 * Taken from libGDX google docs, edited.
+	/*
+	 * Input handler for navigating the map Taken from libGDX google docs,
+	 * edited.
 	 */
 	private void handleInput() {
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
@@ -194,10 +197,13 @@ public class GameScreen implements Screen {
 		if (stage == null) {
 			stage = new Stage(4000, 4000, true);
 		}
+		hudStage.clear();
+		stage.clear();
+
 		camera = (OrthographicCamera) stage.getCamera();
 		camera.setToOrtho(false, width, height);
-		
 
+		/* Start adding buttons */
 		standardB = new TextButton("ST", style);
 		standardB.setWidth(BUTTON_WIDTH);
 		standardB.setHeight(BUTTON_HEIGHT);
@@ -336,8 +342,8 @@ public class GameScreen implements Screen {
 				healthBar.getX(), costBar.getY() - 26);
 		armorBar = new TexturePart(armorBarRegion, healthBar.getX(),
 				penetrationBar.getY() - 26);
-		
-		//gridMap.setOrigin(0, 0);
+
+		// gridMap.setOrigin(0, 0);
 
 		/* adding actors to the HUD */
 		hudStage.addActor(standardB);
@@ -349,10 +355,10 @@ public class GameScreen implements Screen {
 		hudStage.addActor(backB);
 		hudStage.addActor(resourceTF);
 		hudStage.addActor(towerInfo);
+
 		/* adding actors for the camera */
-		//stage.addActor(randomBut2);
 		stage.addActor(gridMap);
-		
+		/* Set camera to the middle */
 		camera.position.set(2000, 2000, 0);
 	}
 
@@ -370,7 +376,7 @@ public class GameScreen implements Screen {
 		skin.addRegions(atlas);
 		white = new BitmapFont(Gdx.files.internal("white_font.fnt"), false);
 		black = new BitmapFont(Gdx.files.internal("black_font.fnt"), false);
-		
+
 		/* Setting the "Style of a TextButton" */
 		style = new TextButtonStyle();
 		style.up = skin.getDrawable("buttonnormal");

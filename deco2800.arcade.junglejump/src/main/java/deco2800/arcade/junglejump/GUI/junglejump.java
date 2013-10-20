@@ -334,7 +334,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			batch.draw(gameBackground, 0, 0, 800, 480);
 			
 			
-			//drawLevel();
+			drawLevel();
 			
 			
 			if ((!movingLeft && !movingRight) || (movingLeft && movingRight)) {

@@ -133,6 +133,7 @@ public class LevelContainer {
 		for (int i = 0; i < size; i++) {
 			Platform p = junglejump.currentLevel.getPlatforms().get(i);
 			// Place platform onto screen
+			p.refreshTexture(); // Make sure texture has changed to current world
 			if(p.getX() >= 1000) {
 				p.setX(p.getX()-1000);
 			}

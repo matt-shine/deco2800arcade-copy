@@ -143,8 +143,11 @@ public class Platform {
 	
 	public Texture getTexture() {
 		// Texture changes depending on world
-		platText = new Texture(Gdx.files.internal("world" + (junglejump.world + 1) + "/" + platformType + ".png"));
 		return this.platText;
+	}
+	
+	public void refreshTexture() {
+		platText = new Texture(Gdx.files.internal("world" + (junglejump.world + 1) + "/" + platformType + ".png"));
 	}
 	
 	/**

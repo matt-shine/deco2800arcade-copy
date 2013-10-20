@@ -58,7 +58,8 @@ public class WorldRenderer {
 	Integer rightCyraCount, leftCyraCount, rightFrameCounter, leftFrameCounter;
 	private BitmapFont font, fontBig;
 	private Texture shipTexture, followerTexture, bulletTexture, walkerTexture, bg, heartsTexture, 
-	jumperBodyTexture, jumperFrontArmTexture, jumperFrontLegTexture, jumperFrontArmJumpingTexture,jumperFrontLegJumpingTexture;
+	jumperBodyTexture, jumperFrontArmTexture, jumperFrontLegTexture, jumperFrontArmJumpingTexture,jumperFrontLegJumpingTexture,
+	wallTexture;
 	private TextureRegion followerFrame, cyraFrame;
 	private TextureRegion walkerRegion;
 	private TextureAtlas groundTextureAtlas, laserTextures, explosionTextures, boss1Atlas, bossRam, firestarter, myEnemy;
@@ -171,10 +172,7 @@ public class WorldRenderer {
 		
 		drawLevel(batch);
 		drawGameObjects(batch);
-		if (ship.isOverForeground()) {
-			//tileMapRenderer.render(cam, new int[]{3,4,5}); // Don't know how to make this transparent
-			
-		}
+		drawForeground(batch);
 		drawHUD(batch);
 		if(debugMode) drawDebugAids();
 		
@@ -277,12 +275,10 @@ public class WorldRenderer {
 		tmp.set(0,0,0);
 		cam.unproject(tmp);
 		tileMapRenderer.render((int) tmp.x, (int) tmp.y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());*/
-		tileMapRenderer.render(cam, new int[]{3}); // THIS IS ONLY UNTIL layer 2's graphics are complete
-		tileMapRenderer.render(cam, new int[]{2});
-		tileMapRenderer.render(cam, new int[]{0,1,2});
-		if (!ship.isOverForeground()) {
-			tileMapRenderer.render(cam, new int[]{3,4,5});
-		}
+		//tileMapRenderer.render(cam, new int[]{3}); // THIS IS ONLY UNTIL layer 2's graphics are complete
+		//tileMapRenderer.render(cam, new int[]{2});
+		tileMapRenderer.render(cam, new int[]{0,1});
+		
 		
 		
 		//tileMapRenderer.render((int) cam.position.x-cam.viewportWidth/2, (int) cam.position.y-cam.viewportHeight/2, 999, 999,
@@ -291,6 +287,12 @@ public class WorldRenderer {
 		
 		
 		return;
+	}
+	
+	private void drawForeground(SpriteBatch batch) {
+		if (!ship.isOverForeground()) {
+			tileMapRenderer.render(cam, new int[]{2,3});
+		}
 	}
 	
 	private void drawGameObjects(SpriteBatch batch) {
@@ -327,7 +329,7 @@ public class WorldRenderer {
 			}
 		}
 		
-		if (ship.getState() == Player.State.DEATH) {
+		if (ship.hasDied()) {
 			
 			redScreenAlpha += Gdx.graphics.getDeltaTime() / 3;
 			if (redScreenAlpha > 1.0f) {
@@ -499,12 +501,32 @@ public class WorldRenderer {
 				if ( (!sb.isFacingRight() && !bossRegion.isFlipX()) || (sb.isFacingRight() && bossRegion.isFlipX())) {
 					bossRegion.flip(true, false);
 				}
+				float bossRotation =0;
+				if (sb.getState() == SoldierBoss.State.RAM) {
+					if (sb.isFacingRight()) {
+						bossRotation=-90;
+					} else {
+						bossRotation =90;
+					}
+				}
 				batch.draw(bossRegion, e.getPosition().x+e.getWidth()/2-bossRegion.getRegionWidth()/32f/2f, e.getPosition().y+e.getHeight()/2-bossRegion.getRegionHeight()/32f/2f,
-						0,0, bossRegion.getRegionWidth()/32f, bossRegion.getRegionHeight()/32f, 2,2,0);
+						 bossRegion.getRegionWidth()/32f/2, bossRegion.getRegionHeight()/32f/2, bossRegion.getRegionWidth()/32f, bossRegion.getRegionHeight()/32f, 2,2,bossRotation);
 				if (sb.getState() == State.RAM && !sb.isPerformingTell()) {
 					bossRegion = myEnemy.findRegion("drill", sb.getOtherAnimationFrame());
+					float drillRotation;
+					if (sb.isFacingRight()) {
+						drillRotation = -90;
+					} else {
+						drillRotation = 90;
+					}
 					batch.draw(bossRegion, e.getPosition().x+e.getWidth()/2-bossRegion.getRegionWidth()/32f/2f, e.getPosition().y+e.getHeight()/2-bossRegion.getRegionHeight()/32f/2f,
-							0,0, bossRegion.getRegionWidth()/32f, bossRegion.getRegionHeight()/32f, 2,2,90);
+							bossRegion.getRegionWidth()/32f/2f,bossRegion.getRegionHeight()/32f/2f, bossRegion.getRegionWidth()/32f, bossRegion.getRegionHeight()/32f, 4,3,drillRotation);
+				}
+				if (sb.getState() == State.LASER) {
+					bossRegion = myEnemy.findRegion("pentagram", sb.getOtherAnimationFrame());
+					batch.draw(bossRegion, e.getPosition().x+e.getWidth()/2-bossRegion.getRegionWidth()/32f/2f, e.getPosition().y,
+							bossRegion.getRegionWidth()/32f/2f,0, bossRegion.getRegionWidth()/32f, bossRegion.getRegionHeight()/32f, 1,1,0);
+					
 				}
 			} else if (e.getClass() == Explosion.class) {
 				int frame = ((Explosion)e).getFrame();
@@ -595,6 +617,10 @@ public class WorldRenderer {
 							break;
 					}
 				}
+			} else if (e.getClass() == WallBoss.class) {
+				batch.draw(wallTexture, e.getPosition().x, e.getPosition().y, 0, 0,
+						e.getWidth(), e.getHeight(), 2, 2, e.getRotation(), 0, 0, wallTexture.getWidth(),
+						wallTexture.getHeight(), false, false);
 			}
 			
 			//draw the enemies health
@@ -677,7 +703,7 @@ public class WorldRenderer {
 		font.draw(textBatch, str, strXPos, strYPos);
 		
 		str = "Score: " + (int)world.getScore();
-		strXPos = Gdx.graphics.getWidth() - 2*223;
+		strXPos = Gdx.graphics.getWidth() - 3*223;
 		strYPos = Gdx.graphics.getHeight() - 4; //Offset from top
 		font.draw(textBatch, str, strXPos, strYPos);
 		
@@ -859,7 +885,8 @@ public class WorldRenderer {
 		manager.load("cyraRightMovement.txt", TextureAtlas.class);
 		manager.load("cyraLeftMovement.txt", TextureAtlas.class);
 		manager.load("modular3.txt", TextureAtlas.class);
-		manager.load("level packfile", TextureAtlas.class);
+		manager.load("tiles/level packfile", TextureAtlas.class);
+		manager.load("wall.png",Texture.class,linearFilteringParam);
 		manager.finishLoading();
 		
 		boss1Atlas = manager.get("stephen.txt", TextureAtlas.class);
@@ -905,6 +932,7 @@ public class WorldRenderer {
 		
 		laserTextures = manager.get("projectiles/lasers.txt");
 		explosionTextures = manager.get("projectiles/explosion.txt");
+		wallTexture = manager.get("wall.png");
 		//laserTextures.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
 			/* Load follower texture */
@@ -926,6 +954,9 @@ public class WorldRenderer {
 		
 		jumperFrontArmJumpingTexture = manager.get("frontarm-jumping-jumper.png");
 		jumperFrontArmJumpingTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		
+		
 		
 		TextureAtlas cyraRightAtlas = manager.get("cyraRightMovement.txt", TextureAtlas.class);
 		TextureAtlas cyraLeftAtlas = manager.get("cyraRightMovement.txt", TextureAtlas.class);
@@ -969,7 +1000,7 @@ public class WorldRenderer {
 		}
 		System.out.println("Found " + walkerRegions.size + " walker parts");
 		
-		groundTextureAtlas = manager.get("level packfile", TextureAtlas.class);
+		groundTextureAtlas = manager.get("tiles/level packfile", TextureAtlas.class);
 			/* Load walker texture - END */
 		return;
 		

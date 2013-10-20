@@ -7,10 +7,14 @@ import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+
+import deco2800.arcade.cyra.model.Block;
+import deco2800.arcade.cyra.model.BlockMaker;
 import deco2800.arcade.cyra.model.BlockMakerSpiderBoss;
 import deco2800.arcade.cyra.model.EnemySpiderBoss;
 import deco2800.arcade.cyra.model.EnemySpiderBossArms;
@@ -29,14 +33,15 @@ import deco2800.arcade.cyra.model.WarningOverlay;
 
 public class Level2Scenes extends LevelScenes {
 
-	public static final float SPIDER_BOSS_START = 602f;
+	public static final float SPIDER_BOSS_START = 615f;
 	public static final float SOLDIER_BOSS_START = 235f;
-	public static final float WALL_BOSS_START = 300f;
+	public static final float WALL_BOSS_START = 328f;
 	
 	
 	//private ParallaxCamera cam;
 	private TweenManager manager;
 	BlockMakerSpiderBoss blockMaker;
+	BlockMakerWaterfall blockMakerWaterfall;
 	private EnemySpiderBoss boss;
 	private SoldierBoss soldierBoss;
 	private WallBoss wallBoss;
@@ -62,6 +67,7 @@ public class Level2Scenes extends LevelScenes {
 		super(ship, cam, resultsScreen);
 		doneSomethingOnce = false;
 		blockMaker = new BlockMakerSpiderBoss();
+		blockMakerWaterfall = new BlockMakerWaterfall(235, 267, 46);
 		
 	}
 
@@ -77,12 +83,15 @@ public class Level2Scenes extends LevelScenes {
 		
 		if (scenePosition == 0) {
 			ship.getVelocity().x = 0;
-			Texture logTex = new Texture(Gdx.files.internal("log.png")); //need to move this to WorldRenderer
-			logTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-			destructLog =  new MovablePlatform(logTex, new Vector2(267, 60), 2, 14, new Vector2(267,46.1f), 10f, false, 0f);
-			MovablePlatform log1 =  new MovablePlatform(logTex, new Vector2(235, 60), 2, 14, new Vector2(235,46.1f), 10f, false, 0f);
-			output.add(destructLog);
-			output.add(log1);
+			//Texture logTex = new Texture(Gdx.files.internal("log.png")); //need to move this to WorldRenderer
+			//logTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			//destructLog =  new MovablePlatform(logTex, new Vector2(267, 60), 2, 14, new Vector2(267,46.1f), 10f, false, 0f);
+			//MovablePlatform log1 =  new MovablePlatform(logTex, new Vector2(235, 60), 2, 14, new Vector2(235,46.1f), 10f, false, 0f);
+			//output.add(destructLog);
+			//output.add(log1);
+			
+			blockMakerWaterfall.setActive(true);
+			output.add(blockMakerWaterfall);
 			soldierBoss = new SoldierBoss(new Vector2(239, 60));
 			output.add(soldierBoss);
 			output.add(new WarningOverlay(new Vector2(cam.position.x+cam.viewportWidth/2, cam.position.y), cam.viewportWidth, 10f));
@@ -92,13 +101,16 @@ public class Level2Scenes extends LevelScenes {
 			count = 0;
 			resultsScreen.showResults(time, ship.getHearts());
 			ship.resetHearts();
-			destructLog.setTargetPosition(new Vector2(270, 61));
+			//destructLog.setTargetPosition(new Vector2(270, 61));
+			blockMakerWaterfall.setState(2);
 			for (int i=0; i< 5; i++) {
 				output.add(new Explosion(new Vector2(267, 46+2*i)));
 			}
 		} else if (scenePosition == 2) {
+			blockMakerWaterfall.stop();
+			blockMakerWaterfall.setActive(false);
 			ship.getVelocity().x = Player.SPEED;
-			wallBoss = new WallBoss(new Vector2(300f, 4f));
+			wallBoss = new WallBoss(new Vector2(348f, 4f));
 			output.add(wallBoss);
 		} else if (scenePosition == 3) {
 			//after wall boss defeated
@@ -178,13 +190,21 @@ public class Level2Scenes extends LevelScenes {
 				return false;
 			}
 		} else if (scenePosition == 2) {
-			if (ship.getPosition().x >= 244f) {
+			if (ship.getPosition().x >= 340f) {
+				cam.position.x = 340f;
+				cam.position.y = cam.viewportHeight/2;
+				cam.setFollowShip(false);
+				ship.getVelocity().x = 0;
 				isPlaying = false;
 				return true;
+			} else {
+				ship.setVelocity(new Vector2(Player.SPEED, 0));
+				
 			}
 			return false;
 		} else if (scenePosition == 3) {
 			//defeated wall boss
+			cam.setFollowShip(true);
 			isPlaying = false;
 			return true;
 		} else if (scenePosition == 4) {
@@ -192,7 +212,7 @@ public class Level2Scenes extends LevelScenes {
 			manager.update(delta);
 			//ship.getVelocity().x = Ship.SPEED / 1.5f;
 			//ship.getVelocity().x = 12f / 1.5f; //after changed ship's default speed
-			ship.getPosition().x += delta * (cam.position.x - ship.getPosition().x) * 0.5f;
+			ship.getPosition().x += delta * (cam.position.x - ship.getPosition().x) * 0.9f;
 			ship.getPosition().y = 4f;
 			boss.getArms().resetPosition();
 			float lerp = 0.8f;
@@ -346,4 +366,72 @@ public class Level2Scenes extends LevelScenes {
 		return scenes[scene];
 	}
 
+	
+	private class BlockMakerWaterfall extends BlockMaker {
+
+		private int state =0;
+		private Array<Block> blocksLeft;
+		private Array<Block> blocksRight;
+		private Block lowestBlock;
+		private float yFinal;
+		
+		public BlockMakerWaterfall(float x1, float x2, float yFinal) {
+			super();
+			blocksLeft = new Array<Block>();
+			blocksRight = new Array<Block>();
+			this.yFinal = yFinal;
+			for (int i=60; i<60*2-yFinal; i++) {
+				if (i==60) {
+					lowestBlock = new Block(new Vector2(x1,i), Block.TextureAtlasReference.LEVEL, 2);
+					blocksLeft.add(lowestBlock);
+				} else {
+					blocksLeft.add(new Block(new Vector2(x1,i), Block.TextureAtlasReference.LEVEL, 2));
+				}
+				blocksRight.add(new Block(new Vector2(x2,i), Block.TextureAtlasReference.LEVEL, 2));
+			}
+		}
+		
+		@Override
+		public Array<Block> getBlocks() {
+			Array<Block> blocks = new Array<Block>();
+			blocks.addAll(blocksLeft);
+			blocks.addAll(blocksRight);
+			return blocks;
+		}
+
+		@Override
+		public void update(float delta, OrthographicCamera cam, float rank) {
+			if (state == 0) {
+				if (lowestBlock.getPosition().y > yFinal) {
+					for (Block b:blocksLeft) {
+						b.getPosition().y -= delta*7;
+					}
+					for (Block b:blocksRight) {
+						b.getPosition().y -= delta*7;
+					}
+				}
+			} else if (state == 2) {
+				Array<Vector2> directions = new Array<Vector2>();
+				float degrees = 150;
+				for (int i=0; i<blocksRight.size; i++) {
+					degrees += 18;
+					directions.add(new Vector2(1,1).rotate(degrees));
+					blocksRight.get(i).getPosition().add(directions.get(i).mul(delta*20));
+				}
+				
+			}
+			
+		}
+		
+		public void setState(int state) {
+			this.state = state;
+		}
+		
+		public void stop() {
+			blocksLeft.clear();
+			blocksRight.clear();
+			state = 1;
+		}
+		
+	}
 }

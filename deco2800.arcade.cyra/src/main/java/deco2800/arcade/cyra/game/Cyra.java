@@ -59,7 +59,7 @@ public class Cyra extends GameClient {
 		
 		super.create();
 		//Overlay
-		this.getOverlay().setListeners(new Screen() {
+		/*this.getOverlay().setListeners(new Screen() {
 			@Override
 			public void hide() {
 				//Unpause your game here
@@ -82,7 +82,7 @@ public class Cyra extends GameClient {
 			public void resume() {}
 			@Override
 			public void dispose() {}
-		});
+		});*/
 		// End Overlay
 		//setScreen(new MainMenu(this));
 		//Set to splash screen

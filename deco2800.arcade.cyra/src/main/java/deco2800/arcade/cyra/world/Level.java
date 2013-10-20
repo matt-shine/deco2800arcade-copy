@@ -56,7 +56,7 @@ public class Level {
 		//map = TiledLoader.createMap(Gdx.files.internal("level"+levelNum+".tmx"));
 		//map = TiledLoader.createMap(Gdx.files.internal("levelOld.tmx"));
 		
-		collisionLayer = (TiledLayer) ( map.layers.get(2) );
+		collisionLayer = (TiledLayer) ( map.layers.get(1) );
 		
 
 		atlas = new TileAtlas(map, Gdx.files.internal("tiles/"));
@@ -122,7 +122,7 @@ public class Level {
 			
 
 			RandomizedEnemySpawner res = new RandomizedEnemySpawner(spawners, sides, collisionLayer, 1.5f-rank, 0f, 200f);
-			RandomizedEnemySpawner res2 = new RandomizedEnemySpawner(spawners, sides, collisionLayer, 1.5f-rank, 300f, 600f);
+			RandomizedEnemySpawner res2 = new RandomizedEnemySpawner(spawners, sides, collisionLayer, 1.5f-rank, 353f, 600f);
 			res.setActive(true);
 			res2.setActive(true);
 			

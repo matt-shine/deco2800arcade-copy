@@ -45,6 +45,7 @@ public class Player extends MovableEntity{
 	private boolean wallClimbEnabled = true;
 	private float doubleTapTime = 0;
 	private boolean isOverForeground = false;
+	private boolean hasDied = false;
 	
 	public Player(Vector2 pos) {
 		super (SPEED, 0, pos, WIDTH, HEIGHT);
@@ -190,6 +191,7 @@ public class Player extends MovableEntity{
 		hearts--;
 		if (hearts <= 0 ){
 			state = State.DEATH;
+			hasDied = true;
 		}
 		return;
 	}
@@ -401,5 +403,8 @@ public class Player extends MovableEntity{
 		}
 		//System.out.println("AFTER State="+state+" canMove="+canMove+" velocity="+velocity+ "position="+position);
 		
+	}
+	public boolean hasDied() {
+		return hasDied;
 	}
 }

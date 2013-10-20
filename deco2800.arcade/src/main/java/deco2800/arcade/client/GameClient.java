@@ -120,7 +120,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	}
 
 	public void incrementAchievement(final String achievementID) {
-		achievementClient.incrementProgress(achievementID, player);
+		//achievementClient.incrementProgress(achievementID, player);
 	}
 
 	public AchievementClient getAchievementClient() {

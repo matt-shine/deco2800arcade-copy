@@ -80,7 +80,7 @@ public class World {
 	private float initCount;
 	
 	private boolean turnOffScenes = false;
-	private LaserBeam testBeam;
+	
 	
 	private Cyra game;
 	//He says this creates circular logic and hence is very bad. It's only really to get touchDown to access camera
@@ -553,6 +553,7 @@ public class World {
 				
 				if (e.isDead()) {			
 					//System.out.println("removing " + e.getClass()+ " because dead");
+					score += e.getScore();
 					eItr.remove();
 					//Enemy is dead - achievement
 					System.out.println("ACHIEVE INC");
@@ -564,6 +565,7 @@ public class World {
 					for (RandomizedEnemySpawner res: curLevel.getRandomEnemySpawners() ) {
 						res.removeEnemy(e);
 					}
+					
 					
 					
 				}
@@ -857,10 +859,7 @@ public class World {
 		Texture copterTex = new Texture(Gdx.files.internal("copter.png"));
 		copterTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(361, 8), 4f, 2f, new Vector2(361,42), 4.5f, true, 3.5f));
-		testBeam = new LaserBeam(75f, new Vector2(20f,6f), 5f, false, 0.1f);
-		enemies.add(testBeam);
-		enemies.add(new BulletHomingDestructible(6f, new Vector2(25f, 9f),1f, 1f, new Vector2(1,0.25f), BulletSimple.Graphic.FIRE));
-		enemies.add(new BulletHomingDestructible(6f, new Vector2(15f, 9f),1f, 1f, new Vector2(-1,0.25f), BulletSimple.Graphic.FIRE));
+		
 		
 		//addStaticEnemies();
 		

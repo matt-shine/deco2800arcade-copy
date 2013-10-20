@@ -481,10 +481,20 @@ public class EnemySpiderBoss extends Enemy {
 					Vector2 intendedDirection = new Vector2(ship.getPosition().x + ship.getWidth()/2 - (position.x+MOUTH_OFFSET_X), 
 							ship.getPosition().y + ship.getHeight()/2 - (position.y+MOUTH_OFFSET_Y));
 					float intendedAngle = intendedDirection.angle();
+					
+					
+					
+					float currentAngle = laserBeam.getRotation();
+					float angleDifference = intendedAngle - currentAngle;
+					if (Math.abs(angleDifference) > 180) {
+						//System.out.println("OVER 180!!!!!!!!!!!!!!!!");
+						angleDifference = -angleDifference/Math.abs(angleDifference) * Math.abs(180-angleDifference);
+					}
+					
 					if (intendedAngle < 0) {
 						intendedAngle += 360f;
 					}
-					laserBeam.setRotation(laserBeam.getRotation() + (intendedDirection.angle() - laserBeam.getRotation()) *delta * 0.2f);
+					laserBeam.setRotation(laserBeam.getRotation() + (angleDifference) *delta * (0.2f+rank/2));
 				}
 			}
 		//}

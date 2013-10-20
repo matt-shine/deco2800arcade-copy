@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Array;
 public class WallBoss extends Enemy{
 
 	public static final float WIDTH = 4f;
-	public static final float HEIGHT = 14f;
+	public static final float HEIGHT = 8f;
 	public static final int INITIAL_HEALTH = 15;
 	public static final float INVINSIBLE_TIME = 0.3f;
 	

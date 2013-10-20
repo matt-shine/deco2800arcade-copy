@@ -22,10 +22,10 @@ public class SoldierBoss extends Enemy {
 	public static final int INITIAL_HEALTH = 10;
 	public static final float ANIMATION_IDLE_RATE = 0.1f;
 	public static final float ANIMATION_ARMS_RATE = 0.1f;
-	public static final float ANIMATION_SPIN_RATE = 0.1f;
+	public static final float ANIMATION_SPIN_RATE = 0.05f;
 	public static final float ANIMATION_DRILL_RATE = 0.1f;
 	public static final float ANIMATION_CIRCLE_RATE = 0.1f;
-	public static final float LOWEST_HEIGHT= 47.4f;
+	public static final float LOWEST_HEIGHT= 46.4f;
 	
 	
 	
@@ -36,6 +36,7 @@ public class SoldierBoss extends Enemy {
 	private int stateFrame;
 	private float shootRotation;
 	private boolean shootRotationDirectionUp;
+	private int shootType;
 	//private float jumpTime;
 	private int health;
 	private boolean beingHit;
@@ -81,7 +82,7 @@ public class SoldierBoss extends Enemy {
 		@Override
 		public Array<Enemy> advance(float delta, Player ship, float rank, OrthographicCamera cam) {
 			super.update(ship);
-			System.out.println(state);
+			System.out.println(state + " "+performingTell);
 			if (beingHit) {
 				invincibleTime -= delta;
 				if (invincibleTime < 0) {
@@ -114,8 +115,13 @@ public class SoldierBoss extends Enemy {
 				case SHOOT:
 					if (performingTell) {
 						performingTell = false;
+						stateTime = 1.5f - rank;
+						shootRotation = 0f;
+						stateFrame = (int)(3f + 30*rank);
+						shootRotationDirectionUp = MathUtils.randomBoolean();
+						
 					} else {
-						int randInt = MathUtils.random(1);
+						
 						/*if (randInt == 0) {
 							newEnemies.add(new BulletHomingDestructible(5f + 10f * rank, new Vector2(position.x + width/2, 
 									position.y + height/2), 1f, 1f, new Vector2(0,1f), BulletSimple.Graphic.FIRE));
@@ -133,7 +139,7 @@ public class SoldierBoss extends Enemy {
 						}*/
 						if (--stateFrame == 0) {
 							startWalk(ship, rank);
-						} else {
+						} else if (shootType == 0){
 							Sounds.playShootSound(0.5f);
 							if (rank < 0.7f) {
 								stateTime = 1f-rank;
@@ -175,8 +181,16 @@ public class SoldierBoss extends Enemy {
 											position.y + height/2), 0.5f, 0.5f, new Vector2(direction), BulletSimple.Graphic.FIRE));
 								}
 							}
+						} else if (shootType == 1) {
+							Sounds.playShootSound(0.5f);
+							if (rank < 0.7f) {
+								stateTime = 1f-rank;
+							} else if (rank < 0.9f) {
+								stateTime = 0.91f-rank;
+							} else {
+								stateTime = 0.0001f;
+							}
 						}
-						
 					}
 					break;
 				case AOE:
@@ -185,7 +199,7 @@ public class SoldierBoss extends Enemy {
 					break;
 				case RAM:
 					if (performingTell) {
-						velocity.x = SPEED * 2.5f * rank;
+						velocity.x = SPEED * 2.5f * rank + 24f * rank;
 						if (!facingRight) {
 							velocity.x = -velocity.x;
 						}
@@ -198,7 +212,27 @@ public class SoldierBoss extends Enemy {
 					}
 					break;
 				case LASER:
-					stateTime = 2f;
+					int initStateFrame = (int) (rank*14);
+					float distanceBetweenBeams = 4f-rank;
+					if (performingTell) {
+						stateTime = 0.5f+ 2*rank;
+						stateFrame = initStateFrame;
+						shootRotation = ship.getPosition().x;
+						shootRotationDirectionUp = true;
+						performingTell = false;
+					} else {
+						if (--stateFrame <= 0) {
+							startWalk(ship, rank);
+						} else {
+							if (stateFrame == initStateFrame-1) {
+								newEnemies.add(new LaserBeam(90, new Vector2(shootRotation, LOWEST_HEIGHT-1f), 1f+ 2*rank, false, 1.2f-rank));
+							} else {
+								newEnemies.add(new LaserBeam(90, new Vector2(shootRotation + distanceBetweenBeams*(initStateFrame-stateFrame-1), LOWEST_HEIGHT-1f), 1f+ 2*rank, false, 1.2f-rank));
+								newEnemies.add(new LaserBeam(90, new Vector2(shootRotation - distanceBetweenBeams*(initStateFrame-stateFrame-1), LOWEST_HEIGHT-1f), 1f+ 2*rank, false, 1.2f-rank));
+							}
+						}
+						stateTime = 1.2f-rank;
+					}
 					//swordTime = 1.5f;
 					break;
 				
@@ -209,7 +243,8 @@ public class SoldierBoss extends Enemy {
 					float randX = MathUtils.random(-WIDTH/2-buffer, WIDTH/2+buffer);
 					float randY = MathUtils.random(-HEIGHT/2-buffer, HEIGHT/2+buffer);
 					newEnemies.add(new Explosion(new Vector2(position.x+width/2-Explosion.WIDTH/2+randX, position.y+height/2-Explosion.HEIGHT/2+randY)));
-					stateTime = 0.05f;
+					Sounds.playExplosionLong(0.5f);
+					stateTime = 0.08f;
 					if (stateFrame == 0) {
 						isDead = true;
 						startingNextScene=true;
@@ -244,6 +279,31 @@ public class SoldierBoss extends Enemy {
 				} else {
 					facingRight = false;
 				}
+			} else if (state == State.RAM) {
+				if (performingTell) {
+					float lerp = 0.9f;
+					if (Math.abs(ship.getPosition().y - position.y) > 3f) {
+						lerp = 3+ 20*rank;
+					}
+					position.y += (LOWEST_HEIGHT - position.y)* delta * lerp;
+					if (position.y < LOWEST_HEIGHT) {
+						position.y = LOWEST_HEIGHT;
+					}
+					if (ship.position.x + ship.getWidth()/2> position.x+width/2) {
+						facingRight = true;
+					} else {
+						facingRight = false;
+					}
+				}
+			}
+				
+			
+			if (position.y + height > 59f) {
+				velocity.y = -4f;
+				position.y -= 0.3f;
+			}
+			if (position.y < LOWEST_HEIGHT) {
+				position.y += 0.2f;
 			}
 			
 			//Animation frames
@@ -256,16 +316,35 @@ public class SoldierBoss extends Enemy {
 						animationFrame = 0;
 					}
 					animationTime = ANIMATION_IDLE_RATE;
+				} else if (state == State.SHOOT && shootType == 0) {
+					animationFrame=6;
+					
+				} else if (state == State.SHOOT && shootType == 1 || state == State.LASER) {
+					animationFrame++;
+					if (animationFrame >= 5) {
+						animationFrame = 3;
+					}
+					animationTime = ANIMATION_ARMS_RATE;
+				} else if (state == State.RAM){
+					if (++animationFrame >= 10) {
+						animationFrame = 7;
+					}
+					animationTime = ANIMATION_SPIN_RATE;
 				}
 			}
 			otherAnimationTime -= delta;
 			if (otherAnimationTime < 0) {
 				if (state == State.RAM) {
 					otherAnimationTime = ANIMATION_DRILL_RATE;
-					if (++otherAnimationFrame == 3) {
+					if (++otherAnimationFrame >= 4) {
 						otherAnimationFrame = 0;
 					}
-				} //else if (state == State.)
+				} else if (state == State.LASER) {
+					otherAnimationTime = ANIMATION_CIRCLE_RATE;
+					if (++otherAnimationFrame >= 4) {
+						otherAnimationFrame = 0;
+					}
+				}
 			}
 			
 			return newEnemies;
@@ -275,20 +354,20 @@ public class SoldierBoss extends Enemy {
 			velocity.x = 0f;
 			
 			//will need to make it so the same state doesn't get picked twice
-			float walkChance = 0.4f - 0.34f * rank;
+			float walkChance = 0.4f - 0.38f * rank;
 			
 			
-			float shootChance = walkChance + 0.4f * rank;
+			float shootChance = walkChance + 0.3f;
 			//float shootChance = waitChance + 50f+0.4f * rank; // doing this to test the shooting
-			float aoeChance;
-			if (rank > 0.75f) {
+			//float aoeChance;
+			/*if (rank > 0.75f) {
 				aoeChance = shootChance + 0.3f;
 			} else {
 				aoeChance = shootChance;	
-			}
-			float ramChance = aoeChance + 0.1f * rank;
+			}*/
+			float ramChance = shootChance + 0.2f;
 			//float laserChance =  ramChance + 0.2f;
-			float laserChance =  ramChance;
+			float laserChance =  ramChance + 0.2f;
 			
 			float rand = MathUtils.random(laserChance);
 			
@@ -306,27 +385,29 @@ public class SoldierBoss extends Enemy {
 				velocity.x = 0;
 				velocity.y = 0;
 				stateTime = 1.5f-1.35f * rank;
-				shootRotation = 0f;
-				stateFrame = (int)(3f + 30*rank);
-				shootRotationDirectionUp = MathUtils.randomBoolean();
-			
+				//shootType = MathUtils.random(1); 
+				shootType = 0; //only doing 1 type now
+				
+			/*
 			} else if (rand < aoeChance) {
 				state = State.AOE;
 				
 				performingTell = true;
 				velocity.x = 0;
 				stateTime = 2.5f-1.5f * rank;
-			
+			*/
 			} else if (rand < ramChance) {
 				state = State.RAM;
-				if (ship.position.x > position.x) {
+				if (ship.position.x + ship.getWidth()/2> position.x+width/2) {
 					facingRight = true;
 				} else {
 					facingRight = false;
 				}
 				performingTell = true;
 				velocity.x = 0;
-				stateTime = 1.5f-1.35f * rank;
+				stateTime = 3.5f-1.45f * rank;
+				animationFrame = 7;
+				animationTime = ANIMATION_SPIN_RATE;
 			} else if (rand < laserChance) {
 				state = State.LASER;
 				if (ship.position.x > position.x) {
@@ -371,9 +452,11 @@ public class SoldierBoss extends Enemy {
 	
 	@Override
 	public void handleXCollision(Rectangle tile) {
-		super.handleXCollision(tile);
+		//super.handleXCollision(tile);
 		if (state == State.WALK) {
 			velocity.x = velocity.x * (-1);
+		} else if (state == State.RAM) {
+			velocity.x = 0;
 		}
 		
 	}
@@ -398,11 +481,11 @@ public class SoldierBoss extends Enemy {
 	@Override
 	public Array<Rectangle> getPlayerDamageBounds() {
 		Array<Rectangle> output = new Array<Rectangle>();
-		if (state == State.AOE) {
+		if (state == State.AOE && !performingTell) {
 			float size = 9f;
 			output.add(new Rectangle(position.x - size, position.y-size, width+2*size, height+2*size));
-		} else if (state == State.RAM) {
-			output.add(new Rectangle(position.x-4f, position.y, width+8f,height));
+		} else if (state == State.RAM && !performingTell) {
+			output.add(new Rectangle(position.x-3f, position.y-1f, width+6f,height+2f));
 		}
 		return output;	
 	}

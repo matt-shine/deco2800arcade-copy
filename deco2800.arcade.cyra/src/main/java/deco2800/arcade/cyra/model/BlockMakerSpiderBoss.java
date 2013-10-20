@@ -145,6 +145,11 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 				blocks.add(new Block(new Vector2(cam.position.x-cam.viewportWidth/2, spawnY), Block.TextureAtlasReference.LEVEL, 0));
 				latestBlock = new Block(new Vector2(cam.position.x+cam.viewportWidth/2 - Block.SIZE, spawnY), Block.TextureAtlasReference.LEVEL, 0);
 				blocks.add(latestBlock);
+				
+				//add the background blocks
+				for (int i = (int)(cam.position.x-cam.viewportWidth/2+1f); i< (int)(cam.position.x+cam.viewportWidth/2-1f); i++) {
+					blocks.add(new Block(new Vector2(i, spawnY), Block.TextureAtlasReference.LEVEL, 1, false));
+				}
 			}
 			
 			
@@ -156,8 +161,17 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 			
 			//Move and remove existing blocks
 			for (int i=0; i<blocks.size; i++) {
+				
 				Block block = blocks.get(i);
-				block.getPosition().y += delta * Player.MAX_FALL_VELOCITY;
+				//float reduceRate = (block.getPosition().x-(cam.position.x-cam.viewportWidth/2))/(cam.viewportWidth/2);
+				float reduceRate;
+				float minReduceRate = 0.2f;
+				if (block.getPosition().x < cam.position.x) {
+					reduceRate = 1f -  ((1-minReduceRate)/(cam.viewportWidth/2)) * (block.getPosition().x-(cam.position.x-cam.viewportWidth/2));
+				} else {
+					reduceRate = minReduceRate+ ((1-minReduceRate)/(cam.viewportWidth/2)) * (block.getPosition().x-(cam.position.x));
+				}
+				block.getPosition().y += delta * Player.MAX_FALL_VELOCITY * reduceRate;
 				if (block.getPosition().y  > cam.position.y + cam.viewportHeight/2) {
 					//System.out.println("Removing Block at " + block.getPosition());
 					blocks.removeIndex(i);
@@ -173,6 +187,7 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 					blocks.add(new Block(new Vector2(i, -3f), Block.TextureAtlasReference.LEVEL, 0));
 					latestBlock = new Block(new Vector2(i, -4f), Block.TextureAtlasReference.LEVEL, 0);
 					blocks.add(latestBlock);
+					blocks.add(new Block(new Vector2(i, -5f), Block.TextureAtlasReference.LEVEL, 0));
 				}
 				firstUpdate = false;
 			}

@@ -18,7 +18,7 @@ public class LaserBeam extends Enemy {
 	private boolean stopWhenHitSolid; // just going to ignore this because it'll make it too complicated and I don't need it right now
 	private float currentWidth;
 	private Vector2 initPos;
-	private float rotation;
+	//private float rotation;
 	private float count;
 	private float maxWidth;
 	
@@ -30,7 +30,7 @@ public class LaserBeam extends Enemy {
 		this.stopWhenHitSolid = stopWhenHitSolid;
 		currentWidth = 0.01f;
 		this.initPos = initPos;
-		this.rotation = rotation;
+		//this.rotation = rotation;
 		count = -timeToBegin;
 		this.maxWidth = maxWidth;
 		System.out.println("Made new laser beam");

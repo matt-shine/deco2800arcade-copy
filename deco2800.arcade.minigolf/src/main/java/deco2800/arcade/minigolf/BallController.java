@@ -151,7 +151,7 @@ public class BallController {
 						// Searches for the destination teleporter in the list 
 						// of all the teleporter blocks.
 						for (Block1 teleBlock : teleBlocks) {
-							if (teleBlock.teleNumber == destinationTele){
+							if (teleBlock.teleNumber == destinationTele && block.teleNumber%2 == 1){
 								
 								ball.setPosition(teleBlock.getPosition().x, teleBlock.getPosition().y);
 							}

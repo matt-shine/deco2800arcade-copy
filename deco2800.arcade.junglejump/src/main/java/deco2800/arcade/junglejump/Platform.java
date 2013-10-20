@@ -116,14 +116,9 @@ public class Platform {
 			this.yPos -= 20;
 			break;
 		case 'J': // Jim
-			platformType = "banana";
+			platformType = "jimbo";
 			this.width = 80;
 			this.height = 60;
-			break;
-		case 'Z': // Princess monkey
-			platformType = "banana";
-			this.width = 50;
-			this.height = 50;
 			break;
 		case '_': // Building roof
 			platformType = "roof";
@@ -252,6 +247,9 @@ public class Platform {
 				if(moveRight) {
 					this.xPos += moveSpeed;
 					moveCounter += moveSpeed;
+					if(this.xPos > junglejump.SCREENWIDTH) {
+						this.inactive = true;
+					}
 				} else {
 					this.xPos -= moveSpeed;
 					moveCounter += moveSpeed;

@@ -1,5 +1,6 @@
 package deco2800.arcade.mixmaze;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.mixmaze.domain.MixMazeModel;
 import deco2800.arcade.mixmaze.domain.PlayerModel;
 import deco2800.arcade.mixmaze.domain.TileModel;
@@ -56,6 +57,7 @@ class LocalScreen extends GameScreen {
 		TileViewModel tile;
 		int boardSize = model.getBoardSize();
 		int tileSize = 640 / boardSize;
+		String username = game.getPlayer().getUsername();
 
 		for (int j = 0; j < boardSize; j++) {
 			for (int i = 0; i < boardSize; i++) {
@@ -83,8 +85,8 @@ class LocalScreen extends GameScreen {
 		gameArea.addActor(p2);
 		scorebar[0].setBoxColor(p1.getColor());
 		scorebar[1].setBoxColor(p2.getColor());
-		left.setPlayerName("kate_is_kewl");
-		right.setPlayerName("mixMAZEr0x");
+		left.setPlayerName(username);
+		right.setPlayerName(username + "'s friend");
 	}
 
 	@Override
@@ -137,7 +139,7 @@ class LocalScreen extends GameScreen {
 	 * Starts the game.
 	 */
 	protected void startGame() {
-		Gdx.input.setInputProcessor(stage);
+		ArcadeInputMux.getInstance().addProcessor(stage);
 		stage.setKeyboardFocus(gameArea);
 		model.startGame();
 		logger.info("start game");

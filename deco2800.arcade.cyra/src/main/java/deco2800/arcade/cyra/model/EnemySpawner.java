@@ -42,7 +42,7 @@ public class EnemySpawner {
 		if (enemies.size < maxSpawnAtOnce && spawnCount < maxSpawn) {
 			return spawnNew();
 		} else {
-			System.out.println("Not spawned because "+enemies.size+", "+maxSpawnAtOnce+", "+spawnCount+", "+maxSpawn);
+			//System.out.println("Not spawned because "+enemies.size+", "+maxSpawnAtOnce+", "+spawnCount+", "+maxSpawn);
 			return null;
 		}
 	}
@@ -55,7 +55,7 @@ public class EnemySpawner {
 			//enemyCount++;
 			spawnCount++;
 			count = 0;
-			System.out.println("Spawned enemy at " + pos.x+","+pos.y);
+			//System.out.println("Spawned enemy at " + pos.x+","+pos.y);
 			return e;
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block

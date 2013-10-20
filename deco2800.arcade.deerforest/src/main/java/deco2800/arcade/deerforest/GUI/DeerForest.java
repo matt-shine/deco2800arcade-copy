@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 
 import deco2800.arcade.model.Game;
@@ -50,6 +49,39 @@ public class DeerForest extends GameClient {
 	public void create() {
 		
 		super.create();
+
+        //add the overlay listeners
+        this.getOverlay().setListeners(new Screen() {
+
+            @Override
+            public void render(float arg0) {
+            }
+
+            @Override
+            public void resize(int width, int height) {
+            }
+
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void hide() {
+            }
+
+            @Override
+            public void pause() {
+            }
+
+            @Override
+            public void resume() {
+            }
+
+            @Override
+            public void dispose() {
+            }
+
+        });
         
         // Setup menu
         mainMenu = new MainMenu(null);

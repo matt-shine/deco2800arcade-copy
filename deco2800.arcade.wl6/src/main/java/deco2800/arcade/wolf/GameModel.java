@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.math.Vector2;
 
@@ -43,14 +45,14 @@ public class GameModel {
     private float delta = 0;
 
     // Doodads to delete or add
-    private ArrayList<Doodad> toDelete = new ArrayList<Doodad>();
-    private ArrayList<Doodad> toAdd = new ArrayList<Doodad>();
+    private List<Doodad> toDelete = new ArrayList<Doodad>();
+    private List<Doodad> toAdd = new ArrayList<Doodad>();
 
 	private int difficulty = 1;
 
 	private boolean resetPlayer = false;
 	
-	private HashMap<String, String> levels = new HashMap<String, String>();
+	private Map<String, String> levels = new HashMap<String, String>();
 	
 
     public GameModel() {

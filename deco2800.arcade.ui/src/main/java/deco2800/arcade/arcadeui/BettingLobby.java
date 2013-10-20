@@ -52,7 +52,7 @@ public class BettingLobby implements Screen {
 	
 
 	
-	ArrayList<ActiveMatchDetails> matches;
+	ArrayList<ArrayList<Object>> matches;
 	static Label topUserLabel;
 	Table topTable = new Table();
 	Label invalidLabel;
@@ -67,7 +67,7 @@ public class BettingLobby implements Screen {
 		bets = new Array<String>();
 		betNum= bets.size; 
 		
-		matches = ArcadeSystem.requestLobbyGamesList();
+		matches = ArcadeSystem.requestActiveGamesList();
 		
 		Table table = new Table();
 		table.setFillParent(true);
@@ -153,6 +153,8 @@ public class BettingLobby implements Screen {
 		
 		updateButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
+				matches= ArcadeSystem.requestActiveGamesList();
+				System.out.print(matches);
 				gamesTable.clear();
 				invalidLabel.setVisible(false);
 				if (matches.size() > 0) {
@@ -163,9 +165,9 @@ public class BettingLobby implements Screen {
 						matchNum = matches.size();
 					}
 					for (int i = 0; i < matchNum; i++) {
-						final int p1 =matches.get(i).hostPlayerId;
-						final int p2 =matches.get(i).hostPlayerId;
-						final String game = matches.get(i).gameId;
+						final int p1 = 1;//matches.get(i).hostPlayerId;
+						final int p2 = 2;//matches.get(i).hostPlayerId;
+						final String game = "PONG";//matches.get(i).gameId;
 						Label gameInfo = new Label("Player: "+p1+" Vs "+"Player: "+p2+ " in "+ game, skin);
 						final TextField betfield = new TextField("", skin);
 						betfield.setMessageText("0");

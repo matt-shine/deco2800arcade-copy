@@ -849,8 +849,9 @@ public class Arcade extends JFrame {
 	 * 
 	 * @return The list of active multiplayer games
 	 */
-	public ArrayList<ArrayList<Object>> getActiveGames() {
+	public static ArrayList<ArrayList<Object>> getActiveGames() {
 		return new ArrayList<ArrayList<Object>>(activeMatches);
 	}
+
 	
 }

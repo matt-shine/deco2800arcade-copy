@@ -255,7 +255,7 @@ public class Controller extends KeyAdapter{
 	    			 }
 	    	 }
 	     }
-	
+
 	/**
 	 * Reset the game.
 	 */

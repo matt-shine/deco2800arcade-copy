@@ -19,7 +19,8 @@ public class Hans extends Enemy {
         setPain(false);
         setRepeatShootChance(0.975f);
         setStateChangeTime(0.08f);
-
+        setDamage(2);
+        
         
         initialiseFromEnemyData(d);
         

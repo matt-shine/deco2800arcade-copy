@@ -19,6 +19,7 @@ public class Giftmacher extends Enemy {
         setPain(false);
         setRepeatShootChance(0.95f);
         setStateChangeTime(0.1f);
+        setDamage(2);
         
         initialiseFromEnemyData(d);
         

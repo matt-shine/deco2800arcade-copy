@@ -1,0 +1,27 @@
+boss.ogg
+    Nightmares/Noice (ZX Spectrum demo) 
+        By Yerzmyey, download at https://soundcloud.com/yerzmyey/yerzmyey-nightmares
+
+gameover.ogg
+    Dubmood Is A Robot (Dubmood Edit)
+        By Zabutom, from the album "Lost Floppies Vol 2"
+
+level0.ogg
+    Toffelskater
+        By Dubmood, from the album "Best Of 2001-2003"
+
+level1.ogg
+    Keygen 3 feat Kootie
+        By Dubmood, from the album "Lost Floppies Vol 1"
+
+something.ogg
+    wotw-intro56.mod
+        By w.o.t.w, download at http://modarchive.org/index.php?request=view_by_moduleid&query=66651
+
+splash0.ogg
+    The hardware chiptune project
+        By kryo, more info at http://www.linusakesson.net/hardware/chiptune.php
+
+splash1.ogg
+    Unreeeal superhero 3
+        By Kenet and Rez, download at http://modarchive.org/index.php?request=view_by_moduleid&query=149252

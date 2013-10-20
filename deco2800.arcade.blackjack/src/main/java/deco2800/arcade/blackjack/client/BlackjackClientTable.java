@@ -278,6 +278,7 @@ public class BlackjackClientTable implements Screen{
 		player3card4.setPosition(640, 295);
 		player3card5.setPosition(665, 295);
 		
+<<<<<<< HEAD
 		TextureRegion player3cardsTexReg = new TextureRegion(CardQueenClub);
 		Image player3cardfinal = new Image(player3cardsTexReg);
 		Image player3cardfinal2 = new Image(player3cardsTexReg);
@@ -359,8 +360,73 @@ public class BlackjackClientTable implements Screen{
 		player5card3.add(player5cardfinal3);
 		player5card4.add(player5cardfinal4);
 		player5card5.add(player5cardfinal5);
+=======
+		Texture CardQueenSpade = new Texture(Gdx.files.internal("data/QS.jpg"));
 		
-
+		TextureRegion player1cardsTexReg = new TextureRegion(CardQueenSpade);
+		Image player1cardfinal = new Image(player1cardsTexReg);
+		Image player1cardfinal2 = new Image(player1cardsTexReg);
+		Image player1cardfinal3 = new Image(player1cardsTexReg);
+		Image player1cardfinal4 = new Image(player1cardsTexReg);
+		Image player1cardfinal5 = new Image(player1cardsTexReg);
+		player3card1.add(player1cardfinal);
+		player3card2.add(player1cardfinal2);
+		player3card3.add(player1cardfinal3);
+		player3card4.add(player1cardfinal4);
+		player3card5.add(player1cardfinal5);
+>>>>>>> 0dbed54497ebc30beb280713641d5f92ebde7685
+		
+		//-----------------------------------------------
+		//----------------BUTTONS------------------------
+		
+		Drawable buttontexture = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/null.png"))));
+		TextButtonStyle buttonstyle = new TextButtonStyle(buttontexture, buttontexture, buttontexture);
+		buttonstyle.font = new BitmapFont();
+		buttonstyle.fontColor = Color.BLACK;
+		
+        TextButton hit = new TextButton("Hit", buttonstyle);
+        hit.setSize(200, 20);
+        hit.setPosition(20, 20);
+        stage.addActor(hit);
+        hit.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				
+				return false;
+			}
+		});
+        
+        TextButton stay = new TextButton("Stay", buttonstyle);
+        stay.setSize(200, 20);
+        stay.setPosition(240, 20);
+        stage.addActor(stay);
+        stay.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				
+				return false;
+			}
+		});
+        
+        TextButton split = new TextButton("Split", buttonstyle);
+        split.setSize(200, 20);
+        split.setPosition(460, 20);
+        stage.addActor(split);
+        split.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				
+				return false;
+			}
+		});
+        
+        TextButton doubledown = new TextButton("Double Down", buttonstyle);
+        doubledown.setSize(200, 20);
+        doubledown.setPosition(680, 20);
+        stage.addActor(doubledown);
+        doubledown.addListener(new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				
+				return false;
+			}
+		});
 		
     }
  

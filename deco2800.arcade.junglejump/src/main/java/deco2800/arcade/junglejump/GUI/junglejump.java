@@ -611,14 +611,13 @@ public class junglejump extends GameClient implements InputProcessor {
 					
 	
 					// If monkey hits bottom of platform tough titties
-					/*if(y >= p.getY() - monkeyHeight
+					if(y >= p.getY() - monkeyHeight
 							&& y <= p.getY()) {
 						monkeyY = p.getY() - monkeyHeight;
-						p.setInactive();
 						onPlatform = false;
 						isFalling = true;
 						return false;
-					}*/
+					}
 					return true;
 				}
 			}
@@ -684,7 +683,8 @@ public class junglejump extends GameClient implements InputProcessor {
 		game = new Game();
 		game.id = "junglejump";
 		game.name = "Jungle Jump";
-		game.description = "Help Jay find Jay's Jane";
+		game.description = "Join Jay's jungle jumping journey to steal"
+				+ " Jane from the steel jaws of Jim Steel!";
 	}
 
 	public Game getGame() {

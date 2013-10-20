@@ -73,7 +73,7 @@ public class Platform {
 			platformType = "vine_short";
 			this.width = 20;
 			this.height = 80;
-			this.xPos -= 15;
+			this.xPos -= 5;
 			break;
 		case 't': // short tree
 			platformType = "treetop_short";

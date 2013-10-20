@@ -18,12 +18,23 @@ import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.AchievementProgress;
 import deco2800.arcade.model.Game;
 
+/**
+ * Listens for incoming achievement messages to the server, communicates with
+ * the server's AchievementStorage instance to perform the message's actions
+ * and then sends a response back to the client (if needed).
+ */
 public class AchievementListener extends Listener {
-	
+
     private static Logger logger = LoggerFactory.getLogger(AchievementListener.class);
-    
 
-
+    /**
+     * Listener override that gets called with every message recieved by the
+     * server. Non-achievement messages are ignored while achievement messages
+     * are handled here and a response sent back.
+     *
+     * @param connection The connection that the message was received from.
+     * @param object The message's object
+     */
     @Override
     public void received(Connection connection, Object object) {
     	//TODO this is a hack to be removed once I hear back from replay team about merging
@@ -32,7 +43,7 @@ public class AchievementListener extends Listener {
 	super.received(connection, object);
 	AchievementStorage storage = ArcadeServer.instance().getAchievementStorage();
 
-	if (object instanceof AchievementsForIDsRequest){		 			
+	if (object instanceof AchievementsForIDsRequest){
 	    AchievementsForIDsRequest req = (AchievementsForIDsRequest) object;
         logger.debug("AchievementsForIDsRequest recieved ID's: {}", req.achievementIDs);
 	    AchievementsForIDsResponse resp = new AchievementsForIDsResponse();
@@ -42,11 +53,11 @@ public class AchievementListener extends Listener {
 		ArrayList<Achievement> achievements = storage.achievementsForIDs(req.achievementIDs);
 
 		logger.debug("Sending back achievements: {}", achievements.toString());
-		resp.achievements = achievements;	     				
+		resp.achievements = achievements;
 	    } catch (DatabaseException e) {
 	    logger.error("Failed to retrieve ID's from database");
 		e.printStackTrace();
-		
+
 		resp.achievements = new ArrayList<Achievement>();
 		for (String id : req.achievementIDs)
 		    resp.achievements.add(null);
@@ -56,7 +67,7 @@ public class AchievementListener extends Listener {
 	} else if (object instanceof IncrementProgressRequest){
 	    IncrementProgressRequest req = (IncrementProgressRequest) object;
         logger.debug("IncrementProgressRequest recieved for {}", req.achievementID);
-			
+
 	    try {
 		//update database
 		int newProgress = storage.incrementProgress(req.playerID, req.achievementID);
@@ -79,11 +90,11 @@ public class AchievementListener extends Listener {
 	    	logger.info("Failed to increment achievement progress of {}", req.achievementID);
 	    }
 	} else if (object instanceof AchievementsForGameRequest){
-	    
-			
+
+
             AchievementsForGameRequest req = (AchievementsForGameRequest)object;
             AchievementsForGameResponse resp = new AchievementsForGameResponse();
-            
+
             try {
             	logger.debug("AchievementsForGameRequest recieved for {}", req.gameID);
 		resp.achievements = storage.achievementsForGame(req.gameID);
@@ -94,16 +105,16 @@ public class AchievementListener extends Listener {
 
 	    NetworkObject.respond(connection, req, resp);
 	} else if (object instanceof ProgressForPlayerRequest){
-			
+
 	    ProgressForPlayerRequest req = (ProgressForPlayerRequest)object;
-	    ProgressForPlayerResponse resp = new ProgressForPlayerResponse();			
-			
+	    ProgressForPlayerResponse resp = new ProgressForPlayerResponse();
+
 	    try {
 	    	logger.debug("ProgressForPlayerRequest recieved for player with ID: {}", req.playerID);
-	    	resp.achievementProgress = storage.progressForPlayer(req.playerID);		
+	    	resp.achievementProgress = storage.progressForPlayer(req.playerID);
 	    } catch (DatabaseException e) {
 	    	logger.error("Failed to get progress for player: {}", req.playerID);
-	    	resp.achievementProgress = null;		
+	    	resp.achievementProgress = null;
 	    }
 
 	    NetworkObject.respond(connection, req, resp);

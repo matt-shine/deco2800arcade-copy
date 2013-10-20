@@ -1,0 +1,141 @@
+
+loginSkin.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+iconBlue_plus
+  rotate: false
+  xy: 1, 856
+  size: 1158, 1157
+  orig: 1158, 1157
+  offset: 0, 0
+  index: -1
+iconMagenta
+  rotate: false
+  xy: 1, 5
+  size: 850, 849
+  orig: 850, 849
+  offset: 0, 0
+  index: -1
+iconBlue
+  rotate: false
+  xy: 1161, 1165
+  size: 849, 848
+  orig: 849, 848
+  offset: 0, 0
+  index: -1
+iconGreen
+  rotate: false
+  xy: 1161, 315
+  size: 849, 848
+  orig: 849, 848
+  offset: 0, 0
+  index: -1
+CenturyGothic20Bold
+  rotate: false
+  xy: 853, 598
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+SFAtarianSystem24
+  rotate: false
+  xy: 853, 340
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+buttonRed
+  rotate: false
+  xy: 853, 127
+  size: 615, 186
+  orig: 615, 186
+  offset: 0, 0
+  index: -1
+textbox
+  rotate: false
+  xy: 853, 78
+  size: 400, 47
+  orig: 400, 47
+  offset: 0, 0
+  index: -1
+Manteka18
+  rotate: false
+  xy: 1470, 185
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+CenturyGothic18Bold
+  rotate: false
+  xy: 1728, 185
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+Manteka16
+  rotate: false
+  xy: 1858, 185
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+cursor
+  rotate: false
+  xy: 1, 1
+  size: 1, 2
+  orig: 1, 2
+  offset: 0, 0
+  index: -1
+selection
+  rotate: false
+  xy: 2012, 2012
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+
+loginSkin2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+iconGreen_plus
+  rotate: false
+  xy: 1, 375
+  size: 1158, 1157
+  orig: 1158, 1157
+  offset: 0, 0
+  index: -1
+buttonBlue
+  rotate: false
+  xy: 1, 188
+  size: 615, 185
+  orig: 615, 185
+  offset: 0, 0
+  index: -1
+buttonGreen
+  rotate: false
+  xy: 1161, 1347
+  size: 615, 185
+  orig: 615, 185
+  offset: 0, 0
+  index: -1
+buttonGrey
+  rotate: false
+  xy: 1, 1
+  size: 615, 185
+  orig: 615, 185
+  offset: 0, 0
+  index: -1
+
+loginSkin3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+iconMagenta_plus
+  rotate: false
+  xy: 1, 1
+  size: 1158, 1157
+  orig: 1158, 1157
+  offset: 0, 0
+  index: -1

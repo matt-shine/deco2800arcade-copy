@@ -8,6 +8,9 @@ import deco2800.arcade.burningskies.entities.BoringEnemy;
 import deco2800.arcade.burningskies.entities.Enemy8;
 import deco2800.arcade.burningskies.entities.Level1Enemy;
 
+/**
+ *  Create enemy objects for the game and adds them.
+ */
 public class SpawnList {
 	
 	private PlayScreen screen;
@@ -121,7 +124,7 @@ public class SpawnList {
 	
 	/**
 	 * Set the interval to spawn enemies
-	 * @param time
+	 * @ensure time != null
 	 */	
 	public void setTimer(float time) {
 		interval = time;

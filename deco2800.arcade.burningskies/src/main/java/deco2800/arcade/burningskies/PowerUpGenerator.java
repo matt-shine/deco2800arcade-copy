@@ -8,7 +8,9 @@ import deco2800.arcade.burningskies.entities.SpeedPowerUp;
 import deco2800.arcade.burningskies.entities.UpgradePowerUp;
 import deco2800.arcade.burningskies.screen.PlayScreen;
 
-//Class placement appropriate?
+/**
+ * A class to randomly choose a powerup to be created.
+ */
 public class PowerUpGenerator {
 
 	private PlayScreen screen;
@@ -19,7 +21,7 @@ public class PowerUpGenerator {
 	
 	/**
 	 * Creates a random powerup to be dropped on the screen.
-	 * @ensure X != null || Y != null
+	 * @ensure X != null && Y != null
 	 */
 	public void randomPowerUp(float X, float Y) {
 		PowerUp toAdd;

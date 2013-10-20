@@ -6,6 +6,11 @@ import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.burningskies.entities.bullets.Enemy8Pattern;
 import deco2800.arcade.burningskies.screen.PlayScreen;
 
+/**
+ * An enemy which shoots a stream of bullets for the game.
+ * The duration of the bullet stream and the bullets damage 
+ * can be altered.
+ */
 public class Enemy8 extends Enemy {
 	
 	private Enemy8Pattern pattern;

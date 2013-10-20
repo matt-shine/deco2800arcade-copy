@@ -30,7 +30,9 @@ import deco2800.arcade.burningskies.entities.bullets.Bullet;
 import deco2800.arcade.burningskies.entities.bullets.Bullet.Affinity;
 import deco2800.arcade.client.ArcadeInputMux;
 
-
+/**
+ *  The screen where the actual game is played. 
+ */
 public class PlayScreen implements Screen
 {
 	private BurningSkies game;
@@ -147,8 +149,8 @@ public class PlayScreen implements Screen
     	Gdx.gl.glClearColor(0, 0, 0, 1);
     	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	
-    	if(!game.isPaused()) {
-    		if(!player.isAlive()) {
+    	if(!game.isPaused()) { //While the game isn't paused.
+    		if(!player.isAlive()) { //Check if the player is alive.
     			respawnTimer -= delta;
     			if(respawnTimer <= 0) {
     				game.incrementAchievement("burningskies.die");
@@ -157,7 +159,7 @@ public class PlayScreen implements Screen
     				if (lives > 0) {
     					player.respawn();
     					sp.setTimer((float) 2.5);
-    					while(bullets.size() != 0) {
+    					while(bullets.size() != 0) { //Clear the stage of players bullets.
     						removeEntity(bullets.get(0));
     					}
     				} else {
@@ -169,7 +171,7 @@ public class PlayScreen implements Screen
     			}
     		} else {
     			levelTimer += delta;
-    			score += 131*(0.5*(Configuration.getDifficulty()+1));
+    			score += 131*(0.5*(Configuration.getDifficulty()+1)); //Increment score per second.
     		}
     		if(!bossActive && (levelTimer > 60.0 || Gdx.input.isKeyPressed(Keys.B))) { //unleash the beast
     			bossActive = true;
@@ -186,7 +188,7 @@ public class PlayScreen implements Screen
 				game.setScreen(game.gameOverScreen);
     		}
     		
-    		if(!bossActive) {
+    		if(!bossActive) { //Spawn enemies while the boss isn't out.
     			sp.checkList(delta);
     		}
     		
@@ -221,7 +223,7 @@ public class PlayScreen implements Screen
     				continue;
     			}
     		}
-			for(int i=0; i<powerups.size(); i++) {
+			for(int i=0; i<powerups.size(); i++) { //Check if a player activated a powerup.
 				PowerUp p = powerups.get(i);
 				if(p.hasCollidedUnscaled(player) && player.isAlive()) {
 					p.powerOn(player);
@@ -241,7 +243,8 @@ public class PlayScreen implements Screen
     	}    	
     	// Draws the map
 	    stage.draw();
-	    	
+	    
+	    //Draw the current lives, score and health of the player.
 	    for (int i = 0; i < lives; i++) {
 		    batch.begin();
 		    batch.draw(lifeIcon, lifePositionX + lifePositionOffset*i, lifePositionY);
@@ -266,6 +269,7 @@ public class PlayScreen implements Screen
 	    healthBar.filledRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);    	
 	    healthBar.end();
 	    
+	    //Draw a health bar of the bosses current health.
 	    if (bossActive) {
 	    	bossHealthBar.begin(ShapeType.FilledRectangle);
 	    	bossHealth = boss.getHealth();

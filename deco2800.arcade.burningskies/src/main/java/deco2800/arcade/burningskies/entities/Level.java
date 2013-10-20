@@ -7,6 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import deco2800.arcade.burningskies.screen.PlayScreen;
 
+/**
+ *  Extra overlay to the background to make it look better.
+ */
 public class Level extends Image {
 
 	private PlayerShip player;

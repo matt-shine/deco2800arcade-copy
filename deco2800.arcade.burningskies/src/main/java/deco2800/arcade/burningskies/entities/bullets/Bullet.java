@@ -64,7 +64,6 @@ public abstract class Bullet extends Entity {
 	
 	/**
 	 * Checks whether the bullet is friend or foe.
-	 * 
 	 * @return true if an enemy bullet, false if a friendly bullet
 	 */
 	public Affinity getAffinity(){

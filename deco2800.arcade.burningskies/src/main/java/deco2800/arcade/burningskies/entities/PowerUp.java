@@ -3,6 +3,10 @@ package deco2800.arcade.burningskies.entities;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * The basis for any powerup, creates the powerup objects position and velocity 
+ * in the game.
+ */
 public abstract class PowerUp extends Entity {
 	
 	float stateTime;
@@ -12,9 +16,7 @@ public abstract class PowerUp extends Entity {
 
 	/**
 	 * Initialise the power up and randomly set the velocity
-	 * @param texture
-	 * @param x
-	 * @param y
+	 * @ensure texture != null && x != null && y != null
 	 */
 	public PowerUp(Texture texture, float x, float y) {
 		super(texture);

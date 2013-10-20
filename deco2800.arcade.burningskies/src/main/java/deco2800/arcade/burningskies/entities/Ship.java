@@ -50,7 +50,8 @@ public abstract class Ship extends Entity {
 	}
 	
 	/**
-	 * Damages the ship
+	 * Damages the ship if not in the godMode state.
+	 * @ensure healthchange > 0
 	 */
 	public void damage(float healthchange) {
 		if(!godMode)
@@ -58,10 +59,17 @@ public abstract class Ship extends Entity {
 		flash = 1f;
 	}
 
+	/**
+	 *  Heals the ship.
+	 *  @ensure healthchange > 0
+	 */
 	public void heal(int healthchange) {
 		this.health += healthchange;
 	}
 	
+	/**
+	 * Checks where the ship is still within the bounds of the playing screen.
+	 */
 	public boolean inBounds() {
 		float left = getX() + getWidth();
 		float right = getY() + getHeight();
@@ -71,7 +79,7 @@ public abstract class Ship extends Entity {
 	}
 	
 	/**
-	 * What to do every frame. Perhaps bounds checking etc.
+	 * What to do every frame.
 	 * Make sure to super.onRender so you implement damage flashes
 	 */
 	public void onRender(float delta) {
@@ -97,6 +105,9 @@ public abstract class Ship extends Entity {
 		
 	}
 	
+	/**
+	 * Sets the ships state to be invulnerable to damage.
+	 */
 	public void setGodMode(boolean b) {
 		godMode = b;
 		gModeTimer = 0;

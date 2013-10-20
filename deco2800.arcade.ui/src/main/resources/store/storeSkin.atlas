@@ -248,3 +248,27 @@ black
   orig: 1, 1
   offset: 0, 0
   index: -1
+
+slider_bg.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+slider_bg
+  rotate: false
+  xy: 1, 1
+  size: 360, 36
+  orig: 360, 36
+  offset: 0, 0
+  index: -1
+
+slider_knob.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+slider_knob
+  rotate: false
+  xy: 1, 1
+  size: 43, 54
+  orig: 43, 54
+  offset: 0, 0
+  index: -1

@@ -3,7 +3,6 @@ package deco2800.arcade.communication.communication.test;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -136,14 +135,14 @@ public class CommunicationTest {
 	 * Tests the chat history. Mostly just tests the transferring of ChatHistory
 	 * object between CommunicationListener -> CommunicationNetwork
 	 */
-	//@Test
+	// @Test
 	public void chatHistory() {
 		Connection connection = null;
 		ChatHistory chathistory = new ChatHistory();
 		HashMap<Integer, ChatNode> history = new HashMap<Integer, ChatNode>();
 		ChatNode node = new ChatNode(123);
-		node.addMessage("12:30 PM - Rick Astley: Testing chat");
-		node.addMessage("12:35 PM - Rick Astley: Testing chat2");
+		node.addMessage("12:30 PM - Rick Astley: Testing chat", "Rick Astley");
+		node.addMessage("12:35 PM - Rick Astley: Testing chat2", "Rick Astley");
 		history.put(123, node);
 		chathistory.setChatHistory(history);
 		listener1.received(connection, chathistory);
@@ -186,7 +185,7 @@ public class CommunicationTest {
 		listener1.received(connection, message2);
 		listener2.received(connection, message1);
 		listener3.received(connection, message2);
-		
+
 		// Tests two methods of getting data (using chatID
 		// (participants.hashcode()) and using current chat (the chat that the
 		// last message recieved belongs to.
@@ -197,8 +196,7 @@ public class CommunicationTest {
 				comm2.getCurrentChats().get(message1.getChatID())
 						.getParticipants());
 		assertEquals(comm1.getCurrentChats().get(message1.getChatID())
-				.getChatHistory().toString(),
-				comm2.getCurrentChats().get(message1.getChatID())
-						.getChatHistory().toString());
+				.getChatHistory().peek().getMessage(), comm2.getCurrentChats()
+				.get(message1.getChatID()).getChatHistory().peek().getMessage());
 	}
 }

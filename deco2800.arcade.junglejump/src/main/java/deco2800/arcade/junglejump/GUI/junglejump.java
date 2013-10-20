@@ -352,6 +352,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			} else if (!leap && !sit && !((!movingLeft && !movingRight) || (movingLeft && movingRight))) {
 				batch.draw(monkeyRun1, monkeyX, monkeyY, 50, 50);
 			}
+			
 			int size = currentLevel.platformAmount();
 			for (int i = 0; i < size; i++) {
 				Platform p = currentLevel.getPlatforms().get(i);
@@ -359,9 +360,10 @@ public class junglejump extends GameClient implements InputProcessor {
 				if(p.getX() >= 1000) {
 					p.setX(p.getX()-1000);
 				}
-				batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
+				//batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
 			}
-			batch.draw(levelText, 5, 5, 80, 30);
+			
+			/*batch.draw(levelText, 5, 5, 80, 30);
 			batch.draw(hyphenText, 105, 5, 30, 30);
 			batch.draw(livesText, 5, 30, 80, 30);
 			batch.draw(levelNumText, 125, 5, 30, 30);
@@ -372,6 +374,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			achievementTitleFont.draw(batch, "BACKSPACE for MENU", SCREENWIDTH-250, SCREENHEIGHT-30);
 			achievementTitleFont.draw(batch, ("Bananas found: " + BANANAS_FOUND), SCREENWIDTH-500, SCREENHEIGHT-10);
 
+*/
 			batch.end();
 			camera.update();
 			super.render();

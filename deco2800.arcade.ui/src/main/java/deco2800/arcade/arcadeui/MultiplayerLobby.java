@@ -51,6 +51,11 @@ public class MultiplayerLobby implements Screen {
 	private ArrayList<ActiveMatchDetails> matches;
 	private Player player;
 	public String name;
+	public String name2;
+	public String name3;
+	public String name4;
+	public String name5;
+	public String chatcheck;
 	
 	Texture bg;
 	Sprite bgSprite;
@@ -412,7 +417,9 @@ public class MultiplayerLobby implements Screen {
 	public void displayChat(LobbyMessageResponse request) {
 		String message = request.message;
 		String username = request.username;
+		System.out.println(username + ": " + message);
 
+		if(name == "" || name == null ){
 		name = username + ": " + message;
 	
 		final TextField chatfield2 = new TextField(name, skin2);
@@ -425,9 +432,177 @@ public class MultiplayerLobby implements Screen {
 		
 		table6.clear();
 		table6.center().right();
-		table6.add(chatfield2).padRight(20).width(300).height(345).padTop(23);
+		table6.add(chatfield2).padRight(35).width(270).height(40).padBottom(260);
 		table6.row();
-		table6.add(" ").padRight(200);
+		table6.add(" ").padRight(300);
+		}
+		
+		else if(name2 == "" || name2 == null ){
+		name2 = username + ": " + message;
+	
+		final TextField chatfield2 = new TextField(name, skin2);
+		chatfield2.setText(name2);
+
+		final Table table6 = new Table(skin2);
+
+		table6.setFillParent(true);
+		stage.addActor(table6);
+		
+		table6.clear();
+		table6.center().right();
+		table6.add(chatfield2).padRight(35).width(270).height(40).padBottom(200).padTop(80);
+		table6.row();
+		table6.add(" ").padRight(300);
+		}
+		
+		else if(name3 == "" || name3 == null ){
+		name3 = username + ": " + message;
+	
+		final TextField chatfield2 = new TextField(name, skin2);
+		chatfield2.setText(name3);
+
+		final Table table6 = new Table(skin2);
+
+		table6.setFillParent(true);
+		stage.addActor(table6);
+		
+		table6.clear();
+		table6.center().right();
+		table6.add(chatfield2).padRight(35).width(270).height(40).padBottom(140).padTop(160);
+		table6.row();
+		table6.add(" ").padRight(300);
+		}
+		
+		else if(name4 == "" || name4 == null ){
+		name4 = username + ": " + message;
+	
+		final TextField chatfield2 = new TextField(name, skin2);
+		chatfield2.setText(name4);
+
+		final Table table6 = new Table(skin2);
+
+		table6.setFillParent(true);
+		stage.addActor(table6);
+		
+		table6.clear();
+		table6.center().right();
+		table6.add(chatfield2).padRight(35).width(270).height(40).padBottom(80).padTop(240);
+		table6.row();
+		table6.add(" ").padRight(300);
+		}
+		
+		else if(name5 == "" || name5 == null ){
+		name5 = username + ": " + message;
+	
+		final TextField chatfield2 = new TextField(name, skin2);
+		chatfield2.setText(name5);
+
+		final Table table6 = new Table(skin2);
+
+		table6.setFillParent(true);
+		stage.addActor(table6);
+		
+		table6.clear();
+		table6.center().right();
+		table6.add(chatfield2).padRight(35).width(270).height(40).padBottom(20).padTop(320);
+		table6.row();
+		table6.add(" ").padRight(300);
+		}
+		
+
+		//New Chat Scrolling
+		
+		
+		else if((name != "" || name != null) && (name2 != "" || name2 != null) && (name3 != "" || name3 != null) && (name4 != "" || name4 != null) && (name5 != "" || name5 != null) && (chatcheck == null || chatcheck == "")){
+		name = username + ": " + message;
+		chatcheck = "1";
+		final TextField chatfield2 = new TextField(name, skin2);
+		chatfield2.setText(name);
+
+		final Table table6 = new Table(skin2);
+
+		table6.setFillParent(true);
+		stage.addActor(table6);
+		
+		table6.clear();
+		table6.center().right();
+		table6.add(chatfield2).padRight(35).width(270).height(40).padBottom(260);
+		table6.row();
+		table6.add(" ").padRight(300);
+		}
+		
+		else if((name != "" || name != null) && (name2 != "" || name2 != null) && (name3 != "" || name3 != null) && (name4 != "" || name4 != null) && (name5 != "" || name5 != null) && (chatcheck == "1")){
+		name2 = username + ": " + message;
+	chatcheck = "2";
+		final TextField chatfield2 = new TextField(name, skin2);
+		chatfield2.setText(name2);
+
+		final Table table6 = new Table(skin2);
+
+		table6.setFillParent(true);
+		stage.addActor(table6);
+		
+		table6.clear();
+		table6.center().right();
+		table6.add(chatfield2).padRight(35).width(270).height(40).padBottom(200).padTop(80);
+		table6.row();
+		table6.add(" ").padRight(300);
+		}
+		
+		else if((name != "" || name != null) && (name2 != "" || name2 != null) && (name3 != "" || name3 != null) && (name4 != "" || name4 != null) && (name5 != "" || name5 != null) && (chatcheck == "2")){
+		name3 = username + ": " + message;
+	chatcheck = "3";
+		final TextField chatfield2 = new TextField(name, skin2);
+		chatfield2.setText(name3);
+
+		final Table table6 = new Table(skin2);
+
+		table6.setFillParent(true);
+		stage.addActor(table6);
+		
+		table6.clear();
+		table6.center().right();
+		table6.add(chatfield2).padRight(35).width(270).height(40).padBottom(140).padTop(160);
+		table6.row();
+		table6.add(" ").padRight(300);
+		}
+		
+		else if((name != "" || name != null) && (name2 != "" || name2 != null) && (name3 != "" || name3 != null) && (name4 != "" || name4 != null) && (name5 != "" || name5 != null) && (chatcheck == "3")){
+		name4 = username + ": " + message;
+	chatcheck = "4";
+		final TextField chatfield2 = new TextField(name, skin2);
+		chatfield2.setText(name4);
+
+		final Table table6 = new Table(skin2);
+
+		table6.setFillParent(true);
+		stage.addActor(table6);
+		
+		table6.clear();
+		table6.center().right();
+		table6.add(chatfield2).padRight(35).width(270).height(40).padBottom(80).padTop(240);
+		table6.row();
+		table6.add(" ").padRight(300);
+		}
+		
+		else if((name != "" || name != null) && (name2 != "" || name2 != null) && (name3 != "" || name3 != null) && (name4 != "" || name4 != null) && (name5 != "" || name5 != null) && (chatcheck == "4")){
+		name5 = username + ": " + message;
+	chatcheck = "";
+		final TextField chatfield2 = new TextField(name, skin2);
+		chatfield2.setText(name5);
+
+		final Table table6 = new Table(skin2);
+
+		table6.setFillParent(true);
+		stage.addActor(table6);
+		
+		table6.clear();
+		table6.center().right();
+		table6.add(chatfield2).padRight(35).width(270).height(40).padBottom(20).padTop(320);
+		table6.row();
+		table6.add(" ").padRight(300);
+		}
+		
 	}
 
 

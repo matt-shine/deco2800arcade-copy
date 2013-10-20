@@ -170,7 +170,7 @@ public class MatchmakerQueueTest {
 		assertTrue(MMQ.getQueue().isEmpty());
 		
 		/* Get the sessionID */
-		int sessionId = MMQ.getServerList().get(3).getSessionId();
+		int sessionId = MMQ.getServerList().get(0).getSessionId();
 		MMQ.gameOver(sessionId, player1ID, player2ID, testGame, player1ID);
 		verify(MMQ.getDatabase(), times(1)).updatePlayerRating(player1ID, testGame, 1528);
 	}
@@ -192,7 +192,7 @@ public class MatchmakerQueueTest {
 		assertEquals(expected3[0], result3[0]);
 		assertEquals(expected3[1], result3[1]);
 		
-		int[] expected4 = {28, -28};
+		int[] expected4 = {28, -29};
 		int[] result4 = MMQ.elo(player1ID, 0, player2ID, 0, player1ID);
 		assertEquals(expected4[0], result4[0]);
 		assertEquals(expected4[1], result4[1]);

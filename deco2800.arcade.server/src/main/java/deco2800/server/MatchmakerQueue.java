@@ -461,6 +461,7 @@ public class MatchmakerQueue {
 	
 	public void resetActiveServers() {
 		this.activeServers = new HashMap<Integer, MultiplayerServer>();
+		this.serverNumber = 0;
 	}
 	
 	/* END TEST HELPER METHODS */

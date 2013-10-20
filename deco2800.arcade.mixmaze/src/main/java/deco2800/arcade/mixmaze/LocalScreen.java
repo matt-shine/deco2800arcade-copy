@@ -56,6 +56,7 @@ class LocalScreen extends GameScreen {
 		TileViewModel tile;
 		int boardSize = model.getBoardSize();
 		int tileSize = 640 / boardSize;
+		String username = game.getPlayer().getUsername();
 
 		for (int j = 0; j < boardSize; j++) {
 			for (int i = 0; i < boardSize; i++) {
@@ -82,8 +83,8 @@ class LocalScreen extends GameScreen {
 		gameArea.addActor(p2);
 		scorebar[0].setBoxColor(p1.getColor());
 		scorebar[1].setBoxColor(p2.getColor());
-		left.setPlayerName("kate_is_kewl");
-		right.setPlayerName("mixMAZEr0x");
+		left.setPlayerName(username);
+		right.setPlayerName(username + "'s friend");
 	}
 
 	@Override

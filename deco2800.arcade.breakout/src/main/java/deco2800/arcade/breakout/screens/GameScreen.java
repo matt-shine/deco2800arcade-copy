@@ -153,15 +153,11 @@ public class GameScreen implements Screen {
 		music.setLooping(true);
 		music.setVolume(0.2f);
 		playMusic();
-<<<<<<< HEAD
 
-		
-=======
-			
 		//TODO uncomment when functionality returns
 		//game.getAccolade().watch(game.getAccoladeBumpCounter(), bumpCount, 60000);
 		//game.getAccolade().watch(game.getAccoladeBrickBreak(), brickBreak, 90000);
->>>>>>> master
+
 		//game.getAccolade().start();
 		// setting the ball and paddle
 		setPaddle(new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10)));

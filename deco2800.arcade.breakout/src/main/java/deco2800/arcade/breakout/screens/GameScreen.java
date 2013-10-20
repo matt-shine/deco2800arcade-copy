@@ -66,6 +66,8 @@ public class GameScreen implements Screen {
 	public int highScore = 0;
 	public int bumpCount = 0;
 	public int brickBreak = 0;
+	//game.getAccolade().watch(game.getAccoladeBumpCounter(), bumpCount, 60000);
+	//game.getAccolade().watch(game.getAccoladeBrickBreak(), brickBreak, 90000);
 	
 
 	// GameOver status message constructor
@@ -151,10 +153,11 @@ public class GameScreen implements Screen {
 		music.setLooping(true);
 		music.setVolume(0.2f);
 		playMusic();
-			
+
 		//TODO uncomment when functionality returns
 		//game.getAccolade().watch(game.getAccoladeBumpCounter(), bumpCount, 60000);
 		//game.getAccolade().watch(game.getAccoladeBrickBreak(), brickBreak, 90000);
+
 		//game.getAccolade().start();
 		// setting the ball and paddle
 		setPaddle(new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10)));

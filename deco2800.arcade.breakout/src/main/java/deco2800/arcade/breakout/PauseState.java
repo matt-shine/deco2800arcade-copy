@@ -33,7 +33,7 @@ public class PauseState extends GameState {
 	 */
 	@Override
 	public void handleState(GameScreen context) {
-		context.setStatus("Press Space to Resume, Tab for Overlay or E to exit!");
+		context.setStatus("Press Space to Resume, Tab for Overlay or E to return to menu!");
 		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
 			context.inGameUnpause(prevBallVelocity, prevPowerupBallVelocity);
 		} else if (Gdx.input.isKeyPressed(Keys.E)) {

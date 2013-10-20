@@ -198,8 +198,8 @@ public class GameScreen implements Screen{
 				
 		// Setting the "Style of a TextButton",
 		TextButtonStyle style = new TextButtonStyle();
-		style.up = skin.getDrawable("button");
-		style.down = skin.getDrawable("button");
+		style.up = skin.getDrawable("buttonnormal");
+		style.down = skin.getDrawable("buttonpressed");
 		style.font = white;
 
 		frostB = new TextButton("1", style);

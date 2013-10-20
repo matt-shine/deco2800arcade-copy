@@ -164,7 +164,12 @@ public class ArcadeSystem {
 		return Arcade.getMatches();
 	}
 	
-	public static ArrayList<ArrayList<Object>> requestCurrentMultiplayerList() {
+	/**
+	 * Requests a copy of the active game list from the server
+	 *  
+	 * @return a copy of the active game list from the server
+	 */
+	public static ArrayList<ArrayList<Object>> requestActiveGames() {
 		arcade.requestActiveGames();
 		return arcade.getActiveGames();
 	}

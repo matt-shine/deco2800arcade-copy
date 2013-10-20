@@ -50,7 +50,7 @@ public class MultiplayerListener extends NetworkListener {
 			}
 		//Update the list of current MultiplayerGames
 		} else if (object instanceof ActiveGameRequest) {
-			arcade.setActiveGames(((ActiveGameRequest) object).serverList)
+			arcade.setActiveGames(((ActiveGameRequest) object).serverList);
 		}
 	}
 

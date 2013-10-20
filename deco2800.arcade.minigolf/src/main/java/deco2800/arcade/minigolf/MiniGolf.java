@@ -39,10 +39,12 @@ public class MiniGolf extends GameClient {
 
 			@Override
 			public void hide() {
+			hole.gamePaused = false;
 			}
 
 			@Override
 			public void pause() {
+			
 			}
 
 			@Override
@@ -59,6 +61,7 @@ public class MiniGolf extends GameClient {
 
 			@Override
 			public void show() {
+			hole.gamePaused = true;
 			}
 			
         });

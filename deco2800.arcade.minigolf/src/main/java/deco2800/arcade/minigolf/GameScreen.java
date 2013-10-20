@@ -40,7 +40,7 @@ public class GameScreen implements Screen, InputProcessor {
 	private int width, height, totalShots;
 	public int level, scoreX, scoreY; //hole
 	private float power, fadeInOut, fadeVar;
-	private boolean scoreYes, gamePaused;
+	public boolean scoreYes, gamePaused;
 	
 	//Variables for the button
 	BitmapFont font1, font2, font3;
@@ -68,6 +68,7 @@ public class GameScreen implements Screen, InputProcessor {
 	
 	/* get and set current level */
 	private int getLevel() {
+		golf.incrementAchievement("minigolf.CompFirstMap");
 		return level; 
 	}
 	private void setLevel(int level) {

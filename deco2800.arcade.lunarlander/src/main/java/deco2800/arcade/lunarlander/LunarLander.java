@@ -63,10 +63,6 @@ public class LunarLander extends GameClient {
 	private float velY;
 	private float velXleft;
 	private float velXright;
-
-	//	//asteroid stuff
-	//	private float asteroidX;
-	//	private float asteroidY;
 		
 	// terrain generation
 	private List<List<Integer>> terrain;
@@ -210,8 +206,6 @@ public class LunarLander extends GameClient {
 		velY = 1;
 		velXleft = 0;
 		velXright = 0;
-		//asteroidX = 500;
-		//asteroidY = 500;
 		speed = 1;
 		this.fuel = fuel;
 		this.score = score;
@@ -290,7 +284,7 @@ public class LunarLander extends GameClient {
 							hasCollidedWithAsteroid(landerX, landerY)) {
 				gameOver = true;
 				gameState = GameState.GAME_OVER_LOSE;
-			} else if(landerX > terrain.get(0).get(0) && landerX < 
+			} else if(landerX > terrain.get(0).get(0) - 20 && landerX + 20 < 
 					terrain.get(0).get(2)){
 				if(landerY < terrain.get(0).get(1)){
 					score += 10; //not incrementing properly					
@@ -311,11 +305,11 @@ public class LunarLander extends GameClient {
 					landerX2 < asteroidArray.get(i).get(0) + 20) &&
 					(landerY2 > asteroidArray.get(i).get(1) && 
 							landerY2 < asteroidArray.get(i).get(1) + 20)){
-
-				gameOver = true;
-				velY = 0;
-				gameState = GameState.GAME_OVER_LOSE;
-				gameOverLoseScreen();
+				return true;
+//				gameOver = true;
+//				velY = 0;
+//				gameState = GameState.GAME_OVER_LOSE;
+//				gameOverLoseScreen();
 			}
 		}
 		return false;
@@ -375,11 +369,13 @@ public class LunarLander extends GameClient {
 			for (int i = 0; i < asteroidArray.size(); i++){
 				int tempAsteroidX = asteroidArray.get(i).get(0);
 				int tempAsteroidY = asteroidArray.get(i).get(1);
-				tempAsteroidX -= 0.10;
-				tempAsteroidY -= 0.10;
+				int tempAsteroidZ = asteroidArray.get(i).get(2);
+				tempAsteroidX -= tempAsteroidZ/10;
+				tempAsteroidY -= tempAsteroidZ/10;
 				asteroidArray.get(i).clear();
 				asteroidArray.get(i).add(tempAsteroidX);
 				asteroidArray.get(i).add(tempAsteroidY);
+				asteroidArray.get(i).add(tempAsteroidZ);
 			}
 		}
 	}

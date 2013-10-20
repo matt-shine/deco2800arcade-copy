@@ -156,9 +156,11 @@ public static List<List<Integer>> createMap(){
 		int asteroidY = 750;
 		for (int i = 0; i < 7; i++){
 			asteroidArray.add(new ArrayList<Integer>());
-			int asteroidX = randNum(600, 1200);
+			int asteroidX = randNum(50, 1200);
+			int asteroidZ = randNum(1, 50);
 			asteroidArray.get(i).add(asteroidX);
 			asteroidArray.get(i).add(asteroidY);
+			asteroidArray.get(i).add(asteroidZ);
 		}
 		return asteroidArray;
 	}

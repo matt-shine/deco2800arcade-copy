@@ -112,15 +112,40 @@ public class ReplayItemTest {
         
         assertEquals(true, r1.equals(r2));
         
+        r1 = new ReplayItem(123);
+        r2 = new ReplayItem(456);
+        
+        assertEquals(false, r1.equals(r2));
+        
         r1 = new ReplayItem(123.0f);
         r2 = new ReplayItem(123.0f);
         
         assertEquals(true, r1.equals(r2));
+        
+        r1 = new ReplayItem(123.0f);
+        r2 = new ReplayItem(456.0f);
+        
+        assertEquals(false, r1.equals(r2));
 
         r1 = new ReplayItem("123");
         r2 = new ReplayItem("123");
         
         assertEquals(true, r1.equals(r2));
+        
+        r1 = new ReplayItem("456");
+        r2 = new ReplayItem("123");
+        
+        assertEquals(false, r1.equals(r2));
+        
+        r1 = new ReplayItem(123);
+        r2 = new ReplayItem("123");
+        
+        assertEquals(false, r1.equals(r2));
+        
+        r1 = new ReplayItem(123);
+        r2 = new ReplayItem(123.0f);
+        
+        assertEquals(false, r1.equals(r2));
     }
     
     /**

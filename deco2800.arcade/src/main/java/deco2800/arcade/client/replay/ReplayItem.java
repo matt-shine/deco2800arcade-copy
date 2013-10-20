@@ -102,7 +102,10 @@ public class ReplayItem {
 			return false;
 		}
 		ReplayItem replayItem = ( ReplayItem )r;
-	    return this.type.equals(replayItem.type) && this.data.equals(replayItem.data);
+		if (!this.type.equals(replayItem.type)) return false;
+		if (!this.data.equals(replayItem.data)) return false;
+		
+	    return true;
 	}
 	
 	@Override

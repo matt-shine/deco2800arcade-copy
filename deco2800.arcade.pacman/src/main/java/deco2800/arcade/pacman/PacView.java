@@ -3,6 +3,7 @@ package deco2800.arcade.pacman;
 import org.lwjgl.util.Point;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -41,6 +42,7 @@ public class PacView {
 	private TextureRegion[][] ghostFrames = new TextureRegion[NUM_GHOSTS][MOVER_SPRITE_NUM];
 	private static int SCREEN_WIDTH;
 	private static int SCREEN_HEIGHT;
+	Sound waka = Gdx.audio.newSound(Gdx.files.internal("Chomping.mp3"));
 	
 	private GameMap gameMap;
 	private PacChar player;
@@ -60,6 +62,8 @@ public class PacView {
 		camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
 		// initialise spriteBatch for drawing things
 		batch = new SpriteBatch();		
+		// Sound!
+		
 		//get tile sprites
 			tileSprites = TextureRegion.split(
 				new Texture(Gdx.files.internal("wallsAndPellets.png")), 8, 8);		
@@ -206,22 +210,26 @@ public class PacView {
 	 * Draws the Ghost
 	 */
 	private void drawGhost() {
-		//draw ghost facing the appropriate direction
-		if (blinky.getCurrentState() == GhostState.DEAD ||
-				blinky.getCurrentState() == GhostState.SCATTER){
-			batch.draw(ghostFrames[4][blinky.getSpritePos()], blinky.getDrawX(), 
-					blinky.getDrawY(), blinky.getWidth(), blinky.getHeight());
+		// draw ghost facing the appropriate direction
+		if (blinky.getCurrentState() == GhostState.DEAD
+				|| blinky.getCurrentState() == GhostState.SCATTER
+				|| blinky.getCurrentState() == GhostState.PENNED) {
+			batch.draw(ghostFrames[4][blinky.getSpritePos()],
+					blinky.getDrawX(), blinky.getDrawY(), blinky.getWidth(),
+					blinky.getHeight());
 		} else {
-		batch.draw(ghostFrames[0][blinky.getSpritePos()], blinky.getDrawX(), 
-				blinky.getDrawY(), blinky.getWidth(), blinky.getHeight());
+			batch.draw(ghostFrames[0][blinky.getSpritePos()],
+					blinky.getDrawX(), blinky.getDrawY(), blinky.getWidth(),
+					blinky.getHeight());
 		}
-		
-		if (pinky.getCurrentState() == GhostState.DEAD ||
-				pinky.getCurrentState() == GhostState.SCATTER){
-			batch.draw(ghostFrames[4][pinky.getSpritePos()], pinky.getDrawX(), 
+
+		if (pinky.getCurrentState() == GhostState.DEAD
+				|| pinky.getCurrentState() == GhostState.SCATTER
+				|| pinky.getCurrentState() == GhostState.PENNED) {
+			batch.draw(ghostFrames[4][pinky.getSpritePos()], pinky.getDrawX(),
 					pinky.getDrawY(), pinky.getWidth(), pinky.getHeight());
 		} else {
-			batch.draw(ghostFrames[1][pinky.getSpritePos()], pinky.getDrawX(), 
+			batch.draw(ghostFrames[1][pinky.getSpritePos()], pinky.getDrawX(),
 					pinky.getDrawY(), pinky.getWidth(), pinky.getHeight());
 		}
 	}
@@ -234,6 +242,11 @@ public class PacView {
 		} else {	
 		batch.draw(pacmanFrames[player.getSpritePos()], player.getDrawX(), 
 				player.getDrawY(), player.getWidth(), player.getHeight());
+		}
+		
+		// Play sound if moving
+		if (player.getCurrentState() == PacState.MOVING){
+			waka.play();
 		}
 	}
 	

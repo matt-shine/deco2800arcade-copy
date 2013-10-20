@@ -52,7 +52,7 @@ public class Pacman extends GameClient {
 		
 	public Pacman(Player player1, NetworkClient networkClient) {
 		super(player1, networkClient);		
-//		this.networkClient = networkClient;
+		this.networkClient = networkClient; // Once we can merge with master, this will work with new Achievements.
 		this.incrementAchievement("pacman.onegame");
 	}	
 		
@@ -113,7 +113,6 @@ public class Pacman extends GameClient {
 			System.out.println(ach.toString());
 		}
 		
-		waka.loop();
 	}
 	
 	/**
@@ -123,7 +122,6 @@ public class Pacman extends GameClient {
 	public void dispose() {
 		super.dispose();
 		ArcadeInputMux.getInstance().removeProcessor(controller);
-		waka.dispose();
 		
 		//TODO dispose more stuff here? Perhaps the view things?
 	}

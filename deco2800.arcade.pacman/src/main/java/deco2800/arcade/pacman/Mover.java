@@ -128,7 +128,7 @@ public abstract class Mover {
 				this.drawX = gameMap.getTileCoords(currentTile).getX();
 				this.drawY = gameMap.getTileCoords(currentTile).getY();
 				this.updatePosition();
-				((Ghost)this).setCurrentState(GhostState.CHASE);
+				((Ghost)this).setCurrentState(GhostState.PENNED);
 			}
 		}
 		

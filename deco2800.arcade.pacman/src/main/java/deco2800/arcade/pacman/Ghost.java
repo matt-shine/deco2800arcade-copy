@@ -10,7 +10,7 @@ import deco2800.arcade.pacman.Mover.Dir;
 public final class Ghost extends Mover {
 
 	public enum GhostState {
-		CHASE, SCATTER, FRIGHT, DEAD
+		CHASE, SCATTER, FRIGHT, DEAD, PENNED
 	}
 
 	public enum GhostName {
@@ -41,9 +41,10 @@ public final class Ghost extends Mover {
 		default: num = 0; break;
 		}
 
-		facing = Dir.LEFT;
-//		currentTile = gameMap.getGhostStarts()[num];  //This is the actual starting positon in pen
-		currentTile = gameMap.getFruitRight(); // For testing purposes
+		facing = Dir.UP;
+		currentState = GhostState.PENNED;
+		targetTile = currentTile = gameMap.getGhostStarts()[num];  //This is the actual starting positon in pen
+//		currentTile = gameMap.getFruitRight(); // For testing purposes
 		// makes the previous tile the one to right, since he's facing left
 		Point current = gameMap.getTilePos(currentTile);
 		previousTile = gameMap.getGrid()[current.getX() + 1][current.getY()];
@@ -52,7 +53,6 @@ public final class Ghost extends Mover {
 		// DEBUGGING PRINT
 //		System.out.println("drawX % 16 is: " + (drawX % 16)
 //				+ ", drawY % 16 is: " + (drawY % 16));		
-		currentState = GhostState.CHASE;
 		width = widthVal;
 		height = heightVal;
 		moveDist = 1;
@@ -91,6 +91,8 @@ public final class Ghost extends Mover {
 			} else if (facing == Dir.DOWN) {
 				spritePos = 7;
 			} 
+		} else if (currentState == GhostState.PENNED){
+			spritePos = 1;
 		}
 		
 		
@@ -130,6 +132,7 @@ public final class Ghost extends Mover {
 			}
 		}
 		updatePosition();
+		releaseGhosts();
 	}
 
 	/** Updates the target tile for the ghost. So far only does Blinky 
@@ -209,6 +212,28 @@ public final class Ghost extends Mover {
 		return testTiles;
 	}	
 	
+	private void releaseGhosts(){
+		if (currentState == GhostState.PENNED){
+			facing = Dir.UP;
+			if (gameMap.getDotsEaten() == 7){ // Release blinky!
+				if (ghostName == GhostName.BLINKY){
+					currentTile = nextTile(currentTile, 2);
+					drawX = gameMap.getTileCoords(currentTile).getX();
+					drawY = gameMap.getTileCoords(currentTile).getY();
+					updatePosition();
+					setCurrentState(GhostState.CHASE);
+				}
+			} else if (gameMap.getDotsEaten() == 17){ // Release pinky!
+				if (ghostName == GhostName.PINKY){
+					currentTile = nextTile(currentTile, 2);
+					drawX = gameMap.getTileCoords(currentTile).getX();
+					drawY = gameMap.getTileCoords(currentTile).getY();
+					updatePosition();
+					setCurrentState(GhostState.CHASE);
+				}
+			}
+		}
+	}
 	
 	/**
 	 * Calculates the Euclidean distance between a tile

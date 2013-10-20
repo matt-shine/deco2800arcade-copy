@@ -30,8 +30,8 @@ public final class PacChar extends Mover{
 		drawY = gameMap.getTileCoords(currentTile).getY() - 4;
 		// initialise some variables
 		currentState = PacState.IDLE;
-		facing = Dir.LEFT; // the way he'll turn at the next intersection if possible
-		drawFacing = Dir.LEFT; // the way pacman appears
+		facing = Dir.DOWN; // the way he'll turn at the next intersection if possible
+		drawFacing = Dir.DOWN; // the way pacman appears
 		width = widthVal;
 		height = heightVal;
 		spritePos = 3;
@@ -141,9 +141,7 @@ public final class PacChar extends Mover{
 							}
 						}, 3);
 						System.out.println(currentState);
-						System.out.println(" >>> life lsot!");
 						setLives(getLives() - 1);
-						System.out.println(" >>> lives: + " + getLives());
 						// Is it game over?
 						if (getLives() <= 0) {
 							this.setCurrentState(PacState.DEAD);

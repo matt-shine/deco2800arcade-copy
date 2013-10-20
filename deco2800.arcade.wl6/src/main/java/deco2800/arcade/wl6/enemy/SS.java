@@ -11,17 +11,14 @@ public class SS extends Enemy {
         super(uid);
 
         setHealth(STARTING_HEALTH);
-        if (d.pathingDir == null) {
-            setState(STATES.STAND);
-        }
-        else {
-            setState(STATES.PATH);
-        }
         setPathSpeed(512);
         setChaseSpeed(1536);
         setPain(true);
-
-        this.setTextureName(d.texture);
+        setDamage(0);
+        this.setStateChangeTime(0.33f);
+        
+        initialiseFromEnemyData(d);
+        
     }
 
 

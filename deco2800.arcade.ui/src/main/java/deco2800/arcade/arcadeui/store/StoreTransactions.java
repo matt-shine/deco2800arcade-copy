@@ -24,24 +24,30 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
 /**
+ * The transactions page is used exclusively for buying tokens, and shows the
+ * prices of different token packs. The transactions page was intended to have
+ * the ability to buy individual games, but this was not implemented.
  * @author Addison Gourluck
  */
 public class StoreTransactions implements Screen, StoreScreen {
 	private Skin skin = new Skin(Gdx.files.internal("store/storeSkin.json"));
 	private Stage stage = new Stage();
 	private ArcadeUI arcadeUI;
-	private int balance = 0;
+	private Player player; // The currently logged in player.
+	private int balance = 0; // TEMPORARY: The players credit balance.
 	
 	/**
 	 * @author Addison Gourluck
 	 * @param ArcadeUI ui
+	 * @param Player user
 	 */
-	public StoreTransactions(ArcadeUI ui) {
+	public StoreTransactions(ArcadeUI ui, Player user) {
+		player = user;
 		arcadeUI = ui;
 		
 		final Table bg = new Table();
 		final Button homeButton = new Button(skin, "home");
-		final Label Title = new Label("Buy More Coins", skin, "default-34");
+		final Label title = new Label("Buy More Coins", skin, "default-34");
 		final Button searchButton = new Button(skin, "search");
 		final TextField searchField = new TextField("", skin);
 		final Label searchResult = new Label("", skin);
@@ -50,7 +56,8 @@ public class StoreTransactions implements Screen, StoreScreen {
 		final TextButton wishlistButton = new TextButton("Wishlist", skin);
 		
 		// The background for the store.
-		skin.add("background", new Texture(Gdx.files.internal("store/transactions_bg.png")));
+		skin.add("background", new Texture(
+				Gdx.files.internal("store/transactions_bg.png")));
 		bg.setFillParent(true);
 		bg.setBackground(skin.getDrawable("background"));
 		stage.addActor(bg);
@@ -61,9 +68,9 @@ public class StoreTransactions implements Screen, StoreScreen {
 		stage.addActor(homeButton);
 		
 		// Title "Buy More Coins", located center of screen.
-		Title.setSize(380, 40);
-		Title.setPosition(96, 515);
-		stage.addActor(Title);
+		title.setSize(380, 40);
+		title.setPosition(96, 515);
+		stage.addActor(title);
 		
 		// Entry field for search term. Will update the featured game, as well.
 		// as the search result located below it.
@@ -93,58 +100,75 @@ public class StoreTransactions implements Screen, StoreScreen {
 		balanceNumber.setAlignment(Align.center);
 		stage.addActor(balanceNumber);
 		
+		// Button linking to wishlist page.
 		wishlistButton.setSize(360, 95);
 		wishlistButton.setPosition(833, 176);
 		stage.addActor(wishlistButton);
 		
+		// Adds the images of the different coins, the text and buttons beside
+		// them, and the listeners for the buttons.
 		addCoins();
 		
+		// Top right Home button and listener.
 		homeButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				arcadeUI.setScreen(new StoreHome(arcadeUI));
+				hide();
+				arcadeUI.setScreen(arcadeUI.getStoreHome());
 			}
 		});
 		
+		// Search Field, with listen. Located top right.
 		searchField.setTextFieldListener(new TextFieldListener() {
 			public void keyTyped(TextField textField, char key) {
+				// Run search whenever a key is typed.
 				Game result = Utilities.helper.search(searchField.getText());
+				// No results if search returns null.
 				if (result == null) {
 					searchResult.setText("No results.");
 					return;
 				}
+				// Else display closest match.
 				searchResult.setText(result.name);
 			}
 		});
 		
+		// Search button, paired with search field. Top right screen.
 		searchButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				try {
+					// Attempt to search for whatever is in the field.
 					Game result = Utilities.helper.search(searchField.getText());
 					if (result == null) {
-						searchResult.setText("No results.");
+						searchResult.setText("No results."); // Bad text
 						return;
 					}
-					dispose();
-					arcadeUI.setScreen(new StoreGame(arcadeUI, result));
+					hide(); // On successful search, go to its page.
+					arcadeUI.setScreen(new StoreGame(arcadeUI, player, result));
 				} catch (Exception e) {
-					searchResult.setText("Invalid Search");
+					searchResult.setText("Invalid Search"); // No text
 				}
 			}
 		});
 		
+		// Button linking to wishlist page.
 		wishlistButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				arcadeUI.setScreen(new StoreWishlist(arcadeUI));
+				hide();
+				arcadeUI.setScreen(arcadeUI.getStoreWishlist());
 			}
 		});
 	}
 	
+	/**
+	 * Adds the coin icons, text, and buy button for each of the 5 coin packs,
+	 * as well as the listener for the buy button.
+	 * @author Addison Gourluck
+	 */
 	private void addCoins() {
 		int i = 0;
 		for (int check : Arrays.asList(5, 10, 20, 50, 100)) {
-			skin.add("coin" + check, new Texture(Gdx.files.internal("store/coin_" + check + ".png")));
+			skin.add("coin" + check, new Texture(
+					Gdx.files.internal("store/coin_" + check + ".png")));
 			
 			// Buy options icons.
 			final Table coins = new Table();
@@ -177,10 +201,13 @@ public class StoreTransactions implements Screen, StoreScreen {
 			buyButton.setName(check + "");
 			stage.addActor(buyButton);
 			
+			// Buy button Listener, which will buy tokens for user on click.
 			buyButton.addListener(new ChangeListener() {
 				public void changed(ChangeEvent event, Actor actor) {
-					System.out.println("buying " + Integer.parseInt(actor.getName()));
+					System.out.println("buying "
+							+ Integer.parseInt(actor.getName()));
 					buyTokens(Integer.parseInt(actor.getName()));
+					// not yet implemented^
 				}
 			});
 			i++;
@@ -204,11 +231,13 @@ public class StoreTransactions implements Screen, StoreScreen {
 
 	@Override
 	public void show() {
+		player = arcadeUI.getPlayer();
 		ArcadeInputMux.getInstance().addProcessor(stage);
 	}
 	
 	@Override
 	public void hide() {
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 	
 	@Override
@@ -229,21 +258,31 @@ public class StoreTransactions implements Screen, StoreScreen {
 
 	@Override
 	public Player getPlayer() {
-		return null;
+		return player;
 	}
 	
 	@Override
 	public Game getSelected() {
-		return null;
+		return null; // No selected game for transactions screen.
 	}
 	
 	@Override
 	public boolean buyTokens(int amount) {
+		// TODO
+		// FIXME
+		// NEEDS IMPLEMENTING!
+		// TODO
+		// FIXME
 		return false;
 	}
 	
 	@Override
 	public boolean buyGame(Game game) {
+		// TODO
+		// FIXME
+		// NEEDS IMPLEMENTING!
+		// TODO
+		// FIXME
 		return false;
 	}
 	
@@ -254,6 +293,11 @@ public class StoreTransactions implements Screen, StoreScreen {
 	
 	@Override
 	public boolean addWishlist(Game game) {
+		// TODO
+		// FIXME
+		// NEEDS IMPLEMENTING!
+		// TODO
+		// FIXME
 		return true;
 	}
 }

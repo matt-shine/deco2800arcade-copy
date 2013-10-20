@@ -12,7 +12,8 @@ public class WL6InputProcessor implements InputProcessor {
     private WL6 game = null;
     private GameModel model = null;
     private float MOUSE_SENSITIVITY = 0.25f;
-
+    private boolean left = false;
+    private boolean right = false;
 
     public WL6InputProcessor(WL6 game, GameModel model) {
         this.game = game;
@@ -57,6 +58,23 @@ public class WL6InputProcessor implements InputProcessor {
         if (c == Keys.NUM_7) {
         	model.setDifficulty(model.getDifficulty() - 1);
         }
+        
+        
+        //look left
+        if (c == Keys.LEFT) {
+        	this.left = true;
+        }
+        
+        //look right
+        if (c == Keys.RIGHT) {
+        	this.right = true;
+        }
+        
+        //shoot
+        if (c == Keys.SPACE) {
+        	model.getPlayer().shoot(model, true);
+        }
+        
 
         if (c == Keys.W || c == Keys.S || c == Keys.A || c == Keys.D) {
             updatePlayerSpeed();
@@ -74,11 +92,11 @@ public class WL6InputProcessor implements InputProcessor {
         if (Gdx.input.isKeyPressed(Keys.A)) x -= 1;
         if (Gdx.input.isKeyPressed(Keys.D)) x += 1;
 
-        //velocity = rotate(-p.getAngle(), normalize((x, y)) * speed * delta)
+        //velocity = rotate(-p.getAngle(), normalize((x, y)) * speed)
         p.setVel(
                 new Vector2(x, y)
                 .nor()
-                .mul(Player.SPEED * model.delta())
+                .mul(Player.SPEED)
                 .rotate(-p.getAngle())
         );
     }
@@ -95,6 +113,17 @@ public class WL6InputProcessor implements InputProcessor {
         if (c == Keys.W || c == Keys.S || c == Keys.A || c == Keys.D) {
             updatePlayerSpeed();
         }
+
+        //look left
+        if (c == Keys.LEFT) {
+        	this.left = false;
+        }
+        
+        //look right
+        if (c == Keys.RIGHT) {
+        	this.right = false;
+        }
+        
         return false;
     }
 
@@ -108,6 +137,20 @@ public class WL6InputProcessor implements InputProcessor {
         updatePlayerSpeed();
         return false;
     }
+    
+    
+    public void tick() {
+    	
+    	model.getPlayer().setAngle(model.getPlayer().getAngle() +
+    			((left ? 1 : 0) + (right ? -1 : 0)) * 2);
+    	updatePlayerSpeed();
+    	
+    	if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+    		model.getPlayer().shoot(model, false);
+    	}
+    	
+    }
+    
 
     @Override
     public boolean scrolled(int arg0) {
@@ -117,9 +160,7 @@ public class WL6InputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
-        Player p = model.getPlayer();
-        p.doDamage(model);
-        return false;
+        return true;
     }
 
     @Override

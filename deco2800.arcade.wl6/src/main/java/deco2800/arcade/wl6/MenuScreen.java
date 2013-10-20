@@ -2,13 +2,11 @@ package deco2800.arcade.wl6;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -26,50 +24,70 @@ public class MenuScreen implements Screen {
     private Skin skin;
     private MenuScreenStage stage;
 
+    private static final String[] exitStrings = new String[] {
+            "Dost thou wish to\nleave with such hasty\nabandon?",
+            "Chickening out...\nalready?",
+            "Press N for more carnage.\nPress Y to be a weenie.",
+            "So, you think you can\nquit this easily, huh?",
+            "Press N to save the world.\nPress Y to abandon it in\nits hour of need.",
+            "Press N if you are brave.\nPress Y to cower in shame.",
+            "Heroes, press N.\n Wimps, press Y.",
+            "You are at an intersection.\n A sign says, 'Press Y to quit.'\n>",
+            "For guns and glory, press N.\nFor work and worry, press Y."
+    };
+    private static final String[] difficultyStrings = new String[] {
+            "Can I play, Daddy?",
+            "Don't hurt me.",
+            "Bring 'em on!",
+            "I am Death incarnate!"
+    };
+    private static final String[] episodeStrings = new String[] {
+            "Episode 1: Escape from Wolfenstein",
+            "Episode 2: Operation: Eisenfaust",
+            "Episode 3: Die, Fuhrer, Die!",
+            "Episode 4: A Dark Secret",
+            "Episode 5: Trail of the Madman",
+            "Episode 6: Confrontation",
+    };
+    private static final String[] levelStrings = new String[] {
+	    	"Level 1",
+	    	"Level 2",
+	    	"Level 3",
+	    	"Level 4",
+	    	"Level 5",
+	    	"Level 6",
+	    	"Level 7",
+	    	"Level 8",
+	    	"Boss",
+    };
+
     public MenuScreen(WL6 game) {
         wl6 = game;
         model = new GameModel();
-
         stage = new MenuScreenStage();
+        skin = new Skin(Gdx.files.internal("menuSkin.json"));
+        skin.add("background", new Texture("wolf_background.png"));
 
-        // A skin can be loaded via JSON or defined programmatically, either is fine. Using a skin is optional but strongly
-        // recommended solely for the convenience of getting a texture, region, etc as a drawable, tinted drawable, etc.
-        skin = new Skin();
-
-        // Generate a 1x1 white texture and store it in the skin named "white".
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
-        skin.add("white", new Texture(pixmap));
-
-        // Store the default libgdx font under the name "default".
-        skin.add("default", new BitmapFont());
-
-        // Configure a TextButtonStyle and name it "default". Skin resources are stored by type, so this doesn't overwrite the font.
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
-        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
-        textButtonStyle.font = skin.getFont("default");
-        skin.add("default", textButtonStyle);
-
-        // Create a table that fills the screen. Everything else will go inside this table.
         Table table = new Table();
         table.setFillParent(true);
+        table.setBackground(skin.getDrawable("background"));
         stage.addActor(table);
 
-        // Create a button with the "default" TextButtonStyle. A 3rd parameter can be used to specify a name other than "default".
-        final TextButton button = new TextButton("New Game", skin);
+        TextButton button = new TextButton("New Game", skin);
+        SelectBox difficulty = new SelectBox(difficultyStrings, skin);
+        SelectBox episode = new SelectBox(episodeStrings,skin);
+        SelectBox level = new SelectBox(levelStrings, skin);
+
+        table.add(difficulty);
+        table.row();
+        table.add(episode);
+        table.add(level);
+        table.row();
         table.add(button);
 
-        // Add a listener to the button. ChangeListener is fired when the button's checked state changes, eg when clicked,
-        // Button#setChecked() is called, via a key press, etc. If the event.cancel() is called, the checked state will be reverted.
-        // ClickListener could have been used, but would only fire when clicked. Also, canceling a ClickListener event won't
-        // revert the checked state.
         button.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-                wl6.setScreen(wl6.gameScreen);
+            public void changed(ChangeEvent event, Actor actor) {
+                wl6.goToGame();
             }
         });
     }

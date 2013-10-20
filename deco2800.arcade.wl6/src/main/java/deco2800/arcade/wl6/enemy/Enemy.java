@@ -2,9 +2,15 @@ package deco2800.arcade.wl6.enemy;
 
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.wl6.Doodad;
+import deco2800.arcade.wl6.DoodadInfo;
 import deco2800.arcade.wl6.GameModel;
 import deco2800.arcade.wl6.Mob;
+import deco2800.arcade.wl6.Pickup;
+import deco2800.arcade.wl6.Player;
+import deco2800.arcade.wl6.Projectile;
 import deco2800.arcade.wl6.WL6Meta;
+import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,141 +36,175 @@ public class Enemy extends Mob {
     // current state
     private STATES state = STATES.NO_STATE;
     // State tick
-    private float tick;
+    private float stateTime;
     private STATES nextState;
     //
-    private WL6Meta.DIRS pathDir;
+    private boolean pathing;
     //
     private float pathSpeed;
     //
     private float chaseSpeed;
     //
     private int pathGoal = 1;
-    @SuppressWarnings("unused")
-	private int pathLast = 0;
-    @SuppressWarnings("unused")
-	private int pathLoopStart = 0;
+    private int pathLast = 0;
+    private int pathLoopStart = 0;
     
+    private float stateChangeTime = 1;
     
-    // path list
+    public float getStateChangeTime() {
+		return stateChangeTime;
+	}
+
+	public void setStateChangeTime(float stateChangeTime) {
+		this.stateChangeTime = stateChangeTime;
+	}
+
+	// path list
     private List<Vector2> path;
     // suffers from pain (they have an animation that they do nothing in when they get hit, interrupts their current action)
     private boolean pain;
     // damage
     private int damage;
 
+    private int ammoDrop = 0;
+    @SuppressWarnings("unused")
+	private int gunDrop = 0;
+    private KEY_TYPE keyDrop = null;
+    
 
     public Enemy(int uid) {
         super(uid);
-        tick = 0;
-
+        stateTime = 0;
+        nextState = null;
     }
 
     @Override
     public void init(GameModel model) {
         super.init(model);
-        if (pathDir != null) {
+        if (pathing) {
             calculatePath(model);
         }
-
+        
     }
 
     @Override
     public void tick(GameModel gameModel) {
         super.tick(gameModel);
-        tick += gameModel.delta();
-        if (tick > 1 && nextState != null) {
-            setState(nextState);
+
+        if (state == STATES.DIE) {
+        	return;
+        }
+        
+        stateTime += gameModel.delta();
+        if (stateTime > stateChangeTime && nextState != null) {
+            this.instantStateChange(nextState);
             nextState = null;
         }
-
-        detectPlayer(gameModel);
-        if (state == STATES.ATTACK) {
-            attackPlayer(gameModel);
+        
+        
+        if (canSee(gameModel.getPlayer(), gameModel)){
+        	delayedStateChange(STATES.ATTACK);
         }
-
-        if (state == STATES.PATH && path != null && path.size() != 0) {
+        
+        
+        if (state == STATES.PATH && path != null && path.size() > 1) {
             path();
+        }
+        
+
+        
+        if (state == STATES.ATTACK) {
+        	shootAtPlayer(gameModel);
+            instantStateChange(STATES.CHASE);
+            delayedStateChange(STATES.ATTACK);
         }
 
         if (this.getHealth() <= 0) {
-            changeStates(STATES.DIE, 0);
-            gameModel.destroyDoodad(this);
+        	instantStateChange(STATES.DIE);
+        	this.setTextureName("headstone");
+        	this.setVel(new Vector2(0, 0));
+        	this.dropItems(gameModel);
         }
     }
 
-    public WL6Meta.DIRS getPathDir() {
-        return pathDir;
+    
+    public void initialiseFromEnemyData(DoodadInfo d) {
+    	
+    	setTextureName(d.texture);
+        setPathing(d.pathing);
+        ammoDrop = d.ammo;
+        EnemyType e = d.enemytype;
+        if (e == EnemyType.FETTGESICHT ||
+        		e == EnemyType.GIFTMACHER ||
+        		e == EnemyType.GRETEL ||
+        		e == EnemyType.HANS ||
+        		e == EnemyType.HITLER ||
+        		e == EnemyType.SCHABBS) {
+        	this.keyDrop = KEY_TYPE.GOLD;
+        }
+        if (d.pathing) {
+        	instantStateChange(STATES.PATH);
+        } else {
+        	instantStateChange(STATES.STAND);
+        }
+        this.setAngle(WL6Meta.dirToAngle(d.direction));
+        
     }
+    
 
-    public void setPathDir(WL6Meta.DIRS dir) {
-        pathDir = dir;
-    }
-
-    public void setState(STATES state) {
-        this.state = state;
+    public void setPathing(boolean pathing) {
+        this.pathing = pathing;
     }
 
     /**
      * Tells the enemy to change states
-     * @param State state to change the enemy to
-     * @param delay time taken to change states
-     *              (e.g. An officer takes less time to go CHASE -> ATTACK then a guard)
+     * @param state state to change the enemy to
      */
-    public void changeStates(STATES State, int delay) {
-
-        setState(State);
+    public void delayedStateChange(STATES state) {
+    	if (nextState != state) {
+	        nextState = state;
+	        stateTime = 0;
+    	}
+    }
+    
+    
+    public void instantStateChange(STATES state) {
+        this.state = state;
+        nextState = null;
+        stateTime = 0;
     }
 
+    
+    public void shootAtPlayer(GameModel g) {
+    	Player p = g.getPlayer();
+    	Projectile bullet = new Projectile(0, 10, true, "worm");
+    	g.addDoodad(bullet);
+    	bullet.setPos(this.getPos());
+    	bullet.setVel(p.getPos().sub(bullet.getPos()).nor().mul(0.2f));
+    }
+    
+    
     // follow patrol path
     public void path() {
+    	
     	//if we've passed the next pathing node...
-    	
-    	//this code is for clean navigation through paths but is broken right now
-    	
-    	/*if (path.get(pathLast).dst(path.get(pathGoal)) <= 
-    			path.get(pathLast).dst(getPos())) {
+    	Vector2 goal = path.get(pathGoal).cpy().add(0.5f, 0.5f);
+    	Vector2 last = path.get(pathLast).cpy().add(0.5f, 0.5f);
+    	if (last.dst(goal) <= last.dst(getPos())) {
     		
-    		setPos(new Vector2(path.get(pathGoal)).add(0.5f, 0.5f));
-    		pathLast++;
+    		setPos(goal);
+    		pathLast = pathGoal;
     		pathGoal++;
     		if (pathGoal >= path.size()) {
     			pathGoal = this.pathLoopStart;
     		}
+    		
     	}
-    	this.setVel(
-    			new Vector2().add(path.get(pathGoal)).sub(path.get(pathLast)).nor().mul(0.2f)
-    	);*/
+    	this.setVel(new Vector2().add(goal).sub(last).nor().mul(0.1f));
+
     	
-    	
-    	//rough navigation through path
-    	pathGoal++;
-    	pathGoal = pathGoal % path.size();
-    	setPos(new Vector2(path.get(pathGoal)).add(0.5f, 0.5f));
-		
     }
 
-    // detect player
-    public void detectPlayer(GameModel gameModel) {
-        if (canSee(gameModel.getPlayer(), gameModel)) {
-            nextState = STATES.ATTACK;
-            tick = 0;
-        }
-    }
-
-    // chase player
-
-
-    // dodge (same as chase player, but with some randomized movement to 'dodge' players attacks)
-
-
-    // attack player
-    public void attackPlayer(GameModel gameModel) {
-        doDamage(gameModel);
-        setState(STATES.CHASE);
-    }
-
-    // react to pain
 
 
     @Override
@@ -173,15 +213,16 @@ public class Enemy extends Mob {
         if (state == STATES.STAND || state == STATES.PATH) {
             d = d * 2;
         }
-        if (isPain()) {
-            changeStates(STATES.PAIN, 0);
-            setHealth(getHealth() - d);
-            changeStates(STATES.CHASE, 0);
+        if (feelsPain()) {
+        	instantStateChange(STATES.PAIN);
+        	delayedStateChange(STATES.CHASE);
+        	setHealth(getHealth() - d);
         }
         else {
             setHealth(getHealth() - d);
         }
     }
+    
 
     @Override
     public void doDamage(GameModel gameModel) {
@@ -228,6 +269,30 @@ public class Enemy extends Mob {
 
         return getDamage();
     }
+    
+    
+    protected void dropItems(GameModel g) {
+    	
+    	Doodad d = null;
+    	
+    	if (this.keyDrop != null) {
+    		d = new Pickup(0, this.keyDrop);
+    		d.setTextureName("goldkey");
+    	} else {
+    		d = new Pickup(0, 0, 0, ammoDrop, 0);
+    		d.setTextureName("ammo");
+    	}
+    	
+    	
+    	do {
+    		
+    		d.setPos(this.getPos().add((float) (0.7 * Math.random() - 0.35), (float) (0.7 * Math.random() - 0.35)));
+    		
+    	} while (WL6Meta.hasSolidBlockAt((int) d.getBlockPos().x, (int) d.getBlockPos().y, g.getMap()));
+    	
+    	g.addDoodad(d);
+    }
+    
 
     public void calculatePath(GameModel gameModel) {
         path = new ArrayList<Vector2>();
@@ -303,7 +368,7 @@ public class Enemy extends Mob {
 		this.pathSpeed = pathSpeed;
 	}
 
-	public boolean isPain() {
+	public boolean feelsPain() {
 		return pain;
 	}
 
@@ -326,5 +391,11 @@ public class Enemy extends Mob {
 	public void setDamage(int damage) {
 		this.damage = damage;
 	}
+	
+	public boolean isDead() {
+		return this.state == STATES.DIE;
+	}
+	
+	
 }
 

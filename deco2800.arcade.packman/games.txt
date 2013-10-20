@@ -26,3 +26,6 @@ connect4
 raiden
 wl6
 snakeLadder
+userui
+cyra
+#blackjack #blackjack be trolling me. There is no blackjack folder, so this fails.

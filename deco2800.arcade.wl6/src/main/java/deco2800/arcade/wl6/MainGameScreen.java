@@ -5,7 +5,6 @@ import java.util.Iterator;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import deco2800.arcade.client.ArcadeInputMux;
-import deco2800.arcade.wl6.*;
 import deco2800.arcade.wl6.Doodad;
 
 public class MainGameScreen implements Screen {
@@ -13,7 +12,6 @@ public class MainGameScreen implements Screen {
 	private GameModel model;
 	private WL6 game;
 	private boolean debugMode = false;
-	@SuppressWarnings("unused")
 	private boolean overlayPause = false;
 	private WL6InputProcessor input = null;
 	private IngameUI ui = new IngameUI();
@@ -52,14 +50,20 @@ public class MainGameScreen implements Screen {
 		
 		model.setDelta(delta);
 		
-		//iterate over all game objects
-		model.beginTick();
-		Iterator<Doodad> itr = model.getDoodadIterator();
-		while (itr.hasNext()) {
-			Doodad d = itr.next();
-			d.tick(model);
+		if (!overlayPause) {
+
+			input.tick();
+			
+			//iterate over all game objects
+			model.beginTick();
+			Iterator<Doodad> itr = model.getDoodadIterator();
+			while (itr.hasNext()) {
+				Doodad d = itr.next();
+				d.tick(model);
+			}
+			model.endTick();
+			
 		}
-		model.endTick();
 		
 		
 		b.draw(this.debugMode);

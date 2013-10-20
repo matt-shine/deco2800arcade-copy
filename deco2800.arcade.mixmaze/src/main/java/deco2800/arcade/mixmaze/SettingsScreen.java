@@ -68,6 +68,7 @@ public class SettingsScreen implements Screen {
 	private Image p1BackImage;
 	private Image p2BackImage;
 	private Image p2BodyImage;
+	private String avatarPng;
 	
 	
 	SettingsScreen(final MixMaze game) {
@@ -76,9 +77,9 @@ public class SettingsScreen implements Screen {
 		startDebug();
 		initialize();
 		createAvatarStack(p1Avatarstack, 
-				p1BackImage, p1BodyImage, p1HeadImage, p1HeadRegion, "avatars.png");
+				p1BackImage, p1BodyImage, p1HeadImage);
 		createAvatarStack(p2Avatarstack, 
-				p2BackImage, p2BodyImage, p2HeadImage, p2HeadRegion, "avatars.png");
+				p2BackImage, p2BodyImage, p2HeadImage);
 		setTableLayout();
 		createSettingsPanel();
 		createPlayerPanel(playerOnePanel, p1Texts, p1Buttons, p1Avatarstack);
@@ -138,6 +139,7 @@ public class SettingsScreen implements Screen {
 		this.stage = new Stage();
 		playButton = new TextButton("Play", skin);
 		playButton.pad(20);
+		avatarPng = "avatars.png";
 		skin.add("background", new Texture(Gdx.files.internal("settings.png")));
 		difficultyList = new List(new String[] { "Beginner", "Intermediate",
 				"Advanced" }, skin);
@@ -149,8 +151,8 @@ public class SettingsScreen implements Screen {
 		p1Texts[4] = new TextField("S", skin);
 		p1Texts[5] = new TextField("D", skin);
 
-		p2Texts[0] = new TextField("5", skin);
-		p2Texts[1] = new TextField("6", skin);
+		p2Texts[0] = new TextField("O", skin);
+		p2Texts[1] = new TextField("P", skin);
 		p2Texts[2] = new TextField("UP", skin);
 		p2Texts[3] = new TextField("LEFT", skin);
 		p2Texts[4] = new TextField("DOWN", skin);
@@ -178,7 +180,7 @@ public class SettingsScreen implements Screen {
 				Gdx.files.internal("body.png"))));
 		p1BodyImage.setColor(1f, 0f, 0f, 1f);
 		p1HeadRegion = new TextureRegion(new Texture(
-				Gdx.files.internal("avatars.png")), 256, 0, 256, 256);
+				Gdx.files.internal(avatarPng)), 256, 0, 256, 256);
 		GameScreen.p1HeadRegion = p1HeadRegion;
 		p1HeadImage = new Image(p1HeadRegion);
 		
@@ -188,7 +190,7 @@ public class SettingsScreen implements Screen {
 				Gdx.files.internal("body.png"))));
 		p2BodyImage.setColor(0f, 0f, 1f, 1f);
 		p2HeadRegion = new TextureRegion(new Texture(
-				Gdx.files.internal("avatars.png")), 0, 0, 256, 256);
+				Gdx.files.internal(avatarPng)), 0, 0, 256, 256);
 		GameScreen.p2HeadRegion = p2HeadRegion;
 		p2HeadImage = new Image(p2HeadRegion);
 		
@@ -200,16 +202,9 @@ public class SettingsScreen implements Screen {
 		//p1HeadImage.setColor(Color.YELLOW);
 	}
 	private void createAvatarStack(Stack stack, Image background, Image body,
-			Image head,TextureRegion headReigion,String bodyName){
-
-		
-		background.setScaling(Scaling.fill);
-		
-		
-		body.setScaling(Scaling.fill);		
-		
-				
-		
+			Image head){	
+		background.setScaling(Scaling.fill);		
+		body.setScaling(Scaling.fill);
 		head.setScaling(Scaling.fill);
 		
 		stack.add(background);
@@ -339,86 +334,86 @@ public class SettingsScreen implements Screen {
 
 	private int getKeyCode(String keyText) {
 		int code = 0;
-		if (keyText.equals("0"))
-			code = Keys.NUM_0;
-		if (keyText.equals("1"))
-			code = Keys.NUM_1;
-		if (keyText.equals("2"))
-			code = Keys.NUM_2;
-		if (keyText.equals("3"))
-			code = Keys.NUM_3;
-		if (keyText.equals("4"))
-			code = Keys.NUM_4;
-		if (keyText.equals("5"))
-			code = Keys.NUM_5;
-		if (keyText.equals("6"))
-			code = Keys.NUM_6;
-		if (keyText.equals("7"))
-			code = Keys.NUM_7;
-		if (keyText.equals("8"))
-			code = Keys.NUM_8;
-		if (keyText.equals("9"))
-			code = Keys.NUM_9;
-		if (keyText.equalsIgnoreCase("q"))
-			code = Keys.Q;
-		if (keyText.equalsIgnoreCase("w"))
-			code = Keys.W;
-		if (keyText.equalsIgnoreCase("e"))
-			code = Keys.E;
-		if (keyText.equalsIgnoreCase("r"))
-			code = Keys.R;
-		if (keyText.equalsIgnoreCase("t"))
-			code = Keys.T;
-		if (keyText.equalsIgnoreCase("y"))
-			code = Keys.Y;
-		if (keyText.equalsIgnoreCase("u"))
-			code = Keys.U;
-		if (keyText.equalsIgnoreCase("i"))
-			code = Keys.I;
-		if (keyText.equalsIgnoreCase("o"))
-			code = Keys.O;
-		if (keyText.equalsIgnoreCase("p"))
-			code = Keys.P;
-		if (keyText.equalsIgnoreCase("a"))
-			code = Keys.A;
-		if (keyText.equalsIgnoreCase("s"))
-			code = Keys.S;
-		if (keyText.equalsIgnoreCase("d"))
-			code = Keys.D;
-		if (keyText.equalsIgnoreCase("f"))
-			code = Keys.F;
-		if (keyText.equalsIgnoreCase("g"))
-			code = Keys.G;
-		if (keyText.equalsIgnoreCase("h"))
-			code = Keys.H;
-		if (keyText.equalsIgnoreCase("j"))
-			code = Keys.J;
-		if (keyText.equalsIgnoreCase("k"))
-			code = Keys.K;
-		if (keyText.equalsIgnoreCase("l"))
-			code = Keys.L;
-		if (keyText.equalsIgnoreCase("z"))
-			code = Keys.Z;
-		if (keyText.equalsIgnoreCase("x"))
-			code = Keys.X;
-		if (keyText.equalsIgnoreCase("c"))
-			code = Keys.C;
-		if (keyText.equalsIgnoreCase("v"))
-			code = Keys.V;
-		if (keyText.equalsIgnoreCase("b"))
-			code = Keys.B;
-		if (keyText.equalsIgnoreCase("n"))
-			code = Keys.N;
-		if (keyText.equalsIgnoreCase("m"))
-			code = Keys.N;
-		if (keyText.equalsIgnoreCase("up"))
-			code = Keys.UP;
-		if (keyText.equalsIgnoreCase("down"))
-			code = Keys.DOWN;
-		if (keyText.equalsIgnoreCase("left"))
-			code = Keys.LEFT;
-		if (keyText.equalsIgnoreCase("right"))
-			code = Keys.RIGHT;
+		if (keyText.equals("0")){
+			code = Keys.NUM_0;}
+		if (keyText.equals("1")){
+			code = Keys.NUM_1;}
+		if (keyText.equals("2")){
+			code = Keys.NUM_2;}
+		if (keyText.equals("3")){
+			code = Keys.NUM_3;}
+		if (keyText.equals("4")){
+			code = Keys.NUM_4;}
+		if (keyText.equals("5")){
+			code = Keys.NUM_5;}
+		if (keyText.equals("6")){
+			code = Keys.NUM_6;}
+		if (keyText.equals("7")){
+			code = Keys.NUM_7;}
+		if (keyText.equals("8")){
+			code = Keys.NUM_8;}
+		if (keyText.equals("9")){
+			code = Keys.NUM_9;}
+		if (keyText.equalsIgnoreCase("q")){
+			code = Keys.Q;}
+		if (keyText.equalsIgnoreCase("w")){
+			code = Keys.W;}
+		if (keyText.equalsIgnoreCase("e")){
+			code = Keys.E;}
+		if (keyText.equalsIgnoreCase("r")){
+			code = Keys.R;}
+		if (keyText.equalsIgnoreCase("t")){
+			code = Keys.T;}
+		if (keyText.equalsIgnoreCase("y")){
+			code = Keys.Y;}
+		if (keyText.equalsIgnoreCase("u")){
+			code = Keys.U;}
+		if (keyText.equalsIgnoreCase("i")){
+			code = Keys.I;}
+		if (keyText.equalsIgnoreCase("o")){
+			code = Keys.O;}
+		if (keyText.equalsIgnoreCase("p")){
+			code = Keys.P;}
+		if (keyText.equalsIgnoreCase("a")){
+			code = Keys.A;}
+		if (keyText.equalsIgnoreCase("s")){
+			code = Keys.S;}
+		if (keyText.equalsIgnoreCase("d")){
+			code = Keys.D;}
+		if (keyText.equalsIgnoreCase("f")){
+			code = Keys.F;}
+		if (keyText.equalsIgnoreCase("g")){
+			code = Keys.G;}
+		if (keyText.equalsIgnoreCase("h")){
+			code = Keys.H;}
+		if (keyText.equalsIgnoreCase("j")){
+			code = Keys.J;}
+		if (keyText.equalsIgnoreCase("k")){
+			code = Keys.K;}
+		if (keyText.equalsIgnoreCase("l")){
+			code = Keys.L;}
+		if (keyText.equalsIgnoreCase("z")){
+			code = Keys.Z;}
+		if (keyText.equalsIgnoreCase("x")){
+			code = Keys.X;}
+		if (keyText.equalsIgnoreCase("c")){
+			code = Keys.C;}
+		if (keyText.equalsIgnoreCase("v")){
+			code = Keys.V;}
+		if (keyText.equalsIgnoreCase("b")){
+			code = Keys.B;}
+		if (keyText.equalsIgnoreCase("n")){
+			code = Keys.N;}
+		if (keyText.equalsIgnoreCase("m")){
+			code = Keys.N;}
+		if (keyText.equalsIgnoreCase("up")){
+			code = Keys.UP;}
+		if (keyText.equalsIgnoreCase("down")){
+			code = Keys.DOWN;}
+		if (keyText.equalsIgnoreCase("left")){
+			code = Keys.LEFT;}
+		if (keyText.equalsIgnoreCase("right")){
+			code = Keys.RIGHT;}
 		return code;
 	}
 
@@ -444,10 +439,10 @@ public class SettingsScreen implements Screen {
 
 		@Override
 		public void clicked(InputEvent event, float x, float y) {
-			if (isNext == true && avatar.getRegionX() < 1281) {
+			if (isNext&& avatar.getRegionX() < 1281) {
 				avatar.setRegion(avatar.getRegionX() + 256, 0, 256, 256);
 			}
-			if (isNext == false && avatar.getRegionX() > 255) {
+			if (!isNext&& avatar.getRegionX() > 255) {
 				avatar.setRegion(avatar.getRegionX() - 256, 0, 256, 256);
 			}
 		}

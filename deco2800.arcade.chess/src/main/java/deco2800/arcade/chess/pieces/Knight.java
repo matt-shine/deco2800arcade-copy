@@ -14,7 +14,7 @@ public class Knight extends Piece {
 	 */
 	public Knight(boolean team, int pieceNo) {
 		super(team, pieceNo);
-		this.preference = 4;
+		this.preference = 2;
 	}
 
 	public List<int[]> possibleMoves(int[] currentPos, FixedSizeList<FixedSizeList<Piece>> board_state) {

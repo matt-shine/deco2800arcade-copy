@@ -28,15 +28,13 @@ public class BurningSkies extends GameClient {
 	public static final int SCREENWIDTH = 1280;
 	public static final int SCREENHEIGHT = 720;
 	
-	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
+	private String playerName; // The names of the player
 	
 	private Music nowPlaying;
 	private boolean isPaused = false;
 	
 	//shh
 	public int zalgo = 0;
-
-	//TODO: ACHIEVEMENTS
 
 	@SuppressWarnings("unused")
 	private NetworkClient networkClient;
@@ -56,8 +54,7 @@ public class BurningSkies extends GameClient {
 	 */
 	public BurningSkies(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		players[0] = player.getUsername();
-		//players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
+		playerName = player.getUsername();
 		this.networkClient = networkClient;
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
@@ -180,6 +177,6 @@ public class BurningSkies extends GameClient {
 	}
 	
 	public String getPlayerName() {
-		return players[0];
+		return playerName;
 	}
 }

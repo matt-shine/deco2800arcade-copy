@@ -24,7 +24,6 @@ public class SpawnList {
 	
 	private static final long standardEnemyPoints = 1006493;
 	
-	// TODO more variable pointing to other types of enemies
 	private static Texture[] enemyTex = {
 		new Texture(Gdx.files.internal("images/ships/enemy1.png")),
 		new Texture(Gdx.files.internal("images/ships/enemy2.png")),

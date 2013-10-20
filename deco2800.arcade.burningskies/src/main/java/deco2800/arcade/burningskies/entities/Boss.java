@@ -8,7 +8,6 @@ import deco2800.arcade.burningskies.Configuration;
 import deco2800.arcade.burningskies.entities.bullets.BossPattern;
 import deco2800.arcade.burningskies.screen.PlayScreen;
 
-//TODO abstract?
 public class Boss extends Enemy {
 	
 	private BossPattern pattern;

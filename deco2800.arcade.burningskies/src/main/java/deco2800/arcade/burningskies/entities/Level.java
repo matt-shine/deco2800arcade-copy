@@ -19,7 +19,6 @@ public class Level extends Image {
 
 	
 	public Level(PlayScreen screen) {
-		//TODO: Remove this and make it dynamic
 		super(new Texture(Gdx.files.internal("images/maps/space_720p.png")));
 		this.player = screen.getPlayer();
 	}

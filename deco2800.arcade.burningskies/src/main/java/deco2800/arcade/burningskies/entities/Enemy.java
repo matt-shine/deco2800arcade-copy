@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import deco2800.arcade.burningskies.screen.PlayScreen;
 import deco2800.arcade.burningskies.PowerUpGenerator;
 
-//TODO abstract?
 public class Enemy extends Ship {
 	
 	private PlayerShip player;

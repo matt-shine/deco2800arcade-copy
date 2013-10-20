@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.burningskies.entities.bullets.Level1EnemyPattern;
 import deco2800.arcade.burningskies.screen.PlayScreen;
 
-//TODO abstract?
 public class Level1Enemy extends Enemy {
 	
 	private Level1EnemyPattern pattern;

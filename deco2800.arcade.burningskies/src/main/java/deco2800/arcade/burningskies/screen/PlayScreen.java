@@ -171,7 +171,6 @@ public class PlayScreen implements Screen
     			levelTimer += delta;
     			score += 131;
     		}
-    		//TODO: PRESS B TO SPAWN BOSS, REMOVE AFTER DEBUG
     		if(!bossActive && (levelTimer > 60.0 || Gdx.input.isKeyPressed(Keys.B))) { //unleash the beast
     			bossActive = true;
     			game.playSong("boss");
@@ -210,7 +209,7 @@ public class PlayScreen implements Screen
     							removeEntity(e);
     						}
     						removeEntity(b);
-//    	        			i--; TODO this was causing trouble after making the SpawnList class, may need this later
+    	        			i--;
     						continue;
     					}
     					
@@ -225,7 +224,6 @@ public class PlayScreen implements Screen
 			for(int i=0; i<powerups.size(); i++) {
 				PowerUp p = powerups.get(i);
 				if(p.hasCollidedUnscaled(player) && player.isAlive()) {
-					//TODO: POWERUPS WOO
 					p.powerOn(player);
 					removeEntity(p);
 					i--;

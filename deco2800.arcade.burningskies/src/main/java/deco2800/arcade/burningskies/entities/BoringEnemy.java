@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.burningskies.screen.PlayScreen;
 
-//TODO abstract?
 public class BoringEnemy extends Enemy {
 	
 	public BoringEnemy(int health, Texture image, Vector2 pos, Vector2 dir, PlayScreen screen,

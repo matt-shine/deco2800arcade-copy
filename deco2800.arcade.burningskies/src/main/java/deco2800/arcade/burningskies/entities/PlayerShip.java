@@ -226,6 +226,7 @@ public class PlayerShip extends Ship {
 		this.speedUp = false;
 		this.flash = 0f;
 		this.velocity.set(0f, 0f);
+		this.setGodMode(true);
 		position.set(getStage().getWidth()/2 - this.getOriginX(),getStage().getHeight()/2 - this.getOriginY());
 	}
 

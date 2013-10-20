@@ -84,6 +84,7 @@ public class TestAchievementStorage {
 		databaseTester.onTearDown();
 	}
 	
+
 	/**
 	 * Test for numPlayerWithAchievement
 	 * @throws DatabaseException

@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import deco2800.server.ResourceLoader;
 
 public class ImageStorage {
-    
+
     // max image size of 1M
 
     // reserved image ids that are guaranteed to be accessible
@@ -33,7 +33,7 @@ public class ImageStorage {
      * that always exists, and whose image cannot be modified.
      */
     public static final String GENERIC_AVATAR_ID = "ImageStorage.reserved.GENERIC_AVATER";
-    
+
     /**
      * Get a logger for this class
      */
@@ -42,6 +42,10 @@ public class ImageStorage {
     // private toggle to allow us to initially load in reserved IDs
     private boolean allowSettingReservedIDs = false;
 
+    /**
+     * Initialises the image storage's database and loads in data for the
+     * reserved images.
+     */
     public void initialise() throws DatabaseException {
     	logger.debug("ImageStorage about to be initialised");
         Connection connection = Database.getConnection();
@@ -53,29 +57,29 @@ public class ImageStorage {
 	    if (!tableData.next()){
 	    logger.info("Images table not in database, creating now");
 		statement = connection.createStatement();
-		
+
 		statement.execute("CREATE TABLE IMAGES(id VARCHAR(255) PRIMARY KEY," +
 				  "data BLOB(1M) NOT NULL)");
 		logger.info("Images table created.");
 	    }
-	    
+
 	    // load in our reserved ids
 	    try {
 		allowSettingReservedIDs = true;
 		set(UNKNOWN_IMAGE_ID, ResourceLoader.load("reservedImages/unknown.png"));
-		set(GENERIC_AVATAR_ID, ResourceLoader.load("reservedImages/avatar.png"));		
+		set(GENERIC_AVATAR_ID, ResourceLoader.load("reservedImages/avatar.png"));
 	    } catch (IOException e) {
 	    	logger.error("Could not load in reserved images.");
 	    	throw new DatabaseException("Couldn't load in reserved image", e);
 	    } finally {
 		allowSettingReservedIDs = false;
 	    }
-		
+
 	} catch(SQLException e) {
             e.printStackTrace();
             logger.error("Could not create images table.");
             throw new DatabaseException("Couldn't create images table", e);
-        } finally {           
+        } finally {
             try {
                 if (statement != null) statement.close();
                 tableData.close();
@@ -85,13 +89,13 @@ public class ImageStorage {
             }
         }
     }
-    
+
     /**
      * Associates an image with an id. The image can be retrieved from the database
      * with a call to get using the same id. Any previous image associated with this
      * ID is replaced. If the image's id starts with "ImageStorage.reserved.", a
      * DatabaseException will be thrown.
-     * 
+     *
      * @param id    The id of the image
      * @param image The image to store
      */
@@ -112,7 +116,7 @@ public class ImageStorage {
 		ps.execute();
 
 	    } else {
-		ps = conn.prepareStatement("INSERT INTO IMAGES VALUES (?, ?)");		
+		ps = conn.prepareStatement("INSERT INTO IMAGES VALUES (?, ?)");
 		ps.setString(1, id);
 		ps.setBinaryStream(2, bis);
 		ps.execute();
@@ -126,34 +130,37 @@ public class ImageStorage {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }         
+        }
     }
 
     /**
      * Helper method for taking an image from a file and associating it with an id
      * in the storage. This calls through to set(imageID, *the image in the file*).
      *
-     *
+     * @param imageID The id to associate the image with.
+     * @param imageFile The file containing the image.
      */
-    public void set(String imageID, File imageFile) 
+    public void set(String imageID, File imageFile)
 	throws DatabaseException, FileNotFoundException, IOException {
 	if (!imageFile.isFile()){
 		logger.error("Attempted to set image ID: {} but could not load file", imageID);
 	    throw new FileNotFoundException();
 	}
 	set(imageID, new EncodedImage(imageFile));
-    }    
+    }
 
     /**
      * Returns the image associated with the given id, or the image associated with
      * UNKNOWN_IMAGE_ID as a fallback.
      *
-     *
+     * @param id The id of the image to get.
+     * @return Either the image associated with id, or as a last resort
+     *         UNKNOWN_IMAGE_ID.
      */
     public EncodedImage get(String id) throws DatabaseException {
     	logger.debug("Associating image ID: {} with default unknown image file", id);
         Connection conn = Database.getConnection();
-        PreparedStatement ps = null;        
+        PreparedStatement ps = null;
 
         try {
             ps = conn.prepareStatement(
@@ -221,7 +228,7 @@ public class ImageStorage {
      */
     public boolean contains(String id) throws DatabaseException {
 	Connection conn = Database.getConnection();
-        PreparedStatement ps = null;        
+        PreparedStatement ps = null;
 
         try {
             ps = conn.prepareStatement(
@@ -236,7 +243,7 @@ public class ImageStorage {
 
         } catch(SQLException e) {
         	logger.error("Attempted to check if database contains an image but failed");
-            throw new DatabaseException("SQLException caught", e);            
+            throw new DatabaseException("SQLException caught", e);
         } finally {
             try {
                 ps.close(); // closes rs as well

@@ -278,8 +278,8 @@ public class Connect4 extends GameClient {
 		
 		//Create the table
 		table = new Table();
-		table.bounds.x = SCREENWIDTH/2 - Table.WIDTH/2;
-		table.SetupDiscs();
+		table.getBounds().x = SCREENWIDTH/2 - Table.WIDTH/2;
+		table.setupDiscs();
 		
 		//Create the buttons and setup
 		buttons = new Buttons();
@@ -291,7 +291,7 @@ public class Connect4 extends GameClient {
 		//Create the cursor disc
 		cursorDisc = new Disc();
 		cursorDisc.setState( Disc.PLAYER1 );
-		cursorDisc.setPosition((table.bounds.x + cursorDisc.bounds.width + 5), (table.bounds.y + table.bounds.height + 25));
+		cursorDisc.setPosition((table.getBounds().x + cursorDisc.bounds.width + 5), (table.getBounds().y + table.getBounds().height + 25));
 		
 		//Necessary for rendering
 		shapeRenderer = new ShapeRenderer();
@@ -332,8 +332,8 @@ public class Connect4 extends GameClient {
 	public void renderCursorDisc() {
 		//Set cursor position
 		cursorDisc.setPosition(
-				(table.bounds.x + cursorDisc.bounds.width + cursorDisc.currentPos * ( 5 + 2 * Table.DISCRADIUS ) + 5 ), 
-				(table.bounds.y + table.bounds.height + 25));
+				(table.getBounds().x + cursorDisc.bounds.width + cursorDisc.currentPos * ( 5 + 2 * Table.DISCRADIUS ) + 5 ), 
+				(table.getBounds().y + table.getBounds().height + 25));
 		
 		//Determine current player and set respective cursor colour.
 		if (playerTurn == 0) {

@@ -27,6 +27,7 @@
 // * line 38 - Brick.java (initialiseBrickImgs())
 // * line 56 - Brick.java (initialiseBrickImgs())
 // * REMEMBER TO UNCOMMENT THE LINES ONCE TESTING IS DONE.
+// * REMEMBER TO COMMENT THIS FILE OUT AS WELL.
 // */
 //public class LevelTest1 {
 //

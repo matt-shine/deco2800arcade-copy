@@ -6,13 +6,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import javax.xml.stream.*;
 
 public class XMLReader {
 		
@@ -22,7 +20,7 @@ public class XMLReader {
 		Accolade tmpAccolade;
 		String tmpName = null, tmpMessage = null, tmpPopupMessage = null, tmpUnit = null, 
 				tmpTag = null, tmpImage = null;
-		Integer tmpPopup =null, tmpValue = null, tmpID =null, tmpGameID = null;
+		Integer tmpPopup =null, tmpValue = null, tmpID =null;//, tmpGameID = null; //not assigned in here, assigned in accoladeSystem
 		Double tmpModifier = null;
 		String tag;
 		String line;
@@ -51,10 +49,11 @@ public class XMLReader {
 			} else if (tag.equals("tag")){ tmpTag = data;
 			} else if (tag.equals("image")){ tmpImage = data;
 			} else if (tag.equals("value")){ tmpValue = Integer.parseInt(data);
-			} else if (tag.equals("gameID")){ tmpGameID = Integer.parseInt(data);}
+			//} else if (tag.equals("gameID")){ tmpGameID = Integer.parseInt(data);} //gameID is assigned in accolade System
 			//TODO might not need to store the gameID inside of the xml file. 
 			//Meh (could maybe include multiple games in the one xml)
 			
+			}
 			if(tag.equals("/accolade")){
 				if((tmpName!=null) && (tmpMessage!=null) &&	(tmpPopup!=null) && (tmpPopupMessage!=null) && 
 						(tmpUnit!=null) && (tmpTag!=null) && (tmpImage!=null)){
@@ -74,8 +73,7 @@ public class XMLReader {
 				} else {
 					//THROW SOME ERROR SAYING NOT ALL REQUIRED ELMENTS ARE HERE AND TO CHECK THE XML
 				}//DONE CHECKING IF ALL FIELDS WERE CREATED
-			}//DONE CREATING AND APPENDING THE ACCOLADE	
-			
+			}//DONE CREATING AND APPENDING THE ACCOLADE				
 		}
 		
 		xmlFile.close();

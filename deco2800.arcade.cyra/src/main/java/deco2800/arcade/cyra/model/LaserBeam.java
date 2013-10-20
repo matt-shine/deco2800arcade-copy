@@ -32,7 +32,6 @@ public class LaserBeam extends Enemy {
 		//this.rotation = rotation;
 		count = -timeToBegin;
 		this.maxWidth = maxWidth;
-		System.out.println("Made new laser beam");
 		advanceDuringScenes=true;
 		Sounds.playLaserSound(0.5f);
 	}

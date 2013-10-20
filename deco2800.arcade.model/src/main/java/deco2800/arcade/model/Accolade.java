@@ -1,16 +1,9 @@
 package deco2800.arcade.model;
-import java.text.DecimalFormat;
 import java.util.NoSuchElementException;
 //TODO Add in a popup string method
 
 //THE ACCOLADE ID WILL NO LONGER BE AN AUTO INCRMENT - instead it will be the gameID.xx ie, 1.01, 1.02 
 //(either assigned by gamedev or automatically through our code)
-
-
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
-
 public class Accolade {
 	//TODO move the container specific overrides to the AccoladeContainer class	
 	
@@ -142,7 +135,6 @@ public class Accolade {
 	private String parseString(String message){
 		String s = message.replace("%VALUE", "%s").replace("%UNIT", "%s");
 		String firstReplace, secondReplace;
-		String sValue;
 		Long value = (long) (this.value*this.modifier);
 
 		
@@ -187,6 +179,7 @@ public class Accolade {
 		return prev;
 	}
 	
+	@SuppressWarnings("unused") //Used externallally
 	private boolean hasNext(){
 		return next==null;
 	}

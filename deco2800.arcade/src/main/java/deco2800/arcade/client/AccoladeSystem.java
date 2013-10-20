@@ -1,6 +1,6 @@
 package deco2800.arcade.client;
 import java.io.IOException;
-import java.sql.ResultSet;
+//import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -20,14 +20,11 @@ import deco2800.arcade.model.XMLReader;
 public class AccoladeSystem {
 	//ServerCommunicator server = new ServerCommunicator();
 	//TODO add in a watcherPush for games that reset score on death
-		
-	
-	private Map<String,Integer> nameIDPairs;
 	private AccoladeContainer localAccolades; //progress for popupevent
 	private Map<Double,WatchedAccolade> watchedVariables; //Prepared variables ready for scheduling
 	private Map<Double, TimedPush> timerTasks; //timertasks recreated when the timer begins
 	private Timer timer;
-	private ResultSet serverData; 
+	//private ResultSet serverData; 
 	private String xmlFile;
 	private int playerID;
 	private int gameID;
@@ -71,6 +68,9 @@ public class AccoladeSystem {
 			
 			//finally, any remaining server accolades are the added to the localaccolades
 			//If anything in the localAccolades is changed then the xml is re-written
+			if(xmlChanged){
+				XMLReader.saveAccoladeContainer(this.localAccolades, this.xmlFile);
+			}
 			
 		} else {
 			Random rand = new Random();
@@ -154,8 +154,7 @@ public class AccoladeSystem {
 	 * @param table The player_accolades table retrieved from the server
 	 * @return An accolade Hashmap<accolade_id, accolade_progress> for local tracking of popups
 	 * @throws SQLException //TODO find out when the sql exception is thrown
-	 */
-	//TODO
+	 *
 	private AccoladeContainer makeLocal(ResultSet table) throws SQLException{
 		//this is supposed to be fetching from the server but i'll instead use just the 
 		AccoladeContainer accolades = 
@@ -186,17 +185,20 @@ public class AccoladeSystem {
 		}		
 		return new AccoladeContainer();
 	}
+	*/
 	
+	@SuppressWarnings("unused") //This is used as part of a constructor to force offline (normally online by default
 	private AccoladeSystem offline(){
 		this.online = true;
 		return this;
 	}
 	
+	
 	/** TODO remove this as it is no longer needed
 	 * @param table The player_accolades table retrieved from the server
 	 * @return An accolade Hashmap<accolade_id, accolade_name> for local tracking of popups
 	 * @throws SQLException //TODO find out when the sql exception is thrown
-	 */
+	 *
 	private HashMap<String, Integer> makeStringIDPairs(ResultSet table) throws SQLException{
 		HashMap<String, Integer> stringIDPairs = new HashMap<String, Integer>();
 		while(table.next()){
@@ -205,7 +207,7 @@ public class AccoladeSystem {
 		}
 		return stringIDPairs;
 	}
-	
+	*/
 	
 	/**TIMER STUFF **/
 	
@@ -230,17 +232,18 @@ public class AccoladeSystem {
 	 * @param accoladeID The accolade that you do not want automatically updated anymore
 	 * @throws NullPointerException If an accolade with that accolade ID is not being watched.
 	 */
-	public void stopWatching(int accoladeID)throws NullPointerException{
+	public void stopWatching(Double accoladeID)throws NullPointerException{
 		if(!this.watchedVariables.containsKey(accoladeID)){
 			throw new NullPointerException("There is no accolade being tracked with that ID");			
 		}
 		if(this.timerRunning){
-			WatchedAccolade accolade = this.watchedVariables.get(accoladeID);
+			//WatchedAccolade accolade = this.watchedVariables.get(accoladeID);
 			//Stops the timerTask running
 			timerTasks.get(accoladeID).cancel();
 			//then removes it so it isn't initialised again
 			timerTasks.remove(accoladeID);
 		}
+		this.watchedVariables.remove(accoladeID);
 	}
 	
 	/**
@@ -252,7 +255,7 @@ public class AccoladeSystem {
 		
 		//Schedule all the watched variables as timertasks
 		//TODO add the types to Map.Entry
-		for(Map.Entry entry: this.watchedVariables.entrySet()){
+		for(Map.Entry<Double,WatchedAccolade> entry: this.watchedVariables.entrySet()){
 			//make it a little easier to handle
 			WatchedAccolade accolade = (WatchedAccolade) entry.getValue(); 
 			TimedPush timedPush =  new TimedPush(accolade.accoladeID, accolade.variable);

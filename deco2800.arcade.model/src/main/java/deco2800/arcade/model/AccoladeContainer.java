@@ -1,7 +1,6 @@
 package deco2800.arcade.model;
 import java.util.*;
 
-import javax.sql.rowset.*;
 //TODO extend the accolade.setID function to add the accolade to a hash list
 //Should make .get a lot faster.
  
@@ -10,7 +9,6 @@ public class AccoladeContainer implements Iterable<Accolade> {
     //instantiate variables
     private Accolade head;
     private Accolade tail;
-    private HashMap<Double, Accolade> quickReference;
     private int gameID;
     private int size;
     private int playerID;
@@ -30,7 +28,6 @@ public class AccoladeContainer implements Iterable<Accolade> {
     public void populateAccoladesPlayer(int playerID){
     	//TODO implement populateAccoladesPlayer
     	this.playerID = playerID;
-    	BUILDDUMMYDATA();
     }
     
     /**Retrieves all accolades totals for game with gameID
@@ -39,7 +36,6 @@ public class AccoladeContainer implements Iterable<Accolade> {
     public void populateAccoladesGame(int gameID){
     	//TODO implement the populateAccoldesGame
     	this.gameID = gameID;
-    	BUILDDUMMYDATA();
     }
     
     public AccoladeContainer setGameID(int gameID){
@@ -126,7 +122,6 @@ public class AccoladeContainer implements Iterable<Accolade> {
 //Accolade accolade = new Accolade(ID,Value,Name,String,Unit,Modifier,Tag,Image);
     	//TODO Add in the dumb data stuff
     }
-    
     
  
     public int size() {

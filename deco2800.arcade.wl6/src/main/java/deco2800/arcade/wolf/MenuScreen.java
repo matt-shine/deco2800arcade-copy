@@ -20,23 +20,10 @@ public class MenuScreen implements Screen {
     private Skin skin;
     private MenuScreenStage stage;
 
-    private String lvl;
-    private String ep;
     private SelectBox difficulty;
     private SelectBox episode;
     private SelectBox level;
 
-    private static final String[] exitStrings = new String[] {
-            "Dost thou wish to\nleave with such hasty\nabandon?",
-            "Chickening out...\nalready?",
-            "Press N for more carnage.\nPress Y to be a weenie.",
-            "So, you think you can\nquit this easily, huh?",
-            "Press N to save the world.\nPress Y to abandon it in\nits hour of need.",
-            "Press N if you are brave.\nPress Y to cower in shame.",
-            "Heroes, press N.\n Wimps, press Y.",
-            "You are at an intersection.\n A sign says, 'Press Y to quit.'\n>",
-            "For guns and glory, press N.\nFor work and worry, press Y."
-    };
     private static final String[] difficultyStrings = new String[] {
             "Don't hurt me.",
             "Bring 'em on!",

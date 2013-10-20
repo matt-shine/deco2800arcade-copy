@@ -20,7 +20,6 @@ public enum EnemyType {
 	GIFTMACHER,
 	GRETEL,
 	FETTGESICHT,
-	OTTO,
 
 }
 

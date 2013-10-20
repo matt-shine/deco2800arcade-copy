@@ -355,9 +355,9 @@ public class junglejump extends GameClient implements InputProcessor {
 			} else if (!leap && !sit && !((!movingLeft && !movingRight) || (movingLeft && movingRight))) {
 				batch.draw(monkeyRun1, monkeyX, monkeyY, 50, 50);
 			}
-			
+			batch.end();
 			drawLevel();
-			
+			batch.begin();
 			batch.draw(levelText, 5, 5, 80, 30);
 			batch.draw(hyphenText, 105, 5, 30, 30);
 			batch.draw(livesText, 5, 30, 80, 30);
@@ -820,7 +820,6 @@ public class junglejump extends GameClient implements InputProcessor {
 					monkeyY = monkeyDefaultY;
 					// Reset Bananas, Platforms and Level
 					currentCont = new LevelContainer();
-					getCurrentCont().setCurrentWorld(worldS);
 					currentLevel = LevelContainer.getLevel(levelS);
 					gameState = GameState.INPROGRESS;
 					levelS = 0;

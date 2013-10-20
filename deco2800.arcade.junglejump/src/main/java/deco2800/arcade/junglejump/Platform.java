@@ -26,7 +26,7 @@ public class Platform {
 	private boolean inverted;
 	public char platType;
 	public String platformType = "";
-	private boolean inactive;
+	public boolean inactive;
 	private boolean moveRight;
 	private int moveCounter = 250;
 	

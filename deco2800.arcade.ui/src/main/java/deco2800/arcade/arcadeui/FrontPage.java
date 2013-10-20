@@ -4,51 +4,26 @@ import java.util.Random;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
-
-
-
-import deco2800.arcade.arcadeui.store.StoreHome;
+import deco2800.arcade.client.ArcadeInputMux;
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.Arcade;
-import deco2800.arcade.client.ArcadeInputMux;
-import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.ArcadeInputMux;
-import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.GameClient;
-import deco2800.arcade.model.Player;
-
-//adee added
-import deco2800.arcade.arcadeui.Overlay.*;
-import deco2800.arcade.model.Game.ArcadeGame;
-import deco2800.arcade.arcadeui.store.StoreScreen;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game;
-import deco2800.arcade.model.Game.InternalGame;
+import deco2800.arcade.model.Player;
 
 @ArcadeGame(id="frontpage")
 public class FrontPage implements Screen {
@@ -56,7 +31,7 @@ public class FrontPage implements Screen {
     private class FrontPageStage extends Stage {}
 	
         public static Skin skin;
-        public static String pName = "<USERNAME>";
+        private static String pName;
         private static FrontPageStage stage;
         
         private static int creditVal = 0;//temp placeholder for credits
@@ -65,7 +40,8 @@ public class FrontPage implements Screen {
         private int nFriends = onlineFriends.length;
         private static Set<Game> games = ArcadeSystem.getArcadeGames();
         private static ArcadeUI arcadeUI;
-        
+
+        	
         Texture bg;
         Texture mB;
         Texture rP;
@@ -141,10 +117,10 @@ public class FrontPage implements Screen {
             recentButton.setSize(300, 300);        
             recentButton.setPosition(bX, bY);
             
-            final TextButton lobbyButton = new TextButton("Multiplayer", skin, "default-red");
+         /*   final TextButton lobbyButton = new TextButton("Multiplayer", skin, "default-red");
             recentButton.setSize(100, 200);        
             recentButton.setPosition(bX2, bY-enlarge);
-            
+            */
             final Table recentTable = new Table();
             recentTable.setBackground(skin.getDrawable("recentBar"));
             recentTable.setSize(350, 800);
@@ -173,7 +149,8 @@ public class FrontPage implements Screen {
             stage.addActor(recentButton);
             stage.addActor(libraryButton);
             stage.addActor(storeButton);
-            stage.addActor(lobbyButton);
+           // stage.addActor(lobbyButton);
+            
             
             //Creating Game Icons
             for (Game game : games) {
@@ -304,11 +281,11 @@ public class FrontPage implements Screen {
                 }
             })); 
             
-            //Mouse Over Listener for Lobby Button
+          /*  //Mouse Over Listener for Lobby Button
             lobbyButton.addListener((new ClickListener() {        	
                 public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	    	
-                	lobbyButton.setSize(bSize + enlarge,  bSize + enlarge);
-                	lobbyButton.setPosition(bX2 -(enlarge/2), (bY-enlarge)-(enlarge/2));	
+                lobbyButton.setSize(bSize + enlarge,  bSize + enlarge);
+                lobbyButton.setPosition(bX2 -(enlarge/2), (bY-enlarge)-(enlarge/2));	
                     lobbyButton.setText(null);
                     lobbyButton.setText("Lobby");
                 }
@@ -324,7 +301,7 @@ public class FrontPage implements Screen {
                 public void changed (ChangeEvent event, Actor actor) {
                 	ArcadeSystem.goToGame("lobby");
                 }
-            })); 
+            })); */
             
     		
             
@@ -368,73 +345,92 @@ public class FrontPage implements Screen {
      * @param playerName player name
      */
     public static void setName(String playerName){
-		pName = playerName;
-		System.out.println("Logged in as:" + " " + pName);
-		//String uName = pName;
-		
-		//Top Box Labels
-        final Label logo = new Label("VAPOR", skin, "cgothic");
-        logo.setAlignment(Align.left);
-        
-        
-        logo.addListener((new ClickListener() {        	
-            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	    	
-            	logo.setWidth(490);
-            }
-            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
-            	logo.setWidth(465);
-        }}));   
-          
-        logo.addListener(((new ChangeListener() {
-                public void changed (ChangeEvent event, Actor actor) {
-                	ArcadeSystem.goToGame("main");
-                }
-            })));
-       
-        final Label username = new Label(pName , skin, "cgothic");
-        
-        if (username.getText() != pName){
-        	System.out.println("Label is null");
-        	
-        	username.setText(pName);
-        }
-        
-        username.setAlignment(Align.right);
-        
-        final Label credits = new Label( creditVal + " Credits", skin, "cgothic");
-        credits.setAlignment(Align.right);
-        final Label divider = new Label("|", skin, "cgothic");
-        divider.setAlignment(Align.right);
-        
-        final Button settingsIcon = new Button(skin.getDrawable("settingsIcon"));
-       // recentIcon.setName("recenticon");
-        settingsIcon.setSize(15, 15);
-        settingsIcon.addListener((new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-        	  Table trial = new Table();
-                  trial.setBackground(skin.getDrawable("toolTip"));
-                  trial.setPosition(950,580);
-                  trial.setSize(200, 100);
-		stage.addActor(trial);
-            }
-        })); 
-        final Table topBox = new Table();
-        
-        //set panel sizes and positions
-        topBox.setSize(1279, 30);
-        topBox.setPosition(1, 690);
-        topBox.setColor(255, 255, 255, 1);
-        topBox.setBackground(skin.getDrawable("menuBar"));
-        
-        //set top bar labels
-        topBox.add(logo).width(465);
-        topBox.add(username).width(615);
-        topBox.add(settingsIcon).width(15).height(15).padLeft(10);
-        topBox.add(divider).width(5).pad(15);
-        topBox.add(credits).width(100);
-        
-        stage.addActor(topBox);
-		
+		pName = playerName.toString();
+		System.out.println("Logged in as: " + pName);
+
+	          
+	    	//Top Box Labels
+	            final Label logo = new Label("VAPOR", skin, "cgothic");
+	            logo.setAlignment(Align.left);
+	            
+	            
+	            logo.addListener((new ClickListener() {        	
+	                public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	    	
+	                	logo.setWidth(490);
+	                }
+	                public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+	                	logo.setWidth(465);
+	            }}));   
+	              
+	            logo.addListener(((new ChangeListener() {
+	                    public void changed (ChangeEvent event, Actor actor) {
+	                    	ArcadeSystem.goToGame("main");
+	                    	System.out.println("CLICKED");
+	                    }
+	                })));
+	           
+	            final Label username = new Label(pName , skin, "cgothic");
+	            
+	            if (username.getText() != pName){
+	            	System.out.println("Label is null");
+	            	username.setText(pName);
+	            }
+	            
+	            username.setAlignment(Align.right);
+	            
+	            final Label credits = new Label( creditVal + " Credits", skin, "cgothic");
+	            credits.setAlignment(Align.right);
+	            final Label divider = new Label("|", skin, "cgothic");
+	            divider.setAlignment(Align.right);
+	            
+	            final Button settingsIcon = new Button(skin.getDrawable("settingsIcon"));
+	           // recentIcon.setName("recenticon");
+	            settingsIcon.setSize(15, 15);
+	            settingsIcon.addListener((new ClickListener() {
+	                public void clicked(InputEvent event, float x, float y) {
+	            	  Table trial = new Table();
+	                      trial.setBackground(skin.getDrawable("toolTip"));
+	                      trial.setPosition(950,580);
+	                      trial.setSize(200, 100);
+	                      trial.setName("tooltip");
+	                      
+	                     // final TextButton hello = new TextButton();
+	                      
+	                      stage.addActor(trial);
+	                      
+	                    /*  for (Actor actor: stage.getActors()){
+	                          if (actor.getName() == "tooltip"){
+	                    	  actor.remove();
+	                          }
+	                          System.out.println(actor.getName());
+	                      }*/
+	                     /* if(stage.getActors().contains(trial, true)){
+	                          trial.remove();
+	                          System.out.println("Its there");
+	                      }else{
+	                          System.out.println(stage.getActors());
+	                          
+	                         stage.addActor(trial);
+	                         System.out.println("Its not there");
+	                      }*/
+	                }
+	            })); 
+	            final Table topBox = new Table();
+	            
+	            //set panel sizes and positions
+	            topBox.setSize(1279, 30);
+	            topBox.setPosition(1, 690);
+	            topBox.setColor(255, 255, 255, 1);
+	            topBox.setBackground(skin.getDrawable("menuBar"));
+	            
+	            //set top bar labels
+	            topBox.add(logo).width(465);
+	            topBox.add(username).width(615);
+	            topBox.add(settingsIcon).width(15).height(15).padLeft(10);
+	            topBox.add(divider).width(5).pad(15);
+	            topBox.add(credits).width(100);
+	            
+	            stage.addActor(topBox);
     }
 
     @Override

@@ -321,7 +321,7 @@ public class FrontPage implements Screen {
         @Override
         public void resize(int arg0, int arg1) {
         }
-import deco2800.arcade.client.ArcadeInputMux;
+/*import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.Arcade;
 import deco2800.arcade.client.network.NetworkClient;
@@ -370,9 +370,9 @@ public class FrontPage implements Screen {
         	
             //FIXME big method
             
-            /*
+            
              * Creating Skin and Textures
-             */	
+             	
         	
             arcadeUI = ui;
             skin = new Skin(Gdx.files.internal("loginSkin.json"));
@@ -590,12 +590,12 @@ public class FrontPage implements Screen {
                 }
             })); 
               
-            /*
+            
              * This method listens for a click outside the text boxes.
              * It checks if 'Recently Played' button is on the stage,
              * if not, its add it to stage.
              * 
-             */
+             
             
             stage.addListener((new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
@@ -621,12 +621,12 @@ public class FrontPage implements Screen {
             })); 
         }
     
-    /**
+    *//**
      * Takes the player's name from login and creates the menu bar.
      * 
      * @author William, Adeleen
      * @param playerName player name
-     */
+     *//*
         
     public static void userName(String playerName){
     	pName = playerName.toString();
@@ -794,5 +794,5 @@ public class FrontPage implements Screen {
     
     @Override
     public void resize(int arg0, int arg1) {
-    }
+    }*/
 }

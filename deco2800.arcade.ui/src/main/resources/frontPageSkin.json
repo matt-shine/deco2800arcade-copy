@@ -1,0 +1,36 @@
+{
+    com.badlogic.gdx.graphics.g2d.BitmapFont: {
+        default: { file: Fonts/Manteka18.fnt },
+        default-small: { file: Fonts/Manteka14.fnt },
+        default-large: { file: Fonts/Manteka34.fnt },
+        textbox: { file: Fonts/CenturyGothic20Bold.fnt }
+    },
+    com.badlogic.gdx.graphics.Color: {
+        red:    { a: 1, r: 1, g: 0, b: 0 },
+        green:  { a: 1, r: 0, g: 1, b: 0 },
+        blue:   { a: 1, r: 0, g: 0, b: 1 },
+        white:  { a: 1, r: 1, g: 1, b: 1 },
+        black:  { a: 1, r: 0, g: 0, b: 0 },
+        grey:   { a: 1, r: 0.5, g: 0.5, b: 0.5 }
+    },
+    com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+        default: { font: default, fontColor: white },
+        error: { font: default, fontColor: red },
+		cgothic: { font: textbox, fontColor: white},
+        default-large: { font: default-large, fontColor: white },
+        error: { font: default, fontColor: red }
+    },
+    com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+        default: { font: textbox, fontColor: white, selection: selection, cursor: cursor, background: textbox }
+    },
+    com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+        default: { font: default, fontColor: white, up: buttonGrey, down: buttonGrey, over: buttonGreen },
+        default-green: { font: default, fontColor: white, up: buttonGrey, down: buttonGrey, over: buttonGreen },
+        default-red: { font: default, fontColor: white, up: buttonGrey, down: buttonGrey, over: buttonRed },
+        default-blue: { font: default, fontColor: white, up: buttonGrey, down: buttonGrey, over: buttonBlue },
+        default-green-smallfont: { font: default-small, fontColor: white, up: buttonGrey, down: buttonGrey, over: buttonGreen },
+	    blue: { font: default, fontColor: white, up: iconBlue, down: iconBlue, over: iconBlue_plus },
+	    magenta: { font: default, fontColor: white, up: iconMagenta, down: iconMagenta, over: iconMagenta_plus },
+	    green: { font: default, fontColor: white, up: iconGreen, down: iconGreen, over: iconGreen_plus }
+    }
+}

@@ -28,7 +28,7 @@ public class Pacman extends GameClient {
 	public final int SCREEN_HEIGHT = 720;
 	public final int SCREEN_WIDTH = 1280;	
 	private final int NUM_GHOSTS = 4;
-	private boolean gamePaused;
+	public boolean gamePaused;
 	
 	
 	private PacModel model; // model for Pacman	
@@ -49,7 +49,7 @@ public class Pacman extends GameClient {
 		
 	public Pacman(Player player1, NetworkClient networkClient) {
 		super(player1, networkClient);		
-		this.networkClient = networkClient;
+//		this.networkClient = networkClient;
 		this.incrementAchievement("pacman.onegame");
 	}	
 		
@@ -134,12 +134,13 @@ public class Pacman extends GameClient {
 		}		
 		updateAchievements();		
 		// make changes in the model to prepare for rendering if overlay
-		// not active
-		if (!gamePaused) {
+		// not active and game not over.
+		if (!gamePaused && !getModel().getGameMap().isGameOver()) {
 			model.prepareDraw();
-		}		
+		}
+		
 		view.render();
-		super.render();		
+		super.render();			
 	}
 	
 	private void updateAchievements() {
@@ -155,7 +156,7 @@ public class Pacman extends GameClient {
 		
 		if (getModel().getGameMap().getGhostsEaten() >= 1){
 			this.incrementAchievement("pacman.ghostbuster");
-		}
+		}			
 	}
 		
 	@Override

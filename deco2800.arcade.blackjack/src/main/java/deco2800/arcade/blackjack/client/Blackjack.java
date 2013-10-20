@@ -63,8 +63,14 @@ public class Blackjack extends GameClient {
 	@Override
 	public void create() {
 		super.create();
-		MainMenuScreen = new MainMenuScreen(this);
-		JoinTableScreen = new JoinTableScreen(this);
+		
+		//CasinoServerUpdate msg = new CasinoServerUpdate();
+
+		//msg.playerID = 9;
+		//msg.message = "testme";
+		//this.networkClient.sendNetworkObject(msg);
+		//MainMenuScreen = new MainMenuScreen(this);
+		//JoinTableScreen = new JoinTableScreen(this);
 		/*this.getOverlay().setListeners(new Screen() {
 
             @Override
@@ -96,15 +102,17 @@ public class Blackjack extends GameClient {
             }
             
 		});*/
-		MainMenuScreen = new MainMenuScreen(this);
-    	setScreen(MainMenuScreen);
+		//MainMenuScreen = new MainMenuScreen(this);
+    	//setScreen(MainMenuScreen);
 		
 	}
 
-	/*CasinoServerUpdate msg = new CasinoServerUpdate();
-	msg.username = "test";
-	msg.message = "testme";
-	this.networkClient.sendNetworkObject(msg);*/
+	
+	//CasinoServerUpdate msg = new CasinoServerUpdate();
+
+	//msg.username = "test";
+	//msg.message = "testme";
+	//this.networkClient.sendNetworkObject(msg);
 		
 	@Override
 	public void dispose() {
@@ -152,6 +160,6 @@ public class Blackjack extends GameClient {
 	
 	@Override
 	public void updateCasinoState(CasinoServerUpdate obj) {
-		System.out.println("GOT THIS MESSAGE:" + obj.message);
+		//System.out.println("GOT THIS MESSAGE:" + obj.message);
 	}
 }

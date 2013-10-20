@@ -28,8 +28,8 @@ public class AccoladeSystem {
 	private int playerID;
 	private int gameID;
 	private boolean timerRunning = false;
-	//TODO set this to false when the server is working
-	private boolean offlineMode = true; 
+	//TODO set this to true when server communications is working
+	private boolean online = false; 
 	
 	//when progress%popup = 0 a popup is overlayed on screen
 	private static final int PROGRESS = 0;
@@ -101,23 +101,6 @@ public class AccoladeSystem {
 		tmpAccolade.setValue(progress + increment);
 		//DO THe same increment to the server
 		
-
-		
-		/**
-		 * try {
-		 * 		server.put(this.playerID.toString() + "," 
-		 * 				+ this.accoladeID.toString() + "," + increment.toString());
-		 * 		this.localAccolades.get(accoladeID)[0] += increment;
-		 * 		if(progress + increment == popup){
-		 * 		//make an overlay message appear here
-		 * 		}
-		 * } catch (SQLException error) {
-		 * 		System.Console().printf("There was an error updating the " +
-		 * 			"player progress on the server");
-		 * 		error.printStackTrace();
-		 * }
-		 * 		
-		 */
 	}
 	
 	/** Provides the int version of an accolade primary key to be used in the
@@ -160,6 +143,22 @@ public class AccoladeSystem {
 					).setValue(table.getInt("value"));
 		}
 		return accolades;
+	}
+	
+	private AccoladeContainer makeLocal(){
+		
+		if(online){
+			//make local from server
+			
+		} else {
+			//make local from xml file	
+		}		
+		return new AccoladeContainer();
+	}
+	
+	private AccoladeSystem offline(){
+		this.online = true;
+		return this;
 	}
 	
 	/** 

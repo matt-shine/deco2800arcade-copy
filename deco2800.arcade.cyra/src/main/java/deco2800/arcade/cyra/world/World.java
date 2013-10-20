@@ -899,6 +899,7 @@ public class World {
 	
 	public void gameOver() {
 		// go back to menu
+		Sounds.stopMusic();
 		game.addHighscore(score);
 		game.setScreen(new MainMenu(game));
 
@@ -907,6 +908,7 @@ public class World {
 	
 	public void gameWin() {
 		// show some message/credits then go back to menu
+		Sounds.stopMusic();
 		game.incrementAchievement("cyra.whataplayer");
 		game.addHighscore(score);
 		game.setScreen(new MainMenu(game));

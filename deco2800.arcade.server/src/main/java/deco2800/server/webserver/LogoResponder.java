@@ -19,7 +19,7 @@ public class LogoResponder implements WebResponder {
         ArcadeWebserver.setResponseValues(response, "image/png");
         
         //Match the storage convention
-        param = param.toLowerCase().replace("\\s", "");
+        String logoName = param.toLowerCase().replace("\\s", "");
         
         /*
          * Attempt to serve the image file from the logo resources folder, 
@@ -27,7 +27,7 @@ public class LogoResponder implements WebResponder {
          */
         try
         {
-            ByteBuffer file = FileReader.readBinaryFile("../deco2800.arcade.ui/src/main/resources/logos/" + param);
+            ByteBuffer file = FileReader.readBinaryFile("../deco2800.arcade.ui/src/main/resources/logos/" + logoName);
 
             OutputStream out = response.getOutputStream(file.capacity());
             

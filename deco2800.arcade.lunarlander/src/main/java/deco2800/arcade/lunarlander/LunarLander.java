@@ -288,17 +288,38 @@ public class LunarLander extends GameClient {
 							terrain.get(i).get(1), terrain.get(i).get(2), 
 							terrain.get(i).get(3)) || 
 							hasCollidedWithAsteroid(landerX, landerY)) {
+				if(!hasCollidedWithAsteroid(landerX, landerY)){
+					this.incrementAchievement("lunarlander.plummet");
+				}
+				if(fuel > 900){ //This is starting amount (1000) - 100
+					this.incrementAchievement("lunarlander.expresstrip");
+				}
 				gameOver = true;
+				updateAchievements();
 				gameState = GameState.GAME_OVER_LOSE;
 			} else if(landerX > terrain.get(0).get(0) && landerX < 
 					terrain.get(0).get(2)){
 				if(landerY - 5 < terrain.get(0).get(1)){
 					score += 10; //not incrementing properly					
 					gameOver = true;
-					velY = 0;		
+					velY = 0;
 					gameState = GameState.GAME_OVER_WIN;
+					updateAchievements();
 				}
 			}
+		}
+	}
+	
+	private void updateAchievements(){
+		this.incrementAchievement("lunarlander.landed");
+		this.incrementAchievement("lunarlander.fiftytimes");
+		this.incrementAchievement("lunarlander.grabachocolate");
+		if (fuel < 1){
+			this.incrementAchievement("lunarlander.emergencylanding");
+		} else if(fuel < 5){
+			this.incrementAchievement("lunarlander.incrediblyimpossible");
+		} else if(fuel < 50){
+			this.incrementAchievement("lunarlander.closecall");
 		}
 	}
 
@@ -314,6 +335,7 @@ public class LunarLander extends GameClient {
 
 				gameOver = true;
 				velY = 0;
+				this.incrementAchievement("lunarlander.smashed");
 				gameState = GameState.GAME_OVER_LOSE;
 				gameOverLoseScreen();
 			}
@@ -352,6 +374,9 @@ public class LunarLander extends GameClient {
 					flameSound.play(0.01f);
 					upKey = true;
 				}
+			}
+			if(fuel < 1){
+				this.incrementAchievement("lunarlander.nojuice");
 			}
 		}
 	}

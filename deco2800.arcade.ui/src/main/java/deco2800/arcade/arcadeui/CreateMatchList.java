@@ -23,7 +23,7 @@ import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import java.util.*;
 
-public class MultiGamelist2 implements Screen {
+public class CreateMatchList implements Screen {
 
 	private class FrontPageStage extends Stage {
 	}
@@ -42,7 +42,7 @@ public class MultiGamelist2 implements Screen {
 
 	ArrayList<ActiveMatchDetails> matches;
 
-	public MultiGamelist2(ArcadeUI ui) {
+	public CreateMatchList(ArcadeUI ui) {
 
 		arcadeUI = ui;
 		skin = new Skin(Gdx.files.internal("loginSkin.json"));

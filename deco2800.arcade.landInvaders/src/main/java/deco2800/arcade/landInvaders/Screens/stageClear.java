@@ -1,5 +1,8 @@
 package deco2800.arcade.landInvaders.Screens;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -46,10 +49,29 @@ public class stageClear extends JFrame{
 		next.addMouseListener(new mouse1());
 		t.add(next, gbc);
 		gbc.gridy++;
-
-
+		JLabel l = new JLabel();
+		
+		GridBagConstraints gbd = new GridBagConstraints();
+		gbd.anchor = GridBagConstraints.WEST;
+		gbd.insets = new Insets(0,150,60,0);
+		gbd.gridx = 0;
+		gbd.gridy = 0;
+		t.add(l,gbd);
+		l.setForeground(Color.black);
+		l.setFont(new Font("Algerian",1, 40));
+		l.setText("32");
+		
 		this.setVisible(true);
 		this.setSize(800,530);
+		
+		
+
+	}
+	
+	
+	public void paint(Graphics g) {
+		
+		
 
 	}
 

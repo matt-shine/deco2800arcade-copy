@@ -31,13 +31,16 @@ public class StoreTransactions implements Screen, StoreScreen {
 	private Skin skin = new Skin(Gdx.files.internal("store/storeSkin.json"));
 	private Stage stage = new Stage();
 	private ArcadeUI arcadeUI;
+	private Player player;
 	private int balance = 0;
 	
 	/**
 	 * @author Addison Gourluck
 	 * @param ArcadeUI ui
+	 * @param Player user
 	 */
-	public StoreTransactions(ArcadeUI ui) {
+	public StoreTransactions(ArcadeUI ui, Player user) {
+		player = user;
 		arcadeUI = ui;
 		
 		final Table bg = new Table();
@@ -103,8 +106,8 @@ public class StoreTransactions implements Screen, StoreScreen {
 		
 		homeButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				arcadeUI.setScreen(new StoreHome(arcadeUI));
+				hide();
+				arcadeUI.setScreen(arcadeUI.getStoreHome());
 			}
 		});
 		
@@ -127,8 +130,8 @@ public class StoreTransactions implements Screen, StoreScreen {
 						searchResult.setText("No results.");
 						return;
 					}
-					dispose();
-					arcadeUI.setScreen(new StoreGame(arcadeUI, result));
+					hide();
+					arcadeUI.setScreen(new StoreGame(arcadeUI, player, result));
 				} catch (Exception e) {
 					searchResult.setText("Invalid Search");
 				}
@@ -137,8 +140,8 @@ public class StoreTransactions implements Screen, StoreScreen {
 		
 		wishlistButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				arcadeUI.setScreen(new StoreWishlist(arcadeUI));
+				hide();
+				arcadeUI.setScreen(arcadeUI.getStoreWishlist());
 			}
 		});
 	}
@@ -214,11 +217,13 @@ public class StoreTransactions implements Screen, StoreScreen {
 
 	@Override
 	public void show() {
+		player = arcadeUI.getPlayer();
 		ArcadeInputMux.getInstance().addProcessor(stage);
 	}
 	
 	@Override
 	public void hide() {
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 	
 	@Override

@@ -178,13 +178,13 @@ public class Projectile extends GridObject {
 		// find the tile the colldingObject is sitting on.
 		Vector2 centreTile = collidingObject.positionInTiles();
 		// find the top left square of the area to hit.
-		Vector2 startingTile = new Vector2(centreTile.x - r, centreTile.y - r);
+		Vector2 startingTile = new Vector2(centreTile.x - r, centreTile.y + r);
 		// iterate through squares r away from centre tile in a square
 		for (int i = 0; i <= r*2; i++) {
 			for (int j = 0; j <= r*2; j++) {
 				// make an iterator for the contents of each square
 				Iterator<GridObject> contents = grid.getGridContents(
-						(int) (startingTile.x + i), (int) (startingTile.y + j))
+						(int) (startingTile.x + i), (int) (startingTile.y - j))
 						.iterator();
 				// iterate through
 				while (contents.hasNext()) {

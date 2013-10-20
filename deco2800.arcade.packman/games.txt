@@ -29,3 +29,5 @@ wl6
 snakeLadder
 userui
 cyra
+hunter
+#blackjack #blackjack be trolling me. There is no blackjack folder, so this fails.

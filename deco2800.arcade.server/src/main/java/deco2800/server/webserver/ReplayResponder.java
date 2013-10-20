@@ -12,6 +12,7 @@ import org.simpleframework.http.Response;
 import deco2800.arcade.protocol.replay.types.Session;
 import deco2800.server.ArcadeServer;
 import deco2800.server.database.DatabaseException;
+import deco2800.server.database.ReplayStorage;
 
 public class ReplayResponder implements WebResponder {
 	
@@ -37,11 +38,23 @@ public class ReplayResponder implements WebResponder {
 	                 * parse them accordingly.
 	                 */
 	
-	                int sessionId = Integer.parseInt(tokens[0].replaceAll("\\s+",""));
-	                boolean recording = Boolean.parseBoolean(tokens[1]);
-	                String user = tokens[2];
-	                long dateTime = Long.parseLong(tokens[3].replaceAll("\\s+",""));
-	                String comments = tokens[4];
+                    int sessionId = Integer.parseInt(
+                            tokens[ReplayStorage.SESSION_ID_INDEX]
+                            .replaceAll("\\s+","")
+                        );
+        
+                    boolean recording = Boolean.parseBoolean(
+                                            tokens[ReplayStorage.RECORDING_INDEX]
+                                        );
+                    
+                    String user = tokens[ReplayStorage.USER_INDEX];
+                    
+                    long dateTime = Long.parseLong(
+                                        tokens[ReplayStorage.DATE_INDEX]
+                                        .replaceAll("\\s+","")
+                                    );
+                    
+                    String comments = tokens[ReplayStorage.COMMENT_INDEX];
 	                
 	                Session session = new Session();
 	                session.sessionId = sessionId;

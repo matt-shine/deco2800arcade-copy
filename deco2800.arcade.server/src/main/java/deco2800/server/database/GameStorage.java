@@ -95,7 +95,8 @@ public class GameStorage {
                 "INSERT INTO GAMES values (18, 'MiniGolf', 'MiniGolf', 0, 'Search for buried treasure', '');" +
                 "INSERT INTO GAMES values (19, 'lunarlander', 'LunarLander', 0, 'Can your Lunar Lander make it to the surface safely?', '');" +
                 "INSERT INTO GAMES values (20, 'Cyra', 'Cyra', 0, 'Run, jump, swing sword.', '');" +
-                "INSERT INTO GAMES values (21, 'blackjack', 'Blackjack', 0, 'Try your hand at blackjack!', '');";
+                "INSERT INTO GAMES values (21, 'hunter', 'Hunter Game', 0, 'A 2D platformer running game where you hunt animals before they eat you!', '');" +
+        		"INSERT INTO GAMES values (21, 'blackjack', 'Blackjack', 0, 'Try your hand at blackjack!', '');";
 
         String[] cmds = inserts.split(";");
 

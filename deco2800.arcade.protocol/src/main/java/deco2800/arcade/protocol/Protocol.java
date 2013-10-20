@@ -76,6 +76,7 @@ import deco2800.arcade.protocol.replay.StartSessionRequest;
 import deco2800.arcade.protocol.replay.StartSessionResponse;
 import deco2800.arcade.protocol.replay.types.Session;
 import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.AchievementProgress;
 
 public class Protocol {
 	
@@ -108,6 +109,7 @@ public class Protocol {
 
 		// Achievement messages
 		kryo.register(Achievement.class);
+		kryo.register(AchievementProgress.class);
 		kryo.register(AchievementsForIDsRequest.class);
 		kryo.register(AchievementsForIDsResponse.class);
 		kryo.register(AchievementsForGameRequest.class);

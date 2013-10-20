@@ -173,7 +173,7 @@ public class GameScreen implements Screen {
 				camera.translate(-3, 0, 0);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-			if (camera.position.x < 1024)
+			if (camera.position.x < 4000)
 				camera.translate(3, 0, 0);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
@@ -181,7 +181,7 @@ public class GameScreen implements Screen {
 				camera.translate(0, -3, 0);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-			if (camera.position.y < 1024)
+			if (camera.position.y < 4000)
 				camera.translate(0, 3, 0);
 		}
 	}
@@ -192,11 +192,11 @@ public class GameScreen implements Screen {
 			hudStage = new Stage(width, height, true);
 		}
 		if (stage == null) {
-			stage = new Stage(width, height, true);
+			stage = new Stage(4000, 4000, true);
 		}
 		camera = (OrthographicCamera) stage.getCamera();
-		camera.setToOrtho(false, 4000, 4000);
-		camera.position.set(2000, 2000, 0);
+		camera.setToOrtho(false, width, height);
+		
 
 		standardB = new TextButton("ST", style);
 		standardB.setWidth(BUTTON_WIDTH);
@@ -336,6 +336,8 @@ public class GameScreen implements Screen {
 				healthBar.getX(), costBar.getY() - 26);
 		armorBar = new TexturePart(armorBarRegion, healthBar.getX(),
 				penetrationBar.getY() - 26);
+		
+		//gridMap.setOrigin(0, 0);
 
 		/* adding actors to the HUD */
 		hudStage.addActor(standardB);
@@ -350,6 +352,8 @@ public class GameScreen implements Screen {
 		/* adding actors for the camera */
 		//stage.addActor(randomBut2);
 		stage.addActor(gridMap);
+		
+		camera.position.set(2000, 2000, 0);
 	}
 
 	@Override

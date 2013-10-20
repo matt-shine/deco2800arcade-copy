@@ -43,6 +43,7 @@
 // * line 23 - SlowBall.java (setSprite())
 // * line 27 - IncreaseBallNo.java (setSprite())
 // * REMEMBER TO UNCOMMENT THE LINES ONCE TESTING IS DONE.
+// * REMEMBER TO COMMENT THIS FILE OUT AS WELL.
 // */
 //public class PowerUpTest {
 //	
@@ -150,6 +151,7 @@
 //	@Test
 //	public void slowBallPowerup() {
 //		context.resetScore();
+//		context.resetSlowBallsActivated();
 //		Powerup p = new SlowBall(context);
 //		Powerup q = new SlowBall(context);
 //		context.getBall().randomizeVelocity();
@@ -234,6 +236,7 @@
 //		p.applyPowerup();
 //		assertEquals(context.getPaddle().getStandardWidth(), context.getPaddle().getPaddleShapeWidth(), 0.01f);
 //	}
+//	
 //	@AfterClass
 //	public static void cleanUp() {
 //		((OpenALAudio) app.getAudio()).dispose();

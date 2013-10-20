@@ -57,7 +57,7 @@ public class Ship {
 	public Ship(GameScreen gameScreen, Vector2 targetPosition) {
 		this.gameScreen = gameScreen;
 		this.grid = new Grid(Gdx.graphics.getHeight(), Gdx.graphics.getWidth(),
-				"shipGrid", 25, this, targetPosition, "src/main/resources/testGrid");
+				"shipGrid", 25, this, targetPosition);
 	}
 
 	// Getters

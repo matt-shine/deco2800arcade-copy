@@ -42,7 +42,12 @@ public class MainTest {
 		cfg.height = 320; 
 		app = new LwjglApplication(pacGame = new Pacman(Mockito.mock(Player.class), Mockito.mock(NetworkClient.class)), cfg);
 		pacGame.addOverlayBridge(Mockito.mock(UIOverlay.class));
-		pacGame.create();
+		//try-catch because NetworkClient is being mocked and therefore achievements can't be accessed
+		try {
+			pacGame.create();
+		} catch (NullPointerException e) {
+			
+		}
 		model = pacGame.getModel();
 		gameMap = model.getGameMap();
 	}
@@ -51,8 +56,13 @@ public class MainTest {
 	@AfterClass
 	public static void tearDown() {
 		pacGame.dispose();
-		//dispose of audio properly
-		((OpenALAudio) app.getAudio()).dispose();
+		app.exit();
+		//dispose of audio properly- try catch necessary so it passes both in Eclipse and in a build
+		try {
+			((OpenALAudio) app.getAudio()).dispose();
+		} catch (UnsatisfiedLinkError e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Test

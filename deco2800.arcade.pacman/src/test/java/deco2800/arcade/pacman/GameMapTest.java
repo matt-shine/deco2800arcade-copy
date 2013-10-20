@@ -21,8 +21,13 @@ import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Player;
 
-//TESTS DO NOT RUN ON JENKINS BUT WORK FINALLY OTHERWISE. DO NOT DELETE THEM, 
-//THE OFFENDING ONES ARE COMMENTED OUT
+/*TESTS DO NOT RUN ON JENKINS BUT WORK FINALLY OTHERWISE. DO NOT DELETE THEM, 
+ * THE OFFENDING ONES ARE COMMENTED OUT
+ * NOTE ALSO that a GdxRuntimeException: NullPointerException will appear in the console 
+ * from the "LWJGL Application" thread, as the achievements need access to the server.
+ * All tests still run despite this
+ */
+
 
 public class GameMapTest {
 
@@ -43,13 +48,15 @@ public class GameMapTest {
 		pacGame.addOverlayBridge(Mockito.mock(UIOverlay.class));
 		model = new PacModel(1280, 720, 4);
 		gameMap = model.getGameMap();
+		pacGame.dispose();
 	}
 	
-	/** Disposes of things. AL library still seems to cause occasional errors. */
-@AfterClass
+	/** Disposes of things. Apparently no longer necessary */
+	//@AfterClass
 	public static void tearDown() {
-		//dispose of audio properly
-		((OpenALAudio) app.getAudio()).dispose();
+		app.exit();
+		//dispose of audio properly. 
+		//((OpenALAudio) app.getAudio()).dispose();
 	}
 	
 	@Test

@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.lwjgl.util.Point;
 
-import deco2800.arcade.pacman.PacChar.PacState;
-import static java.lang.Math.*;
 
 public final class Ghost extends Mover {
 
@@ -111,41 +109,44 @@ public final class Ghost extends Mover {
 		}
 	}
 
-	public String toString() {
-		return ghostName + " at (" + midX + ", " + midY + ") drawn at {"
-				+ drawX + ", " + drawY + "}, " + currentState + " in "
-				+ currentTile;
-	}
-
-	/**
-	 * Updates the target tile for the ghost so far only does blinky and pinky
-	 */
-
+	/** Updates the target tile for the ghost. So far only does Blinky 
+	 * and Pinky's targeting schemes */
 	private void updateTargetTile() {
-		//System.out.println("<!> " + this.ghostName + " Target is: "
-		//		+ player.getTile());
 		if (ghostName == GhostName.BLINKY) {
 			targetTile = player.getCurTile();
 		} else if (ghostName == GhostName.PINKY) {
-			try {
-				targetTile = player.nextTile(player.getCurTile(), 4);
-			} catch (ArrayIndexOutOfBoundsException e) {
-				// Trying to find a tile outside the map.
-				targetTile = player.nextTile(player.getCurTile(), 1);
-			}
-
+			targetTile = player.nextTile(player.getCurTile(), 4);
 		} else {
 			targetTile = player.getCurTile();
 		}
 	}
 
 	/**
-	 * calculates the straight line distance between the current (start) tile
+	 * Returns the direction that the nextTile is in, in relation to the current
+	 * tile
+	 */
+	private Dir getNextTileDirection() {
+		Point currentPoint = gameMap.getTilePos(currentTile);
+		Point nextPoint = gameMap.getTilePos(getNextTile());
+		int currentX = currentPoint.getX();
+		int currentY = currentPoint.getY();
+		int nextX = nextPoint.getX();
+		int nextY = nextPoint.getY();
+		
+		if (nextX > currentX) {
+			return Dir.RIGHT;
+		} else if (nextX < currentX) {
+			return Dir.LEFT;
+		} else if (nextY > currentY) {
+			return Dir.UP;
+		} else {
+			return Dir.DOWN;
+		}
+	}
+	
+	/**
+	 * Calculates the Euclidean distance between the current (start) tile
 	 * and the target tile.
-	 * 
-	 * @param start
-	 * @param target
-	 * @return
 	 */
 	public double calcDist(Tile start, Tile target) {
 		Point startPoint = gameMap.getTilePos(start);
@@ -157,12 +158,28 @@ public final class Ghost extends Mover {
 		double dist;
 		int distx = targetx - startx;
 		int disty = targety - starty;
-		dist = sqrt((distx * distx + disty * disty));
+		dist = Math.sqrt((distx * distx + disty * disty));
 		return dist;
 	}
+	
+	/**
+	 * Returns the tile next to the ghost in the direction its facing.
+	 */
+	public Tile getNextTile() {
+		List<Tile> testTiles = getTestTiles();
+		List<Double> dists = getDists(testTiles);
+		int tileNum = 0;
+		double dist = 9999;
+		double temp;
 
-	public void setTargetTile(Tile targetTile) {
-		this.targetTile = targetTile;
+		for (int i = 0; i < dists.size(); i++) {
+			temp = dists.get(i);
+			if (temp < dist) {
+				dist = temp;
+				tileNum = i;
+			}
+		}
+		return testTiles.get(tileNum);
 	}
 
 	/**
@@ -198,8 +215,6 @@ public final class Ghost extends Mover {
 				!nextTile(currentTile, 1, Dir.RIGHT).equals(previousTile)){
 			testTiles.add(rightTile);
 		}
-		
-		//System.out.println("List of test tiles: " + testTiles);
 		return testTiles;
 	}
 
@@ -215,64 +230,12 @@ public final class Ghost extends Mover {
 			tempDist = calcDist(targetTile, tTile);
 			dists.add(tempDist);
 		}
-		//System.out.println(dists);
 		return dists;
 	}
 
-	/**
-	 * Returns the direction that the nextTile is in, in relation to the current
-	 * tile
-	 * 
-	 * @param current
-	 * @param nextTile
-	 * @return
-	 */
-	public Dir getNextTileDirection() {
-		Point currentPoint = gameMap.getTilePos(currentTile);
-		Point nextPoint = gameMap.getTilePos(getNextTile());
-		int currentX = currentPoint.getX();
-		int currentY = currentPoint.getY();
-		int nextX = nextPoint.getX();
-		int nextY = nextPoint.getY();
-		
-		//System.out.println("<<getDirection>> current: [" + currentX +
-		//		 "," + currentY + "]  next: [" + nextX + "," + nextY + "]");
-		if (nextX > currentX) {
-			//System.out.println("    next tile is RIGHT");
-			return Dir.RIGHT;
-		} else if (nextX < currentX) {
-			//System.out.println("    next tile is LEFT");
-			return Dir.LEFT;
-		} else if (nextY > currentY) {
-			//System.out.println("    next tile is UP");
-			return Dir.UP;
-		} else {
-			//System.out.println("    next tile is DOWN");
-			return Dir.DOWN;
-		}
-	}
+	
 
-	/**
-	 * Returns the next immediate tile for the Ghost to move to.
-	 */
-
-	public Tile getNextTile() {
-		List<Tile> testTiles = getTestTiles();
-		List<Double> dists = getDists(testTiles);
-		//System.out.println(dists);
-		int tileNum = 0;
-		double dist = 9999;
-		double temp;
-
-		for (int i = 0; i < dists.size(); i++) {
-			temp = dists.get(i);
-			if (temp < dist) {
-				dist = temp;
-				tileNum = i;
-			}
-		}
-		return testTiles.get(tileNum);
-	}
+	
 
 	public GhostState getCurrentState() {
 		return currentState;
@@ -280,6 +243,12 @@ public final class Ghost extends Mover {
 
 	public void setCurrentState(GhostState currentState) {
 		this.currentState = currentState;
+	}
+	
+	public String toString() {
+		return ghostName + " at (" + midX + ", " + midY + ") drawn at {"
+				+ drawX + ", " + drawY + "}, " + currentState + " in "
+				+ currentTile;
 	}
 
 }

@@ -1,15 +1,21 @@
 package deco2800.arcade.pacman;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.utils.Logger;
 
+import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.AchievementProgress;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.utils.AsyncFuture;
 
 /**
  * The main Pacman game class, which sets up the model, view and controller 
@@ -34,14 +40,16 @@ public class Pacman extends GameClient {
 	 *  it causes NullPointers for the tests when it tries to load Textures */
 	private boolean viewNotSetUp; 
 	
-	//not used yet
-	//private NetworkClient networkClient;
-	
+    private NetworkClient networkClient;
+    private AchievementClient achievementClient;
+    
+		
 	//lets us log stuff, left package private so we don't have to make a new one in each class
 	Logger logger = new Logger("Pacman");
 		
 	public Pacman(Player player1, NetworkClient networkClient) {
 		super(player1, networkClient);		
+		this.incrementAchievement("pacman.startgame");
 	}	
 		
 	/**
@@ -88,8 +96,28 @@ public class Pacman extends GameClient {
 		model = new PacModel(SCREEN_WIDTH, SCREEN_HEIGHT, NUM_GHOSTS);		
 		//initialise receiver for input- use the Arcade Multiplexer
 		controller = new PacController(model);
-		ArcadeInputMux.getInstance().addProcessor(controller);
+		ArcadeInputMux.getInstance().addProcessor(controller);		
+		
+		// Achievement stuff
+		AchievementClient achievementClient = new AchievementClient(networkClient);
+		AsyncFuture<ArrayList<Achievement>> achievements = achievementClient.getAchievementsForGame(game);
+		AsyncFuture<AchievementProgress> playerProgress = achievementClient.getProgressForPlayer(player);
+
+		for(Achievement ach : achievements.get()) {
+		    int achProgress = playerProgress.get().progressForAchievement(ach);
+		    double percentage = 100 * (achProgress / (double)ach.awardThreshold);
+		}
+
+		// getting a list of the achievements a player has been awarded
+//		ArrayList<String> awardedIDs = playerProgress.awardedAchievementIDs();
+//		achievements = achievementClient.getAchievementsForIDs(awardedIDs);
+
+		for(Achievement achh : achievements.get()) {
+		    System.out.println(achh.name);
+		}
 	}
+	
+	
 	
 	/**
 	 * Called when application is closed, helps tidy things up

@@ -125,7 +125,6 @@ public class EnemySpiderBossArms extends Enemy {
 				position.x -= (position.x - parent.position.x+PARENT_OFFSET_X) * delta;
 				position.y -= (position.y - parent.position.y+PARENT_OFFSET_Y) * delta * 1.5f;
 				if (position.x <= parent.position.x + PARENT_OFFSET_X) {
-					System.out.println("Arms: I'm back!");
 					isReturning = false;
 					isAttacking = false;
 				}

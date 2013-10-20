@@ -145,7 +145,6 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 		//add new blocks
 		
 		if (latestBlock.getPosition().y >= -2f) {
-			//System.out.println("Making new block. x=" +(cam.position.x-cam.viewportWidth/2-Block.SIZE) + " camX="+ cam.position.x + " camviewwith=" + cam.viewportWidth);
 			float spawnY = latestBlock.getPosition().y	- Block.SIZE;	
 			blocks.add(new Block(new Vector2(cam.position.x-cam.viewportWidth/2, spawnY), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
 			latestBlock = new Block(new Vector2(cam.position.x+cam.viewportWidth/2 - Block.SIZE, spawnY), Block.TextureAtlasReference.LEVEL, GROUND_TILE);
@@ -178,7 +177,6 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 			}
 			block.getPosition().y += delta * Player.MAX_FALL_VELOCITY * reduceRate;
 			if (block.getPosition().y  > cam.position.y + cam.viewportHeight/2) {
-				//System.out.println("Removing Block at " + block.getPosition());
 				blocks.removeIndex(i);
 				i--;
 			}
@@ -212,7 +210,6 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 					float destroySpeed = 14f;
 					switch(type) {
 					case 0:
-						//System.out.println("Found oldBlock at " + b.getPosition());
 						b.getPosition().x -= delta *destroySpeed;
 						b.getPosition().y += delta* destroySpeed;
 						break;

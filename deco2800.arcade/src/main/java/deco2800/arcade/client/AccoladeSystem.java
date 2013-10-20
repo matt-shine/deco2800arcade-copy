@@ -128,6 +128,14 @@ public class AccoladeSystem {
 		tmpAccolade.setValue(value + increment);
 		if(online){
 			//TODO THe same increment to the server
+		} else {
+			//A DISEASED AIDS RIDDEN DIRTY KIND OF FIX
+			try {
+				XMLReader.saveAccoladeContainer(this.localAccolades, this.xmlFile);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		//CHANGE JUST THE VALUE FOR THIS ACCOLADE IN XML
 				

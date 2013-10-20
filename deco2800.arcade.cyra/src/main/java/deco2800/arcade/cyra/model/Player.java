@@ -49,23 +49,44 @@ public class Player extends MovableEntity{
 	private boolean isOverForeground = false;
 	private boolean hasDied = false;
 	
+	/**
+	 * Intanciate player.
+	 * @param pos
+	 */
+	
 	public Player(Vector2 pos) {
 		super (SPEED, 0, pos, WIDTH, HEIGHT);
 	}
+	
+	/**
+	 * Set jumpTime back to original value
+	 */
 
 	public void resetJumpTime() {
 		jumpTime = JUMP_TIME;
 		//System.out.println("jumptime RESET to " + JUMP_TIME);
 	}
 	
+	/**
+	 * Make jumpTime equal to zero.
+	 */
+	
 	public void clearJumpTime() {
 		jumpTime = 0f;
 		//System.out.println("jumptime CLEARED to " + 0f);
 	}
 	
+	/**
+	 * Set wallTime back to original value
+	 */
+	
 	public void resetWallTime() {
 		wallTime = WALL_ATTACH_TIME;
 	}
+	
+	/**
+	 * Make wallTime equal to zero
+	 */
 	
 	public void clearWallTime() {
 		wallTime = 0f;
@@ -74,10 +95,18 @@ public class Player extends MovableEntity{
 	
 	
 	/* ----- Getter methods ----- */
+	/**
+	 * Get the current state of the player (e.g. jump, walk etc.)
+	 * @return state
+	 */
 	public State getState() {
 		return state;
 	}
 	
+	/**
+	 * Find if state is walk
+	 * @return boolean
+	 */
 	public boolean isWalking(){
 		if(state == State.WALK){
 			return true;
@@ -87,26 +116,51 @@ public class Player extends MovableEntity{
 		}
 	}
 	
+	/**
+	 * Is player invincible
+	 * @return boolean
+	 */
 	public boolean isInvincible() {
 		return invincible;
 	}
 	
+	/**
+	 * Is player bouncing back
+	 * @return boolean
+	 */
 	public boolean isBouncingBack() {
 		return bouncingBack;
 	}
 	
+	/**
+	 * Is player facing right
+	 * @return boolean
+	 */
 	public boolean isFacingRight() {
 		return facingRight;
 	}
 	
+	/**
+	 * Is player on moveable
+	 * @return boolean
+	 */
 	public boolean isOnMovable() {
 		return onMovable;
 	}
+	
+	/**
+	 * Get current health of player
+	 * @return hearts
+	 */
 	
 	public int getHearts() {
 		return hearts;
 	}
 	
+	/**
+	 * Update position
+	 * @return position
+	 */
 	public Vector2 getNextPos() {
 		Vector2 tmp = new Vector2(position); 
 		tmp.add(velocity.mul(Gdx.graphics.getDeltaTime()));
@@ -115,6 +169,9 @@ public class Player extends MovableEntity{
 	}
 	
 	/* ----- Setter methods ----- */
+	/**
+	 * Make player's position move to simulate a jump
+	 */
 	public void jump() {
 		if (wallClimbEnabled) {
 			if (getState() == State.WALL) {
@@ -133,6 +190,9 @@ public class Player extends MovableEntity{
 		}
 	}
 	
+	/**
+	 * Make player move right
+	 */
 	public void moveRight() {
 		getVelocity().x = SPEED;
 		if (getState() != State.WALL) {
@@ -147,6 +207,9 @@ public class Player extends MovableEntity{
 		bounceBack(false);
 		System.out.println("telling to move right");
 	}
+	/**
+	 * Make player move left
+	 */
 	
 	public void moveLeft() {
 		getVelocity().x = -1 * SPEED;
@@ -163,6 +226,10 @@ public class Player extends MovableEntity{
 		bounceBack(false);
 	}
 	
+	/**
+	 * Make player bounce back
+	 * @param bounce
+	 */
 	public void bounceBack(boolean bounce) {
 		bouncingBack = bounce;
 		if(bounce) {
@@ -174,21 +241,40 @@ public class Player extends MovableEntity{
 		}
 	}
 	
+	/**
+	 * Change the value of CanMove.
+	 */
 	public void setCanMove(boolean canMv) {
 		canMove = canMv;
 	}
 	
+	/**
+	 * Change the state of the player
+	 * @param state
+	 */
 	public void setState(State state) {
 		this.state = state;
 	}
 	
+	/**
+	 * Make player face right.
+	 * @param right
+	 */
 	public void setFacingRight(boolean right) {
 		facingRight = right;
 	}
 	
+	/**
+	 * Make player on moveable.
+	 * @param onMovable
+	 */
 	public void setOnMovable(boolean onMovable) {
 		this.onMovable = onMovable;
 	}
+	
+	/**
+	 * Decrease health of player
+	 */
 	
 	public void decrementHearts() {
 		hearts--;
@@ -199,25 +285,41 @@ public class Player extends MovableEntity{
 		return;
 	}
 	
+	/**
+	 * Reset player health to original state.
+	 */
 	public void resetHearts() {
 		hearts = DEFAULT_HEARTS;
 	}
 	
+	/**
+	 * Make player invincible
+	 * @param invisibility
+	 */
 	public void setInvincibility(boolean invisibility) {
 		invincible = invisibility;
 	}
 	
+	/**
+	 * Make player solid.
+	 */
 	@Override
 	public boolean isSolid() {
 		return true;
 	}
 	
+	/**
+	 * Make players position move with a moving platform
+	 */
 	@Override
 	public void handleTopOfMovingPlatform(MovablePlatform movablePlatform) {
 		getPosition().y = movablePlatform.getPosition().y + 
 				movablePlatform.getCollisionRectangle().height+1/32f;
 	}
 	
+	/**
+	 * Collision handling
+	 */
 	@Override
 	public void handleXCollision(Rectangle tile) {
 		if (velocity.x > 0.01f) {
@@ -242,6 +344,9 @@ public class Player extends MovableEntity{
 		}
 	}
 	
+	/**
+	 * Collision handling.
+	 */
 	@Override
 	public void handleYCollision(Rectangle tile, boolean onMovablePlatform, MovablePlatform movablePlatform) {
 		if (velocity.y < 0 ) {
@@ -275,6 +380,9 @@ public class Player extends MovableEntity{
 		
 	}
 	
+	/**
+	 * Handles when player is not on solid ground
+	 */
 	public void handleNoTileUnderneath() {
 		if (getState() == State.IDLE || getState() == State.WALK) {
 			setState(State.JUMP);
@@ -282,37 +390,35 @@ public class Player extends MovableEntity{
 		
 	}
 	
+	/**
+	 * Enable wallClimb
+	 * @param wallClimbEnabled
+	 */
 	public void setWallClimbEnabled (boolean wallClimbEnabled) {
 		this.wallClimbEnabled = wallClimbEnabled;
 	}
 	
+	/**
+	 * Set overForeground
+	 * @param overForeground
+	 */
 	public void setOverForeground(boolean overForeground) {
 		isOverForeground = overForeground;
 	}
 	
+	/**
+	 * Check if is overForeground
+	 * @return
+	 */
 	public boolean isOverForeground() {
 		return isOverForeground;
 	}
 	
-	
+	/**
+	 * Update player character
+	 */
 	public void update(Player ship) {
-		//System.out.println("Before suepr update " + velocity.x);
 		super.update(ship);
-		//System.out.println("After super update " + velocity.x);
-		
-		/*if(velocity.x != 0 || velocity.y != 0)
-		rotation = velocity.angle();*/
-		//position.add(velocity.tmp().mul(Gdx.graphics.getDeltaTime() * speed));
-		//position.add(velocity.mul(Gdx.graphics.getDeltaTime()));
-		//position.add(velocity.scl(Gdx.graphics.getDeltaTime()));
-		//position.add(velocity.tmp().mul(Gdx.graphics.getDeltaTime()));
-		//Vector2 tmp1 = velocity.cpy();
-		//tmp1.set(velocity.x, velocity.y);
-		//position.add(velocity.cpy().scl(Gdx.graphics.getDeltaTime()));
-		//position.add(tmp1.mul(Gdx.graphics.getDeltaTime()));
-		//System.out.println(velocity.x);
-		//System.out.println("Velocity before scl " + velocity.x+","+velocity.y);
-		//System.out.println("BEFORE State="+state+" canMove="+canMove+" velocity="+velocity + "position="+position);
 		if (state == State.DEATH){
 			if (facingRight && rotation < 90) {
 				rotation += Gdx.graphics.getDeltaTime() * 10;
@@ -331,22 +437,13 @@ public class Player extends MovableEntity{
 		}
 		velocity.mul(1/(Gdx.graphics.getDeltaTime()));
 		
-		//System.out.println("Velocity after scl " + velocity.x+","+velocity.y);
-		//tmp1.scl(Gdx.graphics.getDeltaTime());
-
-		//System.out.println("Velocity after invert scl " + velocity.x+","+velocity.y);
-		//position.x += velocity.x*Gdx.graphics.getDeltaTime();
-		//position.y += velocity.y*Gdx.graphics.getDeltaTime();
-		//System.out.println("After position add " + velocity.x);
 		if(state == State.JUMP){
-			//jumpTime -= Gdx.graphics.getDeltaTime() * JUMP_TIME;
 			jumpTime -= Gdx.graphics.getDeltaTime() * 1;
 			if (jumpTime < 0) {
 				state = State.FALL;
 			} else {
 				velocity.y = JUMP_VELOCITY;
 			}
-			//System.out.println("jumptime = " + jumpTime +"; velocity.y = " + velocity.y);
 		}
 		if (state == State.WALL) {
 			wallTime -= Gdx.graphics.getDeltaTime();
@@ -362,10 +459,8 @@ public class Player extends MovableEntity{
 				setState(State.JUMP);
 			}
 		}
-		//System.out.println("Velocity before gravity " + velocity.x+","+velocity.y);
 		velocity.add(0, GRAVITY);
 		
-		//System.out.println("Velocity after gravity " + velocity.x+","+velocity.y);
 		if (state == State.WALL && velocity.y < -MAX_WALL_VELOCITY && wallClimbEnabled){
 			velocity.y = -MAX_WALL_VELOCITY;
 		} else if (velocity.y<-MAX_FALL_VELOCITY) {
@@ -375,7 +470,6 @@ public class Player extends MovableEntity{
 		if (Math.abs(velocity.x) < 1) {
 			velocity.x = 0;
 		}
-		//System.out.println("Endo f Ship.update " + velocity.x);
 		
 		
 		
@@ -407,10 +501,18 @@ public class Player extends MovableEntity{
 		//System.out.println("AFTER State="+state+" canMove="+canMove+" velocity="+velocity+ "position="+position);
 		
 	}
+	
+	/**
+	 * Check if player has died.
+	 * @return
+	 */
 	public boolean hasDied() {
 		return hasDied;
 	}
 	
+	/**
+	 * Set player to dead.
+	 */
 	public void setHasDied() {
 		hasDied = true;
 	

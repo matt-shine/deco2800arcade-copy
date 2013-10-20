@@ -3,9 +3,6 @@ package deco2800.arcade.cyra.model;
 import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -23,8 +20,6 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 	private Array<Block> oldBlocks;
 	private HashMap<Block, Integer> oldBlocksType;
 	private Block latestBlock;
-	private float count;
-	//private float rank;
 	private boolean camHasReachedStartPosition;
 	private boolean firstUpdate;
 	
@@ -35,7 +30,6 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 	}
 	
 	private State state;
-	//private TextureAtlas groundTextures;
 		
 	private Array<MovableEntity> moveWithEntities;
 	
@@ -44,9 +38,7 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 	}
 	
 	public BlockMakerSpiderBoss(Array<MovableEntity> moveWithEntities) {
-		//this.rank = rank;
 		loopPos = 0;
-		//groundTextures = new TextureAtlas("data/level packfile");
 		isActive = false;
 		this.moveWithEntities = moveWithEntities;
 		blocks = new Array<Block>();
@@ -67,7 +59,7 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 	}
 
 	public void initBlocks() {
-		float initX = Level2Scenes.SPIDER_BOSS_START + 13f; //find a better way to get this variable
+		float initX = Level2Scenes.SPIDER_BOSS_START + 13f; 
 		for (float i = 0; i < 70; i += 1f) {
 			blocks.add(new Block(new Vector2(initX + i, 0f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
 			blocks.add(new Block(new Vector2(initX + i, 1f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
@@ -78,171 +70,178 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 	}
 	
 	public void update(float delta, OrthographicCamera cam, float rank) {
-		count += delta;
 		if (state == State.RIGHT) {
-			//Add new blocks
-			//if (count > 1 / SPEED) {
+			updateStateRight(delta,cam,rank);
 			
-			if (latestBlock.getPosition().x <= cam.position.x+cam.viewportWidth/2) {
-				//System.out.println("Making new block");
-				//count = 0;
-				loopPos++;
-				float spawnX = latestBlock.getPosition().x + Block.SIZE;
-				if (loopPos > 0 && loopPos < 13) {
-					if (!(rank > 0.95f && loopPos > 4 && loopPos < 8)) {
-						blocks.add(new Block(new Vector2(spawnX, 0f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
-						blocks.add(new Block(new Vector2(spawnX, 1f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
-						blocks.add(new Block(new Vector2(spawnX, 2f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
-						blocks.add(new Block(new Vector2(spawnX, 3f), Block.TextureAtlasReference.LEVEL, GRASS_TILE));
-					}
-				}
-				if (loopPos > 2 && loopPos < 6) {
-					blocks.add(new Block(new Vector2(spawnX, 7f), Block.TextureAtlasReference.LEVEL, GRASS_TILE));
-					
-					
-				}
-				if (loopPos > 11 && loopPos < 17 && rank < 0.85f) {
-					blocks.add(new Block(new Vector2(spawnX, 7f), Block.TextureAtlasReference.LEVEL, GRASS_TILE));
-				}
-				if (loopPos >= 13 && rank < 0.75f) {
+			
+		} else if (state == State.DOWN) {
+			updateStateDown(delta, cam, rank);
+		} else if (state == State.STATICTRANSITION) {
+			updateStateStaticTransition(delta, cam, rank);
+		}
+		
+		updateOldBlocks(delta, cam, rank);
+		
+		
+	}
+	
+	public void updateStateRight(float delta, OrthographicCamera cam, float rank) {
+		//Add new blocks
+		
+		if (latestBlock.getPosition().x <= cam.position.x+cam.viewportWidth/2) {
+			loopPos++;
+			float spawnX = latestBlock.getPosition().x + Block.SIZE;
+			if (loopPos > 0 && loopPos < 13) {
+				if (!(rank > 0.95f && loopPos > 4 && loopPos < 8)) {
 					blocks.add(new Block(new Vector2(spawnX, 0f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
 					blocks.add(new Block(new Vector2(spawnX, 1f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
 					blocks.add(new Block(new Vector2(spawnX, 2f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
 					blocks.add(new Block(new Vector2(spawnX, 3f), Block.TextureAtlasReference.LEVEL, GRASS_TILE));
 				}
-				if (loopPos == 17) {
-					loopPos = 0;
-				}
-				latestBlock = new Block(new Vector2(spawnX, cam.position.y+cam.viewportHeight/2), Block.TextureAtlasReference.LEVEL, 2);
-				blocks.add(latestBlock);
+			}
+			if (loopPos > 2 && loopPos < 6) {
+				blocks.add(new Block(new Vector2(spawnX, 7f), Block.TextureAtlasReference.LEVEL, GRASS_TILE));
+				
 				
 			}
-			
-			//Move objects in the moveWithEntities
-			for (MovableEntity mve: moveWithEntities) {
-				mve.getPosition().x -= delta * SPEED;
+			if (loopPos > 11 && loopPos < 17 && rank < 0.85f) {
+				blocks.add(new Block(new Vector2(spawnX, 7f), Block.TextureAtlasReference.LEVEL, GRASS_TILE));
 			}
-			
-			//Move and remove existing blocks
-			for (int i=0; i<blocks.size; i++) {
-				Block block = blocks.get(i);
-				if (camHasReachedStartPosition) {
-					block.getPosition().x -= delta * SPEED;
-				} else {
-					block.getPosition().x -= delta * SPEED / 2;
-				}
-				if (block.getPosition().x + block.getWidth() < cam.position.x - cam.viewportWidth/2) {
-					blocks.removeIndex(i);
-					i--;
-				}
+			if (loopPos >= 13 && rank < 0.75f) {
+				blocks.add(new Block(new Vector2(spawnX, 0f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+				blocks.add(new Block(new Vector2(spawnX, 1f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+				blocks.add(new Block(new Vector2(spawnX, 2f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+				blocks.add(new Block(new Vector2(spawnX, 3f), Block.TextureAtlasReference.LEVEL, GRASS_TILE));
 			}
-			
-			
-			
-		} else if (state == State.DOWN) {
-			//add new blocks
-		
-			if (latestBlock.getPosition().y >= -2f) {
-				//System.out.println("Making new block. x=" +(cam.position.x-cam.viewportWidth/2-Block.SIZE) + " camX="+ cam.position.x + " camviewwith=" + cam.viewportWidth);
-				count = 0;
-				float spawnY = latestBlock.getPosition().y	- Block.SIZE;	
-				blocks.add(new Block(new Vector2(cam.position.x-cam.viewportWidth/2, spawnY), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
-				latestBlock = new Block(new Vector2(cam.position.x+cam.viewportWidth/2 - Block.SIZE, spawnY), Block.TextureAtlasReference.LEVEL, GROUND_TILE);
-				blocks.add(latestBlock);
-				
-				//add the background blocks
-				for (int i = (int)(cam.position.x-cam.viewportWidth/2+1f); i< (int)(cam.position.x+cam.viewportWidth/2-1f); i++) {
-					blocks.add(new Block(new Vector2(i, spawnY), Block.TextureAtlasReference.LEVEL, BG_TILE, false));
-				}
+			if (loopPos == 17) {
+				loopPos = 0;
 			}
+			latestBlock = new Block(new Vector2(spawnX, cam.position.y+cam.viewportHeight/2), Block.TextureAtlasReference.LEVEL, 2);
+			blocks.add(latestBlock);
 			
-			
-			
-			//Move objects in the moveWithEntities
-			for (MovableEntity mve: moveWithEntities) {
-				mve.getPosition().y += delta * Player.MAX_FALL_VELOCITY;
-			}
-			
-			//Move and remove existing blocks
-			for (int i=0; i<blocks.size; i++) {
-				
-				Block block = blocks.get(i);
-				//float reduceRate = (block.getPosition().x-(cam.position.x-cam.viewportWidth/2))/(cam.viewportWidth/2);
-				float reduceRate;
-				float minReduceRate = 0.2f;
-				if (block.getPosition().x < cam.position.x) {
-					reduceRate = 1f -  ((1-minReduceRate)/(cam.viewportWidth/2)) * (block.getPosition().x-(cam.position.x-cam.viewportWidth/2));
-				} else {
-					reduceRate = minReduceRate+ ((1-minReduceRate)/(cam.viewportWidth/2)) * (block.getPosition().x-(cam.position.x));
-				}
-				block.getPosition().y += delta * Player.MAX_FALL_VELOCITY * reduceRate;
-				if (block.getPosition().y  > cam.position.y + cam.viewportHeight/2) {
-					//System.out.println("Removing Block at " + block.getPosition());
-					blocks.removeIndex(i);
-					i--;
-				}
-				
-			}
-		} else if (state == State.STATICTRANSITION) {
-			if (firstUpdate) {
-				for (float i = cam.position.x - cam.viewportWidth/2; i < cam.position.x + cam.viewportWidth/2; i+=1f) {
-					blocks.add(new Block(new Vector2(i, -1f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
-					blocks.add(new Block(new Vector2(i, -2f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
-					blocks.add(new Block(new Vector2(i, -3f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
-					latestBlock = new Block(new Vector2(i, -4f), Block.TextureAtlasReference.LEVEL, GROUND_TILE);
-					blocks.add(latestBlock);
-					blocks.add(new Block(new Vector2(i, -5f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
-				}
-				firstUpdate = false;
-			}
-			for (Block b: blocks) {
-				b.getPosition().y += delta * Player.MAX_FALL_VELOCITY;
-			}
-			if (latestBlock.getPosition().y >= 0f) {
-				state = State.STATIC;
-			}
 		}
 		
-		//Move old blocks
-		for (Block b: oldBlocks) {
-			
-			int type = oldBlocksType.get(b);
-			float destroySpeed = 14f;
-			switch(type) {
-			case 0:
-				//System.out.println("Found oldBlock at " + b.getPosition());
-				b.getPosition().x -= delta *destroySpeed;
-				b.getPosition().y += delta* destroySpeed;
-				break;
-			case 1:
-				b.getPosition().x -= delta *destroySpeed * 0.5f;
-				b.getPosition().y += delta* destroySpeed * 2f;
-				break;
-			case 2:
-				b.getPosition().x += delta *destroySpeed * 0.5f;
-				b.getPosition().y += delta* destroySpeed * 2f;
-				break;
-			case 3:
-				b.getPosition().x += delta *destroySpeed;
-				b.getPosition().y += delta* destroySpeed;
-				break;
-				
+		//Move objects in the moveWithEntities
+		for (MovableEntity mve: moveWithEntities) {
+			mve.getPosition().x -= delta * SPEED;
+		}
+		
+		//Move and remove existing blocks
+		for (int i=0; i<blocks.size; i++) {
+			Block block = blocks.get(i);
+			if (camHasReachedStartPosition) {
+				block.getPosition().x -= delta * SPEED;
+			} else {
+				block.getPosition().x -= delta * SPEED / 2;
 			}
-			if (b.getPosition().y > cam.position.y + cam.viewportHeight) {
-				oldBlocks.removeValue(b, true);
+			if (block.getPosition().x + block.getWidth() < cam.position.x - cam.viewportWidth/2) {
+				blocks.removeIndex(i);
+				i--;
 			}
-			
 		}
 		
 	}
+	public void updateStateDown(float delta, OrthographicCamera cam, float rank) {
+		//add new blocks
+		
+		if (latestBlock.getPosition().y >= -2f) {
+			//System.out.println("Making new block. x=" +(cam.position.x-cam.viewportWidth/2-Block.SIZE) + " camX="+ cam.position.x + " camviewwith=" + cam.viewportWidth);
+			float spawnY = latestBlock.getPosition().y	- Block.SIZE;	
+			blocks.add(new Block(new Vector2(cam.position.x-cam.viewportWidth/2, spawnY), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+			latestBlock = new Block(new Vector2(cam.position.x+cam.viewportWidth/2 - Block.SIZE, spawnY), Block.TextureAtlasReference.LEVEL, GROUND_TILE);
+			blocks.add(latestBlock);
+			
+			//add the background blocks
+			for (int i = (int)(cam.position.x-cam.viewportWidth/2+1f); i< (int)(cam.position.x+cam.viewportWidth/2-1f); i++) {
+				blocks.add(new Block(new Vector2(i, spawnY), Block.TextureAtlasReference.LEVEL, BG_TILE, false));
+			}
+		}
+		
+		
+		
+		//Move objects in the moveWithEntities
+		for (MovableEntity mve: moveWithEntities) {
+			mve.getPosition().y += delta * Player.MAX_FALL_VELOCITY;
+		}
+		
+		//Move and remove existing blocks
+		for (int i=0; i<blocks.size; i++) {
+			
+			Block block = blocks.get(i);
+			//float reduceRate = (block.getPosition().x-(cam.position.x-cam.viewportWidth/2))/(cam.viewportWidth/2);
+			float reduceRate;
+			float minReduceRate = 0.2f;
+			if (block.getPosition().x < cam.position.x) {
+				reduceRate = 1f -  ((1-minReduceRate)/(cam.viewportWidth/2)) * (block.getPosition().x-(cam.position.x-cam.viewportWidth/2));
+			} else {
+				reduceRate = minReduceRate+ ((1-minReduceRate)/(cam.viewportWidth/2)) * (block.getPosition().x-(cam.position.x));
+			}
+			block.getPosition().y += delta * Player.MAX_FALL_VELOCITY * reduceRate;
+			if (block.getPosition().y  > cam.position.y + cam.viewportHeight/2) {
+				//System.out.println("Removing Block at " + block.getPosition());
+				blocks.removeIndex(i);
+				i--;
+			}
+			
+		}
+	}
+	public void updateStateStaticTransition(float delta, OrthographicCamera cam, float rank) {
+		if (firstUpdate) {
+			for (float i = cam.position.x - cam.viewportWidth/2; i < cam.position.x + cam.viewportWidth/2; i+=1f) {
+				blocks.add(new Block(new Vector2(i, -1f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+				blocks.add(new Block(new Vector2(i, -2f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+				blocks.add(new Block(new Vector2(i, -3f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+				latestBlock = new Block(new Vector2(i, -4f), Block.TextureAtlasReference.LEVEL, GROUND_TILE);
+				blocks.add(latestBlock);
+				blocks.add(new Block(new Vector2(i, -5f), Block.TextureAtlasReference.LEVEL, GROUND_TILE));
+			}
+			firstUpdate = false;
+		}
+		for (Block b: blocks) {
+			b.getPosition().y += delta * Player.MAX_FALL_VELOCITY;
+		}
+		if (latestBlock.getPosition().y >= 0f) {
+			state = State.STATIC;
+		}
+	}
+	public void updateOldBlocks(float delta, OrthographicCamera cam, float rank) {
+		//Move old blocks
+				for (Block b: oldBlocks) {
+					
+					int type = oldBlocksType.get(b);
+					float destroySpeed = 14f;
+					switch(type) {
+					case 0:
+						//System.out.println("Found oldBlock at " + b.getPosition());
+						b.getPosition().x -= delta *destroySpeed;
+						b.getPosition().y += delta* destroySpeed;
+						break;
+					case 1:
+						b.getPosition().x -= delta *destroySpeed * 0.5f;
+						b.getPosition().y += delta* destroySpeed * 2f;
+						break;
+					case 2:
+						b.getPosition().x += delta *destroySpeed * 0.5f;
+						b.getPosition().y += delta* destroySpeed * 2f;
+						break;
+					case 3:
+						b.getPosition().x += delta *destroySpeed;
+						b.getPosition().y += delta* destroySpeed;
+						break;
+						
+					}
+					if (b.getPosition().y > cam.position.y + cam.viewportHeight) {
+						oldBlocks.removeValue(b, true);
+					}
+					
+				}
+	}
 	
 	public void camHasReachedStartPosition() {
-		System.out.println("Cam reached start )(*#@&%)(@!*#&%)!#*(&%)#!*&%");
 		camHasReachedStartPosition = true;
 	}
 	
 	public void startDownward() {
-		System.out.println("Start downward");
 		oldBlocks.addAll(blocks);
 		int type = 0;
 		for (Block b: oldBlocks) {
@@ -266,7 +265,6 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 				type = 0;
 			}
 		}
-		//blocks.clear();
 		state = State.DOWN;
 		loopPos = 0;
 	}

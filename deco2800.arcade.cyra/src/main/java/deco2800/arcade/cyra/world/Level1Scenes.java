@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import deco2800.arcade.cyra.game.SpriteTween;
-import deco2800.arcade.cyra.model.CutsceneObject;
 import deco2800.arcade.cyra.model.MovableEntity;
 import deco2800.arcade.cyra.model.MovablePlatform;
 import deco2800.arcade.cyra.model.PartTween;

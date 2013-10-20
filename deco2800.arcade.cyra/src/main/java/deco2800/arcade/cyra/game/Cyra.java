@@ -16,10 +16,11 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game;
 
-/** The extension of Game class that is opened by the desktop application.
- * Will need to be altered to extend GameClient instead.
- * GameScreen.java might need to get merged with this one, so that this will
- * be the class in control of level progression 
+/** Cyra, a side-scrolling sci-fi themed 2-D platformer game. Run, jump and
+ *  swing your sword!
+ *  
+ *  For use in the 2013 deco2800 arcade.
+ * 
  * @author Game Over
  */
 @ArcadeGame(id = "Cyra")
@@ -33,7 +34,7 @@ public class Cyra extends GameClient {
       
     public Cyra(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		this.networkClient = networkClient; //this is a bit of a hack
+		this.networkClient = networkClient;
         this.achievementClient = new AchievementClient(networkClient);
         this.player = player;
         this.highscoreClient = new HighscoreClient(player.getUsername(), "Cyra", networkClient);
@@ -48,18 +49,6 @@ public class Cyra extends GameClient {
     public void addHighscore(int score) {
     	highscoreClient.storeScore("Number", score);
     }
-
-    
-    public void createPopup(final String message) {
-		this.getOverlay().addPopup(new UIOverlay.PopupMessage() {
-
-			@Override
-			public String getMessage() {
-				return message;
-			}
-
-		});
-	}
     
     /**
      * Grabs a list of the top ten scores for the game. Returns the scores as 
@@ -69,7 +58,6 @@ public class Cyra extends GameClient {
 	public List<Highscore> getHighscores() {
 		return highscoreClient.getGameTopPlayers(10, true, "Number");
 	}
-    
     
 	public SplashScreen getSplashScreen() {
     	return new SplashScreen(this);
@@ -103,16 +91,8 @@ public class Cyra extends GameClient {
 			@Override
 			public void dispose() {}
 		});
-		// End Overlay
-		//setScreen(new MainMenu(this));
-		//Set to splash screen
+		//Go to splash screen
 		setScreen(getSplashScreen());
-		//OR go straight to the action
-
-		
-		
-		
-		
 	}
 	
 	public boolean isPaused() {

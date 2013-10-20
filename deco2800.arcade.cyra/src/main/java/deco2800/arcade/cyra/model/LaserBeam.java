@@ -10,17 +10,14 @@ import com.badlogic.gdx.utils.Array;
 
 import deco2800.arcade.cyra.world.Sounds;
 
-//this probably shouldn't extend Enemy but not sure how else to do it within reasonable time
 public class LaserBeam extends Enemy {
 
 	public static final float DEFAULT_LENGTH = 30f;
 	private static final float OPENING_LENGTH = 4f;
 	
-	//private Polygon collision;
 	private boolean stopWhenHitSolid; // just going to ignore this because it'll make it too complicated and I don't need it right now
 	private float currentWidth;
 	private Vector2 initPos;
-	//private float rotation;
 	private float count;
 	private float maxWidth;
 	
@@ -41,11 +38,15 @@ public class LaserBeam extends Enemy {
 	}
 	
 	
-	
+	/**
+	 * Get the bounds of the LaserBeam that can hurt the player as Polygon
+	 * @return Polygon bounds to hurt player
+	 */
 	public Polygon getLaserBounds() {
 		if (currentWidth < 0.1f) {
 			return null;
 		}
+		//set points as though facing directly up
 		float[] vertices = {initPos.x, initPos.y,
 				initPos.x+currentWidth/2, initPos.y+OPENING_LENGTH,
 				initPos.x+currentWidth/2, initPos.y+DEFAULT_LENGTH,
@@ -56,18 +57,11 @@ public class LaserBeam extends Enemy {
 		Polygon collision = new Polygon(vertices);
 		
 		collision.setOrigin(initPos.x, initPos.y);
-		//set points as though facing directly up
-		/*float[] vertices = {currentWidth/2, OPENING_LENGTH,
-				-currentWidth/2, OPENING_LENGTH,
-				currentWidth/2, DEFAULT_LENGTH,
-				-currentWidth/2, DEFAULT_LENGTH};*/
 		
-		
-		//collision.setVertices(vertices);
 		
 		//rotate to correct rotation
 		collision.rotate(-90+ rotation);
-		System.out.println(Arrays.toString(collision.getVertices()));
+		
 		return collision;
 	}
 

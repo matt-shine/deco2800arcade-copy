@@ -12,13 +12,19 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+/**
+ * The splash screen for the game. Contains the elements that will appear 
+ * before seeing the main menu.
+ * @author Game Over
+ *
+ */
 public class SplashScreen extends AbstractScreen {
 	private Texture splashTex;
 	private TextureRegion splashTexRegion;
 	private Sprite splashSpr;
 	private TweenManager manager;
 	
-	public SplashScreen( Cyra game) {
+	public SplashScreen(Cyra game) {
 		super (game);
 	}
 	
@@ -29,7 +35,7 @@ public class SplashScreen extends AbstractScreen {
 		splashTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		splashTexRegion = new TextureRegion (splashTex, 0, 0, 512, 512);
 		
-		//Version for use with Tween
+		//Tween engine is used to fade textures in and out
 		splashSpr = new Sprite(splashTexRegion);
 		splashSpr.setOrigin(splashSpr.getWidth()/2, splashSpr.getHeight()/2);
 		splashSpr.setPosition((Gdx.graphics.getWidth()-splashSpr.getWidth())/2, (Gdx.graphics.getHeight()-splashSpr.getHeight())/2);
@@ -41,14 +47,15 @@ public class SplashScreen extends AbstractScreen {
 			public void onEvent(int type, BaseTween<?> source) {
 				tweenCompleted();
 			}
-
-			
 		};
 		Tween.to(splashSpr, SpriteTween.ALPHA, 0.6f).target(1).ease(TweenEquations.easeInQuad).repeatYoyo(1, 1.6f).
 				setCallback(cb).setCallbackTriggers(TweenCallback.COMPLETE).start(manager);
 		
 	}
 	
+	/**
+	 * Sets screen to the main menu
+	 */
 	private void tweenCompleted() {
 		game.setScreen(new MainMenu(game));
 	}

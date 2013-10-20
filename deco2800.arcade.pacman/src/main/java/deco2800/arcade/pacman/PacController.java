@@ -45,21 +45,6 @@ public class PacController implements InputProcessor {
 		Tile pTile = player.getCurTile();
 //		Dir tempFacing = player.getFacing();
 		player.setFacing(facing);
-		System.out.println("Can pacman move? Next tile is " + 
-							player.nextTile(pTile, 1));
-		// Check for teleport tile
-		
-//		if (player.nextTile(pTile, 1).getClass() == TeleportTile.class){
-//			
-//		}
-//		
-//		if (player.nextTile(pTile, 1).getClass() != WallTile.class) {
-//			player.setCurrentState(PacState.MOVING);
-//		} else {
-//			player.setCurrentState(PacState.IDLE);
-//			//stops pacman changing facing if he can't move in that direction			
-//			player.setFacing(tempFacing);
-//		}
 		//checkGhostCollision(pTile);			
 		return true;
 	}

@@ -39,7 +39,6 @@ public class ImageStorage {
      */
     private static Logger logger = LoggerFactory.getLogger(ImageStorage.class);
 
-
     // private toggle to allow us to initially load in reserved IDs
     private boolean allowSettingReservedIDs = false;
 
@@ -74,7 +73,7 @@ public class ImageStorage {
 		
 	} catch(SQLException e) {
             e.printStackTrace();
-            logger.error("Could not create imagees table.");
+            logger.error("Could not create images table.");
             throw new DatabaseException("Couldn't create images table", e);
         } finally {           
             try {

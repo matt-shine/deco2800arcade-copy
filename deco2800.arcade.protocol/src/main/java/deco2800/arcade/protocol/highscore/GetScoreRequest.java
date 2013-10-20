@@ -3,6 +3,13 @@ package deco2800.arcade.protocol.highscore;
 
 import deco2800.arcade.protocol.UserRequest;
 
+/**
+ * This protocol object is sent from client to server, containing information
+ * about which query is to be run on the database, as well as extra query
+ * filter information.
+ * 
+ * @author TeamA
+ */
 public class GetScoreRequest extends UserRequest {
 	public String username;
 	public String game_ID;

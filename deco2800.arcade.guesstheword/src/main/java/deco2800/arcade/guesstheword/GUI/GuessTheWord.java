@@ -17,36 +17,86 @@ import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 
 //Main Class
+/**
+ * Main Class for Guess the Word game.
+ * 
+ * @author Xu Duangui
+ */
 @ArcadeGame(id = "GuessTheWord")
 public class GuessTheWord extends GameClient{
-	
+	//--------------------------
+	//PRIVATE VARIABLES
+	//--------------------------
+	/**
+	 * Game instance
+	* */
 	private static final Game GAME;
-	
+	/**
+	 * NetworkClient instance
+	* */
 	private static NetworkClient networkClient;
+	/**
+	 * AchievementClient instance
+	* */
 	private AchievementClient achievementClient;
+	
+	/**
+	 * Player instance
+	* */
 	private static Player player;
 	
-	public GetterSetter getterSetter;
-	public Pictures picture;
-	public PlayerScore playerScore;
-	
+	/**
+	 * The Splash Screen's screen
+	* */
 	Screen splashScreen;
+	/**
+	 * The Main Screen's screen
+	* */
 	Screen mainScreen;
+	/**
+	 * The Game Screen's screen
+	* */
 	Screen gameScreen;
+	/**
+	 * The Settings Screen's screen
+	* */
 	Screen settingsScreen;
 	
+	
+	//--------------------------
+	//PUBLIC VARIABLES
+	//--------------------------
+	/**
+	 * GetterSetter instance
+	* */
+	public GetterSetter getterSetter;
+	/**
+	 * Pictures instance
+	* */
+	public Pictures picture;
+	/**
+	 * PlayerScore instance
+	* */
+	public PlayerScore playerScore;
+	/**
+	 * GameModel instance
+	* */
 	public GameModel gs;
-
+	/**
+	 * Skin instance - other screens also using the skins
+	* */
 	public Skin skin;
 
-	public GuessTheWord(){
-		super(player, networkClient);
-		getterSetter = new GetterSetter();		
-		picture =  new Pictures();
-		gs = new GameModel(this, new GameScreen(), new WordShuffler());
-
-	}
-	
+//	public GuessTheWord(){
+//		super(player, networkClient);
+//		getterSetter = new GetterSetter();		
+//		picture =  new Pictures();
+//		gs = new GameModel(this, new GameScreen(), new WordShuffler());
+//
+//	}
+	/**
+	 * Guess the word constructor
+	* */
 	public GuessTheWord(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		

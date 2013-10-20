@@ -1,17 +1,17 @@
 package deco2800.arcade.guesstheword.gameplay;
 
-import java.io.File;
 import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.TextureData;
 /**
  * This is the class that will "add" all the images required for the game. 
  * 
  * @author Xu Duangui
  * @author Yeo Tze Tian*/
 public class Pictures {
-	
+	//--------------------------
+	//PRIVATE VARIABLES
+	//--------------------------
 	/**
 	 * This hashmap is used for storing the level1 pictures.  
 	 * String is categories they are in.
@@ -29,6 +29,10 @@ public class Pictures {
 	 * */
 	private HashMap<String, HashMap<String, Texture>> level3Cat;
 	
+	/**
+	 * Load all the required textures for the game 
+	 * and add them into the respective hashmap
+	 * */
 	public void loadPictures(){
 		// Declarations for HashMap for the different levels 
 		// DO NOT AMEND!
@@ -39,11 +43,11 @@ public class Pictures {
 		// has their own texture. 
 
 		//animals textures level 1	
-		Texture bear1 = new Texture("src/main/resources/Images/level1/animals/bear/bear_1.png");
-		Texture bull1 = new Texture("src/main/resources/Images/level1/animals/bull/bull_1.png");
-		Texture fish1 = new Texture("src/main/resources/Images/level1/animals/fish/fish_1.png");
-		Texture hare1 = new Texture("src/main/resources/Images/level1/animals/hare/hare_1.png");
-		Texture frog1 = new Texture("src/main/resources/Images/level1/animals/frog/frog_1.png");
+		Texture bear1 = new Texture("Images/level1/animals/bear/bear_1.png");
+		Texture bull1 = new Texture("Images/level1/animals/bull/bull_1.png");
+		Texture fish1 = new Texture("Images/level1/animals/fish/fish_1.png");
+		Texture hare1 = new Texture("Images/level1/animals/hare/hare_1.png");
+		Texture frog1 = new Texture("Images/level1/animals/frog/frog_1.png");
 		HashMap<String, Texture> animalsMap = new HashMap<String, Texture>();
 		animalsMap.put("BEAR", bear1 );
 		animalsMap.put("BULL", bull1 );
@@ -268,14 +272,27 @@ public class Pictures {
 		level3Cat.put("TRANSPORTS", transportsMap3);
 
 	}
-	
+	/**
+	 * Get the hashmap for level 1
+	 * 
+	 * @return level 1 hash map
+	 * */
 	public HashMap<String, HashMap<String, Texture>> getLevel1(){
 		return level1Cat;
 	}
-	
+	/**
+	 * Get the hashmap for level 2
+	 * 
+	 * @return level 2 hash map
+	 * */
 	public HashMap<String, HashMap<String, Texture>> getLevel2(){
 		return level2Cat;
 	}
+	/**
+	 * Get the hashmap for level 3
+	 * 
+	 * @return level 3 hash map
+	 * */
 	public HashMap<String, HashMap<String, Texture>> getLevel3(){
 		return level3Cat;
 	}

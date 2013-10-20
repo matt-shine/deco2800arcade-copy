@@ -1,13 +1,13 @@
 package deco2800.arcade.guesstheword.test;
 
 import java.io.File;
-import java.util.HashMap;
-
 import org.junit.Test;
-import org.mockito.Mock;
-
 import static org.junit.Assert.*;
-
+/**
+ * Test Class for Pictures class. To check if the picture exists
+ * 
+ * @author Xu Duangui
+ */
 public class PictureTest {
 	
 	@Test

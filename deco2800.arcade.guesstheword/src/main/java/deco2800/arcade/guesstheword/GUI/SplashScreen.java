@@ -7,13 +7,33 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
+/**
+ * Splash Screen for Guess The Word
+ * 
+ * @author Xu Duangui
+ * */
 public class SplashScreen implements Screen {
+	//--------------------------
+	//PRIVATE VARIABLES
+	//--------------------------
+	/**
+	 * GuessTheWord instance
+	 * */
 	private final GuessTheWord game;
+	/**
+	 * Batch to draw the texture
+	 * */
 	private final SpriteBatch batch;
+	/**
+	 * Texture for the background
+	 * */
 	private final Texture texture;
 //	private final TextureRegion splashTextureRegion;
-
+	/**
+	 * SplashScreen Constructor
+	 * 
+	 * @param game GuessTheWord Instance
+	 * */
 	SplashScreen(final GuessTheWord game) {
 		this.game = game;
 		batch = new SpriteBatch();

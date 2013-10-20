@@ -2,11 +2,14 @@ package deco2800.arcade.guesstheword.test;
 
 import org.junit.Test;
 
-import com.badlogic.gdx.graphics.Texture;
-
 import deco2800.arcade.guesstheword.gameplay.GetterSetter;
 import static org.junit.Assert.*;
 
+/**
+ * Test Class for getter and setter methods.
+ * 
+ * @author Xu Duangui
+ */
 public class GetterSetterTest {
 
 	@Test

@@ -6,6 +6,11 @@ import deco2800.arcade.guesstheword.gameplay.WordShuffler;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test Class for Word Shuffler.
+ * 
+ * @author Xu Duangui
+ */
 public class WordShufflerTest {
 	
 	@Test

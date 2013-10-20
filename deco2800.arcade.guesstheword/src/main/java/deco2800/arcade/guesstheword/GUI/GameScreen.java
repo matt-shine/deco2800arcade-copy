@@ -29,7 +29,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import deco2800.arcade.guesstheword.gameplay.GameModel;
 import deco2800.arcade.guesstheword.gameplay.WordShuffler;
 
+/**
+ * Game screen for Guess The Word
+ * 
+ * @author Xu Duangui
+ * */
 public class GameScreen implements Screen, InputProcessor {
+	
+	//--------------------------
+	//PRIVATE VARIABLES
+	//--------------------------
 	/**
 	 * GuessTheWord instance
 	 * */
@@ -96,19 +105,7 @@ public class GameScreen implements Screen, InputProcessor {
 	private TextButton playButton;
 
 	// The letters textfield for the game
-	/**
-	 * Textfields for the letters
-	 * */
-	public TextField textfield0, textfield1, textfield2, textfield3, 
-					  textfield4, textfield5, textfield6;  
-	/**
-	 *Score Label
-	 * */
-	public Label scoreLabel; 
-	/**
-	 * Level Label
-	 * */
-	public Label levelLabel;
+
 	/**
 	 * Category Label 
 	 * */
@@ -137,7 +134,6 @@ public class GameScreen implements Screen, InputProcessor {
 	 * Texture for storing the background image.
 	 * */
 	private Texture backGroudTexture;
-	
 
 	/**
 	 * Array of keys code for Letters (A-Z)
@@ -145,7 +141,25 @@ public class GameScreen implements Screen, InputProcessor {
 	private String[] lettersCode = {"A" ,"B" ,"C"  , "D" , "E" , "F" , "G" , "H"  ,"I"  ,"J" , "K"  , "L"  
 			,"M" , "N", "O" ,"P", "Q", "R" ,"S" ,"T", "U", "V", "W", "X", "Y", "Z"};
 	
+	//--------------------------
 	//PUBLC VARIABLES
+	//--------------------------
+	// NOTE: Textfields are set to public because of usage by GameModel class.
+	/**
+	 * Textfields for the letters
+	 * */
+	public TextField textfield0, textfield1, textfield2, textfield3, 
+					  textfield4, textfield5, textfield6;  
+	/**
+	 *Score Label
+	 * */
+	public Label scoreLabel; 
+	/**
+	 * Level Label
+	 * */
+	public Label levelLabel;
+	
+	
 	public HashMap<String, HashMap<String, Texture>> hm;
 	public ArrayList<TextButton> buttonList;
 
@@ -163,13 +177,17 @@ public class GameScreen implements Screen, InputProcessor {
 		
 		//Create an instance of GameModel
 		gm =  new GameModel(game, this, word);
+		
+		gm.resetCounter();
 
 		hm = new HashMap<String, HashMap<String, Texture>>();
 		buttonList = new ArrayList<TextButton>();
 		catList = new ArrayList<String>();
 	}
 	
-	
+	//--------------------------
+	//Methods from Screen interface
+	//--------------------------
 	@Override
 	public void render(float arg0) {
 		Gdx.gl.glClearColor( 0f, 0f, 0f, 1f );
@@ -378,6 +396,9 @@ public class GameScreen implements Screen, InputProcessor {
 		scoreLabel.clearActions();
 	}
 	
+	/**
+	 * Clear all textfield input
+	 * */
 	public void clearInputText(){
 		textfield0.setMessageText("");
 		textfield1.setMessageText("");
@@ -388,7 +409,9 @@ public class GameScreen implements Screen, InputProcessor {
 		textfield6.setMessageText("");
 	}
 
-	//----------RIGHT PANEL-------------//
+	//--------------------
+	//RIGHT PANEL
+	//--------------------
 	//Right Panel to add score and time
 	/**
 	 * Inner Class for setting up of the RightPanel
@@ -404,13 +427,16 @@ public class GameScreen implements Screen, InputProcessor {
 			scoreLabel =  new Label("Score : " + 0 , skin);
 			this.add(scoreLabel).size(100, 50).padBottom(30).width(100).row();
 			
-			
-//			timeLabel = new Label("Time: " , skin);
-//			this.add(timeLabel).padBottom(30).width(100).row();
 		}
 	}
 	
-	//----------BUTTON PANEL-------------//
+	public void setCategoryLabel(){
+		categoryLabel.setText(game.getterSetter.getCategory());
+	}
+	
+	//--------------------
+	//BUTTON PANEL
+	//--------------------
 	/**
 	 * Inner Class for setting up of the ButtonPanel
 	 * */
@@ -495,6 +521,9 @@ public class GameScreen implements Screen, InputProcessor {
 		}
 	}
 	
+	//--------------------
+	//Helper methods to set the button content
+	//--------------------
 	/**
 	 * Method where all the buttons listeners are created. 
 	 * */
@@ -530,7 +559,9 @@ public class GameScreen implements Screen, InputProcessor {
 			textfield6.setMessageText("" + button.getText());
 	}
 
-	//----------PICTURE PANEL-------------//
+	//--------------------
+	//PICTURE PANEL
+	//--------------------
 	/**
 	 * PicturePanel class is used for drawing the 
 	 * new picture (texture on the screen)
@@ -545,7 +576,9 @@ public class GameScreen implements Screen, InputProcessor {
 	        getWindow().setVisible(false);
 		}
 	}
-	//----------LEFT PANEL-------------//
+	//--------------------
+	//LEFT PANEL
+	//--------------------
 	/**
 	 * Left Panel class is use to create the labels for the game. 
 	 * */
@@ -569,7 +602,9 @@ public class GameScreen implements Screen, InputProcessor {
 		}
 	}
 	
-	// Category Window
+	//--------------------
+	//Category Window
+	//--------------------
 	/**
 	 * This method will create a window for the categories. 
 	 * 
@@ -601,14 +636,14 @@ public class GameScreen implements Screen, InputProcessor {
 //					hm = game.picture.getLevel3();
 //				}
 				String category = categoryList.getSelection();
-				System.out.println(hm);
+//				System.out.println(hm);
 				String word =  "" + hm.get(category).keySet().toArray()[0];
 				Texture texture = hm.get(category).get(word);
 				game.getterSetter.setCategory(category);
 				game.getterSetter.setTexture(texture);
 				game.getterSetter.setCategoryItem(word);
 				
-				game.getterSetter.setAnswerCount(0);
+				gm.resetCounter();
 				catList.add(category);	
 				System.out.println("Category : " +  category + " Word :" + word );
 				clearInputText();
@@ -628,8 +663,9 @@ public class GameScreen implements Screen, InputProcessor {
 		return categoryWindow;
 	}
 
-	// INPUT PROCESSOR// 
-
+	//--------------------
+	// Methods from InputProcessor interface
+	//--------------------
 	@Override
 	public boolean keyDown(int code) {
 		// TODO Auto-generated method stub

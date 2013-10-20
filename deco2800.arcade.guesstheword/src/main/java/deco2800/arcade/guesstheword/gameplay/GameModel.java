@@ -3,8 +3,6 @@ package deco2800.arcade.guesstheword.gameplay;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Timer;
@@ -12,9 +10,17 @@ import com.badlogic.gdx.utils.Timer.Task;
 
 import deco2800.arcade.guesstheword.GUI.GameScreen;
 import deco2800.arcade.guesstheword.GUI.GuessTheWord;
-import deco2800.arcade.guesstheword.GUI.MainScreen;
 
+
+/**
+ * Game model for the Game Screen
+ * 
+ * @author Xu Duangui
+ * */
 public class GameModel {
+	//--------------------------
+	//PRIVATE VARIABLES
+	//--------------------------
 	/**
 	 * GuessTheWord instance
 	 * */
@@ -33,6 +39,11 @@ public class GameModel {
 	 * */
 	private int score = 0;	
 	/**
+	 * To keep track of the number of correct ans
+	 * */
+	private int count = 0;	
+	
+	/**
 	 * Array to store the generated words from word shuffler.
 	 * */
 	private String [] breakword;
@@ -40,7 +51,7 @@ public class GameModel {
 	/**
 	 * HashMap where the textures are stored.
 	 * */
-	public HashMap<String, HashMap<String, Texture>> hm;
+	private HashMap<String, HashMap<String, Texture>> hm;
 	
 	/**
 	 * Constructor
@@ -54,11 +65,12 @@ public class GameModel {
 		this.word =  word;
 	}
 	
-	/**
-	 * Empty Constructor
-	 * */
-	public GameModel(){}
-	
+	//=============================================================
+	//Overall Game Play: 
+	// 1) Get Hint
+	// 2) Check Answer
+	// 3) Next Word
+	//=============================================================
 	/**
 	 * Get the Hint from the word. 
 	 * 
@@ -110,8 +122,7 @@ public class GameModel {
 	 * @param category -  the category that the word belong. 
 	 * */
 	public void nextWord(String answer ,  String category){
-		hm =  gameScreen.hm;
-		
+		hm =  gameScreen.hm;	
 		Texture newTexture = null;
 		Object[] next = hm.get(category).keySet().toArray();
 		for(int i = 0; i < next.length-1; i ++){
@@ -151,24 +162,14 @@ public class GameModel {
 		String answer = game.getterSetter.getCategoryItem();
 		
 		if(userAnswer.toString().equalsIgnoreCase(answer)){
-			int count = game.getterSetter.getAnswerCount() + 1;
-			game.getterSetter.setAnswerCount(count);
+			count++;
+//			game.getterSetter.setAnswerCount(count);
 			
 			String category = game.getterSetter.getCategory();
 			
 			// This means the user had finish the category. 
-			if(count >= 5){
-				// Clear game content and set up the next word content
-				gameScreen.clearInputText();
-				gameScreen.setGameContext();
+			if(count < 6){
 				
-				// Push the score to the high score counter.
-				setHighScoreCounter();
-				
-				//Reset Count
-//				count = 0; 
-				game.getterSetter.setAnswerCount(0);
-			}else {
 				//Stop timer 
 				timer(0);
 				
@@ -179,12 +180,26 @@ public class GameModel {
 				gameScreen.scoreLabel.setText("Score : " + score);
 				game.getterSetter.setScore(score);
 				
-				//Achievement will be prompted.
-				setAchievement(category);
-				
-				// Search for next word.
-				nextWord(answer, category);
-				
+				//When counter hit 5 it means the specific category is done.
+				if(count == 5){
+					// Clear game content and set up the next word content
+					gameScreen.clearInputText();
+					gameScreen.setGameContext();
+					
+					// Push the score to the high score counter.
+					setHighScoreCounter();
+					gameScreen.setCategoryLabel();
+					//Reset Count
+					resetCounter();
+//					game.getterSetter.setAnswerCount(0);
+				}
+				else{
+					//Achievement will be prompted.
+					setAchievement(category);
+					
+					// Search for next word.
+					nextWord(answer, category);
+				}
 			}
 		}else{
 			// Clear the textField and return the letters to the button
@@ -219,8 +234,19 @@ public class GameModel {
 			game.playerScore.countScore(game.playerScore.highScorePlayer1);
 		else if(level.equalsIgnoreCase("Level 2"))
 			game.playerScore.countScore(game.playerScore.highScorePlayer2);
-		if(level.equalsIgnoreCase("Level 3"))
+		else if(level.equalsIgnoreCase("Level 3"))
 			game.playerScore.countScore(game.playerScore.highScorePlayer3);
+	}
+	
+	//--------------------------
+	//PUBLIC METHODS
+	//--------------------------
+	
+	/**
+	 * Reset The Answer Counter
+	 * */
+	public void resetCounter(){
+		count = 0;
 	}
 	
 	/**
@@ -231,14 +257,14 @@ public class GameModel {
 	public void timer(int time){
 		if(time == 0){
 			Timer.instance.clear();
-			System.out.println("Timer stop!!!");
+//			System.out.println("Timer stop!!!");
 		}else{
-			System.out.println("Timer started!!!");
+//			System.out.println("Timer started!!!");
 			Timer.instance.start();
 			Timer.schedule(new Task(){
 			    @Override
 			    public void run() {
-			    	System.out.println("Timer UP!!!");
+//			    	System.out.println("Timer UP!!!");
 			    	nextWord(game.getterSetter.getCategoryItem(),
 			    			game.getterSetter.getCategory());
 			    }

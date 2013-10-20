@@ -30,7 +30,7 @@ public class LevelContainer {
 	public LevelContainer() {
 		levels = new ArrayList<Level>();
 		setCurrentLevel(0);
-		currentWorld = 0;
+		currentWorld = 1;
 		levelAmount = 5;
 		worldAmount = 5;
 		

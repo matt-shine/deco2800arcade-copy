@@ -47,9 +47,9 @@ public class Door extends Doodad {
         
     	float speed = 1.5f * g.delta();
         if (shouldOpenEnemy || shouldOpenPlayer) {
-            openness = (float) Math.min(openness + speed, 1.0f);
+            openness = Math.min(openness + speed, 1.0f);
         } else {
-            openness = (float) Math.max(openness - speed, 0.0f);
+            openness = Math.max(openness - speed, 0.0f);
         }
         
         //update collisions

@@ -57,7 +57,7 @@ public class SecretDoor extends Doodad {
             //(x + 1, y + 1), (x - 1, y + 1), (x + 1, y - 1), (x - 1, y - 1)
         }
         if (movementDirection != null) {
-            openness = (float) Math.min(openness + speed, 2.0f);
+            openness = Math.min(openness + speed, 2.0f);
         }
         
         

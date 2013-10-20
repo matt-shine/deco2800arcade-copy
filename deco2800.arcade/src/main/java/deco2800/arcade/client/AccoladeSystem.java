@@ -1,4 +1,4 @@
-package deco2800.arcade.model;
+package deco2800.arcade.client;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -71,7 +71,7 @@ public class AccoladeSystem {
 			error.printStackTrace();
 		}	
 		/**
-		 * *load in the xml file
+		 * *load in the xml file - make sure to assign a playerID to it
 		 * *check each xml module
 		 * *if a key isn't assigned, then create new accolade server side and modify xml to include the 
 		 * the newly assigned AccoladeID (this allows developers to later modify their accolade information by just changing the accolade xml file

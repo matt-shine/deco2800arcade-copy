@@ -4,7 +4,7 @@ package deco2800.arcade.accolades;
 //OUR STUFF
 import deco2800.arcade.model.Accolade;
 import deco2800.arcade.model.AccoladeContainer;
-import deco2800.arcade.model.AccoladeSystem;
+import deco2800.arcade.client.AccoladeSystem; //Not sure why you need this
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;

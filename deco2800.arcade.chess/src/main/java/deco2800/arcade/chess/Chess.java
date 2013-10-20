@@ -333,7 +333,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 					int startx = eData.getItemForString("start_x").intVal();
 					int starty = eData.getItemForString("start_y").intVal();
 					System.out.println("Move from: " + startx + "," + starty);
-					for (Piece piece : board.findActivePieces()) {
+					List<Piece> activePieces = board.findActivePieces(true);
+					activePieces.addAll(board.findActivePieces(false));
+					for (Piece piece : activePieces) {
 						if (board.findPiece(piece)[0] == startx
 								&& board.findPiece(piece)[1] == starty) {
 							int[] movement = {

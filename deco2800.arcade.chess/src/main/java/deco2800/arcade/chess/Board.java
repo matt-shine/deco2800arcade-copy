@@ -52,10 +52,23 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * Returns the current board state
+	 * 
+	 * @return board state
+	 */
 	public FixedSizeList<FixedSizeList<Piece>> getBoardState() {
 		return boardState;
 	}
 	
+	/**
+	 * Returns the graveyard for each team
+	 * 
+	 * @param team
+	 * 			true for black's graveyard, false for white's
+	 * @return
+	 * 			specified team's graveyard
+	 */
 	public ArrayList<Piece> getGraveyard(boolean team) {
 		if (team) {
 			return blackGraveyard;
@@ -66,23 +79,16 @@ public class Board {
 	/**
 	 * Check if either team is in 'Check'
 	 * 
-	 * @param Team
+	 * @param team
 	 *            The team who is being checked for being in 'Check'. - False is
 	 *            for White - True is for Black
 	 * @return True if the team is in 'Check', false otherwise.
 	 */
-	public boolean checkForCheck(boolean Team) {
-		List<Piece> activePieces = findActivePieces();
-		List<Piece> activeEnemyPieces = new ArrayList<Piece>();
+	public boolean checkForCheck(boolean team) {
+		List<Piece> activeEnemyPieces = findActivePieces(!team);
 		List<int[]> enemyMoves = new ArrayList<int[]>();
-		
 		int[] kingPos;
-		kingPos = (Team ? (findPiece(blackKing)) : (findPiece(whiteKing)));
-		for (int i = 0; i < activePieces.size(); i++) {
-			if (activePieces.get(i).getTeam() != Team) {
-				activeEnemyPieces.add(activePieces.get(i));
-			}
-		}
+		kingPos = (team ? (findPiece(blackKing)) : (findPiece(whiteKing)));
 		for (int i = 0; i < activeEnemyPieces.size(); i++) {
 			List<int[]> pieceMoves = allowedMoves(activeEnemyPieces.get(i));
 			for (int j = 0; j < pieceMoves.size(); j++) {
@@ -115,20 +121,11 @@ public class Board {
 	 */
 	public boolean checkForCheckmate(boolean team) {
 		List<int[]> checkMoves;
-		List<Piece> activePieces = this.findActivePieces();
-		List<Piece> activeWhite = new ArrayList<Piece>();
-		List<Piece> activeBlack = new ArrayList<Piece>();
+		List<Piece> activeWhite = this.findActivePieces(false);
+		List<Piece> activeBlack = this.findActivePieces(true);
 		// can't be in checkmate if not in check
 		if (!(this.checkForCheck(team))) {
 			return false;
-		}
-		// find active pieces on team
-		for (Piece piece : activePieces) {
-			if (piece.getTeam()) {
-				activeBlack.add(piece);
-			} else {
-				activeWhite.add(piece);
-			}
 		}
 		if (team) {
 			for (Piece piece : activeBlack) {
@@ -170,15 +167,19 @@ public class Board {
 		boolean team = piece.getTeam();
 		int currentx = this.findPiece(piece)[0];
 		int currenty = this.findPiece(piece)[1];
+		//for all 'allowed moves'
 		for (int[] moveTo : allowedMoves) {
 			Piece onSquare = this.getPiece(moveTo);
+			//move into position
 			boardState.get(moveTo[0]).add(moveTo[1], piece);
 			boardState.get(currentx).add(currenty, nullPiece);
+			//check if in check and remove the move if in check
 			inCheck = this.checkForCheck(team);
 			if (inCheck) {
 				allowedMovesCopy.remove(index);
 				index--;
 			}
+			//revert the move after checking
 			if (this.isNullPiece(onSquare)) {
 				boardState.get(currentx).add(currenty, piece);
 				boardState.get(moveTo[0]).add(moveTo[1], nullPiece);
@@ -222,16 +223,6 @@ public class Board {
 	}
 
 	/**
-	 * Reactivates the piece into play and removes it from the graveyard
-	 * 
-	 * @param retrievalPiece
-	 *            Piece to be retrieved into play
-	 */
-	/*private void retrievePiece(Piece retrievalPiece) {
-
-	}*/
-
-	/**
 	 * Checks whether a space is currently occupied
 	 * 
 	 * @param position
@@ -244,6 +235,7 @@ public class Board {
 		FixedSizeList<Piece> row = boardState.get(x);
 		Piece onSpace = row.get(y);
 
+		//if nothing on space return false otherwise return true
 		if (onSpace.getClass() == nullPiece.getClass()) {
 			return false;
 		} else {
@@ -281,9 +273,12 @@ public class Board {
 		int x = newPosition[0];
 		int y = newPosition[1];
 
+		//remove moves that will leave you in check
 		List<int[]> allowedMoves = removeCheckMoves(piece);
 
 		boolean allowed = false;
+		
+		//check if move is in allowedMoves
 		for (int i = 0; i < allowedMoves.size(); i++) {
 
 			if (newPosition[0] == allowedMoves.get(i)[0]
@@ -309,9 +304,8 @@ public class Board {
 			return false;
 		}
 
-		if (piece.getClass() == whitePawn1.getClass()) {
-			piece.hasMoved();
-		}
+		//update piece to say it has moved
+		piece.hasMoved();
 		
 		/*
 		 * If space is occupied (can only be by other team due to possibleMoves)
@@ -323,13 +317,14 @@ public class Board {
 			Piece onSquare = boardState.get(x).get(y);
 			onSquare.deActivate();
 
-			
+			//take piece and add it to graveyard if square was occupied
 			if (onSquare.getTeam()) {
 				blackGraveyard.add(onSquare);
 			} else {
 				whiteGraveyard.add(onSquare);
 			}
 			
+			//make the move
 			boardState.get(oldPos[0]).add(oldPos[1], nullPiece);
 			boardState.get(x).add(y, piece);
 			checkPawnSwap(piece, turn);
@@ -359,10 +354,12 @@ public class Board {
 		boolean atEnd = false;
 		int highestPref = 1;
 		Piece replaceWith = new Null(team);
+		//if piece is not a pawn return
 		if (piece.getClass() != whitePawn1.getClass()) {
 			return;
 		}
 		int[] piecePos = this.findPiece(piece);
+		//check if pawn is at end of board depending on team it belongs to
 		if (team) {
 			if (piecePos[0] == 0) {
 				atEnd = true;
@@ -372,6 +369,7 @@ public class Board {
 				atEnd = true;
 			}
 		}
+		//if it is at the end, find piece in teams graveyard with highest pref
 		if (atEnd) {
 			if (team) {
 				for (Piece deadPiece: blackGraveyard) {
@@ -393,13 +391,16 @@ public class Board {
 				}
 			}
 		} else {
+			//return if not at end
 			return;
 		}
+		//if only pawns in graveyard return
 		if (highestPref == 1) {
 			return;
 		}
 		System.out.println("replacing pawn with " + replaceWith.toString());
 		piece.deActivate();
+		//replace pawn with piece retrieved from graveyard
 		if (team) {
 			blackGraveyard.add(piece);
 			blackGraveyard.remove(replaceWith);
@@ -476,35 +477,6 @@ public class Board {
 	}
 
 	/**
-	 * Undoes last move
-	 */
-	/*private void removeMove() {
-		moves.remove(moves.size() - 1);
-		pieceMoved.remove(pieceMoved.size() - 1);
-	}*/
-
-	/**
-	 * Finds and returns a list of all active pieces currently on the board
-	 * 
-	 * @return A list of all currently active pieces on the board
-	 */
-	public List<Piece> findActivePieces() {
-		List<Piece> activePieces = new ArrayList<Piece>();
-
-		for (int i = 0; i < 8; i++) {
-			FixedSizeList<Piece> row = boardState.get(i);
-			for (int j = 0; j < 8; j++) {
-				Piece onSquare = row.get(j);
-				if ((onSquare.getClass() != nullPiece.getClass())
-						&& onSquare.getActiveState()) {
-					activePieces.add(onSquare);
-				}
-			}
-		}
-		return activePieces;
-	}
-
-	/**
 	 * Finds and returns a list of all currently active pieces for the given
 	 * team.
 	 * 
@@ -513,11 +485,22 @@ public class Board {
 	 * @return A list of all currently active pieces for the team.
 	 */
 	public List<Piece> findActivePieces(boolean team) {
-		List<Piece> allActive;
+		List<Piece> allActive = new ArrayList<Piece>();
 		List<Piece> returnPieces = new ArrayList<Piece>();
+		
+		//get all active pieces
+		for (int i = 0; i < 8; i++) {
+			FixedSizeList<Piece> row = boardState.get(i);
+			for (int j = 0; j < 8; j++) {
+				Piece onSquare = row.get(j);
+				if ((onSquare.getClass() != nullPiece.getClass())
+						&& onSquare.getActiveState()) {
+					allActive.add(onSquare);
+				}
+			}
+		}
 
-		allActive = findActivePieces();
-
+		//check which team piece is on and add to list if correct team
 		for (Piece piece : allActive) {
 			if (piece.getTeam() == team) {
 				returnPieces.add(piece);
@@ -532,6 +515,14 @@ public class Board {
 	}
 
 
+	/**
+	 * Returns the piece on position given
+	 * 
+	 * @param pos
+	 * 			int[] that is position on board to look for piece
+	 * @return
+	 * 			piece that is on that square (NullPiece if empty)
+	 */
 	public Piece getPiece(int[] pos) {
 		FixedSizeList<Piece> row = boardState.get(pos[0]);
 
@@ -583,7 +574,9 @@ public class Board {
 		List<Piece> activePieces = findActivePieces(team);
 		List<Boolean> canMove = new ArrayList<Boolean>();
 
+		//iterate through all active pieces on team
 		for (int i = 0; i < activePieces.size(); i++) {
+			//if piece cannot move add false to list otherwise add true
 			if (removeCheckMoves(activePieces.get(i)).isEmpty()) {
 				canMove.add(false);
 			} else {
@@ -637,12 +630,14 @@ public class Board {
 	 */
 	public void moveAIPieceEasy(Piece movePiece) {
 
+		//choose which square to move to
 		int[] moveSquare = chooseAISquare(movePiece);
 		System.out.println("board3");
 
 		System.out.println("AI move: " + movePiece);
 		System.out.println("AI move: [" + moveSquare[0] + ", " + moveSquare[1]
 				+ "]");
+		//make move if not in stalemate
 		if (!checkForStaleMate(turn)) {
 			movePiece(movePiece, moveSquare);
 		}
@@ -654,19 +649,21 @@ public class Board {
 	 * 
 	 * @return The piece that will be moved by the computer controlled player.
 	 */
-	Piece chooseAIPiece() {
+	public Piece chooseAIPiece() {
 		Piece returnPiece;
 
 		List<Piece> activePieces = findActivePieces(turn);
 		int numPieces;
 		List<Piece> allowedPieces = new ArrayList<Piece>();
 
+		//find all possible pieces to move
 		for (Piece piece : activePieces) {
 			if (removeCheckMoves(piece).size() != 0) {
 				allowedPieces.add(piece);
 			}
 		}
 
+		//pick piece at random
 		numPieces = allowedPieces.size();
 		int pieceIndex = (int) (Math.random() * ((numPieces - 1) + 1));
 

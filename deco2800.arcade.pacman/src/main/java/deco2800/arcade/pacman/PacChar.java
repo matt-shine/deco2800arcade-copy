@@ -35,7 +35,7 @@ public final class PacChar extends Mover{
 		spritePos = 3;
 		currentTile.addMover(this);
 		updatePosition();
-		moveDist = 1;
+		moveDist = 2;
 		//System.out.println(this);
 //		animation not necessary unless Pacman moving		
 //		walkAnimation = new Animation(0.025f, pacmanFrames);

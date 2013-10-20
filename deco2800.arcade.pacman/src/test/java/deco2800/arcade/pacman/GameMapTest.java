@@ -55,11 +55,10 @@ public class GameMapTest {
 	@AfterClass
 	public static void tearDown() {
 		app.exit();
-		//dispose of audio properly. 
+		//dispose of audio properly. try-catch necessary to build successfully on some machines
 		try {
 			((OpenALAudio) app.getAudio()).dispose();
 		} catch (UnsatisfiedLinkError e) {
-			e.printStackTrace();
 		}
 	}
 	

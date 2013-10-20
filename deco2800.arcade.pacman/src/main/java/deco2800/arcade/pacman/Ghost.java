@@ -124,13 +124,13 @@ public final class Ghost extends Mover {
 			}
 		} else if (currentState == GhostState.DEAD) {
 			if (facing == Dir.LEFT) {
-				drawX -= moveDist;
+				drawX -= moveDist * 2;
 			} else if (facing == Dir.RIGHT) {
-				drawX += moveDist;
+				drawX += moveDist * 2;
 			} else if (facing == Dir.UP) {
-				drawY += moveDist;
+				drawY += moveDist * 2;
 			} else if (facing == Dir.DOWN) {
-				drawY -= moveDist;
+				drawY -= moveDist * 2;
 			}
 		}
 		updatePosition();

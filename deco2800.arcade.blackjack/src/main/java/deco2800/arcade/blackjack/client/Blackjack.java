@@ -6,7 +6,6 @@ import java.util.Set;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Game;
 
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
@@ -29,9 +28,6 @@ public class Blackjack extends GameClient {
     // Screen Parameters
     public static final int SCREENHEIGHT = 720;
     public static final int SCREENWIDTH = 1280;
-    
-	//Network client for communicating with the server.
-	private NetworkClient networkClient;
 	
 	//Menu variables
 	private MainMenuScreen MainMenuScreen;

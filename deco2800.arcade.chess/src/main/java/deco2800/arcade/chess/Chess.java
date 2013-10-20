@@ -1,6 +1,7 @@
 package deco2800.arcade.chess;
 
 import deco2800.arcade.chess.SplashScreen;
+import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -9,11 +10,15 @@ import deco2800.arcade.client.replay.ReplayEventListener;
 import deco2800.arcade.client.replay.ReplayHandler;
 import deco2800.arcade.client.replay.ReplayNode;
 import deco2800.arcade.client.replay.ReplayNodeFactory;
+import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.AchievementProgress;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
+import deco2800.arcade.utils.AsyncFuture;
 import deco2800.arcade.chess.pieces.Piece;
 import deco2800.arcade.client.highscores.*;
+
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -71,6 +76,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	private BitmapFont checkInfo;
 	
 	private List<Highscore> hs;
+	private int rowWins;
 	
 	// Piece positions
 	private int[] whiteRook1Pos, whiteKnight1Pos, whiteBishop1Pos, whiteKingPos,
@@ -133,6 +139,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	// Network client for communicating with the server.
 	// Should games reuse the client of the arcade somehow? Probably!
 	private NetworkClient networkClient;
+	
+	//Achievements client
+	private AchievementClient achClient;
 
 	public SplashScreen splashScreen;
 	public MenuScreen menuScreen;
@@ -145,7 +154,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	public Chess(Player player, NetworkClient networkClient) {
 
 		super(player, networkClient);
-		this.incrementAchievement("chess.start");
 		initPiecePos();
 		board = new Board();
 		movePieceGraphic();
@@ -154,6 +162,10 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		SelectScreen = new SelectScreen(this);
 		setScreen(splashScreen);
 		this.networkClient = networkClient;
+		//Set up achievement
+		achClient = new AchievementClient(networkClient);
+		this.incrementAchievement("chess.start");
+		
 		players[0] = player.getUsername();
 		players[1] = "Player 2";
 		// setup highscore client
@@ -170,6 +182,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				"start_y", "target_x", "target_y" });
 		
 		hs = player1.getWinLoss();
+		rowWins = 0;
 
 		styles = new ArrayList<String>();
 
@@ -403,27 +416,40 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	 */
 	private void finishGame(boolean loser, boolean stalemate) {
 		System.err.println("GAME OVER");
-		if (!multiplayer) {
+		System.out.println("multiplayer: " + multiplayer);
+		if (!easyComputerOpponent) {
 			if ((!stalemate) && (loser)) {
 				player1.logWin();
 				this.incrementAchievement("chess.winGame");
-				this.incrementAchievement("chess.youwon5");
-				this.incrementAchievement("chess.youwon10");
-				this.incrementAchievement("chess.youwon25");
-				this.incrementAchievement("chess.chessmaster");
+				rowWins += 1;
+				System.out.println("rowWins: " + rowWins);
 				hs = player1.getWinLoss();
+			}
+			if(rowWins == 2) {
+				this.incrementAchievement("chess.chessinarow5");
+			} else if(rowWins == 10) {
+				this.incrementAchievement("chess.chessinarow10");
 			}
 			if ((!stalemate) && (!loser)) {
 				player1.logLoss();
+				rowWins = 0;
 				hs = player1.getWinLoss();
 			}
-			//These don't really work just testing them
-			if(player1.getWin().score == 5 && player1.getWin().score == 0){
-				this.incrementAchievement("chess.chessinarow5");
+		} else {
+			if(board.whoseTurn()) {
+				if ((!stalemate)) {
+					player1.logWin();
+					this.incrementAchievement("chess.winGame");
+					rowWins += 1;
+					System.out.println("rowWins: " + rowWins);
+					hs = player1.getWinLoss();
+				}
+				if(rowWins == 2) {
+					this.incrementAchievement("chess.chessinarow5");
+				} else if(rowWins == 10) {
+					this.incrementAchievement("chess.chessinarow10");
+				}
 			}
-			if(player1.getWin().score == 10 && player1.getWin().score == 0){
-				this.incrementAchievement("chess.chessinarow10");
-			}	
 		}
 		System.err.println("wins" + " " +player1.getWin().toString());
 		if (recording) {
@@ -438,6 +464,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		} else {
 			reset();
 		}
+		
 		return;
 	}
 

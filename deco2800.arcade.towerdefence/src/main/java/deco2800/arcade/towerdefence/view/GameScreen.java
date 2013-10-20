@@ -2,6 +2,10 @@ package deco2800.arcade.towerdefence.view;
 
 import static com.badlogic.gdx.graphics.Color.*;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -11,6 +15,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -27,6 +32,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.towerdefence.controller.TowerDefence;
+import deco2800.arcade.towerdefence.model.GridObject;
 
 /* GameScreen is where the game will take place
  * There are many buttons on the HUD for selecting different towers, etc.
@@ -391,5 +397,44 @@ public class GameScreen implements Screen {
 		costBarRegion = barsAtlas.findRegion("Orange_Bar");
 		penetrationBarRegion = barsAtlas.findRegion("Purple_Bar");
 		armorBarRegion = barsAtlas.findRegion("White_Bar");
+	}
+	// Methods
+	/**
+	 * Create List of sprites from frame filenames with set rotation.
+	 * @param object
+	 * @param filenames
+	 * @param rotation
+	 */
+	public List<Sprite> spriteBuild(GridObject object, List<String> filenames){
+		
+		List<Sprite> builtSprites = new ArrayList<Sprite>();
+		// Iterate over the list of filenames
+		for (int i=0; i<filenames.size();i++){
+			Texture texture = new Texture(Gdx.files.internal(filenames.get(i)));
+			Sprite sprite = new Sprite(texture);
+			sprite.setPosition(object.position().x, object.position().y);
+			sprite.setRotation(object.rotation());
+			builtSprites.add(sprite);
+		}
+		return builtSprites;
+		
+	}
+	
+	/**
+	 * Draw sprites to the screen.
+	 * @param sprites
+	 */
+	public void animate(List<Sprite> sprites) {
+		// Create an Iterator
+		Iterator<Sprite> sprIter = sprites.iterator();
+		// So long as there's more sprites in the animation
+		while (sprIter.hasNext()) {
+			// Get the next frame
+			Sprite currentFrame = sprIter.next();
+			batch.begin();
+			currentFrame.draw(batch);
+			batch.end();
+		}
+
 	}
 }

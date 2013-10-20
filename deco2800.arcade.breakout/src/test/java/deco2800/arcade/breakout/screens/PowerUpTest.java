@@ -36,12 +36,12 @@
 // * 
 // * For this test package to run the following lines must be commented out:
 // * line 38 - Brick.java (initialiseBrickImgs())
-// * line 56 - Brick.java (initialiseBrickImgs())
-// * line 26 - DecreasePaddle.java (setSprite())
+// * line 61 - Brick.java (initialiseBrickImgs())
+// * line 31 - DecreasePaddle.java (setSprite())
 // * line 28 - IncreasePaddle.java (setSprite())
 // * line 25 - LifePowerup.java (setSprite())
-// * line 23 - SlowBall.java (setSprite())
-// * line 27 - IncreaseBallNo.java (setSprite())
+// * line 28 - SlowBall.java (setSprite())
+// * line 29 - IncreaseBallNo.java (setSprite())
 // * REMEMBER TO UNCOMMENT THE LINES ONCE TESTING IS DONE.
 // * REMEMBER TO COMMENT THIS FILE OUT AS WELL.
 // */

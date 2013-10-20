@@ -3,6 +3,8 @@ package deco2800.arcade.pacman;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
+import deco2800.arcade.pacman.Ghost.GhostState;
+
 /**
  * An abstract class for objects that can move and collide *
  */
@@ -90,6 +92,37 @@ public abstract class Mover {
 	}
 	
 	/**
+	 * Returns the next tile in the given direction
+	 * @param offset- the amount of tiles to offset from the currentTile
+	 */
+	private Tile nextTile(int offset, Dir dir){
+		int x = gameMap.getTilePos(currentTile).getX();
+		int y = gameMap.getTilePos(currentTile).getY();
+		switch(dir) {
+		case LEFT: x -= offset; break;
+		case RIGHT: x += offset; break;
+		case UP: y += offset; break;
+		case DOWN: y -= offset; break;
+		}
+		return gameMap.getGrid()[x][y];
+	}
+	/**
+	 * Returns the next tile in the given direction
+	 * @param offset- the amount of tiles to offset from the currentTile
+	 */
+	protected Tile tileInDir(int offset, Dir dir){
+		int x = gameMap.getTilePos(currentTile).getX();
+		int y = gameMap.getTilePos(currentTile).getY();
+		switch(dir) {
+		case LEFT: x -= offset; break;
+		case RIGHT: x += offset; break;
+		case UP: y += offset; break;
+		case DOWN: y -= offset; break;
+		}
+		return gameMap.getGrid()[x][y];
+	}
+	
+	/**
 	 * Checks whether the mover can turn
 	 */
 	public boolean canTurn(){
@@ -112,6 +145,17 @@ public abstract class Mover {
 	 * @param tile
 	 */
 	public void checkTile(Tile tile){
+		
+		if (this.getClass() == Ghost.class){
+			
+			if (tileInDir(1, Dir.DOWN) == gameMap.getGhostDoors().get(0) &&
+					((Ghost)this).getCurrentState() == GhostState.DEAD){
+				// Move ghost and revive!
+				((Ghost)this).setCurrentState(GhostState.CHASE);
+				currentTile = gameMap.getGhostStarts()[0];
+			}
+		}
+		
 		// handle teleporters
 		for (Tile t: gameMap.getAfterTeleports()) {
 			if (nextTile(currentTile, 1).equals(t)) {

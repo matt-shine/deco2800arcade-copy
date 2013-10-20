@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import deco2800.arcade.pacman.Ghost.GhostState;
+
 
 /**
  * A view for the Pacman game- separates out all LibGDX drawing functions 
@@ -32,7 +34,7 @@ public class PacView {
 	private static final int GHOST_SIDE_PIX = 14;
 	private TextureRegion[] pacmanFrames = new TextureRegion[MOVER_SPRITE_NUM];
 	private TextureRegion currentFrame; // for pacman animation
-	private static final int NUM_GHOSTS = 4;
+	private static final int NUM_GHOSTS = 5;
 	private TextureRegion[][] ghostFrames = new TextureRegion[NUM_GHOSTS][MOVER_SPRITE_NUM];
 	
 	private GameMap gameMap;
@@ -65,12 +67,13 @@ public class PacView {
 			}
 		}
 		//for ghosts
-		String colour;		
-		for (int i=0; i<4; i++) {
+		String colour;
+		for (int i=0; i<5; i++) {
 			switch(i) {
 			case 1: colour = "pink"; break;
 			case 2: colour = "teal"; break;
 			case 3: colour = "orange"; break;
+			case 4: colour = "scared"; break;
 			default: colour = "red"; break;
 			}
 			spriteSheet = new Texture(Gdx.files.internal(colour + "ghostmove_tran.png"));
@@ -198,11 +201,23 @@ public class PacView {
 	 */
 	private void drawGhost() {
 		//draw ghost facing the appropriate direction
-		// TODO NOTE CURRENTLY ONLY DRAWS RED GHOST WHICHEVER GHOST IT IS
+		if (blinky.getCurrentState() == GhostState.DEAD ||
+				blinky.getCurrentState() == GhostState.SCATTER){
+			batch.draw(ghostFrames[4][blinky.getSpritePos()], blinky.getDrawX(), 
+					blinky.getDrawY(), blinky.getWidth(), blinky.getHeight());
+		} else {
 		batch.draw(ghostFrames[0][blinky.getSpritePos()], blinky.getDrawX(), 
 				blinky.getDrawY(), blinky.getWidth(), blinky.getHeight());
-		batch.draw(ghostFrames[1][pinky.getSpritePos()], pinky.getDrawX(), 
-				pinky.getDrawY(), pinky.getWidth(), pinky.getHeight());
+		}
+		
+		if (pinky.getCurrentState() == GhostState.DEAD ||
+				pinky.getCurrentState() == GhostState.SCATTER){
+			batch.draw(ghostFrames[4][pinky.getSpritePos()], pinky.getDrawX(), 
+					pinky.getDrawY(), pinky.getWidth(), pinky.getHeight());
+		}else {
+			batch.draw(ghostFrames[1][pinky.getSpritePos()], pinky.getDrawX(), 
+					pinky.getDrawY(), pinky.getWidth(), pinky.getHeight());
+		}
 	}
 	
 	private void drawPacman() {

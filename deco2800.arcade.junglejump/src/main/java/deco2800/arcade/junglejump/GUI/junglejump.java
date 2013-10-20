@@ -363,7 +363,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			achievementTitleFont.draw(batch, "BACKSPACE for MENU", SCREENWIDTH-250, SCREENHEIGHT-30);
 			achievementTitleFont.draw(batch, ("Bananas remaining: " + (TOTAL_BANANAS - BANANAS_FOUND)), SCREENWIDTH-500, SCREENHEIGHT-10);
 			achievementTitleFont.draw(batch, ("Lives: " + lives), SCREENWIDTH-750, SCREENHEIGHT-10);
-			achievementTitleFont.draw(batch, ("Level " + LevelContainer.getCurrentWorld()+1 + " - " + (currentLevel.getIndex()+1)%5), SCREENWIDTH-750, SCREENHEIGHT-30);
+			achievementTitleFont.draw(batch, ("Level " + (LevelContainer.getCurrentWorld()+1) + " - " + (currentLevel.getIndex()+1)%6), SCREENWIDTH-750, SCREENHEIGHT-30);
 
 
 			batch.end();

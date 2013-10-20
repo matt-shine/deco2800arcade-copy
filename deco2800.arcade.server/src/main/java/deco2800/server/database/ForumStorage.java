@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Savepoint;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -90,15 +91,17 @@ public class ForumStorage {
 				+ " ADD CONSTRAINT fk_p_thread FOREIGN KEY (p_thread) REFERENCES parent_thread (pid) ON DELETE CASCADE";
 		/* Create database connection */
 		con = Database.getConnection();
+		Savepoint save = null;
 		/* Create tables */
 		try {
-			Statement st = con.createStatement();
 			con.setAutoCommit(false);
+			save = con.setSavepoint("forumStorageInit");
+			Statement st = con.createStatement();
 			ResultSet rs = con.getMetaData().getTables(null, null, "PARENT_THREAD", null);
 			if (!rs.next()) {
 				st.execute(createParentThreadTable);
-				st.execute("ALTER TABLE parent_thread DROP CONSTRAINT CHK_CATEGORY");
-				st.execute(this.getCategoryConstraint());
+				//st.execute("ALTER TABLE parent_thread DROP CONSTRAINT CHK_CATEGORY");
+				//st.execute(this.getCategoryConstraint());
 			}
 			rs.close();
 			rs = con.getMetaData().getTables(null, null, "CHILD_THREAD", null);
@@ -108,17 +111,20 @@ public class ForumStorage {
 			}
 			this.resetTables();
 			rs.close();
-			con.commit();
 			st.close();
+			this.addChkCategory();
 			this.insertParentThread("Test parent thread", "Very fist parent thread", 1, "Others", "Test#Parent thread");
 			this.insertChildThread("Very first child thread.", 1, 1);
 			this.insertThreadExamples();
 			//this.printAllThreads();
+			con.commit();
 			this.initialized = true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			try {
-				con.rollback();
+				if (save != null) {
+					con.rollback(save);
+				}
 			} catch (SQLException er) {
 				er.printStackTrace();
 				throw new DatabaseException("Fail to rollback: ", er);
@@ -1795,6 +1801,35 @@ public class ForumStorage {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Fail to drop constraint, " + e.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException("Fail to close connection, " + e.getMessage());
+			}
+		}
+		return;
+	}
+	
+	/**
+	 * Manually specify check category constraint on parent_thread table.
+	 * 
+	 * @throws DatabaseException 
+	 */
+	public void addChkCategory() throws DatabaseException {
+		String query = this.getCategoryConstraint();
+		if (this.checkConstraint("CHK_CATEGORY")) {
+			/* CHK_CATEGORY exist */
+			return;
+		}
+		Connection con = Database.getConnection();
+		try {
+			Statement st = con.createStatement();
+			st.execute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Fail to add CHK_CATEGORY constraint, " + e.getMessage());
 		} finally {
 			try {
 				con.close();

@@ -78,8 +78,6 @@ public class SnakeLadder extends GameClient {
 	private BitmapFont font;
 	public TextButton diceButton;
 	public String statusMessage;
-	private Dice dice;
-	private Dice diceAI;
 	private int turn=0;
 	private HashMap<String,RuleMapping> ruleMapping = new HashMap<String,RuleMapping>();
 	public HighscoreClient player1;

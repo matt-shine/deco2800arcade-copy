@@ -12,6 +12,8 @@ import deco2800.arcade.snakeLadder.SnakeLadder;
 import deco2800.arcade.snakeLadderGameState.*;
 import deco2800.arcade.snakeLadderModel.*;
 import deco2800.arcade.snakeLadderRulePlugin.ScoreRule;
+import deco2800.arcade.snakeLadderRulePlugin.StopRule;
+import deco2800.arcade.snakeLadderRulePlugin.ThrowDiceRule;
 
 public class RuleExcutingTest {
 
@@ -100,6 +102,30 @@ public class RuleExcutingTest {
                 assertEquals(context.getturns(),0);
                 //transit to moving state
                 assertTrue(context.gameState instanceof MovingState);
+        }
+        
+        @Test
+        public void stopRuleTest()
+        {
+        	iniContext();
+        	StopRule stopRule = new StopRule();
+        	stopRule.processStopRule(0, "!1", context);
+        	//check how many round it is stoped for this player
+        	assertEquals(context.gamePlayers[0].getStopForNumOfRound(),1);
+        	//check who's turn next
+        	assertEquals(context.getturns(),1);
+        	//check gamestate
+        	assertTrue(context.gameState instanceof WaitingState);
+        }
+        
+        @Test
+        public void throwDiceRuleTest()
+        {
+        	iniContext();
+        	ThrowDiceRule throwDiceRule = new ThrowDiceRule();
+        	throwDiceRule.excuteRules(0, "TD", context);
+        	assertEquals(context.getturns(),0);
+        	assertTrue(context.gameState instanceof WaitingState);
         }
 
 }

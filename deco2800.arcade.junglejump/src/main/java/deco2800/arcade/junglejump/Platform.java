@@ -102,7 +102,7 @@ public class Platform {
 			platformType = "banana";
 			this.width = 20;
 			this.height = 20;
-			this.xPos -= 20;
+			this.yPos -= 20;
 			break;
 		case '~': // Tunnel floor
 			platformType = "banana";
@@ -123,6 +123,10 @@ public class Platform {
 			platformType = "banana";
 			this.width = 50;
 			this.height = 50;
+			break;
+		case '_': // Building roof
+			platformType = "roof";
+			this.height = 40;
 			break;
 		default:
 			platformType = "branch";
@@ -246,21 +250,6 @@ public class Platform {
 			junglejump.killMonkey();
 		}
 		//this.active = true;
-	}
-	
-	/**
-	 * Sets the platform to no longer be active
-	 */
-	public void setInactive() {
-		this.active = false;
-	}
-	
-	/**
-	 * What happens each frame when platform is active.
-	 * Does nothing on standard platform
-	 */
-	public void onActive() {
-		return;
 	}
 	
 }

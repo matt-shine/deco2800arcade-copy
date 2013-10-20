@@ -23,13 +23,12 @@ public class BallController {
 		this.collisionBlocks.addAll(world.getHoleBlock());
 		this.collisionBlocks.addAll(world.getInvWallBlocks());
 		this.collisionBlocks.addAll(world.getCornerBlocks());
-		this.collisionBlocks.addAll(world.getHillBlocks());
+		this.collisionBlocks.addAll(world.getCapBlocks());
 		this.collisionBlocks.addAll(world.getWaterBlocks());
 		this.collisionBlocks.addAll(world.getTeleBlocks());
 		this.collisionBlocks.addAll(world.getDiagBlocks());
 		this.teleBlocks = world.getTeleBlocks();
-		this.openBlocks = world.getGroundBlocks();
-		
+		this.openBlocks = world.getGroundBlocks();		
 		
 	}
 
@@ -45,9 +44,7 @@ public class BallController {
 			Block1.BlockType blockType = block.getType();
 			Boolean boundColl = Intersector.overlapConvexPolygons(ballBounds,
 					block.getBounds());
-			if (boundColl) {
-
-				
+			if (boundColl) {				
 					
 				if (blockType == Block1.BlockType.WALL || blockType == Block1.BlockType.INVWALL) {
 						
@@ -62,12 +59,8 @@ public class BallController {
 							ball.bounceY = ball.bounceY == true ? false : true;
 							collisionY = true;
 						}
-					}
-					
-					
-					
-				}
-				
+					}					
+				}				
 				
 					
 				else if (blockType == Block1.BlockType.HOLE) {
@@ -125,40 +118,36 @@ public class BallController {
 						if (collisionX) collisionX = false;
 						if (collisionY) collisionY = false;
 						
-					 }	
-					
+					 }		
 					 
 					
 					else if (blockType == Block1.BlockType.WATER){
-						System.out.println("called");
-						//ball.position = new Vector2(world.holeStartX, world.holeStartY);
 						ball.setPosition(world.holeStartX, world.holeStartY);
 						ball.inWater = true;
 						
 						specialCol = true;
 						
-						if (collisionX) collisionX = false;
-						
+						if (collisionX) collisionX = false;						
 						if (collisionY) collisionY = false;
 						
 					}
 					
-					else if (blockType == Block1.BlockType.TELEPORTER){
-						
-						
-						
-						if(block.teleNumber%2 == 0){
-							destinationTele = (block.teleNumber - 1); 							
-						} else {
-							destinationTele = (block.teleNumber + 1);							
-						}
-						
-
-						for (Block1 teleBlock : teleBlocks) {
-							if (teleBlock.teleNumber == destinationTele){
-								ball.position = new Vector2(teleBlock.getPosition().x, teleBlock.getPosition().y);
+					else if (blockType == Block1.BlockType.TELEPORTER){							
+						if(block.teleNumber%2 == 1){
+							destinationTele = (block.teleNumber + 1); 
+							
+							for (Block1 teleBlock : teleBlocks) {
+								if (teleBlock.teleNumber == destinationTele){
+									ball.setPosition(teleBlock.getPosition().x, teleBlock.getPosition().y);
+								}
 							}
-						}
+						} 
+//						for (Block1 teleBlock : teleBlocks) {
+//							if (teleBlock.teleNumber == destinationTele){
+//								//ball.position = new Vector2(teleBlock.getPosition().x, teleBlock.getPosition().y);
+//								ball.setPosition(teleBlock.getPosition().x, teleBlock.getPosition().y);
+//							}
+//						}
 						specialCol = true;
 						
 						if (collisionX) collisionX = false;
@@ -170,8 +159,7 @@ public class BallController {
 				}
 
 			}
-		}
-		
+		}		
 
 		
 		for (Block1 groundBlock : openBlocks) {
@@ -189,32 +177,5 @@ public class BallController {
 	}
 	
 
-}
-
-//			if(blockType == Block1.BlockType.WALL){
-//				if(blockDir == Block1.FacingDir.NORTH){
-//					if(ball.getPosition().y >= (block.getPosition().y - 2.0f)){
-//						System.out.println("collision"); //detects
-//					}
-//				}
-//				if(blockDir == Block1.FacingDir.SOUTH){
-//					if(ball.getPosition().y <= (block.getPosition().y + 12.0f)){
-//						System.out.println("collides"); //detects
-//					}
-//				}
-//				if(blockDir == Block1.FacingDir.WEST){
-//					if(ball.getPosition().x <= (block.getPosition().x + 12.0f)){
-//						System.out.println("collision"); //detects
-//					}
-//				}
-//				if(blockDir == Block1.FacingDir.EAST){
-//					if(ball.getPosition().x >= (block.getPosition().x - 2.0f)){
-//						System.out.println("collides"); //detects
-//					}
-//				}
-//					//System.out.println("wall x is:"+block.getPosition().y);
-//					//System.out.println("ball x is:"+ball.getPosition().y);
-//				}
-			
-	
+}	
 	

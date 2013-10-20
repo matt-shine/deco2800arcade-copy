@@ -7,7 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 /*
- * This class draws the direction trajectory, overrides the stage/actor functions
+ * This class draws the direction trajectory from the ball, which the ball will travel in 
+ * This class overrides some stage/actor functions
  */
 
 public class Trajectory extends Actor {
@@ -19,8 +20,8 @@ public class Trajectory extends Actor {
 	
 	public Vector2 startVelocity = new Vector2();  
 	
-	public int trajectoryPoints = 5; //number of images
-	public float timeSeparation = 0.5f; //the size of separation of images
+	private int trajectoryPoints = 5; //number of images
+	private float timeSeparation = 0.5f; //the size of separation of images
 	
 	public Trajectory(DirectionValues control, Sprite trajectorySprite, World world){
 		this.controller = control; 
@@ -31,8 +32,8 @@ public class Trajectory extends Actor {
 	@Override //update
 	public void act(float delta){
 		super.act(delta); 
-		startVelocity.set(controller.power, 0f); 
-		startVelocity.rotate(controller.angle);
+		startVelocity.set(controller.getPower(), 0f); 
+		startVelocity.rotate(controller.getAngle());
 	}
 	
 	@Override //render the trajectory direction
@@ -41,7 +42,7 @@ public class Trajectory extends Actor {
 		//width and height of the trajectory image
 		float width = 8; 
 		float height = 8; 		
-		float timeSeparation = this.timeSeparation;
+		float timeSep = this.timeSeparation;
 		//loop through and draw the trajectory images
 		for(int i = 0; i < trajectoryPoints; i++){
 			//get the x and y positions to draw the trajectory
@@ -50,9 +51,9 @@ public class Trajectory extends Actor {
 			
 			//don't draw the first image (under ball)
 			if(i != 0) {
-				batch.draw(trajectorySprite, (x-6), (y-6), width, height);
+				batch.draw(trajectorySprite, (x-8), (y-8), width, height);
 			}			
-			t += timeSeparation;
+			t += timeSep;
 		}
 	}
 	//get the ball's current position

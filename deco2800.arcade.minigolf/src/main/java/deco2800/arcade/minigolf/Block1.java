@@ -105,19 +105,19 @@ public class Block1 {
 		case INVWALL:
 			switch(dir){
 			case SOUTH:
-				coords = new float[] {SIZE/4,0, SIZE/4, SIZE/6, SIZE, 
-						SIZE/6, SIZE, 0};					
+				coords = new float[]  {SIZE/4,0, SIZE/4, SIZE/32, SIZE, 
+					      SIZE/32, SIZE, 0};
 				break;
 			case NORTH:
-				coords = new float[] {SIZE/4, SIZE, SIZE/4, 5*(SIZE/6),  SIZE,
-						5*(SIZE/6), SIZE, SIZE};					
+				coords = new float[] {SIZE/4, SIZE, SIZE/4, 31*(SIZE/32),  SIZE,
+					      31*(SIZE/32), SIZE, SIZE};
 				break;
 			case WEST:
-				coords = new float[] {0, 0, SIZE/6, 0, 0, 
-						3*(SIZE/4), SIZE/6, 3*(SIZE/4)};
+				coords = new float[] {0, 0, SIZE/32, 0, 0, 
+					      3*(SIZE/4), SIZE/32, 3*(SIZE/4)};
 				break;					
 			case EAST:
-				coords = new float[] {SIZE, 0, 5*(SIZE/6), 0, 5*(SIZE/6), 3*(SIZE/4),
+				coords = new float[] {SIZE, 0, 31*(SIZE/32), 0, 31*(SIZE/32), 3*(SIZE/4),
 						SIZE, 3*(SIZE/4)};
 				break;
 			default:

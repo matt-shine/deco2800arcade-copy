@@ -9,7 +9,6 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.ArcadeSystem;
 import com.badlogic.gdx.Screen;
 
-
 /* main game class, sets the screens to be displayed */
 
 @ArcadeGame(id = "MiniGolf")
@@ -24,7 +23,7 @@ public class MiniGolf extends GameClient {
 	public MiniGolf(Player player, NetworkClient network){
 		super(player, network); 
 		this.playerName = player.getUsername();
-		
+		this.incrementAchievement("minigolf.360");
 	}
 	
 	
@@ -33,19 +32,17 @@ public class MiniGolf extends GameClient {
 	
 	
 		this.getOverlay().setListeners(new Screen() {
-			
+
 			@Override
 			public void dispose() {
-			
 			}
 
 			@Override
 			public void hide() {
 			}
-			
+
 			@Override
 			public void pause() {
-			
 			}
 
 			@Override
@@ -69,7 +66,7 @@ public class MiniGolf extends GameClient {
 		hole = new GameScreen(this, 1);
 		setScreen(menu);
 		
-		this.incrementAchievement("minigolf.360");
+		
 		
 	}	
 		
@@ -119,7 +116,7 @@ public class MiniGolf extends GameClient {
 	private static final Game game;
 	static {
 		game = new Game();
-		game.id = "MiniGolf";
+		game.id = "minigolf";
 		game.name = "MiniGolf";
 		game.description = "Search for buried treasure";
 	}

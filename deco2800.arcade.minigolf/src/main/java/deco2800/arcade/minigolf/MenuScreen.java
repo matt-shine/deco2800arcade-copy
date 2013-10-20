@@ -50,7 +50,6 @@ public class MenuScreen implements Screen, InputProcessor {
 	
 	
 	public MenuScreen(MiniGolf game, boolean firstCall){
-		
 		this.fadeInOut = 0;
 		this.fadeCopy = -0.1f;
 		if(firstCall) this.splashYes = true;
@@ -108,12 +107,14 @@ public class MenuScreen implements Screen, InputProcessor {
 			splashBGSprite.draw(splashBatch);
 			
 			if((fadeInOut < 1) && (fadeInOut > fadeCopy)) {
+				System.out.println(fadeInOut);
 				fadeCopy = fadeInOut;
 				fadeInOut += 0.005;
 				if(fadeInOut >= 1) fadeInOut = 1;			
 			
 			} else {
 				if(fadeInOut <= 0) splashYes = false;
+				System.out.println(fadeInOut);
 				fadeInOut -= 0.005;
 				if(fadeInOut <= 0){ splashYes = false; fadeInOut = 0;}
 			

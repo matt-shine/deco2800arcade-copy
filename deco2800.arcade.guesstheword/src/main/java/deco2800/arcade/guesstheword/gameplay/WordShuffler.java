@@ -38,7 +38,7 @@ public class WordShuffler {
 		 return solutionArray;
 	}
 	
-	  // Implementing Fisher–Yates shuffle
+	  // Implementing Fisher-Yates shuffle
 	  private void shuffleWord(String[] ar)
 	  {
 	    Random rnd = new Random();

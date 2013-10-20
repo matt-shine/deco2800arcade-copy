@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import deco2800.arcade.client.ArcadeInputMux;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,11 +93,13 @@ final class MenuScreen implements Screen {
 
 	@Override
 	public void hide() {
+        ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(stage);
+		//Gdx.input.setInputProcessor(stage);
+        ArcadeInputMux.getInstance().addProcessor(stage);
 	}
 
 	@Override

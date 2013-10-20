@@ -34,39 +34,29 @@ public class MiniGolf extends GameClient {
 		this.getOverlay().setListeners(new Screen() {
 
 			@Override
-			public void dispose() {
-			hole.dispose();
-			menu.dispose();
-			
-			}
-
-			@Override
 			public void hide() {
 			hole.gamePaused = false;
 			}
-
-			@Override
-			public void pause() {
 			
-			}
-
-			@Override
-			public void render(float arg0) {
-			}
-
-			@Override
-			public void resize(int arg0, int arg1) {
-			}
-
-			@Override
-			public void resume() {
-			}
-
 			@Override
 			public void show() {
 			hole.gamePaused = true;
 			}
 			
+			@Override
+			public void pause() {}
+
+			@Override
+			public void render(float arg0) {}
+
+			@Override
+			public void resize(int arg0, int arg1) {}
+
+			@Override
+			public void resume() {}
+
+			@Override
+			public void dispose() {}
         });
 		menu = new MenuScreen(this, this.firstCall);
 		hole = new GameScreen(this, 1);

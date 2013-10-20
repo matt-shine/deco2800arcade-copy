@@ -14,17 +14,19 @@ public class Level1EnemyPattern extends BulletPattern {
 	private static Texture image = new Texture(Gdx.files.internal("images/bullets/bullet_2.png"));
 	
 	private PlayerShip player;
+	private int multiplier;
 	
-	public Level1EnemyPattern(Ship emitter, PlayerShip player, PlayScreen screen) {
+	public Level1EnemyPattern(Ship emitter, PlayerShip player, PlayScreen screen, int difficulty) {
 		super(emitter, screen);
-		interval = 3f;
+		interval = (float) (2f/(difficulty*0.5));
 		this.player = player;
+		this.multiplier = difficulty;
 	}
 	
 	public void fire(float lag, float x, float y) {
 		EnemyBullet bullet;
 		for(int i=0;i<360;i+=36) {
-			bullet = new EnemyBullet(Affinity.ENEMY, 10, emitter, player, new Vector2(x,y), i, image);
+			bullet = new EnemyBullet(Affinity.ENEMY, 5*multiplier, emitter, player, new Vector2(x,y), i, image);
 			screen.addBullet(bullet);
 		}
 	}

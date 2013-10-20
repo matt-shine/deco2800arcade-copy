@@ -20,6 +20,7 @@ import deco2800.server.database.DatabaseException;
 import deco2800.server.database.ReplayStorage;
 import deco2800.server.database.GamePath;
 import deco2800.server.listener.CommunicationListener;
+import deco2800.server.listener.CasinoListener;
 import deco2800.server.listener.LobbyListener;
 import deco2800.server.listener.MultiplayerListener;
 import deco2800.server.listener.ReplayListener;
@@ -276,6 +277,7 @@ public class ArcadeServer {
         Protocol.register(server.getKryo());
         server.addListener(new ConnectionListener(connectedUsers));
         server.addListener(new CreditListener());
+		server.addListener(new CasinoListener());
         server.addListener(new GameListener());
         server.addListener(new AchievementListener());
         server.addListener(new ReplayListener());

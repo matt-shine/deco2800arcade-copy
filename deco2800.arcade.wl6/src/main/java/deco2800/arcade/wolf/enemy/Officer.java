@@ -10,7 +10,6 @@ public class Officer extends Enemy {
         super(uid);
 
         setPain(true);
-        setDamage(11);
         setStateChangeTime(0.1f);
         setRepeatShootChance(0);
         

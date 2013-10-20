@@ -13,11 +13,9 @@ public class Mutant extends Enemy {
         super(uid);
 
         setPain(true);
-        setDamage(18);
         setRepeatShootChance(0.7f);
         setStateChangeTime(1f);
         this.setShootChance(1);
-        
         initialiseFromEnemyData(d);
         
     }
@@ -37,6 +35,5 @@ public class Mutant extends Enemy {
         // Should never get here
         return STARTING_HEALTH_1;
     }
-
 
 }

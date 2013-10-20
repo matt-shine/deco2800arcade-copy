@@ -10,7 +10,7 @@ public class Player extends Mob {
 
     public static final float SPEED = 0.05f;
 
-    
+
     private int STARTING_HEALTH = 100;
     private int points = 0;
     private int currentGun = 1;
@@ -19,9 +19,9 @@ public class Player extends Mob {
     private HashSet<KEY_TYPE> keys = new HashSet<KEY_TYPE>();
     private static final Vector2 superMagicalSecretFloorEntranceThatIsntDeclaredInTheMapFilesForGodKnowsWhy = new Vector2(10, 51);
     private float gunTimer = 0;
-    
-    
-	public Player(int uid) {
+
+
+    public Player(int uid) {
         super(uid);
         setHealth(STARTING_HEALTH);
         guns.add(0);
@@ -37,32 +37,32 @@ public class Player extends Mob {
         //no super call
     }
 
-    
-    
+
+
     @Override
     public void tick(GameModel model) {
-    	
-    	this.gunTimer -= model.delta();
-    	
+
+        this.gunTimer -= model.delta();
+
         //detect the end of a level
         Vector2 blockPos = getBlockPos();
         int neighbours = 0;
         if (model.getMap().getTerrainAt((int) blockPos.x + 1, (int) blockPos.y) == WL6Meta.ELEVATOR) {
-        	neighbours++;
+            neighbours++;
         }
-        
+
         if (model.getMap().getTerrainAt((int) blockPos.x - 1, (int) blockPos.y) == WL6Meta.ELEVATOR) {
-        	neighbours++;
+            neighbours++;
         }
-        
+
         if (model.getMap().getTerrainAt((int) blockPos.x, (int) blockPos.y + 1) == WL6Meta.ELEVATOR) {
-        	neighbours++;
+            neighbours++;
         }
-        
+
         if (model.getMap().getTerrainAt((int) blockPos.x, (int) blockPos.y - 1) == WL6Meta.ELEVATOR) {
-        	neighbours++;
+            neighbours++;
         }
-        
+
         if (neighbours >= 3) {
         	//if we're standing on a secret elevator, go to secret floor, also if we're if this
         	//magic position (10, 51) because the secret elevator isn't in the map file on the first level
@@ -110,98 +110,89 @@ public class Player extends Mob {
     }
     
     
-    
     public void addHealth(int health, boolean overheal) {
         setHealth(Math.min(this.getHealth() + health, overheal ? 150 : 100));
     }
 
 
-	public int getPoints() {
-		return points;
-	}
+    public int getPoints() {
+        return points;
+    }
 
 
-	public void setPoints(int points) {
-		this.points = points;
-	}
+    public void setPoints(int points) {
+        this.points = points;
+    }
 
 
-	public void addPoints(int points) {
-		this.points += points;
-	}
+    public void addPoints(int points) {
+        this.points += points;
+    }
 
 
-	public int getCurrentGun() {
-		return currentGun;
-	}
+    public int getCurrentGun() {
+        return currentGun;
+    }
 
 
-	public void setCurrentGun(int currentGun) {
-		if (this.guns.contains(currentGun)) {
-			this.currentGun = currentGun;
-		}
-	}
+    public void setCurrentGun(int currentGun) {
+        if (this.guns.contains(currentGun)) {
+            this.currentGun = currentGun;
+        }
+    }
 
 
-	public int getAmmo() {
-		return ammo;
-	}
+    public int getAmmo() {
+        return ammo;
+    }
 
 
-	public void setAmmo(int ammo) {
-		if (this.ammo == 0 && ammo > 0) {
-			if (guns.contains(3)) {
-				this.currentGun = 3;
-			} else if (guns.contains(2)) {
-				this.currentGun = 2;
-			} else {
-				this.currentGun = 1;
-			}
-		}
-		this.ammo = Math.min(ammo, 99);
-		if (ammo <= 0) {
-			this.ammo = 0;
-			this.setCurrentGun(0);
-		}
-	}
+    public void setAmmo(int ammo) {
+        if (this.ammo == 0 && ammo > 0) {
+            if (guns.contains(3)) {
+                this.currentGun = 3;
+            } else if (guns.contains(2)) {
+                this.currentGun = 2;
+            } else {
+                this.currentGun = 1;
+            }
+        }
+        this.ammo = Math.min(ammo, 99);
+        if (ammo <= 0) {
+            this.ammo = 0;
+            this.setCurrentGun(0);
+        }
+    }
 
-	public void addAmmo(int ammo) {
-		setAmmo(this.ammo + ammo);
-	}
-	
-	
-	public void addGun(int gun) {
-		
-		if (!guns.contains(gun)) {
-			this.currentGun = gun;
-		}
-		
-		this.guns.add(gun);
-		
-	}
-	
-	public HashSet<Integer> getGuns() {
-		return new HashSet<Integer>(guns);
-	}
-	
-	public void setGuns(HashSet<Integer> newGuns) {
-		guns = new HashSet<Integer>(newGuns);
-	}
-	
-	public void addKey(KEY_TYPE k) {
-		keys.add(k);
-	}
-	
-	public boolean hasKey(KEY_TYPE k) {
-		return keys.contains(k);
-	}
+    public void addAmmo(int ammo) {
+        setAmmo(this.ammo + ammo);
+    }
 
-    @Override
-    public void doDamage(GameModel gameModel) {
-        // FIXME this is currently doing damage to yourself :P
-        float dist = this.getPos().dst(gameModel.getPlayer().getPos());
-        int damage = calcDamage((int)dist);
-        gameModel.getPlayer().takeDamage(gameModel, damage);
+
+    public void addGun(int gun) {
+
+        if (!guns.contains(gun)) {
+            this.currentGun = gun;
+        }
+
+        this.guns.add(gun);
+
+    }
+
+    public HashSet<Integer> getGuns() {
+        return new HashSet<Integer>(guns);
+    }
+
+    public void setGuns(HashSet<Integer> newGuns) {
+        guns = new HashSet<Integer>(newGuns);
+    }
+
+    public void addKey(KEY_TYPE k) {
+        keys.add(k);
+    }
+
+    public boolean hasKey(KEY_TYPE k) {
+        return keys.contains(k);
     }
 
     @Override
@@ -247,9 +238,9 @@ public class Player extends Mob {
 
         return damage;
     }
-	
 
-    
+
+
 }
 
 

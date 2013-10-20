@@ -13,10 +13,9 @@ public class FakeHitler extends Enemy {
         super(uid);
 
         setPain(false);
-        setDamage(3);
         setRepeatShootChance(0.95f);
         setStateChangeTime(0.1f);
-        
+
         initialiseFromEnemyData(d);
         
     }

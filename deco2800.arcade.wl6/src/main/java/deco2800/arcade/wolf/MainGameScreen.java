@@ -65,12 +65,10 @@ public class MainGameScreen implements Screen {
 			model.endTick();
 			
 		}
-		
-		
+
+
 		b.draw(this.debugMode);
-		
-		ui.draw(this.model);
-		
+        ui.draw(this.model);
 	}
 
 	@Override

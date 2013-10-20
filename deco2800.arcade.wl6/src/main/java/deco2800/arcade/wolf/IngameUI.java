@@ -2,6 +2,7 @@ package deco2800.arcade.wolf;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import deco2800.arcade.wolf.WL6Meta.KEY_TYPE;
 
 public class IngameUI extends Stage {
@@ -46,21 +48,37 @@ public class IngameUI extends Stage {
     private void setupUI() {
 
         Label epiL = new Label("Episode", skin, "small");
+        epiL.setAlignment(Align.center);
         Label lvlL = new Label("Level", skin, "small");
+        lvlL.setAlignment(Align.center);
         Label dffL = new Label("Difficulty", skin, "small");
+        dffL.setAlignment(Align.center);
         Label scoreL = new Label("Score", skin, "small");
+        scoreL.setAlignment(Align.center);
         Label healthL = new Label("Health", skin, "small");
+        healthL.setAlignment(Align.center);
         Label ammoL = new Label("Ammo", skin, "small");
+        ammoL.setAlignment(Align.center);
         Label keysL = new Label("Keys", skin, "small");
+        keysL.setAlignment(Align.center);
         Label gunL = new Label("Gun", skin, "small");
+        gunL.setAlignment(Align.center);
         epi = new Label("null", skin, "small");
+        epi.setAlignment(Align.center);
         lvl = new Label("null", skin, "small");
+        lvl.setAlignment(Align.center);
         difficulty = new Label("", skin, "small");
+        difficulty.setAlignment(Align.center);
         score = new Label("null", skin, "small");
+        score.setAlignment(Align.center);
         health = new Label("null", skin, "small");
+        health.setAlignment(Align.center);
         ammo = new Label("null", skin, "small");
+        ammo.setAlignment(Align.center);
         keys = new Label("null", skin, "small");
+        keys.setAlignment(Align.center);
         gun = new Label("null", skin, "small");
+        gun.setAlignment(Align.center);
 
         bottom = new Table();
         bottom.setPosition(640, 50);
@@ -88,7 +106,8 @@ public class IngameUI extends Stage {
     
     
     public void draw(GameModel game) {
-    	super.draw();
+        //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        super.draw();
 
         epi.setText(game.getChapter());
         lvl.setText(game.getLevelInChapter());
@@ -98,8 +117,6 @@ public class IngameUI extends Stage {
         ammo.setText("" + game.getPlayer().getAmmo());
         keys.setText("" + (game.getPlayer().hasKey(KEY_TYPE.GOLD) ? "Gold " : "") + (game.getPlayer().hasKey(KEY_TYPE.SILVER) ? "Silver " : ""));
         gun.setText("" + game.getPlayer().getCurrentGun());
-
-        bottom.setBackground(skin.getDrawable("background"));
     }
 
 

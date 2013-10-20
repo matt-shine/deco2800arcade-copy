@@ -780,8 +780,11 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	 * Moves all the pieces to their correct places on the board
 	 */
 	void movePieceGraphic() {
+		
+		ArrayList<Piece> whiteGraveyard = board.getGraveyard(false);
+		ArrayList<Piece> blackGraveyard = board.getGraveyard(true);
 
-		for (FixedSizeList<Piece> row : board.Board_State) {
+		for (FixedSizeList<Piece> row : board.getBoardState()) {
 			for (Piece piece : row) {
 				if (piece.equals(board.whiteRook1)) {
 					int[] correctPos = board.findPiece(board.whiteRook1);
@@ -918,7 +921,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		}
 
 		int blackCount = 0;
-		for (Piece piece : board.blackGraveyard) {
+		for (Piece piece : blackGraveyard) {
 			if (piece.equals(board.blackRook1)) {
 				blackCount++;
 				blackRook1Pos[0] = (horizOff - 59);
@@ -927,7 +930,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackRook1Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackRook1)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackRook1)) % (59 * 8));
 			} else if (piece.equals(board.blackKnight1)) {
 				blackCount++;
 				blackKnight1Pos[0] = (horizOff - 59);
@@ -936,7 +939,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackKnight1Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard
+						+ ((59 * blackGraveyard
 								.indexOf(board.blackKnight1)) % (59 * 8));
 			} else if (piece.equals(board.blackBishop1)) {
 				blackCount++;
@@ -946,7 +949,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackBishop1Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard
+						+ ((59 * blackGraveyard
 								.indexOf(board.blackBishop1)) % (59 * 8));
 			} else if (piece.equals(board.blackQueen)) {
 				blackCount++;
@@ -956,7 +959,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackQueenPos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackQueen)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackQueen)) % (59 * 8));
 			} else if (piece.equals(board.blackKing)) {
 				blackCount++;
 				blackKingPos[0] = (horizOff - 59);
@@ -965,7 +968,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackKingPos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackKing)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackKing)) % (59 * 8));
 			} else if (piece.equals(board.blackBishop2)) {
 				blackCount++;
 				blackBishop2Pos[0] = (horizOff - 59);
@@ -974,7 +977,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackBishop2Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard
+						+ ((59 * blackGraveyard
 								.indexOf(board.blackBishop2)) % (59 * 8));
 			} else if (piece.equals(board.blackKnight2)) {
 				blackCount++;
@@ -984,7 +987,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackKnight2Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard
+						+ ((59 * blackGraveyard
 								.indexOf(board.blackKnight2)) % (59 * 8));
 			} else if (piece.equals(board.blackRook2)) {
 				blackCount++;
@@ -994,7 +997,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackRook2Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackRook2)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackRook2)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn1)) {
 				blackCount++;
 				blackPawn0Pos[0] = (horizOff - 59);
@@ -1003,7 +1006,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackPawn0Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn1)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackPawn1)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn2)) {
 				blackCount++;
 				blackPawn1Pos[0] = (horizOff - 59);
@@ -1012,7 +1015,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackPawn1Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn2)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackPawn2)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn3)) {
 				blackCount++;
 				blackPawn2Pos[0] = (horizOff - 59);
@@ -1021,7 +1024,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackPawn2Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn3)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackPawn3)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn4)) {
 				blackCount++;
 				blackPawn3Pos[0] = (horizOff - 59);
@@ -1030,7 +1033,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackPawn3Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn4)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackPawn4)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn5)) {
 				blackCount++;
 				blackPawn4Pos[0] = (horizOff - 59);
@@ -1039,7 +1042,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackPawn4Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn5)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackPawn5)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn6)) {
 				blackCount++;
 				blackPawn5Pos[0] = (horizOff - 59);
@@ -1048,7 +1051,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackPawn5Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn6)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackPawn6)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn7)) {
 				blackCount++;
 				blackPawn6Pos[0] = (horizOff - 59);
@@ -1057,7 +1060,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackPawn6Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn7)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackPawn7)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn8)) {
 				blackCount++;
 				blackPawn7Pos[0] = (horizOff - 59);
@@ -1066,11 +1069,11 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackPawn7Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn8)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackPawn8)) % (59 * 8));
 			}
 		}
 		int whiteCount = 0;
-		for (Piece piece : board.whiteGraveyard) {
+		for (Piece piece : whiteGraveyard) {
 			if (piece.equals(board.whiteRook1)) {
 				whiteCount++;
 				whiteRook1Pos[0] = (horizOff + 512);
@@ -1079,7 +1082,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whiteRook1Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whiteRook1)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whiteRook1)) % (59 * 8));
 			} else if (piece.equals(board.whiteKnight1)) {
 				whiteCount++;
 				whiteKnight1Pos[0] = (horizOff + 512);
@@ -1088,7 +1091,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whiteKnight1Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard
+						+ ((59 * whiteGraveyard
 								.indexOf(board.whiteKnight1)) % (59 * 8));
 			} else if (piece.equals(board.whiteBishop1)) {
 				whiteCount++;
@@ -1098,7 +1101,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whiteBishop1Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard
+						+ ((59 * whiteGraveyard
 								.indexOf(board.whiteBishop1)) % (59 * 8));
 			} else if (piece.equals(board.whiteQueen)) {
 				whiteCount++;
@@ -1108,7 +1111,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whiteQueenPos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whiteQueen)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whiteQueen)) % (59 * 8));
 			} else if (piece.equals(board.whiteKing)) {
 				whiteCount++;
 				whiteKingPos[0] = (horizOff + 512);
@@ -1117,7 +1120,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whiteKingPos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whiteKing)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whiteKing)) % (59 * 8));
 			} else if (piece.equals(board.whiteBishop2)) {
 				whiteCount++;
 				whiteBishop2Pos[0] = (horizOff + 512);
@@ -1126,7 +1129,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whiteBishop2Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard
+						+ ((59 * whiteGraveyard
 								.indexOf(board.whiteBishop2)) % (59 * 8));
 			} else if (piece.equals(board.whiteKnight2)) {
 				whiteCount++;
@@ -1136,7 +1139,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whiteKnight2Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard
+						+ ((59 * whiteGraveyard
 								.indexOf(board.whiteKnight2)) % (59 * 8));
 			} else if (piece.equals(board.whiteRook2)) {
 				whiteCount++;
@@ -1146,7 +1149,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whiteRook2Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whiteRook2)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whiteRook2)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn1)) {
 				whiteCount++;
 				whitePawn0Pos[0] = (horizOff + 512);
@@ -1155,7 +1158,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whitePawn0Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn1)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whitePawn1)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn2)) {
 				whiteCount++;
 				whitePawn1Pos[0] = (horizOff + 512);
@@ -1164,7 +1167,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whitePawn1Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn2)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whitePawn2)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn3)) {
 				whiteCount++;
 				whitePawn2Pos[0] = (horizOff + 512);
@@ -1173,7 +1176,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whitePawn2Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn3)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whitePawn3)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn4)) {
 				whiteCount++;
 				whitePawn3Pos[0] = (horizOff + 512);
@@ -1182,7 +1185,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whitePawn3Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn4)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whitePawn4)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn5)) {
 				whiteCount++;
 				whitePawn4Pos[0] = (horizOff + 512);
@@ -1191,7 +1194,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whitePawn4Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn5)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whitePawn5)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn6)) {
 				whiteCount++;
 				whitePawn5Pos[0] = (horizOff + 512);
@@ -1200,7 +1203,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whitePawn5Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn6)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whitePawn6)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn7)) {
 				whiteCount++;
 				whitePawn6Pos[0] = (horizOff + 512);
@@ -1209,7 +1212,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whitePawn6Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn7)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whitePawn7)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn8)) {
 				whiteCount++;
 				whitePawn7Pos[0] = (horizOff + 512);
@@ -1218,7 +1221,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whitePawn7Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn8)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whitePawn8)) % (59 * 8));
 			}
 		}
 	}

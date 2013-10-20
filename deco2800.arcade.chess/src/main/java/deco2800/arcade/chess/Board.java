@@ -5,19 +5,12 @@ import java.util.*;
 import deco2800.arcade.chess.pieces.*;
 
 public class Board {
-	List<Piece> pieces = new ArrayList<Piece>();
-	public FixedSizeList<FixedSizeList<Piece>> Board_State;
+	private FixedSizeList<FixedSizeList<Piece>> boardState;
 	// used to check if moves will move you into check without altering actual
 	// board
-	ArrayList<Piece> whiteGraveyard, blackGraveyard;
-	// stores all moves pieces have made
-	ArrayList<int[]> moves;
-	ArrayList<Piece> pieceMoved;
+	private ArrayList<Piece> whiteGraveyard, blackGraveyard;
 	// true = blacks turn, false = whites turn
 	private boolean turn;
-	// true if respective team is in checkmate
-	boolean whiteCheckmate;
-	boolean blackCheckmate;
 	
 	// Initialise pieces
 	public Pawn whitePawn1, whitePawn2, whitePawn3, whitePawn4;
@@ -31,27 +24,20 @@ public class Board {
 	public Queen whiteQueen, blackQueen;
 	public Null nullPiece;
 
-	String NEWLINE = System.getProperty("line.separator");
-	boolean blackCheck, whiteCheck;
 
 	/**
 	 * Initialises board to the default setup.
 	 */
 	public Board() {
 		turn = false;
-		Board_State = new FixedSizeList<FixedSizeList<Piece>>();
-		moves = new ArrayList<int[]>();
-		pieceMoved = new ArrayList<Piece>();
+		boardState = new FixedSizeList<FixedSizeList<Piece>>();
 		blackGraveyard = new ArrayList<Piece>();
 		whiteGraveyard = new ArrayList<Piece>();
 		nullPiece = new Null(true);
 
-		blackCheck = false;
-		whiteCheck = false;
-
 		// Add 8 rows to the board
 		for (int a = 0; a < 8; a++) {
-			Board_State.add(a, new FixedSizeList<Piece>());
+			boardState.add(a, new FixedSizeList<Piece>());
 		}
 		initialisePieces();
 		addPieces();
@@ -59,11 +45,22 @@ public class Board {
 		// Add null values to all other squares
 		FixedSizeList<Piece> row;
 		for (int c = 2; c < 6; c++) {
-			row = Board_State.get(c);
+			row = boardState.get(c);
 			for (int d = 0; d < 8; d++) {
 				row.add(d, nullPiece);
 			}
 		}
+	}
+	
+	public FixedSizeList<FixedSizeList<Piece>> getBoardState() {
+		return boardState;
+	}
+	
+	public ArrayList<Piece> getGraveyard(boolean team) {
+		if (team) {
+			return blackGraveyard;
+		}
+		return whiteGraveyard;
 	}
 
 	/**
@@ -175,16 +172,16 @@ public class Board {
 		int currenty = this.findPiece(piece)[1];
 		for (int[] moveTo : allowedMoves) {
 			Piece onSquare = this.getPiece(moveTo);
-			Board_State.get(moveTo[0]).add(moveTo[1], piece);
-			Board_State.get(currentx).add(currenty, nullPiece);
+			boardState.get(moveTo[0]).add(moveTo[1], piece);
+			boardState.get(currentx).add(currenty, nullPiece);
 			inCheck = this.checkForCheck(team);
 			if (inCheck) {
 				allowedMovesCopy.remove(index);
 				index--;
 			}
 			if (this.isNullPiece(onSquare)) {
-				Board_State.get(currentx).add(currenty, piece);
-				Board_State.get(moveTo[0]).add(moveTo[1], nullPiece);
+				boardState.get(currentx).add(currenty, piece);
+				boardState.get(moveTo[0]).add(moveTo[1], nullPiece);
 			} else {
 				onSquare.reActivate();
 				if (onSquare.getTeam()) {
@@ -192,8 +189,8 @@ public class Board {
 				} else {
 					whiteGraveyard.remove(onSquare);
 				}
-				Board_State.get(currentx).add(currenty, piece);
-				Board_State.get(moveTo[0]).add(moveTo[1], onSquare);
+				boardState.get(currentx).add(currenty, piece);
+				boardState.get(moveTo[0]).add(moveTo[1], onSquare);
 			}
 			index++;
 		}
@@ -244,7 +241,7 @@ public class Board {
 	public boolean occupiedSpace(int[] position) {
 		int x = position[0];
 		int y = position[1];
-		FixedSizeList<Piece> row = Board_State.get(x);
+		FixedSizeList<Piece> row = boardState.get(x);
 		Piece onSpace = row.get(y);
 
 		if (onSpace.getClass() == nullPiece.getClass()) {
@@ -265,7 +262,7 @@ public class Board {
 	public List<int[]> allowedMoves(Piece piece) {
 		int[] currentPos = findPiece(piece);
 
-		List<int[]> possibleMoves = piece.possibleMoves(currentPos, Board_State);
+		List<int[]> possibleMoves = piece.possibleMoves(currentPos, boardState);
 		
 		return possibleMoves;
 	}
@@ -323,24 +320,24 @@ public class Board {
 		 */
 		if (occupiedSpace(newPosition)) {
 			// Remove enemy piece on the newPosition
-			Piece onSquare = Board_State.get(x).get(y);
+			Piece onSquare = boardState.get(x).get(y);
 			onSquare.deActivate();
 
-			boolean temp = onSquare.getTeam() ? blackGraveyard.add(onSquare) : 
-													whiteGraveyard.add(onSquare);
 			
-			Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
-			Board_State.get(x).add(y, piece);
-			moves.add(newPosition);
-			pieceMoved.add(piece);
+			if (onSquare.getTeam()) {
+				blackGraveyard.add(onSquare);
+			} else {
+				whiteGraveyard.add(onSquare);
+			}
+			
+			boardState.get(oldPos[0]).add(oldPos[1], nullPiece);
+			boardState.get(x).add(y, piece);
 			checkPawnSwap(piece, turn);
 			this.nextTurn();
 			return true;
 		} else {
-			Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
-			Board_State.get(x).add(y, piece);
-			moves.add(newPosition);
-			pieceMoved.add(piece);
+			boardState.get(oldPos[0]).add(oldPos[1], nullPiece);
+			boardState.get(x).add(y, piece);
 			checkPawnSwap(piece, turn);
 			this.nextTurn();
 			return true;
@@ -409,7 +406,7 @@ public class Board {
 			whiteGraveyard.add(piece);
 		}
 		//replaceWith.reActivate();
-		Board_State.get(piecePos[0]).add(piecePos[1], replaceWith);
+		boardState.get(piecePos[0]).add(piecePos[1], replaceWith);
 		replaceWith.reActivate();
 	}
 
@@ -439,16 +436,16 @@ public class Board {
 				&& (newPosition[0] == kingSwapPos[0]) && (newPosition[1] == kingSwapPos[1])) {
 
 			// Move King to new position
-			Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
-			Board_State.get(x).add(y, piece);
+			boardState.get(oldPos[0]).add(oldPos[1], nullPiece);
+			boardState.get(x).add(y, piece);
 
 			// Move Rook to new position
 			Piece rook = piece.getTeam() ? blackRook2 : whiteRook2;
 			
-			Board_State.get(findPiece(rook)[0]).add(
+			boardState.get(findPiece(rook)[0]).add(
 					findPiece(rook)[1], nullPiece);
 					
-			Board_State.get(castleSwapPos[0]).add(castleSwapPos[1],
+			boardState.get(castleSwapPos[0]).add(castleSwapPos[1],
 					rook);
 			this.nextTurn();
 			return true;
@@ -466,7 +463,7 @@ public class Board {
 	 */
 	public int[] findPiece(Piece piece) {
 		for (int i = 0; i < 8; i++) {
-			FixedSizeList<Piece> row = Board_State.get(i);
+			FixedSizeList<Piece> row = boardState.get(i);
 			for (int j = 0; j < 8; j++) {
 				if (row.get(j).equals(piece)) {
 					int[] pos = { i, j };
@@ -494,7 +491,7 @@ public class Board {
 		List<Piece> activePieces = new ArrayList<Piece>();
 
 		for (int i = 0; i < 8; i++) {
-			FixedSizeList<Piece> row = Board_State.get(i);
+			FixedSizeList<Piece> row = boardState.get(i);
 			for (int j = 0; j < 8; j++) {
 				Piece onSquare = row.get(j);
 				if ((onSquare.getClass() != nullPiece.getClass())
@@ -530,12 +527,12 @@ public class Board {
 	}
 
 	public String toString() {
-		return Board_State.toString();
+		return boardState.toString();
 	}
 
 
 	public Piece getPiece(int[] pos) {
-		FixedSizeList<Piece> row = Board_State.get(pos[0]);
+		FixedSizeList<Piece> row = boardState.get(pos[0]);
 
 		return row.get(pos[1]);
 	}
@@ -744,7 +741,7 @@ public class Board {
 	public void addPieces() {
 		// Add white pieces to row 1
 
-		FixedSizeList<Piece> row = Board_State.get(0);
+		FixedSizeList<Piece> row = boardState.get(0);
 		row.add(0, whiteRook1);
 		row.add(1, whiteKnight1);
 		row.add(2, whiteBishop1);
@@ -755,7 +752,7 @@ public class Board {
 		row.add(7, whiteRook2);
 
 		// Add white pawns to row 2
-		row = Board_State.get(1);
+		row = boardState.get(1);
 		row.add(0, whitePawn1);
 		row.add(1, whitePawn2);
 		row.add(2, whitePawn3);
@@ -766,7 +763,7 @@ public class Board {
 		row.add(7, whitePawn8);
 
 		// Add black pieces to row 1
-		row = Board_State.get(7);
+		row = boardState.get(7);
 		row.add(0, blackRook1);
 		row.add(1, blackKnight1);
 		row.add(2, blackBishop1);
@@ -777,7 +774,7 @@ public class Board {
 		row.add(7, blackRook2);
 
 		// Add black pawns to row 2
-		row = Board_State.get(6);
+		row = boardState.get(6);
 		row.add(0, blackPawn1);
 		row.add(1, blackPawn2);
 		row.add(2, blackPawn3);

@@ -41,7 +41,7 @@ public class Platform {
 		this.yPos = pY;
 		this.active = false;
 		inactive = false;
-		moveRight = true;
+		moveRight = false;
 		platType = type;
 		setTexture(type);
 	}
@@ -245,9 +245,10 @@ public class Platform {
 		this.active = true;
 	}
 	
-	private void onActive() {
+	public void onActive() {
 		int moveSpeed = 2;
 		if(this.platType == 'J') {
+			
 			if(moveRight) {
 				this.xPos += moveSpeed;
 				moveCounter += moveSpeed;
@@ -255,10 +256,12 @@ public class Platform {
 				this.xPos -= moveSpeed;
 				moveCounter += moveSpeed;
 			}
+			
 			if(moveCounter > 500) {
 				moveCounter = 0;
 				moveRight = !moveRight;
 			}
+			
 			if(inactive) {
 				this.yPos -= 5;
 			}

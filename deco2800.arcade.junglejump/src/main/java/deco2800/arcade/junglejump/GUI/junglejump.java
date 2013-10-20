@@ -288,6 +288,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			batch.setProjectionMatrix(camera.combined);
 			shapeRenderer.setProjectionMatrix(camera.combined);
+			
 			if (movingLeft) {
 				monkeyX -= 2 * SPEED_MULTIPLIER;
 				monkeyRun--;
@@ -492,6 +493,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		int size = currentLevel.platformAmount();
 		for (int i = 0; i < size; i++) {
 			Platform p = currentLevel.getPlatforms().get(i);
+			p.onActive();
 			batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
 		}
 		batch.end();

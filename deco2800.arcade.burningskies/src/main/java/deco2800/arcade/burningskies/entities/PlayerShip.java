@@ -119,7 +119,7 @@ public class PlayerShip extends Ship {
     			velocity.x = maxVelocity;
     	}
     	
-    	decelShip(velocity, delta);
+    	decelShip(delta);
     	
     	//normalise our velocity
 //    	velocity.nor();
@@ -248,18 +248,30 @@ public class PlayerShip extends Ship {
 		return this.playerBullets;
 	}
 	
-	private void decelShip(Vector2 v, float delta) {
-		if (v.y > 0) {
-			v.sub(0, deceleration*delta);
+	private void decelShip(float delta) {
+		if (velocity.y > 0) {
+			velocity.sub(0, deceleration*delta);
+			if(velocity.y < 0) {
+				velocity.y = 0;
+			}
 		} 
-		else {
-			v.add(0, deceleration*delta);
+		else if(velocity.y < 0){
+			velocity.add(0, deceleration*delta);
+			if(velocity.y > 0) {
+				velocity.y = 0;
+			}
 		}
-		if( v.x > 0 ) {
-			v.sub( (deceleration*delta), 0);
+		if( velocity.x > 0 ) {
+			velocity.sub( (deceleration*delta), 0);
+			if(velocity.x < 0) {
+				velocity.x = 0;
+			}
 		}
-		else {
-			v.add( (deceleration*delta), 0);
+		else if(velocity.x < 0){
+			velocity.add( (deceleration*delta), 0);
+			if(velocity.x > 0) {
+				velocity.x = 0;
+			}
 		}
 		
 		

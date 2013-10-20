@@ -1,8 +1,14 @@
 package deco2800.arcade.towerdefence.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.lwjgl.input.Mouse;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Application;
+import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -10,6 +16,12 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.towerdefence.model.AnimationsList;
+import deco2800.arcade.towerdefence.model.Grid;
+import deco2800.arcade.towerdefence.model.Ship;
+import deco2800.arcade.towerdefence.model.Team;
+import deco2800.arcade.towerdefence.model.TowerType;
+import deco2800.arcade.towerdefence.model.creationclasses.Projectile;
+import deco2800.arcade.towerdefence.model.creationclasses.Tower;
 import deco2800.arcade.towerdefence.view.CreditsScreen;
 import deco2800.arcade.towerdefence.view.GameScreen;
 import deco2800.arcade.towerdefence.view.LoreScreen;
@@ -34,14 +46,14 @@ public class TowerDefence extends GameClient {
 	public TowerDefence(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 	}
-	
+
 	@Override
 	public void create() {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		Gdx.app.debug(LOG, "creating");
-		
+
 		super.create();
-		
+
 		// construct screens
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
@@ -51,11 +63,35 @@ public class TowerDefence extends GameClient {
 		optionsScreen = new OptionsScreen(this);
 		// Set initial screen
 		setScreen(splashScreen);
-		
+
 		// Dan insert game creation code here.
+		// Create the Portal to Earth
+		Vector2 portalPosition = new Vector2();
+		// Create a Ship
+		Ship ship = new Ship(gameScreen, portalPosition);
+		// Create a Grid
+		Grid grid = new Grid(4166, 4166, "Main Grid", 25, ship, portalPosition,
+				"src/main/resources/testGrid");
+		// Create objects on the Grid
+		// Create a Standard Tower
+		// Initialise upgradeCosts
+		List<Integer> upgradeCosts = new ArrayList<Integer>(3);
+		upgradeCosts.add(0);
+		upgradeCosts.add(100);
+		upgradeCosts.add(100);
+		// Create a blank Vector2
+		Vector2 blank = new Vector2();
+		// Create the projectile to load into the tower
+		Projectile projStand = new Projectile(0, 0, grid, blank,
+				1000, Team.Player, null, 10, 0, 0);
+		// StandardI
+		Tower standardI = new Tower(100, 2, 2472, 2083, grid, Team.Player,
+				TowerType.STANDARD, 2.0, 9.0, projStand, 100, upgradeCosts,
+				null, null, null);
 		
-		
-		
+		//Draw
+		standardI.start();
+
 		// Listener controls
 		this.getOverlay().setListeners(new Screen() {
 			@Override
@@ -89,7 +125,7 @@ public class TowerDefence extends GameClient {
 			}
 		});
 	}
-	
+
 	@Override
 	public void dispose() {
 		Gdx.app.debug(LOG, "disposing");

@@ -10,6 +10,9 @@ import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
 import deco2800.arcade.deerforest.models.cardContainers.CardCollectionList;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 
+/**
+ * Handles the selection of cards for the deck builder inteface.
+ */
 public class BuilderSpriteMover {
 	//TODO Large Changes still to come with database implementation
 	

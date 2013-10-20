@@ -18,9 +18,10 @@ import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.cards.AbstractMonster;
 import deco2800.arcade.deerforest.models.gameControl.GameSystem;
 
-//This class functions as sort of a higher level game system controller
-//As well as (most importantly) being an instance of a game (according to Gdx)
-//to run
+/** 
+ * This class functions as a higher level game system controller as well as 
+ * (most importantly) being an instance of a game (according to Gdx) to run
+ */
 public class MainMenu extends Game {
 
 	SpriteBatch batch;
@@ -33,7 +34,9 @@ public class MainMenu extends Game {
     private boolean musicMuted;
     private final boolean muted = false;
 
-	
+	/**
+	 * Initialises the main menu
+	 */
 	public MainMenu(GameSystem model) {
 		this.model = model;
 	}
@@ -52,16 +55,25 @@ public class MainMenu extends Game {
 
 	}
 	
+	/**
+	 * Renders the main menu
+	 */
 	public void render() {
         super.render();
 	}
 	
+	/** 
+	 * Disposes the main menu
+	 */
 	public void dispose() {
 		batch.dispose();
 		font.dispose();
         bgLoop.dispose();
 	}
 	
+	/**
+	 * Returns the model for the main menu
+	 */
 	public GameSystem getModel() {
 		return this.model;
 	}

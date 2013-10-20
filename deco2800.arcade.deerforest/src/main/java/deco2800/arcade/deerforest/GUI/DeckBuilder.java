@@ -20,9 +20,10 @@ import deco2800.arcade.deerforest.models.gameControl.DeckSystem;
 
 
 
-//This class functions as sort of a higher level game system controller
-//As well as (most importantly) being an instance of a game (according to Gdx)
-//to run
+/** 
+ * This class functions as a higher level game system controller as well as 
+ * (most importantly) being an instance of a game (according to Gdx) to run.
+ */
 public class DeckBuilder extends Game {
 
 	SpriteBatch batch;

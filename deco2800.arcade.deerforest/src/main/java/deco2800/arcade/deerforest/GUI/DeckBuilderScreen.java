@@ -16,7 +16,10 @@ import com.badlogic.gdx.math.Rectangle;
 import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 
-
+/**
+ * View class for the deck builder. Handles printing to the screen and sprite
+ * control (adding/removing).
+ */
 public class DeckBuilderScreen implements Screen {
 	
 	private final DeckBuilder deckBuilder;

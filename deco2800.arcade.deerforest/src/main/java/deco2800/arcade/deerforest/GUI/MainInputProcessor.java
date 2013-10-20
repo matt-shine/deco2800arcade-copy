@@ -15,7 +15,9 @@ import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.cards.AbstractSpell;
 
-//This class functions basically as the controller
+/** 
+ * This class functions for the main game as the controller
+ */
 public class MainInputProcessor implements InputProcessor {
 
 	private MainGame game;
@@ -288,6 +290,9 @@ public class MainInputProcessor implements InputProcessor {
         return false;
     }
 
+    /**
+     * Returns the current selection as an ExtendedSprite
+     */
     public ExtendedSprite getCurrentSelection() {
     	return currentSelection;
     }
@@ -302,6 +307,9 @@ public class MainInputProcessor implements InputProcessor {
     	yClickOffset = y;
     }
 
+    /**
+     * Returns true if the current sprite is zoomed or false otherwise.
+     */
     public ExtendedSprite getCurrentZoomed() {
         return currentZoomed;
     }
@@ -458,19 +466,31 @@ public class MainInputProcessor implements InputProcessor {
         game.setFirstTurn(true);
     }
 
+    /**
+     * Creates a new game
+     */
     public void newGame() {
         DeerForestSingletonGetter.getDeerForest().dispose();
         DeerForestSingletonGetter.getDeerForest().create();
     }
 
+    /**
+     * Sets whether the game has been finished or not
+     */
     public void setGameFinished(boolean b) {
         this.gameFinished = b;
     }
 
+    /**
+     * Returns the current selection
+     */
     public ExtendedSprite getSelection() {
         return this.zoomSelection;
     }
 
+    /**
+     * Returns true if the sprite has been drawn
+     */
     public boolean hasDrawn() {
         return drawn;
     }

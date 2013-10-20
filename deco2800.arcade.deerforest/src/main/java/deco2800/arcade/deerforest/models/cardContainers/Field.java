@@ -8,19 +8,23 @@ import java.util.List;
 
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 
+/**
+ * Holds the cards on the field for a particular player
+ */
 public class Field extends AbstractCardCollection {
 	private final int MAX_CARDS_EFFECTS = 2;
 	private final int MAX_CARDS_MONSTER = 5;
 	private ArrayList<AbstractMonster> fieldMonster;
 	private ArrayList<AbstractSpell> fieldSpells;
 	
-	//Initialise field
+	/**
+	 * Initialises the field
+	 */
 	public Field() {
 		fieldMonster = new ArrayList<AbstractMonster>();
 		fieldSpells = new ArrayList<AbstractSpell>();
 	}
-	
-	
+
 	/**
 	 * Returns true if field is empty.
 	 */

@@ -9,11 +9,17 @@ import java.util.List;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.cards.AbstractMonster;
 
-
+/**
+ * Abstract class for the CardStack interface providing implementations for
+ * all the CardStack methods
+ */
 public abstract class AbstractCardStack implements CardStack {
 
 	protected List<AbstractCard> cardList;
 	
+	/**
+	 * Initialises the AbstractCardStack class
+	 */
 	public AbstractCardStack() {
 		cardList = new ArrayList<AbstractCard>();
 	}

@@ -539,15 +539,20 @@ public class MainGameScreen implements Screen {
     /**
      * Getters for variables that other classes use
      */
-
 	public Map<String, Set<ExtendedSprite>> getSpriteMap() {
 		return spriteMap;
 	}
 	
+	/**
+	 * Returns the arena
+	 */
 	public Arena getArena() {
 		return arena;
 	}
 	
+	/**
+	 * Returns the width of the game screen
+	 */
 	public int getWidth() {
         if(Gdx.graphics == null) {
             return 0;
@@ -555,6 +560,9 @@ public class MainGameScreen implements Screen {
 		return Gdx.graphics.getWidth();
 	}
 	
+	/**
+	 * Returns the height of the game screen.
+	 */
 	public int getHeight() {
         if(Gdx.graphics == null) {
             return 0;
@@ -565,11 +573,13 @@ public class MainGameScreen implements Screen {
     /**
      * Setters for variables that need them
      */
-
 	public void setHighlightedZones(List<Rectangle> highlight) {
 		highlightedZones = highlight;
 	}
 	
+	/**
+	 * Sets the sprite of the given arena
+	 */
 	public boolean setSpriteToArea(ExtendedSprite s, String area) {
 		Set<ExtendedSprite> listToAddTo = spriteMap.get(area);
 		if(listToAddTo != null) {
@@ -578,11 +588,16 @@ public class MainGameScreen implements Screen {
 		return false;
 	}
 
-
+	/**
+	 * Sets the effect message to describe the current effect
+	 */
     public void setEffectMessage(String message) {
         this.effectMessage = message;
     }
 
+    /**
+     * Sets whether a phase is displayed or not
+     */
     public void setPhaseDisplayed(boolean b) {
         displayedPhaseMessage = b;
     }

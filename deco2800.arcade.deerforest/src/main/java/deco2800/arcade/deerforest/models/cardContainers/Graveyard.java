@@ -4,17 +4,20 @@ package deco2800.arcade.deerforest.models.cardContainers;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.cards.AbstractMonster;
 
+/**
+ * Holds the cards that have been destroyed or defeated
+ */
 public class Graveyard extends AbstractCardStack {
 
-	//Consider having a variable called "isSorted", this will allow searching
-	//be faster as you can check only a section of the card list
-	//Alternatively, have different holders (array, Linked list, etc) for each card type
-	
-	//Initialize graveyard
+	/**
+	 * Initialize the graveyard class
+	 */
 	public Graveyard() {
 	}
 	
-	//check if grave only has spell cards
+	/**
+	 * Check if the graveyard only only contains spell cards
+	 */
 	public boolean onlySpells() {
 		for (AbstractCard card: cardList) {
 			if (card.getCardType().equals("Monster")) {
@@ -24,7 +27,9 @@ public class Graveyard extends AbstractCardStack {
 		return true;
 	}
 	
-	//check if grave only has monsters
+	/**
+	 * Check if graveyard only contains monster cards
+	 */
 	public boolean onlyMonsters() {
 		for (AbstractCard card: cardList) {
 			if (card.getCardType().equals("Spell")) {
@@ -34,7 +39,9 @@ public class Graveyard extends AbstractCardStack {
 		return true;
 	}
 	
-	//check if grave only has monsters of specific type
+	/**
+	 * Check if graveyard only contains monster cards of specific type
+	 */
 	public boolean onlyMonsters(String type) {
 		for (AbstractCard card: cardList) {
 			
@@ -54,9 +61,11 @@ public class Graveyard extends AbstractCardStack {
 		return true;
 	}
 	
-	//Sort graveyard by cards
+	/** 
+	 * Sort the graveyard
+	 */
 	public void sort() {
-		// Not going to happen
+		// Not going to happen at this point :'(
 	}
 
 }

@@ -16,12 +16,17 @@ import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
 import deco2800.arcade.deerforest.models.cardContainers.Field;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 
-//This class functions basically as the controller
+/**
+ * This class functions as the controller for the main menu
+ */
 public class MainMenuInputProcessor implements InputProcessor {
 
 	private MainMenu game;
 	private MainMenuScreen view;
 	
+	/**
+	 * Initialises the main menu input processor
+	 */
 	public MainMenuInputProcessor(MainMenu game, MainMenuScreen view) {
 		this.game = game;
 		this.view = view;

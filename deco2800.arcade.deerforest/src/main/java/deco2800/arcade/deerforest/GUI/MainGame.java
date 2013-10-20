@@ -17,9 +17,8 @@ import deco2800.arcade.deerforest.models.cards.AbstractMonster;
 import deco2800.arcade.deerforest.models.gameControl.GameSystem;
 
 /**
- * This class functions as sort of a higher level game system controller
- * As well as (most importantly) being an instance of a game (according to Gdx)
- * to run
+ * This class as a higher level game system controller as well as 
+ * (most importantly) being an instance of a game (according to Gdx) to run.
  */
 public class MainGame extends Game {
 
@@ -32,7 +31,9 @@ public class MainGame extends Game {
     private boolean musicMuted;
     private final boolean muted = false;
 
-	
+	/**
+	 * Initialses the main game.
+	 */
 	public MainGame(GameSystem model) {
 		this.model = model;
 	}
@@ -77,6 +78,9 @@ public class MainGame extends Game {
         bgLoop.dispose();
 	}
 	
+	/**
+	 * Returns the model.
+	 */
 	public GameSystem getModel() {
 		return this.model;
 	}
@@ -111,22 +115,37 @@ public class MainGame extends Game {
 		return model.getPhase();
 	}
 	
+	/**
+	 * Returns the current player
+	 */
 	public int getCurrentPlayer() {
 		return model.currentPlayer()==model.player1()?1:2;
 	}
 	
+	/**
+	 * Returns true if the sprite has been summoned or false otherwise
+	 */
 	public boolean getSummoned() {
 		return model.getSummoned();
 	}
 	
+	/**
+	 * Sets whether the card is summoned or not
+	 */
 	public void setSummoned(boolean b) {
 		model.setSummoned(b);
 	}
 
+	/**
+	 * Returns the life points of the player
+	 */
 	public int getPlayerLP(int player) {
 		return model.playerLP(player);
 	}
 	
+	/**
+	 * Returns the collection type given by 'area' for the given player.
+	 */
 	public CardCollection getCardCollection(int player, String area) {
 		return model.getCardCollection(player, area);
 	}
@@ -224,8 +243,11 @@ public class MainGame extends Game {
         }
     }
 
+    /**
+     * Plays the sound for the phase changing
+     */
     public void playPhaseSound() {
-
+    	// TODO Help! I'm empty
     }
 
     /**

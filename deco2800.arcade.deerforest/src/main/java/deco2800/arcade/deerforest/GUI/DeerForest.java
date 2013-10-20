@@ -47,6 +47,9 @@ public class DeerForest extends GameClient {
 	private NetworkClient networkClient;
 	static HighscoreClient playerScore;
 
+	/**
+	 * Initialises the DeerForest class.
+	 */
 	public DeerForest(Player player, NetworkClient networkClient){
 		super(player, networkClient);
 		this.networkClient = networkClient;
@@ -442,7 +445,9 @@ public class DeerForest extends GameClient {
 		return p;
 	}
 
-	
+	/**
+	 * Returns the player currently logged in (player 1).
+	 */
 	public int getCurrentPlayer() {
 		return mainGame.getCurrentPlayer();
 		

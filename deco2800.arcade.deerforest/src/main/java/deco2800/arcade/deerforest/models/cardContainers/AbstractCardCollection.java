@@ -7,10 +7,17 @@ import java.util.List;
 
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 
+/**
+ * Abstract class for the CardCollection interface providing implementations for
+ * all the CardCollection methods
+ */
 public abstract class AbstractCardCollection implements CardCollection {
 	
 	protected List<AbstractCard> cardList;
 	
+	/**
+	 * Initialises the abstract card collection class
+	 */
 	public AbstractCardCollection() {
 		cardList = new ArrayList<AbstractCard>();
 	}

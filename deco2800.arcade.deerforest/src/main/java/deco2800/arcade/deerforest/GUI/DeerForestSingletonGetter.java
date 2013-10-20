@@ -3,6 +3,9 @@ package deco2800.arcade.deerforest.GUI;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 
+/**
+ * Use this class retrieve the DeerForest class.
+ */
 public class DeerForestSingletonGetter {
 
 	private static DeerForest instance = null;

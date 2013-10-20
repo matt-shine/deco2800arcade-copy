@@ -11,6 +11,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
+/**
+ * This class functions as the view for the main menu
+ */
 public class MainMenuScreen implements Screen {
 	
 	private final MainMenu menu;
@@ -21,6 +24,9 @@ public class MainMenuScreen implements Screen {
 	private Map<String, Set<ExtendedSprite>> spriteMap;
 	private Arena arena;
 
+	/**
+	 * Initialises the main menu screen
+	 */
 	public MainMenuScreen(final MainMenu men) {
 		this.menu = men;
 		
@@ -39,6 +45,9 @@ public class MainMenuScreen implements Screen {
 		
 	}
 
+	/**
+	 * Loads the assets for the main menu
+	 */
 	private void loadAssets() {
 		manager.load("DeerForestAssets/MenuScreen.png", Texture.class);
 		
@@ -104,18 +113,30 @@ public class MainMenuScreen implements Screen {
 
 	}
 
+	/**
+	 * Returns the sprite map for the main menu screen
+	 */
 	public Map<String, Set<ExtendedSprite>> getSpriteMap() {
 		return spriteMap;
 	}
 	
+	/**
+	 * Returns the arena for the main menu screen
+	 */
 	public Arena getArena() {
 		return arena;
 	}
 	
+	/**
+	 * Returns the width of the main menu
+	 */
 	public int getWidth() {
 		return Gdx.graphics.getWidth();
 	}
 	
+	/**
+	 * Returns the height of the main menu
+	 */
 	public int getHeight() {
 		return Gdx.graphics.getHeight();
 	}

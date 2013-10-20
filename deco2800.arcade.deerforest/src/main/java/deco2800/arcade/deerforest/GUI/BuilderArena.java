@@ -10,6 +10,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.Texture;
 
+/**
+ * Defines the BuilderArena class. The builder arena is a collection of 'Zones' 
+ * in which cards can be placed for the deck builder. These zones are defined by ratios to
+ * the current windows width and height
+ *
+ * This class extends sprite as it also displays the background image.
+ */
 public class BuilderArena extends Sprite{
 	 
 	//time time to move / scale sprites

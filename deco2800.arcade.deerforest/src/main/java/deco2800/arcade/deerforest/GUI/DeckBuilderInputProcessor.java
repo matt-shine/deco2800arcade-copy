@@ -19,7 +19,9 @@ import deco2800.arcade.deerforest.models.cardContainers.Field;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.cards.AbstractSpell;
 
-//This class functions basically as the controller
+/** 
+ * This class functions as the controller for the deck builder.
+ */
 public class DeckBuilderInputProcessor implements InputProcessor {
 
 	private DeckBuilder game;

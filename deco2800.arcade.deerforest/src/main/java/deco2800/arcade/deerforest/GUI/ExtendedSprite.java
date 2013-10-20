@@ -10,7 +10,7 @@ import deco2800.arcade.deerforest.models.cards.AbstractMonster;
 
 /**
  * A representation of a sprite specific to the main game. This sprite stores
- * its own data (attack, picture file path, defence, etc...)
+ * its own data (attack, picture file path, defense, etc...)
  */
 public class ExtendedSprite extends Sprite {
 
@@ -223,58 +223,100 @@ public class ExtendedSprite extends Sprite {
         this.card = c;
     }
 
+    /**
+     * Returns the underlying card.
+     */
     public AbstractCard getCard() {
         return this.card;
     }
 
+    /**
+     * Sets whether the sprite has attacked or not.
+     */
     public void setHasAttacked(boolean b) {
         this.hasAttacked = b;
     }
 
+    /**
+     * Returns true if the sprite has attacked and false otherwise.
+     */
     public boolean hasAttacked() {
         return hasAttacked;
     }
 
+    /**
+     * Returns the orgin zone of the sprite.
+     */
 	public Rectangle getOriginZone() {
 		return originZone;
 	}
 	
+	/**
+	 * Sets the origin zone of the sprite.
+	 */
 	public void setOriginZone(Rectangle r) {
 		originZone = r;
 	}
 
+	/**
+	 * Returns the player.
+	 */
 	public int getPlayer() {
 		return player;
 	}
 
+	/**
+	 * Sets the player
+	 */
 	public void setPlayer(int player) {
 		this.player = player;
 	}
 
+	/**
+	 * Returns true if the sprite is a field or false otherwise.
+	 */
 	public boolean isField() {
 		return field;
 	}
 
+	/**
+	 * Sets the field.
+	 */
 	public void setField(boolean field) {
 		this.field = field;
 	}
 
+	/**
+	 * Returns true if the sprite is a monster or false otherwise.
+	 */
 	public boolean isMonster() {
 		return monster;
 	}
 
+	/**
+	 * Sets the monster for the sprite
+	 */
 	public void setMonster(boolean monster) {
 		this.monster = monster;
 	}
 
+	/**
+	 * Returns the area
+	 */
 	public String getArea() {
 		return area;
 	}
 
+	/**
+	 * Sets the area
+	 */
 	public void setArea(String area) {
 		this.area = area;
 	}
 
+	/**
+	 * Sets the selected sprite
+	 */
     public void setSelected(boolean b) {
         this.isSelected = b;
     }

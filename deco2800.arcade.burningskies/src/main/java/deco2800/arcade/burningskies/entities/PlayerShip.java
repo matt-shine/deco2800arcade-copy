@@ -13,7 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 public class PlayerShip extends Ship {
 	
 	private BulletPattern playerBullets;
-	private float maxVelocity = 300; //Changed from static to dynamic.
+	
 	private float maxHealth; //For health powerups.
 	private int lives = 3;
 	private PlayScreen screen;
@@ -29,6 +29,11 @@ public class PlayerShip extends Ship {
 	
 	//mouse pointer
 	private Vector2 mousePos = new Vector2();
+	
+	// movement 
+	private float acceleration = 1000f;
+	private float deceleration = 200f;
+	private float maxVelocity = 300; //Changed from static to dynamic.
 
 	/**
 	 * Construct a playable ship for the user(s).
@@ -93,24 +98,37 @@ public class PlayerShip extends Ship {
 				patternUp = false;
 			}
 		}
-		
+
 		// reset
-		velocity.set(0, 0);
+//		velocity.set(0, 0);
     	if(up) {
-    		velocity.add(0, maxVelocity);
+    		if(velocity.y > maxVelocity)
+    			velocity.y = maxVelocity;
+    		velocity.add(0, (acceleration*delta) );
     	}
     	if(down) {
-    		velocity.add(0, -maxVelocity);
+    		if (velocity.y < -maxVelocity)
+    			velocity.y = -maxVelocity;
+    		velocity.add(0, -(acceleration*delta) );
     	}
     	if(left) {
-    		velocity.add(-maxVelocity, 0);
+    		if (velocity.x < -maxVelocity)
+    			velocity.x = -maxVelocity;
+    		velocity.add(-(acceleration*delta), 0);
     	}
     	if(right) {
-    		velocity.add(maxVelocity, 0);
+    		if (velocity.x > maxVelocity)
+    			velocity.x = maxVelocity;
+    		velocity.add( (acceleration*delta), 0);
     	}
+    	
+    	decelShip(velocity, delta);
+    	
     	//normalise our velocity
-    	velocity.nor();
-    	velocity.mul(maxVelocity);
+//    	velocity.nor();
+//    	velocity.mul(maxVelocity);
+		
+		// Set the position of the ship
     	position.add( velocity.x * delta, velocity.y * delta );
 		if (position.x + getWidth() > BurningSkies.SCREENWIDTH) {
 			position.x = BurningSkies.SCREENWIDTH - getImageWidth();
@@ -121,8 +139,11 @@ public class PlayerShip extends Ship {
 			position.y = BurningSkies.SCREENHEIGHT - getImageHeight();
 		}
     	if (position.y < 0) position.y = 0;
-		setX(position.x);
+		
+    	setX(position.x);
 		setY(position.y);
+		
+		// Get user mouse input and set ship rotation		
 		mousePos.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()); // reversed y
 		mousePos.sub(getCenterX(), getCenterY()); // gotta have it centered
 		setRotation(mousePos.angle()-90);
@@ -207,6 +228,7 @@ public class PlayerShip extends Ship {
 		this.maxVelocity = 300;
 		this.speedUp = false;
 		this.flash = 0f;
+		this.velocity.set(0f, 0f);
 		position.set(getStage().getWidth()/2 - this.getOriginX(),getStage().getHeight()/2 - this.getOriginY());
 	}
 
@@ -226,5 +248,22 @@ public class PlayerShip extends Ship {
 	
 	public BulletPattern getPattern() {
 		return this.playerBullets;
+	}
+	
+	private void decelShip(Vector2 v, float delta) {
+		if (v.y > 0) {
+			v.sub(0, deceleration*delta);
+		} 
+		else {
+			v.add(0, deceleration*delta);
+		}
+		if( v.x > 0 ) {
+			v.sub( (deceleration*delta), 0);
+		}
+		else {
+			v.add( (deceleration*delta), 0);
+		}
+		
+		
 	}
 }

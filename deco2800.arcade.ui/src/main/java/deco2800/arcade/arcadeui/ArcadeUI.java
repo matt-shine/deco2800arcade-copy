@@ -1,9 +1,8 @@
 package deco2800.arcade.arcadeui;
 
-import com.badlogic.gdx.Screen;
-
 import deco2800.arcade.arcadeui.store.StoreHome;
-import deco2800.arcade.arcadeui.store.StoreScreen;
+import deco2800.arcade.arcadeui.store.StoreTransactions;
+import deco2800.arcade.arcadeui.store.StoreWishlist;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -24,16 +23,17 @@ import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
 public class ArcadeUI extends GameClient {
 
 	LoginScreen login = null;
-	StoreHome store = null;
 	HomeScreen home = null;
 	FrontPage main = null;
 	RegisterScreen register = null;
 	MultiplayerLobby lobby = null;
 	BettingWindow betting = null;
-	MultiGamelist multigame = null;
-	Gamewaiting wait = null;
-	MultiGamelist2 multigame2 = null;
+	JoinMatchList multigame = null;
+	CreateMatchList multigame2 = null;
 	BettingLobby bettingLobby = null;
+	private StoreHome storeHome = null;
+	private StoreTransactions storeTransactions = null;
+	private StoreWishlist storeWishlist = null;
 
 	public ArcadeUI(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -50,19 +50,19 @@ public class ArcadeUI extends GameClient {
 
 		// Initialise the different screens.
 		login = new LoginScreen(this);
-
-		home = new HomeScreen(this);
-		store = new StoreHome(this);
-		main = new FrontPage(this);
-
 		register = new RegisterScreen(this);
-		System.out.println("PLAYER: " + player);
+		home = new HomeScreen(this);
+		main = new FrontPage(this);
+		register = new RegisterScreen(this);
 		lobby = new MultiplayerLobby(this, player);
 		betting = new BettingWindow(this);
-		multigame = new MultiGamelist(this);
-		wait = new Gamewaiting(this);
-		multigame2 = new MultiGamelist2(this);
+		multigame = new JoinMatchList(this);
+		multigame2 = new CreateMatchList(this);
 		bettingLobby = new BettingLobby(this);
+		
+		storeHome = new StoreHome(this, player);
+		storeTransactions = new StoreTransactions(this, player);
+		storeWishlist = new StoreWishlist(this, player);
 
 		// Check to see if a user is logged in.
 		if (ArcadeSystem.isLoggedIn()) {
@@ -112,9 +112,23 @@ public class ArcadeUI extends GameClient {
 	public HomeScreen getHome() {
 		return home;
 	}
+	public FrontPage getMain() {
+		return main;
+	}
 
-	public StoreHome getStore() {
-		return store;
+	public StoreHome getStoreHome() {
+		storeHome.show();
+		return storeHome;
+	}
+
+	public StoreTransactions getStoreTransactions() {
+		storeTransactions.show();
+		return storeTransactions;
+	}
+
+	public StoreWishlist getStoreWishlist() {
+		storeWishlist.show();
+		return storeWishlist;
 	}
 
 	public MultiplayerLobby getLobby() {
@@ -125,15 +139,11 @@ public class ArcadeUI extends GameClient {
 		return betting;
 	}
 
-	public MultiGamelist getMultigame() {
+	public JoinMatchList getMultigame() {
 		return multigame;
 	}
 
-	public Gamewaiting getWait() {
-		return wait;
-	}
-
-	public MultiGamelist2 getMultigame2() {
+	public CreateMatchList getMultigame2() {
 		return multigame2;
 	}
 
@@ -150,6 +160,9 @@ public class ArcadeUI extends GameClient {
 		if (lobby != null) { 
 			lobby.setPlayer(player);
 		}
+	}
+	public Player getPlayer() {
+		return this.player;
 	}
 
 }

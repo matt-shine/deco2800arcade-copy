@@ -1,11 +1,13 @@
 package deco2800.arcade.breakout;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 /**
+ * 
+ * Manages the values of the paddle. Controls the size and position of the
+ * paddle as well as rendering the colour.
  * 
  * @author Naveen
  * 
@@ -16,10 +18,9 @@ public abstract class Paddle {
 	private float width = 128f;
 	private static final float HEIGHT = 20f;
 	private static final float STANDARDWIDTH = 128f;
-	
 
-	Rectangle paddleShape = new Rectangle();
-	
+	private Rectangle paddleShape = new Rectangle();
+
 	/**
 	 * Create a new paddle at a given vector position.
 	 * 
@@ -31,43 +32,87 @@ public abstract class Paddle {
 		this.paddleShape.width = width;
 		this.paddleShape.height = HEIGHT;
 	}
-	
+
+	/**
+	 * Return the Standard width size of the paddle
+	 * 
+	 * @return float STANDARDWIDTH
+	 */
 	public float getStandardWidth() {
 		return STANDARDWIDTH;
 	}
 	
+	/**
+	 * Returns the rectangle paddleshape
+	 * @return Rectangle paddleShape
+	 */
+	public Rectangle getPaddleShape(){
+		return paddleShape;
+	}
+
+	/**
+	 * Decreases the size of the paddle by halving the current size
+	 */
 	public void decreaseSize() {
-		this.paddleShape.width = getPaddleShapeWidth()/2;
+		this.paddleShape.width = getPaddleShapeWidth() / 2;
 	}
-	
+
+	/**
+	 * Increases the size of the paddle by doubling the current size
+	 */
 	public void increaseSize() {
-		this.paddleShape.width = getPaddleShapeWidth()*2;
+		this.paddleShape.width = getPaddleShapeWidth() * 2;
 	}
-	
+
+	/**
+	 * Returns the current size of the width
+	 * 
+	 * @return float width
+	 */
 	public float getPaddleShapeWidth() {
 		return this.paddleShape.width;
 	}
-	
+
+	/**
+	 * Resizes the paddle by setting the new width value to the paddle width
+	 */
 	public void resizePaddle() {
-			this.paddleShape.width = getWidth();
+		this.paddleShape.width = getWidth();
 	}
-	
-	// Getter method for the paddles x position
+
+	/**
+	 * Returns the x position of the paddle
+	 * 
+	 * @return float x
+	 */
 	public float getPaddleX() {
 		return this.paddleShape.x;
 	}
-	
-	// Getter method for the paddles y position
+
+	/**
+	 * Returns the y position of the paddle
+	 * 
+	 * @return float y
+	 */
 	public float getPaddleY() {
 		return this.paddleShape.y;
 	}
-	
-	// Getter method for the paddles width
+
+	/**
+	 * Returns the value of the width
+	 * 
+	 * @return float width
+	 */
 	public float getWidth() {
 		return width;
 	}
-	
-	//Sets the width
+
+	/**
+	 * Sets given float to become the width value and calls the resizePaddle
+	 * method
+	 * 
+	 * @param width
+	 */
 	public void setWidth(float width) {
 		this.width = width;
 		resizePaddle();
@@ -81,7 +126,8 @@ public abstract class Paddle {
 	}
 
 	/**
-	 * render the paddle red
+	 * Render the paddle to white
+	 * 
 	 * @param render
 	 */
 	public void render(ShapeRenderer render) {
@@ -107,9 +153,11 @@ public abstract class Paddle {
 	 * @param ball
 	 */
 	public void update(Ball ball) {
-		if (paddleShape.x > Breakout.SCREENWIDTH - paddleShape.width)
+		if (paddleShape.x > Breakout.SCREENWIDTH - paddleShape.width){
 			paddleShape.x = Breakout.SCREENWIDTH - paddleShape.width;
-		else if (paddleShape.x < 0)
+		}
+		else if (paddleShape.x < 0){
 			paddleShape.x = 0;
+		}
 	}
 }

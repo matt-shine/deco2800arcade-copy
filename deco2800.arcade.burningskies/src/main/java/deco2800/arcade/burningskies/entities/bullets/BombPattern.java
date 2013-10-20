@@ -19,15 +19,19 @@ public class BombPattern extends BulletPattern {
 		interval = 1000f;
 	}
 	
+	/**
+	 * Fires bullet outwards as a circle shaped pattern from
+	 * the current position of the player ship
+	 */
 	public void fire(float lag, float x, float y) {
 		BombBullet bullet;
 		for(int i=0;i<360;i+=4) {
-			bullet = new BombBullet(Affinity.PLAYER, 1000, emitter, (PlayerShip) emitter, new Vector2(x,y), i, image);
+			bullet = new BombBullet(Affinity.PLAYER, 500, emitter, (PlayerShip) emitter, new Vector2(x,y), i, image);
 			screen.addBullet(bullet);
 			//bullet.act(lag);
 		}
 		for(int i=2;i<360;i+=4) {
-			bullet = new BombBullet(Affinity.PLAYER, 1000, emitter, (PlayerShip) emitter, new Vector2(x,y), i, image2);
+			bullet = new BombBullet(Affinity.PLAYER, 500, emitter, (PlayerShip) emitter, new Vector2(x,y), i, image2);
 			screen.addBullet(bullet);
 			//bullet.act(lag);
 		}

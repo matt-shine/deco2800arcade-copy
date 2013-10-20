@@ -8,67 +8,67 @@
     <achievement id="mixmaze.tenmatches">
         <name>Amateur!</name>
         <description>Played 10 matches of Mix Maze</description>
-        <awardThreshold>1</awardThreshold>
-        <icon></icon>
+        <awardThreshold>10</awardThreshold>
+        <icon>mixmaze.tenmatches.png</icon>
     </achievement>
     <achievement id="mixmaze.twentymatches">
         <name>Veteran!</name>
         <description>Played 25 matches of Mix Maze</description>
-        <awardThreshold>1</awardThreshold>
-        <icon></icon>
+        <awardThreshold>25</awardThreshold>
+        <icon>mixmaze.twentymatches.png</icon>
     </achievement>
     <achievement id="mixmaze.firstwin">
         <name>Eyes On Me!</name>
         <description>Win your first game of Mix Maze</description>
         <awardThreshold>1</awardThreshold>
-        <icon></icon>
+        <icon>mixmaze.firstwin.png</icon>
     </achievement>
     <achievement id="mixmaze.risingstar">
         <name>Rising Star!</name>
         <description>Win 5 consecutive matches of Mix Maze</description>
-        <awardThreshold>1</awardThreshold>
-        <icon></icon>
+        <awardThreshold>5</awardThreshold>
+        <icon>mixmaze.risingstar.png</icon>
     </achievement>
     <achievement id="mixmaze.onfire">
         <name>On Fire!</name>
         <description>Win 10 consecutive matches of Mix Maze</description>
-        <awardThreshold>1</awardThreshold>
-        <icon></icon>
+        <awardThreshold>10</awardThreshold>
+        <icon>mixmaze.onfire.png</icon>
     </achievement>
     <achievement id="mixmaze.buildbig">
         <name>Think Big!</name>
         <description>Build a region consist of 5 boxes</description>
         <awardThreshold>1</awardThreshold>
-        <icon></icon>
+        <icon>mixmaze.buildbig.png</icon>
     </achievement>
     <achievement id="mixmaze.strategist">
         <name>Strategist!</name>
         <description>Build a region consist of 10 boxes</description>
         <awardThreshold>1</awardThreshold>
-        <icon></icon>
+        <icon>mixmaze.strategist.png</icon>
     </achievement>
     <achievement id="mixmaze.breakinggood">
         <name>Breaking Good</name>
         <description>Collect your first pick</description>
         <awardThreshold>1</awardThreshold>
-        <icon></icon>
+        <icon>mixmaze.breakinggood.png</icon>
     </achievement>
     <achievement id="mixmaze.tnt">
         <name>Lets blow things up!</name>
         <description>Collect your first TNT</description>
         <awardThreshold>1</awardThreshold>
-        <icon></icon>
+        <icon>mixmaze.tnt.png</icon>
     </achievement>
     <achievement id="mixmaze.usepick">
         <name>There goes your wall!</name>
         <description>Used your first pick</description>
         <awardThreshold>1</awardThreshold>
-        <icon></icon>
+        <icon>mixmaze.usepick.png</icon>
     </achievement>
     <achievement id="mixmaze.usetnt">
         <name>BOOM!</name>
         <description>Used your first TNT</description>
         <awardThreshold>1</awardThreshold>
-        <icon></icon>
+        <icon>mixmaze.usetnt.png</icon>
     </achievement>
 </achievements>

@@ -410,8 +410,13 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		// if ((loser == true) && (!stalemate)) {
 		// this.incrementAchievement("chess.winGame");
 		// }
-
-		player1.logWin();
+		if ((!stalemate) && (loser)) {
+			player1.logWin();
+		}
+		if ((!stalemate) && (!loser)) {
+			player1.logLoss();
+		}
+		
 		System.err.println("wins" + " " +player1.getWin().toString());
 		if (recording) {
 			drawButton();

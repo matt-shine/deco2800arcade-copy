@@ -84,7 +84,7 @@ public class Enemy extends Mob {
         if (pathing) {
             calculatePath(model);
         }
-        
+        setHealth(getStartingHealth(model.getDifficulty()));
     }
 
     @Override
@@ -127,6 +127,9 @@ public class Enemy extends Mob {
         }
     }
 
+    public int getStartingHealth(int difficulty) {
+        return 0;
+    }
     
     public void initialiseFromEnemyData(DoodadInfo d) {
     	

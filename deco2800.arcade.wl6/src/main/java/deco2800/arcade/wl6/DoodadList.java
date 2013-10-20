@@ -494,7 +494,7 @@ public class DoodadList {
                     //159: nothing
                     new DoodadInfo(),
 
-                    //160: fake hitler
+                    //160: Fake Hitler
                     new DoodadInfo(true, "iceking_clone", 0, 0, 0, 0, EnemyType.FAKE_HITLER, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
                     //161: nothing
@@ -548,10 +548,10 @@ public class DoodadList {
                     //177: Dog 3 (Moving)
                     new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.DOG, 0, DIRS.DOWN, true),  // FIXME Not complete
 
-                    //178: hitler
+                    //178: Adolf Hitler
                     new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.HITLER, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
-                    //179: fettgeicht
+                    //179: General Fettgesicht
                     new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.FETTGESICHT, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
                     //180: Guard 4 (Standing)
@@ -602,10 +602,10 @@ public class DoodadList {
                     //195: nothing
                     new DoodadInfo(),
 
-                    //196: schabbs
+                    //196: Dr. Schabbs
                     new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.SCHABBS, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
-                    //197: gretel
+                    //197: Gretel Grosse
                     new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.GRETEL, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
                     //198: SS 4 (Standing)
@@ -659,8 +659,17 @@ public class DoodadList {
                     //214: Hans Grosse
                     new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.HANS, 0, DIRS.RIGHT, false),
                     
-                    //215: otto
+                    //215: Otto Giftmacher
                     new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.GUARD, 0, DIRS.RIGHT, false),  // FIXME Not complete
+
+                    //??: Officers of all types
+
+
+                    //??: Mutants of all types
+
+
+                    //??: Pacman ghosts
+
 
             };
 }

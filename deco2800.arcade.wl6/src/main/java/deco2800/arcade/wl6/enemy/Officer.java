@@ -5,7 +5,6 @@ import deco2800.arcade.wl6.WL6Meta;
 
 public class Officer extends Enemy {
 
-    // All difficulties = 50 health
     private final int STARTING_HEALTH = 50;
 
     public Officer(int uid, DoodadInfo d) {
@@ -21,6 +20,9 @@ public class Officer extends Enemy {
         
     }
 
-
+    @Override
+    public int getStartingHealth(int difficulty) {
+        return STARTING_HEALTH;
+    }
 
 }

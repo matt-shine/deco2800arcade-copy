@@ -7,7 +7,6 @@ import deco2800.arcade.wl6.Projectile;
 
 public class Dog extends Enemy {
 
-    // All difficulties = 1 health
     private final int STARTING_HEALTH = 1;
 
     public Dog(int uid, DoodadInfo d) {
@@ -56,6 +55,11 @@ public class Dog extends Enemy {
     	
     	
     	
+    }
+
+    @Override
+    public int getStartingHealth(int difficulty) {
+        return STARTING_HEALTH;
     }
     
 }

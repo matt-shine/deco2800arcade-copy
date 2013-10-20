@@ -3,14 +3,7 @@ package deco2800.arcade.wl6;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
-import deco2800.arcade.wl6.enemy.Dog;
-import deco2800.arcade.wl6.enemy.EnemyType;
-import deco2800.arcade.wl6.enemy.FakeHitler;
-import deco2800.arcade.wl6.enemy.Guard;
-import deco2800.arcade.wl6.enemy.Hans;
-import deco2800.arcade.wl6.enemy.Mutant;
-import deco2800.arcade.wl6.enemy.Officer;
-import deco2800.arcade.wl6.enemy.SS;
+import deco2800.arcade.wl6.enemy.*;
 
 public class MapProcessor {
 
@@ -183,19 +176,19 @@ public class MapProcessor {
                 	dd = new Hans(doodadID(), d);
                 	break;
                 case SCHABBS:
-                	dd = new Hans(doodadID(), d);
+                	dd = new Schabbs(doodadID(), d);
                 	break;
                 case HITLER:
-                	dd = new Hans(doodadID(), d);
+                	dd = new Hitler(doodadID(), d);
                 	break;
                 case GIFTMACHER:
-                	dd = new Hans(doodadID(), d);
+                	dd = new Giftmacher(doodadID(), d);
                 	break;
                 case GRETEL:
-                	dd = new Hans(doodadID(), d);
+                	dd = new Gretel(doodadID(), d);
                 	break;
                 case FETTGESICHT:
-                	dd = new Hans(doodadID(), d);
+                	dd = new Fettgesicht(doodadID(), d);
                 	break;
             }
         }

@@ -4,7 +4,6 @@ import deco2800.arcade.wl6.DoodadInfo;
 
 public class Guard extends Enemy {
 
-    // All difficulties = 25 health
     private final int STARTING_HEALTH = 25;
 
     public Guard(int uid, DoodadInfo d) {
@@ -17,6 +16,10 @@ public class Guard extends Enemy {
         setDamage(0);
         
         initialiseFromEnemyData(d);
-        
+    }
+
+    @Override
+    public int getStartingHealth(int difficulty) {
+        return STARTING_HEALTH;
     }
 }

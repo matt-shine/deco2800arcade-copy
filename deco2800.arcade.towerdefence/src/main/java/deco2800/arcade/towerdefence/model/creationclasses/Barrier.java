@@ -1,6 +1,9 @@
 package deco2800.arcade.towerdefence.model.creationclasses;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import deco2800.arcade.towerdefence.model.Grid;
 import deco2800.arcade.towerdefence.model.Mortal;
@@ -47,7 +50,25 @@ public class Barrier extends Mortal {
 	}
 
 	// Methods
-	public void start(){
-		GameScreen.spriteBuild(this, fileStanding());
+	public void start() {
+		// Create the list of filenames for standingFiles
+		// The hard-coded file path for the frame
+		String frame = "frames\\Barrier\\Standing\\BarrierStanding.png";
+		// The list
+		List<String> frameList = new ArrayList<String>();
+		// put the frame in the list
+		frameList.add(frame);
+		// set the fileStanding to the list of frame(s)
+		this.fileStanding(frameList);
+		
+		// Remember to adjust the rotation before building the sprite if necessary
+		this.rotation(0);
+		
+		// Build the idle sprite list
+		List<Sprite> sprList = (GameScreen.spriteBuild(this, fileStanding()));
+		 
+		 // Send the List of sprites for animation
+		 //GameScreen.animate(sprList);
+		sprList.size();
 	}
 }

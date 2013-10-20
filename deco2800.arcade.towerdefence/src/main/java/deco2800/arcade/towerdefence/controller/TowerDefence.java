@@ -3,6 +3,7 @@ package deco2800.arcade.towerdefence.controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Application;
+
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
@@ -49,7 +50,7 @@ public class TowerDefence extends GameClient {
 		setScreen(splashScreen);
 		
 		// Dan insert game creation code here.
-		
+		//Tower FireI = new Tower(0, 0, 0, 0, null, null, null, 0, 0, null, 0, null, null, null, null);
 		
 		// Listener controls
 		this.getOverlay().setListeners(new Screen() {

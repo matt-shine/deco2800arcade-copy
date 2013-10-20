@@ -143,7 +143,7 @@ public class Level2Scenes extends LevelScenes {
 			blockMaker.setMoveWithEntites(movingEntities);
 			output.add(blockMaker);
 			blockMaker.setActive(true);
-			boss = new EnemySpiderBoss(new Vector2(SPIDER_BOSS_START - cam.viewportWidth/2 - EnemySpiderBoss.WIDTH, 5f), rank, cam);
+			boss = new EnemySpiderBoss(new Vector2(SPIDER_BOSS_START - cam.viewportWidth/2 - EnemySpiderBoss.WIDTH, 5f));
 			output.add(boss);
 			MovablePlatformAttachment bossSolid1 = new MovablePlatformAttachment(null, 2f, 5f, boss, new Vector2(3f, 5f));
 			MovablePlatformAttachment bossSolid2 = new MovablePlatformAttachment(null, 5f, 2f, boss, new Vector2(1f, 3f));

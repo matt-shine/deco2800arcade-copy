@@ -103,7 +103,7 @@ class HostScreen extends LocalScreen {
 			int boardSize = model.getBoardSize();
 			TileModelObserver t;
 
-			for (int j = 0; j < boardSize; j++)
+			for (int j = 0; j < boardSize; j++){
 				for (int i = 0; i < boardSize; i++) {
 					t = ObjectSpace.getRemoteObject(c, 1700 + j * 100 + i,
 							TileModelObserver.class);
@@ -111,6 +111,7 @@ class HostScreen extends LocalScreen {
 					((RemoteObject) t).setTransmitExceptions(false);
 					model.getBoardTile(i, j).addObserver(t);
 				}
+			}
 
 			p1 = ObjectSpace.getRemoteObject(c, 101, PlayerModelObserver.class);
 			((RemoteObject) p1).setNonBlocking(true);

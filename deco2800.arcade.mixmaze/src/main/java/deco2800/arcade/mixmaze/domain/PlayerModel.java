@@ -2,6 +2,7 @@ package deco2800.arcade.mixmaze.domain;
 
 import java.util.ArrayList;
 
+import deco2800.arcade.mixmaze.Achievements;
 import deco2800.arcade.mixmaze.Sounds;
 import static deco2800.arcade.mixmaze.domain.Direction.*;
 import static deco2800.arcade.mixmaze.domain.ItemModel.Type.*;
@@ -286,10 +287,12 @@ public class PlayerModel {
 			pick = (PickModel) item;
 			updatePick(true);
 			res = true;
+			if(id == 1) Achievements.incrementAchievement(Achievements.AchievementType.BreakingGood);
 		} else if (item.getType() == TNT && this.tnt == null) {
 			tnt = (TNTModel) item;
 			updateTnt(true);
 			res = true;
+			if(id == 1) Achievements.incrementAchievement(Achievements.AchievementType.TNT);
 		}
 		return res;
 	}
@@ -355,6 +358,7 @@ public class PlayerModel {
 					updatePick(false);
 					used = true;
 					Sounds.playDestroy();
+					if(id == 1) Achievements.incrementAchievement(Achievements.AchievementType.UsePick);
 					switchAction();
 				}
 			} else if (action == Action.USE_TNT && tnt != null) {
@@ -364,10 +368,11 @@ public class PlayerModel {
 					if (wall.isBuilt()) {
 						wall.destroy(this);
 					}
-					Sounds.playTNT();
 				}
 				updateTnt(false);
 				used = true;
+				Sounds.playTNT();
+				if(id == 1) Achievements.incrementAchievement(Achievements.AchievementType.UseTNT);
 				switchAction();
 			}
 			lastAction = used ? System.currentTimeMillis() : lastAction;

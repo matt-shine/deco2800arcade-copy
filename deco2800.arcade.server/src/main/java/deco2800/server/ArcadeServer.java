@@ -18,6 +18,7 @@ import deco2800.server.database.CreditStorage;
 import deco2800.server.database.ImageStorage;
 import deco2800.server.database.DatabaseException;
 import deco2800.server.database.ReplayStorage;
+import deco2800.server.database.GamePath;
 import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.LobbyListener;
 import deco2800.server.listener.MultiplayerListener;
@@ -57,6 +58,8 @@ public class ArcadeServer {
 	
 	// Package manager
 	private PackageServer packServ;
+	//table storying gameID, path and and md5hash of the path
+	private GamePath gamePath;
 
     private GameStorage gameStorage;
 	
@@ -186,7 +189,7 @@ public class ArcadeServer {
             //Do nothing, yet ;P
         }
         
-        
+        this.gamePath = new GamePath();
         
         //CODE SMELL
 		this.replayStorage = new ReplayStorage();
@@ -217,6 +220,14 @@ public class ArcadeServer {
 		try {
 			highscoreDatabase.initialise();
 			logger.debug("highscoreDatabase initialised");
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
+		
+		//init GamePath database
+		try {
+			gamePath.initialise();
+			gamePath.addTheGames();
 		} catch (DatabaseException e) {
 			e.printStackTrace();
 		}

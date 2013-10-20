@@ -35,7 +35,6 @@ public class GridScreen implements Screen, LibraryScreen {
     private java.util.List<Game> games = null;
     private Game currentGame;
     private Stage stage;
-    private TextButton storeButton;
     private TextButton userProfileButton;
     private TextButton currentButton;
     private TextButton homeButton;
@@ -154,22 +153,14 @@ public class GridScreen implements Screen, LibraryScreen {
         homeButton.setY(650);
         homeButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
 
-        storeButton = new TextButton("Game Store", libSkin);
-        storeButton.setWidth(150);
-        storeButton.setHeight(40);
-        storeButton.setX(300);
-        storeButton.setY(650);
-        storeButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
-
         userProfileButton = new TextButton("User Profile", libSkin);
         userProfileButton.setWidth(150);
         userProfileButton.setHeight(40);
-        userProfileButton.setX(500);
+        userProfileButton.setX(300);
         userProfileButton.setY(650);
-        userProfileButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
+        userProfileButton.addListener(new PlayButtonActionHandler(this, "profileui"));
         
         stage.addActor(homeButton);
-        stage.addActor(storeButton);
         stage.addActor(userProfileButton);
         
         //you cannot use this method

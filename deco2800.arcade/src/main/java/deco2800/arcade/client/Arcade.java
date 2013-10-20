@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Constructor;
@@ -18,6 +20,10 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import org.reflections.Reflections;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
@@ -333,18 +339,20 @@ public class Arcade extends JFrame {
 		creditBalanceRequest.playerID = myID;
 		creditBalanceRequest.username = myUsername;
 		this.client.sendNetworkObject(creditBalanceRequest);
+		
+		System.out.println("Connected with ID: " + myID + " and Username: " + player.getUsername());
 	
-		if (myID == 1601){ //This ID belongs to debugChat1
+		if (myID == 1501){ //This ID belongs to debugChat1
 			List<Integer> chat = new ArrayList<Integer>(); 
-			chat.add(1600); //debugChat
-			chat.add(1601); //debugChat1 
+			chat.add(1500); //debugChat
+			chat.add(1501); //debugChat1 
 			this.communicationNetwork.createChat(chat);
 		}
 		
-		if (myID == 1602){ //This ID belongs to debugChat2 
+		if (myID == 1502){ //This ID belongs to debugChat2 
 			List<Integer> chat = new ArrayList<Integer>(); 
-			chat.add(1600); //debugChat
-			chat.add(1602); //debugChat2 
+			chat.add(1500); //debugChat
+			chat.add(1502); //debugChat2 
 			this.communicationNetwork.createChat(chat); 
 		}
 		
@@ -392,7 +400,17 @@ public class Arcade extends JFrame {
 	/**
 	 * Fetch the JAR for a given game/version from the server
 	 * 
-	 * A thread is spawned to fetch the game
+	 * A thread is spawned to fetch the game.
+     *
+     * If you do not know which version you wish to fetch, pass in
+     * a null string for the version number and the server will return
+     * the latest version.
+     *
+     * NOTE the reason this method is in here is because it was impossible
+     * to abstract the network class from the deco2800.arcade.client package.
+     * In order to abstract the client side network classes it needed to be
+     * done before anyone had access to the repository. This basically
+     * rendered the entire deco2800.arcade.packman.PackageClient useless.
 	 * 
 	 * @param gameID
 	 * @param version
@@ -403,6 +421,21 @@ public class Arcade extends JFrame {
 		t.start();
 	}
 
+
+    /**
+     * Fetch the JAR for a given game from the server
+     *
+     * A thread is spawned to fetch the game.
+     *
+     * Fetches the latest version as per the DB.
+     *
+     * @param gameID
+     */
+    public void fetchGameJar(String gameID) {
+        FileClient fc = new FileClient(gameID, fileClient);
+        Thread t = new Thread(fc);
+        t.start();
+    }
 
 	/**
 	 * Ask the server to play a given game.
@@ -495,8 +528,24 @@ public class Arcade extends JFrame {
 			proxy.setThreadMonitor(mon);
 
 			container = this.getContentPane();
+			container.setLayout(new GridBagLayout());
+			communicationView = new CommunicationView(height);
+
+			GridBagConstraints c = new GridBagConstraints();
+			c.fill = GridBagConstraints.HORIZONTAL;
+			c.gridy = 1;
 			
-			container.add(this.canvas.getCanvas(), BorderLayout.WEST);
+			c.gridx = 0;
+			c.weightx = 0.8;
+			
+			container.add(this.canvas.getCanvas(), c);
+			
+			c.gridx = 1;
+			c.weightx = 0.2;
+			
+			container.add(communicationView, c);
+			
+			setResizable(false);
 			
 			pack();
 			

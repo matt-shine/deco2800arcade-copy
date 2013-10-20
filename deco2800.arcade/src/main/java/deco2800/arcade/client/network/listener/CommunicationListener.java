@@ -32,7 +32,6 @@ public class CommunicationListener extends NetworkListener {
 		 * Server is replying to our login attempt
 		 */
 		if (object instanceof ConnectionResponse){
-			System.out.println("Client got connectionResponse");
 			ConnectionResponse response = (ConnectionResponse) object;
 			if (response.playerID >= 0){
 				if (response.register == false){

@@ -189,7 +189,18 @@ public class HashStorage {
 			PreparedStatement statement = null;
 			statement = connection.prepareStatement("INSERT INTO PLAYERS "
 					+ "(playerId, username) values (?, ?)");
-			statement.setInt(1, id + 1);
+			
+			//For testing chat
+			if (username.equals("debugChat")){
+				statement.setInt(1, 1500);
+			} else if (username.equals("debugChat1")){
+				statement.setInt(1, 1501);
+			} else if (username.equals("debugChat2")){
+				statement.setInt(1, 1502);
+			} else {
+				statement.setInt(1, id + 1);
+			}
+
 			statement.setString(2, username);
 			statement.executeUpdate();
 		} catch (SQLException e) {

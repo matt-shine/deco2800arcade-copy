@@ -1,5 +1,7 @@
 package deco2800.arcade.model;
 
+import java.util.ArrayList;
+
 public class PlayerPrivacyGlob {
 	private boolean namePrivacy;
 	private boolean emailPrivacy;
@@ -23,14 +25,14 @@ public class PlayerPrivacyGlob {
 	public PlayerPrivacyGlob(){
 	}
 	
-	public PlayerPrivacyGlob(boolean[] privacy) {
-		this.namePrivacy = privacy[NAME_PRIVACY_ID - 1];
-		this.emailPrivacy = privacy[EMAIL_PRIVACY_IDNAME_ID - 1];
-		this.programPrivacy = privacy[PROGRAM_PRIVACY_ID - 1];
-		this.bioPrivacy = privacy[BIO_PRIVACY_ID - 1];
-		this.friendsPrivacy = privacy[FRIENDS_PRIVACY_ID - 1];
-		this.gamesPrivacy = privacy[GAMES_PRIVACY_ID - 1];
-		this.achievementsPrivacy = privacy[ACHIEVMENTS_PRIVACY_ID - 1];
+	public PlayerPrivacyGlob(ArrayList<Boolean> privacy) {
+		this.namePrivacy = privacy.get(NAME_PRIVACY_ID - 1);
+		this.emailPrivacy = privacy.get(EMAIL_PRIVACY_IDNAME_ID - 1);
+		this.programPrivacy = privacy.get(PROGRAM_PRIVACY_ID - 1);
+		this.bioPrivacy = privacy.get(BIO_PRIVACY_ID - 1);
+		this.friendsPrivacy = privacy.get(FRIENDS_PRIVACY_ID - 1);
+		this.gamesPrivacy = privacy.get(GAMES_PRIVACY_ID - 1);
+		this.achievementsPrivacy = privacy.get(ACHIEVMENTS_PRIVACY_ID - 1);
 	}
 	
 	public boolean isNamePrivacy() {

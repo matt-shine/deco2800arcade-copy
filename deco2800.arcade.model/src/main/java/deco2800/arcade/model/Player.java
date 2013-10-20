@@ -1,7 +1,8 @@
 
-
 package deco2800.arcade.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -47,8 +48,8 @@ public class Player extends User {
 
 	private LibraryStyle libraryStyle;
 
-	/*
-	 * Zero-Arg Constructor for Kryo
+	/**
+	 * Zero-Arg Constructor for Player
 	 */
 	public Player(){
 	}
@@ -147,7 +148,7 @@ public class Player extends User {
 	 */
 	public Player(int playerID, String filepath, List<String> details,
 			Set<User> friendsList, Set<User> friendRequestsList,
-			Set<User> blockedList, Set<Game> gamesList, boolean[] privacy) {
+			Set<User> blockedList, Set<Game> gamesList, ArrayList<Boolean> privacy) {
 		super(playerID);
 		this.username = new Field(USERNAME_ID, details.get(0));
 		this.name = new Field(NAME_ID, details.get(1));
@@ -750,18 +751,17 @@ public class Player extends User {
 		clearChanged();
 	}
 
-	/**
-	 * Update Player's library colour
-	 * 
-	 * @param colour
-	 *            Colour Scheme
+    /**
+	 * Update Player's library style
+	 *
+	 * @param style
+	 *            Library Style
 	 */
-	public void updateLibraryColour(int colour) {
-		libraryStyle.setColourScheme(colour);
-		setChanged();
-		notifyObservers(libraryStyle);
-		clearChanged();
+	public void setLibraryStyle(int style) {
+		libraryStyle.setLayout(style);
 	}
+
+
 
 	/**
 	 * Get Player's Library Style
@@ -772,3 +772,4 @@ public class Player extends User {
 		return libraryStyle;
 	}
 }
+

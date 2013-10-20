@@ -187,7 +187,7 @@ public class CommunicationNetwork {
 		this.view = view;
 		this.view.setCommunicationNetwork(this);
 		// this.model = new CommunicationModel();
-		this.controller = new CommunicationController(view, null, this);
+		this.controller = new CommunicationController(this.view, null, this);
 	}
 
 	/**

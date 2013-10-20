@@ -108,6 +108,7 @@ public class PlayerListener extends Listener {
 			} else if (object instanceof LibraryStyleUpdateRequest) {
 				LibraryStyleUpdateRequest request = (LibraryStyleUpdateRequest) object;
 				PlayerDatabaseManager pdm = new PlayerDatabaseManager();
+                pdm.updateStyle(request.getPlayerID(), request.getStyle());
 				/*
 				 * This needs to be completed by the Library Team.
 				 */

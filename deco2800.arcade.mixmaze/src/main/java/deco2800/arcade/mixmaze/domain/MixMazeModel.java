@@ -451,12 +451,15 @@ public class MixMazeModel implements IMixMazeModel {
 	private int getMaxItemCount() {
 		int count = 0;
 
-		for (int i = 0; i < boardSize; i++)
-			for (int j = 0; j < boardSize; j++)
+		for (int i = 0; i < boardSize; i++){
+			for (int j = 0; j < boardSize; j++){
 				if (!(board[i][j].isBoxBuilt()
 						|| player[0].isAtLocation(j, i)
-						|| player[1].isAtLocation(j, i)))
+						|| player[1].isAtLocation(j, i))){
 					count++;
+				}
+			}
+		}
 		return Math.min(difficulty.maxItems, count);
 	}
 

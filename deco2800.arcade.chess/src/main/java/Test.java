@@ -15,8 +15,14 @@ public class Test {
 	public static void main(String[] args) throws NetworkException {
 		Board board = new Board();
 		
-		List<int[]> allowed = board.allowedMoves(board.blackPawn1);
+		int[] pawnPos = {2,1};
+		board.movePiece(board.whitePawn2, pawnPos);
 		
+		List<int[]> allowed = board.allowedMoves(board.whiteBishop1);
+		
+		//System.out.println(allowed);
+		
+		/*
 		//System.out.println(board.blackPawn1);
 		for(int[] a : allowed) {
 			//System.out.println("[" + a[0] + "," + a[1] + "]");
@@ -32,7 +38,7 @@ public class Test {
 		for(int[] a : allowed2) {
 			System.out.println("[" + a[0] + "," + a[1] + "]");
 		}
-		
+		*/
 	}
 
 }

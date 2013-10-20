@@ -19,7 +19,7 @@ public class ReplayPlayback {
 	private long nextReplayTime = -1;
 	private int nextReplayIndex = -1;
 	
-	private final long CONSTANT_PLAYBACK_DEFAULT_INTERVAL = 1000;
+	private static final long CONSTANT_PLAYBACK_DEFAULT_INTERVAL = 1000;
 	
 	private long constantTimePlaybackInterval =
 	                                         CONSTANT_PLAYBACK_DEFAULT_INTERVAL;
@@ -99,7 +99,7 @@ public class ReplayPlayback {
 	 * Starts playback of game
 	 */
 	private void startPlayback() {
-		if ( this.replayHistory == null ) {
+		if ( this.replayHistory == null || this.replayHistory.size() == 0 ) {
 			throw new PlaybackException( "Started replay with no data" );
 		}
 		playbackStartTime = System.currentTimeMillis();

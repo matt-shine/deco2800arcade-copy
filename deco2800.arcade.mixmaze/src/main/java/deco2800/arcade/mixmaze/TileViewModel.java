@@ -51,7 +51,7 @@ public final class TileViewModel extends Group implements TileModelObserver {
 	private final class WallWatcher implements WallModelObserver {
 		private boolean isBuilt;
 
-		public boolean IsBuilt() {
+		public boolean isBuilt() {
 			return isBuilt;
 		}
 
@@ -77,7 +77,7 @@ public final class TileViewModel extends Group implements TileModelObserver {
 	 * @param tileSize
 	 *            the graphical size of the tile
 	 */
-	public TileViewModel(int x, int y, float tileSize, ShapeRenderer renderer) {
+	public TileViewModel(float tileSize, ShapeRenderer renderer) {
 		this.tileSize = tileSize;
 		offset = tileSize / 32;
 		this.renderer = renderer;
@@ -138,14 +138,18 @@ public final class TileViewModel extends Group implements TileModelObserver {
 	private void drawWalls() {
 		renderer.begin(FilledRectangle);
 		renderer.setColor(1f, 1f, 0f, 1f);
-		if (wallWatchers[WEST].IsBuilt())
+		if (wallWatchers[WEST].isBuilt()){
 			renderer.filledRect(0, 0, offset, tileSize);
-		if (wallWatchers[NORTH].IsBuilt())
+		}
+		if (wallWatchers[NORTH].isBuilt()){
 			renderer.filledRect(0, tileSize - offset, tileSize, offset);
-		if (wallWatchers[EAST].IsBuilt())
+		}
+		if (wallWatchers[EAST].isBuilt()){
 			renderer.filledRect(tileSize - offset, 0, offset, tileSize);
-		if (wallWatchers[SOUTH].IsBuilt())
+		}
+		if (wallWatchers[SOUTH].isBuilt()){
 			renderer.filledRect(0, 0, tileSize, offset);
+		}
 		renderer.end();
 	}
 

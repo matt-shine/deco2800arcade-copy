@@ -59,6 +59,8 @@ public class TestHashStorage {
 
 		hashStorage = new HashStorage();
 		hashStorage.initialise();
+		hashStorage.drop();
+		hashStorage.initialise();
 
 		IDataSet ds = getDataSet();
 		databaseTester.setDataSet(ds);
@@ -107,7 +109,7 @@ public class TestHashStorage {
 		// Check that we successfully registered
 		assertTrue(hashStorage.checkPassword(username, password));
 	}
-	
+
 	@Test
 	public void updatePasswordTest() throws DatabaseException {
 		String password = "It's just a flesh wound.";

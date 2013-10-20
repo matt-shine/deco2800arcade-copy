@@ -1,15 +1,18 @@
 package deco2800.arcade.client;
 
 import deco2800.arcade.model.Achievement;
-import deco2800.arcade.model.Player;
 
+/**
+ * Specifies an interface for recieving callbacks when progress is made in
+ * achievements or they're awarded.
+ */
 public interface AchievementListener {
 	/**
 	 * Called when an achievement is awarded to a player.
 	 *
 	 * @param achievement The achievement awarded.
 	 */
-	public void achievementAwarded(Achievement achievement);
+	void achievementAwarded(Achievement achievement);
     
 	/**
 	 * Called when a player's progress in an achievement is incremented
@@ -20,5 +23,5 @@ public interface AchievementListener {
 	 * @param progress    The player's new progress (saves a call to
 	 *                    AchievementClient.progressForPlayer).
 	 */
-	public void progressIncremented(Achievement achievement, int progress);
+	void progressIncremented(Achievement achievement, int progress);
 }

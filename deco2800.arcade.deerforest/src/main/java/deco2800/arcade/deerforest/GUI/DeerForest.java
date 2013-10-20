@@ -60,7 +60,10 @@ public class DeerForest extends GameClient {
 	public void create() {
 		
 		super.create();
-        
+
+        // Create the logger
+        logger = Logger.getLogger("GUILogger");
+
         // Setup menu
         mainMenu = new MainMenu(null);
         menuView = new MainMenuScreen(mainMenu);
@@ -80,9 +83,6 @@ public class DeerForest extends GameClient {
         
 		// Set the menu as the screen
 		changeScreen("menu");
-		
-		// Create the logger
-		logger = Logger.getLogger("GUILogger");
 		
 		// Initialise the highscore client
 		playerScore = new HighscoreClient(getPlayer().getUsername(), "DeerForest", networkClient);
@@ -236,33 +236,54 @@ public class DeerForest extends GameClient {
         cardList.add(card19);
         cardList.add(card19);
 
-        //DARKNESS CARDS
-        AbstractCard card20 = new DarkMonster(20, 70, "DeerForestAssets/bloodhoundv2.png");
+        //FIRE CARDS
+        AbstractCard card20 = new FireMonster(50, 50, "DeerForestAssets/cigar.png");
+        cardList.add(card20);
         cardList.add(card20);
 
-        AbstractCard card21 = new DarkMonster(25, 65, "DeerForestAssets/cavetroll.png");
+        AbstractCard card21 = new FireMonster(100, 100, "DeerForestAssets/cinders.png");
+        cardList.add(card21);
         cardList.add(card21);
 
-        AbstractCard card22 = new DarkMonster(50, 50, "DeerForestAssets/darkmystic.png");
+        AbstractCard card22 = new FireMonster(25, 75, "DeerForestAssets/firewall.png");
+        cardList.add(card22);
         cardList.add(card22);
 
-        AbstractCard card23 = new DarkMonster(1, 999, "DeerForestAssets/death.png");
+        AbstractCard card23 = new FireMonster(75, 25, "DeerForestAssets/inferno.png");
+        cardList.add(card23);
         cardList.add(card23);
 
-        AbstractCard card24 = new DarkMonster(100, 100, "DeerForestAssets/madking.png");
+        AbstractCard card24 = new FireMonster(999, 1, "DeerForestAssets/wilo.png");
+        cardList.add(card24);
         cardList.add(card24);
 
-        AbstractCard card25 = new DarkMonster(75, 30, "DeerForestAssets/shadow.png");
+        //DARKNESS CARDS
+        AbstractCard card25 = new DarkMonster(20, 70, "DeerForestAssets/bloodhoundv2.png");
         cardList.add(card25);
 
-        AbstractCard card26 = new DarkMonster(30, 80, "DeerForestAssets/undeadtrex.png");
+        AbstractCard card26 = new DarkMonster(25, 65, "DeerForestAssets/cavetroll.png");
         cardList.add(card26);
 
-        AbstractCard card27 = new DarkMonster(50, 50, "DeerForestAssets/witch.png");
+        AbstractCard card27 = new DarkMonster(50, 50, "DeerForestAssets/darkmystic.png");
         cardList.add(card27);
 
-        AbstractCard card28 = new DarkMonster(20, 90, "DeerForestAssets/zombiearcher.png");
+        AbstractCard card28 = new DarkMonster(1, 999, "DeerForestAssets/death.png");
         cardList.add(card28);
+
+        AbstractCard card29 = new DarkMonster(100, 100, "DeerForestAssets/madking.png");
+        cardList.add(card29);
+
+        AbstractCard card30 = new DarkMonster(75, 30, "DeerForestAssets/shadow.png");
+        cardList.add(card30);
+
+        AbstractCard card31 = new DarkMonster(30, 80, "DeerForestAssets/undeadtrex.png");
+        cardList.add(card31);
+
+        AbstractCard card32 = new DarkMonster(50, 50, "DeerForestAssets/witch.png");
+        cardList.add(card32);
+
+        AbstractCard card33 = new DarkMonster(20, 90, "DeerForestAssets/zombiearcher.png");
+        cardList.add(card33);
 
         //SPELL CARDS
         //BATTERY
@@ -318,6 +339,101 @@ public class DeerForest extends GameClient {
         cardList.add(spell2);
         cardList.add(spell2);
         cardList.add(spell2);
+
+        //DARKNESS
+        Set<String> typeEffects3 = null;
+        List<String> effectCategory3 = new ArrayList<String>();
+        effectCategory3.add("Destroy");
+        List<List<Integer>> effectParams3 = new ArrayList<List<Integer>>();
+        ArrayList<Integer> destroyEffect3 = new ArrayList<Integer>();
+        destroyEffect3.add(10); //Amount to destroy
+        destroyEffect3.add(1); //affect field
+        destroyEffect3.add(2); //Affect either
+        destroyEffect3.add(0); //destroy monster
+        destroyEffect3.add(0); //On activation
+        destroyEffect3.add(5); //Affect light
+        effectParams3.add(destroyEffect3);
+        SpellEffect spellEffect3;
+        try {
+            spellEffect3 = new SpellEffect(typeEffects3, effectCategory3, effectParams3);
+        } catch (Exception e) {
+            DeerForest.logger.info("Error making effect darkness");
+            spellEffect3 = null;
+        }
+        String filePath3 = "DeerForestAssets/darkness.png";
+        AbstractCard spell3 = new GeneralSpell(spellEffect3, filePath3);
+        cardList.add(spell3);
+
+        //EYE
+        Set<String> typeEffects4 = null;
+        List<String> effectCategory4 = new ArrayList<String>();
+        effectCategory4.add("Destroy");
+        effectCategory4.add("Draw");
+        effectCategory4.add("Draw");
+        List<List<Integer>> effectParams4 = new ArrayList<List<Integer>>();
+        ArrayList<Integer> destroyEffect4 = new ArrayList<Integer>();
+        destroyEffect4.add(12); //Amount to destroy
+        destroyEffect4.add(0); //affect hand
+        destroyEffect4.add(2); //Affect either
+        destroyEffect4.add(0); //destroy monster
+        destroyEffect4.add(0); //On activation
+        destroyEffect4.add(0); //Affect any types
+
+        ArrayList<Integer> drawEffect4 = new ArrayList<Integer>();
+        drawEffect4.add(5); //Amount to draw
+        drawEffect4.add(0); //discard none
+        drawEffect4.add(0); //discard none
+        drawEffect4.add(0); //affect you
+        drawEffect4.add(0); //On activation
+
+        ArrayList<Integer> drawEffect42 = new ArrayList<Integer>();
+        drawEffect42.add(5); //Amount to draw
+        drawEffect42.add(0); //discard none
+        drawEffect42.add(0); //discard none
+        drawEffect42.add(1); //affect opponent
+        drawEffect42.add(0); //On activation
+
+        effectParams4.add(destroyEffect4);
+        effectParams4.add(drawEffect4);
+        effectParams4.add(drawEffect42);
+        SpellEffect spellEffect4;
+        try {
+            spellEffect4 = new SpellEffect(typeEffects4, effectCategory4, effectParams4);
+        } catch (Exception e) {
+            DeerForest.logger.info("Error making effect eye");
+            spellEffect4 = null;
+        }
+        String filePath4 = "DeerForestAssets/eye.png";
+        AbstractCard spell4 = new GeneralSpell(spellEffect4, filePath4);
+        cardList.add(spell4);
+        cardList.add(spell4);
+
+        //GREENACID
+        Set<String> typeEffects5 = null;
+        List<String> effectCategory5 = new ArrayList<String>();
+        effectCategory5.add("Destroy");
+        List<List<Integer>> effectParams5 = new ArrayList<List<Integer>>();
+        ArrayList<Integer> destroyEffect5 = new ArrayList<Integer>();
+        destroyEffect5.add(1); //Amount to destroy
+        destroyEffect5.add(0); //affect hand
+        destroyEffect5.add(1); //Affect opponent
+        destroyEffect5.add(0); //destroy monster
+        destroyEffect5.add(0); //On activation
+        destroyEffect5.add(0); //Affect any types
+        effectParams5.add(destroyEffect5);
+        SpellEffect spellEffect5;
+        try {
+            spellEffect5 = new SpellEffect(typeEffects5, effectCategory5, effectParams5);
+        } catch (Exception e) {
+            DeerForest.logger.info("Error making effect greenacid");
+            spellEffect5 = null;
+        }
+        String filePath5 = "DeerForestAssets/sword of light.png";
+        AbstractCard spell5 = new GeneralSpell(spellEffect5, filePath5);
+        cardList.add(spell5);
+        cardList.add(spell5);
+        cardList.add(spell5);
+        cardList.add(spell5);
 
         //ADD DECK TO PLAYER
 		Deck deck = new Deck(cardList);

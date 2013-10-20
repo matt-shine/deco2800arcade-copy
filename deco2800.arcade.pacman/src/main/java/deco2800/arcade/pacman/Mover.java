@@ -10,8 +10,7 @@ public abstract class Mover {
 		LEFT, RIGHT, UP, DOWN
 	}
 	
-	protected Dir facing; // 1: Right, 2: Left
-						// 3: Up, 4: Down
+	protected Dir facing;
 	protected Dir drawFacing;
 	
 	// the coordinates of the bottom left corner of the pacman/ghost (for
@@ -127,8 +126,8 @@ public abstract class Mover {
 		if (this.getClass() != PacChar.class) {return;} // Only Pac man can use special tiles!
 		if (tile.getClass() == DotTile.class) {
 			if (!((DotTile) tile).isEaten()) {
-//				incrementAchievement("pacman.insatiable");
 				((DotTile) tile).dotEaten();
+				gameMap.setDotsEaten(gameMap.getDotsEaten() + 1);
 				if (((DotTile) tile).isEnergiser()) {
 					this.setScore(this.getScore() + 50);
 				} else {

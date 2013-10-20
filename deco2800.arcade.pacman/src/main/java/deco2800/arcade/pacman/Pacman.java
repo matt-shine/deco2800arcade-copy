@@ -7,8 +7,8 @@ import com.badlogic.gdx.utils.Logger;
 
 import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeInputMux;
-import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.AchievementProgress;
@@ -49,7 +49,7 @@ public class Pacman extends GameClient {
 		
 	public Pacman(Player player1, NetworkClient networkClient) {
 		super(player1, networkClient);		
-		this.incrementAchievement("pacman.startgame");
+		this.incrementAchievement("pacman.onegame");
 	}	
 		
 	/**
@@ -117,8 +117,6 @@ public class Pacman extends GameClient {
 		}
 	}
 	
-	
-	
 	/**
 	 * Called when application is closed, helps tidy things up
 	 */
@@ -134,36 +132,6 @@ public class Pacman extends GameClient {
 		super.pause();
 	}
 	
-	/* Commenting this out because it's not being used and is really old
-	private void makeChanges() {
-		
-		 // Respond to user input depending on the game state
-	    switch(gameState) {	    
-	    //TODO BLARH apparently this commented bit of code isn't even being reached
-	    // (certainly none of my log statements are coming up, not sure if that's 
-	    // cause I set it up wrongly- can't get them to show up anywhere. But yeah, so
-	    // i can't get it to change gamestate
-	    case READY: //Ready to initialise the game
-//	    	if (controller.keyDown(Keys.ANY_KEY)) {
-//	    		startGame();
-//	    	}
-	    	break;	    	
-	    case RUNNING: 
-	    	logger.debug("Still running");	
-	    	if (controller.keyDown(Keys.ESCAPE)) {
-	    		gameState = GameState.GAMEOVER;
-	    	}
-	    	break;	    	
-	    case GAMEOVER: //The game has been won, wait to exit
-	    	logger.debug("Game over man, game over!");	
-	    	if (controller.keyDown(Keys.ANY_KEY)) {
-	    		gameOver();
-	    		ArcadeSystem.goToGame(ArcadeSystem.UI);
-	    	}
-	    	break;
-	    }	    
-	}*/
-	
 	/**
 	 * Called continually to draw the screen unless specifically told not to be
 	 */
@@ -173,6 +141,16 @@ public class Pacman extends GameClient {
 		if (viewNotSetUp) {
 			view = new PacView(model);
 			viewNotSetUp = false;
+		}
+		
+		// Update checks for achievements
+		if (getModel().getGameMap().getDotsEaten() == 100){
+			this.incrementAchievement("pacman.insatiable");
+		}
+		
+		if (getModel().getGameMap().getDotsEaten() == 244){
+			// TODO: some end of game stuff
+			this.incrementAchievement("pacman.completionist");
 		}
 		
 		// make changes in the model to prepare for rendering if overlay

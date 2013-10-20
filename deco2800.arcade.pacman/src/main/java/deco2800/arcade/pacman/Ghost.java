@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.lwjgl.util.Point;
 
-
 public final class Ghost extends Mover {
 
 	public enum GhostState {
@@ -39,8 +38,8 @@ public final class Ghost extends Mover {
 		case CLYDE: num = 3; break;
 		default: num = 0; break;
 		}
-//		currentTile = gameMap.getGhostStarts()[num];  //This is the actual starting positon in pen
-		currentTile = gameMap.getFruitRight(); // For testing purposes
+		currentTile = gameMap.getGhostStarts()[num];  //This is the actual starting positon in pen
+//		currentTile = gameMap.getFruitRight(); // For testing purposes
 		// makes the previous tile the one to right, since he's facing left
 		Point current = gameMap.getTilePos(currentTile);
 		previousTile = gameMap.getGrid()[current.getX() + 1][current.getY()];
@@ -87,20 +86,15 @@ public final class Ghost extends Mover {
 		
 		// checks if ghost is moving, and if so keeps him moving in that
 		// direction
-		int corr = 0;
 		if (currentState == GhostState.CHASE) {
 			if (facing == Dir.LEFT) {
 				drawX -= moveDist;
-//				drawY = gameMap.getTileCoords(currentTile).getY() - corr;
 			} else if (facing == Dir.RIGHT) {
 				drawX += moveDist;
-//				drawY = gameMap.getTileCoords(currentTile).getY() - corr;
 			} else if (facing == Dir.UP) {
 				drawY += moveDist;
-//				drawY = gameMap.getTileCoords(currentTile).getX() - corr;
 			} else if (facing == Dir.DOWN) {
 				drawY -= moveDist;
-//				drawY = gameMap.getTileCoords(currentTile).getX() - corr;
 			} else {
 				currentState = GhostState.SCATTER;
 				facing = Dir.LEFT;
@@ -145,24 +139,6 @@ public final class Ghost extends Mover {
 	}
 	
 	/**
-	 * Calculates the Euclidean distance between the current (start) tile
-	 * and the target tile.
-	 */
-	public double calcDist(Tile start, Tile target) {
-		Point startPoint = gameMap.getTilePos(start);
-		Point targetPoint = gameMap.getTilePos(target);
-		int startx = startPoint.getX();
-		int starty = startPoint.getY();
-		int targetx = targetPoint.getX();
-		int targety = targetPoint.getY();
-		double dist;
-		int distx = targetx - startx;
-		int disty = targety - starty;
-		dist = Math.sqrt((distx * distx + disty * disty));
-		return dist;
-	}
-	
-	/**
 	 * Returns the tile next to the ghost in the direction its facing.
 	 */
 	public Tile getNextTile() {
@@ -181,6 +157,40 @@ public final class Ghost extends Mover {
 		}
 		return testTiles.get(tileNum);
 	}
+	
+	/**
+	 * returns a list of distances in the same order of the testTiles	 * 
+	 */
+	public List<Double> getDists(List<Tile> testTiles) {
+		double tempDist;
+		List<Double> dists = new ArrayList<Double>();
+
+		for (Tile tTile : testTiles) {
+			tempDist = calcDist(targetTile, tTile);
+			dists.add(tempDist);
+		}
+		return dists;
+	}	
+	
+	/**
+	 * Calculates the Euclidean distance between the current (start) tile
+	 * and the target tile.
+	 */
+	public double calcDist(Tile start, Tile target) {
+		Point startPoint = gameMap.getTilePos(start);
+		Point targetPoint = gameMap.getTilePos(target);
+		int startx = startPoint.getX();
+		int starty = startPoint.getY();
+		int targetx = targetPoint.getX();
+		int targety = targetPoint.getY();
+		double dist;
+		int distx = targetx - startx;
+		int disty = targety - starty;
+		dist = Math.sqrt((distx * distx + disty * disty));
+		return dist;
+	}
+	
+	
 
 	/**
 	 * returns a list of testTiles that can be walked into. returns them in the
@@ -217,23 +227,6 @@ public final class Ghost extends Mover {
 		}
 		return testTiles;
 	}
-
-	/**
-	 * returns a list of distances in the same order of the testTiles
-	 * 
-	 */
-	public List<Double> getDists(List<Tile> testTiles) {
-		double tempDist;
-		List<Double> dists = new ArrayList<Double>();
-
-		for (Tile tTile : testTiles) {
-			tempDist = calcDist(targetTile, tTile);
-			dists.add(tempDist);
-		}
-		return dists;
-	}
-
-	
 
 	
 

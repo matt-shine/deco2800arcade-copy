@@ -22,6 +22,7 @@ public class GameMap {
 	private Tile[] ghostStarts; //starting positions for ghosts
 	private Tile blinkyStart;
 	private Tile fruitRight; // the right tile that fruit appears on
+	private int dotsEaten;
 	private int hOffset;
 	private int vOffset;
 	private final int tileSideLength; // length of side of square- should be
@@ -361,5 +362,15 @@ public class GameMap {
 
 	public Tile[] getGhostStarts() {
 		return ghostStarts;
+	}
+
+
+	public int getDotsEaten() {
+		return dotsEaten;
+	}
+
+
+	public void setDotsEaten(int dotsEaten) {
+		this.dotsEaten = dotsEaten;
 	}
 }

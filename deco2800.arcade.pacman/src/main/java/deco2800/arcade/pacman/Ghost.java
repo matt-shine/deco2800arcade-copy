@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.lwjgl.util.Point;
 
+import deco2800.arcade.pacman.Mover.Dir;
+
 public final class Ghost extends Mover {
 
 	public enum GhostState {
@@ -38,8 +40,8 @@ public final class Ghost extends Mover {
 		case CLYDE: num = 3; break;
 		default: num = 0; break;
 		}
-		currentTile = gameMap.getGhostStarts()[num];  //This is the actual starting positon in pen
-//		currentTile = gameMap.getFruitRight(); // For testing purposes
+//		currentTile = gameMap.getGhostStarts()[num];  //This is the actual starting positon in pen
+		currentTile = gameMap.getFruitRight(); // For testing purposes
 		// makes the previous tile the one to right, since he's facing left
 		Point current = gameMap.getTilePos(currentTile);
 		previousTile = gameMap.getGrid()[current.getX() + 1][current.getY()];
@@ -138,18 +140,14 @@ public final class Ghost extends Mover {
 		}
 	}
 	
-	/**
-	 * Returns the tile next to the ghost in the direction its facing.
-	 */
-	public Tile getNextTile() {
+	/** Returns the tile adjacent to the ghost which is closest to the target tile */
+	private Tile getNextTile() {
 		List<Tile> testTiles = getTestTiles();
-		List<Double> dists = getDists(testTiles);
-		int tileNum = 0;
 		double dist = 9999;
 		double temp;
-
-		for (int i = 0; i < dists.size(); i++) {
-			temp = dists.get(i);
+		int tileNum = 0; //number of nextTile
+		for (int i = 0; i < testTiles.size(); i++) {
+			temp = calcDist(testTiles.get(i));
 			if (temp < dist) {
 				dist = temp;
 				tileNum = i;
@@ -158,77 +156,53 @@ public final class Ghost extends Mover {
 		return testTiles.get(tileNum);
 	}
 	
-	/**
-	 * returns a list of distances in the same order of the testTiles	 * 
-	 */
-	public List<Double> getDists(List<Tile> testTiles) {
-		double tempDist;
-		List<Double> dists = new ArrayList<Double>();
-
-		for (Tile tTile : testTiles) {
-			tempDist = calcDist(targetTile, tTile);
-			dists.add(tempDist);
+	/** Returns a list of testTiles that can be walked into. returns them in the
+	 * order left, right, up, down (same as enum) */
+	private List<Tile> getTestTiles() {
+		List<Tile> testTiles = new ArrayList<Tile>();		
+		for (Dir dir: Dir.values()) {
+			Dir opposite = dir; //won't ever stay like this but needed for initialisation
+			switch(dir) {
+			case UP: opposite = Dir.DOWN; break;
+			case DOWN: opposite = Dir.UP; break;
+			case LEFT: opposite = Dir.RIGHT; break;
+			case RIGHT: opposite = Dir.LEFT; break;
+			}
+			Tile next = nextTile(1, dir);
+			if (next.getClass() != WallTile.class && facing != opposite) {
+				testTiles.add(next);
+			}
 		}
-		return dists;
+		return testTiles;
 	}	
 	
 	/**
-	 * Calculates the Euclidean distance between the current (start) tile
+	 * Returns the next tile in the given direction
+	 * @param offset- the amount of tiles to offset from the currentTile
+	 */
+	private Tile nextTile(int offset, Dir dir){
+		int x = gameMap.getTilePos(currentTile).getX();
+		int y = gameMap.getTilePos(currentTile).getY();
+		switch(dir) {
+		case LEFT: x -= offset; break;
+		case RIGHT: x += offset; break;
+		case UP: y += offset; break;
+		case DOWN: y -= offset; break;
+		}
+		return gameMap.getGrid()[x][y];
+	}
+	
+	/**
+	 * Calculates the Euclidean distance between a tile
 	 * and the target tile.
 	 */
-	public double calcDist(Tile start, Tile target) {
+	public double calcDist(Tile start) {
 		Point startPoint = gameMap.getTilePos(start);
-		Point targetPoint = gameMap.getTilePos(target);
-		int startx = startPoint.getX();
-		int starty = startPoint.getY();
-		int targetx = targetPoint.getX();
-		int targety = targetPoint.getY();
-		double dist;
-		int distx = targetx - startx;
-		int disty = targety - starty;
-		dist = Math.sqrt((distx * distx + disty * disty));
-		return dist;
-	}
-	
-	
-
-	/**
-	 * returns a list of testTiles that can be walked into. returns them in the
-	 * order of left, down, up, right
-	 */
-	public List<Tile> getTestTiles() {
-		Point currentPoint = gameMap.getTilePos(currentTile);
-		List<Tile> testTiles = new ArrayList<Tile>();
-		int currentX = currentPoint.getX();
-		int currentY = currentPoint.getY();
-		
-		int upY = currentY + 1;
-		int leftX = currentX - 1;
-		int downY = currentY - 1;
-		int rightX = currentX + 1;
-
-		Tile upTile = gameMap.getGrid()[currentX][upY];
-		Tile leftTile = gameMap.getGrid()[leftX][currentY];
-		Tile downTile = gameMap.getGrid()[currentX][downY];
-		Tile rightTile = gameMap.getGrid()[rightX][currentY];
-		
-		if (nextTile(currentTile, 1, Dir.UP).getClass() != WallTile.class &&
-				!nextTile(currentTile, 1, Dir.UP).equals(previousTile)){
-			testTiles.add(upTile);
-		} if (nextTile(currentTile, 1, Dir.DOWN).getClass() != WallTile.class &&
-				!nextTile(currentTile, 1, Dir.DOWN).equals(previousTile)){
-			testTiles.add(downTile);
-		} if (nextTile(currentTile, 1, Dir.LEFT).getClass() != WallTile.class &&
-				!nextTile(currentTile, 1, Dir.LEFT).equals(previousTile)){
-			testTiles.add(leftTile);
-		} if (nextTile(currentTile, 1, Dir.RIGHT).getClass() != WallTile.class &&
-				!nextTile(currentTile, 1, Dir.RIGHT).equals(previousTile)){
-			testTiles.add(rightTile);
-		}
-		return testTiles;
-	}
-
-	
+		Point targetPoint = gameMap.getTilePos(targetTile);
+		int distx = targetPoint.getX() - startPoint.getX();
+		int disty = targetPoint.getY() - startPoint.getY();
+		return Math.sqrt(Math.pow(distx, 2) + Math.pow(disty, 2));
+	}	
 
 	public GhostState getCurrentState() {
 		return currentState;

@@ -6,17 +6,16 @@ import com.esotericsoftware.kryonet.Connection;
 
 public class BlackjackUser {
 
-	String username;
+	int playerID;
 	int chippile;
 	Connection connection;
 	
 	public BlackjackUser() {
-		this.username = "default";
-	}
-	
-	public BlackjackUser(String username, int chippile, Connection connection) {
 		
-		this.username = username;
+	}
+
+	public BlackjackUser(int playerID, int chippile, Connection connection) {
+		this.playerID = playerID;
 		this.connection = connection;
 		this.chippile = chippile;
 	}

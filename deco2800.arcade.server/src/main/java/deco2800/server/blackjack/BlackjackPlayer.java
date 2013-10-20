@@ -13,7 +13,7 @@ public class BlackjackPlayer extends BlackjackUser{
 	
 	public BlackjackPlayer(BlackjackUser user){
 		this.chippile = user.chippile;
-		this.username = user.username;
+		this.playerID = user.playerID;
 		this.connection = user.connection;
 	}
 	

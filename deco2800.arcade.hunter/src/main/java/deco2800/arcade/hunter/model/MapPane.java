@@ -8,11 +8,17 @@ import deco2800.arcade.hunter.Hunter.Config;
 public class MapPane {
     /**
      * Stores a fixed size 2D array of integers which represent the map tiles
+     * in each layer of the pane
      */
-
     private int[][] background = new int[Config.PANE_SIZE][Config.PANE_SIZE];
     private int[][] foreground = new int[Config.PANE_SIZE][Config.PANE_SIZE];
     private int[][] collision = new int[Config.PANE_SIZE][Config.PANE_SIZE];
+
+    /**
+     * Start and end offsets correspond to the first and last columns of the pane,
+     * they refer to the lowest walkable tile (given as a tile number counting from
+     * the bottom, up) in those columns.
+     */
     private int startOffset;
     private int endOffset;
 
@@ -21,13 +27,20 @@ public class MapPane {
         ROCK
     }
 
+    /**
+     * The type of environment this pane represents
+     */
     private MapType type;
+
+    /**
+     * Rendered version of the two drawn layers of the pane
+     */
     private TextureRegion fgRendered;
     private TextureRegion bgRendered;
 
     /**
      * @param filename file path for map relative to src/resources/
-     * @param type     The MapType of the map pane.
+     * @param type The MapType of the map pane.
      */
     public MapPane(String filename, MapType type) {
         this.type = type;
@@ -40,6 +53,10 @@ public class MapPane {
 
     }
 
+    /**
+     * Load the map pane from a given file
+     * @param filename file name of the map file
+     */
     private void loadPane(String filename) {
         FileHandle mapFile = Gdx.files.internal(filename);
 
@@ -125,8 +142,14 @@ public class MapPane {
         return bgRendered;
     }
 
+    /**
+     * Get the type of collision tile that is at a given pair of coordinates
+     *
+     * @param x column to check
+     * @param y row to check
+     * @return collision tile type at the given coordinates
+     */
     public int getCollisionTile(int x, int y) {
-        //Tiles aren't in this order...
         if (x >= 0 && x < Config.PANE_SIZE &&
                 y >= 0 && y < Config.PANE_SIZE) {
             return collision[Config.PANE_SIZE - 1 - y][x];
@@ -134,6 +157,9 @@ public class MapPane {
         return -3;
     }
 
+    /**
+     * To be called each time an instance of this class is destroyed.
+     */
     public void dispose() {
         fgRendered.getTexture().dispose();
         bgRendered.getTexture().dispose();

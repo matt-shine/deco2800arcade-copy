@@ -16,50 +16,56 @@ import deco2800.arcade.hunter.platformergame.EntityCollision.CollisionType;
 import deco2800.arcade.hunter.screens.GameScreen;
 
 public class MapEntity extends Entity {
-
-	private Texture text;
-
-	private String classType = "MapEntity";
-
+	private Texture texture;
 	private int moveSpeed;
-
-	private String Type;
-
+	private String mapEntityType;
 	private GameScreen gameScreen;
-	
-	private long explodeTimer = 0;
+	private long explodeTime;
 	private boolean explode = false;
 
-	public MapEntity(Vector2 pos, float width, float height, String file,
-			Texture texture, GameScreen game) {
+    /**
+     * @param pos initial position of the MapEntity
+     * @param width initial width of the entity
+     * @param height initial height of the entity
+     * @param mapEntityType the name of the MapEntity, eg. "spike trap".
+     * @param texture Texture containing the image of the map entity
+     * @param gameScreen
+     */
+	public MapEntity(Vector2 pos, float width, float height, String mapEntityType,
+			Texture texture, GameScreen gameScreen) {
 		super(pos, width, height);
-		this.text = texture;
-		if (file.equals("arrow")) {
-			moveSpeed = 40;
-		} else {
-			moveSpeed = 0;
-		}
-		this.Type = file;
-		this.gameScreen = game;
+		this.texture = texture;
+        moveSpeed = (mapEntityType.equals("arrow")) ? 40 : 0;
+
+		this.mapEntityType = mapEntityType;
+		this.gameScreen = gameScreen;
 	}
 
+    /**
+     * @return the type of map entity, e.g. "spike trap".
+     */
 	public String getEntityType() {
-		return Type;
+		return mapEntityType;
 	}
 
+    /**
+     * Update the position and state of this map entity
+     * @param delta delta time since the last game render
+     */
 	@Override
 	public void update(float delta) {
 		if (moveSpeed != 0) {
 			setX(getX() + moveSpeed);
 		}
-		if (explodeTimer + 3000 <= System.currentTimeMillis() && explode){
+		if (explodeTime + 1000 <= System.currentTimeMillis() && explode){
 			gameScreen.removeEntity(this);
 		}
 	}
 
-	/**
-	 * Checks for collisions
-	 */
+    /**
+     * Checks collisions with other entities in the given collection of entities
+     * @param entities collection of entities to search for collisions within
+     */
 	@Override
 	public ArrayList<EntityCollision> getCollisions(EntityCollection entities) {
 		ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
@@ -75,9 +81,13 @@ public class MapEntity extends Entity {
 		return collisions;
 	}
 
-	/**
-	 * Handles Collisions
-	 */
+    /**
+     * Handles collisions with other entities
+     * @param e the entity this entity collided with.
+     * @param entities the collection of entities which contains both this
+     *                 entity and the entity it collided with.
+     *
+     */
 	@Override
 	public void handleCollision(Entity e, EntityCollection entities) {
 		if (e == null) {
@@ -85,26 +95,41 @@ public class MapEntity extends Entity {
 		}
 	}
 
+    /**
+     * @return the type of entity this is
+     */
 	@Override
 	public String getType() {
-		return classType;
+		return "MapEntity";
 	}
 
+    /**
+     * Draw the current entity to the given sprite batch
+     * @param batch sprite batch to draw to
+     * @param stateTime currently unused by this entity type
+     */
 	@Override
 	public void draw(SpriteBatch batch, float stateTime) {
-		batch.draw(text, getX(), getY(), text.getWidth(), text.getHeight());
+		batch.draw(texture, getX(), getY(), texture.getWidth(), texture.getHeight());
 	}
 
+    /**
+     * To be called any time an instance of this class is destroyed.
+     */
     public void dispose() {
-        text.dispose();
+        texture.dispose();
     }
-    
+
+    /**
+     * Used by the bomb map entity type, draw the explosion and play back the
+     * explosion sound.
+     */
     public void explode(){
-    	if (this.Type == "bomb"){
-    		explodeTimer = System.currentTimeMillis();
-    		text = gameScreen.entityHandler.getMapEntity("explosion");
+    	if (this.mapEntityType == "bomb"){
+    		explodeTime = System.currentTimeMillis();
+    		texture = gameScreen.entityHandler.getMapEntity("explosion");
     		explode = true;
-    		this.Type = "explosion";
+    		this.mapEntityType = "explosion";
     		if (Hunter.State.getPreferencesManager().isSoundEnabled()){
     			Sound explosion = (Sound) Gdx.audio.newSound(Gdx.files.internal("explosion.mp3"));
     			explosion.play(Hunter.State.getPreferencesManager().getVolume());

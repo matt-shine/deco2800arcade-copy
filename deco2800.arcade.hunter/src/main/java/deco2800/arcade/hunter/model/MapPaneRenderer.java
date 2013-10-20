@@ -42,6 +42,9 @@ public class MapPaneRenderer {
         return tr;
     }
 
+    /**
+     * To be called when the GameScreen is disposed
+     */
     public static void dispose() {
         tileMap.dispose();
     }

@@ -26,6 +26,8 @@ public class Hunter extends PlatformerGame {
         public final static int SPEED_INCREASE_COUNTDOWN_START = 3;
         public final static int PANES_PER_TYPE = 4; //Number of map panes each map type should be used for
 
+        public final static float CHANCE_OF_CLOUDS = 0.05f;
+        public final static float CHANCE_OF_TREES = 0.021f;
         public final static float CLOUD_MIN_SPEED = 0.3f;
         public final static float CLOUD_MAX_SPEED = 0.7f;
         public final static float TREE_MIN_SPEED = 0.4f;

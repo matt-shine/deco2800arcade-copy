@@ -66,6 +66,11 @@ public class Player extends Entity {
     private Sound death = Gdx.audio.newSound(Gdx.files.internal("death.wav"));
     private Sound hurt = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
 
+    //States used to determine how to draw the player
+    private enum State {
+        RUNNING, JUMPING, ATTACK, FALLING, DEAD, DAMAGED
+    }
+
     public Player(Vector2 pos, float width, float height, GameScreen game) {
         super(pos, width, height);
         loadAnims();
@@ -736,11 +741,9 @@ public class Player extends Entity {
         return animationList.get(Weapon + "running");
     }
 
-    //States used to determine how to draw the player
-    private enum State {
-        RUNNING, JUMPING, ATTACK, FALLING, DEAD, DAMAGED
-    }
-
+    /**
+     * To be called when the GameScreen is disposed
+     */
     public void dispose() {
         pickup.dispose();
         death.dispose();

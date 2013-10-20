@@ -63,7 +63,7 @@ public class MultiplayerServerTest {
 	public void testConstructors() {
 		/* Matchmaking */
 		assertEquals(player1ID, matchmakerServer.getPlayer1());
-		assertEquals(player2ID, matchmakerServer.getplayer2());
+		assertEquals(player2ID, matchmakerServer.getPlayer2());
 		assertEquals(testGame, matchmakerServer.getGameId());
 		assertEquals(sessionId, matchmakerServer.getSessionId());
 		assertEquals(p1Rating, matchmakerServer.getPlayer1Rating());
@@ -74,7 +74,7 @@ public class MultiplayerServerTest {
 		
 		/* Lobby */
 		assertEquals(player1ID, lobbyServer.getPlayer1());
-		assertEquals(player2ID, lobbyServer.getplayer2());
+		assertEquals(player2ID, lobbyServer.getPlayer2());
 		assertEquals(testGame, lobbyServer.getGameId());
 		assertEquals(lobbyMatchId, lobbyServer.getSessionId());
 		assertEquals(0, lobbyServer.getPlayer1Rating());

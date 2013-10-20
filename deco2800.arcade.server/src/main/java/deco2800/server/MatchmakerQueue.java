@@ -2,9 +2,12 @@ package deco2800.server;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Map.Entry;
 
 import com.esotericsoftware.kryonet.Connection;
 
@@ -26,7 +29,7 @@ public class MatchmakerQueue {
 	// Servers currently hosting games
 	private Map<Integer, MultiplayerServer> activeServers;
 	// The PlayerGameStorage database
-	PlayerGameStorage database;
+	private PlayerGameStorage database;
 	// The current number of servers started since the last restart
 	private int serverNumber;
 	// A timer to control the queue
@@ -41,7 +44,7 @@ public class MatchmakerQueue {
 	private MatchmakerQueue() {
 		this.queuedUsers = new ArrayList<ArrayList<Object>>();
 		this.activeServers = new HashMap<Integer, MultiplayerServer>();
-		this.database = new PlayerGameStorage();
+		this.setDatabase(new PlayerGameStorage());
 		this.serverNumber = 0;
 		this.timer = new Timer();
 		class ListTask extends TimerTask {
@@ -199,8 +202,8 @@ public class MatchmakerQueue {
 		String gameID = (String) player1.get(0);
 		// Get the player's rankings
 		try {
-			p1Rating = database.getPlayerRating(p1ID, gameID);
-			p2Rating = database.getPlayerRating(p2ID, gameID);
+			p1Rating = getDatabase().getPlayerRating(p1ID, gameID);
+			p2Rating = getDatabase().getPlayerRating(p2ID, gameID);
 		} catch (DatabaseException e) {
 			e.printStackTrace();
 		}
@@ -209,7 +212,7 @@ public class MatchmakerQueue {
 		if (p1Rating == 0) {
 			p1Rating = 1500;
 			try {
-				database.updatePlayerRating(p1ID, gameID, 1500);
+				getDatabase().updatePlayerRating(p1ID, gameID, 1500);
 			} catch (DatabaseException e) {
 				e.printStackTrace();
 			}
@@ -217,7 +220,7 @@ public class MatchmakerQueue {
 		if (p2Rating == 0) {
 			p2Rating = 1500;
 			try {
-				database.updatePlayerRating(p2ID, gameID, 1500);
+				getDatabase().updatePlayerRating(p2ID, gameID, 1500);
 			} catch (DatabaseException e) {
 				e.printStackTrace();
 			}
@@ -256,8 +259,8 @@ public class MatchmakerQueue {
 		Connection player2Conn = (Connection) player2.get(3);
 		String game = (String) player1.get(0);
 		try {
-			p1Rating = database.getPlayerRating(player1ID, game);
-			p2Rating = database.getPlayerRating(player2ID, game);
+			p1Rating = getDatabase().getPlayerRating(player1ID, game);
+			p2Rating = getDatabase().getPlayerRating(player2ID, game);
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -324,8 +327,8 @@ public class MatchmakerQueue {
 		int player1Rating = 0;
 		int player2Rating = 0;
 		try {
-			player1Rating = database.getPlayerRating(player1ID, gameID);
-			player2Rating = database.getPlayerRating(player2ID, gameID);
+			player1Rating = getDatabase().getPlayerRating(player1ID, gameID);
+			player2Rating = getDatabase().getPlayerRating(player2ID, gameID);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -334,8 +337,8 @@ public class MatchmakerQueue {
 				player2Rating, winner);
 		// Update the rating in the database
 		try {
-			database.updatePlayerRating(player1ID, gameID, newScore[0]);
-			database.updatePlayerRating(player2ID, gameID, newScore[1]);
+			getDatabase().updatePlayerRating(player1ID, gameID, newScore[0]);
+			getDatabase().updatePlayerRating(player2ID, gameID, newScore[1]);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -409,4 +412,33 @@ public class MatchmakerQueue {
 		}
 		return newElo;
 	}
+	
+	
+	/* TEST HELPER METHODS */
+	
+	/**
+	 * For testing purposes
+	 * @return - The database instance
+	 */
+	public PlayerGameStorage getDatabase() {
+		return database;
+	}
+
+	/**
+	 * Set the database instance
+	 * @param database
+	 */
+	public void setDatabase(PlayerGameStorage database) {
+		this.database = database;
+	}
+	
+	public void resetQueuedUsers() {
+		this.queuedUsers = new ArrayList<ArrayList<Object>>();
+	}
+	
+	public void resetActiveServers() {
+		this.activeServers = new HashMap<Integer, MultiplayerServer>();
+	}
+	
+	/* END TEST HELPER METHODS */
 }

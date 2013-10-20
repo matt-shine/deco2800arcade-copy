@@ -110,8 +110,9 @@ public class TowerDefence extends GameClient {
 		game = new Game();
 		game.id = "towerdefence";
 		game.name = "Tower Defence";
-		game.description = "Defend the Starship Arcadia and the people of Earth in the Year 2800 with tower building strategy."
-				+ "Fast paced, tactical gameplay!";
+		game.description = "Defend the Starship Arcadia and the people of "
+				+ "Earth in the Year 2800 with tower building strategy and"
+				+ "fast paced, tactical gameplay!";
 	}
 
 	public Game getGame() {

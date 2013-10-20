@@ -57,7 +57,7 @@ public class PlayerGameStorage {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT * from PLAYERGAMES;");
+			resultSet = statement.executeQuery("SELECT * from PLAYERGAMES");
 			Set<String> result = findGames(playerID, resultSet);
 
 			return result;

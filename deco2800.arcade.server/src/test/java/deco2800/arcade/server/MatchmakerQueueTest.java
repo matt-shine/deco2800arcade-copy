@@ -170,7 +170,7 @@ public class MatchmakerQueueTest {
 		assertTrue(MMQ.getQueue().isEmpty());
 		
 		/* Get the sessionID */
-		int sessionId = MMQ.getServerList().get(3).getSessionId();
+		int sessionId = MMQ.getServerList().get(0).getSessionId();
 		MMQ.gameOver(sessionId, player1ID, player2ID, testGame, player1ID);
 		verify(MMQ.getDatabase(), times(1)).updatePlayerRating(player1ID, testGame, 1528);
 	}

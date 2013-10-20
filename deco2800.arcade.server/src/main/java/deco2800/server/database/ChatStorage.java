@@ -43,23 +43,19 @@ public class ChatStorage {
 		if (chatStorage.containsKey(playerID)) {
 			if (chatStorage.get(playerID).containsKey(nodeID)) {
 				ChatNode node = chatStorage.get(playerID).get(nodeID);
-				// node.addMessage(chatLine, textMessage.getSenderUsername());
 				node.addMessage(chatLine);
 
-			} else { // Fairly certain test does not cover this branch yet
+			} else {
 				ChatNode node = new ChatNode(textMessage.getRecipients());
 				node.setOwner(textMessage.getSenderUsername());
 				node.addMessage(chatLine);
-
-				// node.addMessage(chatLine, textMessage.getSenderUsername());
-
 				chatStorage.get(playerID).put(nodeID, node);
 			}
 		} else {
 			ChatNode node = new ChatNode(textMessage.getRecipients());
 			node.setOwner(textMessage.getSenderUsername());
 
-			// node.addMessage(chatLine, textMessage.getSenderUsername());
+			node.addMessage(chatLine);
 
 			chatHistory.put(nodeID, node);
 			chatStorage.put(playerID, chatHistory);

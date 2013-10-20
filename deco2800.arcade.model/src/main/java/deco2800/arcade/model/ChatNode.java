@@ -15,8 +15,6 @@ public class ChatNode {
 	private List<Integer> participants;
 	private Queue<String> chatHistory;
 	private String owner;
-	
-	//private Queue<ChatMessage<String, String>> chatHistory;
 
 	/**
 	 * Zero-arg Constructor for Kryo
@@ -31,7 +29,6 @@ public class ChatNode {
 	 */
 	public ChatNode(List<Integer> chatParticipants) {
 		participants = new ArrayList<Integer>(chatParticipants);
-		//chatHistory = new ArrayDeque<ChatMessage<String, String>>();
 		chatHistory = new ArrayDeque<String>();
 	}
 
@@ -43,7 +40,6 @@ public class ChatNode {
 	public ChatNode(int participant) {
 		participants = new ArrayList<Integer>();
 		participants.add(participant);
-		//chatHistory = new ArrayDeque<ChatMessage<String, String>>();
 		chatHistory = new ArrayDeque<String>();
 	}
 
@@ -81,18 +77,10 @@ public class ChatNode {
 	 * 
 	 * @param message
 	 */
-	//public void addMessage(String message, String name) {
 	public void addMessage(String message) {
-		/*
-		ChatMessage<String, String> msg = new ChatMessage<String, String>(name,
-				message);
-		chatHistory.add(msg);
-		*/
-		
 		chatHistory.add(message);
 	}
 
-	//public Queue<ChatMessage<String, String>> getChatHistory() {
 	public Queue<String> getChatHistory() {
 		return chatHistory;
 	}

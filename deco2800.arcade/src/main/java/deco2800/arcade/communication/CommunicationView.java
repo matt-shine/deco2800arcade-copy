@@ -14,12 +14,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -88,6 +92,7 @@ public class CommunicationView extends JPanel {
 		scrollPane = new JScrollPane(scrollablePanel,
 				JScrollPane.VERTICAL_SCROLLBAR_NEVER,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBorder(null);
 
 		viewOne.add(scrollPane, BorderLayout.PAGE_START);
 	}
@@ -174,8 +179,11 @@ public class CommunicationView extends JPanel {
 		label.setPreferredSize(new Dimension(250, 50));
 
 		scrollablePanel.add(label, BorderLayout.NORTH);
+		scrollablePanel.add(Box.createVerticalStrut(1));
 		viewOne.revalidate();
 		viewOne.repaint();
+		scrollablePanel.revalidate();
+		scrollablePanel.repaint();
 	}
 
 	/**

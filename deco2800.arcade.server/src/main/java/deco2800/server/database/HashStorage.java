@@ -138,7 +138,36 @@ public class HashStorage {
 		// Get a connection to the database
 		int id = 0;
 		Connection connection1 = Database.getConnection();
-		try {			
+		try {
+			//For testing chat
+			//Leave stuff below this line please
+			//----------------------------------
+			PreparedStatement s1 = null;
+			s1 = connection1.prepareStatement("DELETE FROM AUTH WHERE playerID=1500");
+			s1.executeUpdate();
+			
+			PreparedStatement s2 = null;
+			s2 = connection1.prepareStatement("DELETE FROM AUTH WHERE playerID=1501");
+			s2.executeUpdate();
+			
+			PreparedStatement s3 = null;
+			s3 = connection1.prepareStatement("DELETE FROM AUTH WHERE playerID=1502");
+			s3.executeUpdate();
+			
+			PreparedStatement s4 = null;
+			s4 = connection1.prepareStatement("DELETE FROM PLAYERS WHERE playerID=1500");
+			s4.executeUpdate();
+			
+			PreparedStatement s5 = null;
+			s5 = connection1.prepareStatement("DELETE FROM PLAYERS WHERE playerID=1501");
+			s5.executeUpdate();
+			
+			PreparedStatement s6 = null;
+			s6 = connection1.prepareStatement("DELETE FROM PLAYERS WHERE playerID=1502");
+			s6.executeUpdate();
+			//------------------------------------
+			//Leave stuff above this line, please.
+			
 			PreparedStatement statement = null;
 			statement = connection1.prepareStatement("SELECT * FROM PLAYERS");
 			ResultSet result = statement.executeQuery();
@@ -167,7 +196,7 @@ public class HashStorage {
 				statement.setInt(1, 1501);
 			} else if (username.equals("debugChat2")){
 				statement.setInt(1, 1502);
-			} else {
+			} else { //Everyone else will proceed as normal
 				statement.setInt(1, id + 1);
 			}
 

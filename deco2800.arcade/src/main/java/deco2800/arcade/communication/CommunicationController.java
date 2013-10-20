@@ -13,7 +13,6 @@ import java.util.HashMap;
 
 import javax.swing.JLabel;
 
-import deco2800.arcade.model.ChatMessage;
 import deco2800.arcade.model.ChatNode;
 import deco2800.arcade.protocol.communication.TextMessage;
 
@@ -112,7 +111,6 @@ public class CommunicationController {
 	 *            is in the chat
 	 */
 	public void addChatLabel(ChatNode node, String chatTitle) {
-
 		Integer nodeID = node.getID();
 		JLabel nodeLabel = new JLabel();
 		nodeLink.put(nodeID, nodeLabel);
@@ -131,7 +129,6 @@ public class CommunicationController {
 
 		addMouseListener(nodeLabel);
 		view.addLabel(nodeLabel);
-
 	}
 
 	/**

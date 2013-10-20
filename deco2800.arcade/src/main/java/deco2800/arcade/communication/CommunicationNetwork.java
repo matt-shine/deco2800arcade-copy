@@ -86,7 +86,6 @@ public class CommunicationNetwork {
 	 *            the message to be added to the chat history
 	 */
 	public void recieveTextMesage(TextMessage textMessage) {
-
 		int chatID = textMessage.getChatID();
 		ChatNode node = chatNodes.get(chatID);
 

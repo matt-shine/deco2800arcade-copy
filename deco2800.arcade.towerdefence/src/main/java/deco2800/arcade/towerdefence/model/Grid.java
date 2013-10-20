@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -65,7 +64,9 @@ public class Grid implements TileBasedMap {
 	 * @param targetPosition
 	 *            A vector representing the target (portal)
 	 * @param setupFile
-	 *            File path to the file containing grid data.
+	 *            File path to the file containing grid data. Grid data in the
+	 *            format of spaces for clear tiles and '.'s for tiles with
+	 *            blocks in them.
 	 */
 	public Grid(int width, int depth, String name, int tileSize, Ship ship,
 			Vector2 targetPosition, String setupFile) {
@@ -353,28 +354,29 @@ public class Grid implements TileBasedMap {
 				.add(object);
 	}
 
-	private void readSetupFile(String setupFile){
-		//Read the file line by line, if the char is a '.' place a block there.
-		try{
-		BufferedReader br = new BufferedReader(new FileReader(new File(setupFile)));
-		String line;
-		int lineCount = 0;
-		while ((line = br.readLine()) != null) {
-			for (int i = 0; i < line.length(); i++) {
-				switch (line.charAt(i)) {
-				case '.':
-					GridObject block = new GridObject(i*tileSize, lineCount*tileSize, this,
-							Team.Neutral, null);
-					buildObject(block);
+	private void readSetupFile(String setupFile) {
+		// Read the file line by line, if the char is a '.' place a block there.
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(new File(
+					setupFile)));
+			String line;
+			int lineCount = 0;
+			while ((line = br.readLine()) != null) {
+				for (int i = 0; i < line.length(); i++) {
+					switch (line.charAt(i)) {
+					case '.':
+						GridObject block = new GridObject(i * tileSize,
+								lineCount * tileSize, this, Team.Neutral, null);
+						buildObject(block);
 
+					}
 				}
+				lineCount++;
 			}
-			lineCount++;
-		}
-		br.close();
-		} catch (IOException e){
+			br.close();
+		} catch (IOException e) {
 			return;
-		} 
+		}
 	}
 
 }

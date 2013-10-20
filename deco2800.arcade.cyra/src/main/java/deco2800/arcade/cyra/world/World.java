@@ -683,6 +683,10 @@ public class World {
 			} else if (ship.getPosition().x > cam.position.x + cam.viewportWidth/2 - ship.getWidth()) {
 				ship.getPosition().x = cam.position.x + cam.viewportWidth/2 -ship.getWidth();
 			}
+			
+			if (ship.getPosition().y < cam.position.y - cam.viewportHeight/2) {
+				ship.getPosition().y = cam.position.y - cam.viewportHeight/2;
+			}
 		}
 	}
 	

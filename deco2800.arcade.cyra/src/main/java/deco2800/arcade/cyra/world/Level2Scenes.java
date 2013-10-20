@@ -353,7 +353,7 @@ public class Level2Scenes extends LevelScenes {
 		outputs.add(new Vector2(20f, 6f)); // during first boss
 		outputs.add(new Vector2(272f, 50f)); // before second boss
 		outputs.add(new Vector2(272f, 50f)); // during second boss
-		outputs.add(new Vector2(272f, 50f)); //before thrird boss
+		outputs.add(new Vector2(600f, 6f)); //before thrird boss
 		outputs.add(new Vector2(600f, 6f)); // during third boss
 		outputs.add(new Vector2(600f, 6f)); // during third boss
 		outputs.add(new Vector2(600f, 6f)); // during third boss
@@ -362,7 +362,7 @@ public class Level2Scenes extends LevelScenes {
 
 	@Override
 	public int getScenePositionAfterReload(int scene) {
-		int[] scenes = {0,0,0,2,2,2,4,4,4};
+		int[] scenes = {0,0,0,2,2,4,4,4,4};
 		return scenes[scene];
 	}
 

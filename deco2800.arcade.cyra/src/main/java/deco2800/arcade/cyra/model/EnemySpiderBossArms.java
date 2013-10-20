@@ -256,7 +256,8 @@ public class EnemySpiderBossArms extends Enemy {
 			}
 		} else if (phase == 3) {
 			//System.out.println(isAttacking + " "+moveRight + "  isReturning?="+isReturning);
-			float phase3SpeedIncrease = 3f+6f*rank;
+			//float phase3SpeedIncrease = 3f+6f*rank;
+			float phase3SpeedIncrease = 0f;
 			if (isAttacking) {
 				if (moveRight) {
 					velocity = new Vector2(thisMoveDelta / delta + phase3SpeedIncrease, 0);

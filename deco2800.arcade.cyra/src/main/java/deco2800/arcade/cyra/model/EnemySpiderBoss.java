@@ -456,8 +456,16 @@ public class EnemySpiderBoss extends Enemy {
 								state = State.IDLE;
 							}
 						}
+					} else if (phase ==3) {
+						count3 -= delta;
+						if (count3<0) {
+							count = ATTACK_RATE - rank * ATTACK_RANK_RATE;
+							state = State.IDLE;
+						}
 					}
-					position.add(new Vector2(velocity).mul(delta));
+					if (phase != 3) {
+						position.add(new Vector2(velocity).mul(delta));
+					}
 					
 				}
 			} else if (state == State.LASER) {
@@ -485,22 +493,39 @@ public class EnemySpiderBoss extends Enemy {
 					
 					
 					float currentAngle = laserBeam.getRotation();
-					float angleDifference = intendedAngle - currentAngle;
-					if (Math.abs(angleDifference) > 180) {
-						//System.out.println("OVER 180!!!!!!!!!!!!!!!!");
-						angleDifference = -angleDifference/Math.abs(angleDifference) * Math.abs(180-angleDifference);
+					
+					/*float angleDifference = Math.abs(intendedAngle - currentAngle);
+					System.out.println("Beforeangle: "+angleDifference);
+					if (angleDifference < 180 && intendedAngle > currentAngle) {
+						;
+					} else if (angleDifference < 180 && intendedAngle < currentAngle) {
+						angleDifference = -angleDifference;
+					} else if (angleDifference > 180 && intendedAngle > currentAngle) {
+						angleDifference = -angleDifference;
+					} else if (angleDifference > 180 && intendedAngle < currentAngle) {
+						;
+						//angleDifference = -angleDifference/Math.abs(angleDifference) * Math.abs(180-angleDifference);
+					}*/
+					
+					float angleDifference;
+					if (Math.abs(intendedAngle-currentAngle) < 180) {
+						angleDifference = intendedAngle-currentAngle;
+					} else if (intendedAngle>currentAngle) {
+						angleDifference = intendedAngle-currentAngle-360;
+					} else {
+						angleDifference = intendedAngle-currentAngle+360;
 					}
 					
-					if (intendedAngle < 0) {
-						intendedAngle += 360f;
-					}
+					
 					laserBeam.setRotation(laserBeam.getRotation() + (angleDifference) *delta * (0.2f+rank/2));
+					System.out.println("Angle Difference" + angleDifference+" laserRotation:" + laserBeam.getRotation());
 				}
 			}
 		//}
-			if (phase == 3 && ship.getPosition().x < position.x + height/2) {
+			if ((phase == 3 || (phase == 1 && rank > 0.7)) && ship.getPosition().x < position.x + width/2) {
 				state = State.RAM;
 				count = 1f;
+				count3 = 1f;
 				if (ramFrame >= 4) {
 					ramFrame = 0;
 				}

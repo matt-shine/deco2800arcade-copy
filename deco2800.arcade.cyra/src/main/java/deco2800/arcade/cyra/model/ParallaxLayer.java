@@ -30,6 +30,8 @@ public class ParallaxLayer {
 		return basePos;
 	}
 	
+	
+	
 	public Array<Texture> getAllDrawTextures() {
 		Array<Texture> output = new Array<Texture>();
 		for (int i=0; i <repeatCount; i++) {

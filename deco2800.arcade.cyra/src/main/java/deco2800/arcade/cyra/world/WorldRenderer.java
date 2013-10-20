@@ -82,6 +82,7 @@ public class WorldRenderer {
 	private float healthPercentage;
 	private String healthName;
 	private float redScreenAlpha;
+	private ParallaxLayer parallaxLayer;
 	
 	//attempting to use maps
 	TileMapRenderer tileMapRenderer;
@@ -244,9 +245,19 @@ public class WorldRenderer {
 	
 	private void drawLevel(SpriteBatch batch) {
 		/* Draw background layers */
-		batch.setProjectionMatrix(cam.calculateParallaxMatrix(0, 0));
+		batch.setProjectionMatrix(cam.calculateParallaxMatrix(0f, 0));
 		batch.begin();
 		batch.draw(bg, -cam.viewportWidth/2, -cam.viewportHeight/2, cam.viewportWidth, cam.viewportHeight);
+		batch.end();
+		batch.setProjectionMatrix(cam.calculateParallaxMatrix(0.4f, 1));
+		batch.begin();
+		Array<Vector2> positions = parallaxLayer.getAllDrawPositions();
+		Array<Texture> textures = parallaxLayer.getAllDrawTextures();
+		for (int i=0; i<textures.size; i++ ) {
+			//if (positions.get(i).x < cam.position.x +cam.viewportWidth && positions.get(i).x +textures.get(i).getWidth()/32f > cam.position.x - cam.viewportWidth) {
+				batch.draw(textures.get(i), positions.get(i).x, positions.get(i).y, textures.get(i).getWidth()/32f, textures.get(i).getHeight()/32f);
+			//}
+		}
 		batch.end();
 		
 		/* Draw tiled layers */
@@ -293,6 +304,7 @@ public class WorldRenderer {
 		if (!ship.isOverForeground()) {
 			tileMapRenderer.render(cam, new int[]{2,3});
 		}
+		
 	}
 	
 	private void drawGameObjects(SpriteBatch batch) {
@@ -473,7 +485,7 @@ public class WorldRenderer {
 				
 				EnemySpiderBossArms arms = ((EnemySpiderBoss)e).getArms();
 				float rotationArms = arms.getRotation();
-				System.out.println("scale*arms.getScale() = "+scale*arms.getScale());
+				//System.out.println("scale*arms.getScale() = "+scale*arms.getScale());
 				//batch.draw(boss1arms, arms.getPosition().x, arms.getPosition().y+arms.getHeight()-2f, arms.getWidth()/2, arms.getHeight()/2, 
 				batch.draw(boss1arms, arms.getPosition().x, arms.getPosition().y+arms.getHeight()-1.5f, arms.getWidth()/2, arms.getHeight()/2,
 						boss1arms.getRegionWidth()/32f, boss1arms.getRegionHeight()/32f, scale*arms.getScale(), scale*arms.getScale(), e.getRotation() + rotationArms);
@@ -856,6 +868,7 @@ public class WorldRenderer {
 		
 		if (debugMode) fpsLogger = new FPSLogger();
 		
+		
 		loadTextures();
 		return;
 	}
@@ -869,7 +882,7 @@ public class WorldRenderer {
 		manager.load("stephenram.txt", TextureAtlas.class);
 		manager.load("firestarter.txt", TextureAtlas.class);
 		manager.load("myEnemy.txt", TextureAtlas.class);
-		manager.load("bg2.png", Texture.class, linearFilteringParam);
+		manager.load("bg3.png", Texture.class, linearFilteringParam);
 		manager.load("ship.png", Texture.class, linearFilteringParam);
 		manager.load("cyra.png", Texture.class, linearFilteringParam);
 		manager.load("body-jumper.png", Texture.class, linearFilteringParam);
@@ -887,6 +900,7 @@ public class WorldRenderer {
 		manager.load("modular3.txt", TextureAtlas.class);
 		manager.load("tiles/level packfile", TextureAtlas.class);
 		manager.load("wall.png",Texture.class,linearFilteringParam);
+		manager.load("frontbush1.png", Texture.class, linearFilteringParam);
 		manager.finishLoading();
 		
 		boss1Atlas = manager.get("stephen.txt", TextureAtlas.class);
@@ -918,7 +932,7 @@ public class WorldRenderer {
 		//bossRamAnimation = new Animation(FOLLOWER_FRAME_DURATION, bossRamFrames);
 		myEnemy = manager.get("myEnemy.txt", TextureAtlas.class);
 		
-		bg = manager.get("bg2.png", Texture.class);
+		bg = manager.get("bg3.png", Texture.class);
 		bg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
 		shipTexture = manager.get("ship.png", Texture.class);
@@ -1002,6 +1016,15 @@ public class WorldRenderer {
 		
 		groundTextureAtlas = manager.get("tiles/level packfile", TextureAtlas.class);
 			/* Load walker texture - END */
+		
+		Texture parallaxTex = manager.get("frontbush1.png", Texture.class);
+		Array<Texture> textures= new Array<Texture>();
+		textures.add(parallaxTex);
+		Array<Vector2> offsets =  new Array<Vector2>();
+		offsets.add(new Vector2(0,0));
+		parallaxLayer = new ParallaxLayer(textures,offsets, 1024/32,15, new Vector2(0,0));
+		
+		
 		return;
 		
 		

@@ -16,6 +16,7 @@ chess
 landInvaders
 junglejump
 burningskies
+hunter
 checkers
 landInvaders
 towerdefence

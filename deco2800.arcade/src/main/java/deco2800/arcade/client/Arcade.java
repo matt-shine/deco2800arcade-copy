@@ -384,7 +384,17 @@ public class Arcade extends JFrame {
 	/**
 	 * Fetch the JAR for a given game/version from the server
 	 * 
-	 * A thread is spawned to fetch the game
+	 * A thread is spawned to fetch the game.
+     *
+     * If you do not know which version you wish to fetch, pass in
+     * a null string for the version number and the server will return
+     * the latest version.
+     *
+     * NOTE the reason this method is in here is because it was impossible
+     * to abstract the network class from the deco2800.arcade.client package.
+     * In order to abstract the client side network classes it needed to be
+     * done before anyone had access to the repository. This basically
+     * rendered the entire deco2800.arcade.packman.PackageClient useless.
 	 * 
 	 * @param gameID
 	 * @param version
@@ -394,6 +404,21 @@ public class Arcade extends JFrame {
 		Thread t = new Thread(fc);
 		t.start();
 	}
+
+    /**
+     * Fetch the JAR for a given game from the server
+     *
+     * A thread is spawned to fetch the game.
+     *
+     * Fetches the latest version as per the DB.
+     *
+     * @param gameID
+     */
+    public void fetchGameJar(String gameID) {
+        FileClient fc = new FileClient(gameID, fileClient);
+        Thread t = new Thread(fc);
+        t.start();
+    }
 
 	/**
 	 * Ask the server to play a given game.

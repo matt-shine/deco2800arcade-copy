@@ -201,6 +201,16 @@ public class Pong extends GameClient {
 		}
 
 	}
+	
+	@Override
+        public void dispose() {
+                super.dispose();
+        }
+
+        @Override
+        public void pause() {
+                super.pause();
+        }
 
 	/**
 	 * Render the current state of the game and process updates

@@ -62,7 +62,15 @@ public class UserTest {
 		Set<User> friendset = new HashSet<User>();
 		Set<User> pendset = new HashSet<User>();
 		Set<Game> gameset = new HashSet<Game>();
-		boolean[] privset = {true, true, true, true, true, true, true};
+		
+		ArrayList<Boolean> privset = new ArrayList<Boolean>();
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
 
 		Player p1 = new Player(123, "THIS IS NOT A VALID PATH.html", info,
 				friendset, pendset, blockset, gameset, privset);

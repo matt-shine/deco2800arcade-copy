@@ -88,7 +88,7 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
-		splashTexture = new Texture(Gdx.files.internal("chessMenu.png"));
+		splashTexture = new Texture(Gdx.files.internal("chess.png"));
 		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		splashTexture2 = new Texture(Gdx.files.internal("chessTitle.png"));
 		splashTexture2.setFilter(TextureFilter.Linear, TextureFilter.Linear);

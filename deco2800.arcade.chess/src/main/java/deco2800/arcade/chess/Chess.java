@@ -206,10 +206,10 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			public void resume() {}
 			@Override
 			public void dispose() {}
-			
+			@Override
 			public void resize(int arg0, int arg1) {
-				arg1 = SCREENHEIGHT;
-				arg0 =  SCREENWIDTH;
+				//arg1 = SCREENHEIGHT;
+				//arg0 =  SCREENWIDTH;
 				
 			}
 		});
@@ -1344,7 +1344,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	}
 
 	public void makeButtons() {
-		splashTexture = new Texture(Gdx.files.internal("chessMenu.png"));
+		splashTexture = new Texture(Gdx.files.internal("chess.png"));
 		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		splashTexture2 = new Texture(Gdx.files.internal("chessTitle.png"));
 		splashTexture2.setFilter(TextureFilter.Linear, TextureFilter.Linear);

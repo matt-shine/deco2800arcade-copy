@@ -21,6 +21,8 @@ public class WL6 extends GameClient {
     @SuppressWarnings("unused")
     private AchievementClient achievementClient;
     private HighscoreClient highscoreClient = null;
+
+    private GameModel model;
     
     private MainGameScreen gameScreen;
     private MenuScreen menuScreen;
@@ -77,8 +79,10 @@ public class WL6 extends GameClient {
 
         });
 
-        gameScreen = new MainGameScreen(this);
-        menuScreen = new MenuScreen(this);
+        model = new GameModel();
+
+        gameScreen = new MainGameScreen(this, model);
+        menuScreen = new MenuScreen(this, model);
         splashScreen = new SplashScreen(this);
         this.setScreen(splashScreen);
 

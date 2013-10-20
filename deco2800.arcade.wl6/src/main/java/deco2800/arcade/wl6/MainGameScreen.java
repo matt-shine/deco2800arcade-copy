@@ -18,9 +18,8 @@ public class MainGameScreen implements Screen {
 	
 	Renderer b = new Renderer();
 	
-	public MainGameScreen(WL6 game) {
-		this.model = new GameModel();
-		model.goToLevel("e1l1");
+	public MainGameScreen(WL6 game, GameModel model) {
+		this.model = model;
 		this.game = game;
 		
 		input = new WL6InputProcessor(game, model);

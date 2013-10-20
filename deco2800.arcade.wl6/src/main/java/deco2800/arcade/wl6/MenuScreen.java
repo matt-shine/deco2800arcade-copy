@@ -17,10 +17,15 @@ public class MenuScreen implements Screen {
     private class MenuScreenStage extends Stage {}
 
     private WL6 wl6;
-    @SuppressWarnings("unused")
-	private GameModel model;
+	private GameModel gameModel;
     private Skin skin;
     private MenuScreenStage stage;
+
+    private String lvl;
+    private String ep;
+    private SelectBox difficulty;
+    private SelectBox episode;
+    private SelectBox level;
 
     private static final String[] exitStrings = new String[] {
             "Dost thou wish to\nleave with such hasty\nabandon?",
@@ -59,9 +64,9 @@ public class MenuScreen implements Screen {
 	    	"Boss",
     };
 
-    public MenuScreen(WL6 game) {
+    public MenuScreen(WL6 game, GameModel model) {
         wl6 = game;
-        model = new GameModel();
+        gameModel = model;
         stage = new MenuScreenStage();
         skin = new Skin(Gdx.files.internal("wl6Skin.json"));
         skin.add("background", new Texture("wolf_background.png"));
@@ -75,11 +80,11 @@ public class MenuScreen implements Screen {
         TextButton newGame = new TextButton("New Game", skin);
         TextButton exit = new TextButton("Exit", skin);
         Label difLabel = new Label("Difficulty", skin);
-        SelectBox difficulty = new SelectBox(difficultyStrings, skin);
+        difficulty = new SelectBox(difficultyStrings, skin);
         Label epLabel = new Label("Episode", skin);
-        SelectBox episode = new SelectBox(episodeStrings,skin);
+        episode = new SelectBox(episodeStrings,skin);
         Label lvlLabel = new Label("Level", skin);
-        SelectBox level = new SelectBox(levelStrings, skin);
+        level = new SelectBox(levelStrings, skin);
 
         content.add(epLabel).pad(5).colspan(2);
         content.row();
@@ -99,6 +104,8 @@ public class MenuScreen implements Screen {
 
         newGame.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+                gameModel.setDifficulty(difficulty.getSelectionIndex() + 1);
+                gameModel.goToLevel("e" + (episode.getSelectionIndex() + 1) + (level.getSelectionIndex() == 8 ? "boss" : ("l" + (level.getSelectionIndex() + 1))));
                 wl6.goToGame();
             }
         });

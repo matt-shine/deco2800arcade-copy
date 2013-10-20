@@ -3,27 +3,23 @@
 	        <name>Noob Progression</name>
 	        <description> Complete first course.</description>
 	        <awardThreshold>1</awardThreshold>
-	        <icon>youwon</icon>
-        </achievement>
+	        <icon>youwon.png</icon>
+        	</achievement>
 
 	<achievement id="minigolf.marksman">
 	        <name>Makrsman</name>
 	        <description> Get a hole in one.</description>
 	        <awardThreshold>1</awardThreshold>
-	        <icon>youwon</icon>
-        </achievement>
+	        <icon>youwon.png</icon>
+        	</achievement>
 
 	<achievement id="minigolf.360">
-		<name>360 Overlay Check</name>
-		<description>Check the overlay</description>
-		<awardThreshold>1</awardThreshold>
-		<icon>youwon</icon>
-	</achievement>
+	        <name>Open the game O_O</name>
+	        <description>Click on play</description>
+	        <awardThreshold>1</awardThreshold>
+	        <icon>youwon.png</icon>
+        	</achievement>
 
-	<achievement id="minigolf.whoneedsamap">
-		<name>Who needs a map</name>
-		<description>Make a course.</description>
-		<awardThreshold>1</awardThreshold>
-		<icon>youwon</icon>
-	</achievement>
+	
+        
 </achievements>

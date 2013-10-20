@@ -9,7 +9,7 @@
         <unit>"Kilograms"</unit>
         <modifier> "$VALUE * 40" </modifier> 
         #this will be a relative location to both your game client and the serverresource
-        <image>./build/main/resources/monkeySit.png</image>   
+        <image>zombie_monkey.png</image>
         #When the value reaches a multiple of this, the popup occurs
         <popup>1</popup>
         #Message for ingame popup - contains an example of hardcoded $unit (use if different)

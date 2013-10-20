@@ -50,8 +50,10 @@ public class Breakout extends GameClient {
 	public String player;
 	private NetworkClient networkClient;
 	private AchievementClient achievementClient;
-	HighscoreClient highscoreUser;
+	private HighscoreClient highscoreUser;
 	private AccoladeSystem accolades;
+	private int accoladeBumpCounter;
+	private int accoladeBrickBreak;
 
 	// Screen Parameters
 	public static final int SCREENHEIGHT = 720;
@@ -69,9 +71,11 @@ public class Breakout extends GameClient {
 		this.player = player.getUsername();
 		this.networkClient = networkClient;
 		this.achievementClient = new AchievementClient(networkClient);
-		this.highscoreUser = new HighscoreClient(player.getUsername(),
-				"Breakout", networkClient);
+		this.highscoreUser = new HighscoreClient(this.player, "Breakout",
+				networkClient);
 		this.accolades = new AccoladeSystem();
+		accoladeBumpCounter = accolades.fetchID("bumpCount");
+		accoladeBrickBreak = accolades.fetchID("brickBreak");
 	}
 
 	/**
@@ -124,8 +128,6 @@ public class Breakout extends GameClient {
 		helpscreen2 = new HelpScreen2(this);
 		modelscreen = new ModelScreen(this);
 		setScreen(splashScreen);
-		HighscoreClient player1 = new HighscoreClient(player, "Breakout",
-				networkClient);
 	}
 
 	/**
@@ -204,6 +206,33 @@ public class Breakout extends GameClient {
 	 */
 	public HighscoreClient getHighScoreClient() {
 		return this.highscoreUser;
+	}
+
+	/**
+	 * Returns the accolades for the user
+	 * 
+	 * @return AccoladeSystem accolades
+	 */
+	public AccoladeSystem getAccolade() {
+		return this.accolades;
+	}
+
+	/**
+	 * Returns the accoladeBumpCounter for the user
+	 * 
+	 * @return int accolades
+	 */
+	public int getAccoladeBumpCounter() {
+		return accoladeBumpCounter;
+	}
+
+	/**
+	 * Returns the accoladeBrickBreak for the user
+	 * 
+	 * @return int accolades
+	 */
+	public int getAccoladeBrickBreak() {
+		return accoladeBrickBreak;
 	}
 
 	/**

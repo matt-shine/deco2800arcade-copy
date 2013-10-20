@@ -1,12 +1,9 @@
 package deco2800.arcade.breakout;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import deco2800.arcade.breakout.screens.GameScreen;
 /**
@@ -15,9 +12,6 @@ import deco2800.arcade.breakout.screens.GameScreen;
  *
  */
 public class Level {
-	
-	private final int SCREENHEIGHT = 720;
-	private final int SCREENWIDTH = 1280;
 	
 	public Level() {
 		

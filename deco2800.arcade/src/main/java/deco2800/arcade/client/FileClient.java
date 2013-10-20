@@ -26,8 +26,16 @@ public class FileClient implements Runnable {
         this.client = client;
     }
 
+    public FileClient(String gameID, NetworkClient client) {
+        this.gameID = gameID;
+        this.version = null;
+        this.client = client;
+    }
+
     @Override
     public void run() {
+        String filebase = null;
+
         FetchGameResponse resp = null;
 
         FetchGameRequest fetchGameRequest = new
@@ -39,19 +47,19 @@ public class FileClient implements Runnable {
 
         int bytesReceived = 0;
 
-        String filebase = "../games/" + gameID + "-" + version;
-
         // Get the file
         try {
+
+            BlockingMessage r = BlockingMessage.request(client.kryoClient(),
+                    fetchGameRequest);
+            resp = (FetchGameResponse) r;
+
+            filebase = "../games/" + resp.gameID + "-" + resp.version;
+
             FileOutputStream fout = new FileOutputStream(filebase + ".tar.gz");
 
             // Fetch the file
             do {
-                BlockingMessage r = BlockingMessage.request(client.kryoClient(),
-                        fetchGameRequest);
-
-                resp = (FetchGameResponse) r;
-
                 //stops the file server from crashing every two seconds.
                 if (resp.data == null) return;
                 
@@ -61,6 +69,10 @@ public class FileClient implements Runnable {
                 fetchGameRequest.byteOffset = fetchGameRequest.byteOffset + resp.byteCount;
 
                 bytesReceived = bytesReceived + resp.byteCount;
+
+                r = BlockingMessage.request(client.kryoClient(),
+                        fetchGameRequest);
+                resp = (FetchGameResponse) r;
 
             } while (resp.status == 1 && bytesReceived < resp.totalBytes);
 

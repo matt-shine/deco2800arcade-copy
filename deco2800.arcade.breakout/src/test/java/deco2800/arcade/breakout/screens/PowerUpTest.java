@@ -1,24 +1,18 @@
 //package deco2800.arcade.breakout.screens;
 //
-//import static org.junit.Assert.*;
+//import static org.junit.Assert.assertEquals;
+//import static org.junit.Assert.assertNotNull;
+//import static org.mockito.Mockito.mock;
+//import static org.mockito.Mockito.when;
 //
 //import org.junit.AfterClass;
-//import org.junit.Before;
 //import org.junit.BeforeClass;
 //import org.junit.Test;
-//import static org.mockito.Mockito.*;
-//
-//import org.junit.*;
-//import org.lwjgl.util.vector.Vector;
 //import org.mockito.Mockito;
-//import org.mockito.internal.configuration.ClassPathLoader;
 //
-//import com.badlogic.gdx.Gdx;
 //import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 //import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 //import com.badlogic.gdx.backends.openal.OpenALAudio;
-//import com.badlogic.gdx.graphics.Texture;
-//import com.badlogic.gdx.graphics.g2d.Sprite;
 //import com.badlogic.gdx.math.Rectangle;
 //import com.badlogic.gdx.math.Vector2;
 //
@@ -32,7 +26,6 @@
 //import deco2800.arcade.breakout.powerup.IncreasePaddle;
 //import deco2800.arcade.breakout.powerup.LifePowerup;
 //import deco2800.arcade.breakout.powerup.Powerup;
-//import deco2800.arcade.breakout.powerup.PowerupManager;
 //import deco2800.arcade.breakout.powerup.SlowBall;
 //import deco2800.arcade.client.UIOverlay;
 //import deco2800.arcade.client.network.NetworkClient;

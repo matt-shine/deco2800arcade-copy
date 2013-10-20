@@ -41,7 +41,8 @@ public class LifePowerup extends Powerup{
 	 * Set the sprite for the powerup
 	 */
 	public void setSprite(){
-		this.sprite = new Sprite(new Texture(Gdx.files.classpath("imgs/" + img)));
+		this.sprite = new Sprite(new Texture(Gdx.files.classpath("imgs/" + img))
+		);
 	}
 	
 }

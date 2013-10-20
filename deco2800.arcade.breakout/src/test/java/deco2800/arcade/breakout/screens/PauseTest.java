@@ -18,6 +18,13 @@ import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Player;
 
+/**
+ * 
+ * @author Carlie Smits
+ * 
+ * This testing package requires no modifications of any other files.
+ *
+ */
 public class PauseTest {
 
 	private static LwjglApplication app;

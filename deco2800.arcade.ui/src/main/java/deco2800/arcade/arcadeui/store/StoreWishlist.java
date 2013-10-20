@@ -32,16 +32,19 @@ public class StoreWishlist implements Screen, StoreScreen {
 	private Skin skin = new Skin(Gdx.files.internal("store/storeSkin.json"));
 	private Stage stage = new Stage();
 	private ArcadeUI arcadeUI;
+	private Player player; // The currently logged in player.
 	
 	/**
 	 * @author Addison Gourluck
 	 * @param ArcadeUI ui
+	 * @param Player user
 	 */
-	public StoreWishlist(ArcadeUI ui) {
+	public StoreWishlist(ArcadeUI ui, Player user) {
+		player = user;
 		arcadeUI = ui;
 		
+		// Load the Icons into the skin, with names as game id's.
 		Utilities.helper.loadIcons(skin);
-		
 		skin.add("big_star", new Texture(Gdx.files.internal("store/big_stars.png")));
 		
 		final Table bg = new Table();
@@ -90,48 +93,55 @@ public class StoreWishlist implements Screen, StoreScreen {
 		transactionsButton.setPosition(834, 353);
 		stage.addActor(transactionsButton);
 		
+		// The number 8 here is just a random index. Since nobody knows how to get
+		// a players wishlist, I just put in a placeholder number.
 		populateWishlist(8);
 		
+		// HOME BUTTON
 		homeButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				arcadeUI.setScreen(new StoreHome(arcadeUI));
+				hide();
+				arcadeUI.setScreen(arcadeUI.getStoreHome());
 			}
 		});
 		
+		// TRANSACTIONS BUTTON
 		transactionsButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				arcadeUI.setScreen(new StoreTransactions(arcadeUI));
+				hide();
+				arcadeUI.setScreen(arcadeUI.getStoreTransactions());
 			}
 		});
 		
-		// Listener to update the search prediction result as the user types.
+		// Search Field, with listen. Located top right.
 		searchField.setTextFieldListener(new TextFieldListener() {
 			public void keyTyped(TextField textField, char key) {
+				// Run search whenever a key is typed.
 				Game result = Utilities.helper.search(searchField.getText());
+				// No results if search returns null.
 				if (result == null) {
 					searchResult.setText("No results.");
 					return;
 				}
+				// Else display closest match.
 				searchResult.setText(result.name);
 			}
 		});
 		
-		// Searchbutton listener, which will attempt to redirect to a game based
-		// upon the searchfield's text, else will set the result as invalid.
+		// Search button, paired with search field. Top right screen.
 		searchButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				try {
+					// Attempt to search for whatever is in the field.
 					Game result = Utilities.helper.search(searchField.getText());
 					if (result == null) {
-						searchResult.setText("No results.");
+						searchResult.setText("No results."); // Bad text
 						return;
 					}
-					dispose();
-					arcadeUI.setScreen(new StoreGame(arcadeUI, result));
+					hide(); // On successful search, go to its page.
+					arcadeUI.setScreen(new StoreGame(arcadeUI, player, result));
 				} catch (Exception e) {
-					searchResult.setText("Invalid Search");
+					searchResult.setText("Invalid Search"); // No text
 				}
 			}
 		});
@@ -149,12 +159,11 @@ public class StoreWishlist implements Screen, StoreScreen {
 	 * show games 0 - 6.
 	 * 
 	 * @author Addison Gourluck
-	 * @param Stage stage
-	 * @param Skin skin
 	 * @param int index
 	 */
 	private void populateWishlist(int index) {
 		for (int i = 0; i < 6; ++i) {
+			// Load 6 games from the users wishlist, from index onwards.
 			final Game game = (Game)ArcadeSystem.getArcadeGames().toArray()
 					[(index + i)%ArcadeSystem.getArcadeGames().size()];
 			final Button gameGridGlow = new Button(skin, "icon");
@@ -163,11 +172,14 @@ public class StoreWishlist implements Screen, StoreScreen {
 			// Retrieve icon for the game.
 			final Button gameGridIcon = new Button(skin.getDrawable(game.id));
 			gameGridIcon.setSize(110, 110);
+			gameGridIcon.setPosition(6, 6);
 			
+			// Load star rating for all games. TODO: They don't exist, so static
 			final Table star = new Table();
 			star.setBackground(skin.getDrawable("big_star"));
 			star.setSize(142, 23);
 			
+			// Text beside Icon, and above star, showing games name.
 			final Label gameName;
 			if (game.name.length() > 12) {
 				gameName = new Label(game.name, skin, "default-22");
@@ -178,34 +190,25 @@ public class StoreWishlist implements Screen, StoreScreen {
 			
 			if (i < 2) { // Bottom 2 games
 				gameGridGlow.setPosition(124 + i * 320, 54);
-				gameGridIcon.setPosition(130 + i * 320, 60);
 				gameName.setPosition(260 + i * 320, 120);
 				star.setPosition(260 + i * 320, 80);
 			} else if (i < 4) { // Middle 2 games
 				gameGridGlow.setPosition(124 + i%2 * 320, 194);
-				gameGridIcon.setPosition(130 + i%2 * 320, 200);
 				gameName.setPosition(260 + i%2 * 320, 260);
 				star.setPosition(260 + i%2 * 320, 220);
 			} else { // Top 2 games
 				gameGridGlow.setPosition(124 + i%2 * 320, 334);
-				gameGridIcon.setPosition(130 + i%2 * 320, 340);
 				gameName.setPosition(260 + i%2 * 320, 400);
 				star.setPosition(260 + i%2 * 320, 360);
 			}
 			gameGridGlow.addListener(new ChangeListener() {
 				public void changed(ChangeEvent event, Actor actor) {
-					dispose();
-					arcadeUI.setScreen(new StoreGame(arcadeUI, game));
+					hide();
+					arcadeUI.setScreen(new StoreGame(arcadeUI, player, game));
 				}
 			});
-			gameGridIcon.addListener(new ChangeListener() {
-				public void changed(ChangeEvent event, Actor actor) {
-					dispose();
-					arcadeUI.setScreen(new StoreGame(arcadeUI, game));
-				}
-			});
+			gameGridGlow.addActor(gameGridIcon); // Place icon inside/above glow.
 			stage.addActor(gameGridGlow);
-			stage.addActor(gameGridIcon);
 			stage.addActor(gameName);
 			stage.addActor(star);
 		}
@@ -228,11 +231,13 @@ public class StoreWishlist implements Screen, StoreScreen {
 
 	@Override
 	public void show() {
+		player = arcadeUI.getPlayer();
 		ArcadeInputMux.getInstance().addProcessor(stage);
 	}
 	
 	@Override
 	public void hide() {
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 	
 	@Override
@@ -253,21 +258,31 @@ public class StoreWishlist implements Screen, StoreScreen {
 
 	@Override
 	public Player getPlayer() {
-		return null;
+		return player;
 	}
 	
 	@Override
 	public Game getSelected() {
-		return null;
+		return null; // No selected game for wishlist screen.
 	}
 	
 	@Override
 	public boolean buyTokens(int amount) {
+		// TODO
+		// FIXME
+		// NEEDS IMPLEMENTING!
+		// TODO
+		// FIXME
 		return false;
 	}
 	
 	@Override
 	public boolean buyGame(Game game) {
+		// TODO
+		// FIXME
+		// NEEDS IMPLEMENTING!
+		// TODO
+		// FIXME
 		return false;
 	}
 	
@@ -278,6 +293,11 @@ public class StoreWishlist implements Screen, StoreScreen {
 	
 	@Override
 	public boolean addWishlist(Game game) {
+		// TODO
+		// FIXME
+		// NEEDS IMPLEMENTING!
+		// TODO
+		// FIXME
 		return true;
 	}
 }

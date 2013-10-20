@@ -13,6 +13,7 @@ import deco2800.arcade.snakeLadderGameState.*;
 import deco2800.arcade.snakeLadderModel.*;
 import deco2800.arcade.snakeLadderRulePlugin.ScoreRule;
 import deco2800.arcade.snakeLadderRulePlugin.StopRule;
+import deco2800.arcade.snakeLadderRulePlugin.ThrowDiceRule;
 
 public class RuleExcutingTest {
 
@@ -114,6 +115,16 @@ public class RuleExcutingTest {
         	//check who's turn next
         	assertEquals(context.getturns(),1);
         	//check gamestate
+        	assertTrue(context.gameState instanceof WaitingState);
+        }
+        
+        @Test
+        public void throwDiceRuleTest()
+        {
+        	iniContext();
+        	ThrowDiceRule throwDiceRule = new ThrowDiceRule();
+        	throwDiceRule.excuteRules(0, "TD", context);
+        	assertEquals(context.getturns(),0);
         	assertTrue(context.gameState instanceof WaitingState);
         }
 

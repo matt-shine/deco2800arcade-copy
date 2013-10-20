@@ -4,19 +4,14 @@ import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import deco2800.arcade.breakout.Breakout;
@@ -24,7 +19,6 @@ import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 
 public class MenuScreen implements Screen {
-	private final Breakout game;
 	private final SpriteBatch batch;
 	private final Texture texture;
 	public static final int SCREENHEIGHT = 720;
@@ -35,37 +29,22 @@ public class MenuScreen implements Screen {
 	 */
 	private TextureRegionDrawable gameup;
 	private TextureRegionDrawable gamedown;
-	private TextureRegionDrawable levelup;
-	private TextureRegionDrawable leveldown;
-	private TextureRegionDrawable rankingup;
-	private TextureRegionDrawable rankingdown;
 	private TextureRegionDrawable helpup;
 	private TextureRegionDrawable helpdown;
 	private TextureRegionDrawable quitup;
 	private TextureRegionDrawable quitdown;
-	private TextureRegionDrawable modelup;
-	private TextureRegionDrawable modeldown;
 
 	private TextureRegion newgamebuttonUp;
 	private TextureRegion newgamebuttonDown;
-	private TextureRegion levelbuttonUp;
-	private TextureRegion levelbuttonDown;
-	private TextureRegion rankingbuttonUp;
-	private TextureRegion rankingbuttonDown;
 	private TextureRegion helpbuttonUp;
 	private TextureRegion helpbuttonDown;
 	private TextureRegion quitbuttonUp;
 	private TextureRegion quitbuttonDown;
-	private TextureRegion modelbuttonUp;
-	private TextureRegion modelbuttonDown;
 
 	private Texture tex;
 	private ImageButton gamebutton;
-	private ImageButton levelbutton;
-	private ImageButton rankingbutton;
 	private ImageButton helpbutton;
 	private ImageButton quitbutton;
-	private ImageButton modelbutton;
 
 	/**
 	 * Instantiate a new instance of the MenuScreen class
@@ -73,7 +52,6 @@ public class MenuScreen implements Screen {
 	 */
 	public MenuScreen(final Breakout game) {
 
-		this.game = game;
 		batch = new SpriteBatch();
 		Texture.setEnforcePotImages(false);
 		texture = new Texture(Gdx.files.classpath("imgs/final_background.png"));
@@ -164,8 +142,8 @@ public class MenuScreen implements Screen {
 
 				return true;
 			}
-			/** called when a button press down occurs, the screen will move to the
-			 * arcadesystem.ui screen
+			/** called when a button press down occurs, the screen will move to
+			 *  the arcadesystem.ui screen
 			 * @param event - Event for actor input
 			 */
 			public void touchUp(InputEvent event, float x, float y,
@@ -194,16 +172,16 @@ public class MenuScreen implements Screen {
 	    gamebutton = new ImageButton(gameup, gamedown);
 	    gamebutton.setPosition(485, 350);
 	    gamebutton.addListener(new InputListener(){
-	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
-	        		
+	    	public boolean touchDown(InputEvent event, float x, float y, int
+	    	   pointer, int button) { 
+	    			//touch down method is needed for the rest to work
 	        		return true; 
 	        	}
-	        	
-	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+        	public void touchUp(InputEvent event, float x, float y, int pointer,
+        		int button) { //on button release do this
 	        		game.setScreen(game.getModelscreen());
-	        	}}
-	    	   );
-	    
+        	}}
+	    );
 	    //help
 	    helpbuttonUp=tmp[1][2];
 	    helpbuttonDown=tmp[1][3];
@@ -212,14 +190,17 @@ public class MenuScreen implements Screen {
 	    helpbutton = new ImageButton(helpup, helpdown);
 	    helpbutton.setPosition(485, 250);
 	    helpbutton.addListener(new InputListener(){
-	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+	    	public boolean touchDown(InputEvent event, float x, float y, int 
+	    	   pointer, int button) { 
+	    			//touch down method is needed for the rest to work
 	        		return true; 
-	        	}
+	        }
 	        	
-	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
-	        		game.setScreen(game.getHelpscreen1()); 
-	        	}}
-	    	   );
+	        public void touchUp(InputEvent event, float x, float y, int pointer,
+	        		int button) { //on button release do this
+	        	game.setScreen(game.getHelpscreen1()); 
+	        }}
+	    );
 	    //quit
 	    quitbuttonUp=tmp[2][0];
 	    quitbuttonDown=tmp[2][1];
@@ -228,30 +209,26 @@ public class MenuScreen implements Screen {
 	    quitbutton = new ImageButton(quitup, quitdown);
 	    quitbutton.setPosition(485, 150);
 	    quitbutton.addListener(new InputListener(){
-	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
-	        		
-	        		return true; 
-	        	}
-	        	
-	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+	    	public boolean touchDown(InputEvent event, float x, float y, int 
+	    		pointer, int button) { 
+	    			//touch down method is needed for the rest to work
+        			return true; 
+        	}
+        	public void touchUp(InputEvent event, float x, float y, int pointer,
+        		int button) { //on button release do this
 	        		ArcadeSystem.goToGame(ArcadeSystem.UI);
-	        	}}
-	    	   );
-	    
-	       stage = new Stage(480, 640, true);
-	       
-	       stage.addActor(gamebutton);
-	       stage.addActor(quitbutton);     
-	       stage.addActor(helpbutton);
-		
-
+	        }}
+	    );
+       stage = new Stage(480, 640, true);
+       stage.addActor(gamebutton);
+       stage.addActor(quitbutton);     
+       stage.addActor(helpbutton);
 	}
 
 	@Override
 	public void dispose() {
 		texture.dispose();
 		batch.dispose();
-
 	}
 
 	@Override
@@ -277,7 +254,6 @@ public class MenuScreen implements Screen {
 		batch.end();
 		stage.act();
 		stage.draw();
-
 	}
 
 	@Override
@@ -290,7 +266,6 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
-		//ArcadeInputMux.getInstance().addProcessor(stage);		
 		Gdx.input.setInputProcessor(stage);
 	}
 

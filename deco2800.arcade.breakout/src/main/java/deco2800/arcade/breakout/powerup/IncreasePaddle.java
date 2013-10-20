@@ -33,7 +33,8 @@ public class IncreasePaddle extends Powerup{
 	 * Adds to the score if the increase power up is already active.
 	 */
 	public void applyPowerup() {
-		if ((context.getPaddle().getPaddleShapeWidth() - context.getPaddle().getStandardWidth()) > EPSILON) {
+		if ((context.getPaddle().getPaddleShapeWidth() - context.getPaddle().
+				getStandardWidth()) > EPSILON) {
 			context.incrementScore(20 * context.getLevel());
 			return;
 		}
@@ -49,6 +50,7 @@ public class IncreasePaddle extends Powerup{
 	 * Set the sprite for the powerup
 	 */
 	public void setSprite(){
-		this.sprite = new Sprite(new Texture(Gdx.files.classpath("imgs/" + img)));
+		this.sprite = new Sprite(new Texture(Gdx.files.classpath("imgs/" + img))
+		);
 	}
 }

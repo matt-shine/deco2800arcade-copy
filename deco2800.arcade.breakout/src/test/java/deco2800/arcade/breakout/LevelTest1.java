@@ -1,14 +1,13 @@
-////Shelved for now
 //package deco2800.arcade.breakout;
 //
-//import static org.junit.Assert.*;
-//import static org.mockito.Mockito.*;
-//import java.io.BufferedReader;
-//import java.io.FileReader;
-//import java.io.IOException;
-//import java.net.URL;
+//import static org.junit.Assert.assertEquals;
+//import static org.junit.Assert.assertNotEquals;
 //
-//import org.junit.*;
+//import java.io.IOException;
+//
+//import org.junit.AfterClass;
+//import org.junit.BeforeClass;
+//import org.junit.Test;
 //import org.mockito.Mockito;
 //
 //import com.badlogic.gdx.Gdx;
@@ -53,7 +52,8 @@
 //	
 //	@Test
 //	public void testLevel1() {
-//		String fileContents = Gdx.files.classpath("levels/level1.txt").readString();
+//		String fileContents = Gdx.files.classpath("levels/level1.txt").
+//				readString();
 //		Brick[] bricks;
 //		try {
 //			bricks = context.getLevelSystem().initialiseBrickArray
@@ -69,7 +69,8 @@
 //	
 //	@Test
 //	public void testLevel5() {
-//		String fileContents = Gdx.files.classpath("levels/level5.txt").readString();
+//		String fileContents = Gdx.files.classpath("levels/level5.txt").
+//				readString();
 //		Brick[] bricks;
 //		try {
 //			bricks = context.getLevelSystem().initialiseBrickArray
@@ -85,7 +86,8 @@
 //	
 //	@Test
 //	public void testLevel10() {
-//		String fileContents = Gdx.files.classpath("levels/level10.txt").readString();
+//		String fileContents = Gdx.files.classpath("levels/level10.txt").
+//				readString();
 //		Brick[] bricks;
 //		try {
 //			bricks = context.getLevelSystem().initialiseBrickArray

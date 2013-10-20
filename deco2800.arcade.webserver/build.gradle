@@ -1,8 +1,0 @@
-dependencies {
-  compile project(":deco2800.arcade")
-
-  compile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.7"
-  compile group: "org.simpleframework", name: "simple", version: "5.1.6"
-
-  testCompile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.7"
-}

@@ -96,9 +96,13 @@ public class ReplayItem {
 		return this.data.toString();
 	}
 	
-	public Boolean equals(ReplayItem r)
+	public boolean equals(Object r)
 	{
-	    return this.type.equals(r.type) && this.data.equals(r.data);
+		if ( !( r instanceof ReplayItem ) ) {
+			return false;
+		}
+		ReplayItem replayItem = ( ReplayItem )r;
+	    return this.type.equals(replayItem.type) && this.data.equals(replayItem.data);
 	}
 	
 	@Override

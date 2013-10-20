@@ -41,8 +41,8 @@ public class Connect4 extends GameClient {
 		GAMEOVER
 	}
 	private GameState gameState;
-	private int[] scores = new int[2];
-	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
+	// The names of the players: the local player is always players[0]
+	private String[] players = new String[2];
 	private int playerTurn = 0;
 	
 	private int[] keyCodes = new int[3];
@@ -52,13 +52,13 @@ public class Connect4 extends GameClient {
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
 	
-	private final int AI_DELAY = 200;
+	private static final int AI_DELAY = 200;
 	
-	private final int KEY_LEFT = 0;
-	private final int KEY_RIGHT = 1;
-	private final int KEY_ENTER = 2;
+	private static final int KEY_LEFT = 0;
+	private static final int KEY_RIGHT = 1;
+	private static final int KEY_ENTER = 2;
 	
-	public ShapeRenderer shapeRenderer;
+	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
 	private BitmapFont font;
 
@@ -70,9 +70,8 @@ public class Connect4 extends GameClient {
 	//Network client for communicating with the server.
 	private NetworkClient networkClient;
 	
-	long nextComputerMove;
-	
-	int nextComputerCol = -1;
+	private long nextComputerMove;
+	private int nextComputerCol = -1;
 
 	/**
 	 * Basic constructor for the Connect4 game
@@ -279,8 +278,8 @@ public class Connect4 extends GameClient {
 		
 		//Create the table
 		table = new Table();
-		table.bounds.x = SCREENWIDTH/2 - Table.WIDTH/2;
-		table.SetupDiscs();
+		table.getBounds().x = SCREENWIDTH/2 - Table.WIDTH/2;
+		table.setupDiscs();
 		
 		//Create the buttons and setup
 		buttons = new Buttons();
@@ -292,7 +291,7 @@ public class Connect4 extends GameClient {
 		//Create the cursor disc
 		cursorDisc = new Disc();
 		cursorDisc.setState( Disc.PLAYER1 );
-		cursorDisc.setPosition((table.bounds.x + cursorDisc.bounds.width + 5), (table.bounds.y + table.bounds.height + 25));
+		cursorDisc.setPosition((table.getBounds().x + cursorDisc.bounds.width + 5), (table.getBounds().y + table.getBounds().height + 25));
 		
 		//Necessary for rendering
 		shapeRenderer = new ShapeRenderer();
@@ -301,8 +300,6 @@ public class Connect4 extends GameClient {
 		batch = new SpriteBatch();
 		
 		//Initialise the scores and game state
-		scores[0] = 0;
-		scores[1] = 0;
 		gameState = GameState.READY;
 		statusMessage = "Click to start!";
 		
@@ -335,8 +332,8 @@ public class Connect4 extends GameClient {
 	public void renderCursorDisc() {
 		//Set cursor position
 		cursorDisc.setPosition(
-				(table.bounds.x + cursorDisc.bounds.width + cursorDisc.currentPos * ( 5 + 2 * Table.DISCRADIUS ) + 5 ), 
-				(table.bounds.y + table.bounds.height + 25));
+				(table.getBounds().x + cursorDisc.bounds.width + cursorDisc.currentPos * ( 5 + 2 * Table.DISCRADIUS ) + 5 ), 
+				(table.getBounds().y + table.getBounds().height + 25));
 		
 		//Determine current player and set respective cursor colour.
 		if (playerTurn == 0) {

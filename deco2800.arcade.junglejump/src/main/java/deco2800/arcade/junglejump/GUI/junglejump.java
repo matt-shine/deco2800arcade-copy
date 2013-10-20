@@ -2,28 +2,20 @@ package deco2800.arcade.junglejump.GUI;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.security.auth.login.Configuration;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -34,8 +26,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Frustum;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 
 import deco2800.arcade.junglejump.Level;
 import deco2800.arcade.junglejump.LevelContainer;
@@ -43,14 +33,11 @@ import deco2800.arcade.junglejump.Platform;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
-//import deco2800.arcade.breakout.Breakout.GameState;
-import deco2800.arcade.client.Arcade;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.model.Achievement;
-import deco2800.arcade.model.AchievementProgress;
 /**
  * Main class for Jungle Jump Game Instantiates game with scene, player and
  * assets
@@ -69,6 +56,8 @@ public class junglejump extends GameClient implements InputProcessor {
 	
 	public int BANANAS_FOUND = 0;
 	public static int deaths = 0;
+	
+	int SPEED_MULTIPLIER = 2;
 
 	private enum GameState {
 		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS, CONTINUE, PAUSE
@@ -85,9 +74,6 @@ public class junglejump extends GameClient implements InputProcessor {
 	public static int world;
 	// Store details about the activity of junglejump and the players
 	public static final String messages = junglejump.class.getSimpleName();
-	// FPS Animation helper
-	private FPSLogger fpsLogger;
-	private Player player;
 	private OrthographicCamera camera;
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
@@ -109,7 +95,7 @@ public class junglejump extends GameClient implements InputProcessor {
 
 //	public int currentLevelIndex = 0;
 	private static LevelContainer currentCont = new LevelContainer();
-	public static Level currentLevel = getCurrentCont().getLevel(getCurrentCont().getCurrentLevel());
+	public static Level currentLevel = LevelContainer.getLevel(LevelContainer.getCurrentLevel());
 //	public static int currentWorld = 0;
 
 	public static float monkeyDefaultX;
@@ -167,12 +153,12 @@ public class junglejump extends GameClient implements InputProcessor {
 					"resources/soundtrack.wav";
 			System.out.println(resource);
 			File file = new File(resource);
-			FileHandle fileh = new FileHandle(file);
+			new FileHandle(file);
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 			Clip clip = AudioSystem.getClip();
 			clip.open(audioIn);
 			clip.start();
-			clip.loop(clip.LOOP_CONTINUOUSLY);
+			clip.loop(Clip.LOOP_CONTINUOUSLY);
 
 			// System.out.println(file.getCanonicalPath());
 			// themeMusic = Gdx.audio.newMusic(fileh);
@@ -335,14 +321,14 @@ public class junglejump extends GameClient implements InputProcessor {
 			batch.setProjectionMatrix(camera.combined);
 			shapeRenderer.setProjectionMatrix(camera.combined);
 			if (movingLeft) {
-				monkeyX -= 2;
+				monkeyX -= 2 * SPEED_MULTIPLIER;
 				monkeyRun--;
 				if (!isOnPlatform(monkeyX, monkeyY) && !jumping) {
 					isFalling = true;
 				} else isFalling = false;
 			}
 			if (movingRight) {
-				monkeyX += 2;
+				monkeyX += 2 * SPEED_MULTIPLIER;
 				monkeyRun++;
 				if (!isOnPlatform(monkeyX, monkeyY) && !jumping) {
 					isFalling = true;
@@ -354,7 +340,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			if (isFalling) {
 				if (isOnPlatform(monkeyX, monkeyY)) {
 					isFalling = false;
-				} else monkeyY += -9.8f / 2f;
+				} else monkeyY += (-9.8f / 2f);
 			}
 			if(monkeyY <= 5) {
 				playDeathSound();
@@ -408,7 +394,9 @@ public class junglejump extends GameClient implements InputProcessor {
 			} else if (!leap && !sit && !((!movingLeft && !movingRight) || (movingLeft && movingRight))) {
 				batch.draw(monkeyRun1, monkeyX, monkeyY, 50, 50);
 			}
-			for (Platform p : currentLevel.getPlatforms()) {
+			int size = currentLevel.platformAmount();
+			for (int i = 0; i < size; i++) {
+				Platform p = currentLevel.getPlatforms().get(i);
 				// Place platform onto screen
 				if(p.getX() >= 1000) {
 					p.setX(p.getX()-1000);
@@ -506,7 +494,9 @@ public class junglejump extends GameClient implements InputProcessor {
 
 	public static void drawLevel() {
 		batch.begin();
-		for (Platform p : currentLevel.getPlatforms()) {
+		int size = currentLevel.platformAmount();
+		for (int i = 0; i < size; i++) {
+			Platform p = currentLevel.getPlatforms().get(i);
 			batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
 		}
 		batch.end();
@@ -520,7 +510,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					"resources/pickup.wav";
 			System.out.println(resource);
 			File file = new File(resource);
-			FileHandle fileh = new FileHandle(file);
+			new FileHandle(file);
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 			Clip clip = AudioSystem.getClip();
 			clip.open(audioIn);
@@ -538,7 +528,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					"resources/death.wav";
 			System.out.println(resource);
 			File file = new File(resource);
-			FileHandle fileh = new FileHandle(file);
+			new FileHandle(file);
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 			Clip clip = AudioSystem.getClip();
 			clip.open(audioIn);
@@ -550,7 +540,9 @@ public class junglejump extends GameClient implements InputProcessor {
 	}
 
 	public boolean isOnPlatform(float x, float y) {
-		for (Platform p : currentLevel.getPlatforms()) {
+		int size = currentLevel.platformAmount();
+		for (int i = 0; i < size; i++) {
+			Platform p = currentLevel.getPlatforms().get(i);
 			// Check x and y are within the platform boundaries and monkey is on it
 			if (p.platType != '=' && x > (p.getX() - monkeyLength)
 					&& x < (p.getX()+p.getWidth() - 10)
@@ -706,7 +698,9 @@ public class junglejump extends GameClient implements InputProcessor {
 				monkeyY = monkeyDefaultY;
 				// Reset Bananas, Platforms and Level
 				currentCont = new LevelContainer();
-				currentLevel = getCurrentCont().getLevel(getCurrentCont().getCurrentLevel());
+				getCurrentCont();
+				getCurrentCont();
+				currentLevel = LevelContainer.getLevel(LevelContainer.getCurrentLevel());
 				gameState = GameState.INPROGRESS;
 			}
 			if (butY == ACHIEVEMENTS) {
@@ -748,7 +742,7 @@ public class junglejump extends GameClient implements InputProcessor {
 							"resources/jump.wav";
 					System.out.println(resource);
 					File file = new File(resource);
-					FileHandle fileh = new FileHandle(file);
+					new FileHandle(file);
 					AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 					Clip clip = AudioSystem.getClip();
 					clip.open(audioIn);

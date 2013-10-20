@@ -70,10 +70,10 @@ public interface IMixMazeModel {
 	/**
 	 * Uses the current action of the player specified by <code>id</code>.
 	 * 
-	 * @param id
-	 *            the player id
+	 * @param id	the player id
+	 * @return the action, or <code>null</code> if no action is used 
 	 */
-	void usePlayerAction(int id);
+	PlayerModel.Action usePlayerAction(int id);
 
 	/**
 	 * Starts the game.

@@ -64,10 +64,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		game = new Game();
 		game.id = "chess";
 		game.name = "Chess";
-		game.description = "A game of Chess, where players duke it out dubbed " +
-				"a team white or black with the aim of " +
-				"the game being to capture the enemy's king, " +
-				"this is called 'CheckMate'."; 
+		game.description = "A game of Chess, where 2 players, dubbed white"
+				+ "or black, aim to CheckMate their opponent before being"
+				+ "CheckMated themselves."; 
 	}
 	private ReplayHandler replayHandler;
 	private ReplayListener replayListener;
@@ -432,7 +431,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 	@Override
 	public void resize(int arg0, int arg1) {
-		// super.resize(arg0, arg1);
+		super.resize(arg0, arg1);
 	}
 
 	@Override

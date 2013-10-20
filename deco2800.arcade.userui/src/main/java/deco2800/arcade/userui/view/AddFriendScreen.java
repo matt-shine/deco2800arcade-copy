@@ -6,24 +6,21 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import deco2800.arcade.userui.Model;
 import net.miginfocom.swing.MigLayout;
 
+/**
+ * The View Class for Adding a Friend
+ *
+ */
 public class AddFriendScreen extends JFrame{
-	
-	/**
-	 * The view class for Adding a Friend
-	 */
 	
 	private Model model;
 	

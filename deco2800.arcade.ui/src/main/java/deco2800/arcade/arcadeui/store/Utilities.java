@@ -17,8 +17,8 @@ public class Utilities {
 	static Utilities helper = new Utilities();
 	
 	/**
-	 * This method will add all of the images from the logos/ folder into the
-	 * skin given to it. If any of them are missing, default is laoded instead.
+	 * This method will add all of the images from the 'logos' folder into the
+	 * skin given to it. If any of them are missing, default is loaded instead.
 	 * 
 	 * @author Addison Gourluck
 	 * @param Skin skin
@@ -30,7 +30,7 @@ public class Utilities {
 			try {
 				skin.add(gamename.id, new Texture(Gdx.files.internal("logos/"
 						+ gamename.id.toLowerCase() + ".png")));
-			} catch (Exception e) {
+			} catch (Exception e) { // Loading file failed, load default.
 				skin.add(gamename.id, new Texture
 						(Gdx.files.internal("logos/default.png")));
 			}

@@ -14,15 +14,13 @@ public class Fettgesicht extends Enemy {
         super(uid);
 
         setHealth(STARTING_HEALTH);
-        setFaceDir(d.direction);
-        setPathing(false);
-        setState(STATES.STAND);
         setPathSpeed(512);
         setChaseSpeed(1536);
         setPain(false);
         setDamage(0);
 
-        setTextureName(d.texture);
+        initialiseFromEnemyData(d);
+        
     }
 
 

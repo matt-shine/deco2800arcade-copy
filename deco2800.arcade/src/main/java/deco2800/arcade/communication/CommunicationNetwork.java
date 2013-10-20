@@ -38,7 +38,6 @@ public class CommunicationNetwork {
 	 * @param networkClient
 	 */
 	public CommunicationNetwork(Player player, NetworkClient networkClient) {
-		this.player = player;
 		this.networkClient = networkClient;
 	}
 
@@ -48,6 +47,7 @@ public class CommunicationNetwork {
 	 * @param chatParticipants
 	 */
 	public void createChat(List<Integer> chatParticipants) {
+		
 		if(!chatNodes.containsKey(chatParticipants.hashCode())) {
 			ChatNode node = new ChatNode(chatParticipants);
 			chatNodes.put(chatParticipants.hashCode(), node);
@@ -55,7 +55,7 @@ public class CommunicationNetwork {
 			
 			//This will need to be fixed. It is assumed that the chatTitle can be created when clicking on a friend in the friend's list
 			String chatTitle = "placeholder";
-			view.addChatNode(node, chatTitle);
+			controller.addChatLabel(node, chatTitle);
 		}
 	}
 
@@ -67,6 +67,10 @@ public class CommunicationNetwork {
 	public void sendTextMessage(TextMessage message) {
 		networkClient.sendNetworkObject(message);
 	}
+	
+	public ChatNode getChatNode(int chatID) {
+		return chatNodes.get(chatID);
+	}
 
 	/**
 	 * Adds a message received to the chat history of the corresponding chat
@@ -75,12 +79,14 @@ public class CommunicationNetwork {
 	 * @param textMessage
 	 */
 	public void recieveTextMesage(TextMessage textMessage) {
+		
 		int chatID = textMessage.getChatID();
 		ChatNode node = chatNodes.get(chatID);
+		
 		if (node == null) {
 			node = new ChatNode(textMessage.getRecipients());
 			chatNodes.put(textMessage.getRecipients().hashCode(), node);
-			view.addChatNode(node, textMessage.getSenderUsername());
+			controller.addChatLabel(node, textMessage.getSenderUsername());
 		}
 		
 		//Create chat-friendly string
@@ -89,9 +95,9 @@ public class CommunicationNetwork {
 		node.addMessage(chatLine);
 		
 		if (currentChat == node){
-			view.receiveText(textMessage);
+			controller.receiveText(textMessage);
 		} else if (currentChat == null) {
-			view.chatNotification(node);
+			controller.revieceNotification(node);
 		}
 	}
 
@@ -190,7 +196,7 @@ public class CommunicationNetwork {
 	public void receiveChatHistory(ChatHistory receivedHistory) {
 		chatNodes = receivedHistory.getChatHistory();		
 		for (Entry<Integer, ChatNode> entry : chatNodes.entrySet()) {
-			view.addChatNode(entry.getValue(), entry.getValue().getChatHistory().peek().substring(entry.getValue().getChatHistory().peek().indexOf('-') + 2, entry.getValue().getChatHistory().peek().indexOf(':')-1)); //This doesn't know who sent it yet
+			controller.addChatLabel(entry.getValue(), entry.getValue().getChatHistory().peek().substring(entry.getValue().getChatHistory().peek().indexOf('-') + 2, entry.getValue().getChatHistory().peek().indexOf(':')-1)); //This doesn't know who sent it yet
 		}
 	}
 	

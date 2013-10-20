@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
@@ -121,10 +122,12 @@ public class ListScreen implements Screen, LibraryScreen {
 
 
         label = new Label(description, libSkin);
-        label.setWidth(150);
-        label.setHeight(40);
+        label.setWidth(840);
+        label.setHeight(100);
         label.setX(320);
-        label.setY(475);
+        label.setY(425);
+        label.setAlignment(Align.left | Align.top);
+        label.setWrap(true);
 
         titleLabel = new Label(gameTitle, libSkin, "heading");
         titleLabel.setWidth(150);

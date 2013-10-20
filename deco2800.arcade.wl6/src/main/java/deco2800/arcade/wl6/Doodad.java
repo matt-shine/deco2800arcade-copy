@@ -73,8 +73,8 @@ public class Doodad {
 
     public void draw(Renderer renderer) {
         float angle = (float) Math.atan2(
-                (float) (this.pos.x - renderer.getGame().getPlayer().getPos().x),
-                (float) (this.pos.y - renderer.getGame().getPlayer().getPos().y)
+                (this.pos.x - renderer.getGame().getPlayer().getPos().x),
+                (this.pos.y - renderer.getGame().getPlayer().getPos().y)
         ) * (180.0f / (float)Math.PI) * -1;
         renderer.drawBasicSprite(this.textureName, this.pos.x, this.pos.y, angle);
     }

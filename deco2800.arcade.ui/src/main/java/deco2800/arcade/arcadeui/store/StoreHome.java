@@ -164,7 +164,7 @@ public class StoreHome implements Screen, StoreScreen {
 					return;
 				}
 				searchResult.setText(result.name);
-				if (featured.id != result.id) {
+				if (!featured.id.equals(result.id)) {
 					featured = result;
 					if (fade == 60) {
 						fade--; // Will trigger textFade and iconFade in render.

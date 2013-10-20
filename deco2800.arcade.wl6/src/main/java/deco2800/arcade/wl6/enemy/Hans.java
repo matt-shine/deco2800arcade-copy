@@ -8,7 +8,7 @@ public class Hans extends Enemy {
     // Difficulty 2 = 950 health
     // Difficulty 3 = 1050 health
     // Difficulty 4 = 1200 health
-    private int STARTING_HEALTH = 850;
+    private final int STARTING_HEALTH = 850;
 
     public Hans(int uid, DoodadInfo d) {
         super(uid);

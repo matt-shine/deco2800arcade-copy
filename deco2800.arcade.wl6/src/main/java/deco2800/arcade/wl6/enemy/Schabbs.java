@@ -8,7 +8,7 @@ public class Schabbs extends Enemy {
     // Difficulty 2 = 950 health
     // Difficulty 3 = 1550 health
     // Difficulty 4 = 2400 health
-    private int STARTING_HEALTH = 850;
+    private final int STARTING_HEALTH = 850;
 
     public Schabbs(int uid, DoodadInfo d) {
         super(uid);

@@ -28,7 +28,7 @@ public class WL6 extends GameClient {
     private MenuScreen menuScreen;
     private SplashScreen splashScreen;
 
-    public static int MAP_DIM = 64;
+    public static final int MAP_DIM = 64;
 
     public WL6(Player player, NetworkClient networkClient) {
         super(player, networkClient);

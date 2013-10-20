@@ -8,7 +8,7 @@ public class FakeHitler extends Enemy {
     // Difficulty 2 = 300 health
     // Difficulty 3 = 400 health
     // Difficulty 4 = 500 health
-    private int STARTING_HEALTH = 200;
+    private final int STARTING_HEALTH = 200;
 
     public FakeHitler(int uid, DoodadInfo d) {
         super(uid);

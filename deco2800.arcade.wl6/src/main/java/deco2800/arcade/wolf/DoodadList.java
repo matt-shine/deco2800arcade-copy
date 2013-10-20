@@ -183,7 +183,7 @@ public class DoodadList {
                     DoodadInfo.treasurePickup("worm", 5000, 1),
 
                     //56: extra life
-                    DoodadInfo.treasurePickup("fullheal", 10000, 150),
+                    DoodadInfo.treasurePickup("life", 10000, 150),
 
                     //57: bones / blood
                     DoodadInfo.nonsolidScenery("headstone"),
@@ -363,28 +363,28 @@ public class DoodadList {
                     new DoodadInfo(true, "snowman", 0, 6, 0, 1, EnemyType.GUARD, 0, DIRS.DOWN, true),
 
                     //116: Officer 1 (Standing)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.RIGHT, false),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.RIGHT, false),
 
                     //117: Officer 1 (Standing)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.UP, false),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.UP, false),
 
                     //118: Officer 1 (Standing)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.LEFT, false),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.LEFT, false),
 
                     //119: Officer 1 (Standing)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.DOWN, false),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.DOWN, false),
 
                     //120: Officer 1 (Moving)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.RIGHT, true),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.RIGHT, true),
 
                     //121: Officer 1 (Moving)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.UP, true),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.UP, true),
 
                     //122: Officer 1 (Moving)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.LEFT, true),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.LEFT, true),
 
                     //123: Officer 1 (Moving)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.DOWN, true),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.DOWN, true),
 
                     //124: dead guard
                     DoodadInfo.nonsolidScenery("headstone"),
@@ -471,28 +471,28 @@ public class DoodadList {
                     new DoodadInfo(true, "snowman", 0, 6, 0, 3, EnemyType.GUARD, 0, DIRS.DOWN, true),
 
                     //152: Officer 3 (Standing)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.RIGHT, false),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.RIGHT, false),
 
                     //153: Officer 3 (Standing)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.UP, false),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.UP, false),
 
                     //154: Officer 3 (Standing)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.LEFT, false),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.LEFT, false),
 
                     //155: Officer 3 (Standing)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.DOWN, false),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.DOWN, false),
 
                     //156: Officer 3 (Moving)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.RIGHT, true),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.RIGHT, true),
 
                     //157: Officer 3 (Moving)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.UP, true),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.UP, true),
 
                     //158: Officer 3 (Moving)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.LEFT, true),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.LEFT, true),
 
                     //159: Officer 3 (Moving)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.DOWN, true),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.DOWN, true),
 
                     //160: Fake Hitler
                     new DoodadInfo(true, "iceking_clone", 0, 0, 0, 0, EnemyType.FAKE_HITLER, 0, DIRS.RIGHT, false),
@@ -579,28 +579,28 @@ public class DoodadList {
                     new DoodadInfo(true, "snowman", 0, 6, 0, 4, EnemyType.GUARD, 0, DIRS.DOWN, true),
 
                     //188: Officer 4 (Standing)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.RIGHT, false),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.RIGHT, false),
 
                     //189: Officer 4 (Standing)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.UP, false),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.UP, false),
 
                     //190: Officer 4 (Standing)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.LEFT, false),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.LEFT, false),
 
                     //191: Officer 4 (Standing)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.DOWN, false),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.DOWN, false),
 
                     //192: Officer 4 (Moving)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.RIGHT, true),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.RIGHT, true),
 
                     //193: Officer 4 (Moving)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.UP, true),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.UP, true),
 
                     //194: Officer 4 (Moving)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.LEFT, true),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.LEFT, true),
 
                     //195: Officer 4 (Moving)
-                    new DoodadInfo(true, "officer", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.DOWN, true),
+                    new DoodadInfo(true, "snowman", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.DOWN, true),
 
                     //196: Dr. Schabbs
                     new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.SCHABBS, 0, DIRS.RIGHT, false),
@@ -660,7 +660,7 @@ public class DoodadList {
                     new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.HANS, 0, DIRS.RIGHT, false),
                     
                     //215: Otto Giftmacher
-                    new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.GUARD, 0, DIRS.RIGHT, false),
+                    new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.GIFTMACHER, 0, DIRS.RIGHT, false),
 
                     //216: Mutant 1 (Standing)
                     new DoodadInfo(true, "icekingboss", 0, 6, 0, 1, EnemyType.MUTANT, 0, DIRS.RIGHT, false),  // FIXME Not complete

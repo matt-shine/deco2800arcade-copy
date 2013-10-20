@@ -73,15 +73,15 @@ public class Player extends Mob {
         			((int) blockPos.y) == superMagicalSecretFloorEntranceThatIsntDeclaredInTheMapFilesForGodKnowsWhy.y)) {
         		
         		model.secretLevel();
-        	} else {
-        		model.nextLevel();
-        		
-        		if (model.getChapter() == "1") {
-        			AchievementGiver.give("wolf.win" + model.getLevel());
-        		}
-        		
         	}
+
         	
+    		model.nextLevel();
+    		
+    		if (model.getChapter().equals("1")) {
+    			AchievementGiver.give("wolf.win" + model.getLevel());
+    		}
+
         }
 
         if (this.getHealth() <= 0) {

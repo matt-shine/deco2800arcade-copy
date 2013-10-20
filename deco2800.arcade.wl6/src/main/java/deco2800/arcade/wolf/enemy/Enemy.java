@@ -407,15 +407,20 @@ public class Enemy extends Mob {
 
 		}
 
-		do {
-
-			d.setPos(this.getPos().add((float) (0.7 * Math.random() - 0.35),
-					(float) (0.7 * Math.random() - 0.35)));
-
-		} while (WL6Meta.hasSolidBlockAt((int) d.getBlockPos().x,
-				(int) d.getBlockPos().y, g.getMap()));
-
-		g.addDoodad(d);
+		if (d != null) {
+			do {
+	
+				d.setPos(this.getPos().add((float) (0.7 * Math.random() - 0.35),
+						(float) (0.7 * Math.random() - 0.35)));
+	
+			} while (WL6Meta.hasSolidBlockAt((int) d.getBlockPos().x,
+					(int) d.getBlockPos().y, g.getMap()));
+	
+			g.addDoodad(d);
+		}
+		
+		
+		
 	}
 
 	public void calculatePath(GameModel gameModel) {

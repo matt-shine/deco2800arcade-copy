@@ -1,10 +1,6 @@
 package deco2800.arcade.wolf.enemy;
 
-import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.wolf.DoodadInfo;
-import deco2800.arcade.wolf.GameModel;
-import deco2800.arcade.wolf.Player;
-import deco2800.arcade.wolf.Projectile;
 
 public class SS extends Enemy {
 

@@ -31,6 +31,12 @@ public class WL6InputProcessor implements InputProcessor {
             game.toggleDebugMode();
         }
 
+        //debug
+        if (c == Keys.BACKSPACE) {
+            game.goToMenu();
+            model.reset();
+        }
+
         //panic
         if (c == Keys.F2) {
             ArcadeSystem.exit();

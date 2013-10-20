@@ -1,10 +1,7 @@
 package deco2800.arcade.wolf.enemy;
 
-import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.wolf.DoodadInfo;
 import deco2800.arcade.wolf.GameModel;
-import deco2800.arcade.wolf.Player;
-import deco2800.arcade.wolf.Projectile;
 
 public class Giftmacher extends Enemy {
 
@@ -17,14 +14,28 @@ public class Giftmacher extends Enemy {
         super(uid);
 
         setPain(false);
-        setRepeatShootChance(0.95f);
+        setRepeatShootChance(0f);
         setStateChangeTime(0.1f);
-        setDamage(2);
+        setDamage(60);
+        
         
         initialiseFromEnemyData(d);
         
     }
-
+    
+    @Override
+    public void tick(GameModel g) {
+    	
+    	super.tick(g);
+    	
+    	//there is no elevator on this level
+    	if (this.getHealth() <= 0) {
+    		g.nextLevel();
+    	}
+    	
+    	
+    }
+    
     @Override
     public int getStartingHealth(int difficulty) {
         switch (difficulty) {

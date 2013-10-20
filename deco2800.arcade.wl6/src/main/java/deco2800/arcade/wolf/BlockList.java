@@ -156,7 +156,7 @@ public class BlockList {
                     new BlockInfo(true, "purplewall"),
 
                     //48: wood panel
-                    new BlockInfo(true, "wood"),
+                    new BlockInfo(true, "woodwall"),
 
                     //49: grey / hitler
                     new BlockInfo(true, "greybrick"),

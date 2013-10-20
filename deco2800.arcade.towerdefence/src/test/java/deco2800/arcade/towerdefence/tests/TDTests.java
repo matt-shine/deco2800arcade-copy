@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.towerdefence.model.*;
 import deco2800.arcade.towerdefence.model.creationclasses.Enemy;
 import deco2800.arcade.towerdefence.model.creationclasses.Projectile;
+import deco2800.arcade.towerdefence.model.creationclasses.Tower;
 import deco2800.arcade.towerdefence.model.pathfinding.Path;
 
 public class TDTests {
@@ -123,41 +124,69 @@ public class TDTests {
 	}
 
 	@Test
-	public void projectileTest(){
+	public void projectileTest() {
 		Grid grid = new Grid(100, 100, "grid", 10, null, null);
-		//Create a projectile with no radius dealing 50 damage
-		Projectile bullet = new Projectile(0, 0, grid, new Vector2(10,10), 200,
-			Team.Player, null, 50, 0, 0);
-		//Create a target
-		Enemy victim = new Enemy(100, 0, 30, 30, 0, grid, Team.Computer, 0, 0, 0,
-				0, 0, null, null, null, null, null);
+		// Create a projectile with no radius dealing 50 damage
+		Projectile bullet = new Projectile(0, 0, grid, new Vector2(10, 10),
+				200, Team.Player, null, 50, 0, 0);
+		// Create a target
+		Enemy victim = new Enemy(100, 0, 30, 30, 0, grid, Team.Computer, 0, 0,
+				0, 0, 0, null, null, null, null, null);
 		grid.placeAlien(victim);
-		//Shoot the projectile
+		// Shoot the projectile
 		bullet.move();
-		Assert.assertEquals(50, ((Enemy)grid.getGridContents(3,3).get(0)).health());
+		Assert.assertEquals(50,
+				((Enemy) grid.getGridContents(3, 3).get(0)).health());
 	}
-	
+
 	@Test
-	public void areaDamageTest(){
-		//Create grid
+	public void areaDamageTest() {
+		// Create grid
 		Grid grid = new Grid(100, 100, "grid", 10, null, null);
-		//Create explosive with radius 2 and 50 damage
-		Projectile explosive = new Projectile(0, 0, grid, new Vector2(10,10), 200,
-			Team.Player, null, 50, 0, 2);
-		//Create 3 targets at varying distances
-		Enemy victim1 = new Enemy(100, 0, 30, 30, 0, grid, Team.Computer, 0, 0, 0,
-				0, 0, null, null, null, null, null);
-		Enemy victim2 = new Enemy(100, 0, 40, 30, 0, grid, Team.Computer, 0, 0, 0,
-				0, 0, null, null, null, null, null);
-		Enemy victim3 = new Enemy(100, 0, 50, 30, 0, grid, Team.Computer, 0, 0, 0,
-				0, 0, null, null, null, null, null);
+		// Create explosive with radius 2 and 50 damage
+		Projectile explosive = new Projectile(0, 0, grid, new Vector2(10, 10),
+				200, Team.Player, null, 50, 0, 2);
+		// Create 3 targets at varying distances
+		Enemy victim1 = new Enemy(100, 0, 30, 30, 0, grid, Team.Computer, 0, 0,
+				0, 0, 0, null, null, null, null, null);
+		Enemy victim2 = new Enemy(100, 0, 40, 30, 0, grid, Team.Computer, 0, 0,
+				0, 0, 0, null, null, null, null, null);
+		Enemy victim3 = new Enemy(100, 0, 50, 30, 0, grid, Team.Computer, 0, 0,
+				0, 0, 0, null, null, null, null, null);
 		grid.placeAlien(victim1);
 		grid.placeAlien(victim2);
 		grid.placeAlien(victim3);
-		//Shoot the explosive
+		// Shoot the explosive
 		explosive.move();
-		Assert.assertEquals(50, ((Enemy)grid.getGridContents(3,3).get(0)).health());
-		Assert.assertEquals(50, ((Enemy)grid.getGridContents(4,3).get(0)).health());
-		Assert.assertEquals(50, ((Enemy)grid.getGridContents(5,3).get(0)).health());
+		Assert.assertEquals(50,
+				((Enemy) grid.getGridContents(3, 3).get(0)).health());
+		Assert.assertEquals(50,
+				((Enemy) grid.getGridContents(4, 3).get(0)).health());
+		Assert.assertEquals(50,
+				((Enemy) grid.getGridContents(5, 3).get(0)).health());
+	}
+
+	@Test
+	public void towerShootingTest() {
+		// The grid
+		Grid grid = new Grid(100, 100, "grid", 10, null, null);
+		// The projectile used by the tower
+		Projectile projectile = new Projectile(0, 0, grid, new Vector2(10, 10),
+				200, Team.Player, null, 50, 0, 0);
+		// The tower itself
+		Tower tower = new Tower(50, 10, 0, 0, grid, Team.Player, null, 1, 10,
+				projectile, 0, null, null, null, null);
+		// A target for the tower to shoot at
+		Enemy victim = new Enemy(100, 0, 60, 30, 0, grid, Team.Computer, 0, 0,
+				0, 0, 0, null, null, null, null, null);
+		grid.placeAlien(victim);
+		// TARGET ACQUIRED, YOUR ORDERS COMMANDER JUNIT?
+		tower.target(victim);
+		// OPEN FIRE
+		tower.shoot();
+		// EFFECT ON TARGET?
+		Assert.assertEquals(50,
+				((Mortal) grid.getGridContents(6, 3).get(0)).health());
+		// HEAVY DAMAGE, ANOTHER ONE LIKE THAT SHOULD FINISH THEM SIR!
 	}
 }

@@ -3,6 +3,7 @@ package deco2800.arcade.towerdefence.model.creationclasses;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.towerdefence.model.Grid;
 import deco2800.arcade.towerdefence.model.GridObject;
@@ -66,9 +67,11 @@ public class Tower extends Mortal implements Ranged {
 	 * @param attackRate
 	 *            The number of attacks per second
 	 * @param range
-	 *            The range at which it can acquire a target
+	 *            The range at which it can acquire a target, in tiles
 	 * @param projectile
-	 *            The projectile it shoots
+	 *            The projectile it shoots. NOTE: Speed in this case should be
+	 *            simply a vector with a length based on the speed of the
+	 *            projectile.
 	 * @param baseCost
 	 *            The cost to build the base tower
 	 * @param upgradeCost
@@ -152,22 +155,21 @@ public class Tower extends Mortal implements Ranged {
 	public Projectile projectile() {
 		return projectile;
 	}
-	
+
 	/**
 	 * The base cost of the tower
 	 */
 	public int baseCost() {
 		return baseCost;
 	}
-	
+
 	/**
-	 * The upgrade cost of the tower
-	 * Index as level.
+	 * The upgrade cost of the tower Index as level.
 	 */
 	public List<Integer> upgradeCost() {
 		return upgradeCost;
 	}
-	
+
 	/**
 	 * The target the tower currently has.
 	 */
@@ -226,7 +228,7 @@ public class Tower extends Mortal implements Ranged {
 	}
 
 	/**
-	 * Sets the range at which a tower can acquire a target.
+	 * Sets the range at which a tower can acquire a target, in tiles.
 	 */
 	public void range(double range) {
 		this.range = range;
@@ -238,21 +240,20 @@ public class Tower extends Mortal implements Ranged {
 	public void projectile(Projectile projectile) {
 		this.projectile = projectile;
 	}
+
 	/**
 	 * Sets the base cost of the tower
 	 */
 	public void baseCost(int cost) {
 		this.baseCost = cost;
 	}
-	
+
 	/**
-	 * Sets the upgrade cost of the tower
-	 * Index as level.
+	 * Sets the upgrade cost of the tower Index as level.
 	 */
 	public void upgradeCost(List<Integer> costList) {
 		this.upgradeCost = costList;
 	}
-	
 
 	/**
 	 * Sets the current target of the tower
@@ -274,7 +275,12 @@ public class Tower extends Mortal implements Ranged {
 	 * The method for firing a single projectile at a target.
 	 */
 	public void shoot() {
-		// TODO Auto-generated method stub
-
+		// Get the angle between this and the target
+		float angle = target.position().cpy().sub(position()).angle();
+		Vector2 projVector = projectile.speed().cpy();
+		projVector.setAngle(angle);
+		// Fire
+		Projectile shot = new Projectile(projectile, projVector, position);
+		shot.move();
 	}
 }

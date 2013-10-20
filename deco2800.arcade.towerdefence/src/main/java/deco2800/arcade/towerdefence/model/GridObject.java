@@ -170,6 +170,13 @@ public class GridObject {
 		return effectStacks;
 	}
 
+	/**
+	 * Return the list of standing sprites.
+	 */
+	public List<Sprite> standingSprites() {
+		return sprStanding;
+	}
+
 	// Setters
 	/**
 	 * Set the grid the object belongs to.
@@ -327,13 +334,15 @@ public class GridObject {
 		tilesPosition.y /= grid.getTileSize();
 		return tilesPosition;
 	}
-	
+
 	/**
 	 * Get the contents of the grid the object is currently in.
+	 * 
 	 * @return A list of objects in the current tile.
 	 */
-	public List<GridObject> getCurrentGrid(){
-		return grid.getGridContents((int)positionInTiles().x, (int)positionInTiles().y);
+	public List<GridObject> getCurrentGrid() {
+		return grid.getGridContents((int) positionInTiles().x,
+				(int) positionInTiles().y);
 	}
 
 	/**

@@ -72,6 +72,24 @@ public class Projectile extends GridObject {
 		this.explosionRadius = explosionRadius;
 	}
 
+	/**
+	 * Constructor used by towers when shooting.
+	 * 
+	 * @param other
+	 *            The Projectile given by the tower to copy.
+	 * @param speed
+	 *            The speed and direction of this projectile.
+	 */
+	public Projectile(Projectile other, Vector2 speed, Vector2 position) {
+		super((int) position.x, (int) position.y, other.grid(), other.team(),
+				other.standingSprites());
+		this.speed = speed;
+		this.range = other.range;
+		this.damage = other.damage;
+		this.penetration = other.penetration;
+		this.explosionRadius = other.explosionRadius;
+	}
+
 	// Getters
 	/**
 	 * Returns the damage the projectile inflicts on collision.
@@ -98,6 +116,15 @@ public class Projectile extends GridObject {
 	 */
 	public int explosionRadius() {
 		return explosionRadius;
+	}
+
+	/**
+	 * Return a copy of this projectile's speed/direction vector.
+	 * 
+	 * @return A vector representing the speed and direction of this projectile.
+	 */
+	public Vector2 speed() {
+		return speed.cpy();
 	}
 
 	// Setters
@@ -140,18 +167,17 @@ public class Projectile extends GridObject {
 		float moved = 0;
 		long t0, t1;
 		Vector2 addVector = speed.cpy();
-		addVector.mul((float)1/30);
+		addVector.mul((float) 1 / 30);
 		while (moved < range) {
-			//Check for collisions
-			//System.out.println(position);
-			for (int i =0;i < getCurrentGrid().size(); i++){
-				if (getCurrentGrid().get(i).team() != this.team){
-					//Collision occurred
+			// Check for collisions
+			for (int i = 0; i < getCurrentGrid().size(); i++) {
+				if (getCurrentGrid().get(i).team() != this.team) {
+					// Collision occurred
 					collide(getCurrentGrid().get(i));
 					return;
 				}
 			}
-			
+
 			t0 = System.currentTimeMillis();
 			t1 = t0;
 			// Move
@@ -180,8 +206,8 @@ public class Projectile extends GridObject {
 		// find the top left square of the area to hit.
 		Vector2 startingTile = new Vector2(centreTile.x - r, centreTile.y + r);
 		// iterate through squares r away from centre tile in a square
-		for (int i = 0; i <= r*2; i++) {
-			for (int j = 0; j <= r*2; j++) {
+		for (int i = 0; i <= r * 2; i++) {
+			for (int j = 0; j <= r * 2; j++) {
 				// make an iterator for the contents of each square
 				Iterator<GridObject> contents = grid.getGridContents(
 						(int) (startingTile.x + i), (int) (startingTile.y - j))

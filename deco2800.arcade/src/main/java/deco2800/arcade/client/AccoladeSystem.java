@@ -125,12 +125,15 @@ public class AccoladeSystem {
 	 * @param accolade The string name for the accolade (matches database).
 	 * @return The primary key for the accolade.
 	 */
-	public int fetchID(String accolade) throws NullPointerException{
+	public Double fetchID(String accolade) throws NullPointerException{
+		/**
 		if(this.nameIDPairs.containsKey(accolade)){
 			return this.nameIDPairs.get(accolade);
 		} else {
 			throw new NullPointerException("No accolade by that name exists. Check your XML");
 		}
+		**/
+		return 1.11;
 	}
 	
 	/** 

@@ -132,7 +132,7 @@ public class GamePath {
 
 		String gameMd5 = PackageUtils.genMD5(gamePath);
 		Statement statement = null;
-		String query = "INSERT INTO GAMEPATH VALUES ("+gameID+",'"+
+		String query = "INSERT INTO GAMEPATH VALUES ('"+gameID+"','"+
 		gamePath+"','"+gameMd5+"')";
 		try {
 			statement = connection.createStatement();

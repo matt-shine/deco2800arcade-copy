@@ -46,7 +46,6 @@ public class CommunicationListener extends Listener {
 			
 			//A user has just logged in, get their chat history and send it to them
 			HashMap<Integer, ChatNode> personalChatHistory = ArcadeServer.instance().getChatStorage().getChatHistory(contact.playerID);
-			
 			if (personalChatHistory != null){
 				ChatHistory chatHistory = new ChatHistory();
 				chatHistory.setChatHistory(personalChatHistory);

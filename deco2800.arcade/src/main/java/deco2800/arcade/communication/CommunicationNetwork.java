@@ -81,7 +81,6 @@ public class CommunicationNetwork {
 	 * @param textMessage
 	 */
 	public void recieveTextMesage(TextMessage textMessage) {
-		
 		int chatID = textMessage.getChatID();
 		ChatNode node = chatNodes.get(chatID);
 		
@@ -198,6 +197,7 @@ public class CommunicationNetwork {
 	public void receiveChatHistory(ChatHistory receivedHistory) {
 		chatNodes = receivedHistory.getChatHistory();
 		for (Entry<Integer, ChatNode> entry : chatNodes.entrySet()) {
+			System.out.println("Adding a new chat label for received history");
 			controller.addChatLabel(entry.getValue(), entry.getValue().getOwner());
 		}
 	}

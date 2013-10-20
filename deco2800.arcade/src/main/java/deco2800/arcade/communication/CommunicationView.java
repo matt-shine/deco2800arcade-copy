@@ -13,12 +13,16 @@ import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -52,7 +56,9 @@ public class CommunicationView extends JPanel {
 
 	private void createViewOne() {
 		
+		Border border = BorderFactory.createLineBorder(Color.BLACK, 2);
 		viewOne = new JPanel(new GridLayout(1, 1, 0, 0));
+		viewOne.setBorder(border);
 		
 		scrollablePanel = new JPanel(new FlowLayout(FlowLayout.CENTER,0,1)) {
 			private static final long serialVersionUID = 1L;
@@ -72,9 +78,13 @@ public class CommunicationView extends JPanel {
 		        
 		};
 		
+		scrollablePanel.setLayout(new BoxLayout(scrollablePanel, BoxLayout.Y_AXIS));
+		scrollablePanel.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
+
 		scrollPane = new JScrollPane(scrollablePanel,
 				JScrollPane.VERTICAL_SCROLLBAR_NEVER,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBorder(null);
 
 		viewOne.add(scrollPane, BorderLayout.PAGE_START);
 	}
@@ -145,11 +155,16 @@ public class CommunicationView extends JPanel {
 		label.setBackground(Color.WHITE);
 		label.setOpaque(true);
 		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setPreferredSize(new Dimension(250, 50));
-		
+		Border border = BorderFactory.createLineBorder(Color.BLACK, 3);
+		label.setMaximumSize(new Dimension(250, 50));
+		label.setBorder(border);
+
 		scrollablePanel.add(label, BorderLayout.NORTH);
+		scrollablePanel.add(Box.createVerticalStrut(1));
 		viewOne.revalidate();
 		viewOne.repaint();
+		scrollablePanel.revalidate();
+		scrollablePanel.repaint();
 	}
 	
 	

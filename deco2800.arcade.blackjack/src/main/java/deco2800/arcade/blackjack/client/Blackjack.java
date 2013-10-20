@@ -17,11 +17,11 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.listener.CasinoListener;
 
 /**
- * A Blackjack Cainso game for use in the Arcade
+ * A Blackjack Casino game for use in the Arcade
  * @author Dane Cousins, Kristian Zembic, Robert Macdonald, Scott Fredericks, Fionntan Shanahan
  *
  */
-@ArcadeGame("id=blackjack")
+@ArcadeGame(id="blackjack")
 public class Blackjack extends GameClient {
 	
 

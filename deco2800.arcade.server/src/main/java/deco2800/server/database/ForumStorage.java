@@ -710,7 +710,7 @@ public class ForumStorage {
 		ArrayList<ParentThread> result = new ArrayList<ParentThread>();
 		
 		/* Check params */
-		if (start < 0 || end < 0 || limit < 0 || start < end || userId < 0) {
+		if (start < 0 || end < 0 || limit < 0 || userId < 0) {
 			throw new DatabaseException("Invalid parameter.");
 		}
 		
@@ -799,7 +799,7 @@ public class ForumStorage {
 		ArrayList<ParentThread> result = new ArrayList<ParentThread>();
 		
 		/* Check params */
-		if (start < 0 || end < 0 || limit < 0 || start < end || (!this.inCategoryList(category))) {
+		if (start < 0 || end < 0 || limit < 0 || (!this.inCategoryList(category))) {
 			throw new DatabaseException("Invalid parameter.");
 		}
 		

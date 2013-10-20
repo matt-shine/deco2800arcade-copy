@@ -16,6 +16,9 @@ public class ReplayNodeTest {
     private ReplayItem r3 = new ReplayItem("test");
     private HashMap<String, ReplayItem> items;
 
+    /**
+     * Test that a ReplayNode returns the correct type for its data.
+     */
     @Test
     public void testGetType()
     {
@@ -29,6 +32,9 @@ public class ReplayNodeTest {
         assertEquals("test_event", rn.getType());
     }
     
+    /**
+     * Test retrieving data from the ReplayNode using its label.
+     */
     @Test
     public void testGetItems()
     {
@@ -47,6 +53,9 @@ public class ReplayNodeTest {
         assertEquals("test", rn.getItemForString("name").stringVal());
     }
     
+    /**
+     * Test that the time supplied to a ReplayNode is returned correctly.
+     */
     @Test
     public void testGetTime()
     {
@@ -55,11 +64,14 @@ public class ReplayNodeTest {
         items.put("y", r2);
         items.put("name", r3);
         
-        ReplayNode rn = new ReplayNode("test_event", items);
+        ReplayNode rn = new ReplayNode("test_event", items, 999);
         
-        assertEquals(0, rn.getTime());
+        assertEquals(999, rn.getTime());
     }
     
+    /**
+     * Test setting the time of a ReplayNode after instantiation is correct.
+     */
     @Test
     public void testSetTime()
     {
@@ -74,6 +86,9 @@ public class ReplayNodeTest {
         assertEquals(123, rn.getTime());
     }
     
+    /**
+     * Test that the map of items returned is correct.
+     */
     @Test
     public void testItems()
     {
@@ -87,6 +102,9 @@ public class ReplayNodeTest {
         assertEquals(rn.getItems(), items);
     }
     
+    /**
+     * Test the minimal creation syntax.
+     */
     @Test
     public void testSmallConstructor()
     {        
@@ -96,6 +114,9 @@ public class ReplayNodeTest {
         assertEquals(rn.getTime(), 0);
     }
     
+    /**
+     * Test the constructor specifying time but no data.
+     */
     @Test
     public void testAlternateConstructor()
     {
@@ -104,6 +125,9 @@ public class ReplayNodeTest {
         assertEquals(rn.getTime(), 999);
     }
     
+    /**
+     * Test the full syntax for a constructor with data supplied.
+     */
     @Test
     public void testFinalConstructor()
     {
@@ -117,6 +141,9 @@ public class ReplayNodeTest {
         assertEquals(rn.getTime(), 999);
     }
     
+    /**
+     * Test the cloning constructor and toString methods are correct.
+     */
     @Test
     public void testCopy()
     {

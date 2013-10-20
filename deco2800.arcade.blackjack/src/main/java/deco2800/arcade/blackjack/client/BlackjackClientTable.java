@@ -278,7 +278,6 @@ public class BlackjackClientTable implements Screen{
 		player3card4.setPosition(640, 295);
 		player3card5.setPosition(665, 295);
 		
-<<<<<<< HEAD
 		TextureRegion player3cardsTexReg = new TextureRegion(CardQueenClub);
 		Image player3cardfinal = new Image(player3cardsTexReg);
 		Image player3cardfinal2 = new Image(player3cardsTexReg);
@@ -360,21 +359,6 @@ public class BlackjackClientTable implements Screen{
 		player5card3.add(player5cardfinal3);
 		player5card4.add(player5cardfinal4);
 		player5card5.add(player5cardfinal5);
-=======
-		Texture CardQueenSpade = new Texture(Gdx.files.internal("data/QS.jpg"));
-		
-		TextureRegion player1cardsTexReg = new TextureRegion(CardQueenSpade);
-		Image player1cardfinal = new Image(player1cardsTexReg);
-		Image player1cardfinal2 = new Image(player1cardsTexReg);
-		Image player1cardfinal3 = new Image(player1cardsTexReg);
-		Image player1cardfinal4 = new Image(player1cardsTexReg);
-		Image player1cardfinal5 = new Image(player1cardsTexReg);
-		player3card1.add(player1cardfinal);
-		player3card2.add(player1cardfinal2);
-		player3card3.add(player1cardfinal3);
-		player3card4.add(player1cardfinal4);
-		player3card5.add(player1cardfinal5);
->>>>>>> 0dbed54497ebc30beb280713641d5f92ebde7685
 		
 		//-----------------------------------------------
 		//----------------BUTTONS------------------------

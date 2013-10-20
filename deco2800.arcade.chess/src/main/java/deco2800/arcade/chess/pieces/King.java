@@ -97,8 +97,17 @@ public class King extends Piece {
 			}
 		}
 		
+		List<int[]> movesToReturn = new ArrayList<int[]>();
+		//Check for and remove moves not on the board
+		for(int i=0; i<allowableMoves.size(); i++) {
+			int[] move = allowableMoves.get(i);
+			if((0 <= move[0] && move[0] <= 7) && (0 <= move[1] && move[1] <= 7)) {
+				movesToReturn.add(allowableMoves.get(i));	
+			}
+		}
 		
-		return allowableMoves;
+		
+		return movesToReturn;
 	}
 
 	public boolean isChecked() {

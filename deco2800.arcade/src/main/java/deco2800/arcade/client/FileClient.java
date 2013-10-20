@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.packman.PackCompress;
+import deco2800.arcade.packman.PackageUtils;
+import deco2800.arcade.packman.PackageClient;
 import deco2800.arcade.protocol.BlockingMessage;
 import deco2800.arcade.protocol.packman.FetchGameRequest;
 import deco2800.arcade.protocol.packman.FetchGameResponse;
@@ -83,11 +85,22 @@ public class FileClient implements Runnable {
         }
 
         try {
-            // Extract the JAR
-            PackCompress unpack = new PackCompress();
-            unpack.expand(filebase + ".tar.gz", filebase + ".jar");
+            // Verify MD5 signature
+            String md5 = PackageUtils.genMD5(filebase + ".tar.gz");
+            if (!md5.equals(resp.md5)) {
+                System.out.println("[FILE CLIENT] Error transferring file. MD5 checksum failed.");
+            } else {
+                // Extract the JAR
+                PackCompress unpack = new PackCompress();
+                unpack.expand(filebase + ".tar.gz", filebase + ".jar");
 
-            // Delete the .tar.gz file
+                // Add the new JAR to the classpath
+                if (!PackageClient.addJar(filebase + ".jar")) {
+                    System.out.println("[FILE CLIENT] Error adding downloaded JAR to classpath.");
+                }
+            }
+
+            // Delete the .tar.gz file regardless of whether it was ok or not
             File del = new File(filebase + ".tar.gz");
             del.delete();
         } catch (IOException e) {

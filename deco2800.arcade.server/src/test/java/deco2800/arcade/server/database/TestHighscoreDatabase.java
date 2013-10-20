@@ -64,7 +64,6 @@ public class TestHighscoreDatabase {
 		databaseTester.onTearDown();
 	}
 
-
 	/**
 	 * Tests adding a scores using updateScore method
 	 * @throws DatabaseException
@@ -152,5 +151,4 @@ public class TestHighscoreDatabase {
 
 	}
 	*/
-
 }

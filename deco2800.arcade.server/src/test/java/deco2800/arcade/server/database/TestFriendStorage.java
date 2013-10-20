@@ -228,5 +228,6 @@ public class TestFriendStorage {
 				return column.getColumnName().equalsIgnoreCase("U1");
 			}
 		}
+
 	}	
 }

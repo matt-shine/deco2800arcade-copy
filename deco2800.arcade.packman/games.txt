@@ -9,6 +9,7 @@ pong
 tictactoe
 ui
 breakout
+blackjack
 deerforest
 gamelibrary
 soundboard
@@ -28,3 +29,5 @@ wl6
 snakeLadder
 userui
 cyra
+hunter
+blackjack

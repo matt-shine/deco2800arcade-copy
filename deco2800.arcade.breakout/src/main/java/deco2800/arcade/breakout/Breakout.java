@@ -1,32 +1,23 @@
 package deco2800.arcade.breakout;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Intersector;
 
+import deco2800.arcade.breakout.screens.GameScreen;
+import deco2800.arcade.breakout.screens.HelpScreen1;
+import deco2800.arcade.breakout.screens.HelpScreen2;
+import deco2800.arcade.breakout.screens.LevelScreen1;
+import deco2800.arcade.breakout.screens.LevelScreen2;
+import deco2800.arcade.breakout.screens.MenuScreen;
+import deco2800.arcade.breakout.screens.ModelScreen;
+import deco2800.arcade.breakout.screens.SplashScreen;
+import deco2800.arcade.client.AccoladeSystem;
+import deco2800.arcade.client.AchievementClient;
+import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.highscores.HighscoreClient;
+import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.breakout.screens.*;
-import deco2800.arcade.client.AchievementClient;
-import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.GameClient;
-import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.client.highscores.HighscoreClient;
-import deco2800.arcade.client.AccoladeSystem;
 
 /**
  * The game client
@@ -52,8 +43,8 @@ public class Breakout extends GameClient {
 	private AchievementClient achievementClient;
 	private HighscoreClient highscoreUser;
 	private AccoladeSystem accolades;
-	private int accoladeBumpCounter;
-	private int accoladeBrickBreak;
+	private Double accoladeBumpCounter;
+	private Double accoladeBrickBreak;
 
 	// Screen Parameters
 	public static final int SCREENHEIGHT = 720;
@@ -74,8 +65,8 @@ public class Breakout extends GameClient {
 		this.highscoreUser = new HighscoreClient(this.player, "Breakout",
 				networkClient);
 		this.accolades = new AccoladeSystem();
-		accoladeBumpCounter = accolades.fetchID("bumpCount");
-		accoladeBrickBreak = accolades.fetchID("brickBreak");
+		//accoladeBumpCounter = accolades.fetchID("bumpCount");
+		//accoladeBrickBreak = accolades.fetchID("brickBreak");
 	}
 
 	/**
@@ -196,7 +187,8 @@ public class Breakout extends GameClient {
 		game = new Game();
 		game.id = "breakout";
 		game.name = "Breakout";
-		game.description = "Bounce the ball off your paddle to keep it from falling off the bottom of the screen.";
+		game.description = "Bounce the ball off your paddle to keep it from" +
+				" falling off the bottom of the screen.";
 	}
 
 	/**
@@ -222,7 +214,7 @@ public class Breakout extends GameClient {
 	 * 
 	 * @return int accolades
 	 */
-	public int getAccoladeBumpCounter() {
+	public Double getAccoladeBumpCounter() {
 		return accoladeBumpCounter;
 	}
 
@@ -231,7 +223,7 @@ public class Breakout extends GameClient {
 	 * 
 	 * @return int accolades
 	 */
-	public int getAccoladeBrickBreak() {
+	public Double getAccoladeBrickBreak() {
 		return accoladeBrickBreak;
 	}
 

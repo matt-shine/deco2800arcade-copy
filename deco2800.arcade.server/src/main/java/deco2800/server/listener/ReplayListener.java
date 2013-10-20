@@ -2,6 +2,7 @@ package deco2800.server.listener;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import deco2800.arcade.protocol.replay.StartSessionResponse;
 import deco2800.arcade.protocol.replay.types.Session;
 import deco2800.server.ArcadeServer;
 import deco2800.server.database.DatabaseException;
+import deco2800.server.database.ReplayStorage;
 
 public class ReplayListener extends Listener {
 
@@ -83,7 +85,7 @@ public class ReplayListener extends Listener {
             
             logger.info("Got list replay session event.");
 
-            ArrayList<String> sessionStrings = null;
+            List<String> sessionStrings = null;
             
             try {
                 sessionStrings = ArcadeServer.instance().getReplayStorage().getSessionsForGame(lsr.gameId);
@@ -99,11 +101,23 @@ public class ReplayListener extends Listener {
                 {
                     String[] tokens = s.split(",");
 
-                    int sessionId = Integer.parseInt(tokens[0].replaceAll("\\s+",""));
-                    boolean recording = Boolean.parseBoolean(tokens[1]);
-                    String user = tokens[2];
-                    long dateTime = Long.parseLong(tokens[3].replaceAll("\\s+",""));
-                    String comments = tokens[4];
+                    int sessionId = Integer.parseInt(
+                                        tokens[ReplayStorage.SESSION_ID_INDEX]
+                                        .replaceAll("\\s+","")
+                                    );
+                    
+                    boolean recording = Boolean.parseBoolean(
+                                            tokens[ReplayStorage.RECORDING_INDEX]
+                                        );
+                    
+                    String user = tokens[ReplayStorage.USER_INDEX];
+                    
+                    long dateTime = Long.parseLong(
+                                        tokens[ReplayStorage.DATE_INDEX]
+                                        .replaceAll("\\s+","")
+                                    );
+                    
+                    String comments = tokens[ReplayStorage.COMMENT_INDEX];
                     
                     Session session = new Session();
                     session.gameId = lsr.gameId;

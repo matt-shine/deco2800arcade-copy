@@ -2,8 +2,6 @@ package deco2800.arcade.towerdefence.model.creationclasses;
 
 import java.util.List;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
-
 import deco2800.arcade.towerdefence.model.Grid;
 import deco2800.arcade.towerdefence.model.GridObject;
 import deco2800.arcade.towerdefence.model.Melee;
@@ -28,8 +26,8 @@ public class Enemy extends Mobile implements Melee {
 	private int penetration;
 	// The current target.
 	private GridObject target;
-	// The sprites for the melee attacking animation.
-	private List<Sprite> sprAttacking;
+	// The files for the melee attacking animation.
+	private List<String> fileAttacking;
 	// The enemies anger statistic, for how likely it is to stop pathing and
 	// attack a different team object randomly.
 	private double anger;
@@ -60,16 +58,16 @@ public class Enemy extends Mobile implements Melee {
 	 *            The damage per attack
 	 * @param penetration
 	 *            The amount of armour the attack ignores
-	 * @param sprStanding
-	 *            The in order list of Standing Sprites
-	 * @param sprMoving
-	 *            The in order list of Movement Sprites
-	 * @param sprDying
-	 *            The in order list of Dying Sprites
-	 * @param sprDeath
-	 *            The in order list of Death Sprites
-	 * @param sprAttacking
-	 *            The in order list of Attacking Sprites
+	 * @param fileStanding
+	 *            The in order list of Standing files
+	 * @param fileMoving
+	 *            The in order list of Movement files
+	 * @param fileDying
+	 *            The in order list of Dying files
+	 * @param fileDeath
+	 *            The in order list of Death files
+	 * @param fileAttacking
+	 *            The in order list of Attacking files
 	 * @param anger
 	 *            How likely the enemy is to stop pathing and attack nearest
 	 *            other-team object.
@@ -78,12 +76,12 @@ public class Enemy extends Mobile implements Melee {
 	 */
 	public Enemy(int maxHealth, int armour, int x, int y, double speed,
 			Grid grid, Team team, double attackRate, int damage,
-			int penetration, double anger, int bounty, List<Sprite> sprStanding,
-			List<Sprite> sprMoving, List<Sprite> sprDying,
-			List<Sprite> sprDeath, List<Sprite> sprAttacking) {
-		super(maxHealth, armour, x, y, speed, grid, team, sprStanding,
-				sprMoving, sprDying, sprDeath);
-		this.sprAttacking = sprAttacking;
+			int penetration, double anger, int bounty, List<String> fileStanding,
+			List<String> fileMoving, List<String> fileDying,
+			List<String> fileDeath, List<String> fileAttacking) {
+		super(maxHealth, armour, x, y, speed, grid, team, fileStanding,
+				fileMoving, fileDying, fileDeath);
+		this.fileAttacking = fileAttacking;
 		this.attackRate = attackRate;
 		this.damage = damage;
 		this.penetration = penetration;
@@ -135,10 +133,10 @@ public class Enemy extends Mobile implements Melee {
 	}
 
 	/**
-	 * Return the sprites for melee attacking animation.
+	 * Return the files for melee attacking animation.
 	 */
-	public List<Sprite> sprAttacking() {
-		return sprAttacking;
+	public List<String> fileAttacking() {
+		return fileAttacking;
 	}
 
 	// Setters
@@ -197,11 +195,13 @@ public class Enemy extends Mobile implements Melee {
 	}
 
 	/**
-	 * Sets the sprites for melee attacking animation.
+	 * Sets the files for melee attacking animation.
 	 */
-	public void sprAttacking(List<Sprite> sprites) {
-		this.sprAttacking = sprites;
+	public void fileAttacking(List<String> files) {
+		this.fileAttacking = files;
 	}
 
 	// Methods
+	
+
 }

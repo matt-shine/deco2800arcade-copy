@@ -97,7 +97,7 @@ public class JoinTable2Screen implements Screen{
         backbutton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				JoinTableScreen = new JoinTableScreen(myGame);
-				myGame.setScreen(JoinTableScreen);
+				//myGame.setScreen(JoinTableScreen);
 				return false;
 			}
 		});
@@ -105,7 +105,7 @@ public class JoinTable2Screen implements Screen{
         imagebuttonblackjack.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				BlackjackClientTable = new BlackjackClientTable(myGame);
-				myGame.setScreen(BlackjackClientTable);
+				//myGame.setScreen(BlackjackClientTable);
 				return false;
 			}
 		});

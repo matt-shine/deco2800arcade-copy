@@ -95,7 +95,7 @@ public class HowToScreen implements Screen{
         backbutton.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
 				JoinTableScreen = new JoinTableScreen(myGame);
-				myGame.setScreen(JoinTableScreen);
+				//myGame.setScreen(JoinTableScreen);
 				return false;
 			}
 		});

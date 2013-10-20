@@ -63,7 +63,7 @@ public class Blackjack extends GameClient {
 	public void create() {
 		super.create();
 		MainMenuScreen = new MainMenuScreen(this);
-    	setScreen(MainMenuScreen);
+    	//setScreen(MainMenuScreen);
     	
 		//  This is a test message and an example 
 		CasinoServerUpdate msg = new CasinoServerUpdate();

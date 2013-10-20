@@ -10,8 +10,8 @@ public class Blackjack_UI extends Game {
 	MainMenuScreen MainMenuScreen;
 	@Override
 	public void create() {
-		MainMenuScreen = new MainMenuScreen(this);
-    	setScreen(MainMenuScreen);
+		//MainMenuScreen = new MainMenuScreen(this);
+    	//setScreen(MainMenuScreen);
 
 	}
 }

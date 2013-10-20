@@ -1,7 +1,11 @@
 package deco2800.arcade.model;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.xml.stream.*;
@@ -22,7 +26,7 @@ public class XMLReader {
 		Integer tmpPopup =null, tmpValue = null, tmpID =null, tmpGameID = null;
 		Double tmpModifier = null;
 		AccoladeContainer accoladeContainer = new AccoladeContainer();
-		XMLStreamReader xmlFile = readXML(fileLocation);
+		XMLStreamReader xmlFile = null; //readXML(fileLocation);
 		try{	
 			while(xmlFile.hasNext()){
 				if(xmlFile.isStartElement()){
@@ -106,21 +110,51 @@ public class XMLReader {
 		return false;
 	}
 	
-	public static XMLStreamReader readXML(String fileLocation){
-		//TODO Implent this and include it in the read to accolade
-		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-		XMLStreamReader xmlFile = null;
-		FileInputStream fileStream;
-		try{
-			fileStream = new FileInputStream(fileLocation);
-			xmlFile = inputFactory.createXMLStreamReader(fileStream);
-		} catch (XMLStreamException xmlError){
-			//TODO put some stuff here	
-		} catch (FileNotFoundException missingFile){
-			//TODO put some stuff here
+	public static String readXML(String fileLocation) throws FileNotFoundException{
+		String xml = "";
+		String line = null;
+		if(!(new File(fileLocation).exists())){
+			throw new FileNotFoundException("The files does not exist: " + fileLocation);		
 		}
-		return xmlFile;
 		
+		try {
+			BufferedReader xmlFile = new BufferedReader(new FileReader(fileLocation));
+			
+			while((line = xmlFile.readLine()) != null){
+				xml += line.trim();
+			}		
+			xmlFile.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return xml;
 	}
+	
+	public static String XMLToString(XMLStreamReader xmlFile){
+		String output = "";
+		try {
+			while(xmlFile.hasNext()){
+				if(xmlFile.isStartElement()){
+					output += "<" + xmlFile.getLocalName() + ">";
+					output += "\"" + xmlFile.getElementText() + "\"";
+					
+				} else if(xmlFile.isEndElement()){
+					output += "</" + xmlFile.getLocalName() + ">";
+				}
+			}
+		} catch (XMLStreamException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			//Something wrong with the xml file
+		}	
+		
+		return output;
+	}
+	
+	
 	
 }

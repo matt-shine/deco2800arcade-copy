@@ -52,8 +52,8 @@ public class Breakout extends GameClient {
 	private AchievementClient achievementClient;
 	private HighscoreClient highscoreUser;
 	private AccoladeSystem accolades;
-	private int accoladeBumpCounter;
-	private int accoladeBrickBreak;
+	private Double accoladeBumpCounter;
+	private Double accoladeBrickBreak;
 
 	// Screen Parameters
 	public static final int SCREENHEIGHT = 720;
@@ -222,7 +222,7 @@ public class Breakout extends GameClient {
 	 * 
 	 * @return int accolades
 	 */
-	public int getAccoladeBumpCounter() {
+	public Double getAccoladeBumpCounter() {
 		return accoladeBumpCounter;
 	}
 
@@ -231,7 +231,7 @@ public class Breakout extends GameClient {
 	 * 
 	 * @return int accolades
 	 */
-	public int getAccoladeBrickBreak() {
+	public Double getAccoladeBrickBreak() {
 		return accoladeBrickBreak;
 	}
 

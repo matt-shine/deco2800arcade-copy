@@ -61,18 +61,18 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 		this.scorebar = scorebar;
 		this.sidePanel = sidePanel;
 
-		if (playerControls[0] != NUM_5)
-			mapping.put(playerControls[0], NUM_5);
-		if (playerControls[1] != NUM_6)
-			mapping.put(playerControls[1], NUM_6);
-		if (playerControls[2] != UP)
-			mapping.put(playerControls[2], UP);
-		if (playerControls[3] != LEFT)
-			mapping.put(playerControls[3], LEFT);
-		if (playerControls[4] != DOWN)
-			mapping.put(playerControls[4], DOWN);
-		if (playerControls[5] != RIGHT)
-			mapping.put(playerControls[5], RIGHT);
+		if (playerControls[0] != NUM_5){
+			mapping.put(playerControls[0], NUM_5);}
+		if (playerControls[1] != NUM_6){
+			mapping.put(playerControls[1], NUM_6);}
+		if (playerControls[2] != UP){
+			mapping.put(playerControls[2], UP);}
+		if (playerControls[3] != LEFT){
+			mapping.put(playerControls[3], LEFT);}
+		if (playerControls[4] != DOWN){
+			mapping.put(playerControls[4], DOWN);}
+		if (playerControls[5] != RIGHT){
+			mapping.put(playerControls[5], RIGHT);}
 
 		km = new KeyManager(mapping);
 
@@ -91,11 +91,12 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 		building = false;
 		destroying = false;
 
-		if (id == 1)
+		if (id == 1){
 			this.setColor(1f, 0f, 0f, 1f);
-		else
+		}
+		else{
 			this.setColor(0f, 0f, 1f, 1f);
-
+		}
 		addListener(new PlayerInputListener());
 	}
 

@@ -143,14 +143,13 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	public Chess(Player player, NetworkClient networkClient) {
 
 		super(player, networkClient);
-		
+		this.incrementAchievement("chess.winGame");
 		initPiecePos();
 		board = new Board();
 		movePieceGraphic();
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
 		setScreen(splashScreen);
-
 		this.networkClient = networkClient;
 		players[0] = player.getUsername();
 		players[1] = "Player 2";
@@ -193,7 +192,28 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	@Override
 	public void create() {
 		super.create();
-
+		this.getOverlay().setListeners(new Screen() {
+			@Override
+			public void hide() {
+			}
+			@Override
+			public void show() {
+			}
+			@Override
+			public void pause() {}
+			@Override
+			public void render(float arg0) {}
+			@Override
+			public void resume() {}
+			@Override
+			public void dispose() {}
+			
+			public void resize(int arg0, int arg1) {
+				arg1 = SCREENHEIGHT;
+				arg0 =  SCREENWIDTH;
+				
+			}
+		});
 		// Initialise camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false);
@@ -268,39 +288,17 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		blackPawn6 = blackPawn0;
 		blackPawn7 = blackPawn0;
 
-		//Removed @Override from pause, Overlay never became fully functional
-		//the @Override was causing a huge exiting error after closure of our game
-		this.getOverlay().setListeners(new Screen() {
-			@Override
-			public void hide() {
-			}
-			@Override
-			public void show() {
-			}
-			@Override
-			public void render(float arg0) {
-			}
-			@Override
-			public void resize(int arg0, int arg1) {
-			}
-			@Override
-			public void resume() {
-			}
-			@Override
-			public void dispose() {
-			}
-			@Override
-			public void pause() {
-			}
-		});
+
 		makeButtons();
 		replayHandler.startSession("chess", player.getUsername());
 		// Pause game and wait for connection if multiplayer is selected
 		if (Multiplayer) {
 			paused = true;
 		}
+	
 	}
 
+	
 	private static ReplayEventListener initReplayEventListener() {
 		return new ReplayEventListener() {
 			public void replayEventReceived(String eType, ReplayNode eData) {
@@ -344,7 +342,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			}
 		};
 	}
-	
 	/**
 	 * Render the current state of the game and process updates
 	 */
@@ -397,10 +394,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		movePieceGraphic();
 		drawButton();
 	}
-
-	@Override
-	public void resize(int arg0, int arg1) {
-	}
+	
+	/*public void resize(int arg0, int arg1) {
+	}*/
 
 	@Override
 	public void resume() {
@@ -412,7 +408,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	 */
 	private void finishGame(boolean loser, boolean stalemate) {
 		System.err.println("GAME OVER");
-		this.incrementAchievement("chess.winGame");
+	
 		// loser was black i.e. not this player, increment achievement
 		// if ((loser == true) && (!stalemate)) {
 		// this.incrementAchievement("chess.winGame");

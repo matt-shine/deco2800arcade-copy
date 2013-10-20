@@ -138,7 +138,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	 */
 	public void addOverlay(ApplicationListener overlay) {
 		this.overlay = overlay;
-		overlay.resize(width, height);
+		//overlay.resize(width, height);
 	}
 
 	/**
@@ -237,7 +237,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 		if (overlay != null) {
 			overlay.resize(width, height);
 		}
-		super.resize(width, height);
+		//super.resize(width, height);
 	}
 
 	@Override

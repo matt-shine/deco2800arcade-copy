@@ -4,11 +4,8 @@ import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,30 +14,31 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import deco2800.arcade.client.highscores.Highscore;
 
-/** This class controls the components that make up the main menu - buttons,
- * images, texts and draw them onto the GameScreen.
+/** This class controls the components that make up the Highscore screen - buttons
+ * and labels. Gets passed highscore information from Cyra class.
  *
  * @author Game Over
  */
 public class HighscoreScreen extends AbstractScreen{
-	Stage stage;
-	BitmapFont blackFont;
-	TextureAtlas atlas;
-	Skin skin;
-	//SpriteBatch batch;
-	TextButton button;
-	Label label;
-	Label playerLabel;
-	Label scoreLabel;
-	private boolean keydown = false;
+	private Stage stage;
+	private BitmapFont blackFont;
+	private BitmapFont listFont;
+	private TextureAtlas atlas;
+	private Skin skin;
+	private TextButton button;
+	private Label titleLabel;
+	private Label playerLabel;
+	private Label scoreLabel;
+	private String playerText;
+	private String scoreText;
 	
-	private List<Highscore> highscores;
-	
+	/**
+	 * Basic constructor.
+	 * @param game
+	 */
 	public HighscoreScreen(Cyra game) {
 		super(game);
 		
@@ -51,12 +49,23 @@ public class HighscoreScreen extends AbstractScreen{
 		atlas = new TextureAtlas("buttons.txt");
 		skin = new Skin();
 		skin.addRegions(atlas);
-		blackFont = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);
-		game.addHighscore(60044);
-		game.addHighscore(2334);
 		
-		highscores = game.getHighscores();
-		System.out.println("size of hs list " + highscores.size());
+		//Create fonts
+		blackFont = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);
+		listFont = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);
+		listFont.setScale(0.6f);
+		
+		//Get highscore information
+		List<Highscore> highscores = game.getHighscores();
+		//Create string of scores
+		playerText = "Player\n\n";
+		scoreText = "Score\n\n";
+		for (Highscore hs: highscores) {
+			playerText += hs.playerName;
+			playerText += "\n";
+			scoreText += hs.score;
+			scoreText += "\n";
+		}
 		
 	}
 	
@@ -64,11 +73,9 @@ public class HighscoreScreen extends AbstractScreen{
 	public void render(float delta) {
 		super.render(delta);
 		stage.act(delta);
-		
 		batch.begin();
 		stage.draw();
 		batch.end();
-		
 
 	}
 	
@@ -83,76 +90,53 @@ public class HighscoreScreen extends AbstractScreen{
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = skin.getDrawable("buttonopen");
 		style.down = skin.getDrawable("buttonclose0");
-		
 		style.font = blackFont;
+		
+		//Label styles for title text and list texts
+		LabelStyle titleStyle = new LabelStyle(blackFont, Color.WHITE);
+		LabelStyle listStyle = new LabelStyle(listFont, Color.WHITE);
+
+		//Create elements and place them
+		
+		//Back button to return to Main Menu
 		button = new TextButton("Back", style);
 		button.setHeight(90);
 		button.setX(Gdx.graphics.getWidth()/2 - button.getWidth()/2);
-		button.setY(Gdx.graphics.getHeight()/2 - button.getHeight()/2 - 200);
+		button.setY(Gdx.graphics.getHeight()/2 - button.getHeight()/2 - 300);
 		
+		//Add action for pressing the button
 		button.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				keydown = true;
 				return true;
 			}
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				keydown = false;
 				game.setScreen(new MainMenu(game));
 			}
 		});
 		
+		//Label for the title of screen
+		titleLabel = new Label("Highscores", titleStyle);
+		titleLabel.setX(Gdx.graphics.getWidth()/2 - titleLabel.getWidth()/2);
+		titleLabel.setY(Gdx.graphics.getHeight()/2 - titleLabel.getHeight()/2 + 300);
 		
-		
-		LabelStyle ls = new LabelStyle(blackFont, Color.WHITE);
-		label = new Label("Highscores", ls);
-		//label.setX(Gdx.graphics.getWidth()/2 - button.getWidth()/2);
-		label.setY(Gdx.graphics.getHeight()/2 - label.getHeight()/2 + 115);
-		label.setWidth(width);
-		label.setAlignment(Align.top);
-		
-		String playerText = "";
-		String scoreText = "";
-		//Create string of scores
-		for (Highscore hs: highscores) {
-			playerText += hs.playerName;
-			playerText += "\n";
-			scoreText += hs.score;
-			scoreText += "\n";
-		}
-		
-		
-		
-		
-		
-		playerLabel = new Label(playerText, ls);
-		playerLabel.setY(Gdx.graphics.getHeight()/2 - label.getHeight()/2 + 50);
+		//Label for the list of player names
+		playerLabel = new Label(playerText, listStyle);
+		playerLabel.setY(Gdx.graphics.getHeight()/2 - titleLabel.getHeight()/2 - 100);
 		playerLabel.setX(Gdx.graphics.getWidth()/2 - 200);
 		
-		scoreLabel = new Label(scoreText, ls);
-		scoreLabel.setY(Gdx.graphics.getHeight()/2 - label.getHeight()/2 + 50);
+		//Label for the list of scores
+		scoreLabel = new Label(scoreText, listStyle);
+		scoreLabel.setY(Gdx.graphics.getHeight()/2 - titleLabel.getHeight()/2 - 100);
 		scoreLabel.setX(Gdx.graphics.getWidth()/2 + 200);
 		
-		
-		
-		
-		Image cyra = new Image(new Texture(Gdx.files.internal("cyra.png")));
-		cyra.setX(Gdx.graphics.getWidth()/2 - cyra.getWidth()/2);
-		cyra.setY(Gdx.graphics.getHeight()/2 - cyra.getHeight()/2 + 115);
-		
-		Image bg = new Image(new Texture(Gdx.files.internal("main_bg.png")));
-		bg.setX(Gdx.graphics.getWidth()/2 - bg.getWidth()*0.75f/2);
-		bg.setY(Gdx.graphics.getHeight() - bg.getHeight()*0.75f + 30);
-		bg.setScale(0.75f);
-		
-		//stage.addActor(bg);
+		//Add elements to stage
 		stage.addActor(button);
-		stage.addActor(label);
+		stage.addActor(titleLabel);
 		stage.addActor(playerLabel);
 		stage.addActor(scoreLabel);
 		
-		//stage.addActor(cyra);
 	}
 	
 	

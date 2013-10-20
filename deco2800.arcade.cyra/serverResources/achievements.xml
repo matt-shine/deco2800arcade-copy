@@ -8,13 +8,13 @@
     <achievement id="cyra.slayer">
         <name>Slayer</name>
         <description>Kill 10 enemies.</description>
-        <awardThreshold>1</awardThreshold>
+        <awardThreshold>10</awardThreshold>
         <icon>tempach.png</icon>
     </achievement>
     <achievement id="cyra.jumparound">
         <name>Jump Around</name>
-        <description>Jump 20 times.</description>
-		<awardThreshold>2</awardThreshold>
+        <description>Jump 5 times.</description>
+		<awardThreshold>5</awardThreshold>
         <icon>tempach.png</icon>
      </achievement>
 </achievements>

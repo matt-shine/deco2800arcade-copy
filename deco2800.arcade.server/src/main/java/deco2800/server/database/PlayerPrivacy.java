@@ -7,6 +7,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * PlayerPrivacy deals with database access for player privacy data.
  * 
@@ -36,24 +39,43 @@ public class PlayerPrivacy {
 
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
-
+		ResultSet resultSet = null;
+		Statement statement = null;
 		try {
-			ResultSet tableData = connection.getMetaData().getTables(null,
+			resultSet = connection.getMetaData().getTables(null,
 					null, "PLAYERPRIVACY", null);
-			if (!tableData.next()) {
-				Statement statement = connection.createStatement();
+			if (!resultSet.next()) {
+				statement = connection.createStatement();
 				statement
 						.execute("CREATE TABLE PLAYERPRIVACY( "
 								+ "playerID INT NOT NULL, "
 								+ "name INT NOT NULL, email INT, program INT, "
-								+ "bio INT,"
+								+ "bio INT, "
 								+ "games INT, achievements INT, "
+								+ "age INT, "
 								+ "PRIMARY KEY (playerID), "
 								+ "FOREIGN KEY (playerID) REFERENCES PLAYER(playerID);");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Unable to create players table", e);
+			 Logger logger = LoggerFactory.getLogger(PlayerPrivacy.class);
+			 logger.error(e.getStackTrace().toString());
+			throw new DatabaseException(
+					"Unable to create PLAYERPRIVACY table.", e);
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				 Logger logger = LoggerFactory.getLogger(PlayerPrivacy.class);
+				 logger.error(e.getStackTrace().toString());
+			}
 		}
 		initialised = true;
 	}
@@ -89,10 +111,12 @@ public class PlayerPrivacy {
 			data.add(findPlayerInfo(playerID, resultSet, "bio"));
 			data.add(findPlayerInfo(playerID, resultSet, "games"));
 			data.add(findPlayerInfo(playerID, resultSet, "achievements"));
+			data.add(findPlayerInfo(playerID, resultSet, "age"));
 
 			return data;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(PlayerPrivacy.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException(
 					"Unable to get player privacy informtion from database", e);
 		} finally {
@@ -107,7 +131,8 @@ public class PlayerPrivacy {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(PlayerPrivacy.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -265,6 +290,27 @@ public class PlayerPrivacy {
 			updateField(playerID, FRIENDS_ONLY, "achievements");
 		}
 	}
+	
+	/**
+	 * Sets a player's age privacy setting to the provided modes.
+	 *  
+	 * @param playerID
+	 *            The player's playerID.
+	 * @param privacySetting
+	 *            True if information is public, false if information is for
+	 *            friends only.
+	 * @throws DatabaseException
+	 */
+	public void updateAge(int playerID, boolean privacySetting)
+			throws DatabaseException {
+
+
+		if(privacySetting){
+			updateField(playerID, PUBLIC, "age");
+		} else {
+			updateField(playerID, FRIENDS_ONLY, "age");
+		}
+	}
 
 	/**
 	 * Updates a database field, given a playerID, the field to be updated and
@@ -295,7 +341,8 @@ public class PlayerPrivacy {
 					+ " = " + newValue + " WHERE playerID = " + playerID + ";");
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(PlayerPrivacy.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException(
 					"Unable to update player username in database", e);
 		} finally {
@@ -310,7 +357,48 @@ public class PlayerPrivacy {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(PlayerPrivacy.class);
+				 logger.error(e.getStackTrace().toString());
+			}
+		}
+	}
+	
+	/**
+	 * Drops all tables from the database for clean testing.
+	 */
+	public void dropTables() throws DatabaseException {
+		
+		if (!initialised) {
+			initialise();
+		}
+		
+		Connection connection = Database.getConnection();
+		
+		Statement statement = null;
+		ResultSet resultSet = null;
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("DROP TABLE *;");
+
+		} catch (SQLException e) {
+			 Logger logger = LoggerFactory.getLogger(PlayerPrivacy.class);
+			 logger.error(e.getStackTrace().toString());
+			throw new DatabaseException(
+					"Unable to drop tables from the database.", e);
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				 Logger logger = LoggerFactory.getLogger(PlayerPrivacy.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}

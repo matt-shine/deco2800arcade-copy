@@ -1,19 +1,6 @@
 package deco2800.arcade.pacman;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Logger;
 
 import deco2800.arcade.client.ArcadeInputMux;
@@ -23,57 +10,36 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.pacman.PacChar.PacState;
-import deco2800.arcade.pacman.Ghost.GhostName;
 
-//note: no 'implements ApplicationListener is relevant anywhere in our program,
-// as GameClient extends Game which implements it. As far as I can tell
+/**
+ * The main Pacman game class, which sets up the model, view and controller 
+ * and forms the LibGdx backend stuff.
+ *
+ */
 @ArcadeGame(id="Pacman")
 public class Pacman extends GameClient {
 	
-	private enum GameState {
-		READY,
-		RUNNING,
-		GAMEOVER
-	}
+	public final int SCREEN_HEIGHT = 720;
+	public final int SCREEN_WIDTH = 1280;	
+	private final int NUM_GHOSTS = 4;
 	
-	private OrthographicCamera camera;			
-	private GameState gameState;
-	public static final int SCREENHEIGHT = 720;
-	public static final int SCREENWIDTH = 1280;	
-	private SpriteBatch batch;
-	private ShapeRenderer shaper;
-	private PacChar player;
-	private Ghost blinky;
-	//takes keyboard input
+	private PacModel model; // model for Pacman	
+	private PacView view; // view for Pacman	
+	private PacController controller; //takes keyboard input for Pacman
 
+	/** Checks to make sure View isn't set up more than once
+	 * View can't be set up normally until the rendering starts because
+	 *  it causes NullPointers for the tests when it tries to load Textures */
+	private boolean viewNotSetUp; 
 	
-	private PacController controller;
-	private GameMap map1;
-	private ArrayList<char[]> map1Array;
-	
-	
-	private List<ArrayList<Tile>> map;
-	
-	
-	
-
-	
-	private GameMap gameMap;
-	private BitmapFont scoreText; 
-
-
-
 	//not used yet
 	//private NetworkClient networkClient;
 	
-	//lets us log stuff, doesn't seem to work yet
-	private Logger logger = new Logger("Pacman");
-	
-	
-	public Pacman(Player player, NetworkClient networkClient) {
-		super(player, networkClient);
-		// TODO is there stuff we need to happen here?
+	//lets us log stuff, left package private so we don't have to make a new one in each class
+	Logger logger = new Logger("Pacman");
+		
+	public Pacman(Player player1, NetworkClient networkClient) {
+		super(player1, networkClient);		
 	}	
 		
 	/**
@@ -86,11 +52,13 @@ public class Pacman extends GameClient {
         this.getOverlay().setListeners(new Screen() {
 
 			@Override
-			public void dispose() {				
-			}
-
-			@Override
 			public void hide() {
+				//TODO implement stuff to pause game here
+			}
+			 
+			@Override
+			public void show() {
+				//TODO implement stuff to unpause game here
 			}
 
 			@Override
@@ -110,38 +78,15 @@ public class Pacman extends GameClient {
 			}
 
 			@Override
-			public void show() {
-
-			}			
+			public void dispose() {				
+			}
         });           
-		super.create();			
-		// level map file
-		String file = "levelMap.txt";
-
-		//Initialize camera
-		camera = new OrthographicCamera();
-		// set resolution
-		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
-		// initialise spriteBatch for drawing things
-		batch = new SpriteBatch();		
-		shaper = new ShapeRenderer();
-		//initialise gamemap
-		gameMap = new GameMap(450, 100);
-		gameMap.createTiles(gameMap.readMap(file));
-		//initialise pacman
-		player = new PacChar(gameMap);
-		blinky = new Ghost(gameMap, GhostName.BLINKY, player);
-		//initialise receiver for input- use the multiplexer from Arcade
-
-		// because overlay group said to in log messages
-		
-		
-
-		controller = new PacController(player, gameMap);
-
+		super.create();		
+		viewNotSetUp = true;		
+		model = new PacModel(SCREEN_WIDTH, SCREEN_HEIGHT, NUM_GHOSTS);		
+		//initialise receiver for input- use the Arcade Multiplexer
+		controller = new PacController(model);
 		ArcadeInputMux.getInstance().addProcessor(controller);
-		//Initialise game state
-		gameState = GameState.READY;		
 	}
 	
 	/**
@@ -151,6 +96,7 @@ public class Pacman extends GameClient {
 	public void dispose() {
 		super.dispose();
 		ArcadeInputMux.getInstance().removeProcessor(controller);
+		//TODO dispose more stuff here? Perhaps the view things?
 	}
 
 	@Override
@@ -158,6 +104,7 @@ public class Pacman extends GameClient {
 		super.pause();
 	}
 	
+	/* Commenting this out because it's not being used and is really old
 	private void makeChanges() {
 		
 		 // Respond to user input depending on the game state
@@ -185,65 +132,27 @@ public class Pacman extends GameClient {
 	    	}
 	    	break;
 	    }	    
-	}
+	}*/
 	
 	/**
 	 * Called continually to draw the screen unless specifically told not to be
 	 */
 	@Override
 	public void render() {	
-		//FIXME big method
-		//make changes to location of object etc, then draw
-		//makeChanges();
-		
-		//Black background
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-	    // updating camera is something we should do once per frame
-	    camera.update();
-	    //tell the spritebatch to use the coordinate system of the camera
-	    batch.setProjectionMatrix(camera.combined);	    
-	    shaper.setProjectionMatrix(camera.combined);
-	    // start the drawing
-	    batch.begin();
-	    gameMap.render(batch);
-	    
-	    //testing bitmap text print
-//	    scoreText.setColor(Color.WHITE);
-//	    scoreText.draw(batch, "Pacman!", 10, 10);
-	    
-	    // check if pacman is trying to move into a wall
-	    // this stops him even if no key is pressed
-	    if (!player.checkNoWallCollision(player.getTile())) {
-			player.setCurrentState(PacState.IDLE);
+		// makes sure view is only set up once
+		if (viewNotSetUp) {
+			view = new PacView(model);
+			viewNotSetUp = false;
 		}
-	    player.render(batch);
-	    blinky.render(batch);
-	    //end the drawing
-	    batch.end();
-	    
-	    //currently ShapeRenderer not being used
-	    shaper.begin(ShapeType.Line);
-	    shaper.end();
-	    //do any stuff the superclass normally does for rendering
+		//make changes in the model to prepare for rendering
+		model.prepareDraw();
+		view.render();
 		super.render();		
-	}
-	
-	/**
-	 * Displays the score of the current Mover.
-	 * When support for multiple player-controlled movers is implemented, printing
-	 * will have to occur in different positions.
-	 */
-	public void displayScore(Mover mover) {
-		batch.begin();
-		scoreText.setColor(Color.WHITE);
-		scoreText.draw(batch, "Score:" + mover.getScore(), 50, 50);
-		batch.end();
 	}
 	
 	private void startGame() {	
 		logger.debug("Game is now running");		
-		gameState = GameState.RUNNING;	
+		//gameState = GameState.RUNNING;	
 	}
 		
 	@Override
@@ -262,8 +171,8 @@ public class Pacman extends GameClient {
 			game = new Game();
 			game.id = "Pacman";
 			game.name = "Pacman";
-			game.description = "An implementation of the classic arcade game Pac-"
-			+ "man." + System.getProperty("line.separator") + "Still in progress- additional " + 
+			game.description = "An implementation of the classic arcade game Pac-man." + 
+			System.getProperty("line.separator") + "Still in progress- additional " + 
 			"features may be added later.";
 			// game.icon- to be added later once the icon part is fully implemented
 		} 
@@ -272,11 +181,11 @@ public class Pacman extends GameClient {
 		return game;
 	}
 
-	public GameState getGameState() {
-		return gameState;
+	public PacController getController() {
+		return controller;
 	}
-
-	public void setGameState(GameState gameState) {
-		this.gameState = gameState;
+	
+	public PacModel getModel() {
+		return model;
 	}
 }

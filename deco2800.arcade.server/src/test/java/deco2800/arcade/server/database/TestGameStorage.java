@@ -39,11 +39,10 @@ public class TestGameStorage {
 	public void testOutOfBound() throws SQLException, DatabaseException {
 		GameStorage gs = new GameStorage();
 		gs.initialise();
-		Assert.assertEquals(null,gs.getGameDescription(20));
-		Assert.assertEquals(null,gs.getGameName(20));
-		Assert.assertEquals(0,gs.getGamePrice(20));
-		Assert.assertEquals(null,gs.getGameID(20));
-		Assert.assertEquals(null,gs.getIconPath(20));
-		
+		Assert.assertEquals(null,gs.getGameDescription(23));
+		Assert.assertEquals(null,gs.getGameName(23));
+		Assert.assertEquals(0,gs.getGamePrice(23));
+		Assert.assertEquals(null,gs.getGameID(23));
+		Assert.assertEquals(null,gs.getIconPath(23));
 	}
 }

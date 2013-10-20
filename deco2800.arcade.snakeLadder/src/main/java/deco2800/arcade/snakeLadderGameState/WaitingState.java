@@ -1,6 +1,7 @@
 package deco2800.arcade.snakeLadderGameState;
 
 import deco2800.arcade.snakeLadder.SnakeLadder;
+import deco2800.arcade.snakeLadderModel.GamePlayer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -13,30 +14,38 @@ public class WaitingState extends GameState {
 
 	@Override
 	public void handleInput(SnakeLadder context) {	
-		int turn=context.getturns();
-		int playerIndex = turn%context.gamePlayers.length;
-
-	
-		if(context.gamePlayers[playerIndex].isAI())
+		int playerIndex=context.getturns();
+		GamePlayer gamePlayer = context.gamePlayers[playerIndex];
+		if(gamePlayer.getStopForNumOfRound()==0)
 		{
-			transitToMoving(context,playerIndex);
+			if(gamePlayer.isAI())
+			{
+				transitToMoving(context,playerIndex);
+			}
+			else
+			{
+				if(context.diceButton.isPressed())
+				{
+				 transitToMoving(context,playerIndex);
+				}
+			}
 		}
 		else
 		{
-			if(context.diceButton.isPressed())
-			{
-			 transitToMoving(context,playerIndex);
-			}
+			context.taketurns();
+			gamePlayer.setStopForNumOfRound(gamePlayer.getStopForNumOfRound()-1);
+			context.gameState = new WaitingState();
 		}
 	}
 
 	/**
+	 * Transit the game state to moving state
 	 * @param context
 	 * @param playerIndex 
 	 */
 	public void transitToMoving(SnakeLadder context, int playerIndex) {
-		context.getDice(playerIndex).rollDice();
 		 context.gamePlayers[playerIndex].initializeVelocity();
+		 context.getDice(playerIndex).rollDice();
 		 context.gameState = new MovingState();
 		 context.statusMessage = null;     		
 		 context.gamePlayers[playerIndex].getDnumber(context.getDice(playerIndex).getDiceNumber());

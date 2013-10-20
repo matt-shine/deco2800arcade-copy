@@ -1,7 +1,11 @@
 package deco2800.arcade.junglejump;
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 
 import deco2800.arcade.junglejump.GUI.junglejump;
 
@@ -14,10 +18,10 @@ import deco2800.arcade.junglejump.GUI.junglejump;
  */
 public class LevelContainer {
 	static ArrayList<Level> levels;
-	public static int currentLevel;
+	private static int currentLevel;
 	public static int currentWorld;
 	private static int levelAmount;
-	private int worldAmount = 1;
+	private static int worldAmount;
 	
 	/**
 	 * Constructor where levels are created and placed
@@ -25,9 +29,10 @@ public class LevelContainer {
 	 */
 	public LevelContainer() {
 		levels = new ArrayList<Level>();
-		currentLevel = 0;
+		setCurrentLevel(0);
 		currentWorld = 0;
-		levelAmount = 4;
+		levelAmount = 5;
+		worldAmount = 5;
 		
 		// Read level from file
 		for(int i=0;i<worldAmount;i++) {
@@ -49,8 +54,16 @@ public class LevelContainer {
 		int bananaCounter = 0;
 		Level level = new Level(); // Creating and adding to a level
 		
+		URL path = this.getClass().getResource("/");
+		
+		
 		try {
-			br = new BufferedReader(new FileReader("junglejumpassets/levels/world" + (worldNum+1) + "/level" + (levelNum+1) + ".txt"));
+			String resource = path.toString().replace(".arcade/build/classes/main/", 
+					".arcade.junglejump/src/main/").replace("file:", "") + 
+					"resources/levels/world" + (worldNum+1) + "/level" + 
+					(levelNum+1) + ".txt" ;
+			System.out.println(resource);
+			br = new BufferedReader(new FileReader(resource));
 		} catch (FileNotFoundException e1) {
 			System.out.println("No file");
 			return;
@@ -68,12 +81,11 @@ public class LevelContainer {
 	        		Platform p;
 	        		if(c == 'b') {
 	        				level.addBanana(); // false means not found
-	        				p = new Platform(c, false, (x*xLength), (y*xLength), xLength, yLength);
+	        				p = new Platform(c, (x*xLength), (y*xLength), xLength, yLength);
 		        			level.addPlatform(p);
 		        			bananaCounter++;
-	        		}
-	        		if(c!='*') {
-	        			p = new Platform(c, false, (x*xLength), (y*xLength), xLength, yLength);
+	        		} else if(c!='*' && c!= '.') {
+	        			p = new Platform(c, (x*xLength), (y*xLength), xLength, yLength);
 	        			level.addPlatform(p);
 	        		}
 	        	}
@@ -98,14 +110,22 @@ public class LevelContainer {
 	 * @return
 	 */
 	public static void nextLevel() {
+		System.out.println("loading next level");
 		clearCurrentLevel();
-		currentLevel++;
-		if(currentLevel > levelAmount-1) {
-			currentLevel = 0;
-		//	currentWorld++;
+		setCurrentLevel(getCurrentLevel() + 1);
+		if(getCurrentLevel() > levelAmount-1) {
+			setCurrentLevel(0);
+			currentWorld++;
+			if(currentWorld > worldAmount-1) {
+				currentWorld = 0;
+			}
+			junglejump.world = currentWorld;
+			junglejump.gameBackground = new Texture(Gdx.files.internal("world" + (currentWorld+1) + "/background.png"));
+			junglejump.worldNumText = new Texture(Gdx.files.internal((currentWorld + 1) + ".png"));
 		}
-		junglejump.currentLevel = getLevel(currentLevel);
+		junglejump.currentLevel = getLevel(getCurrentLevel());
 		//currentLevel = newLevel;
+		junglejump.levelNumText = new Texture(Gdx.files.internal((getCurrentLevel() + 1) + ".png"));
 		junglejump.monkeyX = junglejump.monkeyDefaultX;
 		junglejump.monkeyY = junglejump.monkeyDefaultY;
 		return;
@@ -119,8 +139,8 @@ public class LevelContainer {
 		levels.add(level);
 	}
 	
-	public static Level getLevel(int i) {
-		return levels.get(i);
+	public static Level getLevel(int currentLevel) {
+		return levels.get((currentWorld * levelAmount) + currentLevel);
 	}
 	
 	/**
@@ -133,9 +153,17 @@ public class LevelContainer {
 	}
 	
 	public static void clearCurrentLevel() {
-		for (Platform p : getLevel(currentLevel).getPlatforms()) {
+		for (Platform p : getLevel(getCurrentLevel()).getPlatforms()) {
 			p.setX(p.getX()+1000);
 		}
+	}
+
+	public static int getCurrentLevel() {
+		return currentLevel;
+	}
+
+	public static void setCurrentLevel(int currentLevel) {
+		LevelContainer.currentLevel = currentLevel;
 	}
 	
 

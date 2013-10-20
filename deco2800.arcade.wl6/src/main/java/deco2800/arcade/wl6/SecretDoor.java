@@ -11,7 +11,6 @@ public class SecretDoor extends Doodad {
 
     private float openness = 0;
     private Vector2 movementDirection = null;
-    private boolean firstDraw = true;
     private Vector2 gridPosition = null;
     
     public SecretDoor(int uid) {
@@ -23,7 +22,16 @@ public class SecretDoor extends Doodad {
     	
     	gridPosition = new Vector2((float) Math.floor(this.getPos().x), (float) Math.floor(getPos().y));
     	g.getCollisionGrid().setSolidAt((int) this.gridPosition.x, (int) this.gridPosition.y, 0);
-    	
+        
+    	this.setTextureName(
+                WL6Meta.block(
+                        g.getMap().getTerrainAt(
+                                (int) Math.floor(getPos().x),
+                                (int) Math.floor(getPos().y)
+                        )
+                ).texture
+        );
+
     }
     
     
@@ -56,7 +64,8 @@ public class SecretDoor extends Doodad {
         //update the collision grid
         if (movementDirection != null) {
         	Vector2 newGridPosition = new Vector2((float) Math.floor(this.getPos().x), (float) Math.floor(getPos().y));
-        	newGridPosition.add(new Vector2(movementDirection).nor().mul(openness));
+        	boolean isNegative = (movementDirection.x < 0) || (movementDirection.y < 0);
+        	newGridPosition.add(new Vector2(movementDirection).nor().mul(openness - (isNegative ? 0.999f : 0)));
             if (!newGridPosition.equals(this.gridPosition)) {
             	g.getCollisionGrid().setSolidAt((int) this.gridPosition.x, (int) this.gridPosition.y, 0);
         		g.getCollisionGrid().setSolidAt((int) newGridPosition.x, (int) newGridPosition.y, 1);
@@ -80,20 +89,6 @@ public class SecretDoor extends Doodad {
 
     @Override
     public void draw(Renderer r) {
-
-        if (firstDraw) {
-
-            this.setTextureName(
-                    WL6Meta.block(
-                            r.getGame().getMap().getTerrainAt(
-                                    (int) Math.floor(getPos().x),
-                                    (int) Math.floor(getPos().y)
-                            )
-                    ).texture
-            );
-
-            firstDraw = false;
-        }
 
         float x = this.getPos().x;
         float y = this.getPos().y;

@@ -7,7 +7,6 @@ import java.util.List;
 import org.lwjgl.util.Point;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * The map of the pacman game, containing the list of tiles and which tiles 
@@ -19,18 +18,24 @@ public class GameMap {
 	private Tile[][] grid; //game map
 	private List<WallTile> ghostDoors; //list of ghost doors for ghosts to access
 	private Tile pacStart; //the right starting tile for pacman (appears on two tiles)
+	private Tile[] ghostStarts; //starting positions for ghosts
 	private Tile blinkyStart;
 	private Tile fruitRight; // the right tile that fruit appears on
 	private int hOffset;
 	private int vOffset;
-	private int side;
+	private final int tileSideLength; // length of side of square- should be
+	// same for all tiles in a GameMap
+	public final int SCREEN_HEIGHT;
+	public final int SCREEN_WIDTH;
 	
-	public GameMap(int hOffset, int vOffset) {
+	
+	public GameMap(int SCREEN_WIDTH, int SCREEN_HEIGHT, int numGhosts) {
 		vsym = false;
-		ghostDoors = new ArrayList<WallTile>();
-		this.hOffset = hOffset;
-		this.vOffset = vOffset;
-		side = Tile.getSideLength();		
+		ghostDoors = new ArrayList<WallTile>();		
+		this.SCREEN_HEIGHT = SCREEN_HEIGHT;
+		this.SCREEN_WIDTH = SCREEN_WIDTH;
+		ghostStarts = new Tile[numGhosts];
+		tileSideLength = 16;
 	}
 	
 
@@ -43,12 +48,12 @@ public class GameMap {
 		// each array contains all the characters from that line
 		ArrayList<char[]> resultArray = new ArrayList<char[]>();
 		String[] lineArray = contents.split(System.getProperty("line.separator"));
-		for (int i = 0; i < lineArray.length; i++) {
-			String line = lineArray[i];
-			if (line.contains("VSYM")) {
-				vsym = true;
-				continue;
-			}
+		String line = lineArray[0];
+		if (line.contains("VSYM")) {
+			vsym = true;
+		}
+		for (int i = 1; i < lineArray.length; i++) {
+			line = lineArray[i];			
 			if (vsym) {
 				line = useVSymmetry(line); 
 			}
@@ -109,6 +114,11 @@ public class GameMap {
 			// s is left tile pacman starts on
 			case 'r': replacer = " "; break;
 			case 's': replacer = " "; break;
+			// !, @, #, $ are the 4 ghost starting positions
+			case '!': replacer = "@"; break;
+			case '#': replacer = "$"; break;
+			case '@': replacer = "!"; break;
+			case '$': replacer = "#"; break;
 			}
 			if (replacer !=  null) {
 				reverse.replace(i, i+1, replacer);
@@ -124,6 +134,8 @@ public class GameMap {
 		//initialise size of map grid
 		int ySize = map.size(); // number of lines
 		int xSize = map.get(0).length; //length of each line
+		hOffset = (SCREEN_WIDTH - xSize * tileSideLength) /2;
+		vOffset = (SCREEN_HEIGHT - ySize * tileSideLength) /2;
 		grid = new Tile[xSize][ySize];
 		//set up teleport target making- currently supports any even number 
 		//of teleporters, each targeting the next one which appears in the list
@@ -147,12 +159,16 @@ public class GameMap {
 					} else {
 						target = square;
 					}
-				} else if (type == ' ' || type == 'r' || type == 's'){
+				} else if (type == ' ' || type == 'r' || type == 's' 
+					|| type == '!' || type == '@' || type == '#' || type == '$'){
 					square = new Tile(this);
-					if (type == 'r') {
-						fruitRight = square;
-					} else if (type == 's'){
-						pacStart = square;
+					switch(type) {
+					case 'r': fruitRight = square; break;
+					case 's': pacStart = square; break;
+					case '!': ghostStarts[0] = square; break;
+					case '@': ghostStarts[1] = square; break;
+					case '#': ghostStarts[2] = square; break;
+					case '$': ghostStarts[3] = square; break;
 					}
 				} else {
 					square = new WallTile(this, type);
@@ -162,27 +178,10 @@ public class GameMap {
 					}
 				}
 				grid[i][lineNum] = square;
-				//square.setGridPos(new Point(i, lineNum));
 			}
 		}
-//		for (Tile[] a: grid) {
-//			for (Tile t: a) {
-//				System.out.println(t);
-//			}
-//			System.out.println();
-//		}
 	}
 	
-	public void render(SpriteBatch batch) {
-		//should do some fancy stuff to position pacman grid in middle of screen horizontally
-		//instead of what I've done here with just setting them to a value I picked		
-		for (int x = 0; x < grid.length; x++) {
-			for (int y = 0; y < grid[x].length; y++) {
-				grid[x][y].render(batch, hOffset + x*side, vOffset + y*side);
-			}
-		}
-	}
-
 	public List<WallTile> getGhostDoors() {
 		return ghostDoors;
 	}
@@ -191,17 +190,8 @@ public class GameMap {
 		return pacStart;
 	}
 
-	public Tile getFruitLeft() {
+	public Tile getFruitRight() {
 		return fruitRight;
-	}
-	
-	/**
-	 *  Returns the coordinates of the bottom left corner of the tile
-	 *  @param the position of the tile in the grid
-	 */
-	public Point getTileCoords(Tile tile) {
-		Point xy = getTilePos(tile);
-		return new Point(hOffset + xy.getX()*side, vOffset + xy.getY()*side);
 	}
 	
 	/**
@@ -211,13 +201,12 @@ public class GameMap {
 	public Tile findMoverTile(Mover mover) {
 		int x = mover.getMidX();
 		int y = mover.getMidY();
-		int side = Tile.getSideLength();
 		for (int i = 0; i < grid.length; i++) {
 			int tileX = getTileCoords(grid[i][0]).getX();
-			if (x > tileX && x <= tileX + side) {
+			if (x > tileX && x <= tileX + tileSideLength) {
 				for (int j = 0; j < grid[i].length; j++) {
 					int tileY = getTileCoords(grid[i][j]).getY(); 
-					if (y > tileY && y <= tileY + side) {
+					if (y > tileY && y <= tileY + tileSideLength) {
 						return grid[i][j];
 					}
 				}
@@ -225,6 +214,15 @@ public class GameMap {
 		}
 		return null;
 	}
+	
+	/**
+	 *  Returns the coordinates of the bottom left corner of the tile
+	 *  @param the position of the tile in the grid
+	 */
+	public Point getTileCoords(Tile tile) {
+		Point xy = getTilePos(tile);
+		return new Point(hOffset + xy.getX()*tileSideLength, vOffset + xy.getY()*tileSideLength);
+	} 
 	
 	/**
 	 * Returns the position of the tile in the grid
@@ -255,4 +253,12 @@ public class GameMap {
 		return vOffset;
 	}
 
+	public int getTileSideLength() {
+		return tileSideLength;
+	}
+
+
+	public Tile[] getGhostStarts() {
+		return ghostStarts;
+	}
 }

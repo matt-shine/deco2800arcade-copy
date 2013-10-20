@@ -4,8 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import deco2800.arcade.breakout.GameScreen;
-
+import deco2800.arcade.breakout.screens.GameScreen;
+/**
+ * Decreases the speed of the ball for the slow ball powerup
+ * @author Carlie Smits
+ *
+ */
 public class SlowBall extends Powerup {
 	private final String img = "slowerball.png";
 	private Sprite sprite = new Sprite(new Texture(Gdx.files.classpath("imgs/" + img)));

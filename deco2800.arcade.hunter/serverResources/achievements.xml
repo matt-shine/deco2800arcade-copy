@@ -1,0 +1,85 @@
+<achievements>
+	<achievement id="hunter.beginnings">
+		<name>Beginnings</name>
+		<description>Play one game of Hunter</description>
+		<awardThreshold>1</awardThreshold>
+		<icon>fork and knife achieved.png</icon>
+	</achievement>
+	<achievement id="hunter.smallsteps">
+		<name>Play 10 Games</name>
+		<description>Play 10 Games of Hunter</description>
+		<awardThreshold>10</awardThreshold>
+		<icon>fork and knife achieved.png</icon>
+	</achievement>
+	<achievement id="hunter.expert">
+		<name>Expert</name>
+		<description>Play 100 Games of Hunter</description>
+		<awardThreshold>100</awardThreshold>
+		<icon>fork and knife achieved.png</icon>
+	</achievement>
+	<achievement id="hunter.Hitman">
+		<name>Godlike Hunter</name>
+		<description>Kill 100 Animals</description>
+		<awardThreshold>100</awardThreshold>
+		<icon>arrow achieved.png</icon>
+	</achievement>
+	<achievement id="hunter.100m">
+		<name>100m Sprint</name>
+		<description>Ran 100m</description>
+		<awardThreshold>1</awardThreshold>
+		<icon>potion 1 achieved.png</icon>
+	</achievement>
+	<achievement id="hunter.200m">
+		<name>200m Sprint</name>
+		<description>Ran 200m</description>
+		<awardThreshold>1</awardThreshold>
+		<icon>potion 2 achieved.png</icon>
+	</achievement>
+	<achievement id="hunter.400m">
+		<name>400m Sprint</name>
+		<description>Ran 400m</description>
+		<awardThreshold>1</awardThreshold>
+		<icon>potion 3 achieved.png</icon>
+	</achievement>
+	<achievement id="hunter.800m">
+		<name>800m Sprint</name>
+		<description>Ran 800m</description>
+		<awardThreshold>1</awardThreshold>
+		<icon>potion 1 achieved.png</icon>
+	</achievement>
+	<achievement id="hunter.Marathoner">
+		<name>Marathoner</name>
+		<description>Maybe you should consider a career as a Marathoner?</description>
+		<awardThreshold>1</awardThreshold>
+		<icon>yay.png</icon>
+	</achievement>
+	<achievement id="hunter.superpowered">
+		<name>SUPERPOWERED</name>
+		<description>Pick up all Powerups</description>
+		<icon>heart achieved.png</icon>
+		
+		<components>
+			<component id="hunter.superpowered.Invulnerability" awardThreshold="1" />
+			<component id="hunter.superpowered.Coin" awardThreshold="1" />
+			<component id="hunter.superpowered.DoublePoints" awardThreshold="1" />
+			<component id="hunter.superpowered.ExtraLife" awardThreshold="1" />
+		</components>
+	</achievement>
+	<achievement id="hunter.10Coins">
+		<name>HOLLA HOLLA GET DOLLA</name>
+		<description>Pickup 10 Coins</description>
+		<awardThreshold>10</awardThreshold>
+		<icon>points achieved.png</icon>
+	</achievement>
+	<achievement id="hunter.arsenal">
+		<name>Pickup all weapons</name>
+		<description>Say Hello to my little friend</description>
+		<icon>spear achieved.png</icon>
+		
+		<components>
+			<component id="hunter.arsenal.Spear" awardThreshold="1" />
+			<component id="hunter.arsenal.Bow" awardThreshold="1" />
+			<component id="hunter.arsenal.Trident" awardThreshold="1" />
+		</components>
+	</achievement>
+</achievements>

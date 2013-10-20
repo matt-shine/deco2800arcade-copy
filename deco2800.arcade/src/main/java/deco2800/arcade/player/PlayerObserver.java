@@ -24,13 +24,14 @@ public class PlayerObserver implements Observer {
 	private ProgramUpdateRequest programUpdateRequest;
 	private UsernameUpdateRequest usernameUpdateRequest;
     private LibraryStyleUpdateRequest libraryStyleUpdateRequest;
+	private AgeUpdateRequest ageUpdateRequest;
 
 	private static NetworkClient networkClient;
 
 	/**
 	 * Initialises the Observer.
 	 * 
-	 * @param networkClient
+	 * @param nc
 	 *            The NetworkClient used to communicate with the server.
 	 */
 	public static void initialise(NetworkClient nc) {
@@ -57,9 +58,9 @@ public class PlayerObserver implements Observer {
 				/*
 				 * Encapsulating Player change data for transmission for server.
 				 */
-				friendsUpdateRequest.playerID = p.getID();
-				friendsUpdateRequest.friendID = f.getUpdatedID();
-				friendsUpdateRequest.add = f.getAdded();
+				friendsUpdateRequest.setPlayerID(p.getID());
+				friendsUpdateRequest.setFriendID(f.getUpdatedID());
+				friendsUpdateRequest.setAdd(f.getAdded());
 				networkClient.sendNetworkObject(friendsUpdateRequest);
 
 			} else if (object instanceof FriendInvites) {
@@ -67,9 +68,9 @@ public class PlayerObserver implements Observer {
 				/*
 				 * Encapsulating Player change data for transmission for server.
 				 */
-				friendInvitesUpdateRequest.playerID = p.getID();
-				friendInvitesUpdateRequest.friendID = fi.getUpdatedID();
-				friendInvitesUpdateRequest.add = fi.getAdded();
+				friendInvitesUpdateRequest.setPlayerID(p.getID());
+				friendInvitesUpdateRequest.setFriendID(fi.getUpdatedID());
+				friendInvitesUpdateRequest.setAdd(fi.getAdded());
 				networkClient.sendNetworkObject(friendInvitesUpdateRequest);
 
 			} else if (object instanceof Games) {
@@ -77,9 +78,9 @@ public class PlayerObserver implements Observer {
 				/*
 				 * Encapsulating Player change data for transmission for server.
 				 */
-				gamesUpdateRequest.playerID = p.getID();
-				gamesUpdateRequest.gameID = g.getUpdatedID();
-				gamesUpdateRequest.add = g.getAdded();
+				gamesUpdateRequest.setPlayerID(p.getID());
+				gamesUpdateRequest.setGameID(g.getUpdatedID());
+				gamesUpdateRequest.setAdd(g.getAdded());
 				networkClient.sendNetworkObject(gamesUpdateRequest);
 
 			} else if (object instanceof Blocked) {
@@ -87,9 +88,9 @@ public class PlayerObserver implements Observer {
 				/*
 				 * Encapsulating Player change data for transmission for server.
 				 */
-				blockedUpdateRequest.playerID = p.getID();
-				blockedUpdateRequest.playerID2 = b.getUpdatedID();
-				blockedUpdateRequest.add = b.getAdded();
+				blockedUpdateRequest.setPlayerID(p.getID());
+				blockedUpdateRequest.setPlayerID2(b.getUpdatedID());
+				blockedUpdateRequest.setAdd(b.getAdded());
 				networkClient.sendNetworkObject(blockedUpdateRequest);
 
 			} else if (object instanceof Field) {
@@ -102,8 +103,8 @@ public class PlayerObserver implements Observer {
 					 * Encapsulating Player change data for transmission for
 					 * server.
 					 */
-					usernameUpdateRequest.playerID = p.getID();
-					usernameUpdateRequest.username = value;
+					usernameUpdateRequest.setPlayerID(p.getID());
+					usernameUpdateRequest.setUsername(value);
 					networkClient.sendNetworkObject(usernameUpdateRequest);
 
 				case Player.NAME_ID:
@@ -111,8 +112,8 @@ public class PlayerObserver implements Observer {
 					 * Encapsulating Player change data for transmission for
 					 * server.
 					 */
-					nameUpdateRequest.playerID = p.getID();
-					nameUpdateRequest.name = value;
+					nameUpdateRequest.setPlayerID(p.getID());
+					nameUpdateRequest.setName(value);
 					networkClient.sendNetworkObject(nameUpdateRequest);
 
 				case Player.EMAIL_ID:
@@ -120,8 +121,8 @@ public class PlayerObserver implements Observer {
 					 * Encapsulating Player change data for transmission for
 					 * server.
 					 */
-					emailUpdateRequest.playerID = p.getID();
-					emailUpdateRequest.email = value;
+					emailUpdateRequest.setPlayerID(p.getID());
+					emailUpdateRequest.setEmail(value);
 					networkClient.sendNetworkObject(emailUpdateRequest);
 
 				case Player.PROGRAM_ID:
@@ -129,8 +130,8 @@ public class PlayerObserver implements Observer {
 					 * Encapsulating Player change data for transmission for
 					 * server.
 					 */
-					programUpdateRequest.playerID = p.getID();
-					programUpdateRequest.program = value;
+					programUpdateRequest.setPlayerID(p.getID());
+					programUpdateRequest.setProgram(value);
 					networkClient.sendNetworkObject(programUpdateRequest);
 
 				case Player.BIO_ID:
@@ -138,18 +139,26 @@ public class PlayerObserver implements Observer {
 					 * Encapsulating Player change data for transmission for
 					 * server.
 					 */
-					bioUpdateRequest.playerID = p.getID();
-					bioUpdateRequest.bio = value;
+					bioUpdateRequest.setPlayerID(p.getID());
+					bioUpdateRequest.setBio(value);
 					networkClient.sendNetworkObject(bioUpdateRequest);
-
+				
+				case Player.AGE_ID:
+					/*
+					 * Encapsulating Player change data for transmission for
+					 * server.
+					 */
+					ageUpdateRequest.setPlayerID(p.getID());
+					ageUpdateRequest.setAge(value);
+					networkClient.sendNetworkObject(ageUpdateRequest);
 				}
 
 			} else if (object instanceof LibraryStyle) {
                 LibraryStyle libraryStyle = (LibraryStyle) object;
 
                 libraryStyleUpdateRequest = new LibraryStyleUpdateRequest();
-                libraryStyleUpdateRequest.view = libraryStyle.getLayout();
-                libraryStyleUpdateRequest.colour = libraryStyle.getColourScheme();
+                libraryStyleUpdateRequest.setColour(libraryStyle.getColourScheme());
+                libraryStyleUpdateRequest.setStyle(libraryStyle.getLayout());
                 networkClient.sendNetworkObject(libraryStyleUpdateRequest);
 
             }

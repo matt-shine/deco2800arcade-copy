@@ -1,6 +1,9 @@
 package deco2800.arcade.wl6;
 
+import java.util.Iterator;
+
 import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
+import deco2800.arcade.wl6.enemy.Enemy;
 
 public class Door extends Doodad {
 
@@ -19,17 +22,42 @@ public class Door extends Doodad {
     @Override
     public void tick(GameModel g) {
 
-        float speed = 1.5f * g.delta();
-        if (g.getPlayer().getPos().dst(this.getPos()) < 1.5f &&
-        		(key == null || g.getPlayer().hasKey(key))) {
+    	boolean shouldOpenEnemy = false;
+    	boolean shouldOpenPlayer = false;
+    	
+        Iterator<Doodad> itr = g.getDoodadIterator();
+        while (itr.hasNext()) {
+			Doodad d = itr.next();
+			if (d instanceof Mob) {
+				if (d.getPos().dst(this.getPos()) < 1.5f) {
+					shouldOpenEnemy = shouldOpenEnemy || (d instanceof Enemy);
+					shouldOpenPlayer = shouldOpenPlayer || (d instanceof Player);
+				}
+			}
+		}
+        
+    	if (key != null) {
+    		shouldOpenEnemy = false;
+    		
+    		if (!g.getPlayer().hasKey(key)) {
+    			shouldOpenPlayer = false;
+    		}
+    		
+    	}
+        
+    	float speed = 1.5f * g.delta();
+        if (shouldOpenEnemy || shouldOpenPlayer) {
             openness = (float) Math.min(openness + speed, 1.0f);
         } else {
             openness = (float) Math.max(openness - speed, 0.0f);
         }
         
         //update collisions
-        g.getCollisionGrid().setSolidAt((int) this.getPos().x, (int) this.getPos().y, openness > 0.9f ? 0 : 1);
+        g.getCollisionGrid().setSolidAt((int) this.getPos().x, (int) this.getPos().y, openness >= 0.8f ? 0 : 1);
+        
+        
 
+        
     }
 
 

@@ -16,9 +16,14 @@ import deco2800.arcade.client.image.ImageClient;
 import deco2800.arcade.client.image.ImageManager;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
+
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.EncodedImage;
+import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
+import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
+import deco2800.arcade.protocol.game.CasinoServerUpdate;
 import deco2800.arcade.utils.Handler;
+
 
 public abstract class GameClient extends com.badlogic.gdx.Game implements AchievementListener {
 
@@ -36,6 +41,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	private PlayerClient playerClient;
 	private ImageManager imageManager;
 	private boolean hasF11PressedLast = false;
+	private boolean host = false;
 
 	public GameClient(Player player, NetworkClient networkClient) {
 
@@ -234,7 +240,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 		if (overlay != null) {
 			overlay.resize(width, height);
 		}
-		super.resize(width, height);
+		//super.resize(width, height);
 	}
 
 	@Override
@@ -276,14 +282,42 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 
 	public void setMultiSession(int session) {
 		multiplayerSession = session;
-		startMultiplayerGame();
+		if (getMPHost()) {
+			startMultiplayerGame();
+		}
+	}
+	
+	public void updateCasinoState(CasinoServerUpdate obj) {
+		
 	}
 
+	public int getMultiSession() {
+		return multiplayerSession;
+	}
+
+	public void setHost(boolean host) {
+		this.host = host;
+	}
+	
+	public boolean getMPHost() {
+		return host;
+	}
+	
 	public void startMultiplayerGame() {
 	}
 
-	public void updateGameState(Object update) {
+	public void updateGameState(GameStateUpdateRequest request) {
 	}
+	
+	public void sendStateUpdate() {
+	}
+	
+	private void requestMultiplayerGame() {	
+	}
+	
+	public void displayChat(LobbyMessageResponse response) {
+	}
+
 }
 
 

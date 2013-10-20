@@ -6,7 +6,7 @@ import deco2800.arcade.chess.pieces.*;
 
 public class Board {
 	List<Piece> pieces = new ArrayList<Piece>();
-	FixedSizeList<FixedSizeList<Piece>> Board_State;
+	public FixedSizeList<FixedSizeList<Piece>> Board_State;
 	// used to check if moves will move you into check without altering actual
 	// board
 	ArrayList<Piece> whiteGraveyard, blackGraveyard;
@@ -20,16 +20,16 @@ public class Board {
 	boolean blackCheckmate;
 	
 	// Initialise pieces
-	Pawn whitePawn1, whitePawn2, whitePawn3, whitePawn4;
-	Pawn whitePawn5, whitePawn6, whitePawn7, whitePawn8;
-	Pawn blackPawn1, blackPawn2, blackPawn3, blackPawn4;
-	Pawn blackPawn5, blackPawn6, blackPawn7, blackPawn8;
-	Rook whiteRook1, whiteRook2, blackRook1, blackRook2;
-	Knight whiteKnight1, whiteKnight2, blackKnight1, blackKnight2;
-	Bishop whiteBishop1, whiteBishop2, blackBishop1, blackBishop2;
-	King whiteKing, blackKing;
-	Queen whiteQueen, blackQueen;
-	Null nullPiece;
+	public Pawn whitePawn1, whitePawn2, whitePawn3, whitePawn4;
+	public Pawn whitePawn5, whitePawn6, whitePawn7, whitePawn8;
+	public Pawn blackPawn1, blackPawn2, blackPawn3, blackPawn4;
+	public Pawn blackPawn5, blackPawn6, blackPawn7, blackPawn8;
+	public Rook whiteRook1, whiteRook2, blackRook1, blackRook2;
+	public Knight whiteKnight1, whiteKnight2, blackKnight1, blackKnight2;
+	public Bishop whiteBishop1, whiteBishop2, blackBishop1, blackBishop2;
+	public King whiteKing, blackKing;
+	public Queen whiteQueen, blackQueen;
+	public Null nullPiece;
 
 	String NEWLINE = System.getProperty("line.separator");
 	boolean blackCheck, whiteCheck;
@@ -44,7 +44,7 @@ public class Board {
 		pieceMoved = new ArrayList<Piece>();
 		blackGraveyard = new ArrayList<Piece>();
 		whiteGraveyard = new ArrayList<Piece>();
-		nullPiece = new Null();
+		nullPiece = new Null(true);
 
 		blackCheck = false;
 		whiteCheck = false;
@@ -230,9 +230,9 @@ public class Board {
 	 * @param retrievalPiece
 	 *            Piece to be retrieved into play
 	 */
-	private void retrievePiece(Piece retrievalPiece) {
+	/*private void retrievePiece(Piece retrievalPiece) {
 
-	}
+	}*/
 
 	/**
 	 * Checks whether a space is currently occupied
@@ -241,7 +241,7 @@ public class Board {
 	 *            The position to be checked for occupation
 	 * @return True if the space is occupied, false if available
 	 */
-	private boolean occupiedSpace(int[] position) {
+	public boolean occupiedSpace(int[] position) {
 		int x = position[0];
 		int y = position[1];
 		FixedSizeList<Piece> row = Board_State.get(x);
@@ -263,108 +263,11 @@ public class Board {
 	 * @return A list of all allowed moves the piece can make
 	 */
 	public List<int[]> allowedMoves(Piece piece) {
-		// FIXME big method
 		int[] currentPos = findPiece(piece);
 
-		List<int[]> possibleMoves = piece.possibleMoves(currentPos);
-		List<int[]> allowableMoves = new ArrayList<int[]>();
-		/*
-		 * Checks if possibleMoves spaces are occupied, if occupied by own team
-		 * don't allow, if occupied by other team allow.
-		 */
-		// Used by: knight
-		if (piece.getClass() == blackKnight1.getClass()) {
-			for (int i = 0; i < possibleMoves.size(); i++) {
-				// If the space is unoccupied add to list of allowable
-				if (!occupiedSpace(possibleMoves.get(i))) {
-					allowableMoves.add(possibleMoves.get(i));
-				} else {
-					// If the space is occupied check by which team
-					int x = possibleMoves.get(i)[0];
-					int y = possibleMoves.get(i)[1];
-					List<Piece> row = Board_State.get(x);
-					Piece onSquare = row.get(y);
-
-					// If piece on the space is on opposing team add to
-					// allowable
-					if (piece.getTeam() != onSquare.getTeam()) {
-						allowableMoves.add(possibleMoves.get(i));
-					}
-				}
-			}
-		}
-
-		// Pawn Movement
-		if (piece.getClass() == blackPawn1.getClass()) {
-			if (!piece.getFirstMove()) {
-				if (this.occupiedSpace(possibleMoves.get(1))) {
-					possibleMoves.remove(0);
-				}
-			}
-			for (int i = 0; i < possibleMoves.size(); i++) {
-				if (occupiedSpace(possibleMoves.get(i))) {
-					// If the space is occupied check by which team
-					int x = possibleMoves.get(i)[0];
-					int y = possibleMoves.get(i)[1];
-					List<Piece> row = Board_State.get(x);
-					Piece onSquare = row.get(y);
-					/*
-					 * If piece on the space is on opposing team add to
-					 * allowable if diagonal
-					 */
-					if ((piece.getTeam() != onSquare.getTeam())
-							&& (possibleMoves.get(i)[1] != currentPos[1])) {
-						allowableMoves.add(possibleMoves.get(i));
-					}
-				} else { // If diagonal squares are empty don't add
-					if (possibleMoves.get(i)[1] == currentPos[1]) {
-						allowableMoves.add(possibleMoves.get(i));
-					}
-				}
-			}
-		}
-		// Rook movement
-		if (piece.getClass() == blackRook1.getClass()) {
-			allowableMoves = new ArrayList<int[]>(this.removeJumpsUp(
-					possibleMoves, currentPos, piece));
-
-		}
-		// King Movement
-		if (piece.getClass() == whiteKing.getClass()) {
-
-			for (int i = 0; i < possibleMoves.size(); i++) {
-				// If the space is unoccupied add to list of allowable
-				if (!occupiedSpace(possibleMoves.get(i))) {
-					allowableMoves.add(possibleMoves.get(i));
-				} else {
-
-					// If the space is occupied check by which team
-					int x = possibleMoves.get(i)[0];
-					int y = possibleMoves.get(i)[1];
-					List<Piece> row = Board_State.get(x);
-					Piece onSquare = row.get(y);
-					// If piece on the space is on opposing team add to
-					// allowable
-					if (piece.getTeam() != onSquare.getTeam()) {
-						allowableMoves.add(possibleMoves.get(i));
-					}
-				}
-			}
-		}
-		// Bishop Movement
-		if (piece.getClass() == whiteBishop1.getClass()) {
-
-			allowableMoves = new ArrayList<int[]>(this.removeJumpsDiagonal(
-					possibleMoves, currentPos, piece));
-		}
-		// Queen movement
-		if (piece.getClass() == whiteQueen.getClass()) {
-			this.removeJumpsUp(possibleMoves, currentPos, piece);
-			allowableMoves = new ArrayList<int[]>(this.removeJumpsUp(
-					possibleMoves, currentPos, piece));
-
-		}
-		return allowableMoves;
+		List<int[]> possibleMoves = piece.possibleMoves(currentPos, Board_State);
+		
+		return possibleMoves;
 	}
 
 	/**
@@ -377,11 +280,9 @@ public class Board {
 	 * @return True if the piece moved, false if the move failed.
 	 */
 	public boolean movePiece(Piece piece, int[] newPosition) {
-		// FIXME big method
 		int[] oldPos = findPiece(piece);
 		int x = newPosition[0];
 		int y = newPosition[1];
-		boolean kingCastleSwap = false;
 
 		List<int[]> allowedMoves = removeCheckMoves(piece);
 
@@ -394,61 +295,13 @@ public class Board {
 			}
 		}
 
-		// If the piece is a king or a rook
+		// If the piece is a king
 		if ((piece.getClass() == blackKing.getClass())
-				|| (piece.getClass() == blackRook1.getClass())) {
+				|| (piece.getClass() == whiteKing.getClass())) {
 			// Check if the kingCastle swap can be performed, if so allow move
-			if (kingCastleSwap(piece)) {
-				// Allow black teams move
-				System.out.println(piece.getTeam());
-				if (piece.getTeam()) {
-					System.out.println("Black newPos: " + newPosition[0]
-							+ "', " + newPosition[1]);
-					int[] kingSwapPos = { 7, 6 };
-					int[] castleSwapPos = { 7, 5 };
-					// Check they attempted the swap
-					if ((piece.getClass() == blackKing.getClass())
-							&& (newPosition[0] == kingSwapPos[0])
-							&& (newPosition[1] == kingSwapPos[1])) {
-						System.out.println("Black king castle swap");
-						// Move King to new position
-						Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
-						Board_State.get(x).add(y, piece);
-						System.out.println("Black king castle swap");
-						// Move Rook to new position
-						Board_State.get(findPiece(blackRook2)[0]).add(
-								findPiece(blackRook2)[1], nullPiece);
-						Board_State.get(castleSwapPos[0]).add(castleSwapPos[1],
-								blackRook2);
-						allowed = true;
-						kingCastleSwap = true;
-						this.nextTurn();
-						return true;
-					}
-				}
-				// Allow white teams move
-				if (!piece.getTeam()) {
-					// Check they attempted the swap
-					int[] kingSwapPos = { 0, 6 };
-					int[] castleSwapPos = { 0, 5 };
-					// Check they attempted the swap
-					if ((piece.getClass() == whiteKing.getClass())
-							&& (newPosition[0] == kingSwapPos[0])
-							&& (newPosition[1] == kingSwapPos[1])) {
-						// Move King to new position
-						Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
-						Board_State.get(x).add(y, piece);
-						// Move Rook to new position
-						Board_State.get(findPiece(whiteRook2)[0]).add(
-								findPiece(whiteRook2)[1], nullPiece);
-						Board_State.get(castleSwapPos[0]).add(castleSwapPos[1],
-								whiteRook2);
-						allowed = true;
-						kingCastleSwap = true;
-						this.nextTurn();
-						return true;
-					}
-
+			if (checkKingCastleSwap(piece)) {
+				if(performKingCastleSwap(piece, newPosition, oldPos)) {
+					return true;
 				}
 			}
 		}
@@ -459,28 +312,28 @@ public class Board {
 			return false;
 		}
 
+		if (piece.getClass() == whitePawn1.getClass()) {
+			piece.hasMoved();
+		}
+		
 		/*
 		 * If space is occupied (can only be by other team due to possibleMoves)
 		 * deactivate the piece, add it to the graveyard and move new piece to
 		 * that square
 		 */
-		if (piece.getClass() == whitePawn1.getClass()) {
-			piece.hasMoved();
-		}
-		if (occupiedSpace(newPosition) && !kingCastleSwap) {
+		if (occupiedSpace(newPosition)) {
 			// Remove enemy piece on the newPosition
 			Piece onSquare = Board_State.get(x).get(y);
 			onSquare.deActivate();
 
-			if (onSquare.getTeam()) {
-				blackGraveyard.add(onSquare);
-			} else {
-				whiteGraveyard.add(onSquare);
-			}
+			/*boolean temp = onSquare.getTeam() ? blackGraveyard.add(onSquare) : 
+													whiteGraveyard.add(onSquare);*/
+			
 			Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
 			Board_State.get(x).add(y, piece);
 			moves.add(newPosition);
 			pieceMoved.add(piece);
+			checkPawnSwap(piece, turn);
 			this.nextTurn();
 			return true;
 		} else {
@@ -488,11 +341,122 @@ public class Board {
 			Board_State.get(x).add(y, piece);
 			moves.add(newPosition);
 			pieceMoved.add(piece);
+			checkPawnSwap(piece, turn);
 			this.nextTurn();
 			return true;
 		}
+		
+	}
+	
+	/**
+	 * Checks if piece is pawn and if it has reached end of board.
+	 * If it has, replaces with piece in graveyard (if there is a piece that
+	 * isn't a pawn)
+	 * 
+	 * @param piece
+	 * 			the piece to check
+	 * @param team
+	 * 			the team who is currently moving
+	 */
+	private void checkPawnSwap(Piece piece, boolean team) {
+		boolean atEnd = false;
+		int highestPref = 1;
+		Piece replaceWith = piece;
+		if (piece.getClass() != whitePawn1.getClass()) {
+			return;
+		}
+		int[] piecePos = this.findPiece(piece);
+		if (team) {
+			if (piecePos[0] == 0) {
+				atEnd = true;
+			}
+		} else {
+			if (piecePos[0] == 7) {
+				atEnd = true;
+			}
+		}
+		if (atEnd) {
+			if (team) {
+				for (Piece deadPiece: blackGraveyard) {
+					int currentPref;
+					currentPref = deadPiece.getPreference();
+					if (currentPref > highestPref) {
+						highestPref = currentPref;
+						replaceWith = deadPiece;
+					}
+				}
+			} else {
+				for (Piece deadPiece: whiteGraveyard) {
+					int currentPref;
+					currentPref = deadPiece.getPreference();
+					if (currentPref > highestPref) {
+						highestPref = currentPref;
+						replaceWith = deadPiece;
+					}
+				}
+			}
+		} else {
+			return;
+		}
+		if (highestPref == 1) {
+			return;
+		}
+		System.out.println("replacing pawn with " + replaceWith.toString());
+		piece.deActivate();
+		if (team) {
+			blackGraveyard.add(piece);
+		} else {
+			whiteGraveyard.add(piece);
+		}
+		//replaceWith.reActivate();
+		Board_State.get(piecePos[0]).add(piecePos[1], replaceWith);
+		replaceWith.reActivate();
 	}
 
+	/**
+	 * Piece the king castle swap if the user attempted to.
+	 * 
+	 * @param piece
+	 * 		The piece that is being attempted to move
+	 * @param newPosition
+	 * 		The position that the given piece was attempted to move to
+	 * @param oldPos
+	 * 		The position that the given piece began in
+	 * @return
+	 * 		True if the swap succeeded, false otherwise
+	 */
+	private boolean performKingCastleSwap(Piece piece, int[] newPosition, int[] oldPos) {
+		boolean team = piece.getTeam();
+		int x = newPosition[0];
+		int y = newPosition[1];
+		
+		int[] bKingPos = {7,6}, bCastlePos = {7,5}, wKingPos = {0,6}, wCastlePos = {0,5};
+		int[] kingSwapPos =  team ? bKingPos : wKingPos;
+		int[] castleSwapPos = team ? bCastlePos : wCastlePos;
+
+		// Check they attempted the swap
+		if( ((piece.getClass() == blackKing.getClass()) || (piece.getClass() == whiteKing.getClass())) 
+				&& (newPosition[0] == kingSwapPos[0]) && (newPosition[1] == kingSwapPos[1])) {
+
+			// Move King to new position
+			Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
+			Board_State.get(x).add(y, piece);
+
+			// Move Rook to new position
+			Piece rook = piece.getTeam() ? blackRook2 : whiteRook2;
+			
+			Board_State.get(findPiece(rook)[0]).add(
+					findPiece(rook)[1], nullPiece);
+					
+			Board_State.get(castleSwapPos[0]).add(castleSwapPos[1],
+					rook);
+			this.nextTurn();
+			return true;
+		} else {
+			return false;
+		}
+	}
+		
 	/**
 	 * Finds and returns the board co-ordinates for the given piece
 	 * 
@@ -516,10 +480,10 @@ public class Board {
 	/**
 	 * Undoes last move
 	 */
-	private void removeMove() {
+	/*private void removeMove() {
 		moves.remove(moves.size() - 1);
 		pieceMoved.remove(pieceMoved.size() - 1);
-	}
+	}*/
 
 	/**
 	 * Finds and returns a list of all active pieces currently on the board
@@ -569,382 +533,6 @@ public class Board {
 		return Board_State.toString();
 	}
 
-	/**
-	 * Returns a list with all impossible jumps removed from the queens possible
-	 * moves.
-	 * 
-	 * @param possibleMoves
-	 *            List of all possible moves the queen can make, not
-	 *            disregarding disallowed moves
-	 * @param currentPos
-	 *            The current position of the given queen
-	 * @param piece
-	 *            The queen for whom the moves are being removed from
-	 * @return A list of all possible moves the queen can make without the
-	 *         impossible jumps included in possibleMoves
-	 */
-	private List<int[]> removeJumpsDiagonal(List<int[]> possibleMoves,
-			int[] currentPos, Piece piece) {
-		int x = currentPos[0];
-		int y = currentPos[1];
-		int xCheck;
-		int yCheck;
-		List<int[]> possible = new ArrayList<int[]>(possibleMoves);
-		if (piece.getClass() == whiteBishop1.getClass()
-				|| piece.getClass() == whiteQueen.getClass()) {
-			for (int i = 1; i <= 7; i++) {
-				int[] upRight = { x + i, y + i };
-				if ((upRight[0] >= 0) && (upRight[0] <= 7) && (upRight[1] >= 0)
-						&& (upRight[1] <= 7)) {
-					if (!occupiedSpace(upRight)) {
-						continue;
-					} else {
-						List<Piece> row = Board_State.get(x + i);
-						Piece onSquare = row.get(y + i);
-						// remove possible moves AFTER enemy piece onwards
-						if (piece.getTeam() != onSquare.getTeam()) {
-							for (int j = 1; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x + i + j))
-											&& (yCheck == (y + i + j))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-							// remove possible moves FROM ally piece onwards
-						} else {
-							for (int j = 0; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x + i + j))
-											&& (yCheck == (y + i + j))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-						}
-					}
-				}
-			}
-			// remove jumps for moving UP and LEFT
-			for (int i = 1; i <= 7; i++) {
-				int[] upLeft = { x + i, y - i };
-				if ((upLeft[0] >= 0) && (upLeft[0] <= 7) && (upLeft[1] >= 0)
-						&& (upLeft[1] <= 7)) {
-					// if space is not occupied continue
-					if (!occupiedSpace(upLeft)) {
-						continue;
-					} else {
-						List<Piece> row = Board_State.get(x + i);
-						Piece onSquare = row.get(y - i);
-						// remove possible moves AFTER enemy piece onwards
-						if (piece.getTeam() != onSquare.getTeam()) {
-							for (int j = 1; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x + i + j))
-											&& (yCheck == (y - i - j))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-							// remove possible moves FROM ally piece onwards
-						} else {
-							for (int j = 0; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x + i + j))
-											&& (yCheck == (y - i - j))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-						}
-					}
-				}
-			}
-
-			// remove jumps for moving DOWN and RIGHT
-			for (int i = 1; i <= 7; i++) {
-				int[] downRight = { x - i, y + i };
-				if ((downRight[0] >= 0) && (downRight[0] <= 7)
-						&& (downRight[1] >= 0) && (downRight[1] <= 7)) {
-					if (!occupiedSpace(downRight)) {
-						continue;
-					} else {
-						List<Piece> row = Board_State.get(x - i);
-						Piece onSquare = row.get(y + i);
-						// remove possible moves AFTER enemy piece onwards
-						if (piece.getTeam() != onSquare.getTeam()) {
-							for (int j = 1; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x - i - j))
-											&& (yCheck == (y + i + j))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-							// remove possible moves FROM ally piece onwards
-						} else {
-							for (int j = 0; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x - i - j))
-											&& (yCheck == (y + i + j))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-						}
-					}
-				}
-			}
-
-			// remove jumps for moving DOWN and LEFT
-			for (int i = 1; i <= 7; i++) {
-				int[] downLeft = { x - i, y - i };
-				if ((downLeft[0] >= 0) && (downLeft[0] <= 7)
-						&& (downLeft[1] >= 0) && (downLeft[1] <= 7)) {
-					if (!occupiedSpace(downLeft)) {
-						continue;
-					} else {
-						List<Piece> row = Board_State.get(x - i);
-						Piece onSquare = row.get(y - i);
-						// remove possible moves AFTER enemy piece onwards
-						if (piece.getTeam() != onSquare.getTeam()) {
-							for (int j = 1; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x - i - j))
-											&& (yCheck == (y - i - j))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-							// remove possible moves FROM ally piece onwards
-						} else {
-							for (int j = 0; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x - i - j))
-											&& (yCheck == (y - i - j))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-						}
-					}
-				}
-			}
-		}
-		return possible;
-	}
-
-	private List<int[]> removeJumpsUp(List<int[]> possibleMoves,
-			int[] currentPos, Piece piece) {
-		int x = currentPos[0];
-		int y = currentPos[1];
-		int xCheck;
-		int yCheck;
-		List<int[]> possible = new ArrayList<int[]>(possibleMoves);
-		if (piece.getClass() == whiteRook1.getClass()
-				|| piece.getClass() == whiteQueen.getClass()) {
-			// remove jumps UP
-			for (int i = 1; i <= 7; i++) {
-
-				int[] up = { x + i, y };
-				if ((up[0] >= 0) && (up[0] <= 7) && (up[1] >= 0)
-						&& (up[1] <= 7)) {
-
-					if (!occupiedSpace(up)) {
-						continue;
-
-					} else {
-
-						List<Piece> row = Board_State.get(x + i);
-						Piece onSquare = row.get(y);
-
-						// remove possible moves AFTER enemy piece onwards
-						if (piece.getTeam() != onSquare.getTeam()) {
-							for (int j = 1; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x + i + j))
-											&& (yCheck == (y))) {
-										possible.remove(k);
-
-									}
-								}
-							}
-							break;
-							// remove possible moves FROM ally piece onwards
-						} else {
-							for (int j = 0; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x + i + j))
-											&& (yCheck == (y))) {
-										possible.remove(k);
-
-									}
-								}
-							}
-							break;
-						}
-					}
-				}
-			}
-
-			// remove jumps LEFT
-			for (int i = 1; i <= 7; i++) {
-				int[] Left = { x, y - i };
-				if ((Left[0] >= 0) && (Left[0] <= 7) && (Left[1] >= 0)
-						&& (Left[1] <= 7)) {
-					if (!occupiedSpace(Left)) {
-						continue;
-					} else {
-						List<Piece> row = Board_State.get(x);
-						Piece onSquare = row.get(y - i);
-						// remove possible moves AFTER enemy piece onwards
-						if (piece.getTeam() != onSquare.getTeam()) {
-							for (int j = 1; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x) && (yCheck == (y - i - j)))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-							// remove possible moves FROM ally piece onwards in
-							// direction
-						} else {
-							for (int j = 0; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x) && (yCheck == (y - i - j)))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-						}
-					}
-				}
-			}
-
-			// remove jumps RIGHT
-			for (int i = 1; i <= 7; i++) {
-				int[] Right = { x, y + i };
-				if ((Right[0] >= 0) && (Right[0] <= 7) && (Right[1] >= 0)
-						&& (Right[1] <= 7)) {
-					if (!occupiedSpace(Right)) {
-						continue;
-					} else {
-						List<Piece> row = Board_State.get(x);
-						Piece onSquare = row.get(y + i);
-						// remove possible moves AFTER enemy piece onwards
-						if (piece.getTeam() != onSquare.getTeam()) {
-							for (int j = 1; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x) && (yCheck == (y + i + j)))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-							// remove possible moves FROM ally piece onwards
-						} else {
-							for (int j = 0; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x) && (yCheck == (y + i + j)))) {
-										possible.remove(k);
-
-									}
-								}
-							}
-							break;
-						}
-					}
-				}
-			}
-			// remove jumps downwards
-			for (int i = 1; i <= 7; i++) {
-				int[] down = { x - i, y };
-				if ((down[0] >= 0) && (down[0] <= 7) && (down[1] >= 0)
-						&& (down[1] <= 7)) {
-
-					// if space is not occupied continue
-					if (!occupiedSpace(down)) {
-						continue;
-					} else {
-						List<Piece> row = Board_State.get(x - i);
-						Piece onSquare = row.get(y);
-						// remove possible moves AFTER enemy piece onwards
-						if (piece.getTeam() != onSquare.getTeam()) {
-
-							for (int j = 1; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x - i - j))
-											&& (yCheck == (y))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-							// remove possible moves FROM ally piece onwards
-						} else {
-							for (int j = 0; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x - i - j))
-											&& (yCheck == (y))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-						}
-					}
-				}
-			}
-		}
-		if (piece.getClass() == whiteRook1.getClass()) {
-			return possible;
-		} else {
-			return removeJumpsDiagonal(possible, currentPos, piece);
-		}
-	}
 
 	public Piece getPiece(int[] pos) {
 		FixedSizeList<Piece> row = Board_State.get(pos[0]);
@@ -952,10 +540,12 @@ public class Board {
 		return row.get(pos[1]);
 	}
 
-	/**
+	/**Takes in a piece and determines whether it is the null piece or not.
 	 * 
 	 * @param piece
-	 * @return Boolean whether a null piece exists
+	 * 		Piece to test if null
+	 * @return 
+	 * 		True if the given piece in Null. i.e the square is empty
 	 */
 	public boolean isNullPiece(Piece piece) {
 		if (piece.getClass() == nullPiece.getClass()) {
@@ -964,15 +554,17 @@ public class Board {
 		return false;
 	}
 
-	/**
+	/**Returns whose turn it is to make the next move
 	 * 
-	 * @return the current team's turn
+	 * @return 
+	 * 		True if it is the black teams turn, false if whites
 	 */
 	public boolean whoseTurn() {
 		return turn;
 	}
 
 	/**
+	 * 
 	 * @return the next team's turn
 	 */
 	public void nextTurn() {
@@ -980,8 +572,14 @@ public class Board {
 	}
 
 	/**
-	 * Checks all active pieces on the board to see whether any pieces can move
-	 * and returns a list of boolean values
+	 * Returns a list of booleans corresponding to the pieces on the team that
+	 * can and cannot move
+	 * 
+	 * @param team
+	 * 		Team that is being checked for possible moves
+	 * @return
+	 * 		Return a list of boolean values, corresponding to the pieces that
+	 * 		can move
 	 */
 	public List<Boolean> checkMoves(boolean team) {
 		List<Piece> activePieces = findActivePieces(team);
@@ -1002,10 +600,11 @@ public class Board {
 	 * king-castle swap and false otherwise
 	 * 
 	 * @param piece
-	 *            Piece who's team is to be checked
-	 * @return True if piece's team can perform the move, false otherwise
+	 * 		Piece who's team is to be checked
+	 * @return 
+	 * 		True if piece's team can perform the move, false otherwise
 	 */
-	private boolean kingCastleSwap(Piece piece) {
+	private boolean checkKingCastleSwap(Piece piece) {
 		// If on the black team and king and rook1 haven't moved
 		if (piece.getTeam() && !blackKing.getFirstMove()
 				&& !blackRook1.getFirstMove()) {
@@ -1032,11 +631,13 @@ public class Board {
 	}
 
 	/**
-	 * Moves a piece on the computer controlled team using basic logic for easy
-	 * mode.
+	 * Makes a computer determined move of the given piece based on basic
+	 * logic
+	 * 
+	 * @param movePiece
+	 * 		The piece that will be moves
 	 */
 	public void moveAIPieceEasy(Piece movePiece) {
-		// Piece movePiece = chooseAIPiece();
 
 		int[] moveSquare = chooseAISquare(movePiece);
 		System.out.println("board3");

@@ -140,7 +140,7 @@ public class Renderer {
         //projection
         float aspect = Gdx.graphics.getWidth() / (float)Gdx.graphics.getHeight();
         Matrix4 projection = new Matrix4();
-        projection.setToProjection(0.01f, 200.0f, 60.0f, aspect);
+        projection.setToProjection(0.01f, 200.0f, 45.0f, aspect);
 
         //view
         Matrix4 view = debugMode ? getDebugCameraTransform() : getCameraTransform();
@@ -221,7 +221,7 @@ public class Renderer {
             m.rotate(1, 0, 0, 270);
         } else {
             //if not debug mode, rotate to face the player
-            m.rotate(0, 0, 1, angle);
+        	m.rotate(0, 0, 1, angle + 180);
         }
 
 
@@ -367,7 +367,7 @@ public class Renderer {
      * @return
      */
     public Matrix4 getDebugCameraTransform() {
-        return new Matrix4().idt().trn(-32, 32, -60.0f).rotate(1, 0, 0, 180);
+        return new Matrix4().idt().trn(-32, 32, -80.0f).rotate(1, 0, 0, 180);
     }
 
     /**

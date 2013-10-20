@@ -1,5 +1,7 @@
 package deco2800.arcade.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -10,6 +12,7 @@ public class Player extends User {
 	public static final int EMAIL_ID = 3;
 	public static final int PROGRAM_ID = 4;
 	public static final int BIO_ID = 5;
+	public static final int AGE_ID = 6;
 
 	public static final int NAME_PRIVACY_ID = 1;
 	public static final int EMAIL_PRIVACY_IDNAME_ID = 2;
@@ -19,13 +22,13 @@ public class Player extends User {
 	public static final int GAMES_PRIVACY_ID = 6;
 	public static final int ACHIEVMENTS_PRIVACY_ID = 7;
 
-
 	private Field username;
 
 	private Field name;
 	private Field email;
 	private Field program;
 	private Field bio;
+	private Field age;
 
 	private PrivacyField namePrivacy;
 	private PrivacyField emailPrivacy;
@@ -34,23 +37,39 @@ public class Player extends User {
 	private PrivacyField friendsPrivacy;
 	private PrivacyField gamesPrivacy;
 	private PrivacyField achievementsPrivacy;
+	
+	private PlayerPrivacyGlob playerPrivacy;
 
 	private Games games;
 	private Friends friends;
 	private Blocked blocked;
 	private FriendInvites friendInvites;
-    
-    private LibraryStyle libraryStyle;
 
-	private Icon icon;
-    
-    @Deprecated
-    /**
-     * DO NOT USE THIS METHOD, AT ALL, EVER.
-     */
-    public Player(int playerID, String username, String filepath) {
-        // Do nothing
-    }
+	private LibraryStyle libraryStyle;
+
+
+	@Deprecated
+	/**
+	 * DO NOT USE THIS METHOD, AT ALL, EVER.
+	 */
+	public Player(int playerID, String username, String filepath) {
+		super(playerID);
+		this.username = new Field(USERNAME_ID, username);
+		this.games = new Games();
+		this.friends = new Friends();
+		this.friendInvites = new FriendInvites();
+		this.blocked = new Blocked();
+
+		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, false);
+		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID, false);
+		this.programPrivacy = new PrivacyField(PROGRAM_PRIVACY_ID, false);
+		this.bioPrivacy = new PrivacyField(BIO_PRIVACY_ID, false);
+		this.friendsPrivacy = new PrivacyField(FRIENDS_PRIVACY_ID, false);
+		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, false);
+		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
+				false);
+		this.libraryStyle = new LibraryStyle();
+	}
 
 	@Deprecated
 	/**
@@ -64,7 +83,6 @@ public class Player extends User {
 		this.friends = new Friends();
 		this.friendInvites = new FriendInvites();
 		this.blocked = new Blocked();
-
 		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, privacy[0]);
 		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID,
 				privacy[1]);
@@ -74,7 +92,7 @@ public class Player extends User {
 		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, privacy[5]);
 		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
 				privacy[6]);
-        this.libraryStyle = new LibraryStyle();
+		this.libraryStyle = new LibraryStyle();
 
 		/*
 		 * Note that exception handling could be done in-method, however if it
@@ -89,7 +107,7 @@ public class Player extends User {
 		 * @throws IOException Throws exception when the image cannot be found
 		 * at the designated filepath.
 		 */
-		this.icon = null;
+
 	}
 
 	/**
@@ -101,11 +119,16 @@ public class Player extends User {
 	 *            The Player's icon filepath
 	 * @param details
 	 *            An array of strings containing the player's username, name,
-	 *            email, program and bio.
-     * @param friendsList
-     * @param friendRequestsList
-     * @param blockedList
-     * @param gamesList
+	 *            email, program, bio and age.
+	 * @param friendsList
+	 * 			A set of Users which represents a Player's friends list.
+	 * @param friendRequestsList
+	 * 			A set of Users which represents a Player's 
+	 * 			received friend request list.
+	 * @param blockedList
+	 * 			A set of Users which represents a Player's blocked list.
+	 * @param gamesList
+	 * 			A set of Games which represent a Player's games.
 	 * @param privacy
 	 *            A boolean array of privacy settings.
 	 * @require There are at least 7 elements in privacy array. Elements 1
@@ -119,44 +142,37 @@ public class Player extends User {
 	 */
 	public Player(int playerID, String filepath, List<String> details,
 			Set<User> friendsList, Set<User> friendRequestsList,
-			Set<User> blockedList, Set<Game> gamesList, boolean[] privacy) {
+			Set<User> blockedList, Set<Game> gamesList, ArrayList<Boolean> privacy) {
 		super(playerID);
 		this.username = new Field(USERNAME_ID, details.get(0));
 		this.name = new Field(NAME_ID, details.get(1));
 		this.email = new Field(EMAIL_ID, details.get(2));
 		this.program = new Field(PROGRAM_ID, details.get(3));
 		this.bio = new Field(BIO_ID, details.get(4));
+		this.age = new Field(AGE_ID, details.get(5));
 
 		this.games = new Games();
-		if(gamesList != null){
+		if (gamesList != null) {
 			this.games.addAll(gamesList);
 		}
-				
+
 		this.friends = new Friends();
-		if(friendsList != null){
+		if (friendsList != null) {
 			this.friends.addAll(friendsList);
 		}
-		
+
 		this.friendInvites = new FriendInvites();
-		if(friendRequestsList != null){
+		if (friendRequestsList != null) {
 			this.friendInvites.addAll(friendRequestsList);
 		}
-		
+
 		this.blocked = new Blocked();
-		if(blockedList != null){
+		if (blockedList != null) {
 			this.blocked.addAll(blockedList);
 		}
 		
-		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, privacy[0]);
-		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID,
-				privacy[1]);
-		this.programPrivacy = new PrivacyField(PROGRAM_PRIVACY_ID, privacy[2]);
-		this.bioPrivacy = new PrivacyField(BIO_PRIVACY_ID, privacy[3]);
-		this.friendsPrivacy = new PrivacyField(FRIENDS_PRIVACY_ID, privacy[4]);
-		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, privacy[5]);
-		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
-				privacy[6]);
-        this.libraryStyle = new LibraryStyle();
+		this.playerPrivacy = new PlayerPrivacyGlob(privacy);
+		this.libraryStyle = new LibraryStyle();
 
 		/*
 		 * Note that exception handling could be done in-method, however if it
@@ -171,7 +187,6 @@ public class Player extends User {
 		 * @throws IOException Throws exception when the image cannot be found
 		 * at the designated filepath.
 		 */
-		this.icon = null;
 	}
 
 
@@ -186,11 +201,16 @@ public class Player extends User {
 
 	/**
 	 * Sets the name of the user.
-	 * @param username string of username
+	 * 
+	 * @param username
+	 *            string of username
 	 */
 	public void setUsername(String username) {
 		if (username != null) {
 			this.username.setValue(username);
+			setChanged();
+			notifyObservers(this.username);
+			clearChanged();
 		}
 	}
 
@@ -210,6 +230,9 @@ public class Player extends User {
 	 */
 	public void setEmail(String email) {
 		this.email.setValue(email);
+		setChanged();
+		notifyObservers(this.email);
+		clearChanged();
 		// TODO
 		// Do we want to add in any checking for valid email format here?
 	}
@@ -230,6 +253,9 @@ public class Player extends User {
 	 */
 	public void setBio(String bio) {
 		this.bio.setValue(bio);
+		setChanged();
+		notifyObservers(this.bio);
+		clearChanged();
 	}
 
 	/**
@@ -248,6 +274,30 @@ public class Player extends User {
 	 */
 	public void setName(String name) {
 		this.name.setValue(name);
+		setChanged();
+		notifyObservers(this.name);
+		clearChanged();
+	}
+
+	/**
+	 * An access method for the players age
+	 * 
+	 * @return a String of the players age
+	 */
+	public String getAge() {
+		return age.getValue();
+	}
+
+	/**
+	 * Set the players age
+	 * 
+	 * @param age
+	 */
+	public void setAge(String age) {
+		this.age.setValue(age);
+		setChanged();
+		notifyObservers(this.age);
+		clearChanged();
 	}
 
 	/**
@@ -266,26 +316,9 @@ public class Player extends User {
 	 */
 	public void setProgram(String program) {
 		this.program.setValue(program);
-	}
-
-	/**
-	 * Access method for the Player's icon
-	 * 
-	 * @return The Player's icon
-	 */
-	public Icon getIcon() {
-		return this.icon.clone();
-	}
-
-	/**
-	 * Sets the Player's icon that the provided icon.
-	 * 
-	 * @param icon
-	 *            The icon to set to the Player.
-	 * @require icon != null
-	 */
-	public void setIcon(Icon icon) {
-		this.icon = icon.clone();
+		setChanged();
+		notifyObservers(this.program);
+		clearChanged();
 	}
 
 	/**
@@ -368,9 +401,9 @@ public class Player extends User {
 	 *            The friend to be added to the friends set.
 	 * @ensure this.friends.contains(friend)
 	 */
-	public void addFriend(User friend) {
-		if (friend != null /* && this.hasInvite(friend) */) {
-			this.friends.add(new User(friend.getID()));
+	public void acceptFriendInvite(User friend) {
+		if (friend != null  && this.hasInvite(friend)) {
+			this.friends.add(friend);
 			setChanged();
 			notifyObservers(friends);
 			clearChanged();
@@ -508,11 +541,10 @@ public class Player extends User {
 	 *            friends only.
 	 */
 	public void setNamePrivacy(boolean v) {
-		namePrivacy.setValue(v);
+		this.playerPrivacy.setNamePrivacy(v);
 		setChanged();
-		notifyObservers(namePrivacy);
+		notifyObservers(this.playerPrivacy);
 		clearChanged();
-
 	}
 
 	/**
@@ -522,7 +554,7 @@ public class Player extends User {
 	 *         friends only.
 	 */
 	public boolean getNamePrivacy() {
-		return namePrivacy.getValue();
+		return this.playerPrivacy.isNamePrivacy();
 	}
 
 	/**
@@ -533,12 +565,10 @@ public class Player extends User {
 	 *            for friends only.
 	 */
 	public void setEmailPrivacy(boolean v) {
-		emailPrivacy.setValue(v);
-		namePrivacy.setValue(v);
+		this.playerPrivacy.setEmailPrivacy(v);
 		setChanged();
-		notifyObservers(emailPrivacy);
+		notifyObservers(this.playerPrivacy);
 		clearChanged();
-
 	}
 
 	/**
@@ -548,7 +578,7 @@ public class Player extends User {
 	 *         friends only.
 	 */
 	public boolean getEmailPrivacy() {
-		return emailPrivacy.getValue();
+		return this.playerPrivacy.isEmailPrivacy();
 	}
 
 	/**
@@ -559,12 +589,10 @@ public class Player extends User {
 	 *            for friends only.
 	 */
 	public void setProgramPrivacy(boolean v) {
-		programPrivacy.setValue(v);
-		namePrivacy.setValue(v);
+		this.playerPrivacy.setProgramPrivacy(v);
 		setChanged();
-		notifyObservers(programPrivacy);
+		notifyObservers(this.playerPrivacy);
 		clearChanged();
-
 	}
 
 	/**
@@ -574,7 +602,7 @@ public class Player extends User {
 	 *         friends only.
 	 */
 	public boolean getProgramPrivacy() {
-		return programPrivacy.getValue();
+		return this.playerPrivacy.isProgramPrivacy();
 	}
 
 	/**
@@ -585,12 +613,10 @@ public class Player extends User {
 	 *            friends only.
 	 */
 	public void setBioPrivacy(boolean v) {
-		bioPrivacy.setValue(v);
-		namePrivacy.setValue(v);
+		this.playerPrivacy.setBioPrivacy(v);
 		setChanged();
-		notifyObservers(bioPrivacy);
+		notifyObservers(this.playerPrivacy);
 		clearChanged();
-
 	}
 
 	/**
@@ -600,7 +626,7 @@ public class Player extends User {
 	 *         friends only.
 	 */
 	public boolean getBioPrivacy() {
-		return bioPrivacy.getValue();
+		return this.playerPrivacy.isBioPrivacy();
 	}
 
 	/**
@@ -611,10 +637,9 @@ public class Player extends User {
 	 *            for friends only.
 	 */
 	public void setFriendsPrivacy(boolean v) {
-		friendsPrivacy.setValue(v);
-		namePrivacy.setValue(v);
+		this.playerPrivacy.setFriendsPrivacy(v);
 		setChanged();
-		notifyObservers(friendsPrivacy);
+		notifyObservers(this.playerPrivacy);
 		clearChanged();
 
 	}
@@ -626,7 +651,7 @@ public class Player extends User {
 	 *         friends only.
 	 */
 	public boolean getFriendsPrivacy() {
-		return friendsPrivacy.getValue();
+		return this.playerPrivacy.isFriendsPrivacy();
 	}
 
 	/**
@@ -637,12 +662,10 @@ public class Player extends User {
 	 *            for friends only.
 	 */
 	public void setGamesPrivacy(boolean v) {
-		gamesPrivacy.setValue(v);
-		namePrivacy.setValue(v);
+		this.playerPrivacy.setGamesPrivacy(v);
 		setChanged();
-		notifyObservers(gamesPrivacy);
+		notifyObservers(this.playerPrivacy);
 		clearChanged();
-
 	}
 
 	/**
@@ -652,7 +675,7 @@ public class Player extends User {
 	 *         friends only.
 	 */
 	public boolean getGamesPrivacy() {
-		return gamesPrivacy.getValue();
+		return this.playerPrivacy.isGamesPrivacy();
 	}
 
 	/**
@@ -663,12 +686,10 @@ public class Player extends User {
 	 *            false for friends only.
 	 */
 	public void setAchievementsPrivacy(boolean v) {
-		achievementsPrivacy.setValue(v);
-		namePrivacy.setValue(v);
+		this.playerPrivacy.setAchievementsPrivacy(v);
 		setChanged();
-		notifyObservers(achievementsPrivacy);
+		notifyObservers(this.playerPrivacy);
 		clearChanged();
-
 	}
 
 	/**
@@ -678,36 +699,40 @@ public class Player extends User {
 	 *         false for friends only.
 	 */
 	public boolean getAchievementsPrivacy() {
-		return achievementsPrivacy.getValue();
+		return this.playerPrivacy.isAchievementsPrivacy();
+	}
+
+	/**
+	 * Update Player's library style
+	 * 
+	 * @param style
+	 *            Library Style
+	 */
+	public void updateLibraryLayout(int style) {
+		libraryStyle.setLayout(style);
+		setChanged();
+		notifyObservers(libraryStyle);
+		clearChanged();
 	}
 
     /**
-     * Update Player's library style
-     * @param style Library Style
-     */
-    public void updateLibraryLayout(int style) {
-        libraryStyle.setLayout(style);
-        setChanged();
-        notifyObservers(libraryStyle);
-        clearChanged();
-    }
+	 * Update Player's library style
+	 *
+	 * @param style
+	 *            Library Style
+	 */
+	public void setLibraryStyle(int style) {
+		libraryStyle.setLayout(style);
+	}
 
-    /**
-     * Update Player's library colour
-     * @param colour Colour Scheme
-     */
-    public void updateLibraryColour(int colour) {
-        libraryStyle.setColourScheme(colour);
-        setChanged();
-        notifyObservers(libraryStyle);
-        clearChanged();
-    }
 
-    /**
-     * Get Player's Library Style
-     * @return libraryStyle
-     */
-    public LibraryStyle getLibraryStyle() {
-        return libraryStyle;
-    }
+
+	/**
+	 * Get Player's Library Style
+	 * 
+	 * @return libraryStyle
+	 */
+	public LibraryStyle getLibraryStyle() {
+		return libraryStyle;
+	}
 }

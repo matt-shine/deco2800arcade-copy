@@ -28,6 +28,7 @@ public class Invite {
 		this.userView = userView;
 		
 		this.inviteView.addAcceptListener(new AcceptListener());
+		this.inviteView.addDeclineListener(new DeclineListener());
 		
 	}
 

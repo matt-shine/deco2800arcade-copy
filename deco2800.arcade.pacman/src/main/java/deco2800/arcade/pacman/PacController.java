@@ -19,16 +19,16 @@ public class PacController implements InputProcessor {
 	private PacChar player;
 	private GameMap gameMap;
 	
-	public PacController(PacChar player, GameMap gameMap) {
-		this.player = player;
-		this.gameMap = gameMap;
+	public PacController(PacModel model) {
+		this.player = model.getPlayer();
+		this.gameMap = model.getGameMap();
 	}
 	
 		
 	@Override
 	public boolean keyDown(int key) {
 		Dir facing;
-		//move based on key pressed
+		//Change facing based on key press if that direction is valid
 		if (key == Keys.RIGHT) {
 			facing = Dir.RIGHT;
 		} else if (key == Keys.LEFT){
@@ -37,46 +37,31 @@ public class PacController implements InputProcessor {
 			facing = Dir.UP;
 		} else if (key == Keys.DOWN){ 
 			facing = Dir.DOWN;	
-		} else if (key == Keys.ENTER) {
-			facing = Dir.TEST;			
 		} else {
 			// if not one of the arrow keys
 			return false;
 		}
 		// check for collisions
 		Tile pTile = player.getTile();
-		Dir tempFacing = player.getFacing();
+//		Dir tempFacing = player.getFacing();
 		player.setFacing(facing);
 		System.out.println("Can pacman move? Next tile is " + 
 							player.nextTile(pTile, 1));
 		// Check for teleport tile
-		if (player.nextTile(pTile, 1).getClass() == TeleportTile.class){
-			
-		}
 		
-		if (player.nextTile(pTile, 1).getClass() != WallTile.class) {
-			player.setCurrentState(PacState.MOVING);
-		} else {
-			player.setCurrentState(PacState.IDLE);
-			//stops pacman changing facing if he can't move in that direction			
-			player.setFacing(tempFacing);
-		}
+//		if (player.nextTile(pTile, 1).getClass() == TeleportTile.class){
+//			
+//		}
+//		
+//		if (player.nextTile(pTile, 1).getClass() != WallTile.class) {
+//			player.setCurrentState(PacState.MOVING);
+//		} else {
+//			player.setCurrentState(PacState.IDLE);
+//			//stops pacman changing facing if he can't move in that direction			
+//			player.setFacing(tempFacing);
+//		}
 		//checkGhostCollision(pTile);			
 		return true;
-	}
-
-	private void checkGhostCollision(Tile pTile) {	
-		List<Mover> colList = pTile.getMovers();
-		if (colList.size() > 1) {
-			for (int i=0; i < colList.size(); i++) {
-				if (colList.get(i).getClass() == Ghost.class) {
-					System.out.println("Pacman hit a ghost!");
-					//TODO some death thing
-					player.setCurrentState(PacState.DEAD);
-				}
-			}
-		}
-		
 	}
 	
 	

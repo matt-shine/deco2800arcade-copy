@@ -9,6 +9,7 @@ import org.dbunit.JdbcDatabaseTester;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.dataset.xml.FlatXmlWriter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -58,6 +59,8 @@ public class TestHashStorage {
 
 		hashStorage = new HashStorage();
 		hashStorage.initialise();
+		hashStorage.drop();
+		hashStorage.initialise();
 
 		IDataSet ds = getDataSet();
 		databaseTester.setDataSet(ds);
@@ -106,7 +109,7 @@ public class TestHashStorage {
 		// Check that we successfully registered
 		assertTrue(hashStorage.checkPassword(username, password));
 	}
-	
+
 	@Test
 	public void updatePasswordTest() throws DatabaseException {
 		String password = "It's just a flesh wound.";

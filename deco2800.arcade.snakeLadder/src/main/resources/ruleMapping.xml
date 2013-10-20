@@ -39,4 +39,16 @@
 		<icon>minus_100.png</icon>
 		<implementationClass>ScoreRule</implementationClass>
 	</entry>
+	<entry>
+		<icon>stop1.png</icon>
+		<implementationClass>StopRule</implementationClass>
+		<rule>!1</rule></entry>
+	<entry>
+	<icon>stop2.png</icon>
+	<implementationClass>StopRule</implementationClass>
+	<rule>!2</rule></entry>
+	<entry>
+		<icon>throwAgain.png</icon>
+		<implementationClass>ThrowDiceRule</implementationClass>
+		<rule>TD</rule></entry>
 </ruleMapping>

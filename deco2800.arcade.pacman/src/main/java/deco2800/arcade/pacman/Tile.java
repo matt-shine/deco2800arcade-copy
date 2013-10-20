@@ -3,11 +3,6 @@ package deco2800.arcade.pacman;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 /**
  * A square in the grid of pacman. Can be either a dot, energiser, fruit, wall,
  * door to ghost pen or teleporter TODO work out how slowtiles (ghosts slow down
@@ -15,14 +10,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 public class Tile {
 
-	protected static int sideLength = 16; // length of side of square- should be
+	protected int sideLength; // length of side of square- should be
 											// same for all tiles
-	// sprite sheet, divided into array of arrays of 8x8 tile images
-	protected static final TextureRegion[][] tileSprites = TextureRegion.split(
-			new Texture(Gdx.files.internal("wallsAndPellets.png")), 8, 8);
 	private List<Mover> moversHere; // list of pacman/ghosts for whom this is
 									// the current tile
-	private GameMap gameMap;
+	protected GameMap gameMap;
 
 	// thinking gameMap should become the model- currently Tile only has it
 	// because it needs it for the toString() method, but most eveyrthing else
@@ -30,14 +22,7 @@ public class Tile {
 	public Tile(GameMap gameMap) {
 		moversHere = new ArrayList<Mover>();
 		this.gameMap = gameMap;
-	}
-
-	public void render(SpriteBatch batch, float x, float y) {
-		batch.draw(tileSprites[7][1], x, y, sideLength, sideLength);
-	}
-
-	public static int getSideLength() {
-		return sideLength;
+		sideLength = gameMap.getTileSideLength();
 	}
 
 	public List<Mover> getMovers() {
@@ -62,6 +47,8 @@ public class Tile {
 				+ gameMap.getTileCoords(this).getX() + ", " + 
 				gameMap.getTileCoords(this).getY() + ")";
 	}
+	
+	
 
 	// Equals method which compares tiles based on position
 	public boolean equals(Tile tile) {

@@ -5,10 +5,17 @@ import java.util.Map;
 
 import deco2800.arcade.client.replay.exception.ReplayItemDataInvalidException;
 
-public class ReplayNodeFactory {
+public final class ReplayNodeFactory {
     
     private static Map<String, String[]> lookupEvents = new HashMap<String, String[]>();
 
+    /**
+	 * Ensures that the class can never be instantiated
+	 */
+	private ReplayNodeFactory() {
+		
+	}
+	
     /**
      * Create a replay node from a registered event name.
      * @param eName
@@ -17,7 +24,6 @@ public class ReplayNodeFactory {
      * @throws Exception
      */
     public static ReplayNode createReplayNode(String eName, Object... eData)
-            throws ReplayItemDataInvalidException
     {
         HashMap<String, ReplayItem> data = new HashMap<String, ReplayItem>();
         ReplayItem riTemp;

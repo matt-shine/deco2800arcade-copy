@@ -78,8 +78,6 @@ public class SnakeLadder extends GameClient {
 	private BitmapFont font;
 	public TextButton diceButton;
 	public String statusMessage;
-	private Dice dice;
-	private Dice diceAI;
 	private int turn=0;
 	private HashMap<String,RuleMapping> ruleMapping = new HashMap<String,RuleMapping>();
 	public HighscoreClient player1;
@@ -128,7 +126,7 @@ public class SnakeLadder extends GameClient {
 	}
 
 	public int getturns() {
-		return this.turn%2;
+		return this.turn;
 	}
 
 	public ArrayList<Label> getScoreLabels() {
@@ -248,9 +246,9 @@ public class SnakeLadder extends GameClient {
 	}
 	
 
-	public int taketurns() {
+	public void taketurns() {
 		turn++;
-		return this.turn;
+		turn = turn%this.gamePlayers.length;
 	}
 	
 	@Override
@@ -348,7 +346,7 @@ public class SnakeLadder extends GameClient {
         
         //adding highscore list
         table.row();
-        table.add(new Label("Highest Scores", skin)).spaceTop(20);
+        table.add(new Label("Highest Scores", skin)).spaceTop(100);
         table.row();
         table.add(new Label("Username", skin)).width(100).top().left();
         table.add(new Label("Scores", skin)).width(100).top().left();
@@ -363,30 +361,6 @@ public class SnakeLadder extends GameClient {
         	table.add(new Label(topPlayers.get(i).score+"", skin)).width(100).top().left();
             table.row();
         }
-        
-        //adding achievements list
-        table.row();
-        table.add(new Label("Your Achievements", skin)).spaceTop(20);
-        table.row();
-        
-//        //getting achievements for a game and getting the player's progress in them
-//        AchievementClient achClient = new AchievementClient(networkClient);
-//        AsyncFuture<ArrayList<Achievement>> achievements = achClient.getAchievementsForGame(getGame());
-//        AsyncFuture<AchievementProgress> playerProgress = achClient.getProgressForPlayer(player);
-//        for(Achievement ach : achievements.get()) {
-//            int achProgress = playerProgress.get().progressForAchievement(ach);
-//           double percentage = 100 * (achProgress / (double)ach.awardThreshold);
-//        }
-//        
-//        //getting a list of the achievements a player has been awarded
-//        ArrayList<String> awardedIDs = playerProgress.awardedAchievementIDs();
-//        achievements = achClient.getAchievementsForIDs(awardedIDs);
-//        
-//        //display player's achievement in table
-//        for(Achievement ach : achievements.get()) {
-//        	table.add(new Label(ach.toString(), skin)).width(100).top().left();
-//          table.row();
-//        }
 	}
 	
 	public HashMap<String,RuleMapping> getRuleMapping() {
@@ -411,6 +385,12 @@ public class SnakeLadder extends GameClient {
 		player5.storeScore("Number", 1093);
 		
 	}
-
+	private static final Game game;
+	static {
+		game = new Game();
+		game.id = "snakeLadder";
+		game.name = "Snakes & Ladders";
+		game.description = "Many snakes and ladders."; 
+	}
 }
 

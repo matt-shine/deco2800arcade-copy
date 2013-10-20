@@ -7,11 +7,9 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementClient;
-import deco2800.arcade.wl6.screen.MainGameScreen;
-import deco2800.arcade.wl6.screen.MenuScreen;
-import deco2800.arcade.wl6.screen.SplashScreen;
 
 
 @ArcadeGame(id="Wolfenstein 3D")
@@ -22,12 +20,10 @@ public class WL6 extends GameClient {
     private NetworkClient networkClient;
     @SuppressWarnings("unused")
     private AchievementClient achievementClient;
-
-    private Screen currentScreen;
+    private HighscoreClient highscoreClient = null;
+    
     private MainGameScreen gameScreen;
-    @SuppressWarnings("unused")
     private MenuScreen menuScreen;
-    @SuppressWarnings("unused")
     private SplashScreen splashScreen;
 
     public static int MAP_DIM = 64;
@@ -36,6 +32,7 @@ public class WL6 extends GameClient {
         super(player, networkClient);
         this.networkClient = networkClient;
         this.achievementClient = new AchievementClient(networkClient);
+        //highscoreClient = new HighscoreClient(player.getUsername(), "Wolfenstein", networkClient);
     }
 
     /**
@@ -83,8 +80,7 @@ public class WL6 extends GameClient {
         gameScreen = new MainGameScreen(this);
         menuScreen = new MenuScreen(this);
         splashScreen = new SplashScreen(this);
-        currentScreen = gameScreen;
-        this.setScreen(currentScreen);
+        this.setScreen(splashScreen);
 
         super.create();
 
@@ -93,7 +89,6 @@ public class WL6 extends GameClient {
     @Override
     public void dispose() {
         Gdx.input.setCursorCatched(false);
-        currentScreen.dispose();
         super.dispose();
     }
 
@@ -135,6 +130,18 @@ public class WL6 extends GameClient {
         return GAME;
     }
 
+    
+    public void goToMenu() {
+    	this.setScreen(menuScreen);
+    }
+    
+    
+    public void goToGame() {
+    	this.setScreen(gameScreen);
+    }
 
+    
+    
+    
 
 }

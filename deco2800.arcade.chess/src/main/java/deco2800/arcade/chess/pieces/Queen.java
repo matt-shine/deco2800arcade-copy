@@ -3,9 +3,49 @@ package deco2800.arcade.chess.pieces;
 import java.util.ArrayList;
 import java.util.List;
 
+import deco2800.arcade.chess.FixedSizeList;
 
-public class Queen implements Piece {
 
+public class Queen extends Piece {
+	
+	/**
+	 * Initialises the piece
+	 * 
+	 * @param team
+	 */
+	public Queen(boolean team) {
+		super(team, 0);
+		this.preference = 5;
+	}
+
+	public List<int[]> possibleMoves(int[] currentPos, FixedSizeList<FixedSizeList<Piece>> board_state) {
+		List<int[]> moves = new ArrayList<int[]>();
+		//add all possible moves for directions queen can move in
+		moves.addAll(removeJumps(currentPos, board_state, 1));
+		moves.addAll(removeJumps(currentPos, board_state, 2));
+		moves.addAll(removeJumps(currentPos, board_state, 3));
+		moves.addAll(removeJumps(currentPos, board_state, 4));
+		moves.addAll(removeJumps(currentPos, board_state, 5));
+		moves.addAll(removeJumps(currentPos, board_state, 6));
+		moves.addAll(removeJumps(currentPos, board_state, 7));
+		moves.addAll(removeJumps(currentPos, board_state, 8));
+		return moves;
+	}
+
+	public String toString() {
+		String toString = "";
+		
+		if(!team) {
+			toString+="white ";
+		} else {
+			toString+="black ";
+		}
+		
+		toString+="Queen";
+		
+		return toString;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -36,116 +76,5 @@ public class Queen implements Piece {
 			return false;
 		return true;
 	}
-
-	boolean team;
-	boolean firstMove;
-	boolean active;
-	int preference;
-	
-	/**
-	 * Initialises the piece
-	 * 
-	 * @param team
-	 */
-	public Queen(boolean team) {
-		this.team = team;
-		this.firstMove = false;
-		this.active = true;
-		this.preference = 5;
-	}
-
-	@Override
-	public void deActivate() {
-		active = false;
-		
-	}
-
-	@Override
-	public void reActivate() {
-		active = true;
-		
-	}
-	
-	public String toString() {
-		String toString = "";
-		
-		if(!team) {
-			toString+="white ";
-		} else {
-			toString+="black ";
-		}
-		
-		toString+="Queen";
-		
-		return toString;
-	}
-
-	@Override
-	public boolean getTeam() {
-		return this.team;
-	}
-
-	@Override
-	public boolean getFirstMove() {
-		return this.firstMove;
-	}
-
-	@Override
-	public boolean getActiveState() {
-		return this.active;
-	}
-
-	@Override
-	public int getPreference() {
-		return this.preference;
-	}
-
-	@Override
-	public List<int[]> possibleMoves(int[] currentPos) {
-		List<int[]> moves = new ArrayList<int[]>();
-		int x = currentPos[0];
-		int y = currentPos[1];
-		//add all moves
-		for (int i = 1; i <= 7; i++) {
-			int[] upRight = {x+i,y+i};
-			int[] upLeft = {x-i,y+i};
-			int[] downRight = {x+i,y-i};
-			int[] downLeft = {x-i,y-i};
-			int[] left = {x-i,y};
-			int[] right = {x+i,y};
-			int[] up = {x,y+i};
-			int[] down = {x,y-i};
-			moves.add(upRight);
-			moves.add(upLeft);
-			moves.add(downRight);
-			moves.add(downLeft);
-			moves.add(left);
-			moves.add(right);
-			moves.add(up);
-			moves.add(down);
-		}
-		//remove impossible moves
-		//iterate over all moves in moves List
-		for (int j=0; j<moves.size();j++) {
-			int[] coords = moves.get(j);
-			//remove the move if coordinate is out of bounds
-			if ((coords[0] < 0) || (coords[0] > 7)) {
-				moves.remove(coords);
-				j--;
-			}
-			if ((coords[1] < 0) || (coords[1] > 7)) {
-				moves.remove(coords);
-				j--;
-			}
-		}
-		return moves;
-	}
-
-	@Override
-	public void hasMoved() {
-		// TODO Auto-generated method stub
-		
-	}
-
 
 }

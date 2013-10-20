@@ -1,8 +1,7 @@
 package deco2800.arcade.pacman;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class DotTile extends Tile {
+public final class DotTile extends Tile {
 
 	private final boolean energiser; //true means energiser, false means normal dot
 	private boolean exists; //true if not eaten, false if eaten
@@ -25,18 +24,8 @@ public class DotTile extends Tile {
 		return !exists;
 	}
 	
-	public void eaten() {
+	public void dotEaten() {
 		exists = false;
-	}
-	
-	public void render(SpriteBatch batch, float x, float y) {
-		if (exists) {
-			if (energiser) {
-				batch.draw(tileSprites[1][1], x, y, sideLength, sideLength);	
-			} else {
-				batch.draw(tileSprites[4][1], x, y, sideLength, sideLength);
-			} 
-		} 
 	}
 	
 	public String toString() {

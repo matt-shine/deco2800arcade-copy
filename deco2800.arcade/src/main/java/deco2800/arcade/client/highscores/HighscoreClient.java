@@ -8,6 +8,13 @@ import java.util.List;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.protocol.highscore.*;
 
+/**
+ * This class is designed to be used by game designers in order to allow access
+ * to the Highscore Database. It has a number of methods that allow scores
+ * to be added to and fetched from the database.
+ * 
+ * @author TeamA
+ */
 public class HighscoreClient {
 	private String Username;
 	private String Game_ID;
@@ -58,6 +65,18 @@ public class HighscoreClient {
 		} else {
 			throw new NullPointerException("Game_ID and client can't be null");
 		}
+	}
+	
+	/**
+	 * THIS IS FOR TESTING ONLY
+	 */
+	public HighscoreClient(String user, String game) {
+			this.Username = user;
+			this.Game_ID = game;
+			this.client = null;
+
+			//Init the score list that is used for sending scores
+			scoreQueue = new LinkedList<String>();
 	}
 
 	/**
@@ -207,14 +226,15 @@ public class HighscoreClient {
 	}
 	
 	/**
-	 * Still requires some work in regards to returning a String as per the Api Docs.
-	 * 
 	 * requestID: 2. This function is user DEPENDENT.
+	 * 
+	 * Returns a Highscore object containing the current user's high score
+	 * for this particular game.
 	 * 
 	 * @param highestIsBest If having a high score is best for your game, then
 	 * set this to true. If having a low score is best, then set this to false.
 	 * 
-	 * @return A list of Highscore objects.
+	 * @return A Highscore object.
 	 */
 	public Highscore getUserHighScore(boolean highestIsBest, String type) {
 		GetScoreRequest gsReq = new GetScoreRequest();
@@ -234,21 +254,26 @@ public class HighscoreClient {
 		} else {
 			return this.scoreResponseList.get(0);
 		}
-		
 	}
 	
 	/**
-	 * Still requires some work in regards to returning a String as per the Api Docs.
-	 * 
 	 * requestID: 3. This function is user DEPENDENT.
+	 * 
+	 * Returns the ranking of this user against all others users for the set
+	 * game and type. The ranking is for users, and not individual scores; that 
+	 * is, if p1 has the first 10 scores for a game, and p2 has the 11th 
+	 * score, then p2's ranking will be 2.
+	 * 
+	 * If this user has not scored in this game, then the ranking value will be 
+	 * set to -1.
 	 * 
 	 * @param highestIsBest If having a high score is best for your game, then
 	 * set this to true. If having a low score is best, then set this to false.
 	 * 
 	 * @return A list of Highscore objects. 
 	 */
-	public List<Highscore> getUserRanking(boolean highestIsBest, String type) {
-		/*GetScoreRequest gsReq = new GetScoreRequest();
+	public Highscore getUserRanking(boolean highestIsBest, String type) {
+		GetScoreRequest gsReq = new GetScoreRequest();
 		gsReq.requestID = 3; //Telling the server which query to run
 		gsReq.type = type;
 		gsReq.highestIsBest = highestIsBest;
@@ -257,11 +282,10 @@ public class HighscoreClient {
 		requireUsername();
 		
 		//Send the request off, waiting for response before continuing
-		sendScoreRequest(gsReq);
+		sendScoreRequest(gsReq, true);
 		
 		//Now that the response is back, return the data to the user
-		return this.scoreResponseList;*/
-		return null;
+		return this.scoreResponseList.get(0);
 	}
 	
 	/**
@@ -273,7 +297,6 @@ public class HighscoreClient {
 	 * 
 	 * @return A list of Highscore objects 
 	 */
-
 	public List<Highscore> getWinLoss() {
 		GetScoreRequest gsReq = new GetScoreRequest();
 		gsReq.requestID = 4;
@@ -427,6 +450,13 @@ public class HighscoreClient {
 	}
 	
 	/**
+	 * Get scores currently stored in the queue.
+	 */
+	public LinkedList<String> getMultiScoreQueue() {
+		return this.scoreQueue;
+	}
+	
+	/**
 	 * Returns the number of scores that are currently queued up to be sent to 
 	 * the database.
 	 */
@@ -558,7 +588,7 @@ public class HighscoreClient {
 	//Private
 	//--------------------
 	/**
-	 * Throws a NoUsernameAvailableException is the class was instantiated 
+	 * Throws a NoUsernameAvailableException ifp the class was instantiated 
 	 * without a username.
 	 */
 	private void requireUsername() {

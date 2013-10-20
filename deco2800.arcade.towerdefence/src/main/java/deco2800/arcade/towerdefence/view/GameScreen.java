@@ -2,10 +2,6 @@ package deco2800.arcade.towerdefence.view;
 
 import static com.badlogic.gdx.graphics.Color.*;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -15,7 +11,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -26,14 +21,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.towerdefence.controller.TowerDefence;
-import deco2800.arcade.towerdefence.model.GridObject;
 
 /* GameScreen is where the game will take place
  * There are many buttons on the HUD for selecting different towers, etc.
@@ -45,9 +38,6 @@ public class GameScreen implements Screen {
 	private TowerDefence game;
 
 	private Stage stage, hudStage;
-	// unused
-	// private static float STATUS_HEIGHT = 50f;
-	// private static float BOTTOM_HEIGHT = 150f;
 	Button standardB, fireB, holyB, cryoB, piercingB, barricadeB, backB;
 	private Label towerInfo;
 	BitmapFont black;
@@ -63,25 +53,22 @@ public class GameScreen implements Screen {
 	TextField resourceTF;
 	private OrthographicCamera camera;
 	private static final float BUTTON_HEIGHT = 64f;
-	// unused
-	// private static final float CAMERA_HEIGHT = (720 - STATUS_HEIGHT -
-	// BOTTOM_HEIGHT);
 	private static final float BUTTON_WIDTH = 64f;
-	int resource; /* int for player's resources. */
+	/* int for player's resources. */
+	int resource;
 
 	Texture crystalsTexture, gridMapTexture;
-
 	String fireStr, cryoStr, piercingStr, holyStr, attackStr, standardStr,
 			barricadeStr, defenceStr;
 
 	/*
 	 * Constructor for GameScreen, creates the platform for which the game will
-	 * be played. 720p (720 x 1024) pixels
+	 * be played. 720p (720 x 1280) pixels
 	 */
 	public GameScreen(TowerDefence game) {
 		this.game = game;
 		stage = new Stage();
-		stage.setViewport(4000, 4000, true);
+		stage.setViewport(4166, 4166, true);
 		hudStage = new Stage();
 		hudStage.setViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
 				true);
@@ -95,9 +82,9 @@ public class GameScreen implements Screen {
 		resource = 0;
 		resourceTF = new TextField("", textFieldStyle);
 
+		/* Getting textures from internal file */
 		crystalsTexture = new Texture(Gdx.files.internal("crystals.png"));
 		crystalsTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-
 		gridMapTexture = new Texture(Gdx.files.internal("gridMap.png"));
 		gridMapTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
@@ -108,6 +95,7 @@ public class GameScreen implements Screen {
 		towerInfo.setWrap(true);
 
 		resource = 2000;
+		
 		fireStr = "Fire I: \n" + "Cost: 200\n" + "Max Health: 100\n"
 				+ "Damage: 15";
 		cryoStr = "Cryo I: \n" + "Cost: 200\n" + "Max Health: 100\n"
@@ -160,7 +148,6 @@ public class GameScreen implements Screen {
 		hudStage.act(delta);
 		hudStage.draw();
 
-		Table.drawDebug(hudStage);
 		if (!game.isPaused()) {
 			stage.act(delta);
 			hudStage.act(delta);
@@ -188,7 +175,7 @@ public class GameScreen implements Screen {
 				camera.translate(-3, 0, 0);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			if (camera.position.x < 4000)
+			if (camera.position.x < 4166)
 				camera.translate(3, 0, 0);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
@@ -196,7 +183,7 @@ public class GameScreen implements Screen {
 				camera.translate(0, -3, 0);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			if (camera.position.y < 4000)
+			if (camera.position.y < 4166)
 				camera.translate(0, 3, 0);
 		}
 	}
@@ -207,11 +194,15 @@ public class GameScreen implements Screen {
 			hudStage = new Stage(width, height, true);
 		}
 		if (stage == null) {
-			stage = new Stage(4000, 4000, true);
+			stage = new Stage(4166, 4166, true);
 		}
+		hudStage.clear();
+		stage.clear();
+
 		camera = (OrthographicCamera) stage.getCamera();
 		camera.setToOrtho(false, width, height);
 
+		/* Start adding buttons */
 		standardB = new TextButton("ST", style);
 		standardB.setWidth(BUTTON_WIDTH);
 		standardB.setHeight(BUTTON_HEIGHT);
@@ -363,11 +354,11 @@ public class GameScreen implements Screen {
 		hudStage.addActor(backB);
 		hudStage.addActor(resourceTF);
 		hudStage.addActor(towerInfo);
-		/* adding actors for the camera */
-		// stage.addActor(randomBut2);
-		stage.addActor(gridMap);
 
-		camera.position.set(2000, 2000, 0);
+		/* adding actors for the camera */
+		stage.addActor(gridMap);
+		/* Set camera to the middle */
+		camera.position.set(2083, 2083, 0);
 	}
 
 	@Override
@@ -400,45 +391,5 @@ public class GameScreen implements Screen {
 		costBarRegion = barsAtlas.findRegion("Orange_Bar");
 		penetrationBarRegion = barsAtlas.findRegion("Purple_Bar");
 		armorBarRegion = barsAtlas.findRegion("White_Bar");
-	}
-
-	// Methods
-	/**
-	 * Create List of sprites from frame filenames with set rotation.
-	 * @param object
-	 * @param filenames
-	 * @param rotation
-	 */
-	public List<Sprite> spriteBuild(GridObject object, List<String> filenames){
-		
-		List<Sprite> builtSprites = new ArrayList<Sprite>();
-		// Iterate over the list of filenames
-		for (int i=0; i<filenames.size();i++){
-			Texture texture = new Texture(Gdx.files.internal(filenames.get(i)));
-			Sprite sprite = new Sprite(texture);
-			sprite.setPosition(object.position().x, object.position().y);
-			sprite.setRotation(object.rotation());
-			builtSprites.add(sprite);
-		}
-		return builtSprites;
-		
-	}
-	
-	/**
-	 * Draw sprites to the screen.
-	 * @param sprites
-	 */
-	public void animate(List<Sprite> sprites) {
-		// Create an Iterator
-		Iterator<Sprite> sprIter = sprites.iterator();
-		// So long as there's more sprites in the animation
-		while (sprIter.hasNext()) {
-			// Get the next frame
-			Sprite currentFrame = sprIter.next();
-			batch.begin();
-			currentFrame.draw(batch);
-			batch.end();
-		}
-
 	}
 }

@@ -3,6 +3,7 @@ package deco2800.arcade.pacman;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
+import deco2800.arcade.pacman.Ghost.GhostName;
 import deco2800.arcade.pacman.Ghost.GhostState;
 
 /**
@@ -121,10 +122,18 @@ public abstract class Mover {
 	public void checkTile(Tile tile){
 		
 		// Get dead ghosts back into the pen!
-		if (this.getClass() == Ghost.class){
+		if (this.getClass() == Ghost.class){	
 			if (tileInDir(1, Dir.DOWN) == gameMap.getGhostDoors().get(0) &&
 					((Ghost)this).getCurrentState() == GhostState.DEAD){
-				this.currentTile = gameMap.getGhostStarts()[0];
+				GhostName name = ((Ghost)this).getGhostName();
+				int num = 0;
+				switch (name){
+				case PINKY: num = 1; break;
+				case INKY: num = 2; break;
+				case CLYDE: num = 3; break;
+				default: num = 0; break;
+				}		
+				this.currentTile = gameMap.getGhostStarts()[num];
 				this.drawX = gameMap.getTileCoords(currentTile).getX();
 				this.drawY = gameMap.getTileCoords(currentTile).getY();
 				this.updatePosition();

@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 import deco2800.arcade.pacman.Ghost.GhostState;
 import deco2800.arcade.pacman.PacChar.PacState;
@@ -212,8 +214,7 @@ public class PacView {
 	private void drawGhost() {
 		// draw ghost facing the appropriate direction
 		if (blinky.getCurrentState() == GhostState.DEAD
-				|| blinky.getCurrentState() == GhostState.SCATTER
-				|| blinky.getCurrentState() == GhostState.PENNED) {
+				|| blinky.getCurrentState() == GhostState.SCATTER) {
 			batch.draw(ghostFrames[4][blinky.getSpritePos()],
 					blinky.getDrawX(), blinky.getDrawY(), blinky.getWidth(),
 					blinky.getHeight());
@@ -224,8 +225,7 @@ public class PacView {
 		}
 
 		if (pinky.getCurrentState() == GhostState.DEAD
-				|| pinky.getCurrentState() == GhostState.SCATTER
-				|| pinky.getCurrentState() == GhostState.PENNED) {
+				|| pinky.getCurrentState() == GhostState.SCATTER) {
 			batch.draw(ghostFrames[4][pinky.getSpritePos()], pinky.getDrawX(),
 					pinky.getDrawY(), pinky.getWidth(), pinky.getHeight());
 		} else {
@@ -235,21 +235,28 @@ public class PacView {
 	}
 	
 	private void drawPacman() {
-		//draw pacman facing the appropriate direction
-		if (player.getCurrentState() == PacState.DEAD){
-		batch.draw(pacmanFrames[player.getSpritePos()], player.getDrawX(), 
-				player.getDrawY(), player.getWidth(), player.getHeight());
-		} else {	
-		batch.draw(pacmanFrames[player.getSpritePos()], player.getDrawX(), 
-				player.getDrawY(), player.getWidth(), player.getHeight());
+		// draw pacman facing the appropriate direction
+		if (player.getCurrentState() == PacState.DEAD) {
+			batch.draw(pacmanFrames[player.getSpritePos()], player.getDrawX(),
+					player.getDrawY(), player.getWidth(), player.getHeight());
+		} else {
+			batch.draw(pacmanFrames[player.getSpritePos()], player.getDrawX(),
+					player.getDrawY(), player.getWidth(), player.getHeight());
 		}
-		
+
 		// Play sound if moving
-		if (player.getCurrentState() == PacState.MOVING){
-			waka.play();
+		if (player.getCurrentState() == PacState.MOVING) {
+			waka.setLooping(waka.play(), true);
+			// Timer.schedule(new Task() { // Play waka on a 1 sec loop
+			// public void run() {
+			// waka.dispose();
+			// }
+			// }, 1);
+		} else {
+			waka.stop();
 		}
 	}
-	
+
 	/**
 	 * Displays the score of the current Mover.
 	 * When support for multiple player-controlled movers is implemented, printing

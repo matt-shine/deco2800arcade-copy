@@ -31,7 +31,6 @@ public class Pacman extends GameClient {
 	public final int SCREEN_WIDTH = 1280;	
 	private final int NUM_GHOSTS = 4;
 	public boolean gamePaused;
-	Sound waka = Gdx.audio.newSound(Gdx.files.internal("Chomping.mp3"));
 	
 	
 	private PacModel model; // model for Pacman	

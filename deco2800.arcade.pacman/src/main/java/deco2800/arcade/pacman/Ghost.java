@@ -5,13 +5,12 @@ import java.util.List;
 
 import org.lwjgl.util.Point;
 
-import deco2800.arcade.pacman.PacChar.PacState;
-import static java.lang.Math.*;
+import deco2800.arcade.pacman.Mover.Dir;
 
 public final class Ghost extends Mover {
 
 	public enum GhostState {
-		CHASE, SCATTER, FRIGHT, DEAD
+		CHASE, SCATTER, FRIGHT, DEAD, PENNED
 	}
 
 	public enum GhostName {
@@ -30,38 +29,35 @@ public final class Ghost extends Mover {
 	private Tile previousTile;
 	// private Animation walkAnimation; this should move to PacView
 
-	public Ghost(GameMap gameMap, GhostName ghost, PacChar player) {
+	public Ghost(GameMap gameMap, GhostName ghostName, PacChar player) {
 		super(gameMap);
 		this.player = player;
-		this.ghostName = ghost;
+		this.ghostName = ghostName;
 		int num;
-		switch (ghost) {
+		switch (ghostName) {
 		case PINKY: num = 1; break;
 		case INKY: num = 2; break;
 		case CLYDE: num = 3; break;
 		default: num = 0; break;
 		}
-//		currentTile = gameMap.getGhostStarts()[num];  //This is the actual starting positon in pen
-		currentTile = gameMap.getFruitRight(); // For testing purposes
+
+		facing = Dir.UP;
+		currentState = GhostState.PENNED;
+		targetTile = currentTile = gameMap.getGhostStarts()[num];  //This is the actual starting positon in pen
+//		currentTile = gameMap.getFruitRight(); // For testing purposes
 		// makes the previous tile the one to right, since he's facing left
 		Point current = gameMap.getTilePos(currentTile);
 		previousTile = gameMap.getGrid()[current.getX() + 1][current.getY()];
 		drawX = gameMap.getTileCoords(currentTile).getX(); 
 		drawY = gameMap.getTileCoords(currentTile).getY(); 
-
-		facing = Dir.LEFT;
 		// DEBUGGING PRINT
 //		System.out.println("drawX % 16 is: " + (drawX % 16)
-//				+ ", drawY % 16 is: " + (drawY % 16));
-
-		
-		currentState = GhostState.CHASE;
-
+//				+ ", drawY % 16 is: " + (drawY % 16));		
 		width = widthVal;
 		height = heightVal;
-		updatePosition();
 		moveDist = 1;
 		currentTile.addMover(this);
+		updatePosition();
 		// System.out.println(this);
 		// animation not necessary unless Pacman moving
 		// walkAnimation = new Animation(0.025f, pacmanFrames);
@@ -71,172 +67,96 @@ public final class Ghost extends Mover {
 	/**
 	 * Prepares to draw a Ghost
 	 */
-	public void prepareDraw() {
-		spritePos = 3;
-		ghost_move();
-		if (facing == Dir.RIGHT) {
-			spritePos = 1;
-		} else if (facing == Dir.UP) {
-			spritePos = 5;
-		} else if (facing == Dir.DOWN) {
-			spritePos = 7;
-		} 
+	public void prepareDraw() {		
+		updateTargetTile();
+		facing = getNextTileDirection();
 		
-		// Check ghost wall collision
-		if (!this.checkNoWallCollision(this.getTile())){
-//			currentState = GhostState.SCATTER;
-			facing = Dir.LEFT;
+		if (currentState == GhostState.CHASE) {
+			spritePos = 3;
+			if (facing == Dir.RIGHT) {
+				spritePos = 1;
+			} else if (facing == Dir.UP) {
+				spritePos = 5;
+			} else if (facing == Dir.DOWN) {
+				spritePos = 7;
+			} 
+		} else if (currentState == GhostState.SCATTER){
+			spritePos = 0;
+		}  else if (currentState == GhostState.DEAD){
+			spritePos = 5;
+			if (facing == Dir.RIGHT) {
+				spritePos = 4;
+			} else if (facing == Dir.UP) {
+				spritePos = 6;
+			} else if (facing == Dir.DOWN) {
+				spritePos = 7;
+			} 
+		} else if (currentState == GhostState.PENNED){
+			spritePos = 1;
+		}
+		
+		
+		// Check whether energised
+		if (gameMap.isEnergized() && currentState == GhostState.CHASE){
+			System.out.println("Ghosts scatter!");
+			currentState = GhostState.SCATTER;
+			// TODO: more stuff
+		} else if (!gameMap.isEnergized() && currentState == GhostState.SCATTER) {
+			System.out.println("Ghosts back to the chase!");
+			currentState = GhostState.CHASE;
 		}
 		
 		// checks if ghost is moving, and if so keeps him moving in that
 		// direction
-		int corr = 0;
-		if (currentState == GhostState.CHASE) {
+		
+		if (currentState == GhostState.CHASE ||
+				currentState == GhostState.SCATTER) {
 			if (facing == Dir.LEFT) {
 				drawX -= moveDist;
-//				drawY = gameMap.getTileCoords(currentTile).getY() - corr;
 			} else if (facing == Dir.RIGHT) {
 				drawX += moveDist;
-//				drawY = gameMap.getTileCoords(currentTile).getY() - corr;
 			} else if (facing == Dir.UP) {
 				drawY += moveDist;
-//				drawY = gameMap.getTileCoords(currentTile).getX() - corr;
 			} else if (facing == Dir.DOWN) {
 				drawY -= moveDist;
-//				drawY = gameMap.getTileCoords(currentTile).getX() - corr;
+			}
+		} else if (currentState == GhostState.DEAD) {
+			if (facing == Dir.LEFT) {
+				drawX -= moveDist * 2;
+			} else if (facing == Dir.RIGHT) {
+				drawX += moveDist * 2;
+			} else if (facing == Dir.UP) {
+				drawY += moveDist * 2;
+			} else if (facing == Dir.DOWN) {
+				drawY -= moveDist * 2;
+			}
+		}
+		updatePosition();
+		releaseGhosts();
+	}
+
+	/** Updates the target tile for the ghost. So far only does Blinky 
+	 * and Pinky's targeting schemes */
+	private void updateTargetTile() {
+		if (currentState == GhostState.CHASE) {
+			if (ghostName == GhostName.BLINKY) {
+				targetTile = player.getCurTile();
+			} else if (ghostName == GhostName.PINKY) {
+				targetTile = player.nextTile(player.getCurTile(), 4);
 			} else {
-				currentState = GhostState.SCATTER;
-				facing = Dir.LEFT;
+				targetTile = player.getCurTile();
 			}
-			updatePosition();
+		} else if (currentState == GhostState.SCATTER ||
+				currentState == GhostState.DEAD){
+			targetTile = gameMap.getGhostDoors().get(0);
 		}
-	}
-
-	public String toString() {
-		return ghostName + " at (" + midX + ", " + midY + ") drawn at {"
-				+ drawX + ", " + drawY + "}, " + currentState + " in "
-				+ currentTile;
-	}
-
-	/**
-	 * Updates the target tile for the ghost so far only does blinky and pinky
-	 */
-
-	public void updateTargetTile() {
-		System.out.println("<!> " + this.ghostName + " Target is: "
-				+ player.getTile());
-		if (ghostName == GhostName.BLINKY) {
-			targetTile = player.getTile();
-		} else if (ghostName == GhostName.PINKY) {
-			try {
-				targetTile = player.nextTile(player.getTile(), 4);
-			} catch (ArrayIndexOutOfBoundsException e) {
-				// Trying to finda tile outside the map.
-				targetTile = player.nextTile(player.getTile(), 1);
-			}
-
-		} else {
-			targetTile = player.getTile();
-		}
-	}
-
-	/**
-	 * calculates the straight line distance between the current (start) tile
-	 * and the target tile.
-	 * 
-	 * @param start
-	 * @param target
-	 * @return
-	 */
-	public double calcDist(Tile start, Tile target) {
-		Point startPoint = gameMap.getTilePos(start);
-		Point targetPoint = gameMap.getTilePos(target);
-		int startx = startPoint.getX();
-		int starty = startPoint.getY();
-		int targetx = targetPoint.getX();
-		int targety = targetPoint.getY();
-		double dist;
-		int distx = targetx - startx;
-		int disty = targety - starty;
-		System.out.println("distx: " + distx + " disty: " + disty);
-		dist = sqrt((distx * distx + disty * disty));
-		return dist;
-	}
-
-	public void setTargetTile(Tile targetTile) {
-		this.targetTile = targetTile;
-	}
-
-	/**
-	 * returns a list of testTiles that can be walked into. returns them in the
-	 * order of left, down, up, right
-	 * 
-	 * @param current
-	 * @return
-	 */
-	public List<Tile> getTestTiles(Tile current) {
-		Point currentPoint = gameMap.getTilePos(current);
-		List<Tile> testTiles = new ArrayList<Tile>();
-		int currentX = currentPoint.getX();
-		int currentY = currentPoint.getY();
-		
-		int upY = currentY + 1;
-		int leftX = currentX - 1;
-		int downY = currentY - 1;
-		int rightX = currentX + 1;
-
-		Tile upTile = gameMap.getGrid()[currentX][upY];
-		Tile leftTile = gameMap.getGrid()[leftX][currentY];
-		Tile downTile = gameMap.getGrid()[currentX][downY];
-		Tile rightTile = gameMap.getGrid()[rightX][currentY];
-		
-		if (this.nextTile(this.currentTile, 1, Dir.UP).getClass() != WallTile.class &&
-				!this.nextTile(this.currentTile, 1, Dir.UP).equals(previousTile)){
-			testTiles.add(upTile);
-		} if (this.nextTile(this.currentTile, 1, Dir.DOWN).getClass() != WallTile.class &&
-				!this.nextTile(this.currentTile, 1, Dir.DOWN).equals(previousTile)){
-			testTiles.add(downTile);
-		} if (this.nextTile(this.currentTile, 1, Dir.LEFT).getClass() != WallTile.class &&
-				!this.nextTile(this.currentTile, 1, Dir.LEFT).equals(previousTile)){
-			testTiles.add(leftTile);
-		} if (this.nextTile(this.currentTile, 1, Dir.RIGHT).getClass() != WallTile.class &&
-				!this.nextTile(this.currentTile, 1, Dir.RIGHT).equals(previousTile)){
-			testTiles.add(rightTile);
-		}
-		
-		System.out.println("List of test tiles: " + testTiles);
-		return testTiles;
-	}
-
-	/**
-	 * returns a list of distances in the same order of the testTiles
-	 * 
-	 * @param testTiles
-	 * @param current
-	 * @return
-	 */
-	public List<Double> getDists(List<Tile> testTiles, Tile target) {
-		double tempDist;
-		List<Double> dists = new ArrayList<Double>();
-
-		for (Tile tTile : testTiles) {
-			System.out.println("target: " + target + "tTile: " + tTile );
-			tempDist = calcDist(target, tTile);
-			dists.add(tempDist);
-		}
-		System.out.println(dists);
-		return dists;
 	}
 
 	/**
 	 * Returns the direction that the nextTile is in, in relation to the current
 	 * tile
-	 * 
-	 * @param current
-	 * @param nextTile
-	 * @return
 	 */
-	public Dir getDirection() {
+	private Dir getNextTileDirection() {
 		Point currentPoint = gameMap.getTilePos(currentTile);
 		Point nextPoint = gameMap.getTilePos(getNextTile());
 		int currentX = currentPoint.getX();
@@ -244,37 +164,25 @@ public final class Ghost extends Mover {
 		int nextX = nextPoint.getX();
 		int nextY = nextPoint.getY();
 		
-		System.out.println("<<getDirection>> current: [" + currentX +
-				 "," + currentY + "]  next: [" + nextX + "," + nextY + "]");
 		if (nextX > currentX) {
-			System.out.println("    next tile is RIGHT");
 			return Dir.RIGHT;
 		} else if (nextX < currentX) {
-			System.out.println("    next tile is LEFT");
 			return Dir.LEFT;
 		} else if (nextY > currentY) {
-			System.out.println("    next tile is UP");
 			return Dir.UP;
 		} else {
-			System.out.println("    next tile is DOWN");
 			return Dir.DOWN;
 		}
 	}
-
-	/**
-	 * Returns the next immediate tile for the Ghost to move to.
-	 */
-
-	public Tile getNextTile() {
-		List<Tile> testTiles = getTestTiles(currentTile);
-		List<Double> dists = getDists(testTiles, this.targetTile);
-		System.out.println(dists);
-		int tileNum = 0;
+	
+	/** Returns the tile adjacent to the ghost which is closest to the target tile */
+	private Tile getNextTile() {
+		List<Tile> testTiles = getTestTiles();
 		double dist = 9999;
 		double temp;
-
-		for (int i = 0; i < dists.size(); i++) {
-			temp = dists.get(i);
+		int tileNum = 0; //number of nextTile
+		for (int i = 0; i < testTiles.size(); i++) {
+			temp = calcDist(testTiles.get(i));
 			if (temp < dist) {
 				dist = temp;
 				tileNum = i;
@@ -282,18 +190,82 @@ public final class Ghost extends Mover {
 		}
 		return testTiles.get(tileNum);
 	}
-
-	private void ghost_move() {
-		updateTargetTile();
-		facing = getDirection();
+	
+	/** Returns a list of testTiles that can be walked into. returns them in the
+	 * order left, right, up, down (same as enum) */
+	private List<Tile> getTestTiles() {
+		List<Tile> testTiles = new ArrayList<Tile>();		
+		for (Dir dir: Dir.values()) {
+			Dir opposite = dir; //won't ever stay like this but needed for initialisation
+			switch(dir) {
+			case UP: opposite = Dir.DOWN; break;
+			case DOWN: opposite = Dir.UP; break;
+			case LEFT: opposite = Dir.RIGHT; break;
+			case RIGHT: opposite = Dir.LEFT; break;
+			}
+			Tile next = tileInDir(1, dir);
+			if (next.getClass() != WallTile.class && facing != opposite &&
+					!next.equals(previousTile)) {
+				testTiles.add(next);
+			}
+		}
+		return testTiles;
+	}	
+	
+	private void releaseGhosts(){
+		if (currentState == GhostState.PENNED){
+			facing = Dir.UP;
+			if (gameMap.getDotsEaten() == 7){ // Release blinky!
+				if (ghostName == GhostName.BLINKY){
+					currentTile = nextTile(currentTile, 2);
+					drawX = gameMap.getTileCoords(currentTile).getX();
+					drawY = gameMap.getTileCoords(currentTile).getY();
+					updatePosition();
+					setCurrentState(GhostState.CHASE);
+				}
+			} else if (gameMap.getDotsEaten() == 17){ // Release pinky!
+				if (ghostName == GhostName.PINKY){
+					currentTile = nextTile(currentTile, 2);
+					drawX = gameMap.getTileCoords(currentTile).getX();
+					drawY = gameMap.getTileCoords(currentTile).getY();
+					updatePosition();
+					setCurrentState(GhostState.CHASE);
+				}
+			}
+		}
 	}
+	
+	/**
+	 * Calculates the Euclidean distance between a tile
+	 * and the target tile.
+	 */
+	public double calcDist(Tile start) {
+		Point startPoint = gameMap.getTilePos(start);
+		Point targetPoint = gameMap.getTilePos(targetTile);
+		int distx = targetPoint.getX() - startPoint.getX();
+		int disty = targetPoint.getY() - startPoint.getY();
+		return Math.sqrt(Math.pow(distx, 2) + Math.pow(disty, 2));
+	}	
 
 	public GhostState getCurrentState() {
 		return currentState;
 	}
 
+	public GhostName getGhostName(){
+		return ghostName;
+	}
 	public void setCurrentState(GhostState currentState) {
 		this.currentState = currentState;
+	}
+	
+	public String toString() {
+		return ghostName + " at (" + midX + ", " + midY + ") drawn at {"
+				+ drawX + ", " + drawY + "}, " + currentState + " in "
+				+ currentTile;
+	}
+	
+	public void setPreviousTile(Tile tile){
+		previousTile = tile;
 	}
 
 }

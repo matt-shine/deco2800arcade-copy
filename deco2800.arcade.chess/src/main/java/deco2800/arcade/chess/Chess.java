@@ -584,12 +584,14 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 					}
 					return true;
 				}
-
+				movingPiece.hasMoved();
 				movingPiece = board.nullPiece;
 				moving = false;
 				return false;
 			}
 		}
+		
+		
 		return true;
 	}
 

@@ -1,15 +1,23 @@
 package deco2800.arcade.pacman;
 
+import java.util.ArrayList;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Logger;
 
+import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeInputMux;
-import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.AchievementProgress;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.utils.AsyncFuture;
 
 /**
  * The main Pacman game class, which sets up the model, view and controller 
@@ -22,6 +30,8 @@ public class Pacman extends GameClient {
 	public final int SCREEN_HEIGHT = 720;
 	public final int SCREEN_WIDTH = 1280;	
 	private final int NUM_GHOSTS = 4;
+	public boolean gamePaused;
+	
 	
 	private PacModel model; // model for Pacman	
 	private PacView view; // view for Pacman	
@@ -32,14 +42,17 @@ public class Pacman extends GameClient {
 	 *  it causes NullPointers for the tests when it tries to load Textures */
 	private boolean viewNotSetUp; 
 	
-	//not used yet
-	//private NetworkClient networkClient;
-	
+    private NetworkClient networkClient;
+    private AchievementClient achievementClient;
+    
+		
 	//lets us log stuff, left package private so we don't have to make a new one in each class
 	Logger logger = new Logger("Pacman");
 		
 	public Pacman(Player player1, NetworkClient networkClient) {
 		super(player1, networkClient);		
+		this.networkClient = networkClient; // Once we can merge with master, this will work with new Achievements.
+		this.incrementAchievement("pacman.onegame");
 	}	
 		
 	/**
@@ -53,12 +66,12 @@ public class Pacman extends GameClient {
 
 			@Override
 			public void hide() {
-				//TODO implement stuff to pause game here
+				gamePaused = false;
 			}
 			 
 			@Override
 			public void show() {
-				//TODO implement stuff to unpause game here
+				gamePaused = true;
 			}
 
 			@Override
@@ -87,6 +100,18 @@ public class Pacman extends GameClient {
 		//initialise receiver for input- use the Arcade Multiplexer
 		controller = new PacController(model);
 		ArcadeInputMux.getInstance().addProcessor(controller);
+		
+		
+		// Achievement stuff
+		AchievementClient achievementClient = 
+				new AchievementClient(networkClient);
+		AsyncFuture<ArrayList<Achievement>> achievements = achievementClient.getAchievementsForGame(game);
+		AsyncFuture<AchievementProgress> playerProgress = achievementClient.getProgressForPlayer(player);
+		
+		for (Achievement ach : achievements.get()) {
+			System.out.println(ach.toString());
+		}
+		
 	}
 	
 	/**
@@ -96,6 +121,7 @@ public class Pacman extends GameClient {
 	public void dispose() {
 		super.dispose();
 		ArcadeInputMux.getInstance().removeProcessor(controller);
+		
 		//TODO dispose more stuff here? Perhaps the view things?
 	}
 
@@ -103,36 +129,6 @@ public class Pacman extends GameClient {
 	public void pause() {
 		super.pause();
 	}
-	
-	/* Commenting this out because it's not being used and is really old
-	private void makeChanges() {
-		
-		 // Respond to user input depending on the game state
-	    switch(gameState) {	    
-	    //TODO BLARH apparently this commented bit of code isn't even being reached
-	    // (certainly none of my log statements are coming up, not sure if that's 
-	    // cause I set it up wrongly- can't get them to show up anywhere. But yeah, so
-	    // i can't get it to change gamestate
-	    case READY: //Ready to initialise the game
-//	    	if (controller.keyDown(Keys.ANY_KEY)) {
-//	    		startGame();
-//	    	}
-	    	break;	    	
-	    case RUNNING: 
-	    	logger.debug("Still running");	
-	    	if (controller.keyDown(Keys.ESCAPE)) {
-	    		gameState = GameState.GAMEOVER;
-	    	}
-	    	break;	    	
-	    case GAMEOVER: //The game has been won, wait to exit
-	    	logger.debug("Game over man, game over!");	
-	    	if (controller.keyDown(Keys.ANY_KEY)) {
-	    		gameOver();
-	    		ArcadeSystem.goToGame(ArcadeSystem.UI);
-	    	}
-	    	break;
-	    }	    
-	}*/
 	
 	/**
 	 * Called continually to draw the screen unless specifically told not to be
@@ -143,16 +139,32 @@ public class Pacman extends GameClient {
 		if (viewNotSetUp) {
 			view = new PacView(model);
 			viewNotSetUp = false;
+		}		
+		updateAchievements();		
+		// make changes in the model to prepare for rendering if overlay
+		// not active and game not over.
+		if (!gamePaused && !getModel().getGameMap().isGameOver()) {
+			model.prepareDraw();
 		}
-		//make changes in the model to prepare for rendering
-		model.prepareDraw();
+		
 		view.render();
-		super.render();		
+		super.render();			
 	}
 	
-	private void startGame() {	
-		logger.debug("Game is now running");		
-		//gameState = GameState.RUNNING;	
+	private void updateAchievements() {
+		// Update checks for achievements
+		if (getModel().getGameMap().getDotsEaten() == 100){
+			this.incrementAchievement("pacman.insatiable");
+		}
+		
+		if (getModel().getGameMap().getDotsEaten() == 244){
+			// TODO: some end of game stuff
+			this.incrementAchievement("pacman.completionist");
+		}
+		
+		if (getModel().getGameMap().getGhostsEaten() >= 1){
+			this.incrementAchievement("pacman.ghostbuster");
+		}			
 	}
 		
 	@Override

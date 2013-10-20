@@ -1,11 +1,16 @@
 package deco2800.arcade.model;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.xml.stream.*;
 
@@ -78,32 +83,35 @@ public class XMLReader {
 		
 	}
 	
-	public  void saveAccoladeContainer(AccoladeContainer accolades){
-		int indentLeve = 0;
-		String output = "";
-		output += "<?xml version=\"1.0\"?>\n";
-		output += "<accolades>";
-		output += "<gameID>\"" + accolades.getGameID() + "\"</gameID>";
+	public static void saveAccoladeContainer(AccoladeContainer accolades, String fileLocation) throws IOException{
+		Path path = Paths.get(fileLocation);
+		BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
+		
+		writer.write("<?xml version=\"1.0\"?>\n");
+		writer.write("<accolades>\n");
+		writer.write("<gameID>\"" + accolades.getGameID() + "\"</gameID>\n");
 		for(Accolade accolade : accolades){
-			output += "\t<accolade>\n";
-			output += "\t\t<id>\"" + accolade.getID().toString() + "\"</id>\n";
-			output += "\t\t<value>\"" + accolade.getValue().toString() + "\"</value>\n";
-			output += "\t\t<name>\"" + accolade.getName() + "\"</name>\n";
-			output += "\t\t<message>\"" + accolade.getRawString() + "\"</message>\n";
-			output += "\t\t<!-- When the value reaches a multiple of this, the popup occurs -->\n";
-			output += "\t\t<popup>\"" + accolade.getPopup().toString() + "\"</popup>\n";
-			output += "\t\t<!-- Message for ingame popup - contains an example of hardcoded $unit (use if different) -->\n";
-			output += "\t\t<popupMessage>\"" + accolade.getPopupMessage() + "\"</popupMessage>\n";
-			output += "\t\t<!-- This will multiplied against the value to produce the final value-->\n";
-			output += "\t\t<modifier>\"" + accolade.getModifier().toString() + "\"</modifier>\n";
-			output += "\t\t<unit>\"" + accolade.getUnit() + "\"</unit>\n";
-			output += "\t\t<tag>\"" + accolade.getTag() + "\"</tag>\n";
-			output += "\t\t<!-- This is the relative local file lovation - should be your server resources folder -->\n";
-			output += "\t\t<image>\"" + accolade.getImagePath() + "\"</image>\n";
-			output += "\t</accolade>\n";			
+			writer.write("\t<accolade>\n"); 
+			writer.write("\t\t<id>\"" + accolade.getID().toString() + "\"</id>\n");
+			writer.write("\t\t<value>\"" + accolade.getValue().toString() + "\"</value>\n");
+			writer.write("\t\t<name>\"" + accolade.getName() + "\"</name>\n");
+			writer.write("\t\t<message>\"" + accolade.getRawString() + "\"</message>\n");
+			writer.write("\t\t<!-- When the value reaches a multiple of this, the popup occurs -->\n");
+			writer.write("\t\t<popup>\"" + accolade.getPopup().toString() + "\"</popup>\n");
+			writer.write("\t\t<!-- Message for ingame popup - contains an example of hardcoded $unit (use if different) -->\n");
+			writer.write("\t\t<popupMessage>\"" + accolade.getRawPopupMessage() + "\"</popupMessage>\n");
+			writer.write("\t\t<!-- This will multiplied against the value to produce the final value-->\n");
+			writer.write("\t\t<modifier>\"" + accolade.getModifier().toString() + "\"</modifier>\n");
+			writer.write("\t\t<unit>\"" + accolade.getUnit() + "\"</unit>\n");
+			writer.write("\t\t<tag>\"" + accolade.getTag() + "\"</tag>\n");
+			writer.write("\t\t<!-- This is the relative local file lovation - should be your server resources folder -->\n");
+			writer.write("\t\t<image>\"" + accolade.getImagePath() + "\"</image>\n");
+			writer.write("\t</accolade>\n");
+			writer.newLine(); 
 			}
-		output += "</accolades>";
-				
+		writer.write("</accolades>");
+		writer.close();
+		
 	}
 	
 	public static String readXML(String fileLocation) throws FileNotFoundException{

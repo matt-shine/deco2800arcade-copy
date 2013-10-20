@@ -96,8 +96,9 @@ public class World {
 		curLevel = new Level(level, rank);
 		
 		
-		
-		Sounds.loadAll();
+		if (!Sounds.areSoundsLoadedYet()) {
+			Sounds.loadAll();
+		}
 		callingInitAfterReloadLevel = false;
 		initCount = 2.5f;
 		init(true);
@@ -106,6 +107,7 @@ public class World {
 					levelScenes = new Level1Scenes(ship, cam, resultsScreen);
 				} else {
 					levelScenes = new Level2Scenes(ship, cam, resultsScreen);
+					Sounds.playLevelMusic();
 				}
 		
 	}
@@ -170,6 +172,11 @@ public class World {
 			if (levelScenes.update(Gdx.graphics.getDeltaTime())) {
 				// The scene is complete; accept input again
 				inputHandler.acceptInput();
+				
+				//if this was the final scene, the game was won
+				if (scenePosition == levelScenes.getStartValues().length) {
+					gameWin();
+				}
 			}
 		
 		// Check for scene start
@@ -193,6 +200,7 @@ public class World {
 					resetLevel();
 				}*/
 				//ship.setState(Player.State.DEATH);
+				ship.setHasDied();
 				System.out.println("SHIP IN BAD POSITION!!!! hearts="+ship.getHearts()+" ship.getPosition().y"+ship.getPosition().y);
 				inputHandler.cancelInput();
 				count -= Gdx.graphics.getDeltaTime();
@@ -692,8 +700,8 @@ public class World {
 				ship.getPosition().x = cam.position.x + cam.viewportWidth/2 -ship.getWidth();
 			}
 			
-			if (ship.getPosition().y < cam.position.y - cam.viewportHeight/2) {
-				ship.getPosition().y = cam.position.y - cam.viewportHeight/2;
+			if (ship.getPosition().y > cam.position.y + cam.viewportHeight/2-ship.getHeight()) {
+				ship.getPosition().y = cam.position.y + cam.viewportHeight/2-ship.getHeight();
 			}
 		}
 	}
@@ -917,6 +925,15 @@ public class World {
 	
 	public void gameOver() {
 		// go back to menu
+		System.out.println("GAME OVER!!!");
+		game.addHighscore(score);
+		game.setScreen(new MainMenu(game));
+
+		
+	}
+	
+	public void gameWin() {
+		// show some message/credits then go back to menu
 		game.addHighscore(score);
 		game.setScreen(new MainMenu(game));
 	}

@@ -7,10 +7,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import deco2800.arcade.cyra.world.ParallaxCamera;
+import deco2800.arcade.cyra.world.Sounds;
 
 public class EnemySpiderBoss extends Enemy {
 	public enum State {
-		IDLE, THROW_ARMS, FIREBALL, RAM, LASER
+		IDLE, THROW_ARMS, FIREBALL, RAM, LASER, DEATH
 	}
 	
 	
@@ -41,8 +42,8 @@ public class EnemySpiderBoss extends Enemy {
 	private boolean performingTell;
 	private EnemySpiderBossArms arms;
 	private int health;
-	private float invincibleTime;
-	private boolean flash;
+	//private float invincibleTime;
+	//private boolean flash;
 	private boolean beingHit;
 	private Array<EnemySpiderBossPopcorn> popcorns;
 	private float phase2fireballPosition;
@@ -84,6 +85,7 @@ public class EnemySpiderBoss extends Enemy {
 		flash = true;
 		ramFrame = 0;
 		//state = State.INTRO1;
+		healthName = "Steven The Mutant Spider";
 		
 		
 	}
@@ -139,6 +141,7 @@ public class EnemySpiderBoss extends Enemy {
 							charges.add(new Rectangle(position.x+MOUTH_OFFSET_X + 0.1f, position.y+MOUTH_OFFSET_Y-0.25f, 1, 1));
 							charges.add(new Rectangle(position.x+MOUTH_OFFSET_X + 0.5f, position.y+MOUTH_OFFSET_Y+0.44f, 1, 1));
 							headFrame = 1;
+							Sounds.playLaserChargeSound(0.5f);
 						}
 					}
 					break;
@@ -318,11 +321,24 @@ public class EnemySpiderBoss extends Enemy {
 						performingTell = false;
 						count = 6f-2*rank;
 						charges.clear();
-						
+						Sounds.stopLaserChargeSound();
 					} else {
 						count = ATTACK_RATE - rank * ATTACK_RANK_RATE;
 						state = State.IDLE;
 						headFrame = 0;
+					}
+					break;
+				case DEATH:
+					count3--;
+					float buffer = 2f;
+					float randX = MathUtils.random(-WIDTH/2-buffer, WIDTH/2+buffer);
+					float randY = MathUtils.random(-HEIGHT/2-buffer, HEIGHT/2+buffer);
+					newEnemies.add(new Explosion(new Vector2(position.x+width/2-Explosion.WIDTH/2+randX, position.y+height/2-Explosion.HEIGHT/2+randY)));
+					Sounds.playExplosionLong(0.5f);
+					count = 0.08f;
+					if (count3 <= 0) {
+						isDead = true;
+						startingNextScene=true;
 					}
 					break;
 				}
@@ -629,6 +645,11 @@ public class EnemySpiderBoss extends Enemy {
 			health = PHASE3_HEALTH;
 			count = ATTACK_RATE;
 			break;
+		case 3:
+			state = State.DEATH;
+			count = 0.1f;
+			count3=7f;
+			break;
 		}
 		//for (MovablePlatformAttachment apa: solidParts) {
 		for (int i=0; i < solidParts.size; i++) {
@@ -669,7 +690,7 @@ public class EnemySpiderBoss extends Enemy {
 	
 	@Override
 	public Rectangle getVulnerableBounds() {
-		return new Rectangle(position.x + width/2-0.2f, position.y + height-4f, 1.6f,3.8f);
+		return new Rectangle(position.x + width/2-0.2f, position.y + height-6f, 1.6f,4.8f);
 	}
 	
 	public void setSolidParts(Array<MovablePlatformAttachment> solidParts) {
@@ -707,7 +728,7 @@ public class EnemySpiderBoss extends Enemy {
 		charges.add(new Rectangle(position.x+MOUTH_OFFSET_X + 1.6f, position.y+MOUTH_OFFSET_Y, 1, 1));
 		charges.add(new Rectangle(position.x+MOUTH_OFFSET_X + 0.1f, position.y+MOUTH_OFFSET_Y-0.25f, 1, 1));
 		charges.add(new Rectangle(position.x+MOUTH_OFFSET_X + 0.5f, position.y+MOUTH_OFFSET_Y+0.44f, 1, 1));
-		
+		Sounds.playLaserChargeSound(0.5f);
 	}
 	
 	public void advanceCutsceneLaser(float delta) {
@@ -735,18 +756,7 @@ public class EnemySpiderBoss extends Enemy {
 		return ramFrame;
 	}
 	
-	public boolean isInvincible() {
-		if (invincibleTime > 0 ) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	public boolean toggleFlash() {
-		flash= !flash;
-		return flash;
-	}
+
 	
 	@Override
 	public boolean displayHealth() {

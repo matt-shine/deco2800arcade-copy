@@ -9,7 +9,7 @@ public class WallBoss extends Enemy{
 	public static final float WIDTH = 4f;
 	public static final float HEIGHT = 8f;
 	public static final int INITIAL_HEALTH = 15;
-	public static final float INVINSIBLE_TIME = 0.3f;
+	public static final float INVINCIBLE_TIME = 0.3f;
 	
 	private int health;
 	private float count;
@@ -28,6 +28,9 @@ public class WallBoss extends Enemy{
 		Array<Enemy> newEnemies = new Array<Enemy>();
 		if (count > 3f-2.9*rank) {
 			newEnemies.add(new SoldierEnemy(new Vector2(cam.position.x-cam.viewportWidth-1.5f, cam.position.y), false));
+		}
+		if (invincibleTime >0) {
+			invincibleTime-=delta;
 		}
 		return null;
 	}
@@ -56,10 +59,13 @@ public class WallBoss extends Enemy{
 	
 	@Override
 	public void handleDamage(boolean fromRight) {
-		health--;
-		if (health==0) {
-			isDead = true;
-			startingNextScene = true;
+		if (invincibleTime <=0) {
+			health--;
+			if (health==0) {
+				isDead = true;
+				startingNextScene = true;
+			}
+			invincibleTime = INVINCIBLE_TIME;
 		}
 	}
 

@@ -48,6 +48,8 @@ public class MainMenu extends AbstractScreen{
 		difficulty[0] = 0.21f;
 		difficulty[1] = 0.76f;
 		difficulty[2] = 0.91f;
+		
+		Sounds.loadAll();
 	}
 	
 	@Override
@@ -57,7 +59,8 @@ public class MainMenu extends AbstractScreen{
 		skin.addRegions(atlas);
 		//blackFont = new BitmapFont(Gdx.files.internal("whitefont.fnt"), false);
 		blackFont = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);
-		Sounds.load();
+		//Sounds.load();
+		Sounds.playMenuMusic();
 		
 	}
 	

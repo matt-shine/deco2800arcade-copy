@@ -68,12 +68,14 @@ public class Enemy extends Mob {
     private float repeatShootChance = 0.3f;
 	//the distance we try to keep away from the player
     private float personalSpace = 4f;
-    
+    //amount of ammo dropped on death
 	private int ammoDrop = 0;
     @SuppressWarnings("unused")
     private int gunDrop = 0;
-    
-    private KEY_TYPE keyDrop = null;
+    //damage
+    private int damage = 10;
+    //key to drop on death. replaces ammo
+	private KEY_TYPE keyDrop = null;
 
     
     
@@ -122,8 +124,7 @@ public class Enemy extends Mob {
         //if we can see the player and we haven't seen him yet, chase him
         if ((this.state == STATES.PATH || this.state == STATES.STAND) && canSee(gameModel.getPlayer(), gameModel)){
         	this.setVel(new Vector2(0, 0));
-        	instantStateChange(STATES.IDLE);
-        	delayedStateChange(STATES.CHASE);
+        	instantStateChange(STATES.CHASE);
         }
 
 
@@ -397,7 +398,11 @@ public class Enemy extends Mob {
      * @return Damage to be dealt.
      */
     public int calcDamage(int dist, boolean speed, boolean look) {
-        boolean hit = false;
+    	
+    	return this.damage;
+    	
+    	
+        /*boolean hit = false;
         if (randInt(0, 255, getRand()) < ((speed ? 160 : 256) - (dist * (look ? 16 : 8)))) {
             hit = true;
         }
@@ -422,7 +427,7 @@ public class Enemy extends Mob {
             damage = 0;
         }
 
-        return damage;
+        return damage;*/
     }
     
     
@@ -572,6 +577,14 @@ public class Enemy extends Mob {
 
 	public void setRepeatShootChance(float repeatShootChance) {
 		this.repeatShootChance = repeatShootChance;
+	}
+	
+    public int getDamage() {
+		return damage;
+	}
+
+	public void setDamage(int damage) {
+		this.damage = damage;
 	}
 
 

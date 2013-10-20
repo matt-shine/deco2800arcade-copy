@@ -15,8 +15,12 @@ public class Mutant extends Enemy {
         setPain(true);
         setRepeatShootChance(0.7f);
         setStateChangeTime(1f);
-        this.setShootChance(1);
+        setShootChance(1);
+        setDamage(18);
+        
+        
         initialiseFromEnemyData(d);
+        
         
     }
 

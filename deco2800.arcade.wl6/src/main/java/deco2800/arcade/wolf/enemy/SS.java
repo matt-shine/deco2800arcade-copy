@@ -16,6 +16,7 @@ public class SS extends Enemy {
         setPain(true);
         setRepeatShootChance(0.95f);
         setStateChangeTime(0.1f);
+        setDamage(4);
         
         initialiseFromEnemyData(d);
         

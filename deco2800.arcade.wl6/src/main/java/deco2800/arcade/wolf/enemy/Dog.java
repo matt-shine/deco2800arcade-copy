@@ -16,6 +16,7 @@ public class Dog extends Enemy {
         setPain(false);
         setPersonalSpace(1);
         setRepeatShootChance(0.5f);
+        setDamage(5);
         
         initialiseFromEnemyData(d);
         

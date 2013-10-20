@@ -3,7 +3,6 @@ package deco2800.arcade.arcadeui;
 import java.util.*;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -22,14 +21,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.client.network.listener.LobbyListener;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
-import deco2800.arcade.protocol.lobby.CreateMatchRequest;
-import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
-import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
-import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.lobby.LobbyMessageRequest;
 import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
 

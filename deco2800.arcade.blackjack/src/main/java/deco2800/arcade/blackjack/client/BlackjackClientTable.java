@@ -84,6 +84,58 @@ public class BlackjackClientTable implements Screen{
 	private Table player5card3;
 	private Table player5card4;
 	private Table player5card5;
+	private Texture S2;
+	private Texture S3;
+	private Texture S4;
+	private Texture S5;
+	private Texture S6;
+	private Texture S7;
+	private Texture S8;
+	private Texture S9;
+	private Texture S10;
+	private Texture SJ;
+	private Texture SQ;
+	private Texture SK;
+	private Texture SA;
+	private Texture H2;
+	private Texture H3;
+	private Texture H4;
+	private Texture H5;
+	private Texture H6;
+	private Texture H7;
+	private Texture H8;
+	private Texture H9;
+	private Texture H10;
+	private Texture HJ;
+	private Texture HQ;
+	private Texture HK;
+	private Texture HA;
+	private Texture D2;
+	private Texture D3;
+	private Texture D4;
+	private Texture D5;
+	private Texture D6;
+	private Texture D7;
+	private Texture D8;
+	private Texture D9;
+	private Texture D10;
+	private Texture DJ;
+	private Texture DQ;
+	private Texture DK;
+	private Texture DA;
+	private Texture C2;
+	private Texture C3;
+	private Texture C4;
+	private Texture C5;
+	private Texture C6;
+	private Texture C7;
+	private Texture C8;
+	private Texture C9;
+	private Texture C10;
+	private Texture CJ;
+	private Texture CQ;
+	private Texture CK;
+	private Texture CA;
 
 	// Constructor
 	public BlackjackClientTable(Blackjack myGame )
@@ -551,5 +603,11 @@ public class BlackjackClientTable implements Screen{
 			tableSeat5.row();
 			tableSeat5.add(moneylabel);
 		}
+	}
+	//Code for updating a specific card in a specific hand
+	private void updateCard(int playerNo, int cardPos, String card){
+		//link card to texture
+		//set texture region to card
+		//update card position in player hand with texture region
 	}
 }

@@ -23,8 +23,10 @@ import java.security.spec.X509EncodedKeySpec;
 public class CertificateHandler {
 
 	private static String algorithm = "RSA";
-	private static String pathClient = "client.cert";
-	private static String pathServer = "server.cert";
+	private static String pathClient = CertificateHandler.class
+			.getClassLoader().getResource("client.cert").getPath();
+	private static String pathServer = CertificateHandler.class
+			.getClassLoader().getResource("server.cert").getPath();
 
 	/**
 	 * Get client certificate from file if it exists

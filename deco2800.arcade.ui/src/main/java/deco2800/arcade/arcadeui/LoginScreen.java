@@ -40,7 +40,7 @@ public class LoginScreen implements Screen {
 		table.setBackground(skin.getDrawable("background"));
 		stage.addActor(table);
 
-		final Label announce = new Label("Welcome to Vapor!\n\nPlease login with your\nusername & password.", skin);
+		final Label announce = new Label("Welcome to Vapor!\n\nPlease login with your\nUsername and Password.", skin);
 		announce.setAlignment(Align.center);
 		final Label errorLabel = new Label("", skin, "error");
 		errorLabel.setAlignment(Align.center);

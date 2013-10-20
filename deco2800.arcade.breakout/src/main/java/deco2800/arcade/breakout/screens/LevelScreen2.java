@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import deco2800.arcade.breakout.Breakout;
+import deco2800.arcade.client.ArcadeInputMux;
 
 public class LevelScreen2 implements Screen {
 	private final Breakout game;
@@ -305,7 +306,7 @@ public class LevelScreen2 implements Screen {
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-
+        ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override
@@ -344,7 +345,8 @@ public class LevelScreen2 implements Screen {
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
-		Gdx.input.setInputProcessor(stage);
+		//Gdx.input.setInputProcessor(stage);
+        ArcadeInputMux.getInstance().addProcessor(stage);
 
 	}
 

@@ -5,6 +5,7 @@ import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -324,7 +325,7 @@ public class SettingsScreen implements Screen {
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
+        ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override
@@ -374,7 +375,8 @@ public class SettingsScreen implements Screen {
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(stage);
+		//Gdx.input.setInputProcessor(stage);
+        ArcadeInputMux.getInstance().addProcessor(stage);
 	}
 
 	/**

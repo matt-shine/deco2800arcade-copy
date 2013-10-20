@@ -4,9 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -64,17 +62,19 @@ public class AchievementScreen extends JFrame{
 	
 	//Declare Images here
 	private ImageIcon picavatar,piclocked, picunlocked, piceditbutton, 
-	piconline, picoffline, select, selecthover;
+	piconline, select, selecthover, logo;
 	private ImageIcon home, homehover, forum, forumhover, store, storehover,
 	library, libraryhover, profile, profilehover;
 			
-	//Declare Fonts to use here
-	Font blackbold = new Font("Verdana", Font.BOLD, 16);
-	Font blacknormal = new Font("Verdana", Font.PLAIN, 14);
-	Font blacksmall = new Font("Verdana", Font.PLAIN, 12);
-	Font blacklink = new Font("Verdana", Font.PLAIN, 15);
-	Font linkbold = new Font("Verdana", Font.BOLD, 14);
-	Font sidebold = new Font("Verdana", Font.BOLD, 12);
+	//Declare Fonts
+	Font blackbold = new Font("Century Gothic", Font.BOLD, 20);
+	Font blacknormal = new Font("Century Gothic", Font.PLAIN, 16);
+	Font blacksmall = new Font("Century Gothic", Font.PLAIN, 13);
+	Font blacklink = new Font("Century Gothic", Font.PLAIN, 16);
+	Font linkbold = new Font("Century Gothic", Font.BOLD, 16);
+	Font sidebold = new Font("Century Gothic", Font.BOLD, 14);
+
+	private String name, description, count;
 	
 	//Logger
 	static Logger log = Logger.getLogger(AchievementScreen.class);
@@ -93,8 +93,6 @@ public class AchievementScreen extends JFrame{
 		piclocked = new ImageIcon("assets/images/achievement_locked.png");
 		picunlocked = new ImageIcon("assets/images/achievement_unlocked.png");
 		piceditbutton = new ImageIcon("assets/images/edit_button.png");
-		piconline = new ImageIcon("assets/images/online.png");
-		picoffline = new ImageIcon("assets/images/offline.png");
 		homehover = new ImageIcon("assets/images/homehover.png");
 		home = new ImageIcon("assets/images/home.png");
 		storehover = new ImageIcon("assets/images/storehover.png");
@@ -164,8 +162,10 @@ public class AchievementScreen extends JFrame{
 	 */
 	public void addgamepanel(){
 		
-		String[] gamelist = {"", "Pong", "Chess", "Burning Skies", "Checkers","Jungle Jump",
-		"Snakes and Ladders","Raiden","Breakout"};
+		String[] gamelist = {"", "Pong", "Chess", "Burning Skies","Jungle Jump",
+				"Breakout","Mix Maze","Pacman", "Land Invaders","Snakes and Ladders",
+				"Raiden"};
+		
 		gameselect = new JComboBox(gamelist);
 		
 		selectbutton = new JButton();
@@ -174,34 +174,34 @@ public class AchievementScreen extends JFrame{
 		selectbutton.setIcon(select);
 		selectbutton.setRolloverIcon(selecthover);
 		
-		gamename = new JLabel("Game Name");
+		gamename = new JLabel();
 	    gamename.setFont(linkbold);
 	    gamename.setForeground(Color.white);
-	    gameachievementcount = new JLabel("15/100");
-	    gameachievementcount.setFont(blackbold);
+	    gameachievementcount = new JLabel();
+	    gameachievementcount.setFont(sidebold);
 	    gameachievementcount.setForeground(Color.white);
-	    gamedescription = new JTextArea("Some description about the game");
+	    gamedescription = new JTextArea();
 	    gamedescription.setFont(blacksmall);
 	    gamedescription.setForeground(Color.white);
 	    gamedescription.setLineWrap(true);
 	    gamedescription.setOpaque(false);
 	    gameicon = new JLabel();
-	    gameicon.setIcon(piclocked);
 	    
 	    gameavatarpanel = new JPanel(new MigLayout());
 	    gameavatarpanel.add(gameicon);
 	    gameavatarpanel.setOpaque(false);
 	    
 	    gameinfopanel = new JPanel(new MigLayout());
-	    gameinfopanel.add(gameachievementcount,"gap left 20px, wrap");
 	    gameinfopanel.add(gamedescription,"width :180px, height :100px");
 	    gameinfopanel.setOpaque(false);
 		
 		gamepanel = new ImagePanel(new ImageIcon("assets/images/Blue_Box.png").getImage());
 		gamepanel.setLayout(new MigLayout());
-		gamepanel.add(gamename,"gap left 10px, wrap");
-		gamepanel.add(gameavatarpanel,"left, gap bottom 50px");
-		gamepanel.add(gameinfopanel,"center, gap bottom 50px");
+		gamepanel.add(gamename,"gap left 15px");
+	    gamepanel.add(gameachievementcount,"gap left 60px, wrap");
+		gamepanel.add(gameavatarpanel,"gap bottom 10px");
+		gamepanel.add(gameinfopanel,"gap bottom 10px");
+		gamepanel.setOpaque(false);
 		
 	}
 	
@@ -223,9 +223,10 @@ public class AchievementScreen extends JFrame{
 	    achievementlist = new JTextArea();
 	    achievementlist.setLineWrap(true);
 	    achievementlist.setFont(blacknormal);
-	    achievementlist.setBackground(Color.white);
+	    achievementlist.setForeground(Color.white);
 	    achievementlist.setEditable(false);
 	    achievementlist.setMargin(new Insets(10,10,10,10));
+	    achievementlist.setOpaque(false);
 	    
 	    achievementbarpanel.add(achievementbar);
         achievementbarpanel.setOpaque(false);
@@ -428,8 +429,7 @@ public void addplayerinfopanel(){
 	 */
 	public String getGameSelection(){
 		
-		//Set selected game identifier
-		System.out.println(gameselect.getSelectedItem().toString());
+		log.info(gameselect.getSelectedItem().toString());
 		return gameselect.getSelectedItem().toString();
 		
 	}
@@ -452,19 +452,44 @@ public void addplayerinfopanel(){
 	
 	/**
 	 *  Set the game's name field
+	 * @param string 
 	 */
-	public void setGameName(){
+	public void setGameName(String name){
 		
-		
+		this.name = name;
+		gamename.setText(name);
 		
 	}
 	
 	/**
 	 *  Set the game's description field
 	 */
-	public void setGameDescription(){
+	public void setGameDescription(String description){
 		
+		this.description = description;
+		gamedescription.setText(description);
 		
+	}
+	
+	/**
+	 *  Set the game's Logo
+	 * @param logo ImageIcon of the game logo
+	 */
+	public void setGameLogo(ImageIcon logo){
+		
+		this.logo = logo;
+		gameicon.setIcon(logo);
+		
+	}
+	
+	/**
+	 *  Set the game's achievement count
+	 * @param count String representation of the achievements
+	 */
+	public void setAchievementCount(String count){
+		
+		this.count = count;
+		gameachievementcount.setText(count);
 		
 	}
 

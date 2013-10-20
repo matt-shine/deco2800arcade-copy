@@ -2,10 +2,7 @@ package deco2800.arcade.chess;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import deco2800.arcade.client.ArcadeInputMux;
-import deco2800.arcade.client.ArcadeSystem;
-
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
@@ -22,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
-public class MenuScreen implements Screen {
+public class SelectScreen implements Screen {
 
 	Texture splashTexture;
 	Texture splashTexture2;
@@ -33,9 +30,9 @@ public class MenuScreen implements Screen {
 	private TextureAtlas map;
 	private Skin skin;
 	private SpriteBatch batch;
-	private TextButton sB, hB, eB;
-
-	public MenuScreen(Chess game) {
+	private TextButton sB, hB;
+	
+	public SelectScreen(Chess game) {
 		this.game = game;
 	}
 
@@ -121,14 +118,12 @@ public class MenuScreen implements Screen {
 		style.down = skin.getDrawable("buttonpressed");
 		style.font = BmFontA;
 
-		sB = new TextButton("Start", style);
-		hB = new TextButton("Help", style);
-		eB = new TextButton("Exit", style);
+		sB = new TextButton("Single Player", style);
+		hB = new TextButton("MultiPlayer", style);
 		List<TextButton> but = new ArrayList<TextButton>();
 		but.add(sB);
 		but.add(hB);
-		but.add(eB);
-
+		
 		for (TextButton button : but) {
 			button.setWidth(200);
 			button.setHeight(50);
@@ -136,19 +131,14 @@ public class MenuScreen implements Screen {
 
 		sB.setX(width / 2 - sB.getWidth() / 2);
 		hB.setX(width / 2 - hB.getWidth() / 2);
-		eB.setX(width / 2 - eB.getWidth() / 2);
-
 		hB.setY(height / 2 - hB.getHeight() / 2);
 		sB.setY(hB.getY() + (2 * (sB.getHeight() + 10)));
-		eB.setY(hB.getY() - (2 * (sB.getHeight() + 10)));
-
-		addListeners(sB, hB, eB);
+		addListeners(sB, hB);
 		stage.addActor(hB);
 		stage.addActor(sB);
-		stage.addActor(eB);
 	}
 
-	public void addListeners(TextButton sB, TextButton hB, TextButton eB) {
+	public void addListeners(TextButton sB, TextButton hB) {
 
 		sB.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y,
@@ -158,7 +148,8 @@ public class MenuScreen implements Screen {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				game.setScreen(game.SelectScreen);
+				game.easyComputerOpponent = true;
+				game.setScreen(game);
 			}
 		});
 
@@ -170,21 +161,8 @@ public class MenuScreen implements Screen {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				game.setScreen(new HelpScreen(game));
-			}
-		});
-
-		eB.addListener(new InputListener() {
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
-				return true;
-			}
-
-			public void touchUp(InputEvent event, float x, float y,
-					int pointer, int button) {
-				ArcadeInputMux.getInstance().removeProcessor(stage);
-				ArcadeInputMux.getInstance().removeProcessor(0);
-				ArcadeSystem.goToGame("arcadeui");				
+				game.easyComputerOpponent = false;
+				game.setScreen(game);
 			}
 		});
 	}

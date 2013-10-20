@@ -200,12 +200,11 @@ public class MainScreen implements Screen {
 //				scrollpane = new ScrollPane(highscore, skin);
 //				scrollpane.setVisible(true);
 			}
-		});
-		
-		List highscore = new List(getHighScore().toArray() , skin);
+		});		
+		List highscore = new List(getHighScore().toArray() , skin);	
 		scrollpane = new ScrollPane(highscore, skin);
 		scrollpane.setVisible(true);
-		
+
 		// Creating of the table to store the buttons and labels
 		Table mainTable =  new Table();
 		mainTable.setFillParent(true);
@@ -239,24 +238,31 @@ public class MainScreen implements Screen {
 		ArrayList<String> highScoreGame = new ArrayList<String>(); 
 		
 		
-
-		String level1Score = "Level 1 High Score: " ;
-		String level1ScoreA = list1.get(0).score + " by " + list1.get(0).playerName + " on " + list1.get(0).date ;
+		if(list1.size()==0 ){
+			String noScore = "No High Score Yet!!!" ;
+			highScoreGame.add(noScore);
+			return highScoreGame;
+		}
+		else{
+			String level1Score = "Level 1 High Score: " ;
+			String level1ScoreA = list1.get(0).score + " by " + list1.get(0).playerName + " on " + list1.get(0).date ;
+			
+			String level2Score = "Level 2 High Score: " ;
+			String level2ScoreA = list2.get(0).score + " by " + list2.get(0).playerName + " on " + list2.get(0).date ;
+			
+			String level3Score = "Level 3 High Score: " ;
+			String level3ScoreA = list3.get(0).score + " by " + list3.get(0).playerName + " on " + list3.get(0).date ;
+			
+			highScoreGame.add(level1Score);
+			highScoreGame.add(level1ScoreA);
+			highScoreGame.add(level2Score);
+			highScoreGame.add(level2ScoreA);
+			highScoreGame.add(level3Score);
+			highScoreGame.add(level3ScoreA);
+			
+			return highScoreGame;
+		}
 		
-		String level2Score = "Level 2 High Score: " ;
-		String level2ScoreA = list2.get(0).score + " by " + list2.get(0).playerName + " on " + list2.get(0).date ;
-		
-		String level3Score = "Level 3 High Score: " ;
-		String level3ScoreA = list3.get(0).score + " by " + list3.get(0).playerName + " on " + list3.get(0).date ;
-		
-		highScoreGame.add(level1Score);
-		highScoreGame.add(level1ScoreA);
-		highScoreGame.add(level2Score);
-		highScoreGame.add(level2ScoreA);
-		highScoreGame.add(level3Score);
-		highScoreGame.add(level3ScoreA);
-		
-		return highScoreGame;
 	}
 	
 

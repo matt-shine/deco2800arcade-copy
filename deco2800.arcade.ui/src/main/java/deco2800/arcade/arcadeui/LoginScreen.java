@@ -40,8 +40,8 @@ public class LoginScreen implements Screen {
 		table.setBackground(skin.getDrawable("background"));
 		stage.addActor(table);
 
-		final Label tempLabel = new Label("Login with username:", skin);
-		tempLabel.setAlignment(Align.center);
+		final Label announce = new Label("Welcome to Vapor!\n\nPlease login with your\nusername & password.", skin);
+		announce.setAlignment(Align.center);
 		final Label errorLabel = new Label("", skin, "error");
 		errorLabel.setAlignment(Align.center);
 		final TextField usernameText = new TextField("", skin);
@@ -62,7 +62,7 @@ public class LoginScreen implements Screen {
 		TextButton forgotLogButton = new TextButton("Forgot Login?", skin,
 				"default-red");
 
-		table.add(tempLabel).colspan(2); // Temporary label to display a message
+		table.add(announce).colspan(2);
 		table.row();
 		table.add(errorLabel).width(400).pad(5).colspan(2);
 		table.row();

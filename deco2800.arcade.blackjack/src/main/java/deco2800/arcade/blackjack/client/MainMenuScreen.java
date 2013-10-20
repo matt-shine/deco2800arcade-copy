@@ -57,7 +57,7 @@ public class MainMenuScreen implements Screen{
 		batch = new SpriteBatch();
  
         // load the image and create the texture region
-        textureBackground = new Texture(Gdx.files.internal("data/menu1.png"));
+        textureBackground = new Texture(Gdx.files.internal("menu1.png"));
  
         // we set the linear texture filter to improve the stretching
         textureBackground.setFilter(TextureFilter.Linear, TextureFilter.Linear);

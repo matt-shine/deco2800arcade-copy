@@ -70,7 +70,7 @@ public class Blackjack extends GameClient {
 		//msg.message = "testme";
 		//this.networkClient.sendNetworkObject(msg);
 		//MainMenuScreen = new MainMenuScreen(this);
-		//JoinTableScreen = new JoinTableScreen(this);
+		JoinTableScreen = new JoinTableScreen(this);
 		/*this.getOverlay().setListeners(new Screen() {
 
             @Override
@@ -102,8 +102,8 @@ public class Blackjack extends GameClient {
             }
             
 		});*/
-		//MainMenuScreen = new MainMenuScreen(this);
-    	//setScreen(MainMenuScreen);
+		MainMenuScreen = new MainMenuScreen(this);
+    	setScreen(MainMenuScreen);
 		
 	}
 

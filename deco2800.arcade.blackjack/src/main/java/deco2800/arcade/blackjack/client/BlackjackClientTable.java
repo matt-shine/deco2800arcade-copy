@@ -538,6 +538,8 @@ public class BlackjackClientTable implements Screen{
 	public void parseMessage(String msg){
 	String[] stringArray = msg.split("|");
 	String function = stringArray[0];
+	
+	/*
     switch (function) {
         case "takeseat":
         	//code for adding a user to a seat, takes format:
@@ -564,6 +566,8 @@ public class BlackjackClientTable implements Screen{
         	//addchips|player|chippile total
                  break;
     	}
+    	
+    */
 	}
 	// Code for adding a player to a seat
 	private void fillSeat(Player player, int SeatNo, int Chipcount){

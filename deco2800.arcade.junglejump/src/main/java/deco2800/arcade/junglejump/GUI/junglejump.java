@@ -609,7 +609,7 @@ public class junglejump extends GameClient implements InputProcessor {
 						}
 						
 		
-						// If monkey hits bottom of platform tough titties
+						// If monkey hits bottom of platform fall
 						if(y >= p.getY() - monkeyHeight
 								&& y <= p.getY()) {
 							monkeyY = p.getY() - monkeyHeight;
@@ -618,6 +618,7 @@ public class junglejump extends GameClient implements InputProcessor {
 							return false;
 						}
 					}
+					p.setActive();
 					return true;
 				}
 			}

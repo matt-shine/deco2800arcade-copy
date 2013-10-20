@@ -2,6 +2,8 @@ package deco2800.arcade.model.test;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URL;
 
 import javax.xml.stream.XMLStreamReader;
@@ -11,7 +13,7 @@ import org.junit.Test;
 
 import deco2800.arcade.model.Accolade;
 import deco2800.arcade.model.XMLReader;
-import deco2800.arcade.model.XMLReader.*;
+
 
 public class XMLReaderTest {
 	private Accolade a1;
@@ -41,11 +43,22 @@ public class XMLReaderTest {
 				"PopUp Message of Accolade5: %VALUE %UNIT", 5, "Unit5", "Tag5", 
 				"Path5").setID(5).setValue(500);
 	}
+	
+	/** test the read from xml and the readToString funtion
+	 * @throws FileNotFoundException 
+	 * 
+	 */
 	@Test
-	public void XMLReaderTest1() {
-		XMLStreamReader xmlTestFile = XMLReader.readXML("/deco2800.arcade.model/src/test/xmlTestFiles/newaccolade.xml");
-		URL url = getClass().getResource("deco2800.arcade.model.test/test/xmlTestFiles/newaccolade.xml");
-		System.out.print(url);
+	public void XMLReaderTest1() throws FileNotFoundException {
+		try {
+			String testFile = XMLReader.readXML("src/test/java/deco2800/arcade/model/test/xmlTests/newaccolade.xml");
+		}catch (FileNotFoundException error) {
+			fail("The test file is missing.");
+			error.printStackTrace();
+		}
+		
+		//XMLStreamReader xmlTestFile = XMLReader.readXML("src/test/java/deco2800/arcade/model/test/xmlTests/newaccolade.xml");
+		//System.out.print(XMLReader.XMLToString(xmlTestFile));
 		//fail("Not yet implemented");
 	}
 

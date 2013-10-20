@@ -56,7 +56,7 @@ public class TestHighscoreDatabase {
 	}
 	
 	/**
-	 * 
+	 * Clean up after tests.
 	 * @throws Exception
 	 */
 	@After
@@ -66,7 +66,7 @@ public class TestHighscoreDatabase {
 	
 	
 	/**
-	 * Test for adding a score using updateScore method
+	 * Tests adding a scores using updateScore method
 	 * @throws DatabaseException
 	 * @throws SQLException 
 	 */
@@ -92,7 +92,7 @@ public class TestHighscoreDatabase {
 	}
 	
 	/**
-	 * Test getGameTopPlayers method
+	 * Tests retrieving the highest scores in the database.
 	 * @throws DatabaseException
 	 * @throws SQLException 
 	 */
@@ -103,7 +103,7 @@ public class TestHighscoreDatabase {
 	}
 
 	/**
-	 * Test getUserHighScore method
+	 * Test retrieving a users top scores
 	 * @throws DatabaseException
 	 * @throws SQLException 
 	 */
@@ -127,35 +127,24 @@ public class TestHighscoreDatabase {
 	}
 	
 	/**
-	 * Test getUserRanking method
+	 * Test a users score ranking in a game
 	 * @throws DatabaseException
 	 * @throws SQLException 
 	 */
 	@Test
 	public void testGetUserRanking() throws DatabaseException, SQLException {
-		//Implemented but now working
-		//List<String> p3HighestScore = highscoreDatabase.getUserRanking("Player Three", "Pong", "Points", true);
-		//System.out.println("p3 return: " + p3HighestScore.toString());
+		List<String> p3HighestScore = highscoreDatabase.getUserRanking("Player Three", "Pong", "Points", true);
+		assertEquals("[Player Three, 3, , rank]", p3HighestScore.toString());
 	}
 	
 	/**
-	 * Test getAvgUserHighScore method
+	 * Test getAvgUserHighScore method !! Not yet implemented
 	 * @throws DatabaseException
 	 * @throws SQLException 
-	 */
 	@Test
 	public void testGetAvgUserHighScore() throws DatabaseException, SQLException {
-		//Not yet implemented
+		
 	}
-	
-	/**
-	 * Test getTopPlayers method
-	 * @throws DatabaseException
-	 * @throws SQLException 
-	 */
-	@Test
-	public void testGetTopPlayers() throws DatabaseException, SQLException {
-		//Not yet implemented
-	}
+	*/
 	
 }

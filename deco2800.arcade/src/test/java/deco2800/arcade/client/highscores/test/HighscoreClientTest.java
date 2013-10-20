@@ -12,6 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 
+
 import deco2800.arcade.client.highscores.Highscore;
 import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.highscores.UnsupportedScoreTypeException;
@@ -31,8 +32,7 @@ public class HighscoreClientTest {
 	private boolean[] privacy = { true, true, true, true, true, true, true };
 	
 	/**
-	 * Create a new highscore class object
-	 * @param networkClient 
+	 * Initialize and setup variables for testing
 	 * @throws Exception
 	 */
 	@Before
@@ -62,6 +62,7 @@ public class HighscoreClientTest {
 	/**
 	 * Test is currently redundant while trying to figure out a way to test while the
 	 * server is not running.
+	 * @exception NullPointerException
 	 */
 	@Test (expected=NullPointerException.class)
 	public void testGetGameTopPlayers() {
@@ -87,6 +88,7 @@ public class HighscoreClientTest {
 
 	/**
 	 * Tests for unsupported score type exception.
+	 * @exception UnsupportedScoreTypeException
 	 */
 	@Test
 	public void testVaildScoreType() {
@@ -102,7 +104,8 @@ public class HighscoreClientTest {
 	}
 	
 	/**
-	 * Tests when the server is down and Highscore Client Network Client is null
+	 * Tests when the server is down and Highscore Client Network Client is null.
+	 * @exception NullPointerException
 	 */
 	@Test
 	public void testHighscoreClientInit() {

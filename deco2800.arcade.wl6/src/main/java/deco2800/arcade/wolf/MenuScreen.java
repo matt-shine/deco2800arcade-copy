@@ -39,7 +39,6 @@ public class MenuScreen implements Screen {
             "For guns and glory, press N.\nFor work and worry, press Y."
     };
     private static final String[] difficultyStrings = new String[] {
-            "Can I play, Daddy?",
             "Don't hurt me.",
             "Bring 'em on!",
             "I am Death incarnate!"
@@ -78,7 +77,6 @@ public class MenuScreen implements Screen {
         stage.addActor(table);
 
         TextButton newGame = new TextButton("New Game", skin);
-        TextButton exit = new TextButton("Exit", skin);
         Label difLabel = new Label("Difficulty", skin);
         difficulty = new SelectBox(difficultyStrings, skin);
         Label epLabel = new Label("Episode", skin);
@@ -86,32 +84,26 @@ public class MenuScreen implements Screen {
         Label lvlLabel = new Label("Level", skin);
         level = new SelectBox(levelStrings, skin);
 
-        content.add(epLabel).pad(5).colspan(2);
+        content.add(epLabel).pad(5).colspan(2).left();
         content.row();
-        content.add(episode).pad(5).colspan(2);
+        content.add(episode).pad(5).colspan(2).left();
         content.row();
-        content.add(lvlLabel).pad(5);
-        content.add(difLabel).pad(5);
+        content.add(lvlLabel).pad(5).left();
+        content.add(difLabel).pad(5).left();
         content.row();
-        content.add(level).pad(5);
-        content.add(difficulty).pad(5);
+        content.add(level).pad(5).left();
+        content.add(difficulty).pad(5).left();
         content.row();
-        content.add(newGame).pad(5);
-        content.add(exit).pad(5);
+        content.add(newGame).pad(5).left();
 
         content.setPosition(300, 400);
         stage.addActor(content);
 
         newGame.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                gameModel.setDifficulty(difficulty.getSelectionIndex() + 1);
+                gameModel.setDifficulty(difficulty.getSelectionIndex() + 2);
                 gameModel.goToLevel("e" + (episode.getSelectionIndex() + 1) + (level.getSelectionIndex() == 8 ? "boss" : ("l" + (level.getSelectionIndex() + 1))));
                 wl6.goToGame();
-            }
-        });
-        exit.addListener(new ChangeListener() {
-            public void changed(ChangeEvent event, Actor actor) {
-                ArcadeSystem.goToGame(ArcadeSystem.UI);
             }
         });
     }

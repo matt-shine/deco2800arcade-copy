@@ -1,6 +1,5 @@
 package deco2800.arcade.wolf;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.badlogic.gdx.math.Vector2;
@@ -18,7 +17,7 @@ public class Player extends Mob {
     private HashSet<Integer> guns = new HashSet<Integer>();
     private int ammo = 16;
     private HashSet<KEY_TYPE> keys = new HashSet<KEY_TYPE>();
-    
+    private static final Vector2 superMagicalSecretFloorEntranceThatIsntDeclaredInTheMapFilesForGodKnowsWhy = new Vector2(10, 51);
     private float gunTimer = 0;
     
     
@@ -69,10 +68,18 @@ public class Player extends Mob {
         	//magic position (10, 51) because the secret elevator isn't in the map file on the first level
         	//for god knows why. It looks like the real wolfenstein game hard codes this too.
         	if (model.getMap().getTerrainAt((int) blockPos.x, (int) blockPos.y) == WL6Meta.SECRET_ELEVATOR ||
-        			(model.getChapter().equals("1") && ((int) blockPos.x) == 10 && ((int) blockPos.y) == 51)) {
+        			(model.getChapter().equals("1") &&
+        			((int) blockPos.x) == superMagicalSecretFloorEntranceThatIsntDeclaredInTheMapFilesForGodKnowsWhy.x &&
+        			((int) blockPos.y) == superMagicalSecretFloorEntranceThatIsntDeclaredInTheMapFilesForGodKnowsWhy.y)) {
+        		
         		model.secretLevel();
         	} else {
         		model.nextLevel();
+        		
+        		if (model.getChapter() == "1") {
+        			AchievementGiver.give("wolf.win" + model.getLevel());
+        		}
+        		
         	}
         	
         }
@@ -92,7 +99,7 @@ public class Player extends Mob {
         	this.ammo = Math.max(ammo - 1, 0);
         	
         	if (this.currentGun == 1) {
-        		gunTimer = 0;
+        		gunTimer = 0.25f;
         	} else if (this.currentGun == 2) {
         		gunTimer = 0.25f;
         	} else if (this.currentGun == 3) {

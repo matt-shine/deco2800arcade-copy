@@ -1,20 +1,19 @@
 package deco2800.arcade.wolf.enemy;
 
 import deco2800.arcade.wolf.DoodadInfo;
-import deco2800.arcade.wolf.WL6Meta;
 
 public class Officer extends Enemy {
 
-    private final int STARTING_HEALTH = 50;
+    private final int STARTING_HEALTH = 75;
 
     public Officer(int uid, DoodadInfo d) {
         super(uid);
 
-        setHealth(STARTING_HEALTH);
-        setSpeed(512);
         setPain(true);
-        setDamage(0);
-
+        setDamage(11);
+        setStateChangeTime(0.1f);
+        setRepeatShootChance(0);
+        
         initialiseFromEnemyData(d);
         
     }

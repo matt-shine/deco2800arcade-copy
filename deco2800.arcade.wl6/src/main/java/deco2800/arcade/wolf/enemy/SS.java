@@ -4,16 +4,15 @@ import deco2800.arcade.wolf.DoodadInfo;
 
 public class SS extends Enemy {
 
-    private final int STARTING_HEALTH = 100;
+    private final int STARTING_HEALTH = 45;
 
     public SS(int uid, DoodadInfo d) {
         super(uid);
 
-        setHealth(STARTING_HEALTH);
-        setSpeed(512);
         setPain(true);
-        setDamage(0);
-        this.setStateChangeTime(0.33f);
+        setDamage(3);
+        setRepeatShootChance(0.95f);
+        setStateChangeTime(0.1f);
         
         initialiseFromEnemyData(d);
         

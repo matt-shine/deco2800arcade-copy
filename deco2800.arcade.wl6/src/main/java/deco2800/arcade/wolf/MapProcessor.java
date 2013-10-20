@@ -111,6 +111,12 @@ public class MapProcessor {
         door.setTextureName(bInfo.texture);
         if (id == WL6Meta.DOOR_ELEVATOR) {
         	door.setTextureName("elevator_door");
+        } else if (id == WL6Meta.DOOR_GOLDKEY) {
+        	door.setTextureName("gold_door");
+        } else if (id == WL6Meta.SILVERKEY) {
+        	door.setTextureName("solver_door");
+        } else {
+        	door.setTextureName("door");
         }
         door.setPos(new Vector2(x + 0.5f, y + 0.5f));
         model.addDoodad(door);

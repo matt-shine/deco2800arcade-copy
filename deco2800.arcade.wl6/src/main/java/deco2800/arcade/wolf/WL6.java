@@ -9,7 +9,6 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.client.AchievementClient;
 
 
 @ArcadeGame(id="Wolfenstein 3D")
@@ -19,7 +18,6 @@ public class WL6 extends GameClient {
     @SuppressWarnings("unused")
     private NetworkClient networkClient;
     @SuppressWarnings("unused")
-    private AchievementClient achievementClient;
     private HighscoreClient highscoreClient = null;
 
     private GameModel model;
@@ -32,8 +30,10 @@ public class WL6 extends GameClient {
 
     public WL6(Player player, NetworkClient networkClient) {
         super(player, networkClient);
+        
+        AchievementGiver.init(player, this);
+        
         this.networkClient = networkClient;
-        this.achievementClient = new AchievementClient(networkClient);
         if (player != null) {
         	highscoreClient = new HighscoreClient(player.getUsername(), "Wolfenstein", networkClient);
         }

@@ -99,7 +99,7 @@ public class DoodadList {
                     DoodadInfo.nonsolidScenery("manfried"),
 
                     //28: hanging skeleton
-                    DoodadInfo.solidScenery("headstone"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //29: dog food
                     DoodadInfo.healthPickup("health", 5, 0),
@@ -141,7 +141,7 @@ public class DoodadList {
                     DoodadInfo.solidScenery("cage"),
 
                     //42: bones 1
-                    DoodadInfo.solidScenery("headstone"),
+                    DoodadInfo.nonsolidScenery("headstone"),
 
                     //43: gold key
                     new DoodadInfo().specialCase(),
@@ -189,19 +189,19 @@ public class DoodadList {
                     DoodadInfo.nonsolidScenery("headstone"),
 
                     //58: barrel
-                    DoodadInfo.solidScenery("barrel"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //59: well / water
-                    DoodadInfo.solidScenery("well"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //60: well
-                    DoodadInfo.solidScenery("well"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //61: pool of blood
                     DoodadInfo.nonsolidScenery("headstone"),
 
                     //62: flag
-                    DoodadInfo.solidScenery("flag"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //63: Aardwolf sign
                     new DoodadInfo(),
@@ -216,13 +216,13 @@ public class DoodadList {
                     DoodadInfo.nonsolidScenery("headstone"),
 
                     //67: utensils blue
-                    DoodadInfo.solidScenery("utensils"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //68: stove
-                    DoodadInfo.solidScenery("stove"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //69: rack
-                    DoodadInfo.solidScenery("rack"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //70: vines
                     DoodadInfo.nonsolidScenery("vines"),
@@ -645,16 +645,16 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //210: Dog 4 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.RIGHT, true),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.DOG, 0, DIRS.RIGHT, true),  // FIXME Not complete
 
                     //211: Dog 4 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.UP, true),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.DOG, 0, DIRS.UP, true),  // FIXME Not complete
 
                     //212: Dog 4 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.LEFT, true),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.DOG, 0, DIRS.LEFT, true),  // FIXME Not complete
 
                     //213: Dog 4 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.DOWN, true),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.DOG, 0, DIRS.DOWN, true),  // FIXME Not complete
 
                     //214: Hans Grosse
                     new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.HANS, 0, DIRS.RIGHT, false),  // FIXME Not complete
@@ -663,28 +663,28 @@ public class DoodadList {
                     new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.GUARD, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
                     //216: Mutant 1 (Standing)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.MUTANT, 0, DIRS.RIGHT, false),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 1, EnemyType.MUTANT, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
                     //217: Mutant 1 (Standing)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.MUTANT, 0, DIRS.UP, false),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 1, EnemyType.MUTANT, 0, DIRS.UP, false),  // FIXME Not complete
 
                     //218: Mutant 1 (Standing)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.MUTANT, 0, DIRS.LEFT, false),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 1, EnemyType.MUTANT, 0, DIRS.LEFT, false),  // FIXME Not complete
 
                     //219: Mutant 1 (Standing)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.MUTANT, 0, DIRS.DOWN, false),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 1, EnemyType.MUTANT, 0, DIRS.DOWN, false),  // FIXME Not complete
 
                     //220: Mutant 1 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.MUTANT, 0, DIRS.RIGHT, true),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 1, EnemyType.MUTANT, 0, DIRS.RIGHT, true),  // FIXME Not complete
 
                     //221: Mutant 1 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.MUTANT, 0, DIRS.UP, true),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 1, EnemyType.MUTANT, 0, DIRS.UP, true),  // FIXME Not complete
 
                     //222: Mutant 1 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.MUTANT, 0, DIRS.LEFT, true),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 1, EnemyType.MUTANT, 0, DIRS.LEFT, true),  // FIXME Not complete
 
                     //223: Mutant 1 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.MUTANT, 0, DIRS.DOWN, true),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 1, EnemyType.MUTANT, 0, DIRS.DOWN, true),  // FIXME Not complete
 
                     //224: Red PacMan
                     new DoodadInfo(),
@@ -717,28 +717,28 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //234: Mutant 3 (Standing)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.MUTANT, 0, DIRS.RIGHT, false),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 3, EnemyType.MUTANT, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
                     //235: Mutant 3 (Standing)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.MUTANT, 0, DIRS.UP, false),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 3, EnemyType.MUTANT, 0, DIRS.UP, false),  // FIXME Not complete
 
                     //236: Mutant 3 (Standing)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.MUTANT, 0, DIRS.LEFT, false),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 3, EnemyType.MUTANT, 0, DIRS.LEFT, false),  // FIXME Not complete
 
                     //237: Mutant 3 (Standing)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.MUTANT, 0, DIRS.DOWN, false),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 3, EnemyType.MUTANT, 0, DIRS.DOWN, false),  // FIXME Not complete
 
                     //238: Mutant 3 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.MUTANT, 0, DIRS.RIGHT, true),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 3, EnemyType.MUTANT, 0, DIRS.RIGHT, true),  // FIXME Not complete
 
                     //239: Mutant 3 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.MUTANT, 0, DIRS.UP, true),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 3, EnemyType.MUTANT, 0, DIRS.UP, true),  // FIXME Not complete
 
                     //240: Mutant 3 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.MUTANT, 0, DIRS.LEFT, true),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 3, EnemyType.MUTANT, 0, DIRS.LEFT, true),  // FIXME Not complete
 
                     //241: Mutant 3 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.MUTANT, 0, DIRS.DOWN, true),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 3, EnemyType.MUTANT, 0, DIRS.DOWN, true),  // FIXME Not complete
 
                     //242: Nothing
                     new DoodadInfo(),
@@ -771,28 +771,28 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //252: Mutant 4 (Standing)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.MUTANT, 0, DIRS.RIGHT, false),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 4, EnemyType.MUTANT, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
                     //253: Mutant 4 (Standing)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.MUTANT, 0, DIRS.UP, false),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 4, EnemyType.MUTANT, 0, DIRS.UP, false),  // FIXME Not complete
 
                     //254: Mutant 4 (Standing)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.MUTANT, 0, DIRS.LEFT, false),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 4, EnemyType.MUTANT, 0, DIRS.LEFT, false),  // FIXME Not complete
 
                     //255: Mutant 4 (Standing)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.MUTANT, 0, DIRS.DOWN, false),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 4, EnemyType.MUTANT, 0, DIRS.DOWN, false),  // FIXME Not complete
 
                     //256: Mutant 4 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.MUTANT, 0, DIRS.RIGHT, true),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 4, EnemyType.MUTANT, 0, DIRS.RIGHT, true),  // FIXME Not complete
 
                     //257: Mutant 4 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.MUTANT, 0, DIRS.UP, true),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 4, EnemyType.MUTANT, 0, DIRS.UP, true),  // FIXME Not complete
 
                     //258: Mutant 4 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.MUTANT, 0, DIRS.LEFT, true),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 4, EnemyType.MUTANT, 0, DIRS.LEFT, true),  // FIXME Not complete
 
                     //259: Mutant 4 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.MUTANT, 0, DIRS.DOWN, true),  // FIXME Not complete
+                    new DoodadInfo(true, "icekingboss", 0, 6, 0, 4, EnemyType.MUTANT, 0, DIRS.DOWN, true),  // FIXME Not complete
 
             };
 }

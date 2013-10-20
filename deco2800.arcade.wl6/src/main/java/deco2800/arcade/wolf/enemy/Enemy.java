@@ -65,7 +65,11 @@ public class Enemy extends Mob {
 	//the intermediate goal for the player chasing logic
     private Vector2 chaseLast = null;
     //the odds that the enemy will shoot at the end of a chase step
-    private float shootChance = 0.7f;
+    private float shootChance = 0.6f;
+    //the chance that the enemy will shoot again after just shooting
+    private float repeatShootChance = 0.3f;
+	//the distance we try to keep away from the player
+    private float personalSpace = 4f;
     
     
 	private int ammoDrop = 0;
@@ -117,6 +121,7 @@ public class Enemy extends Mob {
         
         //if we can see the player and we haven't seen him yet, chase him
         if ((this.state == STATES.PATH || this.state == STATES.STAND) && canSee(gameModel.getPlayer(), gameModel)){
+        	this.setVel(new Vector2(0, 0));
         	instantStateChange(STATES.IDLE);
         	delayedStateChange(STATES.CHASE);
         }
@@ -134,7 +139,12 @@ public class Enemy extends Mob {
         	shootAtPlayer(gameModel);
         	this.setVel(new Vector2(0, 0));
             instantStateChange(STATES.IDLE);
-            delayedStateChange(STATES.CHASE);
+            if (Math.random() < repeatShootChance) {
+            	delayedStateChange(STATES.ATTACK);
+            } else {
+            	delayedStateChange(STATES.CHASE);
+            }
+            
         }
         
         
@@ -152,11 +162,24 @@ public class Enemy extends Mob {
         	this.dropItems(gameModel);
         }
     }
-
+    
+    
+    
+    /**
+     * Intended to be overridden
+     * @param difficulty
+     * @return
+     */
     public int getStartingHealth(int difficulty) {
         return 0;
     }
     
+    
+    
+    /**
+     * Initialise the enemy
+     * @param d
+     */
     public void initialiseFromEnemyData(DoodadInfo d) {
     	
     	setTextureName(d.texture);
@@ -180,10 +203,15 @@ public class Enemy extends Mob {
         
     }
     
+    
+    
 
     public void setPathing(boolean pathing) {
         this.pathing = pathing;
     }
+    
+    
+    
 
     /**
      * Tells the enemy to change states
@@ -197,6 +225,8 @@ public class Enemy extends Mob {
     }
     
     
+    
+    
     public void instantStateChange(STATES state) {
         this.state = state;
         nextState = null;
@@ -204,13 +234,17 @@ public class Enemy extends Mob {
     }
 
     
+    
+    
     public void shootAtPlayer(GameModel g) {
     	Player p = g.getPlayer();
-    	Projectile bullet = new Projectile(0, 10, true, "worm");
+    	Projectile bullet = new Projectile(0, damage, true, "worm");
     	g.addDoodad(bullet);
     	bullet.setPos(this.getPos());
     	bullet.setVel(p.getPos().sub(bullet.getPos()).nor().mul(0.2f));
     }
+    
+    
     
     
     // follow patrol path
@@ -233,9 +267,14 @@ public class Enemy extends Mob {
 
     	
     }
+    
 
 
-    public void followPlayer(GameModel g) {
+    /**
+     * Called when the state is CHASE
+     * @param g
+     */
+    protected void followPlayer(GameModel g) {
     	Player p = g.getPlayer();
     	
     	float dist = p.getPos().dst(this.getPos());
@@ -255,9 +294,10 @@ public class Enemy extends Mob {
     		chaseLast = chaseGoal;
 			chaseGoal = null;
 			
-    		if (los && dist < 15 && Math.random() < shootChance) {
+    		if (los && dist < 15 && Math.random() < this.shootChance) {
     			instantStateChange(STATES.IDLE);
     			delayedStateChange(STATES.ATTACK);
+    			this.setVel(new Vector2(0, 0));
     		} else {
     			chaseGoal = bestChaseGoal(g);
     		}
@@ -266,12 +306,13 @@ public class Enemy extends Mob {
     	
     	
     	if (chaseGoal != null && chaseLast != null) {
-        	this.setVel(new Vector2().add(chaseGoal).sub(chaseLast).nor().mul(speed));
+        	this.setVel(new Vector2().add(chaseGoal).sub(this.getPos()).nor().mul(speed));
     	} else {
     		this.setVel(new Vector2(0, 0));
     	}
 
     }
+    
     
     
     /**
@@ -306,8 +347,8 @@ public class Enemy extends Mob {
     		
     	}
 		
-    	SortedMap<Float, Vector2> greater = goals.tailMap(4.0f, true);
-    	SortedMap<Float, Vector2> less = goals.headMap(4.0f, false);
+    	SortedMap<Float, Vector2> greater = goals.tailMap(personalSpace, true);
+    	SortedMap<Float, Vector2> less = goals.headMap(personalSpace, false);
     	if (greater.size() != 0) {
     		return greater.get(greater.firstKey());
     	}
@@ -319,7 +360,9 @@ public class Enemy extends Mob {
     }
     
 
-    @Override
+
+    
+	@Override
     public void takeDamage(GameModel model, int damage) {
         int d = damage;
         if (state == STATES.STAND || state == STATES.PATH) {
@@ -329,6 +372,7 @@ public class Enemy extends Mob {
         	instantStateChange(STATES.PAIN);
         	delayedStateChange(STATES.CHASE);
         	setHealth(getHealth() - d);
+        	this.setVel(new Vector2(0, 0));
         }
         else {
             setHealth(getHealth() - d);
@@ -345,6 +389,10 @@ public class Enemy extends Mob {
         gameModel.getPlayer().takeDamage(gameModel, damage);
     }
 
+    
+    
+    
+    
     /**
      * Damage Calculation
      *
@@ -383,6 +431,13 @@ public class Enemy extends Mob {
     }
     
     
+    
+    
+    
+    /**
+     * 
+     * @param g
+     */
     protected void dropItems(GameModel g) {
     	
     	Doodad d = null;
@@ -405,7 +460,10 @@ public class Enemy extends Mob {
     	g.addDoodad(d);
     }
     
-
+    
+    
+    
+    
     public void calculatePath(GameModel gameModel) {
         path = new ArrayList<Vector2>();
         HashSet<Vector2> usedWaypoints = new HashSet<Vector2>();
@@ -452,12 +510,12 @@ public class Enemy extends Mob {
                     y = y - 1;
                     break;
             }
-            if (path.size() > 10000) {
-            	System.out.println("infinite loop in a path");
+            if (path.size() > 1000) {
+            	//System.out.println("infinite loop in a path");
                 return;
             }
             if (WL6Meta.block(gameModel.getMap().getTerrainAt(x, y)).texture != null) {
-                System.out.println("waypoints led into a wall");
+                //System.out.println("waypoints led into a wall");
                 return;
             }
             path.add(new Vector2(x, y));
@@ -515,6 +573,22 @@ public class Enemy extends Mob {
 
 	public void setShootChance(float shootChance) {
 		this.shootChance = shootChance;
+	}
+	
+    public float getPersonalSpace() {
+		return personalSpace;
+	}
+
+	public void setPersonalSpace(float personalSpace) {
+		this.personalSpace = personalSpace;
+	}
+	
+    public float getRepeatShootChance() {
+		return repeatShootChance;
+	}
+
+	public void setRepeatShootChance(float repeatShootChance) {
+		this.repeatShootChance = repeatShootChance;
 	}
 
 }

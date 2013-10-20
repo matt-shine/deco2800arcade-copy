@@ -10,9 +10,9 @@ public class Guard extends Enemy {
         super(uid);
 
         setHealth(STARTING_HEALTH);
-        setSpeed(512);
         setPain(true);
-        setDamage(0);
+        
+        //use default settings
         
         initialiseFromEnemyData(d);
     }

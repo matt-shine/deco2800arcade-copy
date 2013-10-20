@@ -12,15 +12,30 @@ public class Hitler extends Enemy {
     public Hitler(int uid, DoodadInfo d) {
         super(uid);
 
-        setHealth(STARTING_HEALTH_1);
-        setSpeed(512);
         setPain(false);
-        setDamage(0);
-
+        setDamage(3);
+        setRepeatShootChance(0.95f);
+        setStateChangeTime(0.1f);
+        
         initialiseFromEnemyData(d);
         
     }
 
+    @Override
+    public int getStartingHealth(int difficulty) {
+        switch (difficulty) {
+            case 1:
+                return STARTING_HEALTH_1;
+            case 2:
+                return STARTING_HEALTH_2;
+            case 3:
+                return STARTING_HEALTH_3;
+            case 4:
+                return STARTING_HEALTH_4;
+        }
+        // Should never get here
+        return STARTING_HEALTH_1;
+    }
 
 
 }

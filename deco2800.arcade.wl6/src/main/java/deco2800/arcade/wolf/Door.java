@@ -70,22 +70,14 @@ public class Door extends Doodad {
         float offX = vertical ? 0.5f : 0;
         float offY = vertical ? 0 : 0.5f;
 
-        String texture = "door";
-        if (key == KEY_TYPE.GOLD) {
-        	texture = "gold_door";
-        }
-        if (key == KEY_TYPE.SILVER) {
-        	texture = "gold_silver";
-        }
-        
         r.drawBasicSprite(
-        		texture,
+        		this.getTextureName(),
                 x + (vertical ? openness : 0),
                 y + (vertical ? 0 : openness),
                 angle
         );
-        r.drawBasicSprite(texture, x - offX, y - offY, angle + 90);
-        r.drawBasicSprite(texture, x + offX, y + offY, angle - 90);
+        r.drawBasicSprite(this.getTextureName(), x - offX, y - offY, angle + 90);
+        r.drawBasicSprite(this.getTextureName(), x + offX, y + offY, angle - 90);
 
 
     }

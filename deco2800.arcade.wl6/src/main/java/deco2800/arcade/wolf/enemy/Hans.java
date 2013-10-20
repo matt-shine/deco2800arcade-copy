@@ -12,11 +12,10 @@ public class Hans extends Enemy {
     public Hans(int uid, DoodadInfo d) {
         super(uid);
 
-        setHealth(STARTING_HEALTH_1);
-        setSpeed(512);
         setPain(false);
-        setDamage(0);
-        this.setStateChangeTime(0.1f);
+        setDamage(2);
+        setRepeatShootChance(0.975f);
+        setStateChangeTime(0.08f);
         
         initialiseFromEnemyData(d);
         

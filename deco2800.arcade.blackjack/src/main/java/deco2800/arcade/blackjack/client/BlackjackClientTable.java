@@ -72,6 +72,9 @@ public class BlackjackClientTable implements Screen{
 		
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
+		
+		//placards
+		
         Table table = new Table();
         stage.addActor(table);
         table.setSize(162, 113);
@@ -85,8 +88,49 @@ public class BlackjackClientTable implements Screen{
 		
 		TextureRegion imagePlacard = new TextureRegion(texturePlacard10250);
 		
+		
 		Image placard = new Image(imagePlacard);
 		table.add(placard);
+		
+		//cards
+		
+		Table player3card1 = new Table();
+		Table player3card2 = new Table();
+		Table player3card3 = new Table();
+		Table player3card4 = new Table();
+		Table player3card5 = new Table();
+		stage.addActor(player3card1);
+		stage.addActor(player3card2);
+		stage.addActor(player3card3);
+		stage.addActor(player3card4);
+		stage.addActor(player3card5);
+		player3card1.setSize(56, 81);
+		player3card1.setSize(56, 81);
+		player3card2.setSize(56, 81);
+		player3card3.setSize(56, 81);
+		player3card4.setSize(56, 81);
+		player3card5.setSize(56, 81);
+		player3card1.setPosition(565, 295);
+		player3card2.setPosition(590, 295);
+		player3card3.setPosition(615, 295);
+		player3card4.setPosition(640, 295);
+		player3card5.setPosition(665, 295);
+		
+		Texture CardQueenClub = new Texture(Gdx.files.internal("data/QS.jpg"));
+		
+		TextureRegion player1cardsTexReg = new TextureRegion(CardQueenClub);
+		Image player1cardfinal = new Image(player1cardsTexReg);
+		Image player1cardfinal2 = new Image(player1cardsTexReg);
+		Image player1cardfinal3 = new Image(player1cardsTexReg);
+		Image player1cardfinal4 = new Image(player1cardsTexReg);
+		Image player1cardfinal5 = new Image(player1cardsTexReg);
+		player3card1.add(player1cardfinal);
+		player3card2.add(player1cardfinal2);
+		player3card3.add(player1cardfinal3);
+		player3card4.add(player1cardfinal4);
+		player3card5.add(player1cardfinal5);
+		
+
 		
     }
  

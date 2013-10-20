@@ -34,7 +34,7 @@ import deco2800.arcade.protocol.lobby.LobbyMessageRequest;
 import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
 
 /**
- * 
+ * Main Multiplayer Lobby Screen 
  * @author Kieran Burke
  * 
  */
@@ -60,12 +60,24 @@ public class MultiplayerLobby implements Screen {
 	Texture bg;
 	Sprite bgSprite;
 	SpriteBatch batch;
+	
+/**
+ * Set Current Screen through Arcade
+ * @param ui Get Arcade screen details  
+ * @param player Get player details including name
+ */
 
 	public MultiplayerLobby(ArcadeUI ui, Player player) {
 		arcadeUI = ui;
 		this.player = player;
 		this.lobby = this;
 	}
+	
+/**
+ * 
+ * Main constructor that creates all on screen GUI elements
+ * @param
+ */
 
 	public void show() {
 		ArcadeSystem.addPlayerToLobby();
@@ -329,7 +341,6 @@ public class MultiplayerLobby implements Screen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, 1280, 720);
 
-		// Gdx.app.exit();
 	}
 
 	@Override
@@ -338,19 +349,13 @@ public class MultiplayerLobby implements Screen {
 		camera.update();
 		shapeRenderer.setProjectionMatrix(camera.combined);
 
-		// Gdx.gl.glClearColor(0.9f, 0, 0, 1);
+		
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		batch.begin();
 		bgSprite.draw(batch);
 		batch.end();
 
-		if (Gdx.input.isKeyPressed(Keys.B)) {
-			//dispose();
-			//ArcadeSystem.setPlayerBetting(true);
-			//arcadeUI.setScreen(arcadeUI.getBetting());
-		}
-		
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 
@@ -389,9 +394,21 @@ public class MultiplayerLobby implements Screen {
 
 	}
 	
+/**
+ * 
+ * Get and set the current player
+ * @param player()
+ */
+	
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
+	
+/**
+ * Join active multiplayer game
+ * @param matchId Get unique match ID
+ * @param gameId Get unique game ID
+ */
 
 	public void joinGame(int matchId, String gameId) {
 		ArcadeSystem.setMultiplayerEnabled(true);
@@ -400,15 +417,26 @@ public class MultiplayerLobby implements Screen {
 		ArcadeSystem.goToGame(gameId, matchId);		
 	}
 	
+/**
+ * 
+ * Send text input text across server
+ * @param message Get chat input text
+ */
+	
 	public void chat(String message) {
 		LobbyMessageRequest request = new LobbyMessageRequest();
 		request.playerID = arcadeUI.getPlayer().getID();
 		request.user = player.getUsername();
 		request.message = message;
-		//chatfield.getText();
 		arcadeUI.getNetworkClient().sendNetworkObject(request);
-		//client.sendTCP(Request);
+		
 	}
+	
+/**
+ * 
+ * Display chat messages on screen
+ * @param request Get chat message updates
+ */
 	
 	public void displayChat(LobbyMessageResponse request) {
 		String message = request.message;

@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
@@ -22,6 +23,12 @@ import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import java.util.*;
+
+/**
+ * Create new multiplayer match screen 
+ * @author Kieran Burke
+ * 
+ */
 
 public class CreateMatchList implements Screen {
 
@@ -41,6 +48,12 @@ public class CreateMatchList implements Screen {
 	private ArcadeUI arcadeUI;
 
 	ArrayList<ActiveMatchDetails> matches;
+	
+/**
+ * Main constructor that creates all on screen GUI elements  
+ * @param ui Get Arcade screen details 
+ * 
+ */
 
 	public CreateMatchList(ArcadeUI ui) {
 
@@ -107,13 +120,20 @@ public class CreateMatchList implements Screen {
 		final Table listtable = new Table();
 		listtable.setFillParent(true);
 		stage.addActor(listtable);
-
+		
+		final Table table2 = new Table();
+		table2 .setFillParent(true);
+		stage.addActor(table2);
+		
+		Label title = new Label("Create Multiplayer Match...", skin);
 		TextButton button3 = new TextButton("Return to Lobby", skin);
 		TextButton button4 = new TextButton("<", skin);
 		TextButton button5 = new TextButton(">", skin);
 
+		table2.add(title).width(80).height(40).padRight(180).padBottom(630);
+		
 		table.add(button4).width(60).height(40).padTop(10).padLeft(310);
-		table.add(button3).width(300).height(40).padTop(600).padRight(390)
+		table.add(button3).width(300).height(40).padTop(600).padRight(420)
 				.padLeft(390);
 		table.add(button5).width(60).height(40).padTop(10).padRight(290);
 

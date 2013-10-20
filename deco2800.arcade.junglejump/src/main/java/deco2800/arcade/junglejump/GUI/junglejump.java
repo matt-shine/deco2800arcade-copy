@@ -242,17 +242,25 @@ public class junglejump extends GameClient implements InputProcessor {
 	public void dispose() {
 		super.dispose();
 	}
-
+	
+	/**
+	 * Resize JungleJump World
+	 */
 	public void resize(int w, int h) {
 		super.resize(w,h);
 		Gdx.app.log(junglejump.messages, "Resizing game width " + w
 				+ " height " + h);
 	}
-
+	/**
+	 * Depending on Game State, Render the world accordingly.
+	 * Choices: AT_MENU, INPROGRESS, GAMEOVER, PAUSE, OPTIONS, CONTINUE
+	 * 
+	 */
 	public void render() {
-		// Clears the screen - not sure if this is needed
 		switch (gameState) {
+		/* At the Main Menu */
 		case AT_MENU:
+			// Clears stage and colour buffers
 			Gdx.gl.glClearColor(0f, 1f, 0f, 1f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			batch.setProjectionMatrix(camera.combined);
@@ -270,7 +278,9 @@ public class junglejump extends GameClient implements InputProcessor {
 			camera.update();
 			super.render();
 			break;
+		/* Playing the Game */
 		case INPROGRESS:
+			// Clears stage and colour buffers
 			Gdx.gl.glClearColor(0f, 1f, 0f, 1f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			batch.setProjectionMatrix(camera.combined);
@@ -303,10 +313,6 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 			if (jumping) {
 				velocity = (velocity - 9.8f / 75f);
-				//System.out.println("monkeyY " + monkeyY + " monkeyYor " + monkeyYoriginal + " == " + (monkeyY > monkeyYoriginal) +(monkeyY + velocity < 1f) + velocity + " " + monkeyY);
-				System.out.println(monkeyY > monkeyYoriginal);
-				System.out.println(!isOnPlatform(monkeyX, monkeyY)); //this is false :(
-				System.out.println(monkeyY + " " + monkeyYoriginal);
 				if ((monkeyY > monkeyYoriginal) && (!isOnPlatform(monkeyX, ++monkeyY))) {
 					if (monkeyY + velocity < 1f) {
 						monkeyY = 0;
@@ -364,6 +370,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			batch.draw(levelNumText, 125, 5, 30, 30);
 			batch.draw(worldNumText, 85, 5, 30, 30);
 			batch.draw(livesNumText, 85, 30, 30, 30);
+			// Draws Instructions on Top Right and Top Left of screen
 			achievementTitleFont.draw(batch, "Press P to PAUSE", SCREENWIDTH-250, SCREENHEIGHT-10);
 			achievementTitleFont.draw(batch, "BACKSPACE for MENU", SCREENWIDTH-250, SCREENHEIGHT-30);
 			achievementTitleFont.draw(batch, ("Bananas found: " + BANANAS_FOUND), SCREENWIDTH-150, SCREENHEIGHT-10);
@@ -372,25 +379,21 @@ public class junglejump extends GameClient implements InputProcessor {
 			camera.update();
 			super.render();
 			break;
+		/* Game has ended */
 		case GAMEOVER:
 			break;
+		/* Pause Selected */
 		case PAUSE:
 			batch.setProjectionMatrix(camera.combined);
 			batch.begin();
 			achievementTitleFont.draw(batch, "PAUSED", SCREENWIDTH/2, SCREENHEIGHT/2);
 			batch.end();         
 			break;
+		/* At Options Menu */
 		case OPTIONS:
-			//Gdx.graphics.setVSync(true);
-			// set resolution to default and set full-screen to true
-			//Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, true);
-			
 			Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
-//			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			batchContinue.setProjectionMatrix(camera.combined);
-//			shapeRenderer.setProjectionMatrix(camera.combined);
-			
-			// Load Previous game? If yes, continue to game, if not go back to menu.
+			// Clear Buffers for Drawing of Options Menu
 			Gdx.gl.glEnable(GL10.GL_BLEND);
 			Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 			shapeRenderer.begin(ShapeType.FilledRectangle);
@@ -401,6 +404,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			shapeRenderer.end();
 			Gdx.gl.glDisable(GL10.GL_BLEND);
 			batchContinue.begin();
+			// Text for Options Menu
 			achievementTitleFont.draw(batchContinue, "OPTIONS", 240, 200);
 			achievementTitleFont.draw(batchContinue, "1. Toggle Music ON/OFF.", 290, 170);
 			achievementTitleFont.draw(batchContinue, "2. Back to Menu.", 290, 145);
@@ -409,12 +413,10 @@ public class junglejump extends GameClient implements InputProcessor {
 			camera.update();
 			super.render();
 			break;
+		/* Continue last game */
 		case CONTINUE:
 			Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
-//			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			batchContinue.setProjectionMatrix(camera.combined);
-//			shapeRenderer.setProjectionMatrix(camera.combined);
-			
 			// Load Previous game? If yes, continue to game, if not go back to menu.
 			Gdx.gl.glEnable(GL10.GL_BLEND);
 			Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
@@ -426,6 +428,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			shapeRenderer.end();
 			Gdx.gl.glDisable(GL10.GL_BLEND);
 			batchContinue.begin();
+			// Prompt to Continue previous Game
 			achievementTitleFont.draw(batchContinue, "Are you sure you want to continue?", 240, 200);
 			achievementTitleFont.draw(batchContinue, "Y or N?", 310, 150);
 
@@ -433,7 +436,9 @@ public class junglejump extends GameClient implements InputProcessor {
 			camera.update();
 			super.render();
 			break;
+		/* Achievements Menu */
 		case ACHIEVEMENTS:
+			// Clear Buffers and prepare for drawing of Achievement List
 			Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			batch.setProjectionMatrix(camera.combined);

@@ -77,7 +77,7 @@ public class Enemy extends Ship {
 		if(getStage() != null) {
 			getStage().addActor(new Explosion(getX() + getWidth()/2,getY() + getHeight()/2, 1));
 			// Randomly drop powerups
-			if(Math.random() <= (0.05 - (0.01*(difficulty-1)))) {
+			if(Math.random() <= (0.50 - (0.01*(difficulty-1)))) {
 				powerGenerator.randomPowerUp(getCenterX(), getCenterY());
 			}
 		}

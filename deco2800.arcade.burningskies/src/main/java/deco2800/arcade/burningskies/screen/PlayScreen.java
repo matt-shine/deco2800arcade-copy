@@ -171,12 +171,12 @@ public class PlayScreen implements Screen
     			score += 131;
     		}
     		//TODO: PRESS B TO SPAWN BOSS, REMOVE AFTER DEBUG
-    		if(!bossActive && (levelTimer > 60 || Gdx.input.isKeyPressed(Keys.B))) { //unleash the beast
-    			bossActive = true;
-    			game.playSong("boss");
-    			boss = new Boss(this, player);
-    			addEnemy(boss);
-    		}
+//    		if(!bossActive && (levelTimer > 60 || Gdx.input.isKeyPressed(Keys.B))) { //unleash the beast
+//    			bossActive = true;
+//    			game.playSong("boss");
+//    			boss = new Boss(this, player);
+//    			addEnemy(boss);
+//    		}
 
     		if(bossActive && boss.getHealth() <= 0) {
     			goodEnd = true;

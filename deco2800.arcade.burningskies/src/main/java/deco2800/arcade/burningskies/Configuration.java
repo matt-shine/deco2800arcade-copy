@@ -12,7 +12,7 @@ public class Configuration {
 	private static int effectsVolume = 50;
 	private static int backgroundVolume = 50;
 	// Difficulty stored as integer from 0 to 4, with 4 being insane mode
-	private static int difficulty = 2;
+	private static int difficulty = 0;
 	private static Map<Long, String> highScoresMap = new TreeMap<Long, String>();
 	
 	/* 

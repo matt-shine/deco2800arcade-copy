@@ -9,6 +9,9 @@ public abstract class Ship extends Entity {
 	protected Vector2 velocity;
 	protected Vector2 position;
 	protected float flash = 0f;
+	private boolean godMode;
+	private float gModeTimer;
+	private final float gModeLimit = 10;
 	
 	/**
 	 * Basic constructor for a ship.
@@ -19,6 +22,8 @@ public abstract class Ship extends Entity {
 		this.health = health;
 		this.position = position;
 		velocity = new Vector2(0,0);
+		godMode = false;
+		gModeTimer = 0f;
 	}
 	/**
 	 * Checks if the current ship is alive.
@@ -48,7 +53,8 @@ public abstract class Ship extends Entity {
 	 * Damages the ship
 	 */
 	public void damage(float healthchange) {
-		this.health -= healthchange;
+		if(!godMode)
+			this.health -= healthchange;
 		flash = 1f;
 	}
 
@@ -68,12 +74,32 @@ public abstract class Ship extends Entity {
 	 * What to do every frame. Perhaps bounds checking etc.
 	 * Make sure to super.onRender so you implement damage flashes
 	 */
-	void onRender(float delta) {
+	public void onRender(float delta) {
+		if(godMode) {
+			setColor(0, 1, 0, 1);
+			
+			if(gModeTimer >= gModeLimit) {
+				godMode = false;
+				gModeTimer = 0;
+			}
+
+			gModeTimer += delta;
+			return;
+		}
+		
 		if(flash > 0) {
 			setColor(1, 1-flash, 1-flash, 1);
 			flash -= delta*25;
 		} else {
 			setColor(1, 1, 1, 1);
 		}
+		
+		
 	}
+	
+	public void setGodMode(boolean b) {
+		godMode = b;
+		gModeTimer = 0;
+	}
+	
 }

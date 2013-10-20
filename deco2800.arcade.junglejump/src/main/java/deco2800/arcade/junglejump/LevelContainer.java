@@ -30,7 +30,7 @@ public class LevelContainer {
 	public LevelContainer() {
 		levels = new ArrayList<Level>();
 		setCurrentLevel(0);
-		setCurrentWorld(1);
+		setCurrentWorld(0);
 		levelAmount = 5;
 		worldAmount = 5;
 		
@@ -137,9 +137,7 @@ public class LevelContainer {
 			if(p.getX() >= 1000) {
 				p.setX(p.getX()-1000);
 			}
-//This causes the lag				batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
 		}
-		
 		return;
 	}
 	

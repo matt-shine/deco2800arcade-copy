@@ -538,36 +538,30 @@ public class BlackjackClientTable implements Screen{
 	public void parseMessage(String msg){
 	String[] stringArray = msg.split("|");
 	String function = stringArray[0];
-	
-	/*
-    switch (function) {
-        case "takeseat":
-        	//code for adding a user to a seat, takes format:
-        	//takeseat|player|seatno
-        		break;
-        case "startbettingphase":
-        	//code for notifying the betting phase has started, takes format:
-        	//startbettingphase
-                 break;
-        case "endbettingphase":
-        	//code for notifying the betting phase has ended, takes format:
-        	//endbettingphase
-                 break;
-        case "turn":
-        	//code for notifying that a players turn has begun, takes format:
-        	//turn|player
-                 break;
-        case "cardpull":
-        	//code for notifying that card in a hand has been updated, takes format:
-        	//cardpull|player|handposition|card
-                 break;
-        case "addchips":
-        	//code for notifying that a chip pile has been updated, takes format:
-        	//addchips|player|chippile total
-                 break;
-    	}
-    	
-    */
+	    if (function == "takeseat"){
+	        	//code for adding a user to a seat, takes format:
+	        	//takeseat|player|seatno
+	    }
+	    if (function == "startbettingphase"){
+	        	//code for notifying the betting phase has started, takes format:
+	        	//startbettingphase
+	    }
+	    if (function == "endbettingphase"){
+	        	//code for notifying the betting phase has ended, takes format:
+	        	//endbettingphase
+	    }
+	    if (function == "turn"){
+	        	//code for notifying that a players turn has begun, takes format:
+	        	//turn|player
+	    }
+	    if (function == "cardpull"){
+	        	//code for notifying that card in a hand has been updated, takes format:
+	        	//cardpull|player|handposition|card
+	    }
+	    if (function == "addchips"){
+	        	//code for notifying that a chip pile has been updated, takes format:
+	        	//addchips|player|chippile total
+	    }
 	}
 	// Code for adding a player to a seat
 	private void fillSeat(Player player, int SeatNo, int Chipcount){

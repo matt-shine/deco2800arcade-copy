@@ -2,6 +2,8 @@
 package deco2800.arcade.junglejump;
 
 import java.io.File;
+import java.net.URL;
+
 import com.badlogic.gdx.*;
 
 import javax.sound.sampled.AudioInputStream;
@@ -22,10 +24,6 @@ public class Platform {
 	private Texture platText;
 	public boolean visible = true;
 	private boolean inverted;
-	private enum world {
-		WORLD_ONE, WORLD_TWO, WORLD_THREE
-	}
-	private world currentWorld;
 	public char platType;
 	public String platformType = "";
 	
@@ -33,13 +31,12 @@ public class Platform {
 	 * Platform constructor
 	 * Takes width, height and X and Y position as parameters
 	 */
-	public Platform(char type, boolean flipped, int pX, int pY, int pWidth, int pHeight) {
+	public Platform(char type, int pX, int pY, int pWidth, int pHeight) {
 		this.width = pWidth;
 		this.height = pHeight;
 		this.xPos = pX;
 		this.yPos = pY;
 		this.active = false;
-		this.inverted = flipped;
 		platType = type;
 		setTexture(type);
 	}
@@ -49,7 +46,6 @@ public class Platform {
 		this.width = 40;
 		this.height = 40;
 		
-		//String platformType = "";
 		switch(type) {
 		case '-': 
 			platformType = "branch";
@@ -97,8 +93,38 @@ public class Platform {
 			this.width = 30;
 			this.height = 30;
 			break;
+		case 'x': // Spike
+			platformType = "banana";
+			this.width = 20;
+			this.height = 20;
+			this.yPos -= 20;
+			break;
+		case '~': // Tunnel floor
+			platformType = "banana";
+			this.width = 40;
+			this.height = 20;
+			break;
+		case '=': // Tunnel
+			platformType = "banana";
+			this.width = 40;
+			this.height = 40;
+			break;
+		case 'J': // Jim
+			platformType = "banana";
+			this.width = 80;
+			this.height = 60;
+			break;
+		case 'Z': // Princess monkey
+			platformType = "banana";
+			this.width = 50;
+			this.height = 50;
+			break;
+		case '_': // Building roof
+			platformType = "roof";
+			this.height = 40;
+			break;
 		default:
-			platformType = "branch_short";
+			platformType = "branch";
 			break;
 		}
 		
@@ -116,18 +142,7 @@ public class Platform {
 	
 	public Texture getTexture() {
 		// Texture changes depending on world
-		/* switch(currentWorld) {
-		case WORLD_ONE:
-			platText = new Texture("junglejumpassets/branch.png");
-			break;
-		case WORLD_TWO:
-			// World 2 texture
-			break;
-		case WORLD_THREE:
-			// World 3 texture
-			break;
-		} */
-		platText = new Texture("junglejumpassets/world" + (junglejump.world + 1) + "/" + platformType + ".png");
+		platText = new Texture(Gdx.files.internal("world" + (junglejump.world + 1) + "/" + platformType + ".png"));
 		return this.platText;
 	}
 	
@@ -194,8 +209,13 @@ public class Platform {
 	public void setActive() {
 		if(this.platType == '^') {
 			// Play banana sound
+			/*URL path = this.getClass().getResource("/");
 			try{ 
-				File file = new File("junglejumpassets/pickup.wav");
+				String resource = path.toString().replace(".arcade/build/classes/main/", 
+						".arcade.junglejump/src/main/").replace("file:", "") + 
+						"resources/pickup.wav";
+				System.out.println(resource);
+				File file = new File(resource);
 				FileHandle fileh = new FileHandle(file);
 				AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 				Clip clip = AudioSystem.getClip();
@@ -204,28 +224,16 @@ public class Platform {
 			} catch (Exception e) {
 				Gdx.app.log(junglejump.messages,
 						"Audio File for Banana Music Not Found");
-			}
+			}*/
 			LevelContainer.nextLevel();
 		}
 		if(this.platType == 'j') {
 			junglejump.monkeyY += 50;
 		}
+		if(this.platType == 'x') {
+			junglejump.killMonkey();
+		}
 		this.active = true;
-	}
-	
-	/**
-	 * Sets the platform to no longer be active
-	 */
-	public void setInactive() {
-		this.active = false;
-	}
-	
-	/**
-	 * What happens each frame when platform is active.
-	 * Does nothing on standard platform
-	 */
-	public void onActive() {
-		return;
 	}
 	
 }

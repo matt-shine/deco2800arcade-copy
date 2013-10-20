@@ -13,6 +13,11 @@ public class GameOverState extends GameState {
 		context.statusMessage = context.gamePlayers[playerIndex].getPlayerName() +" Win! ";
 		//setting the scores
 		context.player1.storeScore("Number", context.gamePlayers[0].getScore());
+		//click anywhere on the screen to exit back to game menu
+		if (Gdx.input.isTouched()) {
+			// the arcade system calls gameOver
+			ArcadeSystem.goToGame(ArcadeSystem.UI);
+		}
 	}
 
 }

@@ -1,0 +1,32 @@
+stephen.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+stephenarms
+  rotate: false
+  xy: 69, 213
+  size: 70, 44
+  orig: 70, 44
+  offset: 0, 0
+  index: -1
+steaphenbody
+  rotate: false
+  xy: 2, 2
+  size: 168, 209
+  orig: 168, 209
+  offset: 0, 0
+  index: -1
+steaphenhead0
+  rotate: false
+  xy: 172, 2
+  size: 65, 67
+  orig: 65, 67
+  offset: 0, 0
+  index: -1
+steaphenhead1
+  rotate: false
+  xy: 2, 213
+  size: 65, 67
+  orig: 65, 67
+  offset: 0, 0
+  index: -1

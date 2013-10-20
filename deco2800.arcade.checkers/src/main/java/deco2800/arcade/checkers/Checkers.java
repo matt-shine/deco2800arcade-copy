@@ -114,8 +114,6 @@ public class Checkers extends GameClient {
 			}
 			
         });
-        
-        
 		
 		super.create();
 		
@@ -124,7 +122,6 @@ public class Checkers extends GameClient {
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
 		//making grids
-		
 		squares = new Square[3][4];
 		pushed = new ClickListener();
 		
@@ -167,7 +164,6 @@ public class Checkers extends GameClient {
 		scores[1] = 0;
 		gameState = GameState.READY;
 		statusMessage = "Click to start!";
-		
 	}
 
 	@Override
@@ -249,6 +245,7 @@ public class Checkers extends GameClient {
 				gameState = GameState.GAMEOVER;
 			}
 	    	break;
+	    	
 	    case USERGO: //User go
 			if (Gdx.input.isTouched()) {
 				if ( this.mouseState == MOUSE_UP ) {
@@ -337,7 +334,303 @@ public class Checkers extends GameClient {
 	 */
 	private void startPoint() {
 		//FIXME gigantic method
-		int toMoveNum = 0;
+	System.out.println("startPoint function");
+		//Pieces toMove = theirPieces[toMoveNum];
+		
+		outerloop:
+		for (int toMoveNum = 0; toMoveNum < 4; toMoveNum++) {
+			Pieces toMove = theirPieces[toMoveNum];
+			System.out.println("looped through as " +toMoveNum);
+		
+			//already eaten
+			if (toMove.bounds.y == -90) {
+				// toMoveNum += 1;
+				toMove = theirPieces[toMoveNum];
+				continue outerloop;
+			}
+			
+			//no moves
+			if (toMove.bounds.x == 80) { // is far left
+				for (int p = 0; p < 4; p++) { 
+					if (toMove.bounds.y - 50 == theirPieces[p].bounds.y && toMove.bounds.x + 50 == theirPieces[p].bounds.x) {
+						// and has own piece blocking advancing right space
+						System.out.println("detected own piece at advancing right space");
+						// toMoveNum += 1;
+						toMove = theirPieces[toMoveNum];
+						continue outerloop;
+					} else if (toMove.bounds.y - 50 == myPieces[p].bounds.y && toMove.bounds.x + 50 == myPieces[p].bounds.x) {
+						// and has 2 edible pieces blocking advancing right spaces
+						for (int r = 0; r < 4; r++) {
+							if (toMove.bounds.y - 100 == myPieces[r].bounds.y && toMove.bounds.x + 100 == myPieces[r].bounds.x) {
+								// toMoveNum += 1;
+								toMove = theirPieces[toMoveNum];
+								continue outerloop;
+							}
+						}
+						toMove.move(100f, -100f);
+						myPieces[p].bounds.y = -90;
+						System.out.println("moved 465");
+
+						if (toMove.bounds.y == 110) { //last row
+							scores[1] += 1;
+							toMove.bounds.y = -90;
+						}
+						scores[1] += 1;
+						gameState = GameState.USERGO;
+						statusMessage = null;
+						toMoveNum = 5;
+						break outerloop;
+					}
+				}
+			} else if (toMove.bounds.x == 230) { // is far right
+				for (int p = 0; p < 4; p++) { 
+					// and has own piece blocking advancing left space
+					if (toMove.bounds.y - 50 == theirPieces[p].bounds.y && toMove.bounds.x - 50 == theirPieces[p].bounds.x) {
+						// toMoveNum += 1;
+						toMove = theirPieces[toMoveNum];
+						continue outerloop;
+					} else if (toMove.bounds.y - 50 == myPieces[p].bounds.y && toMove.bounds.x - 50 == myPieces[p].bounds.x) {
+						// and has 2 edible pieces blocking advancing left spaces
+						for (int r = 0; r < 4; r++) {
+							if (toMove.bounds.y - 100 == myPieces[r].bounds.y && toMove.bounds.x - 100 == myPieces[r].bounds.x) {
+								// toMoveNum += 1;
+								toMove = theirPieces[toMoveNum];
+								continue outerloop;
+							}
+						}
+						toMove.move(100f, -100f);
+						myPieces[p].bounds.y = -90;
+						System.out.println("moved 465");
+
+						if (toMove.bounds.y == 110) { //last row
+							scores[1] += 1;
+							toMove.bounds.y = -90;
+						}
+						scores[1] += 1;
+						gameState = GameState.USERGO;
+						statusMessage = null;
+						toMoveNum = 5;
+						break outerloop;
+					}
+				}
+			} else {
+				for (int p = 0; p < 4; p++) { // has own piece blocking advancing right space
+					if (toMove.bounds.y - 50 == theirPieces[p].bounds.y && toMove.bounds.x + 50 == theirPieces[p].bounds.x) {
+						for (int r = 0; r < 4; r++) {
+							if (toMove.bounds.y - 50 == theirPieces[r].bounds.y && toMove.bounds.x - 50 == theirPieces[r].bounds.x) {
+								// and has own piece blocking advancing left space
+								// toMoveNum += 1;
+								toMove = theirPieces[toMoveNum];
+								continue outerloop;
+							} else if (toMove.bounds.y - 50 == myPieces[r].bounds.y && toMove.bounds.x - 50 == myPieces[r].bounds.x) {
+								// edible piece is at corner
+								if (toMove.bounds.x - 100 < 80) {
+									// toMoveNum += 1;
+									toMove = theirPieces[toMoveNum];
+									continue outerloop;
+								}
+								// has 2 edible pieces blocking left spaces
+								for (int s = 0; s < 4; s++) {
+									if (toMove.bounds.y - 100 == myPieces[s].bounds.y && toMove.bounds.x - 100 == myPieces[s].bounds.x) {
+										// toMoveNum += 1;
+										toMove = theirPieces[toMoveNum];
+										continue outerloop;
+									}
+								}
+								// edible, has free space after
+								toMove.move(-100f, -100f);
+								myPieces[r].bounds.y = -90;
+								System.out.println("moved 457");
+								if (toMove.bounds.y == 110) { //last row
+									scores[1] += 1;
+									toMove.bounds.y = -90;
+								}
+								scores[1] += 1;
+								gameState = GameState.USERGO;
+								statusMessage = null;
+								toMoveNum = 5;
+								break outerloop;
+							}
+						}
+					} else if (toMove.bounds.y - 50 == myPieces[p].bounds.y && toMove.bounds.x + 50 == myPieces[p].bounds.x) {
+						// edible piece is at far right
+						if (toMove.bounds.x + 100 > 230) {
+							for (int t = 0; t < 4; t++) {
+								if (toMove.bounds.y - 50 == theirPieces[t].bounds.y && toMove.bounds.x - 50 == theirPieces[t].bounds.x) {
+									// and has own piece blocking advancing left space
+									// toMoveNum += 1;
+									toMove = theirPieces[toMoveNum];
+									continue outerloop;
+								} else if (toMove.bounds.y - 50 == myPieces[t].bounds.y && toMove.bounds.x - 50 == myPieces[t].bounds.x) {
+									// edible piece is at corner
+									if (toMove.bounds.x - 100 < 80) {
+										// toMoveNum += 1;
+										toMove = theirPieces[toMoveNum];
+										continue outerloop;
+									}
+									// has 2 edible pieces blocking left spaces
+									for (int s = 0; s < 4; s++) {
+										if (toMove.bounds.y - 100 == myPieces[s].bounds.y && toMove.bounds.x - 100 == myPieces[s].bounds.x) {
+											// toMoveNum += 1;
+											toMove = theirPieces[toMoveNum];
+											continue outerloop;
+										} else if (toMove.bounds.y - 100 == theirPieces[s].bounds.y && toMove.bounds.x - 100 == theirPieces[s].bounds.x) {
+											// toMoveNum += 1;
+											toMove = theirPieces[toMoveNum];
+											continue outerloop;
+										}
+									}
+									// edible, has free space after
+									toMove.move(-100f, -100f);
+									myPieces[t].bounds.y = -90;
+									System.out.println("moved 417");
+									scores[1] += 1;
+									if (toMove.bounds.y == 110) { //last row
+										scores[1] += 1;
+										toMove.bounds.y = -90;
+									}
+									gameState = GameState.USERGO;
+									statusMessage = null;
+									toMoveNum = 5;
+									break outerloop;
+								}
+							}
+						}
+						// has 2 edible pieces blocking right spaces
+						for (int r = 0; r < 4; r++) {
+							if ((toMove.bounds.y - 100 == myPieces[r].bounds.y && toMove.bounds.x + 100 == myPieces[r].bounds.x) 
+									|| (toMove.bounds.y - 100 == theirPieces[r].bounds.y && toMove.bounds.x + 100 == theirPieces[r].bounds.x)) {
+								for (int t = 0; t < 4; t++) {
+									if (toMove.bounds.y - 50 == theirPieces[t].bounds.y && toMove.bounds.x - 50 == theirPieces[t].bounds.x) {
+										// and has own piece blocking advancing left space
+										// toMoveNum += 1;
+										toMove = theirPieces[toMoveNum];
+										continue outerloop;
+									} else if (toMove.bounds.y - 50 == myPieces[t].bounds.y && toMove.bounds.x - 50 == myPieces[t].bounds.x) {
+										// edible piece is at far left
+										if (toMove.bounds.x - 100 < 80) {
+											// toMoveNum += 1;
+											toMove = theirPieces[toMoveNum];
+											continue outerloop;
+										}
+										// has 2 pieces blocking left spaces after edible
+										for (int s = 0; s < 4; s++) {
+											if (toMove.bounds.y - 100 == myPieces[s].bounds.y && toMove.bounds.x - 100 == myPieces[s].bounds.x) {
+												// toMoveNum += 1;
+												toMove = theirPieces[toMoveNum];
+												continue outerloop;
+											} else if (toMove.bounds.y - 100 == theirPieces[s].bounds.y && toMove.bounds.x - 100 == theirPieces[s].bounds.x) {
+												// toMoveNum += 1;
+												toMove = theirPieces[toMoveNum];
+												continue outerloop;
+											}
+										}
+										// edible, has free space after
+										toMove.move(-100f, -100f);
+										myPieces[t].bounds.y = -90;
+										System.out.println("moved 457");
+										if (toMove.bounds.y == 110) { //last row
+											scores[1] += 1;
+											toMove.bounds.y = -90;
+										}
+										scores[1] += 1;
+										gameState = GameState.USERGO;
+										statusMessage = null;
+										toMoveNum = 5;
+										break outerloop;
+									}
+								}
+							} else {
+								toMove.move(100f, -100f);
+								myPieces[r].bounds.y = -90;
+								System.out.println("moved 465");
+
+								if (toMove.bounds.y == 110) { //last row
+									scores[1] += 1;
+									toMove.bounds.y = -90;
+								}
+								scores[1] += 1;
+								gameState = GameState.USERGO;
+								statusMessage = null;
+								toMoveNum = 5;
+								break outerloop;
+							}
+						}
+					}
+				}
+			}
+			
+			// move
+			if (toMove.bounds.x == 80) { // is far left
+				// advance right
+				toMove.move(50f, -50f);
+				System.out.println("moved 4" + toMoveNum);
+
+				if (toMove.bounds.y == 110) { //last row
+					scores[1] += 1;
+					toMove.bounds.y = -90;
+				}
+				gameState = GameState.USERGO;
+				statusMessage = null;
+				toMoveNum = 5;
+				break outerloop;
+			} else if (toMove.bounds.x == 230) {
+				// advance left
+				toMove.move(-50f, -50f);
+				System.out.println("moved 5");
+
+				if (toMove.bounds.y == 110) { //last row
+					scores[1] += 1;
+					toMove.bounds.y = -90;
+				}
+				gameState = GameState.USERGO;
+				statusMessage = null;
+				toMoveNum = 5;
+				break outerloop;
+			} else {
+				for (int q = 0; q < 4; q++) { 
+					if (toMove.bounds.y - 50 == myPieces[q].bounds.y && toMove.bounds.x + 50 == myPieces[q].bounds.x) {
+						toMove.move(-50f, -50f);
+						System.out.println("moved 6");
+
+						if (toMove.bounds.y == 110) { //last row
+							scores[1] += 1;
+							toMove.bounds.y = -90;
+						}
+						gameState = GameState.USERGO;
+						statusMessage = null;
+						toMoveNum = 5;
+						break outerloop;
+					} else if (toMove.bounds.y - 50 == theirPieces[q].bounds.y && toMove.bounds.x + 50 == theirPieces[q].bounds.x) {
+						toMove.move(-50f, -50f);
+						System.out.println("moved 6");
+
+						if (toMove.bounds.y == 110) { //last row
+							scores[1] += 1;
+							toMove.bounds.y = -90;
+						}
+						gameState = GameState.USERGO;
+						statusMessage = null;
+						toMoveNum = 5;
+						break outerloop;
+					}
+				}
+				toMove.move(50f, -50f);
+				System.out.println("moved 7");
+
+				if (toMove.bounds.y == 110) { //last row
+					scores[1] += 1;
+					toMove.bounds.y = -90;
+				}
+				gameState = GameState.USERGO;
+				statusMessage = null;
+				toMoveNum = 5;
+				break outerloop;
+			}
+		}	
+		
+		
+	/*	int toMoveNum = 0;
 		int direction = 0;
 		int leftEdible = 0;
 		int rightEdible = 0;
@@ -350,7 +643,7 @@ public class Checkers extends GameClient {
 				i = 0;
 				direction = 0;
 			} else if (toMove.bounds.y == -90) {
-				//eaten
+				//piece already gone
 				toMoveNum += 1;
 				toMove = theirPieces[toMoveNum];
 				i = 0;
@@ -527,10 +820,8 @@ public class Checkers extends GameClient {
 		}
 		
 		gameState = GameState.USERGO;
-		statusMessage = null;
+		statusMessage = null;*/
 	}
-
-
 	
 	private void mouseReleased() {
 		//FIXME big method
@@ -642,16 +933,16 @@ public class Checkers extends GameClient {
 		super.resume();
 	}
 
-	
 	private static final Game game;
 	static {
 		game = new Game();
-		game.id = "checkers";
+		game.id = "Checkers";
 		game.name = "Checkers";
+		game.description = "A classical game, passed down through the ages, and"
+				+ "now digitalized, for competitive, but original strategy.";
 	}
 	
 	public Game getGame() {
 		return game;
 	}
-	
 }

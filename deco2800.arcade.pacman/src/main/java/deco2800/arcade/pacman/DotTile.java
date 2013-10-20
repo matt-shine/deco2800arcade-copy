@@ -1,7 +1,7 @@
 package deco2800.arcade.pacman;
 
 
-public class DotTile extends Tile {
+public final class DotTile extends Tile {
 
 	private final boolean energiser; //true means energiser, false means normal dot
 	private boolean exists; //true if not eaten, false if eaten

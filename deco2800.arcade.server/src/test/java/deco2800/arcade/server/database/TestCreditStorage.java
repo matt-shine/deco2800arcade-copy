@@ -79,115 +79,115 @@ public class TestCreditStorage {
 	 * Simple test case to make sure our XML loading is working, and that retrieving a user's balance is OK
 	 * @throws DatabaseException
 	 */
-//	@Test
-//	public void initialTotal() throws DatabaseException {
-//		assertEquals(0, (int) creditStorage.getUserCredits(1));
-//	}
-//	
-//	/**
-//	 * Check that a simple addition to a zero balance works
-//	 * @author Addison Gourluck
-//	 * @throws DatabaseException
-//	 */
-//	@Test
-//	public void addBaseCase() throws DatabaseException {
-//		creditStorage.addUserCredits(1, 5);
-//		assertEquals(new Integer(5), creditStorage.getUserCredits(1));
-//	}
-//	
-//	/**
-//	 * Check that several additions to 0 works
-//	 * @author Addison Gourluck
-//	 * @throws DatabaseException
-//	 */
-//	@Test
-//	public void multipleAddCases() throws DatabaseException {
-//		creditStorage.addUserCredits(1, 50);
-//		creditStorage.addUserCredits(1, 20);
-//		creditStorage.addUserCredits(1, 10);
-//		creditStorage.addUserCredits(1, 1);
-//		creditStorage.addUserCredits(1, 1000);
-//		assertEquals(new Integer(1081), creditStorage.getUserCredits(1));
-//	}
-//	
-//	/**
-//	 * Check that adding 0 will throw an exception.
-//	 * @author Addison Gourluck
-//	 * @throws DatabaseException
-//	 */
-//	@Test(expected=DatabaseException.class)
-//	public void addZeroCase() throws DatabaseException {
-//		creditStorage.addUserCredits(1, 100);
-//		creditStorage.addUserCredits(1, 0);
-//	}
-//
-//	/**
-//	 * Check that adding a negative number will throw an exception.
-//	 * @author Addison Gourluck
-//	 * @throws DatabaseException
-//	 */
-//	@Test(expected=DatabaseException.class)
-//	public void addNegativeCase() throws DatabaseException {
-//		creditStorage.addUserCredits(1, 100);
-//		creditStorage.addUserCredits(1, -10);
-//	}
-//
-//	/**
-//	 * Check that a simple addition and then subtraction works
-//	 * @author Addison Gourluck
-//	 * @throws DatabaseException
-//	 */
-//	@Test
-//	public void deductBaseCase() throws DatabaseException {
-//		creditStorage.addUserCredits(1, 20);
-//		creditStorage.deductUserCredits(1, 5);
-//		assertEquals(new Integer(15), creditStorage.getUserCredits(1));
-//	}
-//	
-//	/**
-//	 * Check that several subtractions work with a final balance of 0.
-//	 * @author Addison Gourluck
-//	 * @throws DatabaseException
-//	 */
-//	@Test
-//	public void multipleDeductCases() throws DatabaseException {
-//		creditStorage.addUserCredits(1, 1000);
-//		creditStorage.deductUserCredits(1, 900);
-//		creditStorage.deductUserCredits(1, 50);
-//		creditStorage.deductUserCredits(1, 50);
-//		assertEquals(new Integer(0), creditStorage.getUserCredits(1));
-//	}
-//	
-//	/**
-//	 * Check that subtracting more than the user has will throw an exception.
-//	 * @author Addison Gourluck
-//	 * @throws DatabaseException
-//	 */
-//	@Test(expected=DatabaseException.class)
-//	public void cantAffordCase() throws DatabaseException {
-//		creditStorage.addUserCredits(1, 100);
-//		creditStorage.deductUserCredits(1, 101);
-//	}
-//	
-//	/**
-//	 * Check that subtracting 0 will throw an exception.
-//	 * @author Addison Gourluck
-//	 * @throws DatabaseException
-//	 */
-//	@Test(expected=DatabaseException.class)
-//	public void deductZeroCase() throws DatabaseException {
-//		creditStorage.addUserCredits(1, 100);
-//		creditStorage.deductUserCredits(1, 0);
-//	}
-//
-//	/**
-//	 * Check that subtracting a negative number will throw an exception.
-//	 * @author Addison Gourluck
-//	 * @throws DatabaseException
-//	 */
-//	@Test(expected=DatabaseException.class)
-//	public void deductNegativeCase() throws DatabaseException {
-//		creditStorage.addUserCredits(1, 100);
-//		creditStorage.deductUserCredits(1, -10);
-//	}
+	@Test
+	public void initialTotal() throws DatabaseException {
+		assertEquals(0, (int) creditStorage.getUserCredits(1));
+	}
+	
+	/**
+	 * Check that a simple addition to a zero balance works
+	 * @author Addison Gourluck
+	 * @throws DatabaseException
+	 */
+	@Test
+	public void addBaseCase() throws DatabaseException {
+		creditStorage.addUserCredits(1, 5);
+		assertEquals(new Integer(5), creditStorage.getUserCredits(1));
+	}
+	
+	/**
+	 * Check that several additions to 0 works
+	 * @author Addison Gourluck
+	 * @throws DatabaseException
+	 */
+	@Test
+	public void multipleAddCases() throws DatabaseException {
+		creditStorage.addUserCredits(1, 50);
+		creditStorage.addUserCredits(1, 20);
+		creditStorage.addUserCredits(1, 10);
+		creditStorage.addUserCredits(1, 1);
+		creditStorage.addUserCredits(1, 1000);
+		assertEquals(new Integer(1081), creditStorage.getUserCredits(1));
+	}
+	
+	/**
+	 * Check that adding 0 will throw an exception.
+	 * @author Addison Gourluck
+	 * @throws DatabaseException
+	 */
+	@Test(expected=DatabaseException.class)
+	public void addZeroCase() throws DatabaseException {
+		creditStorage.addUserCredits(1, 100);
+		creditStorage.addUserCredits(1, 0);
+	}
+
+	/**
+	 * Check that adding a negative number will throw an exception.
+	 * @author Addison Gourluck
+	 * @throws DatabaseException
+	 */
+	@Test(expected=DatabaseException.class)
+	public void addNegativeCase() throws DatabaseException {
+		creditStorage.addUserCredits(1, 100);
+		creditStorage.addUserCredits(1, -10);
+	}
+
+	/**
+	 * Check that a simple addition and then subtraction works
+	 * @author Addison Gourluck
+	 * @throws DatabaseException
+	 */
+	@Test
+	public void deductBaseCase() throws DatabaseException {
+		creditStorage.addUserCredits(1, 20);
+		creditStorage.deductUserCredits(1, 5);
+		assertEquals(new Integer(15), creditStorage.getUserCredits(1));
+	}
+	
+	/**
+	 * Check that several subtractions work with a final balance of 0.
+	 * @author Addison Gourluck
+	 * @throws DatabaseException
+	 */
+	@Test
+	public void multipleDeductCases() throws DatabaseException {
+		creditStorage.addUserCredits(1, 1000);
+		creditStorage.deductUserCredits(1, 900);
+		creditStorage.deductUserCredits(1, 50);
+		creditStorage.deductUserCredits(1, 50);
+		assertEquals(new Integer(0), creditStorage.getUserCredits(1));
+	}
+	
+	/**
+	 * Check that subtracting more than the user has will throw an exception.
+	 * @author Addison Gourluck
+	 * @throws DatabaseException
+	 */
+	@Test(expected=DatabaseException.class)
+	public void cantAffordCase() throws DatabaseException {
+		creditStorage.addUserCredits(1, 100);
+		creditStorage.deductUserCredits(1, 101);
+	}
+	
+	/**
+	 * Check that subtracting 0 will throw an exception.
+	 * @author Addison Gourluck
+	 * @throws DatabaseException
+	 */
+	@Test(expected=DatabaseException.class)
+	public void deductZeroCase() throws DatabaseException {
+		creditStorage.addUserCredits(1, 100);
+		creditStorage.deductUserCredits(1, 0);
+	}
+
+	/**
+	 * Check that subtracting a negative number will throw an exception.
+	 * @author Addison Gourluck
+	 * @throws DatabaseException
+	 */
+	@Test(expected=DatabaseException.class)
+	public void deductNegativeCase() throws DatabaseException {
+		creditStorage.addUserCredits(1, 100);
+		creditStorage.deductUserCredits(1, -10);
+	}
 }

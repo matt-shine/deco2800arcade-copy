@@ -75,26 +75,27 @@ public class GameStorage {
 
         String inserts = "TRUNCATE TABLE GAMES;" +
                 "INSERT INTO GAMES values (0, 'Pong', 'Pong', 0, 'Tennis, without that annoying 3rd dimension!', '');" +
-                "INSERT INTO GAMES values (1, 'deerforest', 'deerforest', 0, 'N/A', '');" +
+                "INSERT INTO GAMES values (1, 'deerforest', 'deerforest', 0, 'A battle of minds, fought with pieces of paper with deer on them. Probably. More dramatic than it sounds.', '');" +
                 "INSERT INTO GAMES values (2, 'Mixmaze', 'Mix Maze', 0, 'Build as much box as you can, stop your opponent from building theirs.', '');" +
                 "INSERT INTO GAMES values (3, 'Breakout', 'Breakout', 0, 'Bounce the ball off your paddle to keep it from falling off the bottom of the screen.', '');" +
                 "INSERT INTO GAMES values (4, 'burningskies', 'Burning Skies', 0, 'Engage in one of the most thrilling space combat battles this side of the galaxy in the critically acclaimed.', '');" +
                 "INSERT INTO GAMES values (5, 'Checkers', 'Checkers', 0, 'It is checkers', '');" +
-                "INSERT INTO GAMES values (6, 'chess', 'Chess', 0, 'N/A', '');" +
+                "INSERT INTO GAMES values (6, 'chess', 'Chess', 0, 'A game of Chess, where 2 players, dubbed white or black, aim to CheckMate their opponent before being CheckMated themselves.', '');" +
                 "INSERT INTO GAMES values (7, 'Connect4', 'Connect4', 0, 'Fun old connect 4!', '');" +
                 "INSERT INTO GAMES values (8, 'LandInvaders', 'LandInvaders', 0, 'funny game!', '');" +
-                "INSERT INTO GAMES values (9, 'Pacman', 'Pac man', 0, 'An implementation of the classic arcade game Pac ', '');" +
-                "INSERT INTO GAMES values (10, 'Raiden', 'Raiden', 0, 'Flight fighter', '');" +
-                "INSERT INTO GAMES values (11, 'towerdefence', 'Tower Defence', 0, 'N/A', '');" +
+                "INSERT INTO GAMES values (9, 'Pacman', 'Pac man', 0, 'An implementation of the classic arcade game PacMan', '');" +
+                "INSERT INTO GAMES values (10, 'Raiden', 'Raiden', 0, 'A Space Flight fighter', '');" +
+                "INSERT INTO GAMES values (11, 'towerdefence', 'Tower Defence', 0, 'Defend your towers with wit and strategy. Endless, fun, fast paced gameplay!', '');" +
                 "INSERT INTO GAMES values (12, 'Wolfenstein 3D', 'Wolfenstein Time', 0, 'Fight through a maze of classic wolfenstein levels against the iceking and his minions.', '');" +
-                "INSERT INTO GAMES values (13, 'snakeLadder', 'snakeLadder', 0, 'N/A', '');" +
-                "INSERT INTO GAMES values (14, 'tictactoe', 'Tic Tac Toe', 0, 'N/A', '');" +
-                "INSERT INTO GAMES values (15, 'junglejump', 'Jungle Jump', 0, 'N/A', '');" +
+                "INSERT INTO GAMES values (13, 'snakeLadder', 'snakeLadder', 0, 'Many snakes and ladders.', '');" +
+                "INSERT INTO GAMES values (14, 'tictactoe', 'Tic Tac Toe', 0, 'The game nobody can lose, and nobody can win.', '');" +
+                "INSERT INTO GAMES values (15, 'junglejump', 'Jungle Jump', 0, 'Help Jay find Jays Jane', '');" +
                 "INSERT INTO GAMES values (16, 'soundboard', 'UQ Soundboard', 0, 'The epic DECO2800 Soundboard!! Enjoy the master sounds of UQ!', '');" +
                 "INSERT INTO GAMES values (17, 'GuessTheWord', 'GuessTheWord', 0, 'This word guessing is popular with people of all ages. Its challenging and exciting at the same time!!', '');" +
                 "INSERT INTO GAMES values (18, 'MiniGolf', 'MiniGolf', 0, 'Search for buried treasure', '');" +
                 "INSERT INTO GAMES values (19, 'lunarlander', 'LunarLander', 0, 'Can your Lunar Lander make it to the surface safely?', '');" +
-                "INSERT INTO GAMES values (20, 'hunter', 'Hunter Game', 0, 'N/A', '');";
+                "INSERT INTO GAMES values (20, 'Cyra', 'Cyra', 0, 'Run, jump, swing sword.', '');" +
+                "INSERT INTO GAMES values (21, 'hunter', 'Hunter Game', 0, 'A 2D platformer running game where you hunt animals before they eat you!', '');";
 
         String[] cmds = inserts.split(";");
 

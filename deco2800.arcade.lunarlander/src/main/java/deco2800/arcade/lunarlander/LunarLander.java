@@ -22,6 +22,7 @@ import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.highscores.HighscoreClient;
 
 // Welcome to Lunar Lander! 
 
@@ -84,6 +85,10 @@ public class LunarLander extends GameClient {
 
 	// speed of movement when lander is moved left or right 
 	private float sideSpeed = 40.0f;
+	
+	//Highscores variable
+	private NetworkClient networkClient;
+	private HighscoreClient player;
 
 	/**
 	 * Basic constructor for Lunar Lander 
@@ -93,7 +98,10 @@ public class LunarLander extends GameClient {
 	 */
 	public LunarLander(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		this.networkClient = networkClient;  
+		this.networkClient = networkClient;
+		//Usage of the players name is isn't Ideal as this can change but
+		//no one really wants to see an integer with a highscore...
+		this.player = new HighscoreClient(player.getUsername(), game.id, networkClient);
 	}
 
 	/**
@@ -294,8 +302,8 @@ public class LunarLander extends GameClient {
 				if(fuel > 900 && !gameOver){ //This is starting amount (1000) - 100
 					this.incrementAchievement("lunarlander.expresstrip");
 				}
+				this.player.logLoss();
 				gameOver = true;
-				updateAchievements();
 				gameState = GameState.GAME_OVER_LOSE;
 			} else if(landerX > terrain.get(0).get(0) && landerX < 
 					terrain.get(0).get(2)){
@@ -310,10 +318,16 @@ public class LunarLander extends GameClient {
 		}
 	}
 	
+	/**
+	 * Updates the Achievements and high-scores for the player, only to be
+	 * called when a successful landing has taken place.
+	 */
 	private void updateAchievements(){
 		if(gameOver){
 			return;
 		}
+		this.player.logWin();
+		this.player.storeScore("Number", this.score);
 		this.incrementAchievement("lunarlander.landed");
 		this.incrementAchievement("lunarlander.fiftytimes");
 		this.incrementAchievement("lunarlander.grabachocolate");

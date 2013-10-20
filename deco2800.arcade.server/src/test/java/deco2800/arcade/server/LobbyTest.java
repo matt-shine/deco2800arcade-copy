@@ -12,7 +12,6 @@ import static org.mockito.Mockito.*;
 
 import com.esotericsoftware.kryonet.Connection;
 
-import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.lobby.CreateMatchResponse;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponse;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponseType;
@@ -38,6 +37,11 @@ public class LobbyTest {
 		player2Connection = mock(Connection.class);
 		l = Lobby.instance();
 		testGame = "paprika";
+	}
+	
+	@Test
+	public void testInstance() {
+		assertTrue(Lobby.instance() == l);
 	}
 	
 	@Test
@@ -103,6 +107,7 @@ public class LobbyTest {
 		
 		/* Player 2 Joins with incorrect matchID */
 		l.joinMatch(222222, player2ID, player2Connection);
+		@SuppressWarnings("rawtypes")
 		ArgumentCaptor arg = ArgumentCaptor.forClass(JoinLobbyMatchResponse.class);
 		
 		verify(player2Connection, atLeastOnce()).sendTCP(arg.capture());
@@ -116,9 +121,4 @@ public class LobbyTest {
 		response = (JoinLobbyMatchResponse)arg.getValue();
 		assertTrue(response.responseType == JoinLobbyMatchResponseType.OK);
 	}
-	
-	
-	
-	
-
 }

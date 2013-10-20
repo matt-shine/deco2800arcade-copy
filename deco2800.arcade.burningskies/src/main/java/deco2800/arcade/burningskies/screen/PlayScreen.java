@@ -210,7 +210,7 @@ public class PlayScreen implements Screen
     						}
     						removeEntity(b);
     	        			i--;
-    						continue;
+    						break;
     					}
     					
     				}

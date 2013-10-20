@@ -32,6 +32,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	protected List<GameOverListener> gameOverListeners;
 	private int multiplayerOn = 0;
 	private int multiplayerSession;
+	private int lobbySession = -1;
 	private ApplicationListener overlay = null;
 	private UIOverlay overlayBridge = null;
 	private boolean overlayInitialised = false;
@@ -58,9 +59,10 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	public abstract Game getGame();
 
     public void achievementAwarded(final Achievement ach) {
-	if (this.overlayBridge == null)
+	if (this.overlayBridge == null) {
 	    return;
-
+	}
+	
 	this.imageManager.getTexture(ach.icon).setHandler(new Handler<Texture>() {
 		public void handle(final Texture texture) {
 		    GameClient.this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
@@ -150,7 +152,6 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	 * @param overlay
 	 */
 	public void addOverlayBridge(UIOverlay overlay) {
-	    System.out.println("adding overlay bridge");
 
 		this.overlayBridge = overlay;
 		overlay.setHost(this);
@@ -211,11 +212,6 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	}
 
 	@Override
-	public void pause() {
-		super.pause();
-	}
-
-	@Override
 	public void render() {
 		super.render();
 		processOverlay();
@@ -243,11 +239,6 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 		//super.resize(width, height);
 	}
 
-	@Override
-	public void resume() {
-		super.resume();
-	}
-
 	public int getWidth() {
 		return width;
 	}
@@ -273,11 +264,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	}
 
 	public boolean multiplayerMode() {
-		if (multiplayerOn == 1) {
-			return true;
-		} else {
-			return false;
-		}
+		return (multiplayerOn == 1);
 	}
 
 	public void setMultiSession(int session) {
@@ -303,6 +290,14 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 		return host;
 	}
 	
+	public void setLobbySession(int lobby) {
+		lobbySession = lobby;
+	}
+	
+	public int getLobbySession() {
+		return lobbySession;
+	}
+	
 	public void startMultiplayerGame() {
 	}
 
@@ -317,7 +312,6 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	
 	public void displayChat(LobbyMessageResponse response) {
 	}
-
 }
 
 

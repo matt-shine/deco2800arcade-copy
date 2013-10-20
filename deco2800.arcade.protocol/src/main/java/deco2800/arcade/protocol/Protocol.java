@@ -53,6 +53,7 @@ import deco2800.arcade.protocol.lobby.LobbyRequestType;
 import deco2800.arcade.protocol.lobby.NewLobbyRequest;
 import deco2800.arcade.protocol.lobby.LobbyMessageRequest;
 import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
+import deco2800.arcade.protocol.multiplayerGame.ActiveGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
 import deco2800.arcade.protocol.multiplayerGame.NewMatchmakingRequest;
@@ -170,6 +171,7 @@ public class Protocol {
 		kryo.register(GameStateUpdateRequest.class);
 		kryo.register(NewMultiSessionResponse.class);
 		kryo.register(NewMatchmakingRequest.class);
+		kryo.register(ActiveGameRequest.class);
 		
 		//Multiplayer Pong Messages
 		kryo.register(com.badlogic.gdx.math.Vector2.class);

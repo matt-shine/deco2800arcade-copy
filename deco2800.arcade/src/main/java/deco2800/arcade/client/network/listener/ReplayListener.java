@@ -67,12 +67,12 @@ public class ReplayListener extends NetworkListener {
 		{
 		    PushEventResponse per = (PushEventResponse) object;
 		    
-		    replayHandler.getRecorder().eventPushed(per);
+//		    replayHandler.getRecorder().eventPushed(per);
 		} else if (object instanceof GetEventsResponse)
 		{
 		    GetEventsResponse ger = (GetEventsResponse) object;
 		    
-		    replayHandler.getPlayback().eventsForSessionReceived(ger);
+//		    replayHandler.getPlayback().eventsForSessionReceived(ger);
 		}
 	}
 

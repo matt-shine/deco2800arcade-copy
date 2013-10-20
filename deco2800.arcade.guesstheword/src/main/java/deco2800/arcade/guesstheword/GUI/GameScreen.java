@@ -149,6 +149,9 @@ public class GameScreen implements Screen, InputProcessor {
 	public HashMap<String, HashMap<String, Texture>> hm;
 	public ArrayList<TextButton> buttonList;
 
+	public GameScreen(){
+	}
+	
 	GameScreen(final GuessTheWord game){
 		this.game = game;
 		this.skin = game.skin;

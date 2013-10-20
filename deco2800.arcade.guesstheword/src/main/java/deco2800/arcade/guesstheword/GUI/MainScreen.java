@@ -15,6 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -47,6 +49,7 @@ public class MainScreen implements Screen {
 	private TextButton achieveButton;
 	
 	private TextField achieveText;
+	private ScrollPane scrollpane;
 	
 	// setup the dimensions of the menu buttons
     private static final float BUTTON_WIDTH = 300f;
@@ -152,14 +155,15 @@ public class MainScreen implements Screen {
 //
 //				for(Achievement ach  : achievements.get())
 //					System.out.println(ach);
-				
-				achieveText.setMessageText("Your HighScore: " + game.playerScore.getHighScore() );
+				List scoreList =  new List(game.playerScore.getHighScore().toArray(), skin);
+				scrollpane = new ScrollPane(scoreList, skin);
+				achieveText.setMessageText("Your HighScore: ");
 			}
 		});
 		
 		achieveText = new TextField("", skin);
 		achieveText.setMessageText("");
-
+		
 		
 		// Creating of the table to store the buttons and labels
 		Table mainTable =  new Table();
@@ -174,8 +178,9 @@ public class MainScreen implements Screen {
 		mainTable.add(achieveButton).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5);
 		
 		mainTable.row();
-		mainTable.add(achieveText).width(BUTTON_WIDTH).height(BUTTON_HEIGHT + 60F).padBottom(5);
-		
+		mainTable.add(achieveText).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5);
+		mainTable.row();
+		mainTable.add(scrollpane).width(BUTTON_WIDTH).height(BUTTON_HEIGHT + 60F).padBottom(5);
 		stage.addActor(mainTable);
 		
 	}

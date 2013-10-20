@@ -1,8 +1,10 @@
 package deco2800.arcade.guesstheword.gameplay;
 
+import java.io.File;
 import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.TextureData;
 /**
  * This is the class that will "add" all the images required for the game. 
  * 
@@ -36,12 +38,12 @@ public class Pictures {
 		// Creating of the new Texture, in other words each picture 
 		// has their own texture. 
 
-		//animals textures level 1
-		Texture bear1 = new Texture("Images/level1/animals/bear/bear_1.png");
-		Texture bull1 = new Texture("Images/level1/animals/bull/bull_1.png");
-		Texture fish1 = new Texture("Images/level1/animals/fish/fish_1.png");
-		Texture hare1 = new Texture("Images/level1/animals/hare/hare_1.png");
-		Texture frog1 = new Texture("Images/level1/animals/frog/frog_1.png");
+		//animals textures level 1	
+		Texture bear1 = new Texture("src/main/resources/Images/level1/animals/bear/bear_1.png");
+		Texture bull1 = new Texture("src/main/resources/Images/level1/animals/bull/bull_1.png");
+		Texture fish1 = new Texture("src/main/resources/Images/level1/animals/fish/fish_1.png");
+		Texture hare1 = new Texture("src/main/resources/Images/level1/animals/hare/hare_1.png");
+		Texture frog1 = new Texture("src/main/resources/Images/level1/animals/frog/frog_1.png");
 		HashMap<String, Texture> animalsMap = new HashMap<String, Texture>();
 		animalsMap.put("BEAR", bear1 );
 		animalsMap.put("BULL", bull1 );

@@ -7,9 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.guesstheword.gameplay.GameModel;
 import deco2800.arcade.guesstheword.gameplay.GetterSetter;
 import deco2800.arcade.guesstheword.gameplay.Pictures;
 import deco2800.arcade.guesstheword.gameplay.PlayerScore;
+import deco2800.arcade.guesstheword.gameplay.WordShuffler;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -32,26 +34,33 @@ public class GuessTheWord extends GameClient{
 	Screen mainScreen;
 	Screen gameScreen;
 	Screen settingsScreen;
+	
+	public GameModel gs;
 
-	Skin skin;
+	public Skin skin;
 
-//	public GuessTheWord(){
-//		super(player, networkClient);
-//	}
+	public GuessTheWord(){
+		super(player, networkClient);
+		getterSetter = new GetterSetter();		
+		picture =  new Pictures();
+		gs = new GameModel(this, new GameScreen(), new WordShuffler());
+
+	}
 	
 	public GuessTheWord(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		
 		this.player = player;
 		this.networkClient = networkClient;
+		
 		this.achievementClient = new AchievementClient(networkClient);
 		playerScore =  new PlayerScore(this,player,networkClient);
+		getterSetter = new GetterSetter();		
+		
 	}
 	
 	@Override
 	public void create() {
-		getterSetter = new GetterSetter();		
-		
 		loadGamePicture();
 		
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -59,9 +68,7 @@ public class GuessTheWord extends GameClient{
 		splashScreen = new SplashScreen(this);
 		mainScreen = new MainScreen(this);
 		gameScreen = new GameScreen(this);
-		settingsScreen = new SettingScreen(this);
-	//	acheivementScreen = new AchievementScreen(this);
-		
+		settingsScreen = new SettingScreen(this);	
 		
 		setScreen(splashScreen);
 	}

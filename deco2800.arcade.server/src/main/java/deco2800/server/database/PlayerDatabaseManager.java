@@ -1,5 +1,6 @@
  package deco2800.server.database;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -383,8 +384,15 @@ public class PlayerDatabaseManager {
 		Set<User> invitesSet = new HashSet<User>();
 		Set<User> blockedSet = new HashSet<User>();
 		Set<Game> gameSet = new HashSet<Game>();
-		boolean[] privacy = {false, false, false, false, false, false, false};
-		privacy[0] = false;
+		ArrayList<Boolean> privacy = new ArrayList<Boolean>();
+		privacy.add(false);
+		privacy.add(false);
+		privacy.add(false);
+		privacy.add(false);
+		privacy.add(false);
+		privacy.add(false);
+		privacy.add(false);
+
 
 		for (int i : friends) {
 			friendsSet.add(new User(i));
@@ -404,9 +412,9 @@ public class PlayerDatabaseManager {
 
 		for (int i = 0; i < privacyData.size(); i++) {
 			if (privacyData.get(i) == 1) {
-				privacy[i] = true;
+				privacy.set(i, true);
 			} else {
-				privacy[i] = false;
+				privacy.set(i, false);
 			}
 		}
 

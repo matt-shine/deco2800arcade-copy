@@ -70,6 +70,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	private String teamCheck;
 	private BitmapFont checkInfo;
 	
+	private List<Highscore> hs;
+	
 	// Piece positions
 	private int[] whiteRook1Pos, whiteKnight1Pos, whiteBishop1Pos, whiteKingPos,
 			whiteQueenPos, whiteBishop2Pos, whiteKnight2Pos, whiteRook2Pos;
@@ -134,7 +136,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 	public SplashScreen splashScreen;
 	public MenuScreen menuScreen;
-	HighscoreClient player1;
+	HighscoreClient player1, player2;
 
 	/**
 	 * Initialises a new game
@@ -167,6 +169,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 		// True means AI is playing, false if it isn't
 		// EasyComputerOpponent = false;
+		
+		hs = player1.getWinLoss();
 
 		styles = new ArrayList<String>();
 
@@ -367,6 +371,17 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			teamCheck = "White team in check";
 			gameInfo.draw(batch, teamCheck, 600, 50);
 		}
+		Highscore b = hs.get(0);
+		Highscore a = hs.get(1);
+		int  c = a.score;
+		int d = b.score;
+		String player = players[0];
+		//String text =  Integer.toString(c)+  Integer.toString(d);
+		String wins = Integer.toString(d) + " win(s)";
+		String losses = Integer.toString(c) + " loss(es)";
+		gameInfo.draw(batch, player, 400, 80);
+		gameInfo.draw(batch, wins, 400, 60);
+		gameInfo.draw(batch, losses, 400, 40);
 		//Camera updating options
 		gameInfo.draw(batch, info, 600, 70);
 		batch.end();
@@ -410,11 +425,15 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		// if ((loser == true) && (!stalemate)) {
 		// this.incrementAchievement("chess.winGame");
 		// }
-		if ((!stalemate) && (loser)) {
-			player1.logWin();
-		}
-		if ((!stalemate) && (!loser)) {
-			player1.logLoss();
+		if (!Multiplayer) {
+			if ((!stalemate) && (loser)) {
+				player1.logWin();
+				hs = player1.getWinLoss();
+			}
+			if ((!stalemate) && (!loser)) {
+				player1.logLoss();
+				hs = player1.getWinLoss();
+			}
 		}
 		
 		System.err.println("wins" + " " +player1.getWin().toString());

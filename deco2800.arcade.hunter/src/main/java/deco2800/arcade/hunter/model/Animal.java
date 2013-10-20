@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Animal extends Entity {
-
-
     /**
      * The speed at which the Animal moves
      */
@@ -30,71 +28,47 @@ public class Animal extends Entity {
     /**
      * The current animation of the animal
      */
-    private Animation currAnim;
+    private Animation currentAnimation;
 
     /**
-     * The type of animal
+     * Whether or not the current animation should loop
      */
-    private Type hunt;
-
-    /**
-     * The Class type of the entity
-     */
-    private String classType = "Animal";
-
-    /**
-     * Boolean of whether the animal loops
-     */
-    private boolean animLoop;
-    //Timer for death
-    private long deathTimer;
-    //Entities list which the Animal is under
-    private EntityCollection entities;
+    private boolean loopAnimation;
+    private long timeOfDeath;
     //GameScreen in which the Animal is located
     private GameScreen gameScreen;
-    //String of type of Animal
-    private String animal;
+    private String animalType;
 
-    public Animal(Vector2 pos, float width, float height, boolean hunted,
-                  String animalType, Animation anim, GameScreen game) {
+    public Animal(Vector2 pos, float width, float height, String animalType,
+                  Animation currentAnimation, GameScreen game) {
         super(pos, width, height);
-        setX(pos.x);
-        setY(pos.y);
-        this.currAnim = anim;
+        setPosition(pos);
+        this.currentAnimation = currentAnimation;
         this.gameScreen = game;
-        this.animal = animalType;
-        this.entities = gameScreen.getEntites();
-        //Determines whether it is a predator or a prey
-        if (animalType.equals("zebra")) {
-            hunt = Type.PREY;
-            moveSpeed = 4;
-        } else {
-            hunt = Type.PREDATOR;
-            moveSpeed = -2;
-        }
+        this.animalType = animalType;
+
+        //Set the speed based upon whether the animal is predator or prey
+        moveSpeed = (animalType.equals("zebra")) ? 4 : -2;
     }
 
 
     private enum State {
-        MOVING, DEAD, IDLE
+        DEAD, IDLE
     }
 
-    private enum Type {
-        PREDATOR, PREY
-    }
-
+    /**
+     * Update the state of the animalType
+     * @param delta delta time since the last call to update
+     */
     public void update(float delta) {
-
-        // updates x position of the animal
+        //Move the animalType
         setX(getX() + moveSpeed);
-
-        //updates y position of the animal
         setY(getY() - Hunter.State.gravity);
 
-        //Removes the entity after a certain period, determined by deathTimer and timeout.
+        //Removes the entity after a certain period, determined by timeOfDeath and timeout.
         if (this.state == State.DEAD) {
-            if (deathTimer + Hunter.Config.PLAYER_BLINK_TIMEOUT <= System.currentTimeMillis()) {
-                Iterator it = entities.iterator();
+            if (timeOfDeath + Hunter.Config.PLAYER_BLINK_TIMEOUT <= System.currentTimeMillis()) {
+                Iterator it = gameScreen.getEntites().iterator();
                 while (it.hasNext()) {
                     if (it.next().equals(this))
                         it.remove();
@@ -103,45 +77,30 @@ public class Animal extends Entity {
         }
     }
 
-
     /**
-     * Returns the current animation of the animal
-     *
-     * @return Animation Current Animation
-     */
-    public Animation getAnim() {
-        return currAnim;
-    }
-
-    /**
-     * Returns the type of animal
-     *
-     * @return Type - Predator or Prey
-     */
-    public Type getHunt() {
-        return hunt;
-    }
-
-    /**
-     * Returns boolean of a dead state.
-     *
-     * @return Boolean - Whether the animal is in a dead state
+     * @return whether the animal is dead.
      */
     public boolean isDead() {
         return state == State.DEAD;
     }
 
+    /**
+     * Handle the animal dying
+     */
     public void dead() {
-        //draw a dead animal sprite
-        //play sound
+        //draw a dead animalType sprite
         moveSpeed = 0;
         this.state = State.DEAD;
-        deathTimer = System.currentTimeMillis();
-        currAnim = gameScreen.entityHandler.getAnimalAnimation(animal + "DEAD");
+        timeOfDeath = System.currentTimeMillis();
+        currentAnimation = gameScreen.entityHandler.getAnimalAnimation(animalType + "DEAD");
     }
 
     /**
-     * Checks for collisions
+     * Checks for collisions against all other entities in the given collection
+     * of entites.
+     *
+     * @param entities a collection of all entities which you want to check
+     *                 for collisions against.
      */
     @Override
     public ArrayList<EntityCollision> getCollisions(EntityCollection entities) {
@@ -160,33 +119,46 @@ public class Animal extends Entity {
     }
 
     /**
-     * Handles Collisions
+     * Handle a collision with an entity
+     * @param e the entity this animal collided with
+     * @param entities the collection of all entities, which contains both this
+     *                 entity and the collided entity.
      */
     @Override
     public void handleCollision(Entity e, EntityCollection entities) {
         if (e == null) {
             entities.remove(this);
-        } else if (e.getType().equals("MapEntity") && ((MapEntity) e).getEntityType().equals("arrow") && this.state != State.DEAD) {
-            this.dead();
-            gameScreen.addScore(200);
-            gameScreen.addAnimalKilled();
-            entities.remove(e);
-        } else if (e.getType().equals("MapEntity") && ((MapEntity) e).getEntityType().equals("bomb") && this.state != State.DEAD){
-        	((MapEntity)e).explode();
-        } else if (e.getType().equals("MapEntity") && ((MapEntity) e).getEntityType().equals("explosion") && this.state != State.DEAD){
-        	this.dead();
+        } else if (e.getType().equals("MapEntity") && this.state != State.DEAD) {
+            if (((MapEntity) e).getEntityType().equals("arrow")) {
+                this.dead();
+                gameScreen.addScore(200);
+                gameScreen.addAnimalKilled();
+                entities.remove(e);
+            } else if (((MapEntity) e).getEntityType().equals("bomb")) {
+                ((MapEntity)e).explode();
+            } else if (((MapEntity) e).getEntityType().equals("explosion")) {
+                this.dead();
+            }
         }
     }
 
+    /**
+     * @return the class type of the entity
+     */
     @Override
     public String getType() {
-        return classType;
+        return "Animal";
     }
 
+    /**
+     * Draw the animal in its current state and animation frame.
+     * @param batch batch to draw to
+     * @param stateTime
+     */
     @Override
     public void draw(SpriteBatch batch, float stateTime) {
-        animLoop = state != State.DEAD;
-        TextureRegion currFrame = currAnim.getKeyFrame(stateTime, animLoop);
+        loopAnimation = state != State.DEAD;
+        TextureRegion currFrame = currentAnimation.getKeyFrame(stateTime, loopAnimation);
         batch.draw(currFrame, getX(), getY(), getWidth(), getHeight());
     }
 }

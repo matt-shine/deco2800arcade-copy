@@ -68,7 +68,7 @@ public class GameScreen implements Screen {
 
         int numPanes = (int) (Math.ceil(Hunter.State.screenWidth / (double) Config.PANE_SIZE_PX) + 1);
         foregroundLayer = new ForegroundLayer(1, numPanes, this);
-        backgroundLayer = new BackgroundLayer(0, this);
+        backgroundLayer = new BackgroundLayer(0);
         spriteLayer = new SpriteLayer((float) 0.6, this);
 
         entityHandler = new EntityHandler(entities);
@@ -76,7 +76,6 @@ public class GameScreen implements Screen {
         // Spawn player
         player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128, this);
         entities.add(player);
-        hunter.incrementAchievement("hunter.beginnings");
 
         // Plays the music
         if (Hunter.State.getPreferencesManager().isMusicEnabled() && Hunter.State.getPreferencesManager().isSoundEnabled()) {
@@ -175,7 +174,7 @@ public class GameScreen implements Screen {
                 }
                 itemTime = System.currentTimeMillis();
             }
-            if (mapEntityTime + 1000 <= System.currentTimeMillis()) {
+            if (mapEntityTime + 4000 <= System.currentTimeMillis()) {
                 if (Hunter.State.randomGenerator.nextFloat() >= 0.5) {
                     createMapEntity();
                 }
@@ -251,7 +250,7 @@ public class GameScreen implements Screen {
 	private void createAnimals(){
 		String[] anims= {"hippo","lion","zebra"};
 		String animal = anims[Hunter.State.randomGenerator.nextInt(3)];
-		entities.add(new Animal(new Vector2(player.getX() + Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX() + Config.PANE_SIZE_PX)),128,128,Hunter.State.randomGenerator.nextBoolean(), animal, entityHandler.getAnimalAnimation(animal), this));
+		entities.add(new Animal(new Vector2(player.getX() + Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX() + Config.PANE_SIZE_PX)), 128, 128, animal, entityHandler.getAnimalAnimation(animal), this));
 	}
 	
 	/**

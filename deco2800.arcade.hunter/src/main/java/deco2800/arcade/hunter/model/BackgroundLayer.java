@@ -8,14 +8,11 @@ import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.hunter.screens.GameScreen;
 
 public class BackgroundLayer extends Map {
-
+    //Image which makes up the background
     private TextureRegion background = new TextureRegion(new Texture("textures/background.png"));
-    private GameScreen gamescreen;
 
-
-    public BackgroundLayer(float speedModifier, GameScreen gameScreen) {
+    public BackgroundLayer(float speedModifier) {
         super(speedModifier);
-        this.gamescreen = gameScreen;
     }
 
     @Override
@@ -25,8 +22,7 @@ public class BackgroundLayer extends Map {
 
     @Override
     public void update(float delta, Vector3 cameraPos) {
-        // TODO Auto-generated method stub
-
+        // Nothing to do here, background image is static
     }
 
     public void dispose() {

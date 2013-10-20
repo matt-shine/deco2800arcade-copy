@@ -358,7 +358,7 @@ public class Board {
 	private void checkPawnSwap(Piece piece, boolean team) {
 		boolean atEnd = false;
 		int highestPref = 1;
-		Piece replaceWith = piece;
+		Piece replaceWith = new Null(team);
 		if (piece.getClass() != whitePawn1.getClass()) {
 			return;
 		}
@@ -405,7 +405,6 @@ public class Board {
 		} else {
 			whiteGraveyard.add(piece);
 		}
-		//replaceWith.reActivate();
 		boardState.get(piecePos[0]).add(piecePos[1], replaceWith);
 		replaceWith.reActivate();
 	}

@@ -2,7 +2,9 @@ package deco2800.arcade.pacman;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Logger;
 
 import deco2800.arcade.client.AchievementClient;
@@ -29,6 +31,7 @@ public class Pacman extends GameClient {
 	public final int SCREEN_WIDTH = 1280;	
 	private final int NUM_GHOSTS = 4;
 	public boolean gamePaused;
+	Sound waka = Gdx.audio.newSound(Gdx.files.internal("Chomping.mp3"));
 	
 	
 	private PacModel model; // model for Pacman	
@@ -97,7 +100,8 @@ public class Pacman extends GameClient {
 		model = new PacModel(SCREEN_WIDTH, SCREEN_HEIGHT, NUM_GHOSTS);		
 		//initialise receiver for input- use the Arcade Multiplexer
 		controller = new PacController(model);
-		ArcadeInputMux.getInstance().addProcessor(controller);		
+		ArcadeInputMux.getInstance().addProcessor(controller);
+		
 		
 		// Achievement stuff
 		AchievementClient achievementClient = 
@@ -105,6 +109,7 @@ public class Pacman extends GameClient {
 		AsyncFuture<ArrayList<Achievement>> achievements = achievementClient.getAchievementsForGame(game);
 		AsyncFuture<AchievementProgress> playerProgress = achievementClient.getProgressForPlayer(player);
 		
+		waka.loop();
 	}
 	
 	/**
@@ -114,6 +119,8 @@ public class Pacman extends GameClient {
 	public void dispose() {
 		super.dispose();
 		ArcadeInputMux.getInstance().removeProcessor(controller);
+		waka.dispose();
+		
 		//TODO dispose more stuff here? Perhaps the view things?
 	}
 

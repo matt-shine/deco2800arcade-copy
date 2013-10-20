@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.breakout.screens.GameScreen;
-import deco2800.arcade.client.ArcadeSystem;
 /**
  * Handles when the game is paused
  * @author Carlie Smits
@@ -22,7 +21,8 @@ public class PauseState extends GameState {
 	 * @param ballVelocity - the regular ball's velocity
 	 * @param pBallVelocity - the powerup ball's velocity
 	 */
-	public PauseState(GameScreen context, Vector2 ballVelocity, Vector2 pBallVelocity) {
+	public PauseState(GameScreen context, Vector2 ballVelocity, Vector2 
+			pBallVelocity) {
 		prevBallVelocity = new Vector2(ballVelocity);
 		prevPowerupBallVelocity = new Vector2(pBallVelocity);
 	}
@@ -33,7 +33,8 @@ public class PauseState extends GameState {
 	 */
 	@Override
 	public void handleState(GameScreen context) {
-		context.setStatus("Press Space to Resume, Tab for Overlay or E to return to menu!");
+		context.setStatus("Press Space to Resume, Tab for Overlay or E to" +
+				" return to menu!");
 		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
 			context.inGameUnpause(prevBallVelocity, prevPowerupBallVelocity);
 		} else if (Gdx.input.isKeyPressed(Keys.E)) {

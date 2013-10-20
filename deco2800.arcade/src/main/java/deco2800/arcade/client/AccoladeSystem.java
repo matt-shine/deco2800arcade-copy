@@ -1,11 +1,14 @@
 package deco2800.arcade.client;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
 import deco2800.arcade.model.Accolade;
 import deco2800.arcade.model.AccoladeContainer;
+import deco2800.arcade.model.XMLReader;
 
+//import deco.arcade.accolades.servercommunicator //this will be what ever jerry calls it
 
 /** CHANGES
  * @author Mitch
@@ -16,6 +19,7 @@ import deco2800.arcade.model.AccoladeContainer;
 //TODO fix up the parameter comments for the methods
 public class AccoladeSystem {
 	//ServerCommunicator server = new ServerCommunicator();
+	//TODO add in a watcherPush for games that reset score on death
 		
 	
 	private Map<String,Integer> nameIDPairs;
@@ -27,63 +31,79 @@ public class AccoladeSystem {
 	private int playerID;
 	private int gameID;
 	private boolean timerRunning = false;
-	//TODO set this to false when the server is working
-	private boolean offlineMode = true; 
+	//TODO set this to true when server communications is working
+	private boolean online = false; 
 	
-	//when progress%popup = 0 a popup is overlayed on screen
-	private static final int PROGRESS = 0;
-	private static final int POPUP=1;
+	//constructor used
+	/** The constructor used when  specifying the game and player ID.
+	 * @param gameID The primary DBkey of your game.
+	 * @param playerID The primary DBkey of the player.
+	 * @throws IOException 
+	 * @throws NumberFormatException 
+	 */
+	public AccoladeSystem(int gameID, int playerID, String accoladeFolder) 
+			throws NumberFormatException, IOException{
+		//start the local variables for the overlay system
+		this.playerID = playerID;
+		this.gameID = gameID;
+		//this.serverData = server.getTable(this.playerID + "," + this.gameID);
+		//read in the xml file.
+		//set id's for any accolade that does not have them
+		//Update the server files based on the localAccolades
+		//Create the name, key pairs
+		this.localAccolades = XMLReader.getAccolades(accoladeFolder + "/accolade.xml");
+		this.localAccolades.setGameID(this.gameID).setPlayerID(this.playerID);
+		
+		//Maybe throw this into the make local function
+		if(online){
+			boolean xmlChanged = false;
+			//Build an accoladeContainer of the server
+			//Loop through the local accolades
+			//For the ones with ID's compare them against the server ones. 
+			//If they are different then the accolade needs to be updated.
+			//Remove them from the server accolade container as they are being fixed up
+			
+			//While looping. If an accolade does not have an id. A new accolade is made on the server
+			//It's assigned to the accolades via .set
+			
+			//finally, any remaining server accolades are the added to the localaccolades
+			//If anything in the localAccolades is changed then the xml is re-written
+			
+		} else {
+			Random rand = new Random();
+			Double randomNum;
+			//Cycle through the accolades testing for ones that do not have ID's
+			for(Accolade accolade : this.localAccolades){
+				while(!accolade.hasID()){
+					randomNum = rand.nextDouble();
+					try{
+						this.localAccolades.get(this.gameID + randomNum);
+					} catch (NoSuchElementException error){
+						accolade.setID(this.gameID + randomNum);
+					}
+				}
+				
+				if(!accolade.hasValue()){
+					accolade.setValue(0);
+				}
+			}//DONE RANDOMLY ASSIGNING KEYS and initialising values
+			//NOW WRITE IT TO THE XMLFILE
+			//TODO Write to the xml File
+		}		
+	}
 	
-	
+	//alternate constructor that will eventually just use the default server resources folder
+	public AccoladeSystem(int gameID, int playerID) 
+			throws NumberFormatException, IOException{
+		//FIGURE OUT HOW TO LINK THE SERVER RESOURCE FOLDER
+		this(gameID, playerID, "test");
+	}
 	
 	/**The constructor used when automatically fetching the Game and Player ID
 	 */
 	public AccoladeSystem(){
 		//start the local variables for the overlay system
 		//TODO Automatically pull the game id and the player id
-	}
-	
-	//constructor used
-	/** The constructor used when  specifying the game and player ID.
-	 * @param gameID The primary DBkey of your game.
-	 * @param playerID The primary DBkey of the player.
-	 */
-	public AccoladeSystem(int gameID, int playerID, String accoladeFolder){
-		//start the local variables for the overlay system
-		this.playerID = playerID;
-		this.gameID = gameID;
-		//this.serverData = server.getTable(this.playerID + "," + this.gameID);
-		
-		//TODO put these try catches into the methods of each function.
-		//This is the local copy of the accolade progress, it's to save 
-		//bandwidth for checking when to do the accolade popup message
-		try {
-			this.localAccolades = this.makeLocal(this.serverData);
-		} catch (SQLException error) {
-			// TODO Auto-generated catch block
-			System.console().printf("There was an error creating the localCopy "
-					+ "of the accolade progress: " + error.toString());
-			error.printStackTrace();
-		}
-		
-		//these pairs are used for lazy game makers that refer to their 
-		//accolades by the string instead of the primary key
-		try {
-			nameIDPairs = this.makeStringIDPairs(this.serverData);
-		} catch (SQLException error) {
-			System.console().printf("There was an error creating the Name and "
-					+ "primary key pairs for the accolades: " + error.toString());
-			error.printStackTrace();
-		}	
-		/*
-		 * load in the xml file - make sure to assign a playerID to it
-		 * check each xml module
-		 * if a key isn't assigned, then create new accolade server side and modify xml to include the 
-		 * the newly assigned AccoladeID (this allows developers to later modify their accolade information by just changing the accolade xml file
-		 * also check for an <imageUpdated>1</imageUpdated> flag, to tell the game to store the new image (also stores the new image if)
-		 * Additionally, if the new filepath is different an manual image update occurs. (IE use the image update flag if the file has the same name)
-		 */
-		
 	}
 	
 	/** Increments an accolade by {@param increment} amount. Uses an integer for
@@ -94,45 +114,26 @@ public class AccoladeSystem {
 	public void push(Double accoladeID, int increment){
 		//TODO check that the increment is a positive value
 		Accolade tmpAccolade = localAccolades.get(accoladeID);
-		int progress = tmpAccolade.getValue();
+		int value = tmpAccolade.getValue();
 		int popup = tmpAccolade.getPopup();
 		
-		tmpAccolade.setValue(progress + increment);
-		//DO THe same increment to the server
-		
-
-		
-		/*
-		 * try {
-		 * 		server.put(this.playerID.toString() + "," 
-		 * 				+ this.accoladeID.toString() + "," + increment.toString());
-		 * 		this.localAccolades.get(accoladeID)[0] += increment;
-		 * 		if(progress + increment == popup){
-		 * 		//make an overlay message appear here
-		 * 		}
-		 * } catch (SQLException error) {
-		 * 		System.Console().printf("There was an error updating the " +
-		 * 			"player progress on the server");
-		 * 		error.printStackTrace();
-		 * }
-		 * 		
-		 */
+		if((value + increment)/popup > value/popup){
+			//TODO add the over lay stuff in here
+		}
+		tmpAccolade.setValue(value + increment);
+		if(online){
+			//TODO THe same increment to the server
+		}
+				
 	}
 	
-	/** Provides the int version of an accolade primary key to be used in the
+	/** Provides the Double version of an accolade primary key to be used in the
 	 * server communication (names may be updated, but the int's will not).
 	 * @param accolade The string name for the accolade (matches database).
 	 * @return The primary key for the accolade.
 	 */
 	public Double fetchID(String accolade) throws NullPointerException{
-		/*
-		if(this.nameIDPairs.containsKey(accolade)){
-			return this.nameIDPairs.get(accolade);
-		} else {
-			throw new NullPointerException("No accolade by that name exists. Check your XML");
-		}
-		*/
-		return 1.11;
+		return this.localAccolades.get(accolade).getID();
 	}
 	
 	/** 
@@ -161,7 +162,23 @@ public class AccoladeSystem {
 		return accolades;
 	}
 	
-	/** 
+	private AccoladeContainer makeLocal(){
+		
+		if(online){
+			//make local from server
+			
+		} else {
+			//make local from xml file	
+		}		
+		return new AccoladeContainer();
+	}
+	
+	private AccoladeSystem offline(){
+		this.online = true;
+		return this;
+	}
+	
+	/** TODO remove this as it is no longer needed
 	 * @param table The player_accolades table retrieved from the server
 	 * @return An accolade Hashmap<accolade_id, accolade_name> for local tracking of popups
 	 * @throws SQLException //TODO find out when the sql exception is thrown
@@ -176,7 +193,7 @@ public class AccoladeSystem {
 	}
 	
 	
-	/*TIMER STUFF */
+	/**TIMER STUFF **/
 	
 	/** Add a watcher to the timer schedule to push accolade progress to the server
 	 * @param accoladeID The primary key of the accolade to be updated
@@ -187,6 +204,12 @@ public class AccoladeSystem {
 		//Creates a new scheduled push or updates the old one.
 		watchedVariables.put(accoladeID,
 					new WatchedAccolade(accoladeID, variable, pushInterval));
+	}
+	
+	//THis i called right before a variable is reset between timer events, 
+	//it prevents losing the last bit of the variable. Useful for games where the score is reset on death.
+	public void resetWatch(double accoladeID, int newvalue){
+		this.timerTasks.get(accoladeID).setPrevValue(newvalue);//contains the push event
 	}
 	
 	/** Removes the accolade from the update schedule. Assumes that accolade exists
@@ -204,8 +227,6 @@ public class AccoladeSystem {
 			//then removes it so it isn't initialised again
 			timerTasks.remove(accoladeID);
 		}
-		
-		
 	}
 	
 	/**
@@ -216,6 +237,7 @@ public class AccoladeSystem {
 		this.timerRunning = true;
 		
 		//Schedule all the watched variables as timertasks
+		//TODO add the types to Map.Entry
 		for(Map.Entry entry: this.watchedVariables.entrySet()){
 			//make it a little easier to handle
 			WatchedAccolade accolade = (WatchedAccolade) entry.getValue(); 
@@ -236,10 +258,10 @@ public class AccoladeSystem {
 		timerTasks.clear();
 	}
 	
-	/*NO LONGER NEED PAUSE AND UNPAUSE AS ONLY CHANGES IN THE VARIABLE ARE 
-	 * 						PUSHED TO THE SERVER */
+	/**NO LONGER NEED PAUSE AND UNPAUSE AS ONLY CHANGES IN THE VARIABLE ARE 
+	 * 						PUSHED TO THE SERVER **/
 	
-	/* END OF TIMER STUFF */
+	/** END OF TIMER STUFF **/
 	
 	private class WatchedAccolade{		
 		public Object variable;
@@ -263,17 +285,19 @@ public class AccoladeSystem {
 			this.variable = variable;
 			this.prevValue = Integer.valueOf((String) variable);
 		}
+		public void setPrevValue(int value){
+			run();
+			this.prevValue = value;
+		}
 		
 		public void run(){
 			//TODO add a function that allows the developers to do a manual push 
 			// before their variable is reset (say the player dies and their score is reset to zero
 			int newValue = Integer.valueOf((String)this.variable);
-			//push different if more, or push full value if lower
-			if( newValue > this.prevValue){
+			if(newValue>this.prevValue){
 				push(this.accoladeID,newValue-this.prevValue);
-			} else {
-				push(this.accoladeID,newValue);
 			}
+
 		}
 	}//End of Timed Push
 	

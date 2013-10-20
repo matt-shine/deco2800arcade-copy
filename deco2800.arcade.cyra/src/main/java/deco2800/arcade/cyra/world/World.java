@@ -15,7 +15,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import deco2800.arcade.cyra.game.Cyra;
-import deco2800.arcade.cyra.model.AchievementsTracker;
+import deco2800.arcade.cyra.game.AchievementsTracker;
+import deco2800.arcade.cyra.game.MainMenu;
 import deco2800.arcade.cyra.model.Block;
 import deco2800.arcade.cyra.model.BlockMaker;
 import deco2800.arcade.cyra.model.Bullet;
@@ -32,11 +33,16 @@ import deco2800.arcade.cyra.model.MovablePlatformSpawner;
 import deco2800.arcade.cyra.model.Player;
 import deco2800.arcade.cyra.model.RandomizedEnemySpawner;
 import deco2800.arcade.cyra.model.ResultsScreen;
+import deco2800.arcade.cyra.model.SoldierEnemy;
 import deco2800.arcade.cyra.model.Sword;
 import deco2800.arcade.cyra.model.Zombie;
 
-/** World class controls all objects in the specified level including any collisions
- * and links Object references where needed
+/** World class describes the Model component of the game's MVC model.
+ * It controls the interactions between various game objects - interactions
+ * among entities, interactions between entities and the specified level
+ * including any collisions. This class also links Object references where
+ * needed.
+ *
  * @author Game Over
  */
 public class World {
@@ -76,7 +82,7 @@ public class World {
 	private float initCount;
 	
 	private boolean turnOffScenes = false;
-	private LaserBeam testBeam;
+	
 	
 	private Cyra game;
 	//He says this creates circular logic and hence is very bad. It's only really to get touchDown to access camera
@@ -89,28 +95,38 @@ public class World {
 		this.game = game;
 		curLevel = new Level(level, rank);
 		
-		
-		
-		Sounds.loadAll();
+		if (!Sounds.areSoundsLoadedYet()) {
+			Sounds.loadAll();
+		}
 		callingInitAfterReloadLevel = false;
 		initCount = 2.5f;
 		init(true);
 		//hardcode
-				if(level == 1) {
-					levelScenes = new Level1Scenes(ship, cam, resultsScreen);
-				} else {
-					levelScenes = new Level2Scenes(ship, cam, resultsScreen);
-				}
+
+		if(level == 1) {
+			levelScenes = new Level1Scenes(ship, cam, resultsScreen);
+		} else {
+			levelScenes = new Level2Scenes(ship, cam, resultsScreen);
+			
+		}
 		
+
+		
+
 	}
 	
-	
+	//Used to count number of jumps - for achievements
+	public void incrementJumps() {
+		game.incrementAchievement("cyra.jumparound");
+	}
 	
 	public void update() {
 		
 
 		//If game is in paused state immediately return
-		if (game.isPaused()) return;
+		if (game.isPaused()) {
+			return;
+		}
 		//If showing results Screen, update it and do nothing else
 		if (resultsScreen.isShowing()) {
 			score += resultsScreen.update(Gdx.graphics.getDeltaTime());
@@ -147,8 +163,6 @@ public class World {
 			
 		}
 		
-		//System.out.println("State after tiles = "+ship.getState());
-		
 
 		handleEnemies();
 		
@@ -160,6 +174,12 @@ public class World {
 			if (levelScenes.update(Gdx.graphics.getDeltaTime())) {
 				// The scene is complete; accept input again
 				inputHandler.acceptInput();
+				
+				//if this was the final scene, the game was won
+				//if (scenePosition == levelScenes.getStartValues().length-1) {
+				if (levelScenes.isGameWon()) {
+					gameWin();
+				}
 			}
 		
 		// Check for scene start
@@ -177,12 +197,7 @@ public class World {
 		} else {
 			updateCamera();
 			if( ship.getHearts() == 0 || ship.getPosition().y < -3) {
-				/*if (--lives == 0) {
-					gameOver();
-				} else {
-					resetLevel();
-				}*/
-				//ship.setState(Player.State.DEATH);
+				ship.setHasDied();
 				System.out.println("SHIP IN BAD POSITION!!!! hearts="+ship.getHearts()+" ship.getPosition().y"+ship.getPosition().y);
 				inputHandler.cancelInput();
 				count -= Gdx.graphics.getDeltaTime();
@@ -197,11 +212,7 @@ public class World {
 			}
 		}
 		
-		//System.out.println("End of World update " + ship.getVelocity().x);
-
-		
 		// Check if sprite has reached left/right level boundary. Changed to just left boundary
-		//if( (int)(ship.getNextPos().x) < 1 || (int)(ship.getNextPos().x) > WORLD_WIDTH )
 		if( (int)(ship.getNextPos().x) < 2)
 			ship.setCanMove(false);
 		// Check if sprite has gone out of level bounds to the bottom.
@@ -502,7 +513,7 @@ public class World {
 						(spp.y > camY - cam.viewportHeight/2 - 1f && spp.y < camY - cam.viewportHeight/2 && ship.getVelocity().y < 0)) &&
 						(spp.x >camX - cam.viewportWidth/2 && spp.x < camX + cam.viewportWidth/2))
 						) {
-					System.out.println("Spawn! Sxy:"+s.getPosition().x+","+s.getPosition().y+" Shipxy"+ship.getPosition().x+","+ship.getPosition().y);
+					//System.out.println("Spawn! Sxy:"+s.getPosition().x+","+s.getPosition().y+" Shipxy"+ship.getPosition().x+","+ship.getPosition().y);
 					enemies.add(s.spawnNew());
 				}
 			}
@@ -548,8 +559,13 @@ public class World {
 				Array<Enemy> newEnemies = e.advance(Gdx.graphics.getDeltaTime(), ship, rank, cam);
 				
 				if (e.isDead()) {			
-					System.out.println("removing " + e.getClass()+ " because dead");
+					//System.out.println("removing " + e.getClass()+ " because dead");
+					score += e.getScore();
 					eItr.remove();
+					//Enemy is dead - achievement
+					if (e.getClass() == SoldierEnemy.class) {
+						game.incrementAchievement("cyra.slayer");
+					}
 					//System.out.println("removed enemy");
 					for (EnemySpawner spns: curLevel.getEnemySpawners() ) {
 						spns.removeEnemy(e);
@@ -557,6 +573,7 @@ public class World {
 					for (RandomizedEnemySpawner res: curLevel.getRandomEnemySpawners() ) {
 						res.removeEnemy(e);
 					}
+					
 					
 					
 				}
@@ -624,7 +641,7 @@ public class World {
 				}
 			}
 			
-			if(b.getExistTime() > b.MAX_EXIST_TIME) {
+			if(b.getExistTime() > b.getMAX_EXIST_TIME()) {
 				bItr.remove();
 			}
 		}
@@ -673,6 +690,10 @@ public class World {
 				ship.getPosition().x = cam.position.x - cam.viewportWidth/2;
 			} else if (ship.getPosition().x > cam.position.x + cam.viewportWidth/2 - ship.getWidth()) {
 				ship.getPosition().x = cam.position.x + cam.viewportWidth/2 -ship.getWidth();
+			}
+			
+			if (ship.getPosition().y > cam.position.y + cam.viewportHeight/2-ship.getHeight()) {
+				ship.getPosition().y = cam.position.y + cam.viewportHeight/2-ship.getHeight();
 			}
 		}
 	}
@@ -783,6 +804,10 @@ public class World {
 		return curLevel;
 	}
 	
+	public LevelScenes getLevelScenes() {
+		return levelScenes;
+	}
+	
 	public int getScore() {
 		return score;
 	}
@@ -844,24 +869,20 @@ public class World {
 		
 		inputHandler = new InputHandler(this);
 		Gdx.input.setInputProcessor(inputHandler);
-		
+		Sounds.stopAll();
+		Sounds.playLevelMusic();
 		
 		//enemies.add( new SoldierEnemy(new Vector2 (15f, 9f), false));
 		Texture copterTex = new Texture(Gdx.files.internal("copter.png"));
 		copterTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(361, 8), 4f, 2f, new Vector2(361,42), 4.5f, true, 3.5f));
-		testBeam = new LaserBeam(75f, new Vector2(20f,6f), 5f, false, 0.1f);
-		enemies.add(testBeam);
-		enemies.add(new BulletHomingDestructible(6f, new Vector2(25f, 9f),1f, 1f, new Vector2(1,0.25f), BulletSimple.Graphic.FIRE));
-		enemies.add(new BulletHomingDestructible(6f, new Vector2(15f, 9f),1f, 1f, new Vector2(-1,0.25f), BulletSimple.Graphic.FIRE));
+		
 		
 		//addStaticEnemies();
 		
 		
 		return;
 	}
-	
-	
 
 	public void resetLevel() {
 		at.addToTime( (int)time );
@@ -879,7 +900,7 @@ public class World {
 		levelScenes = null;
 		cam.setFollowShip(true);
 		inputHandler.acceptInput();
-
+		
 		curLevel.reloadLevel();
 		//callingInitAfterReloadLevel = true;
 		init(false);
@@ -889,6 +910,23 @@ public class World {
 	
 	public void gameOver() {
 		// go back to menu
+
+		Sounds.stopMusic();
+
+		game.addHighscore(score);
+		game.setScreen(new MainMenu(game));
+
+		
+	}
+	
+	public void gameWin() {
+		// show some message/credits then go back to menu
+
+		Sounds.stopMusic();
+		game.incrementAchievement("cyra.whataplayer");
+
+		game.addHighscore(score);
+		game.setScreen(new MainMenu(game));
 	}
 	
 	public void dispose() {

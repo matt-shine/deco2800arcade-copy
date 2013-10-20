@@ -360,7 +360,7 @@ public class junglejump extends GameClient implements InputProcessor {
 				if(p.getX() >= 1000) {
 					p.setX(p.getX()-1000);
 				}
-				//batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
+				batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
 			}
 			
 			/*batch.draw(levelText, 5, 5, 80, 30);

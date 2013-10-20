@@ -16,10 +16,11 @@ public class Hitler extends Enemy {
     public Hitler(int uid, DoodadInfo d) {
         super(uid);
 
-        setHealth(STARTING_HEALTH_1);
-        setSpeed(512);
         setPain(false);
-
+        setRepeatShootChance(0.95f);
+        setStateChangeTime(0.1f);
+        
+        
         initialiseFromEnemyData(d);
         
     }

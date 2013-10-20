@@ -1,7 +1,6 @@
 package deco2800.arcade.wolf.enemy;
 
 import deco2800.arcade.wolf.DoodadInfo;
-import deco2800.arcade.wolf.WL6Meta;
 
 public class Mutant extends Enemy {
 
@@ -13,10 +12,10 @@ public class Mutant extends Enemy {
     public Mutant(int uid, DoodadInfo d) {
         super(uid);
 
-        setHealth(STARTING_HEALTH_1);
-        setSpeed(512);
         setPain(true);
-
+        setRepeatShootChance(0.7f);
+        setStateChangeTime(1f);
+        this.setShootChance(1);
         initialiseFromEnemyData(d);
         
     }

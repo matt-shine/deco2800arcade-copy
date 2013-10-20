@@ -13,13 +13,25 @@ public class Dog extends Enemy {
     public Dog(int uid, DoodadInfo d) {
         super(uid);
 
-        setHealth(STARTING_HEALTH);
-        setSpeed(1500);
         setPain(false);
-
+        setPersonalSpace(1);
+        setRepeatShootChance(0.5f);
+        
         initialiseFromEnemyData(d);
         
     }
+    
+    
+    @Override
+    public void tick(GameModel g) {
+    	if (g.getPlayer().getPos().dst(this.getPos()) > 1.5) {
+    		this.setShootChance(0);
+    	} else {
+    		this.setShootChance(1);
+    	}
+    	super.tick(g);
+    }
+    
 
     @Override
     public int calcDamage(int dist, boolean speed, boolean look) {
@@ -54,9 +66,16 @@ public class Dog extends Enemy {
         	bullet.setVel(p.getPos().sub(bullet.getPos()).nor().mul(0.2f));
     	}
     	
-    	
-    	
     }
+    
+    
+    
+    @Override
+    public void dropItems(GameModel g) {
+    	//do nothing
+    }
+    
+    
 
     @Override
     public int getStartingHealth(int difficulty) {

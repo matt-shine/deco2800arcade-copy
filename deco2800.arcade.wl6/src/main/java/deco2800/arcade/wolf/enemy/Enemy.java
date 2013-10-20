@@ -63,14 +63,20 @@ public class Enemy extends Mob {
     //the intermediate goal for the player chasing logic
     private Vector2 chaseLast = null;
     //the odds that the enemy will shoot at the end of a chase step
-    private float shootChance = 0.7f;
-
-
-    private int ammoDrop = 0;
+    private float shootChance = 0.6f;
+    //the chance that the enemy will shoot again after just shooting
+    private float repeatShootChance = 0.3f;
+	//the distance we try to keep away from the player
+    private float personalSpace = 4f;
+    
+	private int ammoDrop = 0;
     @SuppressWarnings("unused")
     private int gunDrop = 0;
+    
     private KEY_TYPE keyDrop = null;
 
+    
+    
 
     public Enemy(int uid) {
         super(uid);
@@ -115,8 +121,9 @@ public class Enemy extends Mob {
 
         //if we can see the player and we haven't seen him yet, chase him
         if ((this.state == STATES.PATH || this.state == STATES.STAND) && canSee(gameModel.getPlayer(), gameModel)){
-            instantStateChange(STATES.IDLE);
-            delayedStateChange(STATES.CHASE);
+        	this.setVel(new Vector2(0, 0));
+        	instantStateChange(STATES.IDLE);
+        	delayedStateChange(STATES.CHASE);
         }
 
 
@@ -132,7 +139,12 @@ public class Enemy extends Mob {
             shootAtPlayer(gameModel);
             this.setVel(new Vector2(0, 0));
             instantStateChange(STATES.IDLE);
-            delayedStateChange(STATES.CHASE);
+            if (Math.random() < repeatShootChance) {
+            	delayedStateChange(STATES.ATTACK);
+            } else {
+            	delayedStateChange(STATES.CHASE);
+            }
+            
         }
 
 
@@ -150,11 +162,25 @@ public class Enemy extends Mob {
             this.dropItems(gameModel);
         }
     }
-
+    
+    
+    
+    /**
+     * Intended to be overridden
+     * @param difficulty
+     * @return
+     */
     public int getStartingHealth(int difficulty) {
         return 0;
     }
-
+    
+    
+    
+    
+    /**
+     * Initialise the enemy
+     * @param d
+     */
     public void initialiseFromEnemyData(DoodadInfo d) {
 
         setTextureName(d.texture);
@@ -178,10 +204,12 @@ public class Enemy extends Mob {
 
     }
 
-
     public void setPathing(boolean pathing) {
         this.pathing = pathing;
     }
+    
+    
+    
 
     /**
      * Tells the enemy to change states
@@ -194,7 +222,8 @@ public class Enemy extends Mob {
         }
     }
 
-
+    
+    
     public void instantStateChange(STATES state) {
         this.state = state;
         nextState = null;
@@ -202,17 +231,20 @@ public class Enemy extends Mob {
     }
 
 
+    
+    
     public void shootAtPlayer(GameModel g) {
-        Player p = g.getPlayer();
-        float dist = this.getPos().dst(p.getPos());
-        int damage = calcDamage((int)dist, false, true);
-        Projectile bullet = new Projectile(0, damage, true, "worm");
-        g.addDoodad(bullet);
-        bullet.setPos(this.getPos());
-        bullet.setVel(p.getPos().sub(bullet.getPos()).nor().mul(0.2f));
+    	Player p = g.getPlayer();
+    	int damage = calcDamage((int) p.getPos().dst(getPos()), this.getVel().len() == 0, false);
+    	Projectile bullet = new Projectile(0, damage, true, "worm");
+    	g.addDoodad(bullet);
+    	bullet.setPos(this.getPos());
+    	bullet.setVel(p.getPos().sub(bullet.getPos()).nor().mul(0.2f));
     }
+    
 
-
+    
+    
     // follow patrol path
     public void path() {
 
@@ -233,47 +265,59 @@ public class Enemy extends Mob {
 
 
     }
+    
 
-
-    public void followPlayer(GameModel g) {
-        Player p = g.getPlayer();
-
-        float dist = p.getPos().dst(this.getPos());
-        boolean los = this.canSee(g.getPlayer(), g);
-
-
-        //if we've passed the next chase goal node...
-        if (chaseGoal == null || chaseLast == null) {
-            chaseLast = new Vector2(this.getPos());
-            chaseGoal = bestChaseGoal(g);
-        }
-
-
-        if (chaseLast.dst(chaseGoal) <= chaseLast.dst(getPos())) {
-
-            setPos(chaseGoal);
-            chaseLast = chaseGoal;
-            chaseGoal = null;
-
-            if (los && dist < 15 && Math.random() < shootChance) {
-                instantStateChange(STATES.IDLE);
-                delayedStateChange(STATES.ATTACK);
-            } else {
-                chaseGoal = bestChaseGoal(g);
-            }
-
-        }
-
-
-        if (chaseGoal != null && chaseLast != null) {
-            this.setVel(new Vector2().add(chaseGoal).sub(chaseLast).nor().mul(speed));
-        } else {
-            this.setVel(new Vector2(0, 0));
-        }
+    
+    
+    
+    
+    /**
+     * Called when the state is CHASE
+     * @param g
+     */
+    protected void followPlayer(GameModel g) {
+    	Player p = g.getPlayer();
+    	
+    	float dist = p.getPos().dst(this.getPos());
+    	boolean los = this.canSee(g.getPlayer(), g);
+    	
+    	
+    	//if we've passed the next chase goal node...
+    	if (chaseGoal == null || chaseLast == null) {
+    		chaseLast = new Vector2(this.getPos());
+    		chaseGoal = bestChaseGoal(g);
+    	}
+    	
+    	
+    	if (chaseLast.dst(chaseGoal) <= chaseLast.dst(getPos())) {
+    		
+    		setPos(chaseGoal);
+    		chaseLast = chaseGoal;
+			chaseGoal = null;
+			
+    		if (los && dist < 15 && Math.random() < this.shootChance) {
+    			instantStateChange(STATES.IDLE);
+    			delayedStateChange(STATES.ATTACK);
+    			this.setVel(new Vector2(0, 0));
+    		} else {
+    			chaseGoal = bestChaseGoal(g);
+    		}
+    		
+    	}
+    	
+    	
+    	if (chaseGoal != null && chaseLast != null) {
+        	this.setVel(new Vector2().add(chaseGoal).sub(this.getPos()).nor().mul(speed));
+    	} else {
+    		this.setVel(new Vector2(0, 0));
+    	}
 
     }
-
-
+    
+    
+    
+    
+    
     /**
      * returns the closest tile to the player that doesn't have anything in it,
      * but avoids tiles closer than (4.0 + random() * 1) units to the player unless there is no other choice
@@ -281,60 +325,69 @@ public class Enemy extends Mob {
      * @return
      */
     protected Vector2 bestChaseGoal(GameModel g) {
+    	
+    	TreeMap<Float, Vector2> goals = new TreeMap<Float, Vector2>();
+    	
+    	Vector2[] dirs = new Vector2[]{
+    			new Vector2(0, 1),
+    			new Vector2(1, 0),
+    			new Vector2(-1, 0),
+    			new Vector2(0, -1),
+    	};
+    	
+    	Player p = g.getPlayer();
+    	
+    	Vector2 me = this.getBlockPos().add(0.5f, 0.5f);
+    	
+    	for (int i = 0; i < dirs.length; i++) {
+    		
+    		Vector2 hypothetical = me.cpy().add(dirs[i]);
+    		if (this.isWalkableTile(g, (int) Math.floor(hypothetical.x), (int) Math.floor(hypothetical.y))) {
 
-        TreeMap<Float, Vector2> goals = new TreeMap<Float, Vector2>();
+    			goals.put((float) (hypothetical.dst(p.getPos()) + Math.random()), hypothetical.cpy());
+    			
+    		}
+    		
+    	}
+		
+    	SortedMap<Float, Vector2> greater = goals.tailMap(personalSpace, true);
+    	SortedMap<Float, Vector2> less = goals.headMap(personalSpace, false);
+    	if (greater.size() != 0) {
+    		return greater.get(greater.firstKey());
+    	}
+		if (less.size() != 0) {
+			return less.get(less.lastKey());
+		}
+		
+    	return me;
 
-        Vector2[] dirs = new Vector2[]{
-                new Vector2(0, 1),
-                new Vector2(1, 0),
-                new Vector2(-1, 0),
-                new Vector2(0, -1),
-        };
-
-        Player p = g.getPlayer();
-
-        Vector2 me = this.getBlockPos().add(0.5f, 0.5f);
-
-        for (int i = 0; i < dirs.length; i++) {
-
-            Vector2 hypothetical = me.cpy().add(dirs[i]);
-            if (this.isWalkableTile(g, (int) Math.floor(hypothetical.x), (int) Math.floor(hypothetical.y))) {
-
-                goals.put((float) (hypothetical.dst(p.getPos()) + Math.random()), hypothetical.cpy());
-
-            }
-
-        }
-
-        SortedMap<Float, Vector2> greater = goals.tailMap(4.0f, true);
-        SortedMap<Float, Vector2> less = goals.headMap(4.0f, false);
-        if (greater.size() != 0) {
-            return greater.get(greater.firstKey());
-        }
-        if (less.size() != 0) {
-            return less.get(less.lastKey());
-        }
-
-        return me;
     }
 
 
-    @Override
+
+    
+	@Override
     public void takeDamage(GameModel model, int damage) {
         int d = damage;
         if (state == STATES.STAND || state == STATES.PATH) {
             d = d * 2;
         }
         if (feelsPain()) {
-            instantStateChange(STATES.PAIN);
-            delayedStateChange(STATES.CHASE);
-            setHealth(getHealth() - d);
-        }
-        else {
+
+        	instantStateChange(STATES.PAIN);
+        	delayedStateChange(STATES.CHASE);
+        	setHealth(getHealth() - d);
+        	this.setVel(new Vector2(0, 0));
+
+        } else {
             setHealth(getHealth() - d);
         }
     }
 
+    
+    
+    
+    
     /**
      * Damage Calculation
      *
@@ -371,8 +424,12 @@ public class Enemy extends Mob {
 
         return damage;
     }
-
-
+    
+    
+    /**
+     * 
+     * @param g
+     */
     protected void dropItems(GameModel g) {
 
         Doodad d = null;
@@ -395,7 +452,10 @@ public class Enemy extends Mob {
         g.addDoodad(d);
     }
 
-
+    
+    
+    
+    
     public void calculatePath(GameModel gameModel) {
         path = new ArrayList<Vector2>();
         HashSet<Vector2> usedWaypoints = new HashSet<Vector2>();
@@ -442,8 +502,8 @@ public class Enemy extends Mob {
                     y = y - 1;
                     break;
             }
-            if (path.size() > 10000) {
-                //System.out.println("infinite loop in a path");
+            if (path.size() > 1000) {
+            	//System.out.println("infinite loop in a path");
                 return;
             }
             if (WL6Meta.block(gameModel.getMap().getTerrainAt(x, y)).texture != null) {
@@ -494,9 +554,26 @@ public class Enemy extends Mob {
         return shootChance;
     }
 
-    public void setShootChance(float shootChance) {
-        this.shootChance = shootChance;
-    }
+	public void setShootChance(float shootChance) {
+		this.shootChance = shootChance;
+	}
+	
+    public float getPersonalSpace() {
+		return personalSpace;
+	}
+
+	public void setPersonalSpace(float personalSpace) {
+		this.personalSpace = personalSpace;
+	}
+	
+    public float getRepeatShootChance() {
+		return repeatShootChance;
+	}
+
+	public void setRepeatShootChance(float repeatShootChance) {
+		this.repeatShootChance = repeatShootChance;
+	}
+
 
 }
 

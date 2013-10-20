@@ -9,10 +9,10 @@ public class Guard extends Enemy {
     public Guard(int uid, DoodadInfo d) {
         super(uid);
 
-        setHealth(STARTING_HEALTH);
-        setSpeed(512);
         setPain(true);
         
+        //use default settings
+
         initialiseFromEnemyData(d);
     }
 

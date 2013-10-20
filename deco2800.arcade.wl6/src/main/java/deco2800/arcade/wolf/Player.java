@@ -17,7 +17,7 @@ public class Player extends Mob {
     private HashSet<Integer> guns = new HashSet<Integer>();
     private int ammo = 16;
     private HashSet<KEY_TYPE> keys = new HashSet<KEY_TYPE>();
-
+    private static final Vector2 superMagicalSecretFloorEntranceThatIsntDeclaredInTheMapFilesForGodKnowsWhy = new Vector2(10, 51);
     private float gunTimer = 0;
 
 
@@ -64,16 +64,24 @@ public class Player extends Mob {
         }
 
         if (neighbours >= 3) {
-            //if we're standing on a secret elevator, go to secret floor, also if we're if this
-            //magic position (10, 51) because the secret elevator isn't in the map file on the first level
-            //for god knows why. It looks like the real wolfenstein game hard codes this too.
-            if (model.getMap().getTerrainAt((int) blockPos.x, (int) blockPos.y) == WL6Meta.SECRET_ELEVATOR ||
-                    (model.getChapter().equals("1") && ((int) blockPos.x) == 10 && ((int) blockPos.y) == 51)) {
-                model.secretLevel();
-            } else {
-                model.nextLevel();
-            }
-
+        	//if we're standing on a secret elevator, go to secret floor, also if we're if this
+        	//magic position (10, 51) because the secret elevator isn't in the map file on the first level
+        	//for god knows why. It looks like the real wolfenstein game hard codes this too.
+        	if (model.getMap().getTerrainAt((int) blockPos.x, (int) blockPos.y) == WL6Meta.SECRET_ELEVATOR ||
+        			(model.getChapter().equals("1") &&
+        			((int) blockPos.x) == superMagicalSecretFloorEntranceThatIsntDeclaredInTheMapFilesForGodKnowsWhy.x &&
+        			((int) blockPos.y) == superMagicalSecretFloorEntranceThatIsntDeclaredInTheMapFilesForGodKnowsWhy.y)) {
+        		
+        		model.secretLevel();
+        	} else {
+        		model.nextLevel();
+        		
+        		if (model.getChapter() == "1") {
+        			AchievementGiver.give("wolf.win" + model.getLevel());
+        		}
+        		
+        	}
+        	
         }
 
         if (this.getHealth() <= 0) {
@@ -81,31 +89,33 @@ public class Player extends Mob {
         }
 
         super.tick(model);
+        
+        
+    	
+    	super.tick(model);
     }
-
+    
 
     public void shoot(GameModel g, boolean justDown) {
-        if (gunTimer <= 0 && ammo > 0 && (currentGun != 1 || justDown)) {
-            int damage = calcDamage(2);
-            Projectile bullet = new Projectile(0, damage, false, "worm");
-            g.addDoodad(bullet);
-            bullet.setPos(this.getPos());
-            bullet.setVel((new Vector2(0, -0.2f)).rotate(-this.getAngle()));
-            this.ammo = Math.max(ammo - 1, 0);
-
-            if (this.currentGun == 1) {
-                gunTimer = 0;
-            } else if (this.currentGun == 2) {
-                gunTimer = 0.25f;
-            } else if (this.currentGun == 3) {
-                gunTimer = 0.12f;
-            }
-
-        }
+    	if (gunTimer <= 0 && ammo > 0 && (currentGun != 1 || justDown)) {
+    		Projectile bullet = new Projectile(0, 10, false, "worm");
+        	g.addDoodad(bullet);
+        	bullet.setPos(this.getPos());
+        	bullet.setVel((new Vector2(0, -0.2f)).rotate(-this.getAngle()));
+        	this.ammo = Math.max(ammo - 1, 0);
+        	
+        	if (this.currentGun == 1) {
+        		gunTimer = 0.25f;
+        	} else if (this.currentGun == 2) {
+        		gunTimer = 0.25f;
+        	} else if (this.currentGun == 3) {
+        		gunTimer = 0.12f;
+        	}
+        	
+    	}
     }
-
-
-
+    
+    
     public void addHealth(int health, boolean overheal) {
         setHealth(Math.min(this.getHealth() + health, overheal ? 150 : 100));
     }

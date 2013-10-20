@@ -170,7 +170,7 @@ public class Pack {
         List<String> fileContents = readFile("games.txt");
 
         for (String game : fileContents) {
-            if (game.charAt(0) != '#' && game.charAt(0) != '\n') {
+            if (game.length() > 0 && game.charAt(0) != '#' && game.charAt(0) != '\n') {
                 games.add(game);
             }
         }

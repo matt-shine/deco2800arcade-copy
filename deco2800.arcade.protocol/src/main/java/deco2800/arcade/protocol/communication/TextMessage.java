@@ -11,7 +11,6 @@ public class TextMessage extends UserRequest {
 	private List<Integer> recipients = new ArrayList<Integer>();
 	private String text;
 	private String senderUsername;
-	private int playerID;
 	private int chatID;
 	
 	public TextMessage(List<Integer> recipients, String text, Player player,

@@ -10,7 +10,7 @@ package deco2800.arcade.client.highscores;
  */
 public class NoQueuedScoresException extends RuntimeException {
 
-	public NoQueuedScoresException() {
+	public NoQueuedScoresException() { 
 		
 	}
 	

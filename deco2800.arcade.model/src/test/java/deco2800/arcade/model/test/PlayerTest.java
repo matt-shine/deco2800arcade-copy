@@ -1,6 +1,7 @@
 package deco2800.arcade.model.test;
 
 import java.util.*;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +48,15 @@ public class PlayerTest {
 		info.add("ARTS");
 		info.add("#Rickroll");
 		info.add("20");
-		boolean[] privset = { true, true, true, true, true, true, true };
+		
+		ArrayList<Boolean> privset = new ArrayList<Boolean>();
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
 
 		player1 = new Player(123, "THIS IS NOT A VALID PATH.html", info, null,
 				null, null, null, privset);
@@ -59,7 +68,16 @@ public class PlayerTest {
 		info2.add("Nope");
 		info2.add("Kill Louis");
 		info2.add("2");
-		boolean[] privset2 = { true, true, true, true, true, true, true };
+
+		ArrayList<Boolean> privset2 = new ArrayList<Boolean>();
+		privset2.add(true);
+		privset2.add(true);
+		privset2.add(true);
+		privset2.add(true);
+		privset2.add(true);
+		privset2.add(true);
+		privset2.add(true);
+		
 		Set<User> requestSet = new HashSet<User>();
 		requestSet.add(user1);
 		Set<User> blockSet = new HashSet<User>();

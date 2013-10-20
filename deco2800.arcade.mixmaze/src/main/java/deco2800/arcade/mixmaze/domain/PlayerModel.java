@@ -287,12 +287,16 @@ public class PlayerModel {
 			pick = (PickModel) item;
 			updatePick(true);
 			res = true;
-			if(id == 1) Achievements.incrementAchievement(Achievements.AchievementType.BreakingGood);
+			if (id == 1) {
+				Achievements.incrementAchievement(Achievements.AchievementType.BreakingGood);
+			}
 		} else if (item.getType() == TNT && this.tnt == null) {
 			tnt = (TNTModel) item;
 			updateTnt(true);
 			res = true;
-			if(id == 1) Achievements.incrementAchievement(Achievements.AchievementType.TNT);
+			if (id == 1) {
+				Achievements.incrementAchievement(Achievements.AchievementType.TNT);
+			}
 		}
 		return res;
 	}
@@ -358,7 +362,9 @@ public class PlayerModel {
 					updatePick(false);
 					used = true;
 					Sounds.playDestroy();
-					if(id == 1) Achievements.incrementAchievement(Achievements.AchievementType.UsePick);
+					if (id == 1) {
+						Achievements.incrementAchievement(Achievements.AchievementType.UsePick);
+					}
 					switchAction();
 				}
 			} else if (action == Action.USE_TNT && tnt != null) {
@@ -372,7 +378,9 @@ public class PlayerModel {
 				updateTnt(false);
 				used = true;
 				Sounds.playTNT();
-				if(id == 1) Achievements.incrementAchievement(Achievements.AchievementType.UseTNT);
+				if (id == 1) {
+					Achievements.incrementAchievement(Achievements.AchievementType.UseTNT);
+				}
 				switchAction();
 			}
 			lastAction = used ? System.currentTimeMillis() : lastAction;

@@ -820,7 +820,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					monkeyY = monkeyDefaultY;
 					// Reset Bananas, Platforms and Level
 					currentCont = new LevelContainer();
-					currentLevel = LevelContainer.getLevel(levelS);
+					currentLevel = LevelContainer.getLevel(levelS-1);
 					gameState = GameState.INPROGRESS;
 					levelS = 0;
 					gameState = GameState.INPROGRESS;
@@ -836,10 +836,18 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 			if (gameState == GameState.SELECT_LEVEL) {
 				if (levelS > 0) {
+					worldS = 2;
+					monkeyX = monkeyDefaultX;
+					monkeyY = monkeyDefaultY;
+					// Reset Bananas, Platforms and Level
+					currentCont = new LevelContainer();
+					currentCont.setCurrentWorld(worldS);
+					currentLevel = LevelContainer.getLevel(levelS-1);
+					gameState = GameState.INPROGRESS;
 					levelS = 0;
 					gameState = GameState.INPROGRESS;
 				} else {
-					levelS = 1;
+					levelS = 2;
 					levelSelectText = "Which level?";
 				}
 			}
@@ -847,10 +855,18 @@ public class junglejump extends GameClient implements InputProcessor {
 		if (keycode == Keys.NUM_3) {
 			if (gameState == GameState.SELECT_LEVEL) {
 				if (levelS > 0) {
+					worldS = 3;
+					monkeyX = monkeyDefaultX;
+					monkeyY = monkeyDefaultY;
+					// Reset Bananas, Platforms and Level
+					currentCont = new LevelContainer();
+					currentCont.setCurrentWorld(worldS);
+					currentLevel = LevelContainer.getLevel(levelS-1);
+					gameState = GameState.INPROGRESS;
 					levelS = 0;
 					gameState = GameState.INPROGRESS;
 				} else {
-					levelS = 1;
+					levelS = 3;
 					levelSelectText = "Which level?";
 				}
 			}
@@ -858,10 +874,18 @@ public class junglejump extends GameClient implements InputProcessor {
 		if (keycode == Keys.NUM_4) {
 			if (gameState == GameState.SELECT_LEVEL) {
 				if (levelS > 0) {
+					worldS = 4;
+					monkeyX = monkeyDefaultX;
+					monkeyY = monkeyDefaultY;
+					// Reset Bananas, Platforms and Level
+					currentCont = new LevelContainer();
+					currentCont.setCurrentWorld(worldS);
+					currentLevel = LevelContainer.getLevel(levelS-1);
+					gameState = GameState.INPROGRESS;
 					levelS = 0;
 					gameState = GameState.INPROGRESS;
 				} else {
-					levelS = 1;
+					levelS = 4;
 					levelSelectText = "Which level?";
 				}
 			}
@@ -869,10 +893,18 @@ public class junglejump extends GameClient implements InputProcessor {
 		if (keycode == Keys.NUM_5) {
 			if (gameState == GameState.SELECT_LEVEL) {
 				if (levelS > 0) {
+					worldS = 5;
+					monkeyX = monkeyDefaultX;
+					monkeyY = monkeyDefaultY;
+					// Reset Bananas, Platforms and Level
+					currentCont = new LevelContainer();
+					currentCont.setCurrentWorld(worldS); 
+					currentLevel = LevelContainer.getLevel(levelS-1);
+					gameState = GameState.INPROGRESS;
 					levelS = 0;
 					gameState = GameState.INPROGRESS;
 				} else {
-					levelS = 1;
+					levelS = 5;
 					levelSelectText = "Which level?";
 				}
 			}

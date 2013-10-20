@@ -23,7 +23,15 @@ public class TestChatStorage {
 
 	@Before
 	public void initialise() {
-		boolean[] privset = { true, true, true, true, true, true, true };
+		ArrayList<Boolean> privset = new ArrayList<Boolean>();
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+
 		List<String> info = new ArrayList<String>();
 		info.add("Ricky");
 		info.add("Rick Astley");
@@ -40,12 +48,10 @@ public class TestChatStorage {
 		info2.add("Kill Louis");
 		info2.add("2");
 
-		/*
 		player1 = new Player(123, "THIS IS NOT A VALID PATH.html", info, null,
 				null, null, null, privset);
 		player2 = new Player(234, "THIS IS NOT A VALID PATH.html", info2, null,
 				null, null, null, privset);
-		*/
 
 		List<Integer> chatParticipants = new ArrayList<Integer>();
 		chatParticipants.add(player1.getID());
@@ -54,35 +60,35 @@ public class TestChatStorage {
 		message1 = new TextMessage();
 		message1.setRecipients(chatParticipants);
 		message1.setChatID(chatParticipants.hashCode());
-		message1.setSenderID(123);
+		message1.setSenderID(player1.getID());
 		message1.setSenderUsername("Chuck Norris");
 		message1.setText("New Game");
 
 		message2 = new TextMessage();
 		message2.setRecipients(chatParticipants);
 		message2.setChatID(chatParticipants.hashCode());
-		message2.setSenderID(123);
+		message2.setSenderID(player1.getID());
 		message2.setSenderUsername("Chuck Norris");
 		message2.setText("Playing Game");
 
 		message3 = new TextMessage();
 		message3.setRecipients(chatParticipants);
 		message3.setChatID(chatParticipants.hashCode());
-		message3.setSenderID(234);
+		message3.setSenderID(player2.getID());
 		message3.setSenderUsername("Bruce Lee");
 		message3.setText("Playing game some more");
 
 		message4 = new TextMessage();
 		message4.setRecipients(chatParticipants);
 		message4.setChatID(chatParticipants.hashCode());
-		message4.setSenderID(123);
+		message4.setSenderID(player1.getID());
 		message4.setSenderUsername("Chuck Norris");
 		message4.setText("Getting bored of game");
 
 		message5 = new TextMessage();
 		message5.setRecipients(chatParticipants);
 		message5.setChatID(chatParticipants.hashCode());
-		message5.setSenderID(234);
+		message5.setSenderID(player2.getID());
 		message5.setSenderUsername("Bruce Lee");
 		message5.setText("Rage quitting");
 	}
@@ -91,7 +97,7 @@ public class TestChatStorage {
 	 * Tests the adding of chat history and retrieving of that history by
 	 * playersID. Also checks order is intact.
 	 */
-	//@Test
+	@Test
 	public void AddingRecievingHistory() {
 		List<String> history1 = new ArrayList<String>();
 		List<String> history2 = new ArrayList<String>();
@@ -99,6 +105,7 @@ public class TestChatStorage {
 		List<Integer> chatParticipants = new ArrayList<Integer>();
 		chatParticipants.add(player1.getID());
 		chatParticipants.add(player2.getID());
+		int chatID = chatParticipants.hashCode();
 
 		String chatLine1 = sdf.format(date) + " - "
 				+ message1.getSenderUsername() + ": " + message1.getText();
@@ -121,21 +128,19 @@ public class TestChatStorage {
 		history2.add(chatLine5);
 
 		ChatStorage cs = new ChatStorage();
-		cs.addChatHistory(message1, 123);
-		cs.addChatHistory(message2, 123);
-		cs.addChatHistory(message3, 234);
-		cs.addChatHistory(message4, 123);
-		cs.addChatHistory(message5, 234);
+		cs.addChatHistory(message1, player1.getID());
+		cs.addChatHistory(message2, player1.getID());
+		cs.addChatHistory(message3, player2.getID());
+		cs.addChatHistory(message4, player1.getID());
+		cs.addChatHistory(message5, player2.getID());
 		System.out.println(history1);
-		/*
 		for (int i = 0; i < history1.size(); i++) {
-			assertEquals(history1.get(i), cs.getChatHistory(123).get(5008)
-					.getChatHistory().poll().getMessage());
+			assertEquals(history1.get(i), cs.getChatHistory(player1.getID()).get(chatID)
+					.getChatHistory().poll());
 		}
 		for (int i = 0; i < history2.size(); i++) {
-			assertEquals(history2.get(i), cs.getChatHistory(234).get(5008)
-					.getChatHistory().poll().getMessage());
+			assertEquals(history2.get(i), cs.getChatHistory(player2.getID()).get(chatID)
+					.getChatHistory().poll());
 		}
-		*/
 	}
 }

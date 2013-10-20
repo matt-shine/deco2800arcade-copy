@@ -37,7 +37,7 @@ public class MiniGolf extends GameClient {
 			public void dispose() {
 			hole.dispose();
 			menu.dispose();
-			super.dispose();
+			
 			}
 
 			@Override

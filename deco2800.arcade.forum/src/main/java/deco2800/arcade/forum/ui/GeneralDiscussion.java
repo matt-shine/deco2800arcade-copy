@@ -19,6 +19,7 @@ import java.awt.Color;
 import javax.swing.JTextPane;
 
 import deco2800.arcade.forum.ForumException;
+import deco2800.arcade.model.forum.*;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -47,11 +48,13 @@ public class GeneralDiscussion {
 	private JButton btnNewButton;
 	private JButton btnSearch;
 	private JFrame f;
+	private int threadCount;
 	
 
 	public GeneralDiscussion(JFrame window) {
 		this.f = window;
 		f.getContentPane().setLayout(null);
+		threadCount = 0;
 	      
 	    JButton btnLogIn = new JButton("LOG IN");
 	   	      
@@ -130,16 +133,14 @@ public class GeneralDiscussion {
 	    this.ThreadPanel.setBounds(17, 232, 520, 464);
 	    f.getContentPane().add(ThreadPanel);
 	      
-	    this.InnerThreadPanel = new JPanel();
-	    this.ThreadPanel.add(InnerThreadPanel);
 	    f.setVisible(true);
 	    
 	    
 	    try {
 			new ThreadListController(this, new ThreadListModel(1));
 		} catch (ForumException e) {
-			System.out.println("Thread failed to post");
-			JOptionPane.showMessageDialog(null, "Failed to post thread", 
+			System.out.println("Threads failed to load");
+			JOptionPane.showMessageDialog(null, "Failed to load threads", 
 					"Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -173,5 +174,26 @@ public class GeneralDiscussion {
 				}
 			}
 		});
-	}   
+	}
+	//17, 232, 520, 464
+	public void addInnerThreadPanel(ParentThread thread) {
+		this.threadCount += 1;
+		int threadNum = this.threadCount;
+		JPanel threadDisplay = new JPanel();
+	    threadDisplay.setBackground(Color.WHITE);
+	    threadDisplay.setBounds(17, (233 + (46 * threadNum - 1)), 520, 46);
+	    JLabel title = new JLabel(thread.getTopic());
+	    title.setFont(new Font("Tahoma", Font.BOLD, 15));
+	    title.setBounds(19, (235 + (46 * threadNum - 1)), 510, 46);
+	    threadDisplay.add(title);
+	    this.ThreadPanel.add(threadDisplay);	
+	}
+	
+	public void clearThreadPanel() {
+		this.ThreadPanel.removeAll();
+	}
+	
+	public void updateThreadPanel() {
+		this.ThreadPanel.updateUI();
+	}
 }

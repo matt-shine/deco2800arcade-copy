@@ -43,6 +43,10 @@ public class ThreadListModel {
 		this.list = new ArrayList<ParentThread>();
 	}
 	
+	public String get_category() {
+		return this.category;
+	}
+	
 	private void set_category(int page) {
 		//"General_Discussion", "Report_Bug", "Tutorial", "Others"
 		switch(page) {

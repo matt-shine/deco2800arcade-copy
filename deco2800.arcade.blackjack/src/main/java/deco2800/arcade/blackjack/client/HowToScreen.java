@@ -101,7 +101,16 @@ public class HowToScreen implements Screen{
 		});
 
         table.add(backbutton);
-
+        
+        Table rules = new Table();
+        stage.addActor(rules);
+        rules.setSize(783, 520);
+        rules.setPosition(150, 20);
+        Texture tex = new Texture(Gdx.files.internal("data/Rules.png"));
+        TextureRegion RulesTexReg = new TextureRegion(tex);
+        Image Imgrules = new Image(RulesTexReg);
+        rules.add(Imgrules);
+        
     }
  
     @Override

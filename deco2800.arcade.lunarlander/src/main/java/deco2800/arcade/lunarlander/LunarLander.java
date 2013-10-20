@@ -31,7 +31,7 @@ public class LunarLander extends GameClient {
 
 	//states that a game can be in
 	private enum GameState {
-		AT_MENU, IN_GAME, GAME_PAUSED, GAME_OVER_LOSE,
+		AT_MENU, IN_GAME, CHOOSE_SCREEN, GAME_PAUSED, GAME_OVER_LOSE,
 		GAME_OVER_WIN
 	}
 	// GDX tools
@@ -41,13 +41,15 @@ public class LunarLander extends GameClient {
 	public static final int SCREENWIDTH = 1200;
 	private SpriteBatch batch;
 	private ShapeRenderer shapeRenderer;
-	private Texture landerTexture;
+	private Texture ausLanderTexture;
+	private Texture usaLanderTexture;
 	private Texture asteroidTexture;
 	private Texture backgroundTexture1;
 	private Texture backgroundTexture2;
 	private Texture backgroundTexture3;
 	private Texture backgroundTexture4;
 	private Texture pauseScreen;
+	private Texture chooseScreen;
 	private Texture splashScreenBackground;
 	private Texture gameOverBackground;
 	private Texture gameOverWinBackground;
@@ -66,7 +68,8 @@ public class LunarLander extends GameClient {
 	private float velY;
 	private float velXleft;
 	private float velXright;
-		
+	private int whichLander;
+	
 	// terrain generation
 	private List<List<Integer>> terrain;
 	private List<List<Integer>> asteroidArray;
@@ -157,10 +160,10 @@ public class LunarLander extends GameClient {
 		backgrounds.add(backgroundTexture2);
 		backgrounds.add(backgroundTexture3);
 		backgrounds.add(backgroundTexture4);
-		pauseScreen = new Texture(Gdx.files.internal
-				("lunarlanderassets/pause_screen.png"));
+		chooseScreen = new Texture(Gdx.files.internal
+				("lunarlanderassets/choose_screen.png"));
 		splashScreenBackground = new Texture(Gdx.files.internal
-				("lunarlanderassets/LL_splash.png"));
+				("lunarlanderassets/splash_screen.png"));
 		gameOverBackground = new Texture(Gdx.files.internal
 				("lunarlanderassets/game_over_screen.png"));
 		gameOverWinBackground = new Texture(Gdx.files.internal
@@ -171,8 +174,10 @@ public class LunarLander extends GameClient {
 				("lunarlanderassets/flames.png"));
 		asteroidTexture = new Texture(Gdx.files.internal
 				("lunarlanderassets/asteroid.png"));
-		landerTexture = new Texture(Gdx.files.internal
-				("lunarlanderassets/lander.png"));
+		ausLanderTexture = new Texture(Gdx.files.internal
+				("lunarlanderassets/landeraus.png"));
+		usaLanderTexture = new Texture(Gdx.files.internal
+				("lunarlanderassets/landerusa.png"));
 		font = new BitmapFont(Gdx.files.internal
 				("lunarlanderassets/game_font_half.fnt"),
 				Gdx.files.internal
@@ -229,10 +234,17 @@ public class LunarLander extends GameClient {
 	/**
 	 * Draws the lunar lander texture
 	 */
-	private void drawLander() {
-		batch.begin();
-		batch.draw(landerTexture, landerX, landerY, landerWidth, landerHeight);
-		batch.end();
+	private void drawLander(int whichLander) {
+		if (whichLander == 1) {
+			batch.begin();
+			batch.draw(ausLanderTexture, landerX, landerY, landerWidth, landerHeight);
+			batch.end();
+		}
+		if (whichLander == 2) {
+			batch.begin();
+			batch.draw(usaLanderTexture, landerX, landerY, landerWidth, landerHeight);
+			batch.end();
+		}
 	}
 
 	/**
@@ -438,6 +450,11 @@ public class LunarLander extends GameClient {
 		}
 	}
 
+//	if ((Gdx.input.isKeyPressed(Keys.NUM_1))) {
+//		landerTexture.dispose();
+//		landerTexture = new Texture(Gdx.files.internal
+//				("lunarlanderassets/lander2.png"));
+//	}
 	/**
 	 * Clears the current screen and displays the game's splash screen
 	 */
@@ -448,14 +465,22 @@ public class LunarLander extends GameClient {
 		batch.draw(splashScreenBackground, 0, 0, 1200, 800);
 		batch.end();
 		camera.update();
-		if ((Gdx.input.isKeyPressed(Keys.NUM_1))) {
-			landerTexture.dispose();
-			landerTexture = new Texture(Gdx.files.internal
-					("lunarlanderassets/lander2.png"));
-		}
 		super.render();
 	}
 
+	/**
+	 * Clears the current screen and displays the game's splash screen
+	 */
+	private void chooseScreen() {
+		batch.begin();
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		batch.setProjectionMatrix(camera.combined);
+		batch.draw(chooseScreen, 0, 0, 1200, 800);
+		batch.end();
+		camera.update();
+		super.render();
+	}
+	
 	/**
 	 * Clears the current screen and displays the relevent screen
 	 * for losing a game; offers the option to play again or quit the game
@@ -521,6 +546,23 @@ public class LunarLander extends GameClient {
 			splashScreen();
 			if ((Gdx.input.isKeyPressed(Keys.ENTER))) {
 				startVars(fuel, score);
+				gameState = GameState.CHOOSE_SCREEN;
+			}
+			if ((Gdx.input.isKeyPressed(Keys.ESCAPE))) {
+				ArcadeSystem.goToGame(ArcadeSystem.UI);
+			}
+			break;
+		case CHOOSE_SCREEN:
+			// draw screen for player to choose their lander
+			chooseScreen();
+			if ((Gdx.input.isKeyPressed(Keys.NUM_1))) {
+				whichLander = 1;
+				startVars(fuel, score);
+				gameState = GameState.IN_GAME;
+			}
+			if ((Gdx.input.isKeyPressed(Keys.NUM_2))) {
+				whichLander = 2;
+				startVars(fuel, score);
 				gameState = GameState.IN_GAME;
 			}
 			if ((Gdx.input.isKeyPressed(Keys.ESCAPE))) {
@@ -529,7 +571,7 @@ public class LunarLander extends GameClient {
 			break;
 		case IN_GAME:	
 			drawBackground(backgroundTextureRegion);
-			drawLander();
+			drawLander(whichLander);
 			drawAsteroids();
 			drawMap();
 			camera.update();

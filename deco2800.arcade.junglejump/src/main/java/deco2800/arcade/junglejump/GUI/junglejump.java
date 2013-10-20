@@ -198,7 +198,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		super.create();
 
 		System.out.println(System.getProperty("user.dir"));
-		texture = new Texture(Gdx.files.internal("mainscreen.png"));
+		texture = new Texture(Gdx.files.internal("mainscreen2.png"));
 		monkeySit = new Texture(Gdx.files.internal("monkeySit.png"));
 		monkeySitRIGHT = new Texture(Gdx.files.internal("monkeySit.png"));
 		monkeySitLEFT = new Texture(Gdx.files.internal("monkeySitLEFT.png"));
@@ -290,6 +290,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	}
 
 	public void resize(int w, int h) {
+		super.resize(w,h);
 		Gdx.app.log(junglejump.messages, "Resizing game width " + w
 				+ " height " + h);
 	}
@@ -756,9 +757,9 @@ public class junglejump extends GameClient implements InputProcessor {
 		if (keycode == Keys.UP) {
 			if (gameState != GameState.INPROGRESS) {
 				if (butY < NEW_GAME) {
-					menuSound.start();
+					//menuSound.start();
 					butY += 37.5;
-					menuSound.stop();
+					//menuSound.stop();
 				}
 			}
 

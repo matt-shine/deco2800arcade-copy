@@ -74,28 +74,22 @@ public class TestCreditStorage {
 	public void tearDown() throws Exception {
 		databaseTester.onTearDown();
 	}
-<<<<<<< HEAD
 //
 //	/**
 //	 * Simple test case to make sure our XML loading is working, and that retrieving a user's balance is OK
 //	 * @throws DatabaseException
 //	 */
-=======
-	
+
 	/**
 	 * Simple test case to make sure our XML loading is working, and that retrieving a user's balance is OK
 	 * @throws DatabaseException
 	 */
->>>>>>> master
 //	@Test
 //	public void initialTotal() throws DatabaseException {
 //		assertEquals(0, (int) creditStorage.getUserCredits(1));
 //	}
-<<<<<<< HEAD
 //
-=======
-//	
->>>>>>> master
+
 //	/**
 //	 * Check that a simple addition to a zero balance works
 //	 * @author Addison Gourluck
@@ -106,11 +100,7 @@ public class TestCreditStorage {
 //		creditStorage.addUserCredits(1, 5);
 //		assertEquals(new Integer(5), creditStorage.getUserCredits(1));
 //	}
-<<<<<<< HEAD
-//
-=======
-//	
->>>>>>> master
+
 //	/**
 //	 * Check that several additions to 0 works
 //	 * @author Addison Gourluck
@@ -125,11 +115,7 @@ public class TestCreditStorage {
 //		creditStorage.addUserCredits(1, 1000);
 //		assertEquals(new Integer(1081), creditStorage.getUserCredits(1));
 //	}
-<<<<<<< HEAD
-//
-=======
-//	
->>>>>>> master
+
 //	/**
 //	 * Check that adding 0 will throw an exception.
 //	 * @author Addison Gourluck
@@ -163,11 +149,7 @@ public class TestCreditStorage {
 //		creditStorage.deductUserCredits(1, 5);
 //		assertEquals(new Integer(15), creditStorage.getUserCredits(1));
 //	}
-<<<<<<< HEAD
-//
-=======
-//	
->>>>>>> master
+
 //	/**
 //	 * Check that several subtractions work with a final balance of 0.
 //	 * @author Addison Gourluck
@@ -181,11 +163,7 @@ public class TestCreditStorage {
 //		creditStorage.deductUserCredits(1, 50);
 //		assertEquals(new Integer(0), creditStorage.getUserCredits(1));
 //	}
-<<<<<<< HEAD
-//
-=======
-//	
->>>>>>> master
+
 //	/**
 //	 * Check that subtracting more than the user has will throw an exception.
 //	 * @author Addison Gourluck
@@ -196,11 +174,7 @@ public class TestCreditStorage {
 //		creditStorage.addUserCredits(1, 100);
 //		creditStorage.deductUserCredits(1, 101);
 //	}
-<<<<<<< HEAD
-//
-=======
-//	
->>>>>>> master
+
 //	/**
 //	 * Check that subtracting 0 will throw an exception.
 //	 * @author Addison Gourluck

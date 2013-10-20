@@ -66,11 +66,9 @@ public class DeerForest extends GameClient {
 		
 		super.create();
 
-<<<<<<< HEAD
         // Create the logger
         logger = Logger.getLogger("GUILogger");
 
-=======
         //add the overlay listeners
         this.getOverlay().setListeners(new Screen() {
 
@@ -103,8 +101,7 @@ public class DeerForest extends GameClient {
             }
 
         });
-        
->>>>>>> master
+
         // Setup menu
         mainMenu = new MainMenu(null);
         menuView = new MainMenuScreen(mainMenu);
@@ -172,17 +169,7 @@ public class DeerForest extends GameClient {
 	public void render() {
 		super.render();
 	}
-<<<<<<< HEAD
 
-    private static final Game game;
-    static {
-        game = new Game();
-        game.id = "deerforest";
-        game.name = "Deer Forest";
-        game.description = "Battle your friends with unique cards and unique possibilities.";
-    }
-=======
-	
 	private static final Game game;
 	static {
 		game = new Game();
@@ -191,7 +178,6 @@ public class DeerForest extends GameClient {
 		game.description = "A battle of minds, fought with pieces of paper with"
 				+ "deer on them (probably). More dramatic than it sounds.";
 	}
->>>>>>> master
 
 	public Game getGame() {
 		return game;

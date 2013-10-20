@@ -40,6 +40,8 @@ public class StoreHome implements Screen, StoreScreen {
 	private Label description; // featured text
 	private Button featuredIcon; // featured icon
 	private Button featuredbg; // featured icon glow/box
+    final Button greyOverlay;
+    final Button popupBox;
 	
 	/**
 	 * @author Addison Gourluck
@@ -71,8 +73,8 @@ public class StoreHome implements Screen, StoreScreen {
 		populateGamesBox(); // Places 8 icons in a grid, center screen.
 		
 		skin.add("blue_frame", new Texture(Gdx.files.internal("store/blue_frame.png")));
-		final Button greyOverlay = new Button(skin, "black"); // grey shadow for popup
-		final Button popupBox = new Button(skin, "white"); // popup container
+		greyOverlay = new Button(skin, "black"); // grey shadow for popup
+		popupBox = new Button(skin, "white"); // popup container
 		// Creates, but doesn't show, the transactions popup.
 		Utilities.generatePopup(greyOverlay, popupBox, skin);
 		
@@ -207,8 +209,7 @@ public class StoreHome implements Screen, StoreScreen {
 			}
 		});
 	}
-	
-<<<<<<< HEAD
+
 	private void generatePopup() {
 		greyOverlay.setFillParent(true);
 		greyOverlay.setColor(0.5f, 0.5f, 0.5f, 0.5f);
@@ -238,8 +239,6 @@ public class StoreHome implements Screen, StoreScreen {
 		});
 	}
 
-=======
->>>>>>> master
 	/**
 	 * This places 8 icons into a grid pattern in the display section in the
 	 * centre of the main store page. The icons are randomly assigned a game to

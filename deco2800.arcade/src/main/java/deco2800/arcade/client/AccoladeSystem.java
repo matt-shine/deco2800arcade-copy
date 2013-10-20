@@ -28,6 +28,7 @@ public class AccoladeSystem {
 	private Map<Double, TimedPush> timerTasks; //timertasks recreated when the timer begins
 	private Timer timer;
 	private ResultSet serverData; 
+	private String xmlFile;
 	private int playerID;
 	private int gameID;
 	private boolean timerRunning = false;
@@ -46,12 +47,14 @@ public class AccoladeSystem {
 		//start the local variables for the overlay system
 		this.playerID = playerID;
 		this.gameID = gameID;
+		this.xmlFile = accoladeFolder + "/accolades.xml";
+		//TODO add in image management
 		//this.serverData = server.getTable(this.playerID + "," + this.gameID);
 		//read in the xml file.
 		//set id's for any accolade that does not have them
 		//Update the server files based on the localAccolades
 		//Create the name, key pairs
-		this.localAccolades = XMLReader.getAccolades(accoladeFolder + "/accolade.xml");
+		this.localAccolades = XMLReader.getAccolades(this.xmlFile);
 		this.localAccolades.setGameID(this.gameID).setPlayerID(this.playerID);
 		
 		//Maybe throw this into the make local function
@@ -89,6 +92,7 @@ public class AccoladeSystem {
 			}//DONE RANDOMLY ASSIGNING KEYS and initialising values
 			//NOW WRITE IT TO THE XMLFILE
 			//TODO Write to the xml File
+			XMLReader.saveAccoladeContainer(this.localAccolades, this.xmlFile);
 		}		
 	}
 	
@@ -119,11 +123,13 @@ public class AccoladeSystem {
 		
 		if((value + increment)/popup > value/popup){
 			//TODO add the over lay stuff in here
+			System.out.println(tmpAccolade.toPopupMessage());
 		}
 		tmpAccolade.setValue(value + increment);
 		if(online){
 			//TODO THe same increment to the server
 		}
+		//CHANGE JUST THE VALUE FOR THIS ACCOLADE IN XML
 				
 	}
 	
@@ -256,6 +262,12 @@ public class AccoladeSystem {
 		this.timer.cancel();
 		this.timer.purge();
 		timerTasks.clear();
+		try {
+			XMLReader.saveAccoladeContainer(this.localAccolades, this.xmlFile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**NO LONGER NEED PAUSE AND UNPAUSE AS ONLY CHANGES IN THE VARIABLE ARE 

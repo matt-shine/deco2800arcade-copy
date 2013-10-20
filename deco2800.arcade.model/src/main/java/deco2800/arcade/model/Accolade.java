@@ -122,9 +122,12 @@ public class Accolade {
 		return parseString(this.message);
 		}
 	
-	public String getPopupMessage(){
+	public String toPopupMessage(){
 		return parseString(this.popupMessage);
 		}
+	public String getRawPopupMessage(){
+		return this.popupMessage;
+	}
 	
 	//HAS STUFF
 	

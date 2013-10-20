@@ -19,10 +19,8 @@ import deco2800.arcade.cyra.game.AchievementsTracker;
 import deco2800.arcade.cyra.game.MainMenu;
 import deco2800.arcade.cyra.model.Block;
 import deco2800.arcade.cyra.model.BlockMaker;
-import deco2800.arcade.cyra.model.Bullet;
 import deco2800.arcade.cyra.model.BulletHomingDestructible;
 import deco2800.arcade.cyra.model.BulletSimple;
-import deco2800.arcade.cyra.model.CutsceneObject;
 import deco2800.arcade.cyra.model.Enemy;
 import deco2800.arcade.cyra.model.EnemySpawner;
 import deco2800.arcade.cyra.model.LaserBeam;
@@ -35,7 +33,7 @@ import deco2800.arcade.cyra.model.RandomizedEnemySpawner;
 import deco2800.arcade.cyra.model.ResultsScreen;
 import deco2800.arcade.cyra.model.SoldierEnemy;
 import deco2800.arcade.cyra.model.Sword;
-import deco2800.arcade.cyra.model.Zombie;
+
 
 /** World class describes the Model component of the game's MVC model.
  * It controls the interactions between various game objects - interactions
@@ -59,8 +57,6 @@ public class World {
 	Rectangle sRec;
 	private Sword sword;
 	private Array<Enemy> enemies;
-	private Array<Bullet> bullets;
-	private Array<CutsceneObject> cutsceneObjects; 
 	private Array<MovablePlatform> movablePlatforms;
 	private Array<BlockMaker> blockMakers;
 	private ParallaxCamera cam;
@@ -148,15 +144,13 @@ public class World {
 		for (MovablePlatform mp: movablePlatforms) {
 			mp.update(ship);
 		}
-		for (int i = -1; i < enemies.size + bullets.size; i++) {
+		for (int i = -1; i < enemies.size; i++) {
 			MovableEntity mve;
 			if (i == -1) {
 				mve = ship;
-			} else if (i > -1 && i < enemies.size){
-				mve = enemies.get(i);
 			} else {
-				mve = bullets.get(i - enemies.size);
-			}
+				mve = enemies.get(i);
+			} 
 			if (mve.isSolid()) {
 				checkTileCollision(mve);
 			}
@@ -259,9 +253,7 @@ public class World {
 		return;
 	}
 	
-	public void addBullet(Bullet b) {
-		bullets.add(b);
-	}
+	
 	
 	/* ----- Object handlers ----- */	
 	private void checkTileCollision(MovableEntity mve) {
@@ -544,9 +536,7 @@ public class World {
 	}
 	
 	private void handleEnemies() {
-		Iterator<Bullet> bItr;
 		Iterator<Enemy> eItr;
-		Bullet b;
 		Enemy e;
 		
 		
@@ -618,33 +608,7 @@ public class World {
 			}
 		}
 		
-		bItr = bullets.iterator();
-		while(bItr.hasNext()) {
-			b = bItr.next();
-			b.update(ship);
-
-			eItr = enemies.iterator();
-			while(eItr.hasNext()) {
-				e = eItr.next();
-				//e.advance(Gdx.graphics.getDeltaTime(), ship);
-			
-				if(e.getBounds().overlaps(b.getBounds())){
-					//System.out.println("C");
-					eItr.remove();
-					//System.out.println("removed enemy");
-					bItr.remove();
-					//System.out.println("removed bullet");
-					for (EnemySpawner spns: curLevel.getEnemySpawners() ) {
-						spns.removeEnemy(e);
-					}
-					//System.out.println("cleaned arrays");
-				}
-			}
-			
-			if(b.getExistTime() > b.getMAX_EXIST_TIME()) {
-				bItr.remove();
-			}
-		}
+		
 		return;
 	}
 
@@ -730,9 +694,7 @@ public class World {
 		ship.getVelocity().x = 0;
 		Array<Object> temp = levelScenes.start(scenePosition, rank, (int)time);
 		for (Object obj: temp) {
-			if (obj.getClass() == CutsceneObject.class) {
-				cutsceneObjects.add( (CutsceneObject) obj );
-			} else if (obj.getClass() == MovablePlatform.class) {
+			if (obj.getClass() == MovablePlatform.class) {
 				System.out.println("that was a new movable platform!");
 				movablePlatforms.add( (MovablePlatform) obj );
 			} else if (obj.getClass() == MovablePlatformAttachment.class) {
@@ -748,10 +710,7 @@ public class World {
 		scenePosition++;
 	}
 	
-	private void addStaticEnemies() {
-		enemies.add( new Zombie(new Vector2(32f, 3f)) );
-		return;
-	}
+	
 	
 	public boolean isPaused() {
 		return isPaused;
@@ -782,14 +741,7 @@ public class World {
 		return enemies;
 	}
 	
-	public Array<Bullet> getBullets() {
-		return bullets;
-	}
-
-	public Array<CutsceneObject> getCutsceneObjects() {
-		return cutsceneObjects;
-	}
-
+	
 	public Array<MovablePlatform> getMovablePlatforms() {
 		return movablePlatforms;
 	}
@@ -844,8 +796,6 @@ public class World {
 		
 		sword = new Sword(new Vector2(-1, -1));
 		enemies = new Array<Enemy>();
-		bullets = new Array<Bullet>();
-		cutsceneObjects = new Array<CutsceneObject>();
 		movablePlatforms = new Array<MovablePlatform>();
 		blockMakers = new Array<BlockMaker>();
 		//resetCamera();
@@ -894,8 +844,6 @@ public class World {
 		ship = null;
 		sword = null;
 		enemies = null;
-		bullets = null;
-		cutsceneObjects = null;
 		movablePlatforms = null;
 		levelScenes = null;
 		cam.setFollowShip(true);

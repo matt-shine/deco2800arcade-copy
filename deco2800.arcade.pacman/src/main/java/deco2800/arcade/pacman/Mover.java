@@ -50,6 +50,9 @@ public abstract class Mover {
 		// remove mover from tile and add it to new one if it's changed
 		Tile newTile = gameMap.findMoverTile(this);
 		if (!currentTile.equals(newTile)) {
+			if (this.getClass() == Ghost.class){
+				((Ghost)this).setPreviousTile(currentTile);
+			}
 			currentTile.removeMover(this);
 			currentTile = newTile;			
 			currentTile.addMover(this);
@@ -145,12 +148,10 @@ public abstract class Mover {
 				if (((DotTile) tile).isEnergiser()) {
 					this.setScore(this.getScore() + energizerScore);
 					gameMap.setEnergized(true);
-					// Set the scatter timer
-					System.out.println("Timer start!");
+					// Set the scatter timer for seven seconds
 					Timer.schedule(new Task() {
 						public void run() {
 							gameMap.setEnergized(false);
-							System.out.println("Time's up!");
 						}
 					}, 7);
 				} else {

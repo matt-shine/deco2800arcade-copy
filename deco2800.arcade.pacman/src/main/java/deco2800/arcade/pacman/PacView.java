@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import deco2800.arcade.pacman.Ghost.GhostState;
+import deco2800.arcade.pacman.PacChar.PacState;
 
 
 /**
@@ -227,8 +228,13 @@ public class PacView {
 	
 	private void drawPacman() {
 		//draw pacman facing the appropriate direction
+		if (player.getCurrentState() == PacState.DEAD){
+			
+		} else {
+		
 		batch.draw(pacmanFrames[player.getSpritePos()], player.getDrawX(), 
 				player.getDrawY(), player.getWidth(), player.getHeight());
+		}
 	}
 	
 	/**

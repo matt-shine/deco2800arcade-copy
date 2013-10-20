@@ -104,10 +104,6 @@ public final class Ghost extends Mover {
 			currentState = GhostState.CHASE;
 		}
 		
-		// Update draw sprites
-		
-		
-		
 		// checks if ghost is moving, and if so keeps him moving in that
 		// direction
 		
@@ -205,7 +201,8 @@ public final class Ghost extends Mover {
 			case RIGHT: opposite = Dir.LEFT; break;
 			}
 			Tile next = tileInDir(1, dir);
-			if (next.getClass() != WallTile.class && facing != opposite) {
+			if (next.getClass() != WallTile.class && facing != opposite &&
+					!next.equals(previousTile)) {
 				testTiles.add(next);
 			}
 		}
@@ -237,6 +234,10 @@ public final class Ghost extends Mover {
 		return ghostName + " at (" + midX + ", " + midY + ") drawn at {"
 				+ drawX + ", " + drawY + "}, " + currentState + " in "
 				+ currentTile;
+	}
+	
+	public void setPreviousTile(Tile tile){
+		previousTile = tile;
 	}
 
 }

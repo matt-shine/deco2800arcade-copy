@@ -4,6 +4,8 @@ package deco2800.arcade.pacman;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 import deco2800.arcade.pacman.Ghost.GhostState;
 
@@ -48,17 +50,20 @@ public final class PacChar extends Mover{
 	public void prepareDraw() {
 		
 		// Update pacman's facing dir
-		spritePos = 3;
-		if (drawFacing == Dir.RIGHT) {
-			spritePos = 1;
-		} else if (drawFacing == Dir.UP) {
-			spritePos = 5;
-		} else if (drawFacing == Dir.DOWN){ 
-			spritePos = 7;
+		if (currentState == PacState.DEAD) {
+			spritePos = 0;
 		} else {
-			drawFacing = Dir.LEFT;
+			spritePos = 3;
+			if (drawFacing == Dir.RIGHT) {
+				spritePos = 1;
+			} else if (drawFacing == Dir.UP) {
+				spritePos = 5;
+			} else if (drawFacing == Dir.DOWN) {
+				spritePos = 7;
+			} else {
+				drawFacing = Dir.LEFT;
+			}
 		}
-	
 		// If pacman is able to turn, update drawFacing
 		if (canTurn()) {
 			drawFacing = facing;
@@ -110,32 +115,41 @@ public final class PacChar extends Mover{
 		return grid[x][y].getClass() != WallTile.class;
 	}
 	
-	private void checkGhostCollision(Tile pTile) {	
+	private void checkGhostCollision(Tile pTile) {
 		List<Mover> colList = pTile.getMovers();
 		if (colList.size() > 1) {
-			for (int i=0; i < colList.size(); i++) {
+			for (int i = 0; i < colList.size(); i++) {
 				if (colList.get(i).getClass() == Ghost.class) {
-					if (((Ghost)colList.get(i)).getCurrentState() == GhostState.SCATTER ||
-							((Ghost)colList.get(i)).getCurrentState() == GhostState.FRIGHT){
+					if (((Ghost) colList.get(i)).getCurrentState() == GhostState.SCATTER
+							|| ((Ghost) colList.get(i)).getCurrentState() == GhostState.FRIGHT) {
 						// Ghost is scared! Time to feast :>
-						((Ghost)colList.get(i)).setCurrentState(GhostState.DEAD);
+						((Ghost) colList.get(i))
+								.setCurrentState(GhostState.DEAD);
 						gameMap.setGhostsEaten(gameMap.getGhostsEaten() + 1);
 						this.setScore(this.getScore() + getGhostScore());
 						setGhostScore(getGhostScore() * 2);
-					} else if(((Ghost)colList.get(i)).getCurrentState() == GhostState.CHASE){
-						if (getLives() <= 1){
+					} else if (((Ghost) colList.get(i)).getCurrentState() == GhostState.CHASE
+							&& currentState == PacState.MOVING) {
+						// Pacman has been hit!
+						currentState = PacState.DEAD;
+						Timer.schedule(new Task() { // Game's not over! Revive in 3
+							public void run() {
+								currentState = PacState.MOVING;
+							}
+						}, 3);
+						setLives(getLives() - 1);
+
+						// Is it game over?
+						if (getLives() <= 1) {
 							this.setCurrentState(PacState.DEAD);
-//							gamePaused = true;
+							// gamePaused = true;
 							gameMap.setGameOver(true);
 							// Do gameover stuff
-						} else {
-							setLives(getLives() - 1);
 						}
 					}
 				}
 			}
 		}
-		
 	}
 	
 	public void setFacing(Dir facing) {

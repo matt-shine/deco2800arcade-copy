@@ -1,10 +1,10 @@
+
 package deco2800.arcade.server.database;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +50,7 @@ public class TestPlayerStorage {
 	}
 	
 	/**
-	 * Create a new player storage and initialise it,
+	 * Create a new achievement storage and initialise it,
 	 * load in a dataset from XML, and get the database ready (clean old data and put the new stuff in)
 	 * This method is run once before each test case.
 	 * @throws Exception
@@ -74,27 +74,98 @@ public class TestPlayerStorage {
 		databaseTester.onTearDown();
 	}
 	
-	/**
-	 * Test loading a player by ID
-	 * 
-	 * @throws DatabaseException
-	 */
-	//This doesn't like going after "TestHashStorage" runs
-	//Reason: TestHashStorage creates a foreign dependency on Black_Knight's playerID and so when this test
-	// tries to clean up playerStorage, it can't because Black_Knight's ID (1) is being depended on.
-	// other than that, the test works fine.
 	//@Test
-	public void loadPlayerTest() throws DatabaseException {
-		int playerID = 555;
-
+	/**
+	 * Get a player's data from the database.
+	 */
+	public void testGetPlayerData() throws DatabaseException {
+		try {
+			List<String> playerData = new ArrayList<String>();
+			playerData.add("1");
+			playerData.add("U1");
+			playerData.add("bob");
+			playerData.add("bob@gmail.com");
+			playerData.add("BE");
+			playerData.add("I am bob.");
+			playerData.add("86");
+			assertEquals(playerData, playerStorage.getPlayerData(1));
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	//@Test
+	/**
+	 * Tests updating a player's username.
+	 */
+	public void testUpdateUsername() throws DatabaseException {
+		playerStorage.updateUsername(1, "xXxMLGx420x1337x5n1pZ0rxXx");
+		assertEquals("xXxMLGx420x1337x5n1pZ0rxXx", playerStorage.getPlayerData(1).get(1));
+	}
+	
+	//@Test
+	/**
+	 * Tests updating a player's name.
+	 */
+	public void testUpdateName() throws DatabaseException {
+		playerStorage.updateName(1, "Saul Goodman");
+		assertEquals("Saul Goodman", playerStorage.getPlayerData(1).get(2));
+	}
+	
+	//@Test
+	/**
+	 * Tests updating a player's email address.
+	 */
+	public void testUpdateEmail() throws DatabaseException {
+		playerStorage.updateEmail(1, "cod4pro4life@hotmail.com");
+		assertEquals("cod4pro4life@hotmail.com", playerStorage.getPlayerData(1).get(3));
+	}
+	
+	//@Test
+	/**
+	 * Tests updating a player's program.
+	 */
+	public void testUpdateProgram() throws DatabaseException {
+		playerStorage.updateProgram(1, "LLB");
+		assertEquals("LLB", playerStorage.getPlayerData(1).get(4));
+	}
+	
+	//@Test
+	/**
+	 * Tests updating a player's bio.
+	 */
+	public void testUpdateBio() throws DatabaseException {
+		playerStorage.updateBio(1, "Better call Saul! Also Huell's head looks hilarious.");
+		assertEquals("Better call Saul! Also Huell's head looks hilarious.", playerStorage.getPlayerData(1).get(5));
+	}
+	
+	//@Test
+	/**
+	 * Tests updating a player's age.
+	 */
+	public void testUpdateAge() throws DatabaseException {
+		playerStorage.updateAge(1, "9001");
+		assertEquals("9001", playerStorage.getPlayerData(1).get(6));
+	}
+	
+	//@Test
+	/**
+	 * Tests adding a player and then retrieving their results.
+	 */
+	public void testAddPlayer() throws DatabaseException {
 		List<String> playerData = new ArrayList<String>();
-		playerData = playerStorage.getPlayerData(playerID);
-
-		assertTrue(playerData.get(0).equals("Guy"));
-		assertTrue(playerData.get(1).equals("Guybrush Threepwood"));
-		assertTrue(playerData.get(2).equals("guybrush@monkey.island"));
-		assertTrue(playerData.get(3).equals("BE"));
-		assertTrue(playerData.get(4).equals("Escape artist"));
-
+		playerData.add("5");
+		playerData.add("Space Cowboy");
+		playerData.add("Spike Spiegel");
+		playerData.add("spike@bebop.com");
+		playerData.add("Bachelor of Bounty Hunting");
+		playerData.add("BANG!");
+		playerData.add("27");
+		playerStorage.addPlayer(Integer.parseInt(playerData.get(0)), 
+				playerData.get(1), playerData.get(2), playerData.get(3), 
+				playerData.get(4), playerData.get(5), playerData.get(6));
+		List<String> retrievedData = playerStorage.getPlayerData(5);
+		assertEquals(playerData, retrievedData);
 	}
 }

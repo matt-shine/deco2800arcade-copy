@@ -41,17 +41,16 @@ public class TileModel {
 	 *            the column number (origin at top left)
 	 * @param y
 	 *            the row number (origin at top left)
-	 * @param adjacentTiles
+	 * @param newAdjacentTiles
 	 *            the tiles adjacent to this tile
 	 */
-	public TileModel(int x, int y, TileModel[] adjacentTiles) {
+	public TileModel(int x, int y, TileModel[] newAdjacentTiles) {
 		this.x = x;
 		this.y = y;
-		if (adjacentTiles == null) {
+		if (newAdjacentTiles == null) {
 			this.adjacentTiles = new TileModel[0];
 		} else {
-			this.adjacentTiles = Arrays.copyOf(adjacentTiles,
-					adjacentTiles.length);
+			this.adjacentTiles = newAdjacentTiles;
 		}
 		initializeWalls();
 	}

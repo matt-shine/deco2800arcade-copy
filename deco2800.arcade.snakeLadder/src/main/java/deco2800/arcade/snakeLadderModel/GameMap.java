@@ -10,9 +10,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * @author li.tang
+ * 
+ */
 public class GameMap {
 	private Texture backgroundBoard;
 	private Tile[] tileList = new Tile[100]; 
+	private List<SnakeLadderBridge> snakeLadderList = new ArrayList<SnakeLadderBridge>();
 	
 	//This is the empty constructor for testing
 	public GameMap(){}
@@ -26,12 +31,13 @@ public class GameMap {
 		return tileList;
 	}
 
-	public void setTileList(Tile[] tileList) {
-		this.tileList = tileList;
-	}
-
-	private List<SnakeLadderBridge> snakeLadderList = new ArrayList<SnakeLadderBridge>();
-	
+	/**
+	 * This method will populate tileList and snakeLadder List when reading the file as well as 
+	 * initialization of texture for each rule
+	 * @param handle map file to be loaded
+	 * @param ruleMapping rule mappings from xml configuration
+	 * @return true if loading is successful otherwise return false
+	 */
 	public boolean loadMap(FileHandle handle, HashMap<String,RuleMapping> ruleMapping) {
 		try {
 			populateTileListFromMapFile(handle, ruleMapping);
@@ -59,19 +65,20 @@ public class GameMap {
 		//initialize ladder rotation and scalling 
 		for(SnakeLadderBridge l: snakeLadderList)
 		{
-			l.createLadder(tileList);
+			l.createSnakeLadder(tileList);
 		}
 		return true;
 	}
 
 	/**
-	 * @param handle
-	 * @param ruleMapping
+	 * This method will populate tileList when reading the file
+	 * @param handle map file to be loaded
+	 * @param ruleMapping rule mappings from xml configuration
 	 * @throws NumberFormatException
 	 */
 	public void populateTileListFromMapFile(FileHandle handle,
 			HashMap<String, RuleMapping> ruleMapping)
-			throws NumberFormatException,IOException,Exception {
+			throws Exception {
 		BufferedReader file = handle.reader(2048);
 		int counter = 0;
 		try {
@@ -118,6 +125,10 @@ public class GameMap {
 		
 	}
 	
+	/**
+	 * This method is used to render the map
+	 * @param batch
+	 */
 	public void renderMap(SpriteBatch batch)
 	{
 		batch.draw(backgroundBoard,0,0);

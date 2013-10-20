@@ -1,13 +1,14 @@
 package deco2800.server.listener;
 
 
-import deco2800.arcade.protocol.lobby.CreateMatchRequest;
-import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
-import deco2800.arcade.protocol.lobby.NewLobbyRequest;
-import deco2800.server.Lobby;
-
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+
+import deco2800.arcade.protocol.lobby.CreateMatchRequest;
+import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
+import deco2800.arcade.protocol.lobby.LobbyMessageRequest;
+import deco2800.arcade.protocol.lobby.NewLobbyRequest;
+import deco2800.server.Lobby;
 
 public class LobbyListener extends Listener {
 
@@ -37,24 +38,23 @@ public class LobbyListener extends Listener {
 				break;
 			
 			}
-			
-			
-		}
-		else if (object instanceof CreateMatchRequest) {
+		} else if (object instanceof CreateMatchRequest) {
 			
 			CreateMatchRequest request = (CreateMatchRequest) object;
 			String gameId = request.gameId;
 			int playerId = request.playerID;
-			Connection hostConnection = connection;
-			
+			Connection hostConnection = connection;	
 			lobby.createMatch(gameId, playerId, hostConnection);
-		}
-		else if (object instanceof JoinLobbyMatchRequest) {
+		} else if (object instanceof JoinLobbyMatchRequest) {
 			
 			JoinLobbyMatchRequest request = (JoinLobbyMatchRequest) object;
 			int matchId = request.matchId;
 			int playerId = request.playerID;
 			lobby.joinMatch(matchId, playerId, connection);
+		} else if (object instanceof LobbyMessageRequest) {
+			
+			LobbyMessageRequest request = (LobbyMessageRequest) object;
+			Lobby.instance().sendChat(request);
 		}
 
 	}

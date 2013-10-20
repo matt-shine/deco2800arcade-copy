@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 
 import deco2800.arcade.client.highscores.HighscoreClient;
@@ -67,9 +66,45 @@ public class DeerForest extends GameClient {
 		
 		super.create();
 
+<<<<<<< HEAD
         // Create the logger
         logger = Logger.getLogger("GUILogger");
 
+=======
+        //add the overlay listeners
+        this.getOverlay().setListeners(new Screen() {
+
+            @Override
+            public void render(float arg0) {
+            }
+
+            @Override
+            public void resize(int width, int height) {
+            }
+
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void hide() {
+            }
+
+            @Override
+            public void pause() {
+            }
+
+            @Override
+            public void resume() {
+            }
+
+            @Override
+            public void dispose() {
+            }
+
+        });
+        
+>>>>>>> master
         // Setup menu
         mainMenu = new MainMenu(null);
         menuView = new MainMenuScreen(mainMenu);
@@ -137,6 +172,7 @@ public class DeerForest extends GameClient {
 	public void render() {
 		super.render();
 	}
+<<<<<<< HEAD
 
     private static final Game game;
     static {
@@ -145,6 +181,17 @@ public class DeerForest extends GameClient {
         game.name = "Deer Forest";
         game.description = "Battle your friends with unique cards and unique possibilities.";
     }
+=======
+	
+	private static final Game game;
+	static {
+		game = new Game();
+		game.id = "deerforest";
+		game.name = "Deer Forest";
+		game.description = "A battle of minds, fought with pieces of paper with"
+				+ "deer on them (probably). More dramatic than it sounds.";
+	}
+>>>>>>> master
 
 	public Game getGame() {
 		return game;

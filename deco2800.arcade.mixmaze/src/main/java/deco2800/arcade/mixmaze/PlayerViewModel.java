@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.utils.Timer;
 import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,8 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 	private final int tileSize;
 	private final TextureRegion bodyRegion;
 	private final TextureRegion headRegion;
+	private final TextureRegion buildRegion;
+	private final TextureRegion destroyRegion;
 	private final KeyManager km;
 	private final int id;
 	private final GameScreen.ScoreBar scorebar;
@@ -38,6 +41,8 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 	private int x;
 	private int y;
 	private int rotation;
+	private boolean building;
+	private boolean destroying;
 
 	/**
 	 * Constructor
@@ -48,7 +53,6 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 			int[] playerControls, GameScreen.ScoreBar scorebar,
 			GameScreen.SidePanel sidePanel,
 			TextureRegion headRegion) {
-		Texture texture;
 		HashMap<Integer, Integer> mapping = new HashMap<Integer, Integer>();
 
 		this.gameModel = gameModel;
@@ -57,35 +61,39 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 		this.scorebar = scorebar;
 		this.sidePanel = sidePanel;
 
-		if (playerControls[0] != NUM_5)
-			mapping.put(playerControls[0], NUM_5);
-		if (playerControls[1] != NUM_6)
-			mapping.put(playerControls[1], NUM_6);
-		if (playerControls[2] != UP)
-			mapping.put(playerControls[2], UP);
-		if (playerControls[3] != LEFT)
-			mapping.put(playerControls[3], LEFT);
-		if (playerControls[4] != DOWN)
-			mapping.put(playerControls[4], DOWN);
-		if (playerControls[5] != RIGHT)
-			mapping.put(playerControls[5], RIGHT);
+		if (playerControls[0] != NUM_5){
+			mapping.put(playerControls[0], NUM_5);}
+		if (playerControls[1] != NUM_6){
+			mapping.put(playerControls[1], NUM_6);}
+		if (playerControls[2] != UP){
+			mapping.put(playerControls[2], UP);}
+		if (playerControls[3] != LEFT){
+			mapping.put(playerControls[3], LEFT);}
+		if (playerControls[4] != DOWN){
+			mapping.put(playerControls[4], DOWN);}
+		if (playerControls[5] != RIGHT){
+			mapping.put(playerControls[5], RIGHT);}
 
 		km = new KeyManager(mapping);
 
 		/* load texture */
-		texture = new Texture(Gdx.files.internal("body.png"));
-		bodyRegion = new TextureRegion(texture);
-		/*
-		texture = new Texture(Gdx.files.internal((id == 1) ? "miner.png"
-				: "cowboy.png"));
-		*/
+		bodyRegion = new TextureRegion(
+				new Texture(Gdx.files.internal("body.png")));
+		buildRegion = new TextureRegion(
+				new Texture(Gdx.files.internal("build.png")));
+		destroyRegion = new TextureRegion(
+				new Texture(Gdx.files.internal("destroy.png")));
+		
 		this.headRegion = headRegion;
+		building = false;
+		destroying = false;
 
-		if (id == 1)
+		if (id == 1){
 			this.setColor(1f, 0f, 0f, 1f);
-		else
+		}
+		else{
 			this.setColor(0f, 0f, 1f, 1f);
-
+		}
 		addListener(new PlayerInputListener());
 	}
 
@@ -96,6 +104,20 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 		batch.setColor(this.getColor());
 		batch.draw(bodyRegion, x * tileSize, 640 - (y + 1) * tileSize,
 				tileSize, tileSize);
+		if (building) {
+			batch.draw(buildRegion, x * tileSize, 
+					640 - (y + 1) * tileSize,
+					tileSize / 2, tileSize / 2,
+					tileSize, tileSize,
+					1, 1, rotation);
+		}
+		if (destroying) {
+			batch.draw(destroyRegion, x * tileSize, 
+					640 - (y + 1) * tileSize,
+					tileSize / 2, tileSize / 2,
+					tileSize, tileSize,
+					1, 1, rotation);
+		}
 		batch.setColor(old);
 		batch.draw(headRegion, x * tileSize, 640 - (y + 1) * tileSize,
 				tileSize / 2, tileSize / 2, tileSize, tileSize, 1, 1, rotation);
@@ -168,73 +190,6 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 		return id;
 	}
 
-	/**
-	 * Returns the amount of bricks this player has.
-	 * 
-	 * @return the amount of bricks
-	 */
-	/*
-	 * public int getBrickAmount() { IBrickModel brick = model.getBrick();
-	 * 
-	 * if (brick == null) { return 0; } else { return brick.getAmount(); } }
-	 */
-
-	/*
-	 * private boolean hasItem(IItemModel.ItemType type) { IItemModel item =
-	 * null;
-	 * 
-	 * switch (type) { case PICK: item = model.getPick(); break; case TNT: item
-	 * = model.getTNT(); break; }
-	 * 
-	 * return (item == null) ? false : true; }
-	 */
-
-	/**
-	 * Returns if this player has a pick.
-	 * 
-	 * @param pid
-	 *            the player id, can be either 1 or 2
-	 * @return true if the player has pick, otherwise false
-	 */
-	/*
-	 * public boolean hasPick() { return hasItem(PICK); }
-	 */
-
-	/**
-	 * Returns if this player has a TNT.
-	 * 
-	 * @param pid
-	 *            the player id, can be either 1 or 2
-	 * @return true if the player has TNT, otherwise false
-	 */
-	/*
-	 * public boolean hasTNT() { return hasItem(TNT); }
-	 */
-
-	/**
-	 * Returns the active action of this player.
-	 * 
-	 * @return one of <code>USE_BRICK</code>, <code>USE_PICK</code>, or
-	 *         <code>USE_TNT</code>
-	 */
-	/*
-	 * public PlayerAction getAction() { return model.getPlayerAction(); }
-	 */
-
-	/**
-	 * Returns the name of the active action of this player.
-	 * 
-	 * @return a String representing the active action
-	 */
-	/*
-	 * public String getActionName() { PlayerAction act =
-	 * model.getPlayerAction();
-	 * 
-	 * switch (act) { case USE_BRICK: return "using brick"; case USE_PICK:
-	 * return "using pick"; case USE_TNT: return "using TNT"; default: return
-	 * "unknown"; } }
-	 */
-
 	/*
 	 * Handles movement input.
 	 */
@@ -259,7 +214,23 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 				gameModel.switchPlayerAction(id);
 				break;
 			case NUM_6:
-				gameModel.usePlayerAction(id);
+				PlayerModel.Action act = 
+						gameModel.usePlayerAction(id);
+				if (act == PlayerModel.Action.USE_BRICK) {
+					building = true;
+					Timer.schedule(new Timer.Task(){
+						public void run() {
+							building = false;
+						}
+					}, 0.3f);
+				} else if (act == PlayerModel.Action.USE_PICK) {
+					destroying = true;
+					Timer.schedule(new Timer.Task(){
+						public void run() {
+							destroying = false;
+						}
+					}, 0.3f);
+				}
 				break;
 			default:
 				return false; // event not handled

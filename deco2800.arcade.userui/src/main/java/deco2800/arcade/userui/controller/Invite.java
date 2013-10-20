@@ -28,6 +28,10 @@ public class Invite {
 		this.userView = userView;
 		
 		this.inviteView.addAcceptListener(new AcceptListener());
+		this.inviteView.addDeclineListener(new DeclineListener());
+		
+		theModel.getPlayer().addInvite(theModel.getUser());
+		inviteView.displayinvites();
 		
 	}
 
@@ -36,6 +40,7 @@ public class Invite {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
+			inviteView.acceptinvite(theModel.getUser());
 			inviteView.dispose();
 			userView.setEnabled(true);
 			
@@ -48,6 +53,7 @@ public class Invite {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
+			inviteView.declineinvite(theModel.getUser());
 			inviteView.dispose();
 			userView.setEnabled(true);
 			

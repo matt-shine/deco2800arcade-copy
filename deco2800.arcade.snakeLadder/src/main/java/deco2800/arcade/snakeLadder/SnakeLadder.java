@@ -37,6 +37,7 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
 import deco2800.arcade.client.AchievementClient;
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.highscores.Highscore;
@@ -78,8 +79,6 @@ public class SnakeLadder extends GameClient {
 	private BitmapFont font;
 	public TextButton diceButton;
 	public String statusMessage;
-	private Dice dice;
-	private Dice diceAI;
 	private int turn=0;
 	private HashMap<String,RuleMapping> ruleMapping = new HashMap<String,RuleMapping>();
 	public HighscoreClient player1;
@@ -141,6 +140,39 @@ public class SnakeLadder extends GameClient {
 	@Override
 	public void create() {        
 		super.create();
+
+        //add the overlay listeners
+        this.getOverlay().setListeners(new Screen() {
+
+            @Override
+            public void render(float arg0) {
+            }
+
+            @Override
+            public void resize(int width, int height) {
+            }
+
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void hide() {
+            }
+
+            @Override
+            public void pause() {
+            }
+
+            @Override
+            public void resume() {
+            }
+
+            @Override
+            public void dispose() {
+            }
+
+        });
 		
 		//Initialise camera
 		camera = new OrthographicCamera();
@@ -168,7 +200,8 @@ public class SnakeLadder extends GameClient {
         
 		//creating the stage
         stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
+        //Gdx.input.setInputProcessor(stage);
+        ArcadeInputMux.getInstance().addProcessor(stage);
         
         //rendering scoreboard UI
   		renderScoreBoard();
@@ -183,6 +216,7 @@ public class SnakeLadder extends GameClient {
 	@Override
 	public void dispose() {
 		super.dispose();
+        ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override
@@ -387,6 +421,12 @@ public class SnakeLadder extends GameClient {
 		player5.storeScore("Number", 1093);
 		
 	}
-
+	private static final Game game;
+	static {
+		game = new Game();
+		game.id = "snakeLadder";
+		game.name = "Snakes & Ladders";
+		game.description = "Many snakes and ladders."; 
+	}
 }
 

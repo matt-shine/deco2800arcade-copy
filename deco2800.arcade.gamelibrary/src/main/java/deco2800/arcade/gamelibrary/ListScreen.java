@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
@@ -39,7 +40,6 @@ public class ListScreen implements Screen, LibraryScreen {
     private int x = 0;
     private int y = 580;
     private TextButton button;
-    private TextButton storeButton;
     private TextButton userProfileButton;
     private TextButton currentButton;
     private TextButton homeButton;
@@ -122,10 +122,12 @@ public class ListScreen implements Screen, LibraryScreen {
 
 
         label = new Label(description, libSkin);
-        label.setWidth(150);
-        label.setHeight(40);
+        label.setWidth(840);
+        label.setHeight(100);
         label.setX(320);
-        label.setY(475);
+        label.setY(425);
+        label.setAlignment(Align.left | Align.top);
+        label.setWrap(true);
 
         titleLabel = new Label(gameTitle, libSkin, "heading");
         titleLabel.setWidth(150);
@@ -200,24 +202,16 @@ public class ListScreen implements Screen, LibraryScreen {
         homeButton.setY(650);
         homeButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
 
-        storeButton = new TextButton("Game Store", libSkin);
-        storeButton.setWidth(150);
-        storeButton.setHeight(40);
-        storeButton.setX(300);
-        storeButton.setY(650);
-        storeButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
-
         userProfileButton = new TextButton("User Profile", libSkin);
         userProfileButton.setWidth(150);
         userProfileButton.setHeight(40);
-        userProfileButton.setX(500);
+        userProfileButton.setX(300);
         userProfileButton.setY(650);
-        userProfileButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
+        userProfileButton.addListener(new PlayButtonActionHandler(this, "profileui"));
 
         stage.addActor(label);
         stage.addActor(homeButton);
         stage.addActor(titleLabel);
-        stage.addActor(storeButton);
         stage.addActor(userProfileButton);
         stage.addActor(playButton);
         

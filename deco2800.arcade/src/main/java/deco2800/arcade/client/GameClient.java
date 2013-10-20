@@ -16,9 +16,14 @@ import deco2800.arcade.client.image.ImageClient;
 import deco2800.arcade.client.image.ImageManager;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
+
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.EncodedImage;
+import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
+import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
+import deco2800.arcade.protocol.game.CasinoServerUpdate;
 import deco2800.arcade.utils.Handler;
+
 
 public abstract class GameClient extends com.badlogic.gdx.Game implements AchievementListener {
 
@@ -27,6 +32,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	protected List<GameOverListener> gameOverListeners;
 	private int multiplayerOn = 0;
 	private int multiplayerSession;
+	private int lobbySession = -1;
 	private ApplicationListener overlay = null;
 	private UIOverlay overlayBridge = null;
 	private boolean overlayInitialised = false;
@@ -36,6 +42,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	private PlayerClient playerClient;
 	private ImageManager imageManager;
 	private boolean hasF11PressedLast = false;
+	private boolean host = false;
 
 	public GameClient(Player player, NetworkClient networkClient) {
 
@@ -52,9 +59,10 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	public abstract Game getGame();
 
     public void achievementAwarded(final Achievement ach) {
-	if (this.overlayBridge == null)
+	if (this.overlayBridge == null) {
 	    return;
-
+	}
+	
 	this.imageManager.getTexture(ach.icon).setHandler(new Handler<Texture>() {
 		public void handle(final Texture texture) {
 		    GameClient.this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
@@ -144,7 +152,6 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	 * @param overlay
 	 */
 	public void addOverlayBridge(UIOverlay overlay) {
-	    System.out.println("adding overlay bridge");
 
 		this.overlayBridge = overlay;
 		overlay.setHost(this);
@@ -205,11 +212,6 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	}
 
 	@Override
-	public void pause() {
-		super.pause();
-	}
-
-	@Override
 	public void render() {
 		super.render();
 		processOverlay();
@@ -234,12 +236,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 		if (overlay != null) {
 			overlay.resize(width, height);
 		}
-		super.resize(width, height);
-	}
-
-	@Override
-	public void resume() {
-		super.resume();
+		//super.resize(width, height);
 	}
 
 	public int getWidth() {
@@ -267,22 +264,53 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	}
 
 	public boolean multiplayerMode() {
-		if (multiplayerOn == 1) {
-			return true;
-		} else {
-			return false;
-		}
+		return (multiplayerOn == 1);
 	}
 
 	public void setMultiSession(int session) {
 		multiplayerSession = session;
-		startMultiplayerGame();
+		if (getMPHost()) {
+			startMultiplayerGame();
+		}
+	}
+	
+	public void updateCasinoState(CasinoServerUpdate obj) {
+		
 	}
 
+	public int getMultiSession() {
+		return multiplayerSession;
+	}
+
+	public void setHost(boolean host) {
+		this.host = host;
+	}
+	
+	public boolean getMPHost() {
+		return host;
+	}
+	
+	public void setLobbySession(int lobby) {
+		lobbySession = lobby;
+	}
+	
+	public int getLobbySession() {
+		return lobbySession;
+	}
+	
 	public void startMultiplayerGame() {
 	}
 
-	public void updateGameState(Object update) {
+	public void updateGameState(GameStateUpdateRequest request) {
+	}
+	
+	public void sendStateUpdate() {
+	}
+	
+	private void requestMultiplayerGame() {	
+	}
+	
+	public void displayChat(LobbyMessageResponse response) {
 	}
 }
 

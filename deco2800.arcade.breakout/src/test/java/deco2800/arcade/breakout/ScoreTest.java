@@ -5,6 +5,8 @@ import static org.mockito.Mockito.*;
 import org.junit.*;
 import org.mockito.Mockito;
 
+import deco2800.arcade.breakout.screens.GameScreen;
+
 public class ScoreTest {
 
 	GameScreen context = mock(GameScreen.class);
@@ -49,43 +51,5 @@ public class ScoreTest {
 		verify(context).roundOver();
 		assertEquals("Round Over Score", 5, context.getScore());
 	}
-	
-	/*
-	@Test
-	public void scoreLevel1(){
-		for(int i = 0; i<10; i++){
-			Mockito.doCallRealMethod().when(context).incrementScore(context.getLevel()*2);
-			context.incrementScore(context.getLevel()*2);
-		}
-		assertEquals("Score == 20", 20, context.getScore());
-	}
-	
-
-	@Test
-	public void scoreLevel2(){
-		context.setLevel(2);
-		for(int i = 0; i<10; i++){
-			context.incrementScore(context.getLevel()*2);
-		}
-		assertEquals("Score == 60", context.getScore(), 60);
-	}
-	
-	@Test
-	public void scoreLevel1and2(){
-		for(int i = 0; i<10; i++){
-			context.incrementScore(context.getLevel()*2);
-		}
-		assertEquals("Score == 20", context.getScore(), 20);
-		context.setLevel(2);
-		for(int i = 0; i<10; i++){
-			context.incrementScore(context.getLevel()*2);
-		}
-		assertEquals("Score == 60", context.getScore(), 60);
-	}
-	
-	@Test
-	public void alwaysSuccessful() {
-		assertEquals("1 == 1", 1, 1);
-	}*/
 		
 }

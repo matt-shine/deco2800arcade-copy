@@ -4,19 +4,19 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import deco2800.arcade.model.Player;
+import deco2800.arcade.model.User;
 import deco2800.arcade.userui.Model;
 import net.miginfocom.swing.MigLayout;
 
@@ -122,6 +122,9 @@ public class InviteScreen extends JFrame{
 		
 	}
 	
+	/**
+	 *  Adds the username textfield and label
+	 */
 	public void addtextpanel(){
 		
 	    usernamefield = new JTextField("", 20);
@@ -136,7 +139,7 @@ public class InviteScreen extends JFrame{
 	}
 	
 	/**
-	 * 	Adds the backbutton and addfriendbutton
+	 * 	Adds the accept and decline request buttons
 	 */
 	public void addactionpanel(){
 		
@@ -159,8 +162,8 @@ public class InviteScreen extends JFrame{
 	}
 
 	/**
-	 * Listener for the backbutton
-	 * @param listenForCancelButton
+	 * Listener for the acceptbutton
+	 * @param listenForAcceptButton
 	 */
 	public void addAcceptListener(ActionListener listenForAcceptButton){
 		
@@ -168,6 +171,56 @@ public class InviteScreen extends JFrame{
 	
 	}
 	
+	/**
+	 * Listener for the declinebutton
+	 * @param listenForDeclineButton
+	 */
+	public void addDeclineListener(ActionListener listenForDeclineButton){
+		
+		declinebutton.addActionListener(listenForDeclineButton);
+	
+	}
+	
+	/**
+	 * Display list of invites
+	 */
+	public void displayinvites(){
+		
+		invites.setText(model.getPlayer().getInvites().toString());
+		
+	}
+
+	/**
+	 * Accept the friend invite, player gets added to friends list
+	 * @param friend
+	 */
+	public void acceptinvite(User friend){
+		
+		model.getPlayer().acceptFriendInvite(friend);
+		invites.setText(model.getPlayer().getInvites().toString());
+		
+	}
+	
+	/**
+	 * Reject the friend invite, player is remove from the list
+	 * @param friend
+	 */
+	public void declineinvite(User friend){
+		
+		model.getPlayer().removeInvite(friend);
+		invites.setText(model.getPlayer().getInvites().toString());
+		
+	}
+	
+	/**
+	 * Get the name of the user
+	 */
+	public void getname(){
+		
+		usernamefield.getText();
+		
+	}
+		
 }
 
 

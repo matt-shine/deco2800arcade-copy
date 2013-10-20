@@ -107,6 +107,9 @@ public abstract class Piece {
 	public boolean occupiedSpace(FixedSizeList<FixedSizeList<Piece>> board_state, int[] position) {
 		int x = position[0];
 		int y = position[1];
+		if ((x < 0) || (x > 7) || (y < 0) || (y > 7)) {
+			return false;
+		}
 		FixedSizeList<Piece> row = board_state.get(x);
 		Piece onSpace = row.get(y);
 
@@ -119,397 +122,117 @@ public abstract class Piece {
 	}
 	
 	/**
-	 * Returns a list with all impossible diagonal jumps removed from the possible
-	 * moves.
+	 * Checks whether position argument is a valid position on the board
 	 * 
-	 * @param possibleMoves
-	 *            List of all possible moves the piece can make, not
-	 *            disregarding disallowed moves
-	 * @param currentPos
-	 *            The current position of the given piece
-	 * @param piece
-	 *            The piece for whom the moves are being removed from
-	 * @return A list of all possible moves the piece can make without the
-	 *         impossible jumps included in possibleMoves
+	 * @param position
+	 * 			The position to be checked if it is valid
+	 * @return True if it is a valid position, false otherwise
 	 */
-	public List<int[]> removeJumpsDiagonal(List<int[]> possibleMoves,
-			int[] currentPos, FixedSizeList<FixedSizeList<Piece>> board_state) {
-		Piece whiteBishop1 = new Bishop(false,1);
-		Piece whiteQueen = new Queen(false);
-		int x = currentPos[0];
-		int y = currentPos[1];
-		int xCheck;
-		int yCheck;
-		List<int[]> possible = new ArrayList<int[]>(possibleMoves);
-		if (this.getClass() == whiteBishop1.getClass()
-				|| this.getClass() == whiteQueen.getClass()) {
-			for (int i = 1; i <= 7; i++) {
-				int[] upRight = { x + i, y + i };
-				if ((upRight[0] >= 0) && (upRight[0] <= 7) && (upRight[1] >= 0)
-						&& (upRight[1] <= 7)) {
-					if (!occupiedSpace(board_state, upRight)) {
-						continue;
-					} else {
-						List<Piece> row = board_state.get(x + i);
-						Piece onSquare = row.get(y + i);
-						// remove possible moves AFTER enemy piece onwards
-						if (getTeam() != onSquare.getTeam()) {
-							for (int j = 1; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x + i + j))
-											&& (yCheck == (y + i + j))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-							// remove possible moves FROM ally piece onwards
-						} else {
-							for (int j = 0; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x + i + j))
-											&& (yCheck == (y + i + j))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-						}
-					}
-				}
-			}
-			// remove jumps for moving UP and LEFT
-			for (int i = 1; i <= 7; i++) {
-				int[] upLeft = { x + i, y - i };
-				if ((upLeft[0] >= 0) && (upLeft[0] <= 7) && (upLeft[1] >= 0)
-						&& (upLeft[1] <= 7)) {
-					// if space is not occupied continue
-					if (!occupiedSpace(board_state, upLeft)) {
-						continue;
-					} else {
-						List<Piece> row = board_state.get(x + i);
-						Piece onSquare = row.get(y - i);
-						// remove possible moves AFTER enemy piece onwards
-						if (getTeam() != onSquare.getTeam()) {
-							for (int j = 1; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x + i + j))
-											&& (yCheck == (y - i - j))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-							// remove possible moves FROM ally piece onwards
-						} else {
-							for (int j = 0; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x + i + j))
-											&& (yCheck == (y - i - j))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-						}
-					}
-				}
-			}
-
-			// remove jumps for moving DOWN and RIGHT
-			for (int i = 1; i <= 7; i++) {
-				int[] downRight = { x - i, y + i };
-				if ((downRight[0] >= 0) && (downRight[0] <= 7)
-						&& (downRight[1] >= 0) && (downRight[1] <= 7)) {
-					if (!occupiedSpace(board_state, downRight)) {
-						continue;
-					} else {
-						List<Piece> row = board_state.get(x - i);
-						Piece onSquare = row.get(y + i);
-						// remove possible moves AFTER enemy piece onwards
-						if (getTeam() != onSquare.getTeam()) {
-							for (int j = 1; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x - i - j))
-											&& (yCheck == (y + i + j))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-							// remove possible moves FROM ally piece onwards
-						} else {
-							for (int j = 0; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x - i - j))
-											&& (yCheck == (y + i + j))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-						}
-					}
-				}
-			}
-
-			// remove jumps for moving DOWN and LEFT
-			for (int i = 1; i <= 7; i++) {
-				int[] downLeft = { x - i, y - i };
-				if ((downLeft[0] >= 0) && (downLeft[0] <= 7)
-						&& (downLeft[1] >= 0) && (downLeft[1] <= 7)) {
-					if (!occupiedSpace(board_state, downLeft)) {
-						continue;
-					} else {
-						List<Piece> row = board_state.get(x - i);
-						Piece onSquare = row.get(y - i);
-						// remove possible moves AFTER enemy piece onwards
-						if (getTeam() != onSquare.getTeam()) {
-							for (int j = 1; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x - i - j))
-											&& (yCheck == (y - i - j))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-							// remove possible moves FROM ally piece onwards
-						} else {
-							for (int j = 0; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x - i - j))
-											&& (yCheck == (y - i - j))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-						}
-					}
-				}
-			}
+	public boolean inBounds(int[] position) {
+		int x = position[0];
+		int y = position[1];
+		//check if x position is valid
+		if ((x < 0) || (x > 7)) {
+			return false;
 		}
-		return possible;
+		//check if y position is valid
+		if ((y < 0) || (y > 7)) {
+			return false;
+		}
+		return true;
 	}
 	
 	/**
-	 * Returns a list with all impossible up jumps removed from the possible
-	 * moves.
+	 * Returns a list of all possible moves in one of eight directions
+	 * specified by dirCase without the piece jumping any others
 	 * 
-	 * @param possibleMoves
-	 *            List of all possible moves the piece can make, not
-	 *            disregarding disallowed moves
-	 * @param currentPos
-	 *            The current position of the given piece
-	 * @param piece
-	 *            The piece for whom the moves are being removed from
-	 * @return A list of all possible moves the piece can make without the
-	 *         impossible jumps included in possibleMoves
+	 * @param position
+	 * 			the current position of the piece
+	 * @param board_state
+	 * 			the current state of the board
+	 * @param dirCase
+	 * 			integer representing direction to move in
+	 * @return List<int[]> that has all allowable moves in specified direction
 	 */
-	public List<int[]> removeJumpsUp(List<int[]> possibleMoves,
-			int[] currentPos, FixedSizeList<FixedSizeList<Piece>> board_state) {
-		Piece whiteRook1 = new Rook(false,1);
-		Piece whiteQueen = new Queen(false);
-		int x = currentPos[0];
-		int y = currentPos[1];
-		int xCheck;
-		int yCheck;
-		List<int[]> possible = new ArrayList<int[]>(possibleMoves);
-		if (this.getClass() == whiteRook1.getClass()
-				|| getClass() == whiteQueen.getClass()) {
-			// remove jumps UP
-			for (int i = 1; i <= 7; i++) {
-
-				int[] up = { x + i, y };
-				if ((up[0] >= 0) && (up[0] <= 7) && (up[1] >= 0)
-						&& (up[1] <= 7)) {
-
-					if (!occupiedSpace(board_state, up)) {
-						continue;
-
+	public List<int[]> removeJumps(int[] position, 
+			FixedSizeList<FixedSizeList<Piece>> board_state, int dirCase) {
+		List<int[]> noJumps = new ArrayList<int[]>();
+		for (int i = 1; i < 8; i++) {
+			//get move in direction
+			int[] move = getPos(position, dirCase, i);
+			//check it is a position on the board
+			if (inBounds(move)) {
+				//if the space is not occupied add the move
+				if (!occupiedSpace(board_state, move)) {
+					noJumps.add(move);
+				} else {
+					Piece onSquare = board_state.get(move[0]).get(move[1]);
+					//if it is occupied by enemy, add move then break
+					if (getTeam() != onSquare.getTeam()) {
+						noJumps.add(move);
+						break;
 					} else {
-
-						List<Piece> row = board_state.get(x + i);
-						Piece onSquare = row.get(y);
-
-						// remove possible moves AFTER enemy piece onwards
-						if (getTeam() != onSquare.getTeam()) {
-							for (int j = 1; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x + i + j))
-											&& (yCheck == (y))) {
-										possible.remove(k);
-
-									}
-								}
-							}
-							break;
-							// remove possible moves FROM ally piece onwards
-						} else {
-							for (int j = 0; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x + i + j))
-											&& (yCheck == (y))) {
-										possible.remove(k);
-
-									}
-								}
-							}
-							break;
-						}
-					}
-				}
-			}
-
-			// remove jumps LEFT
-			for (int i = 1; i <= 7; i++) {
-				int[] Left = { x, y - i };
-				if ((Left[0] >= 0) && (Left[0] <= 7) && (Left[1] >= 0)
-						&& (Left[1] <= 7)) {
-					if (!occupiedSpace(board_state, Left)) {
-						continue;
-					} else {
-						List<Piece> row = board_state.get(x);
-						Piece onSquare = row.get(y - i);
-						// remove possible moves AFTER enemy piece onwards
-						if (getTeam() != onSquare.getTeam()) {
-							for (int j = 1; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x) && (yCheck == (y - i - j)))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-							// remove possible moves FROM ally piece onwards in
-							// direction
-						} else {
-							for (int j = 0; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x) && (yCheck == (y - i - j)))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-						}
-					}
-				}
-			}
-
-			// remove jumps RIGHT
-			for (int i = 1; i <= 7; i++) {
-				int[] Right = { x, y + i };
-				if ((Right[0] >= 0) && (Right[0] <= 7) && (Right[1] >= 0)
-						&& (Right[1] <= 7)) {
-					if (!occupiedSpace(board_state, Right)) {
-						continue;
-					} else {
-						List<Piece> row = board_state.get(x);
-						Piece onSquare = row.get(y + i);
-						// remove possible moves AFTER enemy piece onwards
-						if (getTeam() != onSquare.getTeam()) {
-							for (int j = 1; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x) && (yCheck == (y + i + j)))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-							// remove possible moves FROM ally piece onwards
-						} else {
-							for (int j = 0; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x) && (yCheck == (y + i + j)))) {
-										possible.remove(k);
-
-									}
-								}
-							}
-							break;
-						}
-					}
-				}
-			}
-			// remove jumps downwards
-			for (int i = 1; i <= 7; i++) {
-				int[] down = { x - i, y };
-				if ((down[0] >= 0) && (down[0] <= 7) && (down[1] >= 0)
-						&& (down[1] <= 7)) {
-
-					// if space is not occupied continue
-					if (!occupiedSpace(board_state, down)) {
-						continue;
-					} else {
-						List<Piece> row = board_state.get(x - i);
-						Piece onSquare = row.get(y);
-						// remove possible moves AFTER enemy piece onwards
-						if (getTeam() != onSquare.getTeam()) {
-
-							for (int j = 1; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x - i - j))
-											&& (yCheck == (y))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-							// remove possible moves FROM ally piece onwards
-						} else {
-							for (int j = 0; j <= 7; j++) {
-								for (int k = 0; k < possible.size(); k++) {
-									xCheck = possible.get(k)[0];
-									yCheck = possible.get(k)[1];
-									if ((xCheck == (x - i - j))
-											&& (yCheck == (y))) {
-										possible.remove(k);
-									}
-								}
-							}
-							break;
-						}
+						//if occupied by ally piece, do not add move and break
+						break;
 					}
 				}
 			}
 		}
-		if (getClass() == whiteRook1.getClass()) {
-			return possible;
-		} else {
-			return removeJumpsDiagonal(possible, currentPos, board_state);
-		}
+		return noJumps;
 	}
+	
+	/**
+	 * Returns the move in direction encoded by dirCase for index amount of
+	 * squares
+	 * 
+	 * @param position
+	 * 			the current position of the piece
+	 * @param dirCase
+	 * 			the encoding for the direction to travel in
+	 * @param index
+	 * 			the amount of steps to take in that direction
+	 * @return An int[] giving the position after moving in the specified
+	 * 			direction for however many steps
+	 */
+	public int[] getPos(int[] position, int dirCase, int steps) {
+		int x = position[0];
+		int y = position[1];
+		int[] move = {0,0};
+		switch (dirCase) {
+			case 1:
+				move[0] += (x + steps);
+				move[1] += (y + steps);
+				break;
+			case 2:
+				move[0] += (x + steps);
+				move[1] += (y - steps);
+				break;
+			case 3:
+				move[0] += (x - steps);
+				move[1] += (y + steps);
+				break;
+			case 4:
+				move[0] += (x - steps);
+				move[1] += (y - steps);
+				break;
+			case 5:
+				move[0] += (x + steps);
+				move[1] += y;
+				break;
+			case 6:
+				move[0] += (x - steps);
+				move[1] += y;
+				break;
+			case 7:
+				move[0] += x;
+				move[1] += (y + steps);
+				break;
+			case 8:
+				move[0] += x;
+				move[1] += (y - steps);
+				break;
+		}
+		return move;
+	}
+	
 }

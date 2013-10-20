@@ -6,10 +6,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import deco2800.arcade.client.ArcadeInputMux;
@@ -71,23 +68,42 @@ public class MenuScreen implements Screen {
         Table table = new Table();
         table.setFillParent(true);
         table.setBackground(skin.getDrawable("background"));
+        Table content = new Table();
         stage.addActor(table);
 
-        TextButton button = new TextButton("New Game", skin);
+        TextButton newGame = new TextButton("New Game", skin);
+        TextButton exit = new TextButton("Exit", skin);
+        Label difLabel = new Label("Difficulty", skin);
         SelectBox difficulty = new SelectBox(difficultyStrings, skin);
+        Label epLabel = new Label("Episode", skin);
         SelectBox episode = new SelectBox(episodeStrings,skin);
+        Label lvlLabel = new Label("Level", skin);
         SelectBox level = new SelectBox(levelStrings, skin);
 
-        table.add(difficulty);
-        table.row();
-        table.add(episode);
-        table.add(level);
-        table.row();
-        table.add(button);
+        content.add(epLabel).pad(5).colspan(2);
+        content.row();
+        content.add(episode).pad(5).colspan(2);
+        content.row();
+        content.add(lvlLabel).pad(5);
+        content.add(difLabel).pad(5);
+        content.row();
+        content.add(level).pad(5);
+        content.add(difficulty).pad(5);
+        content.row();
+        content.add(newGame).pad(5);
+        content.add(exit).pad(5);
 
-        button.addListener(new ChangeListener() {
+        content.setPosition(300, 400);
+        stage.addActor(content);
+
+        newGame.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 wl6.goToGame();
+            }
+        });
+        exit.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                // Exit to arcade
             }
         });
     }

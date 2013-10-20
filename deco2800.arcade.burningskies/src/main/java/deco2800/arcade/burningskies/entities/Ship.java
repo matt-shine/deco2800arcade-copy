@@ -11,7 +11,7 @@ public abstract class Ship extends Entity {
 	protected float flash = 0f;
 	private boolean godMode;
 	private float gModeTimer;
-	private final float gModeLimit = 10;
+	private final float gModeLimit = 5;
 	
 	/**
 	 * Basic constructor for a ship.

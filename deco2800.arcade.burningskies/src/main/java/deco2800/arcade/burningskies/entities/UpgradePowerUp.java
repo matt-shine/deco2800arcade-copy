@@ -14,9 +14,7 @@ public class UpgradePowerUp extends PowerUp {
 	
 	@Override
 	public void powerOn(PlayerShip player) {
-		//Demo of these changes. These are set though and not timed at the moment.
 		player.upgradeBullets();
-		player.setMaxSpeed(600f);//2000 is quite insane speed.
 	}
 
 }

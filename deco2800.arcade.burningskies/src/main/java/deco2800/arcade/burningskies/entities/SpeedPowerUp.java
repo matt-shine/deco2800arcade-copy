@@ -13,7 +13,7 @@ public class SpeedPowerUp extends PowerUp {
 
 	@Override
 	public void powerOn(PlayerShip player) {
-		player.setMaxSpeed(1200f);
+		player.setMaxSpeed(600f);
 
 	}
 }

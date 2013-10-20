@@ -194,7 +194,7 @@ public class PlayerShip extends Ship {
 		}
 		if(timeLimited) {
 			patternUp = true;
-			patternTimer = 10f;
+			patternTimer = 5f;
 		}
 	}
 	

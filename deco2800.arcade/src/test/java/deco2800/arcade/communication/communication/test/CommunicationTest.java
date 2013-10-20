@@ -135,29 +135,44 @@ public class CommunicationTest {
 	 * Tests the chat history. Mostly just tests the transferring of ChatHistory
 	 * object between CommunicationListener -> CommunicationNetwork
 	 */
-	// @Test
+	@Test
 	public void chatHistory() {
+		List<Integer> chatParticipants = new ArrayList<Integer>();
+		chatParticipants.add(player1.getID());
+		chatParticipants.add(player2.getID());
+		chatParticipants.add(player3.getID());
+		
 		Connection connection = null;
 		ChatHistory chathistory = new ChatHistory();
 		HashMap<Integer, ChatNode> history = new HashMap<Integer, ChatNode>();
-		ChatNode node1 = new ChatNode(player1.getID());
-		ChatNode node2 = new ChatNode(player2.getID());
-		ChatNode node3 = new ChatNode(player3.getID());
+		ChatNode node = new ChatNode(chatParticipants);
+		ChatNode compNode = new ChatNode(chatParticipants);
 		
-		node1.addMessage("12:30 PM - Rick Astley: Testing chat", "Rick Astley");
-		node1.addMessage("12:35 PM - Rick Astley: Testing chat2", "Rick Astley");
+		node.addMessage("12:30 PM - Rick Astley: Testing chat", "Rick Astley");
+		node.addMessage("12:35 PM - Rick Astley: Testing chat2", "Rick Astley");
+		node.addMessage("12:36 PM - Stewie Griffin: Testing chat3", "Stewie Griffin");
+		node.addMessage("12:50 PM - Stewie Griffin: Testing chat5", "Stewie Griffin");
+		node.addMessage("12:49 PM - Paul Wade: Testing chat4", "Paul Wade");
 		
-		node2.addMessage("12:36 PM - Stewie Griffin: Testing chat3", "Stewie Griffin");
-		node3.addMessage("12:50 PM - Stewie Griffin: Testing chat5", "Stewie Griffin");
+		compNode.addMessage("12:30 PM - Rick Astley: Testing chat", "Rick Astley");
+		compNode.addMessage("12:35 PM - Rick Astley: Testing chat2", "Rick Astley");
+		compNode.addMessage("12:36 PM - Stewie Griffin: Testing chat3", "Stewie Griffin");
+		compNode.addMessage("12:50 PM - Stewie Griffin: Testing chat5", "Stewie Griffin");
+		compNode.addMessage("12:49 PM - Paul Wade: Testing chat4", "Paul Wade");
 		
-		node3.addMessage("12:49 PM - Paul Wade: Testing chat4", "Paul Wade");
-		history.put(player1.getID(), node1);
-		history.put(player2.getID(), node2);
-		history.put(player3.getID(), node3);
+		history.put(player1.getID(), node);
+		history.put(player2.getID(), node);
+		history.put(player3.getID(), node);
 		chathistory.setChatHistory(history);
 		listener1.received(connection, chathistory);
 		listener2.received(connection, chathistory);
 		listener3.received(connection, chathistory);
+		
+		int size = node.getChatHistory().size();
+		for (int i = 0; i < size; i++) {
+			assertEquals(compNode.getChatHistory().peek().getUsername(), comm1.getCurrentChats().get(player1.getID()).getChatHistory().peek().getUsername());
+			assertEquals(compNode.getChatHistory().poll().getMessage(), comm1.getCurrentChats().get(player1.getID()).getChatHistory().poll().getMessage());
+		}
 	}
 
 	/**

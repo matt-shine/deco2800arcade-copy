@@ -463,6 +463,21 @@ public class junglejump extends GameClient implements InputProcessor {
 			camera.update();
 			super.render();
 			break;
+		case SELECT_LEVEL:
+			// Clear Buffers and prepare for drawing of Achievement List
+			Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			batch.setProjectionMatrix(camera.combined);
+			shapeRenderer.setProjectionMatrix(camera.combined);
+			batch.begin();
+			// Draw achievement labels and graphics here
+			achievementTitleFont.draw(batch, "Achievements", 100, SCREENHEIGHT); /* TITLE */
+			achievementTitleFont.draw(batch, "Press \"BACKSPACE\" to go back to the main menu.", 100, SCREENHEIGHT-20); /* navigation */
+			
+			batch.end();
+			camera.update();
+			super.render();
+			break;
 		}
 
 	}
@@ -703,7 +718,7 @@ public class junglejump extends GameClient implements InputProcessor {
 				gameState = GameState.OPTIONS;
 			}
 			if (butY == LEVEL_SELECT) {
-				
+				gameState = GameState.SELECT_LEVEL;
 			}
 		}
 		if (keycode == Keys.BACKSPACE) {

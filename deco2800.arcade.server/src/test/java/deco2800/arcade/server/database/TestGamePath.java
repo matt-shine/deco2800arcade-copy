@@ -69,20 +69,20 @@ public class TestGamePath {
 	
 	@Test
 	public void testGetPath() throws DatabaseException {
-		assertEquals("TestPath", gamePath.getPath(0));
+		assertEquals("TestPath", gamePath.getPath("0"));
 		System.out.print("\nGame Path found correctly\n\n\n");
 	}
 	
 	@Test 
 	public void testGetMD5() throws DatabaseException {
-		assertEquals("1001", gamePath.getMD5(0));
+		assertEquals("1001", gamePath.getMD5("0"));
 	}
 	
 	@Test
 	public void testInsertGame() throws DatabaseException {
-		gamePath.insertGame(1, "test.txt");
-		assertEquals("test.txt", gamePath.getPath(1));
-		assertEquals(PackageUtils.genMD5("test.txt"), gamePath.getMD5(1));
+		gamePath.insertGame("1", "test.txt");
+		assertEquals("test.txt", gamePath.getPath("1"));
+		assertEquals(PackageUtils.genMD5("test.txt"), gamePath.getMD5("1"));
 	}
 	
 	/**

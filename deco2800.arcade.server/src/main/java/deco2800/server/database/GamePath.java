@@ -22,20 +22,43 @@ public class GamePath {
 					null, "GAMEPATH", null);
 			if (!tableData.next()) {
 				Statement statement = connection.createStatement();
-				statement.execute("CREATE TABLE GAMEPATH(gameID INT PRIMARY KEY,"
+				statement.execute("CREATE TABLE GAMEPATH(gameID VARCHAR(40) PRIMARY KEY,"
 								+ "path VARCHAR(200) NOT NULL,"
 								+ "md5Hash LONG VARCHAR NOT NULL)");
 				/* hard coded insert of the games into the table
 				 * this should be done dynamically however due to other
 				 * tables being hard coded I've had to as well
 				 */
-				insertGame(0, "pong-1.0.tar.gz");
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Unable to create game path table", e);
 		}
 		initialised = true;
+	}
+	
+	public void addTheGames() throws DatabaseException {
+		insertGame("pong", "pong-1.0.tar.gz");
+		insertGame("deerforest", "deerforest-1.0.tar.gz");
+		insertGame("Mixmaze", "Mixmaze-1.0.tar.gz");
+		insertGame("Breakout", "Breakout-1.0.tar.gz");
+		insertGame("burningskies", "burningskies-1.0.tar.gz");
+		insertGame("Checkers", "Checkers-1.0.tar.gz");
+		insertGame("chess", "chess-1.0.tar.gz");
+		insertGame("Connect4", "Connect4-1.0.tar.gz");
+		insertGame("LandInvaders", "LandInvaders-1.0.tar.gz");
+		insertGame("Pacman", "Pacman-1.0.tar.gz");
+		insertGame("Raiden", "Raiden-1.0.tar.gz");
+		insertGame("towerdefence", "towerdefence-1.0.tar.gz");
+		insertGame("Wolfenstein 3D", "Wolfenstein 3D-1.0.tar.gz");
+		insertGame("snakeLadder", "snakeLadder-1.0.tar.gz");
+		insertGame("tictactoe", "tictactoe-1.0.tar.gz");
+		insertGame("junglejump", "junglejump-1.0.tar.gz");
+		insertGame("soundboard", "soundboard-1.0.tar.gz");
+		insertGame("GuessTheWord", "GuessTheWord-1.0.tar.gz");
+		insertGame("MiniGolf", "MiniGolf-1.0.tar.gz");
+		insertGame("lunarlander", "lunarlander-1.0.tar.gz");
 	}
 	/**
 	 * Searches for the path of the game with a particular gameID
@@ -46,7 +69,7 @@ public class GamePath {
 	 * @throws DatabaseException
 	 *          If SQLException occurs
 	 */
-	public String getPath(int gameID) throws DatabaseException{
+	public String getPath(String gameID) throws DatabaseException{
 		if(!initialised){
 			initialise();
 		}
@@ -82,12 +105,12 @@ public class GamePath {
 		}
 	}
 	
-	private String findPath(ResultSet results, int gameID) throws SQLException {
+	private String findPath(ResultSet results, String gameID) throws SQLException {
 		String result = "";
 		
 		while (results.next()){
-			int id = results.getInt("gameID");
-			if (id == gameID){
+			String id = results.getString("gameID");
+			if (id.equals(gameID)){
 				result = results.getString("path");
 				break;
 			}
@@ -104,7 +127,7 @@ public class GamePath {
 	 * @throws DatabaseException
 	 *          If SQLException occurs
 	 */
-	public void insertGame(int gameID, String gamePath) throws DatabaseException{
+	public void insertGame(String gameID, String gamePath) throws DatabaseException{
 		Connection connection = Database.getConnection();
 
 		String gameMd5 = PackageUtils.genMD5(gamePath);
@@ -130,7 +153,7 @@ public class GamePath {
 		}
 	}
 	
-	public String getMD5(int gameID) throws DatabaseException{
+	public String getMD5(String gameID) throws DatabaseException{
 		if(!initialised){
 			initialise();
 		}
@@ -166,12 +189,12 @@ public class GamePath {
 		}
 	}
 	
-	private String findMD5(ResultSet results, int gameID) throws SQLException {
+	private String findMD5(ResultSet results, String gameID) throws SQLException {
 		String result = "";
 		
 		while (results.next()){
-			int id = results.getInt("gameID");
-			if (id == gameID){
+			String id = results.getString("gameID");
+			if (id.equals(gameID)){
 				result = results.getString("md5Hash");
 				break;
 			}

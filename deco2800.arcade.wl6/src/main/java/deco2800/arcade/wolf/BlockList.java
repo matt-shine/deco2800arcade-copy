@@ -21,10 +21,10 @@ public class BlockList {
                     new BlockInfo(true, "greybrick"),
 
                     //3: grey brick wall with nazi flag
-                    new BlockInfo(true, "greybrickflag"),
+                    new BlockInfo(true, "frame_pb"),
 
                     //4: grey brick wall with hitler portrait
-                    new BlockInfo(true, "greybrickportrait"),
+                    new BlockInfo(true, "frame_lsp"),
 
                     //5: prison cell (blue brick)
                     new BlockInfo(true, "cell"),
@@ -51,10 +51,10 @@ public class BlockList {
                     new BlockInfo(true, "woodwall"),
 
                     //13: entrance elevator
-                    new BlockInfo(true, "entranceelevator"),
+                    new BlockInfo(true, "elevator"),
 
                     //14: steel wall with sign
-                    new BlockInfo(true, "steelsign"),
+                    new BlockInfo(true, "steel"),
 
                     //15: steel wall
                     new BlockInfo(true, "steel"),
@@ -69,7 +69,7 @@ public class BlockList {
                     new BlockInfo(true, "frame_erp"),
 
                     //19: purple
-                    new BlockInfo(true, "purple"),
+                    new BlockInfo(true, "purplewall"),
 
                     //20: red brick with flag
                     new BlockInfo(true, "frame_bp"),
@@ -78,19 +78,19 @@ public class BlockList {
                     new BlockInfo(true, "elevator"),
 
                     //22: fake elevator
-                    new BlockInfo(true, "elevatorfake"),
+                    new BlockInfo(true, "elevator"),
 
                     //23: wood with iron cross
                     new BlockInfo(true, "frame_wp"),
 
                     //24: dirty brick 1
-                    new BlockInfo(true, "greybrick"),
+                    new BlockInfo(true, "greenbrick"),
 
                     //25: purple with blood
-                    new BlockInfo(true, "purpleblood"),
+                    new BlockInfo(true, "purplewall"),
 
                     //26: dirty brick 2
-                    new BlockInfo(true, "greybrick"),
+                    new BlockInfo(true, "greenbrick"),
 
                     //27: grey brick 3
                     new BlockInfo(true, "greybrick"),
@@ -99,19 +99,19 @@ public class BlockList {
                     new BlockInfo(true, "greybricksign"),
 
                     //29: brown weave
-                    new BlockInfo(true, "brown"),
+                    new BlockInfo(true, "purplewall"),
 
                     //30: brown weave / blood
-                    new BlockInfo(true, "brown"),
+                    new BlockInfo(true, "purplewall"),
 
                     //31: brown weave / blood 2
-                    new BlockInfo(true, "brown"),
+                    new BlockInfo(true, "purplewall"),
 
                     //32: brown weave / blood 2
-                    new BlockInfo(true, "brown"),
+                    new BlockInfo(true, "purplewall"),
 
                     //33: stained glass
-                    new BlockInfo(true, "glass"),
+                    new BlockInfo(true, "icewall"),
 
                     //34: blue wall / skull
                     new BlockInfo(true, "icewall"),
@@ -138,22 +138,22 @@ public class BlockList {
                     new BlockInfo(true, "icewall"),
 
                     //42: brown marble
-                    new BlockInfo(true, "brown"),
+                    new BlockInfo(true, "purplewall"),
 
                     //43: grey map
                     new BlockInfo(true, "greybrick"),
 
                     //44: brown stone
-                    new BlockInfo(true, "brown"),
+                    new BlockInfo(true, "purplewall"),
 
                     //45: brown stone
-                    new BlockInfo(true, "brown"),
+                    new BlockInfo(true, "purplewall"),
 
                     //46: brown marble
-                    new BlockInfo(true, "brown"),
+                    new BlockInfo(true, "purplewall"),
 
                     //47: brown marble / flag
-                    new BlockInfo(true, "brown"),
+                    new BlockInfo(true, "purplewall"),
 
                     //48: wood panel
                     new BlockInfo(true, "wood"),
@@ -264,7 +264,7 @@ public class BlockList {
                     new BlockInfo(),
 
                     //85: elevator wall
-                    new BlockInfo(true, "elevatorwall"),
+                    new BlockInfo(true, "elevator"),
 
                     //86: nothing
                     new BlockInfo(),
@@ -318,7 +318,7 @@ public class BlockList {
                     new BlockInfo(),
 
                     //107: elevator to secret floor
-                    new BlockInfo(true, "secretelevator"),
+                    new BlockInfo(),
 
                     //108 Floor 6C
                     new BlockInfo(),

@@ -70,7 +70,7 @@ public class Enemy extends Mob {
     private float personalSpace = 4f;
     //amount of ammo dropped on death
 	private int ammoDrop = 0;
-    @SuppressWarnings("unused")
+    //the gun to drop
     private int gunDrop = 0;
     //damage
     private int damage = 10;
@@ -187,6 +187,7 @@ public class Enemy extends Mob {
         setTextureName(d.texture);
         setPathing(d.pathing);
         ammoDrop = d.ammo;
+        gunDrop = d.gun;
         EnemyType e = d.enemytype;
         if (e == EnemyType.FETTGESICHT ||
                 e == EnemyType.GIFTMACHER ||
@@ -442,9 +443,14 @@ public class Enemy extends Mob {
         if (this.keyDrop != null) {
             d = new Pickup(0, this.keyDrop);
             d.setTextureName("goldkey");
-        } else {
-            d = new Pickup(0, 0, 0, ammoDrop, 0);
-            d.setTextureName("ammo");
+        } else if (gunDrop != 0 || ammoDrop != 0){
+            d = new Pickup(0, 0, 0, ammoDrop, gunDrop);
+            if (gunDrop == 0) {
+            	d.setTextureName("ammo");
+            } else {
+            	d.setTextureName("machinegun");
+            }
+            
         }
 
 

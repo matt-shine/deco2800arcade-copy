@@ -177,11 +177,11 @@ public class Player extends Mob {
 
     public void addGun(int gun) {
 
-        if (!guns.contains(gun)) {
-            this.currentGun = gun;
+        if (!guns.contains(gun) && gun > currentGun) {
+            currentGun = gun;
         }
 
-        this.guns.add(gun);
+        guns.add(gun);
 
     }
 

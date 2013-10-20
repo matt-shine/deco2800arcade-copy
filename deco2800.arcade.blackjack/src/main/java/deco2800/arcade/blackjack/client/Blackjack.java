@@ -31,6 +31,7 @@ public class Blackjack extends GameClient {
 	
 	//Menu variables
 	private MainMenuScreen MainMenuScreen;
+	private JoinTableScreen JoinTableScreen;
 	
 	//Game variables
     public String player;
@@ -43,9 +44,9 @@ public class Blackjack extends GameClient {
 	 */
 	public Blackjack(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-        this.player = player.getUsername();
-        this.networkClient = networkClient;
-        networkClient.addListener(new CasinoListener());
+        //this.player = player.getUsername();
+        //this.networkClient = networkClient;
+        //networkClient.addListener(new CasinoListener());
 	}
 	
 	//Reusable list of achievements
@@ -63,15 +64,49 @@ public class Blackjack extends GameClient {
 	public void create() {
 		super.create();
 		MainMenuScreen = new MainMenuScreen(this);
+		JoinTableScreen = new JoinTableScreen(this);
     	//setScreen(MainMenuScreen);
-    	
-		//  This is a test message and an example 
-		CasinoServerUpdate msg = new CasinoServerUpdate();
-		msg.username = "test"; 
-		msg.message = "testme";
-		this.networkClient.sendNetworkObject(msg);	
+		/*this.getOverlay().setListeners(new Screen() {
+
+            @Override
+            public void dispose() {
+            }
+
+            @Override
+            public void hide() {
+            }
+
+            @Override
+            public void pause() {
+            }
+
+            @Override
+            public void render(float arg0) {
+            }
+
+            @Override
+            public void resize(int arg0, int arg1) {
+            }
+
+            @Override
+            public void resume() {
+            }
+
+            @Override
+            public void show() {
+            }
+            
+		});*/
+		MainMenuScreen = new MainMenuScreen(this);
+    	setScreen(MainMenuScreen);
+		
 	}
 
+	/*CasinoServerUpdate msg = new CasinoServerUpdate();
+	msg.username = "test";
+	msg.message = "testme";
+	this.networkClient.sendNetworkObject(msg);*/
+		
 	@Override
 	public void dispose() {
 		super.dispose();

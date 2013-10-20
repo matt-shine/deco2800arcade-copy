@@ -97,8 +97,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	Texture monkeySitLEFT, monkeyRun1LEFT, monkeyRun2LEFT;
 	Texture monkeySitRIGHT, monkeyRun1RIGHT, monkeyRun2RIGHT;
 	public static Texture gameBackground;
-	public static Texture platform, levelText, hyphenText, livesText, levelNumText, 
-	worldNumText, livesNumText;
+	public static Texture platform;
 	ShapeRenderer shapeRenderer;
 	Music themeMusic;
 	Clip menuSound, jump, die, levelup, loselife, collect;
@@ -107,7 +106,8 @@ public class junglejump extends GameClient implements InputProcessor {
 	/* Monkey Info */
 	float velocity = 5.0f;
 	boolean correct = false;
-	boolean onPlatform, isFalling = false;
+	public boolean onPlatform;
+	public static boolean isFalling = false;
 	public static int lives = 3;
 	public static float monkeyDefaultX;
 	public static float monkeyDefaultY;
@@ -202,12 +202,6 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyRun2RIGHT 	= new Texture(Gdx.files.internal("monkeyRun2.png"));
 		monkeyRun2LEFT 		= new Texture(Gdx.files.internal("monkeyRun2LEFT.png"));
 		gameBackground 		= new Texture(Gdx.files.internal("gameBackground2.png"));
-		levelText 			= new Texture(Gdx.files.internal("level.png"));
-		hyphenText 			= new Texture(Gdx.files.internal("-.png"));
-		livesText 			= new Texture(Gdx.files.internal("lives.png"));
-		worldNumText 		= new Texture(Gdx.files.internal("1.png"));
-		livesNumText 		= new Texture(Gdx.files.internal("3.png"));
-		levelNumText 		= new Texture(Gdx.files.internal("1.png"));
 		
 		/* Achievement Handler and Game creator */
 		AchievementClient achClient 	= this.getAchievementClient();
@@ -364,16 +358,12 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 			batch.end();
 			batch.begin();
-			batch.draw(levelText, 5, 5, 80, 30);
-			batch.draw(hyphenText, 105, 5, 30, 30);
-			batch.draw(livesText, 5, 30, 80, 30);
-			batch.draw(levelNumText, 125, 5, 30, 30);
-			batch.draw(worldNumText, 85, 5, 30, 30);
-			batch.draw(livesNumText, 85, 30, 30, 30);
 			// Draws Instructions on Top Right and Top Left of screen
 			achievementTitleFont.draw(batch, "Press P to PAUSE", SCREENWIDTH-250, SCREENHEIGHT-10);
 			achievementTitleFont.draw(batch, "BACKSPACE for MENU", SCREENWIDTH-250, SCREENHEIGHT-30);
-			achievementTitleFont.draw(batch, ("Bananas found: " + BANANAS_FOUND + "/" + TOTAL_BANANAS), SCREENWIDTH-500, SCREENHEIGHT-10);
+			achievementTitleFont.draw(batch, ("Bananas remaining: " + (TOTAL_BANANAS - BANANAS_FOUND)), SCREENWIDTH-500, SCREENHEIGHT-10);
+			achievementTitleFont.draw(batch, ("Lives: " + lives), SCREENWIDTH-500, SCREENHEIGHT-10);
+			achievementTitleFont.draw(batch, ("Level " + LevelContainer.getCurrentWorld() + " - " + currentLevel), SCREENWIDTH-500, SCREENHEIGHT-10);
 
 
 			batch.end();
@@ -513,7 +503,6 @@ public class junglejump extends GameClient implements InputProcessor {
 			// TODO Change to gameover screen 
 			lives = 5;
 		}
-		livesNumText = new Texture(("" + lives + ".png"));
 	}
 	
 	public  void playPickupSound() {

@@ -121,13 +121,12 @@ public class LevelContainer {
 			}
 			junglejump.world = getCurrentWorld();
 			junglejump.gameBackground = new Texture(Gdx.files.internal("world" + (getCurrentWorld()+1) + "/background.png"));
-			junglejump.worldNumText = new Texture(Gdx.files.internal((getCurrentWorld() + 1) + ".png"));
 		}
 		junglejump.currentLevel = getLevel(getCurrentLevel());
 		//currentLevel = newLevel;
-		junglejump.levelNumText = new Texture(Gdx.files.internal((getCurrentLevel() + 1) + ".png"));
 		junglejump.monkeyX = junglejump.monkeyDefaultX;
 		junglejump.monkeyY = junglejump.monkeyDefaultY;
+		junglejump.isFalling = true;
 		
 		int size = junglejump.currentLevel.platformAmount();
 		for (int i = 0; i < size; i++) {

@@ -19,7 +19,7 @@ import deco2800.arcade.junglejump.GUI.junglejump;
 public class LevelContainer {
 	static ArrayList<Level> levels;
 	private static int currentLevel;
-	public static int currentWorld;
+	private static int currentWorld;
 	private static int levelAmount;
 	private static int worldAmount;
 	
@@ -30,7 +30,7 @@ public class LevelContainer {
 	public LevelContainer() {
 		levels = new ArrayList<Level>();
 		setCurrentLevel(0);
-		currentWorld = 1;
+		setCurrentWorld(1);
 		levelAmount = 5;
 		worldAmount = 5;
 		
@@ -115,13 +115,13 @@ public class LevelContainer {
 		setCurrentLevel(getCurrentLevel() + 1);
 		if(getCurrentLevel() > levelAmount-1) {
 			setCurrentLevel(0);
-			currentWorld++;
-			if(currentWorld > worldAmount-1) {
-				currentWorld = 0;
+			setCurrentWorld(getCurrentWorld() + 1);
+			if(getCurrentWorld() > worldAmount-1) {
+				setCurrentWorld(0);
 			}
-			junglejump.world = currentWorld;
-			junglejump.gameBackground = new Texture(Gdx.files.internal("world" + (currentWorld+1) + "/background.png"));
-			junglejump.worldNumText = new Texture(Gdx.files.internal((currentWorld + 1) + ".png"));
+			junglejump.world = getCurrentWorld();
+			junglejump.gameBackground = new Texture(Gdx.files.internal("world" + (getCurrentWorld()+1) + "/background.png"));
+			junglejump.worldNumText = new Texture(Gdx.files.internal((getCurrentWorld() + 1) + ".png"));
 		}
 		junglejump.currentLevel = getLevel(getCurrentLevel());
 		//currentLevel = newLevel;
@@ -151,7 +151,7 @@ public class LevelContainer {
 	}
 	
 	public static Level getLevel(int currentLevel) {
-		return levels.get((currentWorld * levelAmount) + currentLevel);
+		return levels.get((getCurrentWorld() * levelAmount) + currentLevel);
 	}
 	
 	/**
@@ -175,6 +175,14 @@ public class LevelContainer {
 
 	public static void setCurrentLevel(int currentLevel) {
 		LevelContainer.currentLevel = currentLevel;
+	}
+
+	public static int getCurrentWorld() {
+		return currentWorld;
+	}
+
+	public static void setCurrentWorld(int currentWorld) {
+		LevelContainer.currentWorld = currentWorld;
 	}
 	
 

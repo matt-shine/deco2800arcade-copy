@@ -124,7 +124,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	BitmapFont achievementThresholdFont;
 	Texture achievementIconTexture;
 	String levelSelectText;
-	int levelS;
+	int levelS, worldS;
 
 	public static void main(String[] args) {
 		ArcadeSystem.goToGame("junglejump");
@@ -815,6 +815,14 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 			if (gameState == GameState.SELECT_LEVEL) {
 				if (levelS > 0) {
+					worldS = 1;
+					monkeyX = monkeyDefaultX;
+					monkeyY = monkeyDefaultY;
+					// Reset Bananas, Platforms and Level
+					currentCont = new LevelContainer();
+					getCurrentCont().setCurrentWorld(worldS);
+					currentLevel = LevelContainer.getLevel(levelS);
+					gameState = GameState.INPROGRESS;
 					levelS = 0;
 					gameState = GameState.INPROGRESS;
 				} else {

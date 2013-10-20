@@ -49,7 +49,7 @@ public class Pacman extends GameClient {
 		
 	public Pacman(Player player1, NetworkClient networkClient) {
 		super(player1, networkClient);		
-		this.networkClient = networkClient;
+//		this.networkClient = networkClient;
 		this.incrementAchievement("pacman.onegame");
 	}	
 		

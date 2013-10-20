@@ -275,7 +275,7 @@ public class LunarLander extends GameClient {
 					terrain.get(0).get(2)){
 				if(landerY - 5 < terrain.get(0).get(1)){
 					//score += 10; not incrementing properly
-					landerTexture.dispose();
+					
 					gameOver = true;
 					velY = 0;
 //					if (fuel > 0) {
@@ -292,7 +292,7 @@ public class LunarLander extends GameClient {
 		for (int i = 0; i < asteroidArray.size(); i++){
 			if ((landerX2 > asteroidArray.get(i).get(0) && landerX2 < asteroidArray.get(i).get(0) + 20) &&
 				(landerY2 > asteroidArray.get(i).get(1) && landerY2 < asteroidArray.get(i).get(1) + 20)){
-				landerTexture.dispose();
+				
 				gameOver = true;
 				velY = 0;
 				gameState = GameState.GAME_OVER_LOSE;

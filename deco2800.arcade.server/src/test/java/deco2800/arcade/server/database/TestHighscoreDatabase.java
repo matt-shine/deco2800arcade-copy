@@ -70,92 +70,92 @@ public class TestHighscoreDatabase {
 	 * @throws DatabaseException
 	 * @throws SQLException 
 	 */
-	@Test
-	public void testUpdateScore() throws DatabaseException, SQLException {
-		/*LinkedList<Integer> p1Scores = new LinkedList<Integer>();
-		LinkedList<String> p1Types = new LinkedList<String>(); 
-		p1Scores.add(13579);
-		p1Types.add("Points");		
-		highscoreDatabase.updateScore("Pong", "Player One", p1Scores, p1Types);
-		List<String> p1Return = highscoreDatabase.getUserHighScore("Player One", "Pong", "Points", true);
-		
-		LinkedList<Integer> p2Scores = new LinkedList<Integer>();
-		LinkedList<String> p2Types = new LinkedList<String>(); 
-		p2Scores.add(24680);
-		p2Types.add("Points");
-		highscoreDatabase.updateScore("Pong", "Player Two", p2Scores, p2Types);
-		List<String> p2Return = highscoreDatabase.getUserHighScore("Player Two", "Pong", "Points", true);
-		
-		assertEquals("Player One score equals 13579", "13579", p1Return.get(1));
-		assertEquals("Player Two score equals 24680", "24680", p2Return.get(1));*/
-		
-	}
+//	@Test
+//	public void testUpdateScore() throws DatabaseException, SQLException {
+//		/*LinkedList<Integer> p1Scores = new LinkedList<Integer>();
+//		LinkedList<String> p1Types = new LinkedList<String>(); 
+//		p1Scores.add(13579);
+//		p1Types.add("Points");		
+//		highscoreDatabase.updateScore("Pong", "Player One", p1Scores, p1Types);
+//		List<String> p1Return = highscoreDatabase.getUserHighScore("Player One", "Pong", "Points", true);
+//		
+//		LinkedList<Integer> p2Scores = new LinkedList<Integer>();
+//		LinkedList<String> p2Types = new LinkedList<String>(); 
+//		p2Scores.add(24680);
+//		p2Types.add("Points");
+//		highscoreDatabase.updateScore("Pong", "Player Two", p2Scores, p2Types);
+//		List<String> p2Return = highscoreDatabase.getUserHighScore("Player Two", "Pong", "Points", true);
+//		
+//		assertEquals("Player One score equals 13579", "13579", p1Return.get(1));
+//		assertEquals("Player Two score equals 24680", "24680", p2Return.get(1));*/
+//		
+//	}
 	
 	/**
 	 * Test getGameTopPlayers method
 	 * @throws DatabaseException
 	 * @throws SQLException 
 	 */
-	@Test
-	public void testGetGameTopPlayers() throws DatabaseException, SQLException {
-		/*List<String> gameTopPlayers = highscoreDatabase.getGameTopPlayers("Pong", 1, "Points", true);
-		assertEquals("Player Two has highest score", "24680", gameTopPlayers.get(1));*/
-	}
+//	@Test
+//	public void testGetGameTopPlayers() throws DatabaseException, SQLException {
+//		/*List<String> gameTopPlayers = highscoreDatabase.getGameTopPlayers("Pong", 1, "Points", true);
+//		assertEquals("Player Two has highest score", "24680", gameTopPlayers.get(1));*/
+//	}
 
 	/**
 	 * Test getUserHighScore method
 	 * @throws DatabaseException
 	 * @throws SQLException 
 	 */
-	@Test
-	public void testGetUserHighScore() throws DatabaseException, SQLException {
-		/*LinkedList<Integer> p3Scores = new LinkedList<Integer>();
-		LinkedList<String> p3Types = new LinkedList<String>(); 
-		p3Scores.add(12);
-		p3Types.add("Points");
-		p3Scores.add(89);
-		p3Types.add("Points");
-		p3Scores.add(34);
-		p3Types.add("Points");
-		p3Scores.add(67);
-		p3Types.add("Points");
-		p3Scores.add(45);
-		p3Types.add("Points");
-		highscoreDatabase.updateScore("Pong", "Player Three", p3Scores, p3Types);
-		List<String> p3HighestScore = highscoreDatabase.getUserHighScore("Player Three", "Pong", "Points", true);
-		assertEquals("Player Three highest score", "89", p3HighestScore.get(1));*/
-	}
+//	@Test
+//	public void testGetUserHighScore() throws DatabaseException, SQLException {
+//		/*LinkedList<Integer> p3Scores = new LinkedList<Integer>();
+//		LinkedList<String> p3Types = new LinkedList<String>(); 
+//		p3Scores.add(12);
+//		p3Types.add("Points");
+//		p3Scores.add(89);
+//		p3Types.add("Points");
+//		p3Scores.add(34);
+//		p3Types.add("Points");
+//		p3Scores.add(67);
+//		p3Types.add("Points");
+//		p3Scores.add(45);
+//		p3Types.add("Points");
+//		highscoreDatabase.updateScore("Pong", "Player Three", p3Scores, p3Types);
+//		List<String> p3HighestScore = highscoreDatabase.getUserHighScore("Player Three", "Pong", "Points", true);
+//		assertEquals("Player Three highest score", "89", p3HighestScore.get(1));*/
+//	}
 	
 	/**
 	 * Test getUserRanking method
 	 * @throws DatabaseException
 	 * @throws SQLException 
 	 */
-	@Test
-	public void testGetUserRanking() throws DatabaseException, SQLException {
-		//Implemented but now working
-		//List<String> p3HighestScore = highscoreDatabase.getUserRanking("Player Three", "Pong", "Points", true);
-		//System.out.println("p3 return: " + p3HighestScore.toString());
-	}
+//	@Test
+//	public void testGetUserRanking() throws DatabaseException, SQLException {
+//		//Implemented but now working
+//		//List<String> p3HighestScore = highscoreDatabase.getUserRanking("Player Three", "Pong", "Points", true);
+//		//System.out.println("p3 return: " + p3HighestScore.toString());
+//	}
 	
 	/**
 	 * Test getAvgUserHighScore method
 	 * @throws DatabaseException
 	 * @throws SQLException 
 	 */
-	@Test
-	public void testGetAvgUserHighScore() throws DatabaseException, SQLException {
-		//Not yet implemented
-	}
+//	@Test
+//	public void testGetAvgUserHighScore() throws DatabaseException, SQLException {
+//		//Not yet implemented
+//	}
 	
 	/**
 	 * Test getTopPlayers method
 	 * @throws DatabaseException
 	 * @throws SQLException 
-	 */
-	@Test
-	public void testGetTopPlayers() throws DatabaseException, SQLException {
-		//Not yet implemented
-	}
+//	 */
+//	@Test
+//	public void testGetTopPlayers() throws DatabaseException, SQLException {
+//		//Not yet implemented
+//	}
 	
 }

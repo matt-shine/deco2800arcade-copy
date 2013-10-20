@@ -115,11 +115,10 @@ public class LevelContainer {
 		setCurrentLevel(getCurrentLevel() + 1);
 		if(getCurrentLevel() > levelAmount-1) {
 			setCurrentLevel(0);
-			
+			currentWorld++;
 			if(currentWorld > worldAmount-1) {
 				currentWorld = 0;
 			}
-			currentWorld++;
 			junglejump.world = currentWorld;
 			junglejump.gameBackground = new Texture(Gdx.files.internal("world" + (currentWorld+1) + "/background.png"));
 			junglejump.worldNumText = new Texture(Gdx.files.internal((currentWorld + 1) + ".png"));

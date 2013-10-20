@@ -15,14 +15,18 @@ public abstract class Enemy extends MovableEntity{
 	protected int score;
 	protected String healthName;
 	protected Boolean advanceDuringScenes;
+	protected boolean flash;
+	protected float invincibleTime;
 	
 	public Enemy(float speed, float rotation, Vector2 pos, float width, float height) {
 		super(speed, rotation, pos, width, height);
 		isDead = false;
 		startingNextScene = false;
-		score = 100;
+		score = 0;
 		advanceDuringScenes = false;
 		healthName = "";
+		invincibleTime = 0;
+		flash = false;
 	}
 	
 	public boolean isJumping(){
@@ -134,6 +138,19 @@ public abstract class Enemy extends MovableEntity{
 	
 	public boolean advanceDuringScenes() {
 		return advanceDuringScenes;
+	}
+	
+	public boolean isInvincible() {
+		if (invincibleTime > 0 ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean toggleFlash() {
+		flash= !flash;
+		return flash;
 	}
 
 }

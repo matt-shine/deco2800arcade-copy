@@ -51,6 +51,7 @@ public class SoldierEnemy extends Enemy {
 		stateTime = 0.1f;
 		jumpTime = 0;
 		swordTime = 0;
+		score = 100;
 		
 		if (startOnRight) {
 			velocity.x = -SPEED;
@@ -443,6 +444,7 @@ public class SoldierEnemy extends Enemy {
 			performingTell = true;
 			deathCount = 0f;
 			deathRotation = 0f;
+			Sounds.playHurtSound(0.5f);
 		}
 	}
 

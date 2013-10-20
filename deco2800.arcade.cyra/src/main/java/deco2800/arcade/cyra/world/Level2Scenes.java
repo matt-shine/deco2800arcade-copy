@@ -54,6 +54,7 @@ public class Level2Scenes extends LevelScenes {
 	
 	private float count;
 	private float count2;
+	private float volume;
 	private int scenePosition;
 	private boolean doneSomethingOnce;
 	
@@ -96,6 +97,7 @@ public class Level2Scenes extends LevelScenes {
 			output.add(soldierBoss);
 			output.add(new WarningOverlay(new Vector2(cam.position.x+cam.viewportWidth/2, cam.position.y), cam.viewportWidth, 10f));
 			count = 0;
+			volume = Sounds.LEVEL1BGM_VOLUME;
 			//make it drop down, screen shakes, health charges up, then battle starts
 		} else if (scenePosition == 1) {
 			count = 0;
@@ -106,6 +108,7 @@ public class Level2Scenes extends LevelScenes {
 			for (int i=0; i< 5; i++) {
 				output.add(new Explosion(new Vector2(267, 46+2*i)));
 			}
+			//volume = Sounds.BOSS1BGM_VOLUME;
 		} else if (scenePosition == 2) {
 			blockMakerWaterfall.stop();
 			blockMakerWaterfall.setActive(false);
@@ -126,7 +129,8 @@ public class Level2Scenes extends LevelScenes {
 	
 				
 			};
-			Sounds.playBossMusic();
+			volume = Sounds.LEVEL1BGM_VOLUME;
+			//Sounds.playBossMusic();
 			Tween.to(cam, CameraTween.POSITION,(24f)/BlockMakerSpiderBoss.SPEED).target(SPIDER_BOSS_START + 24f + cam.viewportWidth/2, cam.viewportHeight/2).ease(
 					TweenEquations.easeNone).setCallback(cb).setCallbackTriggers(TweenCallback.COMPLETE).start(manager);
 			
@@ -170,12 +174,17 @@ public class Level2Scenes extends LevelScenes {
 	public boolean update(float delta) {
 		System.out.println("playing "+scenePosition);
 		if (scenePosition == 0) {
+			volume -= delta;
+			if (volume >0) {
+				Sounds.setMusicVolume(volume);
+			}
 			if (soldierBoss.getPosition().y > 45) {
 				soldierBoss.getPosition().y -= delta * 4f;
 			}
 			if (ship.getPosition().x < 248f) {
 				ship.getPosition().x += delta * Player.SPEED;
 			} else {
+				Sounds.playBossMusic();
 				isPlaying = false;
 				return true;
 			}
@@ -184,6 +193,7 @@ public class Level2Scenes extends LevelScenes {
 			count += delta;
 			if (count >= 0.1f) {
 				Sounds.playExplosionLong(0.5f);
+				Sounds.playLevelMusic();
 				isPlaying = false;
 				return true;
 			} else {
@@ -215,10 +225,16 @@ public class Level2Scenes extends LevelScenes {
 			ship.getPosition().x += delta * (cam.position.x - ship.getPosition().x) * 0.9f;
 			ship.getPosition().y = 4f;
 			boss.getArms().resetPosition();
+			volume -= delta;
+			if (volume > 0) {
+				Sounds.setMusicVolume(volume);
+				
+			}
 			float lerp = 0.8f;
 			targetPos -= delta * 1.5;
 			boss.getPosition().x += delta* (ship.getPosition().x - 0f - boss.getPosition().x + targetPos)* lerp;
 			if (closeNextUpdate) {
+				Sounds.playBossMusic();
 				isPlaying = false;
 				ship.getVelocity().x = 0;
 				return true;
@@ -260,6 +276,7 @@ public class Level2Scenes extends LevelScenes {
 				boss.setState(EnemySpiderBoss.State.IDLE);
 				if (count <4.5f) {
 					blockMaker.startDownward();
+					Sounds.stopLaserChargeSound();
 					if (boss.getPosition().y < cam.position.y + cam.viewportHeight/2) {
 						boss.getPosition().y += 20f * delta;
 					}
@@ -313,7 +330,7 @@ public class Level2Scenes extends LevelScenes {
 		} else if (scenePosition == 7) {
 			//win game scene
 			count += delta;
-			if (count >= 5f) {
+			if (count >= 2f) {
 				isPlaying = false;
 				return true;
 			}

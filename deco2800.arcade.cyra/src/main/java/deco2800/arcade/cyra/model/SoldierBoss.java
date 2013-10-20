@@ -40,7 +40,7 @@ public class SoldierBoss extends Enemy {
 	//private float jumpTime;
 	private int health;
 	private boolean beingHit;
-	private float invincibleTime;
+	//private float invincibleTime;
 	
 	private int animationFrame;
 	private float animationTime;
@@ -73,6 +73,7 @@ public class SoldierBoss extends Enemy {
 		animationTime = 0;
 		otherAnimationFrame = 0;
 		otherAnimationTime = 0f;
+		
 		
 		
 	}

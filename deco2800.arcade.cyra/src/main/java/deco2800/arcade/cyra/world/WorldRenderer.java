@@ -509,20 +509,22 @@ public class WorldRenderer {
 				SoldierBoss sb = (SoldierBoss)e;
 				//if (sb.getState() == 
 				
-				TextureRegion bossRegion = myEnemy.findRegion("myEnemy",sb.getAnimationFrame());
-				if ( (!sb.isFacingRight() && !bossRegion.isFlipX()) || (sb.isFacingRight() && bossRegion.isFlipX())) {
-					bossRegion.flip(true, false);
-				}
-				float bossRotation =0;
-				if (sb.getState() == SoldierBoss.State.RAM) {
-					if (sb.isFacingRight()) {
-						bossRotation=-90;
-					} else {
-						bossRotation =90;
+					TextureRegion bossRegion = myEnemy.findRegion("myEnemy",sb.getAnimationFrame());
+					if ( (!sb.isFacingRight() && !bossRegion.isFlipX()) || (sb.isFacingRight() && bossRegion.isFlipX())) {
+						bossRegion.flip(true, false);
 					}
+					float bossRotation =0;
+					if (sb.getState() == SoldierBoss.State.RAM) {
+						if (sb.isFacingRight()) {
+							bossRotation=-90;
+						} else {
+							bossRotation =90;
+						}
+					}
+				if (!(e.isInvincible() && e.toggleFlash())) {
+					batch.draw(bossRegion, e.getPosition().x+e.getWidth()/2-bossRegion.getRegionWidth()/32f/2f, e.getPosition().y+e.getHeight()/2-bossRegion.getRegionHeight()/32f/2f,
+							 bossRegion.getRegionWidth()/32f/2, bossRegion.getRegionHeight()/32f/2, bossRegion.getRegionWidth()/32f, bossRegion.getRegionHeight()/32f, 2,2,bossRotation);
 				}
-				batch.draw(bossRegion, e.getPosition().x+e.getWidth()/2-bossRegion.getRegionWidth()/32f/2f, e.getPosition().y+e.getHeight()/2-bossRegion.getRegionHeight()/32f/2f,
-						 bossRegion.getRegionWidth()/32f/2, bossRegion.getRegionHeight()/32f/2, bossRegion.getRegionWidth()/32f, bossRegion.getRegionHeight()/32f, 2,2,bossRotation);
 				if (sb.getState() == State.RAM && !sb.isPerformingTell()) {
 					bossRegion = myEnemy.findRegion("drill", sb.getOtherAnimationFrame());
 					float drillRotation;
@@ -630,9 +632,11 @@ public class WorldRenderer {
 					}
 				}
 			} else if (e.getClass() == WallBoss.class) {
-				batch.draw(wallTexture, e.getPosition().x, e.getPosition().y, 0, 0,
-						e.getWidth(), e.getHeight(), 2, 2, e.getRotation(), 0, 0, wallTexture.getWidth(),
-						wallTexture.getHeight(), false, false);
+				if (!(e.isInvincible() && e.toggleFlash())) {
+					batch.draw(wallTexture, e.getPosition().x, e.getPosition().y, 0, 0,
+							e.getWidth(), e.getHeight(), 2, 2, e.getRotation(), 0, 0, wallTexture.getWidth(),
+							wallTexture.getHeight(), false, false);
+				}
 			}
 			
 			//draw the enemies health
@@ -691,11 +695,12 @@ public class WorldRenderer {
 			float barHeight = 1.5f;
 			sr.begin(ShapeType.Rectangle);
 			sr.setColor(0f,0f,0f,1f);
-			sr.rect(cam.position.x - barWidth/2, cam.position.y-barHeight/2-8f, barWidth, barHeight);
+			float offCenterOffset = cam.viewportWidth/4;
+			sr.rect(cam.position.x+ offCenterOffset- barWidth/2, cam.position.y-barHeight/2-8f, barWidth, barHeight);
 			sr.end();
 			sr.begin(ShapeType.FilledRectangle);
 			sr.setColor(1f, 0f,0f,1f);
-			sr.filledRect(cam.position.x-barWidth/2+0.05f, cam.position.y-barHeight /2+0.05f-8f, barWidth * healthPercentage, barHeight-0.1f);
+			sr.filledRect(cam.position.x+offCenterOffset-barWidth/2+0.05f, cam.position.y-barHeight /2+0.05f-8f, barWidth * healthPercentage, barHeight-0.1f);
 			sr.end();
 			textBatch.begin();
 			//System.out.println(cam);
@@ -1022,7 +1027,7 @@ public class WorldRenderer {
 		textures.add(parallaxTex);
 		Array<Vector2> offsets =  new Array<Vector2>();
 		offsets.add(new Vector2(0,0));
-		parallaxLayer = new ParallaxLayer(textures,offsets, 1024/32,15, new Vector2(0,0));
+		parallaxLayer = new ParallaxLayer(textures,offsets, 1024/32,15, new Vector2(-40,0));
 		
 		
 		return;

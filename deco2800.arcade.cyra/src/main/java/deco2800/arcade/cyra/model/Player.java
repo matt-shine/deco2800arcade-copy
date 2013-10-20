@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.cyra.world.Sounds;
+
 
 /** Player class describes the behaviours, actions and traits of the  
  * character sprite controlled by user.
@@ -28,7 +30,7 @@ public class Player extends MovableEntity{
 	public static final float MAX_FALL_VELOCITY = 30f;
 	public static final float MAX_WALL_VELOCITY = 6.2f; //note that any movable platform falling at speed greater than this will have bugged moving
 	public static final float WALL_ATTACH_TIME = 0.13f;
-	public static final float MAX_INVINCIBLE_TIME = 3f;
+	public static final float MAX_INVINCIBLE_TIME = 2.5f;
 	public static final int DEFAULT_HEARTS = 4;
 	
 	private State state = State.IDLE;
@@ -127,6 +129,7 @@ public class Player extends MovableEntity{
 			getVelocity().y = Player.JUMP_VELOCITY;
 			setState(Player.State.JUMP);
 			resetJumpTime();
+			Sounds.playJumpSound(0.5f);
 		}
 	}
 	
@@ -406,5 +409,10 @@ public class Player extends MovableEntity{
 	}
 	public boolean hasDied() {
 		return hasDied;
+	}
+	
+	public void setHasDied() {
+		hasDied = true;
+	
 	}
 }

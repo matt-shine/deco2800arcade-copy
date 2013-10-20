@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+import deco2800.arcade.cyra.world.Sounds;
+
 //this probably shouldn't extend Enemy but not sure how else to do it within reasonable time
 public class LaserBeam extends Enemy {
 
@@ -35,6 +37,7 @@ public class LaserBeam extends Enemy {
 		this.maxWidth = maxWidth;
 		System.out.println("Made new laser beam");
 		advanceDuringScenes=true;
+		Sounds.playLaserSound(0.5f);
 	}
 	
 	
@@ -80,6 +83,7 @@ public class LaserBeam extends Enemy {
 			currentWidth = maxWidth/(count-endTime);
 			if (currentWidth <= maxWidth * 0.66) {
 				position.x = -100f;
+				Sounds.stopLaserSound();
 				
 			}
 		}

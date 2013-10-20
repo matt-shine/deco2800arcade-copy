@@ -5,6 +5,7 @@ import deco2800.arcade.cyra.world.Sounds;
 public class ResultsScreen {
 
 	private final static int DECREMENT_AMOUNT = 3976;
+	private final static float INITIAL_WAIT_TIME = 4f;
 	
 	private int healthAtLastCall;
 	private int timeAtLastCall;
@@ -23,12 +24,15 @@ public class ResultsScreen {
 	}
 	
 	public void showResults(int time, int hearts) {
-		timeBonus = (time - timeAtLastCall) * 10000;
+		timeBonus = (100-time + timeAtLastCall) * 10000;
+		if (timeBonus <0) timeBonus=0;
 		timeAtLastCall = time;
 		healthBonus = (hearts) * 100000;
 		healthAtLastCall = hearts;
 		isShowing = true;
 		playSound = true;
+		Sounds.playVictoryMusic();
+		count = -INITIAL_WAIT_TIME;
 	}
 	
 	public int update(float delta) {

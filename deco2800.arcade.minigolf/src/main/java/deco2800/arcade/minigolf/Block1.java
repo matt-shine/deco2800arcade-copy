@@ -55,8 +55,8 @@ public class Block1 {
 		case TELEPORTER:
 			this.teleNumber = teleNum;
 		case HOLE:
-			coords = new float[] { 0, 0, SIZE / 4, 0, 0, SIZE / 4, SIZE / 4,
-					SIZE / 4 };
+			coords = new float[] { SIZE/3, SIZE/3, SIZE/3, 2*(SIZE/3), 2*(SIZE/3),
+				     SIZE/3, 2*(SIZE/3),2*(SIZE/3)};
 			this.bounds = new Polygon(coords);
 			this.bounds.setPosition(pos.x, pos.y);
 			//this.bounds.setScale(1.5f, 1.5f);

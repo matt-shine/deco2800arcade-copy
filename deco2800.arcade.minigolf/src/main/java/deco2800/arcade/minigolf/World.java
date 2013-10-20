@@ -83,7 +83,9 @@ public class World {
 		
 	createHole(resource);  
 		
-	}private void clearArrays(){
+	}
+	/* clears all arrays before they are used */
+	private void clearArrays(){
 		cornerArray = new Array<Block1>();
 		wallArray = new Array<Block1>();
 		groundArray = new Array<Block1>(); 
@@ -102,7 +104,7 @@ public class World {
 		File file = new File(text);
 		int widthNum;
 		int heightNum;
-		char currentChar = 0;		
+		char currentChar = 0;
 		try{
 			//store the first 2 integer values found
 			Scanner scan = new Scanner(file);
@@ -190,9 +192,9 @@ public class World {
 		if(width >= 31 && width <= 40)
 			xPos = 350;
 		if(width >= 41 && width <= 50)
-			xPos = 250;
+			xPos = 300;
 		if(width >= 51 && width <= 100)
-			xPos = 200;
+			xPos = 250;
 		
 		return xPos;
 	}
@@ -206,9 +208,9 @@ public class World {
 		if(height >= 21 && height <= 30)
 			yPos = 550;
 		if(height >= 31 && height <= 40)
-			yPos = 650;
+			yPos = 600;
 		if(height >= 41 && height <= 60)
-			yPos = 700;
+			yPos = 650;
 		
 		return yPos;
 	}
@@ -274,15 +276,21 @@ public class World {
 			 teleArray.add(new Block1(new Vector2(j,i), BlockType.TELEPORTER, FacingDir.NORTH,3));
 		 else if(currentChar == '4')
 			 teleArray.add(new Block1(new Vector2(j,i), BlockType.TELEPORTER, FacingDir.NORTH,4));
+		 else if(currentChar == '5'){
+			 teleArray.add(new Block1(new Vector2(j,i), BlockType.TELEPORTER, FacingDir.NORTH,5));
+		 }
+		 else if(currentChar == '6'){
+			 teleArray.add(new Block1(new Vector2(j,i), BlockType.TELEPORTER, FacingDir.NORTH,6));
+		 }
 	}
 	
 	private void checkForRest(char currentChar, int j, int i){
 		if(currentChar == 'V')
-			 waterArray.add(new Block1(new Vector2(j,i), BlockType.WATER, FacingDir.NORTH,0));
-		 else if(currentChar == '/')//ground
+			waterArray.add(new Block1(new Vector2(j,i), BlockType.WATER, FacingDir.NORTH,0));
+		else if(currentChar == '/')//ground
 			groundArray.add(new Block1(new Vector2(j,i), BlockType.OPEN, FacingDir.NORTH,0));
-		 else if(currentChar == 'O')//hole
-			 holeArray.add(new Block1(new Vector2(j,i), BlockType.HOLE, FacingDir.NORTH,0));
+		else if(currentChar == 'O')//hole
+			holeArray.add(new Block1(new Vector2(j,i), BlockType.HOLE, FacingDir.NORTH,0));
 	}
 	
 	/* An exception indicating that an Invalid number has been given in the map */

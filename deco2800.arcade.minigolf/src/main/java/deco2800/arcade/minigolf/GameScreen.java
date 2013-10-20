@@ -24,7 +24,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 import java.util.ArrayList;
 
-
+/* Gamescreen is the main game loop of minigolf.
+ * It calls all render and update methods from other classes 
+ * It also handles input from user */
 
 public class GameScreen implements Screen, InputProcessor {
 	
@@ -47,7 +49,7 @@ public class GameScreen implements Screen, InputProcessor {
 	Stage stage;
 	TextureAtlas butAtlas;
 	Skin butSkin;
-	Texture scoreCardTexture;
+	Texture scoreCardTexture, bgTexture;
  	SpriteBatch butBatch, scoreBatch;
 	Sprite scoreCardSprite;
 
@@ -92,6 +94,9 @@ public class GameScreen implements Screen, InputProcessor {
 			scoreCardSprite.setX(Gdx.graphics.getWidth()/2 - scoreCardSprite.getWidth()/2);
 			scoreCardSprite.setY(Gdx.graphics.getHeight()/2 - scoreCardSprite.getHeight()/2);
 			
+			//background image for pause screen between levels
+			bgTexture = new Texture("background1.png");
+			
 			//button code
 			butBatch = new SpriteBatch();
 			butAtlas = new TextureAtlas("button.pack");
@@ -104,27 +109,28 @@ public class GameScreen implements Screen, InputProcessor {
 	
 	@Override //continuously render all objects
 	public void render(float delta) { 
-//		if(scoreYes){
-//			SpriteBatch batcher = new SpriteBatch();
-//			Texture a = new Texture(Gdx.files.internal("resources/background.png"));
-//			batcher.begin();
-//			batcher.draw(a, 0,0);
-//			displayScoreCard();
-//			if(Gdx.input.isTouched()){
-				//batcher.end();
-//				scoreYes = false;
-//			}
-//		} else {
-		if(this.level != wControl.getHole()){ //if ball is in hole
-			//fade in score-card 
+		//if a hole has been completed display score
+		if(scoreYes){
 			fadeInOut = 1f;
 			fadeVar = 0.0001f;
+			this.pause();
+		} else {
+		if(this.level != wControl.getHole()){ //if ball is in hole						
 			scoreYes = true;	
 			//set next level
 			int nextHole = (getLevel() + 1); 
-			setLevel(nextHole); //set the next hole
-			System.out.println("level is: "+ this.level); 
-			golf.setScreen(golf.hole, level); //render next hole			
+			if(nextHole == 19){
+				if(Gdx.input.isButtonPressed(Buttons.RIGHT)){
+				this.scoreCard = new ArrayList<Integer>();
+				totalScore = "";
+				totalShots = 0; 
+				golf.create();
+				}
+			} else {
+				setLevel(nextHole); //set the next hole
+				System.out.println("level is: "+ this.level); 
+				golf.setScreen(golf.hole, level); //render next hole	
+			}
 		}
 		//clear everything on screen
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
@@ -147,7 +153,7 @@ public class GameScreen implements Screen, InputProcessor {
 		totalScore = " " + totalShots;
 		
 		//if end of level, display score-card
-		displayScoreCard();
+		//displayScoreCard();
 		
 		//Button code
 		stage.act(delta);		
@@ -156,7 +162,7 @@ public class GameScreen implements Screen, InputProcessor {
 		butBatch.end();
 		}
 		
-	
+	}
 	/* cap the speed that the player can hit the ball at */
 	private void capPower(){
 		this.power = renderer.getPower(); //get the power
@@ -171,15 +177,11 @@ public class GameScreen implements Screen, InputProcessor {
 			scoreX = (int)scoreCardSprite.getX() + 71;
 			scoreY = (int)scoreCardSprite.getY() + 112;
 			scoreBatch.begin();
-			if(fadeInOut != 0 && this.level !=19) {
-				if(fadeInOut <= 0) scoreYes = false;
-				fadeInOut -= fadeVar;
-				fadeVar += 0.000025f;
-				if(fadeInOut <= 0){fadeInOut = 0; 
-				scoreYes = false;}
-			} 
+
+			scoreBatch.draw(bgTexture, 0, 0);
 			scoreCardSprite.setColor(1, 1, 1, fadeInOut);
 			scoreCardSprite.draw(scoreBatch);
+			
 			
 			for(int i=0; i<scoreCard.size(); i++){
 				if(i == 9){
@@ -191,6 +193,8 @@ public class GameScreen implements Screen, InputProcessor {
 				font3.draw(scoreBatch, scoreCard.get(i).toString(), scoreX, scoreY);
 				font3.draw(scoreBatch, totalScore, (int)scoreCardSprite.getX() + 210,
 					     (int)scoreCardSprite.getY() + 26);
+				font3.setColor(Color.WHITE);
+				font3.draw(scoreBatch, "Right Click to continue", 525, 650);
 				scoreX += 30 + ((i%9)*0.5);
 			}
 			
@@ -226,12 +230,12 @@ public class GameScreen implements Screen, InputProcessor {
 		
 		mainButton.setWidth(100);
 		mainButton.setHeight(25);
-		mainButton.setX(1280/2 - 130);
+		mainButton.setX(510);
 		mainButton.setY(680);
 		
 		resetButton.setWidth(100);
 		resetButton.setHeight(25);
-		resetButton.setX(1280/2 + 30);
+		resetButton.setX(670);
 		resetButton.setY(680);
 		
 		
@@ -270,6 +274,7 @@ public class GameScreen implements Screen, InputProcessor {
 	}
 	
 	
+	
 	@Override 
 	public void hide() { 
 		Gdx.input.setInputProcessor(null);
@@ -278,8 +283,21 @@ public class GameScreen implements Screen, InputProcessor {
 	}
 	
 	@Override 
-	public void pause() { 
-				
+	public void pause() {	
+		scoreYes = true;
+		gamePaused = true;
+		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		//SpriteBatch batcher = new SpriteBatch();
+		//Texture a = new Texture(Gdx.files.internal("resources/background1.png"));
+		//batcher.begin();
+		//batcher.draw(a, 0,0);
+		displayScoreCard();
+		if(Gdx.input.isButtonPressed(Buttons.RIGHT)){
+			//batcher.end();			
+			scoreYes = false;
+			gamePaused = false;
+		}				
 	}
 	
 	@Override 
@@ -331,9 +349,7 @@ public class GameScreen implements Screen, InputProcessor {
 	//a key from keyboard is released
 	@Override
 	public boolean keyUp(int keycode) {
-		if(keycode == Keys.LEFT)
-			wControl.leftKeyReleased();
-		return true;
+		return false;
 	}
 
 	@Override
@@ -349,10 +365,8 @@ public class GameScreen implements Screen, InputProcessor {
 	//mouse click pressed
 	@Override
 	public boolean touchDown(int arg0, int arg1, int arg2, int button) {
-		if(button == Buttons.LEFT)
+		if(button == Buttons.LEFT){
 			wControl.leftKeyPressed();
-		if (button == Buttons.RIGHT){
-			//wControl.rightKeyPressed();
 		}
 		return true;
 	}
@@ -360,10 +374,8 @@ public class GameScreen implements Screen, InputProcessor {
 	//mouse click released
 	@Override
 	public boolean touchUp(int arg0, int arg1, int arg2, int button) {
-		if(button == Buttons.LEFT)
+		if(button == Buttons.LEFT && gamePaused != true){
 			wControl.leftKeyReleased();
-		if (button == Buttons.RIGHT){
-			//wControl.rightKeyReleased();
 		}
 		return true;
 	}

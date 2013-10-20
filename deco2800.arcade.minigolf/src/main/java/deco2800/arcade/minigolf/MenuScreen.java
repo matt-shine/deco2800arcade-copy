@@ -137,6 +137,7 @@ public class MenuScreen implements Screen, InputProcessor {
 		butStyle.up = butSkin.getDrawable("butdown");
 		butStyle.down = butSkin.getDrawable("butup");
 		butStyle.font = font1;
+		butStyle.fontColor = Color.BLACK;
 		
 		LabelStyle labelStyle = new LabelStyle();
 		labelStyle.font = font1;		
@@ -156,8 +157,7 @@ public class MenuScreen implements Screen, InputProcessor {
 		
 		
 		mainButton.addListener(new InputListener(){
-			public boolean touchDown(InputEvent event, float x, float y, int pointer,int button){
-				System.out.println("down");				
+			public boolean touchDown(InputEvent event, float x, float y, int pointer,int button){			
 				return true;
 			}
 			

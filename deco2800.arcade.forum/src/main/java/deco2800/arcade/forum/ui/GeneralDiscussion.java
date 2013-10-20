@@ -6,6 +6,8 @@ import javax.swing.JTextArea;
 import java.awt.TextField;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
+
+import java.awt.Dimension;
 import java.awt.Label;
 import java.awt.Button;
 import java.awt.Font;
@@ -190,7 +192,10 @@ public class GeneralDiscussion {
 		int threadNum = this.threadCount;
 		JPanel threadDisplay = new JPanel();
 	    threadDisplay.setBackground(Color.WHITE);
-	    threadDisplay.setBounds(17, (233 + (46 * threadNum - 1)), 520, 46);
+	    threadDisplay.setPreferredSize(new Dimension(515, 46));
+	    threadDisplay.setMaximumSize(threadDisplay.getPreferredSize());
+	    threadDisplay.setMinimumSize(threadDisplay.getPreferredSize());
+	    threadDisplay.setLocation(17, (233 + (46 * threadNum - 1)));
 	    JLabel title = new JLabel(thread.getTopic());
 	    title.setFont(new Font("Tahoma", Font.BOLD, 15));
 	    title.setBounds(19, (235 + (46 * threadNum - 1)), 510, 46);

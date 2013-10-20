@@ -31,8 +31,9 @@ public class MakeThreadView {
 	public JTextPane textPane;
 	public JButton submitBtn;
 	public JButton cancelBtn;
-	public JComboBox CategoryCBox;
+	public JComboBox categoryCBox;
 	public JFrame f;
+	public JLabel lblCatgory;
 
 	   public MakeThreadView(JFrame frame) {
 		   this.f = frame;
@@ -78,14 +79,14 @@ public class MakeThreadView {
 		   this.f.getContentPane().add(lblTags);
 		   
 		   
-		   this.CategoryCBox = new JComboBox();
-		   this.CategoryCBox.setModel(new DefaultComboBoxModel(new String[] {"General_Discussion", "Tutorial", "Report_Bug", "Others"}));
-		   this.CategoryCBox.setBounds(748, 321, 142, 22);
-		   this.f.getContentPane().add(CategoryCBox);
+		   this.categoryCBox = new JComboBox();
+		   this.categoryCBox.setModel(new DefaultComboBoxModel(new String[] {"General_Discussion", "Tutorial", "Report_Bug", "Others"}));
+		   this.categoryCBox.setBounds(748, 321, 142, 22);
+		   this.f.getContentPane().add(this.categoryCBox);
 		      
-		   JLabel lblCatgory = new JLabel("Category:");
-		   lblCatgory.setBounds(751, 300, 56, 16);
-		   f.getContentPane().add(lblCatgory);
+		   this.lblCatgory = new JLabel("Category:");
+		   this.lblCatgory.setBounds(751, 300, 56, 16);
+		   f.getContentPane().add(this.lblCatgory);
 		   
 		   
 		   

@@ -50,11 +50,12 @@ public class ThreadListController {
 								view.addInnerThreadPanel(model.get_thread(i));
 							}
 							view.updateThreadPanel();
-						} else {
+						} 
+						/*else {
 							System.out.println("Failed to load thread");
 							JOptionPane.showMessageDialog(null, "Failed to load threads", 
 									"Error", JOptionPane.ERROR_MESSAGE);
-						}
+						}*/
 					}
 				}
 				return;
@@ -67,7 +68,7 @@ public class ThreadListController {
 	private void nextTen() {
 		System.out.println("Request load");
 		GetParentThreadsRequest request = new GetParentThreadsRequest();
-		request.start = this.model.get_thread(this.model.get_size()).getId() - 1;
+		request.start = this.model.get_thread(this.model.get_size() - 1).getId() - 1;
 		request.end = 0;
 		request.limit = 10;
 		request.category = this.model.get_category();

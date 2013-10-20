@@ -52,7 +52,7 @@ public class MakeThreadController implements ActionListener {
 		request.topic = this.view.TitleTBox.getText();
 		request.message = this.view.textPane.getText();
 		request.createdBy = 0;
-		request.category = "Others";
+		request.category = this.view.categoryCBox.getSelectedItem().toString();
 		request.tags = this.view.TagsTBox.getText();
 		this.connection.getClient().sendTCP(request);
 		System.out.println("pThread request is sent");

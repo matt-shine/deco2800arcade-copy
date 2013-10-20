@@ -27,12 +27,20 @@ public class PowerUpGenerator {
 	 * @ensure X != null || Y != null
 	 */
 	public void randomPowerUp(float X, float Y) {
+		PowerUp toAdd;
 		 powers.add(new GodPowerUp(X, Y));
 		 powers.add(new HealthPowerUp(X, Y)); //Cannot avoid this as X,Y 
 		 powers.add(new SpeedPowerUp(X, Y));  //positions always change.
 		 powers.add(new UpgradePowerUp(X, Y));
 		 powers.add(new PatternPowerUp(screen, X, Y));
-		 PowerUp toAdd = powers.get((int)Math.round(Math.random()*(powers.size()-1)));
+		 double chance = Math.random();
+		 if (chance < 0.10) {
+			 toAdd = powers.get(0);
+		 } else if (chance > 0.85) {
+			 toAdd = powers.get(4);
+		 } else {
+			 toAdd = powers.get((int)Math.ceil(chance*(powers.size()-2)));
+		 }
 		 if (occurence >= 3) {
 			 powers.remove(currentPowerUp);
 			 toAdd = powers.get((int)Math.round(Math.random()*(powers.size()-1)));

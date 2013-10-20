@@ -122,7 +122,8 @@ public class PlayScreen implements Screen
     	
         game.playSong("level" + (int)(Math.random()+0.5));
     	
-    	player = new PlayerShip(1000, shipTex[game.zalgo], new Vector2(400, 100), this);
+        int playerSpawnHp = 1000 - (125*Configuration.getDifficulty());
+    	player = new PlayerShip(playerSpawnHp, shipTex[game.zalgo], new Vector2(400, 100), this);
     	level = new Level(this);
 
     	stage.addActor(level);
@@ -181,6 +182,7 @@ public class PlayScreen implements Screen
     		if(bossActive && boss.getHealth() <= 0) {
     			goodEnd = true;
     			game.playSong("gameover");
+    			game.incrementAchievement("burningskies.defeatBoss");
 				GameOverScreen.setScore(score);
 				game.setScreen(game.gameOverScreen);
     		}

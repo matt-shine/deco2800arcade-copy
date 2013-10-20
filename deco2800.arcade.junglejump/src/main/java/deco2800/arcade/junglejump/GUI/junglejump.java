@@ -588,7 +588,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					jumping = false;
 					
 					// Check if monkey hits left side of platform
-					if(x > (p.getX() - monkeyLength) && x < p.getX() + p.getWidth()/2 - monkeyLength
+					if(p.platType != 'j' && x > (p.getX() - monkeyLength) && x < p.getX() + p.getWidth()/2 - monkeyLength
 							&& y <= p.getY() + p.getHeight()/2) {
 						monkeyX = p.getX() - monkeyLength;
 						onPlatform = false;
@@ -597,7 +597,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					}
 					
 					// Same for right side
-					if(x > (p.getX() + p.getWidth()/2) &&
+					if(p.platType != 'j' && x > (p.getX() + p.getWidth()/2) &&
 							x < (p.getX() + p.getWidth() - 10)
 							&& y <= p.getY() + p.getHeight()/2) {
 						monkeyX = p.getX() + p.getWidth() -10;

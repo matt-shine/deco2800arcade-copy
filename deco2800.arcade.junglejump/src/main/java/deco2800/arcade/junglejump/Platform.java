@@ -94,20 +94,20 @@ public class Platform {
 			this.height = 30;
 			break;
 		case 'x': // Spike
-			platformType = "banana";
+			platformType = "spike";
 			this.width = 20;
 			this.height = 20;
 			this.yPos -= 20;
 			break;
 		case '~': // Tunnel floor
-			platformType = "banana";
+			platformType = "floor";
 			this.width = 40;
 			this.height = 20;
 			break;
 		case '=': // Tunnel
-			platformType = "banana";
+			platformType = "tunnel";
 			this.width = 40;
-			this.height = 40;
+			this.height = 60;
 			break;
 		case 'J': // Jim
 			platformType = "banana";

@@ -18,9 +18,9 @@ import deco2800.arcade.towerdefence.view.SplashScreen;
 
 @ArcadeGame(id = "towerdefence")
 public class TowerDefence extends GameClient {
-	Screen splashScreen;
-	public Screen menuScreen, loreScreen, gameScreen, creditsScreen,
-			optionsScreen;
+	// All Tower Defence screens
+	public Screen splashScreen, menuScreen, loreScreen, gameScreen,
+			creditsScreen, optionsScreen;
 	private boolean isPaused = false;
 	private static final String LOG = TowerDefence.class.getSimpleName();
 
@@ -110,8 +110,8 @@ public class TowerDefence extends GameClient {
 		game = new Game();
 		game.id = "towerdefence";
 		game.name = "Tower Defence";
-		game.description = "Defend your towers with wit and strategy."
-				+ "Endless, fun, fast paced gameplay!";
+		game.description = "Defend the Starship Arcadia and the people of Earth in the Year 2800 with tower building strategy."
+				+ "Fast paced, tactical gameplay!";
 	}
 
 	public Game getGame() {

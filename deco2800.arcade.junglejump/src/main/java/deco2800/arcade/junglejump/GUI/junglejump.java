@@ -126,11 +126,16 @@ public class junglejump extends GameClient implements InputProcessor {
 	public static void main(String[] args) {
 		ArcadeSystem.goToGame("junglejump");
 	}
-
+	/**
+	 * Initialize Variables and Create Player 
+	 * 
+	 * @param player
+	 * @param networkClient
+	 */
 	public junglejump(Player player, NetworkClient networkClient) {
-
+		/* Initialize Variables */
 		super(player, networkClient);
-		this.networkClient = networkClient; // this is a bit of a hack
+		this.networkClient = networkClient; 
 		Gdx.input.setCatchBackKey(true);
 		Gdx.input.setInputProcessor(this);
 		butX = 488f;
@@ -140,10 +145,9 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyX = monkeyDefaultX;
 		monkeyY = monkeyDefaultY;
 		monkeyYoriginal = 0f;
-		// Replace "file" with chosen music
 		
-		URL path = this.getClass().getResource("/");
-		
+		/* Initialize Background Music and Menu Sounds */
+		URL path = this.getClass().getResource("/");		
 		try {
 			String resource = path.toString().replace(".arcade/build/classes/main/", 
 					".arcade.junglejump/src/main/").replace("file:", "") + 
@@ -157,10 +161,6 @@ public class junglejump extends GameClient implements InputProcessor {
 			clip.start();
 			clip.loop(Clip.LOOP_CONTINUOUSLY);
 
-			// System.out.println(file.getCanonicalPath());
-			// themeMusic = Gdx.audio.newMusic(fileh);
-			// themeMusic.setLooping(true);
-			// themeMusic.play();
 		} catch (Exception e) {
 			Gdx.app.log(junglejump.messages,
 					"Audio File for Theme Music Not Found");
@@ -169,7 +169,6 @@ public class junglejump extends GameClient implements InputProcessor {
 			String resource = path.toString().replace(".arcade/build/classes/main/", 
 					".arcade.junglejump/src/main/").replace("file:", "") + 
 					"resources/menu.wav";
-			System.out.println(resource);
 			File file2 = new File(resource);
 			AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(file2);
 			menuSound = AudioSystem.getClip();
@@ -177,59 +176,49 @@ public class junglejump extends GameClient implements InputProcessor {
 		} catch (Exception e) {
 			// IO Exception or problem with sound format
 		}
-
-		createWorld();
-
-	}
-
-	/*
-	 * World for holding the Jungle Jump Game Includes Physics for handling
-	 * movement and gravity
-	 */
-	private void createWorld() {
-
 	}
 
 	@Override
+	/**
+	 * Loads Textures and other Images for use in the world. Fonts are
+	 * created for menu systems and achievements.
+	 * 
+	 */
 	public void create() {
 		super.create();
-
-		System.out.println(System.getProperty("user.dir"));
-		texture = new Texture(Gdx.files.internal("mainscreen2.png"));
-		monkeySit = new Texture(Gdx.files.internal("monkeySit.png"));
-		monkeySitRIGHT = new Texture(Gdx.files.internal("monkeySit.png"));
-		monkeySitLEFT = new Texture(Gdx.files.internal("monkeySitLEFT.png"));
-		monkeyRun1 = new Texture(Gdx.files.internal("monkeyRun1.png"));
-		monkeyRun1RIGHT = new Texture(Gdx.files.internal("monkeyRun1.png"));
-		monkeyRun1LEFT = new Texture(Gdx.files.internal("monkeyRun1LEFT.png"));
-		monkeyRun2 = new Texture(Gdx.files.internal("monkeyRun2.png"));
-		monkeyRun2RIGHT = new Texture(Gdx.files.internal("monkeyRun2.png"));
-		monkeyRun2LEFT = new Texture(Gdx.files.internal("monkeyRun2LEFT.png"));
-		gameBackground = new Texture(Gdx.files.internal("gameBackground2.png"));
-		levelText = new Texture(Gdx.files.internal("level.png"));
-		hyphenText = new Texture(Gdx.files.internal("-.png"));
-		livesText = new Texture(Gdx.files.internal("lives.png"));
-		worldNumText = new Texture(Gdx.files.internal("1.png"));
-		livesNumText = new Texture(Gdx.files.internal("3.png"));
-		levelNumText = new Texture(Gdx.files.internal("1.png"));
-		//platform = new Texture("platform.png");
-
-// Commented out for lag
-		/* ACHIEVEMENT STUFF */
-		AchievementClient achClient = this.getAchievementClient();
-		Game myGame = this.getGame();
-
-		achievementArray = new ArrayList<Achievement>();
-		achievementArray = achClient.achievementsForGame(myGame);
-
+		/* Textures for World and Monkey */
+		texture 			= new Texture(Gdx.files.internal("mainscreen2.png"));
+		monkeySit 			= new Texture(Gdx.files.internal("monkeySit.png"));
+		monkeySitRIGHT 		= new Texture(Gdx.files.internal("monkeySit.png"));
+		monkeySitLEFT 		= new Texture(Gdx.files.internal("monkeySitLEFT.png"));
+		monkeyRun1 			= new Texture(Gdx.files.internal("monkeyRun1.png"));
+		monkeyRun1RIGHT 	= new Texture(Gdx.files.internal("monkeyRun1.png"));
+		monkeyRun1LEFT 		= new Texture(Gdx.files.internal("monkeyRun1LEFT.png"));
+		monkeyRun2 			= new Texture(Gdx.files.internal("monkeyRun2.png"));
+		monkeyRun2RIGHT 	= new Texture(Gdx.files.internal("monkeyRun2.png"));
+		monkeyRun2LEFT 		= new Texture(Gdx.files.internal("monkeyRun2LEFT.png"));
+		gameBackground 		= new Texture(Gdx.files.internal("gameBackground2.png"));
+		levelText 			= new Texture(Gdx.files.internal("level.png"));
+		hyphenText 			= new Texture(Gdx.files.internal("-.png"));
+		livesText 			= new Texture(Gdx.files.internal("lives.png"));
+		worldNumText 		= new Texture(Gdx.files.internal("1.png"));
+		livesNumText 		= new Texture(Gdx.files.internal("3.png"));
+		levelNumText 		= new Texture(Gdx.files.internal("1.png"));
+		
+		/* Achievement Handler and Game creator */
+		AchievementClient achClient 	= this.getAchievementClient();
+		Game myGame 					= this.getGame();
+		achievementArray 				= new ArrayList<Achievement>();
+		achievementArray 				= achClient.achievementsForGame(myGame);
 		if (achievementArray.isEmpty()) {
-			System.out.println("list of achievements is empty. will be fixed with merge with master (NEW ACHIEVEMENT API NEEDED)");
-			achievementArray.add(new Achievement("-1", "Empty Achievement List", "issue is in the achievement api of our branch. we have to merge master in to our branch when we can", 0, "I.D10t"));
+			System.out.println("list of achievements is empty. will be " +
+					"fixed with merge with master (NEW ACHIEVEMENT API NEEDED)");
+			achievementArray.add(new Achievement("-1", "Empty Achievement List", "issue is in the " +
+					"achievement api of our branch. we have to merge master in to our branch " +
+					"when we can", 0, "I.D10t"));
 		}
-
-		//AchievementProgress playerProgress = achClient.progressForPlayer(this.getPlayer());
-		//System.out.println("progress: " + playerProgress);
-
+		
+		/* Achievement Fonts */
 		achievementTitleFont       = new BitmapFont(false);
 		achievementIDFont          = new BitmapFont(false);
 		achievementNameFont        = new BitmapFont(false);
@@ -237,6 +226,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		achievementThresholdFont   = new BitmapFont(false);
 		achievementIconTexture     = new Texture(("monkeySit.png"));
 
+		/* Sets up logging for game and Camera */
 		Gdx.app.log(junglejump.messages, "Launching Game");
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
@@ -244,39 +234,6 @@ public class junglejump extends GameClient implements InputProcessor {
 		batchContinue = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 
-		// add the overlay listeners
-		this.getOverlay().setListeners(new Screen() {
-
-			@Override
-			public void dispose() {
-			}
-
-			@Override
-			public void hide() {
-			}
-
-			@Override
-			public void pause() {
-			}
-
-			@Override
-			public void render(float arg0) {
-			}
-
-			@Override
-			public void resize(int arg0, int arg1) {
-			}
-
-			@Override
-			public void resume() {
-			}
-
-			@Override
-			public void show() {
-
-			}
-
-		});
 		// Game begins at Main Menu
 		gameState = GameState.AT_MENU;
 	}

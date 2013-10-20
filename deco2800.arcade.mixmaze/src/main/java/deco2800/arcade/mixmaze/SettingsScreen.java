@@ -34,6 +34,7 @@ public class SettingsScreen implements Screen {
 	private Skin skin;
 	private Stage stage;
 	private TextButton playButton;
+	private TextButton networkButton;
 	private List difficultyList;
 	private Table rootTable = new Table();
 	private Table settingsPanel = new Table();
@@ -94,7 +95,20 @@ public class SettingsScreen implements Screen {
 						p2Controls);
 				game.setScreen(game.localScreen);
 			}
+		});
+		
+		networkButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				getPlayerControlls(p1Texts, p1Controls);
+				getPlayerControlls(p2Texts, p2Controls);
 
+				((GameScreen) game.clientScreen).new Settings(p1Controls,
+						p2Controls);
+				((GameScreen) game.localScreen).new Settings(p1Controls,
+						p2Controls);
+				game.setScreen(game.menuScreen);
+			}
 		});
 
 		p1Buttons[1].addListener(new ChangeListnr(p1HeadRegion, true));
@@ -143,6 +157,7 @@ public class SettingsScreen implements Screen {
 		this.stage = new Stage();
 		playButton = new TextButton("Play", skin);
 		playButton.pad(20);
+		networkButton = new TextButton("Test Network", skin);
 		avatarPng = "avatars.png";
 		skin.add("background", new Texture(Gdx.files.internal("settings.png")));
 		difficultyList = new List(new String[] { "Beginner", "Intermediate",
@@ -269,6 +284,8 @@ public class SettingsScreen implements Screen {
 		settingsPanel.add(difficultyList).padBottom(170);
 		settingsPanel.row();
 		settingsPanel.add(playButton);
+		settingsPanel.row();
+		settingsPanel.add(networkButton);
 	}
 
 	/**

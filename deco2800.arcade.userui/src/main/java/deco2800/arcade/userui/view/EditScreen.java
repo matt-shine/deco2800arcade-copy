@@ -100,7 +100,7 @@ public class EditScreen extends JFrame{
 		add(parentContainer);
 
 		// Set the view window constraints
-		setSize(400,480);
+		setSize(400,600);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setResizable(false);
@@ -117,7 +117,7 @@ public class EditScreen extends JFrame{
 		editprofilebar = new JLabel("Edit Profile");
 		editprofilebar.setForeground(Color.white);
 		editprofilebar.setFont(big);
-		titlepanel.add(editprofilebar, "dock north, wrap, align center, gapleft 110px");
+		titlepanel.add(editprofilebar, "dock north, wrap, align center, gapleft 110px, gaptop 20px");
 		titlepanel.setBorder(BorderFactory.createEmptyBorder(0,0,30,0)); 
 		titlepanel.setOpaque(false);
 
@@ -145,9 +145,9 @@ public class EditScreen extends JFrame{
 		
 		upload = new JTextField("Upload a new picture");
 		
-		topContainer.add(avatar, "dock west, gapright 10px");
+		topContainer.add(avatar, "dock west, gapright 10px, gap bottom 10px");
 		topContainer.add(upload, "dock north, gaptop 70px");
-		topContainer.add(browsebutton, "dock north, wrap");
+		topContainer.add(browsebutton, "dock north, wrap, gap bottom 30px, gap top 20px");
 		topContainer.setOpaque(false);
 		
 	}
@@ -163,7 +163,7 @@ public class EditScreen extends JFrame{
 		profilenamebar.setForeground(Color.white);
 		profilenamebar.setFont(normal);
 		
-		profile = new JTextField("What would you like profile name to be");
+		profile = new JTextField();
 		profile.addMouseListener(new MouseListener() {
 
 		    public void mouseClicked(MouseEvent e) {
@@ -202,7 +202,7 @@ public class EditScreen extends JFrame{
 		realnamebar.setForeground(Color.white);
 		realnamebar.setFont(normal);
 		
-		realname = new JTextField("Whats your real name");
+		realname = new JTextField();
 		
 		realname.addMouseListener(new MouseListener() {
 
@@ -243,7 +243,7 @@ public class EditScreen extends JFrame{
 		aboutmebar.setForeground(Color.white);
 		aboutmebar.setFont(normal);
 				
-		aboutme = new JTextArea("Give a short description");
+		aboutme = new JTextArea();
 		
 		aboutme.addMouseListener(new MouseListener() {
 
@@ -313,8 +313,8 @@ public class EditScreen extends JFrame{
 	    savebutton.setContentAreaFilled(false);
 	    savebutton.setRolloverIcon(rolloverSave);
 
-		bottomContainer.add(savebutton, "dock west");
-		bottomContainer.add(cancelbutton, "dock east");
+		bottomContainer.add(savebutton, "dock west, gap right 20px, gap top 20px");
+		bottomContainer.add(cancelbutton, "dock east, gap top 20px");
 
 		
 

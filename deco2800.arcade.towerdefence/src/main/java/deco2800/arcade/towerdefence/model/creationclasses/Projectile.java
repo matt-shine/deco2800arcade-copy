@@ -245,7 +245,7 @@ public class Projectile extends GridObject {
 		if (!this.canApplyStatusEffects()) {
 			// iterate through hitList
 			for (int i = 0; i < hitList.size(); i++) {
-				((Mortal) hitList.get(i)).takeDamage(damage);
+				((Mortal) hitList.get(i)).takeDamage(damage, penetration);
 			}
 		} else {
 			// Get the list of effects

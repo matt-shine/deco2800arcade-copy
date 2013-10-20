@@ -313,7 +313,7 @@ public class GridObject {
 	 * @return Whether the object has status effects.
 	 */
 	public boolean canApplyStatusEffects() {
-		return effects.size() == 0;
+		return effects.size() != 0;
 	}
 
 	/**

@@ -2,6 +2,7 @@ package deco2800.arcade.wl6;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -89,6 +90,7 @@ public class IngameUI extends Stage {
     
     public void draw(GameModel game) {
     	super.draw();
+        //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         epi.setText(game.getChapter());
         lvl.setText(game.getLevelInChapter());
@@ -98,8 +100,6 @@ public class IngameUI extends Stage {
         ammo.setText("" + game.getPlayer().getAmmo());
         keys.setText("" + (game.getPlayer().hasKey(KEY_TYPE.GOLD) ? "Gold " : "") + (game.getPlayer().hasKey(KEY_TYPE.SILVER) ? "Silver " : ""));
         gun.setText("" + game.getPlayer().getCurrentGun());
-
-        bottom.setBackground(skin.getDrawable("background"));
     }
 
 

@@ -1,5 +1,6 @@
 package deco2800.arcade.mixmaze;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.mixmaze.domain.IMixMazeModel;
 import deco2800.arcade.mixmaze.domain.PlayerModel;
 import com.badlogic.gdx.Gdx;
@@ -165,8 +166,9 @@ abstract class GameScreen implements Screen {
 
 	@Override
 	public void hide() {
-		Gdx.input.setInputProcessor(null);
-		logger.debug("hided");
+		//Gdx.input.setInputProcessor(null);
+        ArcadeInputMux.getInstance().removeProcessor(stage);
+		logger.debug("hid");
 	}
 
 	@Override

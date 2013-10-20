@@ -748,7 +748,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the last hit y variable of the ball
 	 * 
-	 * @param lastHity
+	 * @param lastHitY
 	 */
 	public void setLastHitY(float lastHitY) {
 		this.lastHitY = lastHitY;

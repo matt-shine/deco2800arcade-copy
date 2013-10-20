@@ -1,5 +1,6 @@
 package deco2800.arcade.mixmaze;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.mixmaze.domain.MixMazeModel;
 import deco2800.arcade.mixmaze.domain.PlayerModel;
 import deco2800.arcade.mixmaze.domain.TileModel;
@@ -137,7 +138,8 @@ class LocalScreen extends GameScreen {
 	 * Starts the game.
 	 */
 	protected void startGame() {
-		Gdx.input.setInputProcessor(stage);
+		//Gdx.input.setInputProcessor(stage);
+        ArcadeInputMux.getInstance().addProcessor(stage);
 		stage.setKeyboardFocus(gameArea);
 		model.startGame();
 		logger.info("start game");

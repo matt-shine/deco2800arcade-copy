@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import deco2800.arcade.breakout.Breakout;
+import deco2800.arcade.client.ArcadeInputMux;
 
 /**
  * Class for the SplashScreen 
@@ -46,6 +47,7 @@ public class HelpScreen1 implements Screen  {
 
 	@Override
 	public void hide() {
+        ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override
@@ -80,7 +82,8 @@ public class HelpScreen1 implements Screen  {
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(stage);
+		//Gdx.input.setInputProcessor(stage);
+        ArcadeInputMux.getInstance().addProcessor(stage);
 	}
 
 	

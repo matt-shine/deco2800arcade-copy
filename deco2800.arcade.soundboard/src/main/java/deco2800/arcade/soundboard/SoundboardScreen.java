@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.replay.ReplayHandler;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.soundboard.actions.SoundButtonChangeListener;
@@ -103,7 +104,8 @@ public class SoundboardScreen implements Screen {
         setupLoopButtons();
         setupSampleButtons();
 
-        Gdx.input.setInputProcessor(stage);
+        //Gdx.input.setInputProcessor(stage);
+        ArcadeInputMux.getInstance().addProcessor(stage);
     }
 
     /**
@@ -263,6 +265,7 @@ public class SoundboardScreen implements Screen {
 
     @Override
     public void hide() {
+        ArcadeInputMux.getInstance().removeProcessor(stage);
     }
 
     @Override

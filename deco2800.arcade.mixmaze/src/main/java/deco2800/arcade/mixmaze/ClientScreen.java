@@ -1,5 +1,6 @@
 package deco2800.arcade.mixmaze;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.mixmaze.domain.IMixMazeModel;
 
 import com.badlogic.gdx.Gdx;
@@ -167,7 +168,8 @@ class ClientScreen extends GameScreen {
 					((RemoteObject) model).setTransmitExceptions(false);
 				} else if ("signal: game started".equals(msg)) {
 					setupTimer(timeLimit);
-					Gdx.input.setInputProcessor(stage);
+					//Gdx.input.setInputProcessor(stage);
+                    ArcadeInputMux.getInstance().addProcessor(stage);
 					stage.setKeyboardFocus(gameArea);
 				}
 			}

@@ -3,45 +3,53 @@ package deco2800.arcade.cyra.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import deco2800.arcade.cyra.world.Sounds;
 
+/** This class controls the components that make up the main menu - buttons,
+ * images, texts and draw them onto the GameScreen.
+ *
+ * @author Game Over
+ */
 public class MainMenu extends AbstractScreen{
-	Stage stage;
-	BitmapFont blackFont;
-	TextureAtlas atlas;
-	Skin skin;
-	//SpriteBatch batch;
-	TextButton button;
-	TextButton button2;
-	Label label;
+	private Stage stage;
+	private BitmapFont blackFont;
+	private TextureAtlas atlas;
+	private Skin skin;
+	private TextButton button;
+	private TextButton button2;
+	private TextButton button3;
+	private Label label;
 	private int framecount = 0;
 	private int framecountmax = 80;
 	private int buttonframe = 0;
 	private boolean keydown = false;
 	
-	float[] difficulty = new float[3];
-	int difficultyIndex = 1;
+	private float[] difficulty = new float[3];
+	private int difficultyIndex = 1;
 	
 	public MainMenu(Cyra game) {
 		super(game);
 		
+		//Set values for difficulty
 		difficulty[0] = 0.21f;
 		difficulty[1] = 0.76f;
 		difficulty[2] = 0.91f;
+		Sounds.setSoundEnabled(true);
+		Sounds.loadAll();
+		Sounds.playMenuMusic();
+		
 	}
 	
 	@Override
@@ -49,10 +57,7 @@ public class MainMenu extends AbstractScreen{
 		atlas = new TextureAtlas("buttons.txt");
 		skin = new Skin();
 		skin.addRegions(atlas);
-		//blackFont = new BitmapFont(Gdx.files.internal("whitefont.fnt"), false);
 		blackFont = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);
-		Sounds.load();
-		
 	}
 	
 	@Override
@@ -62,15 +67,15 @@ public class MainMenu extends AbstractScreen{
 		
 		batch.begin();
 		stage.draw();
-		//blackFont.draw(batch, "Test Game Of DOOOOOOOOOOOOOOOOOOOM", 50, 50);
 		batch.end();
 		
 		if (framecount++ == framecountmax) {
-			Sounds.playtest();
 			framecount = 0;
 			if (framecountmax > 25) {
 				framecountmax -= 9;
-			} else framecountmax--;
+			} else {
+				framecountmax--;
+			}
 		}
 		if (++buttonframe == 9) {
 			buttonframe = 0;
@@ -98,8 +103,8 @@ public class MainMenu extends AbstractScreen{
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = skin.getDrawable("buttonopen");
 		style.down = skin.getDrawable("buttonclose0");
-		
 		style.font = blackFont;
+		
 		button = new TextButton("START!", style);
 		button.setHeight(90);
 		button.setX(Gdx.graphics.getWidth()/2 - button.getWidth()/2);
@@ -148,6 +153,24 @@ public class MainMenu extends AbstractScreen{
 			}
 		});
 		
+		button3 = new TextButton("Highscores", style);
+		button3.setHeight(90);
+		button3.setX(Gdx.graphics.getWidth()/2 - button.getWidth()/2);
+		button3.setY(Gdx.graphics.getHeight()/2 - button.getHeight()/2 - 130);
+		
+		button3.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				keydown = true;
+				return true;
+			}
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				keydown = false;
+				game.setScreen(new HighscoreScreen(game));
+			}
+		});
+		
 		LabelStyle ls = new LabelStyle(blackFont, Color.WHITE);
 		label = new Label("CYRA", ls);
 		label.setX(85);
@@ -167,6 +190,7 @@ public class MainMenu extends AbstractScreen{
 		stage.addActor(bg);
 		stage.addActor(button);
 		stage.addActor(button2);
+		stage.addActor(button3);
 		stage.addActor(label);
 		
 		stage.addActor(cyra);

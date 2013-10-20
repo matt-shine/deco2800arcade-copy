@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 
-public class FileReader {
+public final class FileReader {
 	
 	/**
 	 * Ensures that the class can never be instantiated

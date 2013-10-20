@@ -9,6 +9,7 @@ pong
 tictactoe
 ui
 breakout
+blackjack
 deerforest
 gamelibrary
 soundboard
@@ -26,6 +27,10 @@ connect4
 raiden
 wl6
 snakeLadder
+guesstheword
 userui
 cyra
+hunter
 #blackjack #blackjack be trolling me. There is no blackjack folder, so this fails.
+blackjack
+

@@ -4,6 +4,7 @@ import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.client.Arcade;
 import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.protocol.multiplayerGame.ActiveGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
@@ -17,7 +18,7 @@ import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
  */
 public class MultiplayerListener extends NetworkListener {
 	
-	Arcade arcade;
+	private Arcade arcade;
 	
 	/**
 	 * The constructor for the listener.
@@ -26,21 +27,6 @@ public class MultiplayerListener extends NetworkListener {
 	 */
 	public MultiplayerListener(Arcade arcade) {
 		this.arcade = arcade;
-	}
-
-	@Override
-	public void connected(Connection connection) {
-		super.connected(connection);
-	}
-
-	@Override
-	public void disconnected(Connection connection) {
-		super.disconnected(connection);
-	}
-
-	@Override
-	public void idle(Connection connection) {
-		super.idle(connection);
 	}
 
 	@Override
@@ -56,13 +42,16 @@ public class MultiplayerListener extends NetworkListener {
 		//State updates -- If it is the inital update only send it to the non-host player
 		//Otherwise send it to both
 		} else if (object instanceof GameStateUpdateRequest) {
-			if (((GameStateUpdateRequest) object).initial == false) {
+			if (!(((GameStateUpdateRequest) object).initial)) {
 				arcade.getCurrentGame().updateGameState((GameStateUpdateRequest) object);
 			} else {
 				arcade.getCurrentGame().startMultiplayerGame();
 				arcade.getCurrentGame().updateGameState((GameStateUpdateRequest) object);
 			}
-		} 
+		//Update the list of current MultiplayerGames
+		} else if (object instanceof ActiveGameRequest) {
+			arcade.setActiveGames(((ActiveGameRequest) object).serverList);
+		}
 	}
 
 }

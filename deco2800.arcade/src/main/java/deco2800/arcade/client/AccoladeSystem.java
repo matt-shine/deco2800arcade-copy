@@ -6,7 +6,6 @@ import java.util.*;
 import deco2800.arcade.model.Accolade;
 import deco2800.arcade.model.AccoladeContainer;
 
-//import deco.arcade.accolades.servercommunicator //this will be what ever jerry calls it
 
 /** CHANGES
  * @author Mitch
@@ -76,13 +75,13 @@ public class AccoladeSystem {
 					+ "primary key pairs for the accolades: " + error.toString());
 			error.printStackTrace();
 		}	
-		/**
-		 * *load in the xml file - make sure to assign a playerID to it
-		 * *check each xml module
-		 * *if a key isn't assigned, then create new accolade server side and modify xml to include the 
+		/*
+		 * load in the xml file - make sure to assign a playerID to it
+		 * check each xml module
+		 * if a key isn't assigned, then create new accolade server side and modify xml to include the 
 		 * the newly assigned AccoladeID (this allows developers to later modify their accolade information by just changing the accolade xml file
-		 * *also check for an <imageUpdated>1</imageUpdated> flag, to tell the game to store the new image (also stores the new image if)
-		 * *Additionally, if the new filepath is different an manual image update occurs. (IE use the image update flag if the file has the same name)
+		 * also check for an <imageUpdated>1</imageUpdated> flag, to tell the game to store the new image (also stores the new image if)
+		 * Additionally, if the new filepath is different an manual image update occurs. (IE use the image update flag if the file has the same name)
 		 */
 		
 	}
@@ -103,7 +102,7 @@ public class AccoladeSystem {
 		
 
 		
-		/**
+		/*
 		 * try {
 		 * 		server.put(this.playerID.toString() + "," 
 		 * 				+ this.accoladeID.toString() + "," + increment.toString());
@@ -126,13 +125,13 @@ public class AccoladeSystem {
 	 * @return The primary key for the accolade.
 	 */
 	public Double fetchID(String accolade) throws NullPointerException{
-		/**
+		/*
 		if(this.nameIDPairs.containsKey(accolade)){
 			return this.nameIDPairs.get(accolade);
 		} else {
 			throw new NullPointerException("No accolade by that name exists. Check your XML");
 		}
-		**/
+		*/
 		return 1.11;
 	}
 	
@@ -177,7 +176,7 @@ public class AccoladeSystem {
 	}
 	
 	
-	/**TIMER STUFF **/
+	/*TIMER STUFF */
 	
 	/** Add a watcher to the timer schedule to push accolade progress to the server
 	 * @param accoladeID The primary key of the accolade to be updated
@@ -237,10 +236,10 @@ public class AccoladeSystem {
 		timerTasks.clear();
 	}
 	
-	/**NO LONGER NEED PAUSE AND UNPAUSE AS ONLY CHANGES IN THE VARIABLE ARE 
-	 * 						PUSHED TO THE SERVER **/
+	/*NO LONGER NEED PAUSE AND UNPAUSE AS ONLY CHANGES IN THE VARIABLE ARE 
+	 * 						PUSHED TO THE SERVER */
 	
-	/** END OF TIMER STUFF **/
+	/* END OF TIMER STUFF */
 	
 	private class WatchedAccolade{		
 		public Object variable;

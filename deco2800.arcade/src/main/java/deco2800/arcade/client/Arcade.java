@@ -48,6 +48,7 @@ import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.lobby.LobbyRequestType;
 import deco2800.arcade.protocol.lobby.NewLobbyRequest;
 import deco2800.arcade.protocol.lobby.RemovedMatchDetails;
+import deco2800.arcade.protocol.multiplayerGame.ActiveGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckResponse;
@@ -97,6 +98,8 @@ public class Arcade extends JFrame {
 	private static boolean bettingLobby;
 
 	private static ArrayList<ActiveMatchDetails> matches = new ArrayList<ActiveMatchDetails>();
+	
+	private static ArrayList<ArrayList<Object>> activeMatches = new ArrayList<ArrayList<Object>>();
 
 	// Width and height of the Arcade window
 	private static final int ARCADE_WIDTH = 1280;
@@ -253,7 +256,7 @@ public class Arcade extends JFrame {
 				.addListener(new CommunicationListener(communicationNetwork));
 		this.client.addListener(new PackmanListener());
 		this.client.addListener(new MultiplayerListener(this));
-		this.client.addListener(new LobbyListener());
+		this.client.addListener(new LobbyListener(this));
 		this.client.addListener(new LibraryResponseListener());
 	}
 	
@@ -650,7 +653,6 @@ public class Arcade extends JFrame {
 	 * 
 	 * @param response: The match to add.
 	 */
-//>>>>>>> master
 	public static void addToMatchList(ActiveMatchDetails response) {
 		matches.add(response);
 	}
@@ -847,4 +849,33 @@ public class Arcade extends JFrame {
 		return bettingLobby;
 	}
 
+	/**
+	 * Sends a request to the server for the latest list of active games
+	 */
+	public void requestActiveGames() {
+		ActiveGameRequest request = new ActiveGameRequest();
+		client.sendNetworkObject(request);
+		long time = System.currentTimeMillis();
+		while (time + 300 > System.currentTimeMillis());
+	}
+	
+	/**
+	 * Sets the active game list to be the most recent update from the server
+	 * 
+	 * @param serverList The list of active games
+	 */
+	public void setActiveGames(ArrayList<ArrayList<Object>> serverList) {
+		activeMatches = serverList;		
+	}
+
+	/**
+	 * Returns the list of active multiplayer games
+	 * 
+	 * @return The list of active multiplayer games
+	 */
+	public static ArrayList<ArrayList<Object>> getActiveGames() {
+		return new ArrayList<ArrayList<Object>>(activeMatches);
+	}
+
+	
 }

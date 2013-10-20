@@ -2,9 +2,14 @@ package deco2800.arcade.mixmaze;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
@@ -53,7 +58,6 @@ public class SettingsScreen implements Screen {
 	private int[] p2Controls = new int[6];
 	private TextFieldListener textFieldListener = new Listener();
 	private TextFieldFilter textFieldFilter = new Filter();
-	private Texture texture;
 	private TextureRegion p1AvatarTexRegion;
 	private Image p1AvatarImage;
 	private TextureRegion p2AvatarTexRegion;
@@ -69,22 +73,18 @@ public class SettingsScreen implements Screen {
 	private Image p2BackImage;
 	private Image p2BodyImage;
 	private String avatarPng;
-	
-	
+	final Logger logger = LoggerFactory.getLogger(GameScreen.class);
+
 	SettingsScreen(final MixMaze game) {
 		this.game = game;
-		
 		startDebug();
 		initialize();
-		createAvatarStack(p1Avatarstack, 
-				p1BackImage, p1BodyImage, p1HeadImage);
-		createAvatarStack(p2Avatarstack, 
-				p2BackImage, p2BodyImage, p2HeadImage);
+		createAvatarStack(p1Avatarstack, p1BackImage, p1BodyImage, p1HeadImage);
+		createAvatarStack(p2Avatarstack, p2BackImage, p2BodyImage, p2HeadImage);
 		setTableLayout();
 		createSettingsPanel();
 		createPlayerPanel(playerOnePanel, p1Texts, p1Buttons, p1Avatarstack);
 		createPlayerPanel(playerTwoPanel, p2Texts, p2Buttons, p2Avatarstack);
-
 		stage.addActor(rootTable);
 		addTextFeildListeners(p1Texts);
 		addTextFeildListeners(p2Texts);
@@ -96,6 +96,7 @@ public class SettingsScreen implements Screen {
 			public void clicked(InputEvent event, float x, float y) {
 				getPlayerControlls(p1Texts, p1Controls);
 				getPlayerControlls(p2Texts, p2Controls);
+
 				((GameScreen) game.clientScreen).new Settings(p1Controls,
 						p2Controls);
 				((GameScreen) game.localScreen).new Settings(p1Controls,
@@ -109,22 +110,31 @@ public class SettingsScreen implements Screen {
 		p1Buttons[0].addListener(new ChangeListnr(p1HeadRegion, false));
 		p2Buttons[1].addListener(new ChangeListnr(p2HeadRegion, true));
 		p2Buttons[0].addListener(new ChangeListnr(p2HeadRegion, false));
-
 	}
 
+	/**
+	 * adds textFieldFilters to all the TextFields
+	 * 
+	 * @param playerTexts
+	 *            array containing all TextFields
+	 */
 	private void addTextFieldFilter(TextField[] playerTexts) {
 		for (int i = 0; i < playerTexts.length; i++) {
 			playerTexts[i].setTextFieldFilter(textFieldFilter);
 			;
 		}
-
 	}
 
+	/**
+	 * adds textFieldListeners to all the TextFields
+	 * 
+	 * @param playerTexts
+	 *            array containing all TextFields
+	 */
 	private void addTextFeildListeners(TextField[] playerTexts) {
 		for (int i = 0; i < playerTexts.length; i++) {
 			playerTexts[i].setTextFieldListener(textFieldListener);
 		}
-
 	}
 
 	private void getPlayerControlls(TextField[] playerTexts,
@@ -134,6 +144,9 @@ public class SettingsScreen implements Screen {
 		}
 	}
 
+	/**
+	 * Handles the initialization of all the instance parameters
+	 */
 	private void initialize() {
 		this.skin = game.skin;
 		this.stage = new Stage();
@@ -173,9 +186,9 @@ public class SettingsScreen implements Screen {
 		p1AvatarImage.setScaling(Scaling.fill);
 		p2AvatarImage = new Image(p2AvatarTexRegion);
 		p2AvatarImage.setScaling(Scaling.fill);
-		
+
 		p1BackImage = new Image(new TextureRegion(new Texture(
-				Gdx.files.internal("grey.png"))));		
+				Gdx.files.internal("grey.png"))));
 		p1BodyImage = new Image(new TextureRegion(new Texture(
 				Gdx.files.internal("body.png"))));
 		p1BodyImage.setColor(1f, 0f, 0f, 1f);
@@ -183,9 +196,9 @@ public class SettingsScreen implements Screen {
 				Gdx.files.internal(avatarPng)), 256, 0, 256, 256);
 		GameScreen.p1HeadRegion = p1HeadRegion;
 		p1HeadImage = new Image(p1HeadRegion);
-		
+
 		p2BackImage = new Image(new TextureRegion(new Texture(
-				Gdx.files.internal("grey.png"))));		
+				Gdx.files.internal("grey.png"))));
 		p2BodyImage = new Image(new TextureRegion(new Texture(
 				Gdx.files.internal("body.png"))));
 		p2BodyImage.setColor(0f, 0f, 1f, 1f);
@@ -193,24 +206,47 @@ public class SettingsScreen implements Screen {
 				Gdx.files.internal(avatarPng)), 0, 0, 256, 256);
 		GameScreen.p2HeadRegion = p2HeadRegion;
 		p2HeadImage = new Image(p2HeadRegion);
-		
+
 		p1Avatarstack = new Stack();
 		p2Avatarstack = new Stack();
-	
-		
-		//bodyImage.setColor(Color.YELLOW);
-		//p1HeadImage.setColor(Color.YELLOW);
 	}
+
+	/**
+	 * Creates a complete avatar image as a stack, so that it can be inserted in
+	 * to the table layout.
+	 * 
+	 * @param stack
+	 *            stack which holds the image of the avatar
+	 * @param background
+	 *            background image for the avatar
+	 * @param body
+	 *            image of the body region of the avatar
+	 * @param head
+	 *            image of the head region of the avatar
+	 */
 	private void createAvatarStack(Stack stack, Image background, Image body,
-			Image head){	
-		background.setScaling(Scaling.fill);		
+			Image head) {
+		background.setScaling(Scaling.fill);
 		body.setScaling(Scaling.fill);
 		head.setScaling(Scaling.fill);
-		
+
 		stack.add(background);
 		stack.add(body);
 		stack.add(head);
 	}
+
+	/**
+	 * Creates the player panel in the settings screen
+	 * 
+	 * @param panel
+	 *            table which acts as a column in the settings table
+	 * @param playerDetails
+	 *            array of textFields belonging to the specific player
+	 * @param playerButtons
+	 *            array of textButtons belonging to the specific player
+	 * @param avatar
+	 *            stack containg the completed avatar image
+	 */
 	private void createPlayerPanel(Table panel, TextField[] playerDetails,
 			TextButton[] playerButtons, Stack avatar) {
 		panel.row().padBottom(20).padTop(165);
@@ -231,6 +267,9 @@ public class SettingsScreen implements Screen {
 		panel.row();
 	}
 
+	/**
+	 * Creates the main settings panel in the settings page
+	 */
 	private void createSettingsPanel() {
 		gridSize = new SelectBox(
 				new String[] { "5", "6", "7", "8", "9", "10" }, skin);
@@ -241,6 +280,9 @@ public class SettingsScreen implements Screen {
 		settingsPanel.add(playButton);
 	}
 
+	/**
+	 * enables all the debug lines in all the tables
+	 */
 	private void startDebug() {
 		rootTable.debug();
 		settingsPanel.debug();
@@ -248,6 +290,9 @@ public class SettingsScreen implements Screen {
 		playerTwoPanel.debug();
 	}
 
+	/**
+	 * sets the initial table layout
+	 */
 	private void setTableLayout() {
 		float celHeight = Gdx.graphics.getHeight();
 		float settingsWidth = (float) (Gdx.graphics.getWidth() / 2.56);
@@ -293,28 +338,28 @@ public class SettingsScreen implements Screen {
 		Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
 		stage.act(delta);
 		stage.draw();
-		if (stage.getKeyboardFocus() == p1Texts[2]
-				|| stage.getKeyboardFocus() == p1Texts[3]
-				|| stage.getKeyboardFocus() == p1Texts[4]
-				|| stage.getKeyboardFocus() == p1Texts[5]
-				|| stage.getKeyboardFocus() == p2Texts[2]
-				|| stage.getKeyboardFocus() == p2Texts[3]
-				|| stage.getKeyboardFocus() == p2Texts[4]
-				|| stage.getKeyboardFocus() == p2Texts[5]) {
-			if (Gdx.input.isKeyPressed(Keys.UP)) {
-				((TextField) stage.getKeyboardFocus()).setText("UP");
-			}
-			if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-				((TextField) stage.getKeyboardFocus()).setText("LEFT");
-			}
-			if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-				((TextField) stage.getKeyboardFocus()).setText("RIGHT");
-			}
-			if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-				((TextField) stage.getKeyboardFocus()).setText("DOWN");
-			}
+		if (isFocusedOnNavigation()) {
+			setNavigationText();
 		}
 		// Table.drawDebug(stage);
+	}
+
+	/**
+	 * sets the navigation texts to the corresponding textFields
+	 */
+	private void setNavigationText() {
+		if (Gdx.input.isKeyPressed(Keys.UP)) {
+			((TextField) stage.getKeyboardFocus()).setText("UP");
+		}
+		if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+			((TextField) stage.getKeyboardFocus()).setText("LEFT");
+		}
+		if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+			((TextField) stage.getKeyboardFocus()).setText("RIGHT");
+		}
+		if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+			((TextField) stage.getKeyboardFocus()).setText("DOWN");
+		}
 	}
 
 	@Override
@@ -332,89 +377,19 @@ public class SettingsScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 	}
 
-	private int getKeyCode(String keyText) {
-		int code = 0;
-		if (keyText.equals("0")){
-			code = Keys.NUM_0;}
-		if (keyText.equals("1")){
-			code = Keys.NUM_1;}
-		if (keyText.equals("2")){
-			code = Keys.NUM_2;}
-		if (keyText.equals("3")){
-			code = Keys.NUM_3;}
-		if (keyText.equals("4")){
-			code = Keys.NUM_4;}
-		if (keyText.equals("5")){
-			code = Keys.NUM_5;}
-		if (keyText.equals("6")){
-			code = Keys.NUM_6;}
-		if (keyText.equals("7")){
-			code = Keys.NUM_7;}
-		if (keyText.equals("8")){
-			code = Keys.NUM_8;}
-		if (keyText.equals("9")){
-			code = Keys.NUM_9;}
-		if (keyText.equalsIgnoreCase("q")){
-			code = Keys.Q;}
-		if (keyText.equalsIgnoreCase("w")){
-			code = Keys.W;}
-		if (keyText.equalsIgnoreCase("e")){
-			code = Keys.E;}
-		if (keyText.equalsIgnoreCase("r")){
-			code = Keys.R;}
-		if (keyText.equalsIgnoreCase("t")){
-			code = Keys.T;}
-		if (keyText.equalsIgnoreCase("y")){
-			code = Keys.Y;}
-		if (keyText.equalsIgnoreCase("u")){
-			code = Keys.U;}
-		if (keyText.equalsIgnoreCase("i")){
-			code = Keys.I;}
-		if (keyText.equalsIgnoreCase("o")){
-			code = Keys.O;}
-		if (keyText.equalsIgnoreCase("p")){
-			code = Keys.P;}
-		if (keyText.equalsIgnoreCase("a")){
-			code = Keys.A;}
-		if (keyText.equalsIgnoreCase("s")){
-			code = Keys.S;}
-		if (keyText.equalsIgnoreCase("d")){
-			code = Keys.D;}
-		if (keyText.equalsIgnoreCase("f")){
-			code = Keys.F;}
-		if (keyText.equalsIgnoreCase("g")){
-			code = Keys.G;}
-		if (keyText.equalsIgnoreCase("h")){
-			code = Keys.H;}
-		if (keyText.equalsIgnoreCase("j")){
-			code = Keys.J;}
-		if (keyText.equalsIgnoreCase("k")){
-			code = Keys.K;}
-		if (keyText.equalsIgnoreCase("l")){
-			code = Keys.L;}
-		if (keyText.equalsIgnoreCase("z")){
-			code = Keys.Z;}
-		if (keyText.equalsIgnoreCase("x")){
-			code = Keys.X;}
-		if (keyText.equalsIgnoreCase("c")){
-			code = Keys.C;}
-		if (keyText.equalsIgnoreCase("v")){
-			code = Keys.V;}
-		if (keyText.equalsIgnoreCase("b")){
-			code = Keys.B;}
-		if (keyText.equalsIgnoreCase("n")){
-			code = Keys.N;}
-		if (keyText.equalsIgnoreCase("m")){
-			code = Keys.N;}
-		if (keyText.equalsIgnoreCase("up")){
-			code = Keys.UP;}
-		if (keyText.equalsIgnoreCase("down")){
-			code = Keys.DOWN;}
-		if (keyText.equalsIgnoreCase("left")){
-			code = Keys.LEFT;}
-		if (keyText.equalsIgnoreCase("right")){
-			code = Keys.RIGHT;}
-		return code;
+	/**
+	 * 
+	 * @return true if the cursor is focused on one of the navigation input
+	 *         fields false otherwise.
+	 */
+	private boolean isFocusedOnNavigation() {
+		for (int i = 2; i < p1Texts.length; i++) {
+			if (stage.getKeyboardFocus() == p1Texts[i]
+					|| stage.getKeyboardFocus() == p2Texts[i]) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private class Listener implements TextFieldListener {
@@ -424,6 +399,53 @@ public class SettingsScreen implements Screen {
 				textField.setText(("" + key).toUpperCase());
 			}
 		}
+	}
+
+	/**
+	 * finds matching Keys.code for a given Char or arrow keys
+	 * 
+	 * @param keyText
+	 *            String in the textField
+	 * @return the key code for the given keyText
+	 */
+	private int getKeyCode(String keyText) {
+		char key = keyText.charAt(0);
+		if (keyText.length() > 1) {
+			return getKeyCodeforNavArrows(keyText);
+		} else {
+			if (Character.isDigit(key)) {
+				return key - 41;
+			} else if (Character.isUpperCase(key)) {
+				return (key - 36);
+			} else if (Character.isLowerCase(key)) {
+				return (key - 68);
+			}
+		}
+		return 0;
+	}
+
+	/**
+	 * finds matching Keys.code for a arrow keys
+	 * 
+	 * @param keyText
+	 *            String in the textField
+	 * @return the key code for the given keyText
+	 */
+	private int getKeyCodeforNavArrows(String keyText) {
+		int code = 0;
+		if (keyText.equalsIgnoreCase("up")) {
+			code = Keys.UP;
+		}
+		if (keyText.equalsIgnoreCase("down")) {
+			code = Keys.DOWN;
+		}
+		if (keyText.equalsIgnoreCase("left")) {
+			code = Keys.LEFT;
+		}
+		if (keyText.equalsIgnoreCase("right")) {
+			code = Keys.RIGHT;
+		}
+		return code;
 	}
 
 	private class Filter implements TextFieldFilter {
@@ -439,14 +461,22 @@ public class SettingsScreen implements Screen {
 
 		@Override
 		public void clicked(InputEvent event, float x, float y) {
-			if (isNext&& avatar.getRegionX() < 1281) {
-				avatar.setRegion(avatar.getRegionX() + 256, 0, 256, 256);
+			if (isNext) {
+				if (avatar.getRegionX() < 1281) {
+					avatar.setRegion(avatar.getRegionX() + 256, 0, 256, 256);
+				} else {
+					avatar.setRegion(0, 0, 256, 256);
+				}
 			}
-			if (!isNext&& avatar.getRegionX() > 255) {
-				avatar.setRegion(avatar.getRegionX() - 256, 0, 256, 256);
+			if (!isNext) {
+				if (avatar.getRegionX() > 255) {
+					avatar.setRegion(avatar.getRegionX() - 256, 0, 256, 256);
+				} else {
+					avatar.setRegion(1280, 0, 256, 256);
+				}
 			}
 		}
-		
+
 		public ChangeListnr(TextureRegion avatar, boolean isnext) {
 			this.avatar = avatar;
 			this.isNext = isnext;

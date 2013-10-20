@@ -1718,10 +1718,12 @@ public class ForumStorage {
 	public void printConstraints() throws DatabaseException {
 		Connection con = Database.getConnection();
 		String query = "SELECT * FROM sys.sysconstraints";
-		
 		try {
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(query);
+			String attr = "Constraint: CONSTRAINTID, TABLEID, CONSTRAINT-NAME"; 
+			attr += ", TYPE, SCHEMAID, STATE, REFERENCECOUNT";
+			System.out.println(attr);
 			while(rs.next()) {
 				StringBuilder sd = new StringBuilder();
 				sd.append("Constraint: ");

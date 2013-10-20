@@ -85,7 +85,7 @@ public class Arcade extends JFrame {
 
 	private CommunicationNetwork communicationNetwork;
 
-	private CommunicationView view;
+	private CommunicationView communicationView;
 
 	private Container container;
 
@@ -124,7 +124,7 @@ public class Arcade extends JFrame {
 	 */
 	public static void main(String[] args) {
 		Arcade arcade = new Arcade(args);
-
+		
 		ArcadeSystem.setArcadeInstance(arcade);
 
 		arcade.addCanvas();
@@ -316,9 +316,15 @@ public class Arcade extends JFrame {
 			boolean[] privacy = {false, false, false, false, false, false, false};
 			myPlayer = new Player(myID, null, details, friendsSet, invitesSet, blockedSet, gameSet, privacy);
 		}
+		
+		
+		communicationView = new CommunicationView();
+		container.add(communicationView, BorderLayout.EAST);
+		revalidate();
+		repaint();
 
 		this.player = myPlayer;
-		this.communicationNetwork.loggedIn(this.player, this.view);
+		this.communicationNetwork.loggedIn(this.player, this.communicationView);
 
 		System.out.println("My playerID is: " + myID);
 
@@ -494,8 +500,6 @@ public class Arcade extends JFrame {
 
 			container = this.getContentPane();
 			
-			view = new CommunicationView();
-			container.add(view, BorderLayout.EAST);
 			container.add(this.canvas.getCanvas(), BorderLayout.WEST);
 			
 			pack();

@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,6 +18,10 @@ import javax.swing.SwingConstants;
 
 public class CommunicationView extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2843626122426089843L;
 	private JScrollPane scrollPane;
 	private JTextArea inputArea;
 	private JTextArea outputArea;
@@ -29,6 +34,7 @@ public class CommunicationView extends JPanel {
 	private JButton backButton;
 	private CommunicationNetwork communicationNetwork;
 
+	
 	public CommunicationView() {
 		setPreferredSize(new Dimension(250, 600));
 

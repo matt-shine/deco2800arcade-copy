@@ -6,20 +6,16 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.tablelayout.BaseTableLayout;
-import deco2800.arcade.client.Arcade;
+
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.GameOverListener;
-import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.client.network.NetworkException;
 import deco2800.arcade.client.network.listener.NetworkListener;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
-import deco2800.arcade.client.ArcadeInputMux;
-import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.arcadeui.FrontPage;
 
 
@@ -134,7 +130,19 @@ public class LoginScreen implements Screen {
         ConnectionListener listener = new ConnectionListener();
         ArcadeSystem.addListener(listener);        
 
-        
+        passwordText.setTextFieldListener(new TextFieldListener() {
+			public void keyTyped(TextField textField, char key) {
+				if (key == 13) { // User pressed enter in password field
+					if (usernameText.getText().equals("")) {
+	                    // no username entered, throw error
+	                    errorLabel.setText("No Username Supplied");
+	                }
+	                else {
+	                    ArcadeSystem.login(usernameText.getText(), passwordText.getText());
+	                }
+				}
+			}
+		});
 
         loginButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {

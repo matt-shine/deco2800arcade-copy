@@ -23,7 +23,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import deco2800.arcade.breakout.Breakout;
 import deco2800.arcade.client.ArcadeSystem;
 
-
+/**
+ * Class for the SplashScreen 
+ * @author Tony Wu and ZhuLun Liang
+ * 
+ */
  
 public class HelpScreen1 implements Screen  {
 	private final Breakout game;
@@ -32,6 +36,9 @@ public class HelpScreen1 implements Screen  {
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
 	Stage stage;
+	/*
+	 * creates instance variables for each image.
+	 */
 	   TextureRegionDrawable backup;
 	   TextureRegionDrawable backdown;
 	   TextureRegion backUp;
@@ -41,7 +48,12 @@ public class HelpScreen1 implements Screen  {
 	   Texture tex;
 	   ImageButton backbutton;
 	  
-	  
+	 /**
+	  * Constructor.
+	  * Load the image from the resource
+	  * @param game
+	  * 				-The Breakout game
+	  */    
 	public HelpScreen1(final Breakout game) {
 		
 		this.game = game;
@@ -74,10 +86,12 @@ public class HelpScreen1 implements Screen  {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	/**
+	 * get into the HelpScreen2
+	 */
 	@Override
 	public void render(float arg0) {
-		
 		
 		if(Gdx.input.isButtonPressed(Buttons.LEFT)) {
 			

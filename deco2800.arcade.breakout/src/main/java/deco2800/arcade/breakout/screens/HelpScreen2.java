@@ -23,7 +23,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import deco2800.arcade.breakout.Breakout;
 import deco2800.arcade.client.ArcadeSystem;
 
-
+/**
+ * Class for the SplashScreen 
+ * @author Tony Wu and ZhuLun Liang
+ * 
+ */
  
 public class HelpScreen2 implements Screen  {
 	private final Breakout game;
@@ -32,6 +36,9 @@ public class HelpScreen2 implements Screen  {
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
 	Stage stage;
+	/*
+	 * creates instance variables for each image.
+	 */
 	   TextureRegionDrawable backup;
 	   TextureRegionDrawable backdown;
 	   TextureRegion backUp;
@@ -41,7 +48,12 @@ public class HelpScreen2 implements Screen  {
 	   Texture tex;
 	   ImageButton backbutton;
 	  
-	  
+	/**
+	 * Constructor.
+	 * Load the image from the resource
+	 * @param game
+	 * 				-The Breakout game
+	 */    
 	public HelpScreen2(final Breakout game) {
 		
 		this.game = game;
@@ -51,7 +63,7 @@ public class HelpScreen2 implements Screen  {
 		tex = new Texture(Gdx.files.classpath("imgs/button.png"));
 		TextureRegion[][] tmp = TextureRegion.split(tex, 130, 45);
 		
-	    //backbutton
+	    //Back button
 	    backbuttonUp=tmp[2][2];
 	    backbuttonDown=tmp[2][3];
 	    backup = new TextureRegionDrawable(backbuttonUp);
@@ -101,12 +113,11 @@ public class HelpScreen2 implements Screen  {
 		// TODO Auto-generated method stub
 		
 	}
-
+	/**
+	 * render for the screen
+	 */
 	@Override
-	public void render(float arg0) {
-		
-
-	
+	public void render(float arg0) {		
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		 Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		 
@@ -114,8 +125,7 @@ public class HelpScreen2 implements Screen  {
 			batch.draw(texture, 0, 0);
 			batch.end();
 			stage.act();
-		       stage.draw();
-	       
+		       stage.draw();	       
 	}
 
 	@Override

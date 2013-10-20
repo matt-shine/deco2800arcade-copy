@@ -16,9 +16,11 @@ import deco2800.arcade.protocol.forum.*;
 public class ReplyThreadController implements ActionListener {
 	private ReplyThreadView view;
 	private ClientConnection connection;
+	private int pid;
 	
 	public ReplyThreadController (ReplyThreadView viewModel, int pid) throws ForumException {
 		this.view = viewModel;
+		this.pid = pid;
 		this.connection = new ClientConnection("", 0, 0);
 		this.connection.addListener(new Listener() {
 			public void received(Connection con, Object object) {
@@ -45,6 +47,7 @@ public class ReplyThreadController implements ActionListener {
 		InsertChildThreadRequest request = new InsertChildThreadRequest();
 		request.message = this.view.textPane.getText();
 		request.createdBy = 0;
+		request.pThread = this.pid;
 		this.connection.getClient().sendTCP(request);
 		System.out.println("cThread request is sent");
 		return;

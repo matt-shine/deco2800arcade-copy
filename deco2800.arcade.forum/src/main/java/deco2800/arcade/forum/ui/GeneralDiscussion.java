@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JToolBar;
 
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.Button;
 import java.awt.Font;
@@ -17,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JTextPane;
@@ -54,6 +56,7 @@ public class GeneralDiscussion {
 	private int threadCount;
 	public JButton btnPrevButton;
 	public JButton btnNextButton;
+	private JPanel threadDisplay;
 	
 
 	public GeneralDiscussion(JFrame window) {
@@ -147,11 +150,16 @@ public class GeneralDiscussion {
 	    f.getContentPane().add(ThreadPanel);
 	    f.setVisible(true);
 	    
-	    this.scrollPane = new JScrollPane(
+	    this.threadDisplay = new JPanel();
+	    
+	    
+	    this.scrollPane = new JScrollPane(this.threadDisplay,
 	            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 	            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	    this.scrollPane.setBounds(542, 155, 437, 541);
-	    this.f.getContentPane().add(scrollPane);	      
+	    this.f.getContentPane().add(this.scrollPane);
+	    
+	    
 	    f.setVisible(true); 
 	    
 	    
@@ -163,6 +171,35 @@ public class GeneralDiscussion {
 			JOptionPane.showMessageDialog(null, "Failed to load threads", 
 					"Error", JOptionPane.ERROR_MESSAGE);
 		}
+	}
+	
+	public void clear_display() {
+		this.threadDisplay.removeAll();
+	}
+	
+	public void update_display() {
+		this.threadDisplay.updateUI();
+	}
+	
+	public void display_parent(ParentThread p) {
+		JPanel window = new JPanel();
+		window.setLayout(new GridLayout(4, 1));
+		JTextArea message = new JTextArea();
+		JTextArea title = new JTextArea();
+		JTextArea author = new JTextArea();
+		JTextArea date = new JTextArea();
+		message.setColumns(30);
+		title.setColumns(35);
+		author.setText("By: " + p.getCreatedBy().getName());
+		date.setText("Written on: " + p.getTimestamp().toString());
+		message.setText(p.getMessage());
+		title.setText(p.getTopic());
+		window.add(title);
+		window.add(message);
+		window.add(author);
+		window.add(date);
+		this.threadDisplay.add(window);
+		
 	}
 
 	public void open_home() {
@@ -196,8 +233,9 @@ public class GeneralDiscussion {
 		});
 	}
 	//17, 232, 520, 464
-	public void addInnerThreadPanel(ParentThread thread) {
+	public void addInnerThreadPanel(final ParentThread thread) {
 		this.threadCount += 1;
+		ParentThread t = thread;
 		int threadNum = this.threadCount;
 		JPanel threadDisplay = new JPanel();
 	    threadDisplay.setBackground(Color.WHITE);
@@ -209,6 +247,13 @@ public class GeneralDiscussion {
 	    title.setFont(new Font("Tahoma", Font.BOLD, 15));
 	    title.setBounds(19, (235 + (46 * threadNum - 1)), 510, 46);
 	    threadDisplay.add(title);
+	    threadDisplay.addMouseListener(new MouseAdapter() {
+	    	public void mousePressed(MouseEvent e) {
+	    		clear_display();
+	    		display_parent(thread);
+	    		update_display();
+	    	}
+	    });
 	    this.ThreadPanel.add(threadDisplay);	
 	}
 	

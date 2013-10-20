@@ -70,9 +70,9 @@ public class ThreadListController {
 	private void nextTen() {
 		System.out.println("Request load");
 		GetParentThreadsRequest request = new GetParentThreadsRequest();
-		request.start = this.model.get_thread(this.model.get_size() - 1).getId();
+		request.start = this.model.get_thread(this.model.get_size()-1).getId();
 		request.end = 0;
-		request.limit = 10;
+		request.limit = 9;
 		request.category = this.model.get_category();
 		request.userId = 0;
 		System.out.println("Request sent");		
@@ -84,9 +84,9 @@ public class ThreadListController {
 		System.out.println("Request load");
 		GetParentThreadsRequest request = new GetParentThreadsRequest();
 		request.start = 0;
-		request.end = this.model.get_thread(0).getId() + 1;
+		request.end = this.model.get_thread(0).getId();
 		System.out.println(request.end);
-		request.limit = 10;
+		request.limit = 9;
 		request.category = this.model.get_category();
 		request.userId = 0;
 		System.out.println("Request sent");		

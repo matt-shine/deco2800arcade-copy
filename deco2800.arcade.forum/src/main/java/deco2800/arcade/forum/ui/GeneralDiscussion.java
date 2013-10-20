@@ -73,11 +73,11 @@ public class GeneralDiscussion {
 	    f.getContentPane().add(this.btnNewButton);
 	    addMakeThreadListener(this.btnNewButton);
 	    
-	    this.btnPrevButton = new JButton("Prev 10");
+	    this.btnPrevButton = new JButton("Prev 9");
 	    this.btnPrevButton.setBounds(133, 194, 116, 25);
 	    f.getContentPane().add(this.btnPrevButton);
 	    
-	    this.btnNextButton = new JButton("Next 10");
+	    this.btnNextButton = new JButton("Next 9");
 	    this.btnNextButton.setBounds(249, 194, 116, 25);
 	    f.getContentPane().add(this.btnNextButton);
 	      

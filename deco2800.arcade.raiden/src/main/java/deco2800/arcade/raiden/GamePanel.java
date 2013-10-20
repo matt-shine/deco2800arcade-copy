@@ -81,6 +81,13 @@ public class GamePanel extends JPanel{
 		g.drawString("Score: " + Controller.DestoryNum, 30, 30);
 	}
 	/**
+	 * 
+	 * @return the score
+	 */
+	public int getScore(){
+		return Controller.DestoryNum;
+	}
+	/**
 	 * Show the life on the top the panel
 	 * @param g
 	 */

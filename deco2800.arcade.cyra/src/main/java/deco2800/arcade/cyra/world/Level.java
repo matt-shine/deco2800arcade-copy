@@ -143,9 +143,7 @@ public class Level {
 				randomEnemySpawners.add((RandomizedEnemySpawner) o);
 			}
 		}
-		System.out.println("Found " + enemySpawners.size + " enemy spawners");
-		System.out.println("Found " + movablePlatformSpawners.size + " platform spawners");
-		System.out.println("Found " + randomEnemySpawners.size + " randomizd enemy spawners");
+		
 	}
 	
 	public void reloadLevel() {

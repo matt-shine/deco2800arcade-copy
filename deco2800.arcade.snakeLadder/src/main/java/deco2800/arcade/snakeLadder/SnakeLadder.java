@@ -126,6 +126,9 @@ public class SnakeLadder extends GameClient {
 		}
 	}
 
+	/**
+	 * @return the turn number which is cooresponding to player's index
+	 */
 	public int getturns() {
 		return this.turn;
 	}
@@ -282,6 +285,9 @@ public class SnakeLadder extends GameClient {
 	}
 	
 
+	/**
+	 * Update the turn number when transit to next player's round
+	 */
 	public void taketurns() {
 		turn++;
 		turn = turn%this.gamePlayers.length;
@@ -303,19 +309,33 @@ public class SnakeLadder extends GameClient {
 		super.resume();
 	}
 	
+	/**
+	 * @param num dice number after throw
+	 * @return Dice object according to the number thrown passed in
+	 */
 	public Dice getDice(int num){
 		return dices.get(num);
 	}
 	
+	/**
+	 * @param dice dice object
+	 * @param num dice number
+	 */
 	public void setDice(Dice dice, int num){
 		dices.set(num, dice);
 	}
 
 	
+	/**
+	 * @return the game map instance
+	 */
 	public GameMap getMap() {
 		return map;
 	}
 
+	/**
+	 * @param map set game map instance
+	 */
 	public void setMap(GameMap map) {
 		this.map = map;
 	}
@@ -399,12 +419,11 @@ public class SnakeLadder extends GameClient {
         }
 	}
 	
+	/**
+	 * @return the ruleMapping which is populated after reading xml config file
+	 */
 	public HashMap<String,RuleMapping> getRuleMapping() {
 		return ruleMapping;
-	}
-
-	public void setRuleMapping(HashMap<String,RuleMapping> ruleMapping) {
-		this.ruleMapping = ruleMapping;
 	}
 	
 	private void dumpingScores(){

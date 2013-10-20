@@ -42,11 +42,11 @@ public class King extends Piece {
 		moves.add(h);
 		moves.add(f);
 
-		if (firstMove) {
+		if (!firstMove) {
 			int[] castle = { x, y + 2 };
 			moves.add(castle);
 
-			if (!firstMove) {
+			if (firstMove) {
 				moves.remove(castle);
 			}
 		}
@@ -131,6 +131,9 @@ public class King extends Piece {
 				isChecked = false;
 			}
 		}
+	}
+	public void setMove(){
+		this.firstMove = false;
 	}
 	
 	public String toString() {

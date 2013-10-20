@@ -47,10 +47,8 @@ public class RandomizedEnemySpawner {
 	}
 	
 	public Enemy update(float delta, Camera cam, float rank) {
-		//System.out.println(active +" "+ cam.position.x+ " "+ startRange+ " "+endRange);
 		if (active && cam.position.x > startRange && cam.position.x < endRange) {
 			count += delta;
-			//System.out.println("count="+ count+" rate="+rate);
 			if (count > rate) {
 				
 				count = 0;
@@ -61,7 +59,7 @@ public class RandomizedEnemySpawner {
 					int rand = MathUtils.random(enemySpawners.size-1);
 					EnemySpawner es = enemySpawners.get(rand);
 					
-					//adjust position to just outside camera (WILL NEED TO ALSO ADJUST HEIGHT BUT I DON'T KNOW HOW YET)
+					//adjust position to just outside camera
 					float originalY = es.getPosition().y;
 					if (rightSideOfScreen[rand]) {
 						es.setPosition(new Vector2 (cam.position.x + cam.viewportWidth/2 + 2f, es.getPosition().y));
@@ -75,29 +73,21 @@ public class RandomizedEnemySpawner {
 							for (float xRange = es.getPosition().x - 1f; xRange < es.getPosition().x+2f; xRange+=1f) {
 								
 								int yLength = collisionLayer.tiles.length;
-								//if (i < xLength && i > 0 && j < yLength && j > 0) { 
-								//int cell = collisionLayer.tiles[yLength-((int)yChange)-1][(int)es.getPosition().x];
+								if ((int)xRange < 0) xRange = 0;
 								int cell = collisionLayer.tiles[yLength-((int)yChange)-1][(int)xRange];
 								
-								/*String type = map.getTileProperty(cell, "checkCollision");
-								if (type != null && type.equals("solid")) {*/
 								
-								
-								//this won't work becaus it only checks single tiles collisions. Unless you just combine inline and collision layers
 								if (cell != 0) {
-									//Rectangle rect = new Rectangle((int)es.getPosition().x, (int)yChange, 1, 1);
-									//if (rect.overlaps(new Rectangle(es.getPosition().x, es.getPosition().y, 1,1))){
-										collision = true;
-										//System.out.println("@@@@@@@@Collision at "+yChange+","+xRange);
-										break;
-									//}
+									collision = true;
+									
+									break;
+									
 								}
 								
 								
 							}
 							if (!collision) {
 								es.getPosition().y = yChange;
-								//System.out.println("Spawning new from randomized at "+ es.getPosition() + "campos="+cam.position.x+" camview="+cam.viewportWidth);
 								output = es.spawnNewIfPossible();
 								break;
 							}
@@ -105,10 +95,7 @@ public class RandomizedEnemySpawner {
 					}
 					es.getPosition().y = originalY;
 					if (output != null) {
-						//System.out.println("Spawning!!!!");
 						break;
-					} else {
-						//System.out.println("returned enemy was null");
 					}
 				}
 				return output;

@@ -6,14 +6,16 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 public class junglejumpTEST {
+	LevelContainer container;
+	Level level;
 	
 	@Rule 
 	public ExpectedException thrown = ExpectedException.none();
 	
 	@Before
 	public void init() {
-		LevelContainer container = new LevelContainer();
-		Level level = new Level();
+		container = new LevelContainer();
+		level = new Level();
 	}
 	
 	@Test (expected = Exception.class)

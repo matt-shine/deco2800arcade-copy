@@ -16,6 +16,7 @@ chess
 landInvaders
 junglejump
 burningskies
+hunter
 checkers
 landInvaders
 towerdefence
@@ -25,3 +26,4 @@ raiden
 wl6
 statistics
 snakeLadder
+cyra

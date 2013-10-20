@@ -17,7 +17,9 @@ import com.badlogic.gdx.math.Circle;
 public class Ball {
 	// width of the ball
 	public static final float WIDTH = 20f;
+	// minimum velocity
 	public static final float INITIALSPEED = 400;
+	// maximum velocity
 	public static float MAX_X_VELOCITY = 800f;
 	private float multiplier = 1;
 	
@@ -43,23 +45,36 @@ public class Ball {
 		setColor(0.7f, 0.7f, 0.7f, 0.5f);
 	}
 	
-	// Getter method for the balls X position
+	/**
+	 * 
+	 * @return the balls x position
+	 */
 	public float getX() {
-//		return bounds.x;
 		return ballCirc.x;
 	}
 	
-	// Getter method for the balls Y position
+	/**
+	 * 
+	 * @return the balls y position
+	 */
 	public float getY() {
-//		return bounds.y;
 		return ballCirc.y;
 	}
 	
+	/**
+	 * 
+	 * @return the balls radius
+	 */
 	public float getRadius() {
 		return ballCirc.radius;
 	}
-
-	// Setter method for the X Velocity of the ball
+	
+	/**
+	 * Checks whether the maximum velocity has been reached
+	 * so that we can ensure the maximum velocity is never
+	 * exceeded
+	 * @param newVelocity - sets the x velocity of the ball
+	 */
 	public void setXVelocity(float newVelocity) {
 		if (newVelocity > MAX_X_VELOCITY) {
 			this.velocity.x = multiplier * MAX_X_VELOCITY;
@@ -71,8 +86,11 @@ public class Ball {
 		}
 		this.velocity.x = newVelocity;
 	}
-
-	// Reset the ball to where the paddle is
+	
+	/**
+	 * Resets the ball to where the paddle is
+	 * @param paddlePos - the x and y coordinates of the paddle
+	 */
 	public void reset(Vector2 paddlePos) {
 		velocity.x = 0;
 		velocity.y = 0;
@@ -81,17 +99,37 @@ public class Ball {
 		ballCirc.y = paddlePos.y + 25 + ballCirc.radius;
 	}
 
-	// Getter method for the y velocity
+	/**
+	 * 
+	 * @return the y velocity of the ball
+	 */
 	public float getYVelocity() {
 		return this.velocity.y;
 	}
 
-	// Getter method for the x velocity
+	/**
+	 * 
+	 * @return the x velocity of the ball
+	 */
 	public float getXVelocity() {
 		return this.velocity.x;
 	}
+	
+	/**
+	 * 
+	 * @return the velocity as a vector
+	 */
+	public Vector2 getVelocity() {
+		return this.velocity;
+	}
 
-	// Set the colour to render the ball
+	/**
+	 * 
+	 * @param r - sets the colour red to render the ball
+	 * @param g - sets the colour green to render the ball
+	 * @param b - sets the colour blue to render the ball
+	 * @param a - sets alpha to render the ball
+	 */
 	public void setColor(float r, float g, float b, float a) {
 		renderColourRed = r;
 		renderColourGreen = g;
@@ -99,7 +137,12 @@ public class Ball {
 		renderColourAlpha = a;
 	}
 
-	// Colour the ball the colour given by setColor
+	/**
+	 * 
+	 * @param shapeRenderer - colours the ball the colour given by
+	 * the setColour i.e. colours the ball based on the red, green,
+	 * blue and aplha values
+	 */
 	public void render(ShapeRenderer shapeRenderer) {
 		shapeRenderer.setColor(renderColourRed, renderColourGreen,
 				renderColourBlue, renderColourAlpha);
@@ -107,7 +150,16 @@ public class Ball {
 				this.ballCirc.radius);
 	}
 
-	// determine the new x velocity the ball will bounce at
+	/**
+	 * Determines the new x velocity the ball will bounce at based
+	 * on the x and y coordinates which are used in conjunction 
+	 * with basic trigonometry
+	 * @param lastHitX - the x coordinate of the last point at which the
+	 * ball bounced off something
+	 * @param lastHitY - the y coordinate of the last point at which the 
+	 * ball bounced off something
+	 * @param paddle - the current paddle
+	 */
 	public void updateVelocity(float lastHitX, float lastHitY, Paddle paddle) {
 		float currentHitX = ballCirc.x;
 		float currentHitY = ballCirc.y;
@@ -150,45 +202,46 @@ public class Ball {
 						* cosAngle);
 			}
 		// Handles the ball if it hits the right end of the paddle
-		} else if (bX >= pX + 7*pWidth/9 && bX <= pX + pWidth) {
+		} else if (bX >= pX + 7*pWidth/9) { 
 			newVelocity = 100 + (Math.abs(getXVelocity()) + 80
 					* cosAngle);
 		}
 		setXVelocity(newVelocity);
 	}
-
-	// Reverse the X direction
+	
+	/**
+	 * Reverses the x direction of the ball
+	 * @param offset - the value to move ball back (to avoid ball
+	 * glitching along edges)
+	 */
 	public void bounceX(int offset) {
 		this.ballCirc.x += offset;
 		velocity.x *= -1;
 	}
-
-	// Reverse the Y direction
+	
+	/**
+	 * Reverses the y direction of the ball
+	 * @param offset - the value to move the ball back (to avoid
+	 * ball glitching along the top edge of the screen)
+	 */
 	public void bounceY(int offset) {
 		this.ballCirc.y += offset;
 		velocity.y *= -1;
 	}
-	
-	/*
-	 * ball hits far right side, take abs value and increase x velocity
-	 * ball hits right hand side, rebound proportional to theta. so make negative but x velocity --> 0
-	 * ball hits left hand side, rebound proportional to theta. so make positive but x velocity --> 0
-	 * ball hits far left side, make negative and decrease x velocity
-	 * ball hits middle, x velocity --> 0
-	 */
-	
+		
 	/**
 	 * Move the ball according to its current velocity over the given time
-	 * period.
-	 * 
-	 * @param time
-	 *            the time elapsed in seconds
+	 * period
+	 * @param time - the time elapsed in seconds
 	 */
 	public void move(float time) {
 		ballCirc.x += time * velocity.x;
 		ballCirc.y += time * velocity.y;
 	}
 	
+	/**
+	 * Method for randomising the ball given some x and y factor
+	 */
 	public void randomizeVelocity() {
 		int xFactor = (int) (100f + Math.random() * 90f);
 		int yFactor = (int) Math.sqrt((200 * 200) - (xFactor * xFactor));
@@ -197,13 +250,29 @@ public class Ball {
 	}
 	
 	/**
-	 * Method for powerup to slow the ball
+	 * Method for the slow ball powerup which slows the ball
 	 */
 	public void slowBall () {
 		this.multiplier = 0.7f;
 		this.velocity.y *= multiplier;
+	}	
+	
+	/**
+	 * Sets the x and y velocity of the ball to be 0
+	 */
+	public void stopBall() {
+		this.velocity.x = 0;
+		this.velocity.y = 0;
 	}
 	
-	
-
+	/**
+	 * Restores the balls velocity to be the same as it was
+	 * before the game was paused
+	 * @param prevVelocity - the balls velocity before the game
+	 * was paused
+	 */
+	public void resumeBall(Vector2 prevVelocity) {
+		this.velocity.x = prevVelocity.x;
+		this.velocity.y = prevVelocity.y;
+	}
 }

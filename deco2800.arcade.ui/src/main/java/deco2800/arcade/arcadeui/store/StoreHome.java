@@ -9,12 +9,15 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+//import deco2800.server.PurchasingService;
+//import deco2800.server.database.CreditStorage;
 import deco2800.arcade.arcadeui.ArcadeUI;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
@@ -22,30 +25,39 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
 /**
+ * The store Home page, which links to the Game Page, the Transactions Page,
+ * and the Wishlist Page. It features a grid of 8 random games, a search bar,
+ * and a changing featured bar, displaying a single game at any given time in
+ * more detail.
  * @author Addison Gourluck
  */
 public class StoreHome implements Screen, StoreScreen {
 	private Skin skin = new Skin(Gdx.files.internal("store/storeSkin.json"));
 	private Stage stage = new Stage();
-	private static Game featured = new Game();
-	private float fade = 1; // Used for the featured bar fade-out.
-	// Initially set to 1, so that the icon and text will fade in upon load.
-	private Label description; // featured text
-	private Button featured_icon; // featured icon
-	private Button featured_bg; // featured icon glow/box
-	private Button greyOverlay = new Button(skin, "black");
-	private Button popupBox = new Button(skin, "white");
-	
+	private static Game featured = new Game(); // featured game
 	private ArcadeUI arcadeUI;
+	private Player player; // the currently logged in player
+	
+	private float fade = 1; // Used for the featured bar fade-out.
+	// Initially set to 1, so that the icon and text will fade in upon page load.
+	private Label description; // featured text
+	private Button featuredIcon; // featured icon
+	private Button featuredbg; // featured icon glow/box
+	private Button greyOverlay = new Button(skin, "black"); // grey shadow for popup
+	private Button popupBox = new Button(skin, "white"); // popup container
 	
 	/**
 	 * @author Addison Gourluck
 	 * @param ui
+	 * @param Player user
 	 */
-	public StoreHome(ArcadeUI ui) {
-		skin.add("blue_frame", new Texture(Gdx.files.internal("store/blue_frame.png")));
+	public StoreHome(ArcadeUI ui, Player user) {
 		arcadeUI = ui;
+		player = user;
+		
+		// Load the Icons into the skin, with names as game id's.
 		Utilities.helper.loadIcons(skin);
+		skin.add("blue_frame", new Texture(Gdx.files.internal("store/blue_frame.png")));
 		
 		// The background for the store.
 		skin.add("background", new Texture(Gdx.files.internal("store/main_bg.png")));
@@ -57,24 +69,25 @@ public class StoreHome implements Screen, StoreScreen {
 		final TextField searchField = new TextField("", skin);
 		final Button searchButton = new Button(skin, "search");
 		final Label searchResult = new Label("", skin);
-		final TextButton libraryButton = new TextButton("Library", skin);
+		final TextButton libraryButton = new TextButton("Front Page", skin);
 		final TextButton transactionsButton = new TextButton("Transactions", skin);
 		final TextButton wishlistButton = new TextButton("Wishlist", skin);
 		final TextButton reviewsButton = new TextButton("Reviews", skin);
 		
-		populateGamesBox();
+		populateGamesBox(); // Places 8 icons in a grid, center screen.
+		generatePopup(); // Creates, but doesn't show, the transactions popup.
 		
 		// The glowing border of the icon in the featured box.
-		featured_bg = new Button(skin, "icon_bg");
-		featured_bg.setSize(158, 158);
-		featured_bg.setPosition(224, 453);
-		stage.addActor(featured_bg);
+		featuredbg = new Button(skin, "icon_bg");
+		featuredbg.setSize(158, 158);
+		featuredbg.setPosition(224, 453);
+		stage.addActor(featuredbg);
 		
 		// The featured game's icon, located at the left of the top bar.
-		featured_icon = new Button(skin, "icon");
-		featured_icon.setSize(140, 140);
-		featured_icon.setPosition(233, 462);
-		stage.addActor(featured_icon);
+		featuredIcon = new Button(skin, "icon");
+		featuredIcon.setSize(140, 140);
+		featuredIcon.setPosition(9, 9); // distance from edges of featuredbg.
+		featuredbg.addActor(featuredIcon); // add onto featuredbg.
 		
 		// The description of the featured game, 
 		description = new Label("Loading...", skin);
@@ -100,14 +113,17 @@ public class StoreHome implements Screen, StoreScreen {
 		searchResult.setPosition(860, 475);
 		stage.addActor(searchResult);
 		
+		// Button linking back to the Front Page.
 		libraryButton.setSize(360, 95);
 		libraryButton.setPosition(834, 354.5f);
 		stage.addActor(libraryButton);
 		
+		// Button linking to transactions page.
 		transactionsButton.setSize(360, 95);
 		transactionsButton.setPosition(834, 253);
 		stage.addActor(transactionsButton);
 		
+		// Button linking to wishlist page.
 		wishlistButton.setSize(360, 95);
 		wishlistButton.setPosition(834, 151.5f);
 		stage.addActor(wishlistButton);
@@ -116,8 +132,7 @@ public class StoreHome implements Screen, StoreScreen {
 		reviewsButton.setPosition(834, 50);
 		stage.addActor(reviewsButton);
 		
-		generatePopup();
-		
+		// Button linking back to Front Page.
 		libraryButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				dispose();
@@ -125,20 +140,23 @@ public class StoreHome implements Screen, StoreScreen {
 			}
 		});
 		
+		// Button linking to transactions page.
 		transactionsButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				arcadeUI.setScreen(new StoreTransactions(arcadeUI));
+				hide();
+				arcadeUI.setScreen(arcadeUI.getStoreTransactions());
 			}
 		});
 		
+		// Button linking to wishlist page.
 		wishlistButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				arcadeUI.setScreen(new StoreWishlist(arcadeUI));
+				hide();
+				arcadeUI.setScreen(arcadeUI.getStoreWishlist());
 			}
 		});
 		
+		// Reviews button, located bottom right.
 		reviewsButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				stage.addActor(greyOverlay);
@@ -146,15 +164,19 @@ public class StoreHome implements Screen, StoreScreen {
 			}
 		});
 		
+		// Search Field, with listen. Located top right.
 		searchField.setTextFieldListener(new TextFieldListener() {
 			public void keyTyped(TextField textField, char key) {
+				// Run search whenever a key is typed.
 				Game result = Utilities.helper.search(searchField.getText());
-				if (result == null) {
+				if (result == null) { // No results if search returns null.
 					searchResult.setText("No results.");
 					return;
 				}
+				// Set search result to matched search.
 				searchResult.setText(result.name);
 				if (featured.id != result.id) {
+					// Set featured, for featured bar.
 					featured = result;
 					if (fade == 60) {
 						fade--; // Will trigger textFade and iconFade in render.
@@ -163,26 +185,35 @@ public class StoreHome implements Screen, StoreScreen {
 			}
 		});
 		
+		// Search button, paired with search field. Top right screen.
 		searchButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				try {
+					// Attempt to search for whatever is in the field.
 					setSelected(Utilities.helper.search(searchResult.getText() + "").id);
-					dispose();
-					arcadeUI.setScreen(new StoreGame(arcadeUI, featured));
+					// On successful search, go to its page.
+					hide();
+					arcadeUI.setScreen(new StoreGame(arcadeUI, player, featured));
 				} catch (Exception e) {
 					searchResult.setText("Invalid Search");
 				}
 			}
 		});
 		
-		featured_icon.addListener(new ChangeListener() {
+		// Featured icon and bg will redirect to featured game. Located top left.
+		featuredbg.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				arcadeUI.setScreen(new StoreGame(arcadeUI, featured));
+				hide();
+				arcadeUI.setScreen(new StoreGame(arcadeUI, player, featured));
 			}
 		});
 	}
 	
+	/**
+	 * This method generates the inner pieces of the popup, including the grey
+	 * overlay, and the buttons, field, slider, and listeners for them.
+	 * @author Addison Gourluck
+	 */
 	private void generatePopup() {
 		greyOverlay.setFillParent(true);
 		greyOverlay.setColor(0.5f, 0.5f, 0.5f, 0.5f);
@@ -191,19 +222,77 @@ public class StoreHome implements Screen, StoreScreen {
 		popupBox.setSize(545, 300);
 		popupBox.setPosition(368, 210);
 		
+		// Textfield describing the amount of coins to purchase.
+		final TextField buyField = new TextField("1", skin);
+		// Label displaying the cost of the transaction, without discount.
+		final Label costLabel = new Label("Cost: 1", skin);
+		// Label displaying the discount to be given on transaction.
+		final Label discountLabel = new Label("Discount: 0", skin);
+		// Label displaying the total purchase cost, including discount. 
+		final Label totalLabel = new Label("Total: 1", skin);
+		// Slider to select amount of coins to purchase.
+		final Slider slider = new Slider(1, 500, 1, false, skin);
+		
+		buyField.setTextFieldFilter(
+				new TextField.TextFieldFilter.DigitsOnlyFilter());
+		buyField.setSize(70, 50);
+		buyField.setPosition(90, 135);
+		popupBox.addActor(buyField);
+		
+		costLabel.setSize(80, 50);
+		costLabel.setPosition(160, 135);
+		popupBox.addActor(costLabel);
+		
+		discountLabel.setSize(110, 50);
+		discountLabel.setPosition(240, 135);
+		popupBox.addActor(discountLabel);
+		
+		totalLabel.setSize(80, 50);
+		totalLabel.setPosition(350, 135);
+		popupBox.addActor(totalLabel);
+		
+	    slider.setSize(365, 50);
+	    slider.setPosition(90, 80);
+		popupBox.addActor(slider);
+		
+		// Buy button at bottom of popup.
 		Button buy = new Button(skin, "buy");
 		buy.setSize(149, 62);
 		buy.setPosition(198, 10);
 		popupBox.addActor(buy);
 		
-		// Buy button listener
-		buy.addListener(new ChangeListener() {
-			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("DO BUY MANY TOKEN.");
+		buyField.setTextFieldListener(new TextFieldListener() {
+			public void keyTyped(TextField textField, char key) {
+				if (buyField.getText().equals("") ||
+						Float.parseFloat(buyField.getText()) < 1) {
+					buyField.setText("1"); // Ensures that at least 1 is entered.
+				} else if (Float.parseFloat(buyField.getText()) > 500) {
+					buyField.setText("500"); // Ensures no more than 500 is entered.
+				}
+				// Sets the slider to the value entered, upon any keystroke.
+				slider.setValue(Float.parseFloat(buyField.getText()));
+				costLabel.setText("Cost: A");
 			}
 		});
 		
-		// Make grey table disappear upon being clicked
+		slider.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				// Sets the text of the field to the slider value.
+				buyField.setText((int)slider.getValue() + "");
+				// Moves cursor to end of field, to prevent typing interruption.
+				buyField.setCursorPosition(buyField.getText().length());
+				costLabel.setText("Cost: B");
+			}
+		});
+		
+		// Buy button listener.
+		buy.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				System.out.println("Buying " + (int)slider.getValue() + " Tokens.");
+			}
+		});
+		
+		// Make grey overlay, and transactions box disappear upon clicking away.
 		greyOverlay.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				popupBox.remove();
@@ -227,7 +316,7 @@ public class StoreHome implements Screen, StoreScreen {
 		// ^Used to find the first of the 8 games to be displayed.
 		featured = (Game)ArcadeSystem.getArcadeGames().toArray()[number];
 		for (int i = 0; i < 8; ++i) {
-			Game game = (Game)ArcadeSystem.getArcadeGames().toArray()
+			final Game game = (Game)ArcadeSystem.getArcadeGames().toArray()
 					[(number + i)%ArcadeSystem.getArcadeGames().size()];
 			final TextButton gameGridGlow =
 					new TextButton("\n\n\n\n\n" + game.name, skin, "icon");
@@ -249,7 +338,7 @@ public class StoreHome implements Screen, StoreScreen {
 			gameGridGlow.addListener(new ChangeListener() {
 				public void changed(ChangeEvent event, Actor actor) {
 					if (fade == 60) {
-						setSelected(gameGridGlow.getName());
+						featured = game;
 						fade--; // Will trigger textFade and iconFade in render.
 					}
 				}
@@ -257,7 +346,7 @@ public class StoreHome implements Screen, StoreScreen {
 			gameGridIcon.addListener(new ChangeListener() {
 				public void changed(ChangeEvent event, Actor actor) {
 					if (fade == 60) {
-						setSelected(gameGridIcon.getName());
+						featured = game;
 						fade--; // Will trigger textFade and iconFade in render.
 					}
 				}
@@ -283,10 +372,8 @@ public class StoreHome implements Screen, StoreScreen {
 			// reset text, in case some terrible occurrence occurred.
 			fade = 60;
 			description.setColor(1, 1, 1, 1);
-			featured_bg.setColor(1, 1, 1, 1);
-			featured_bg.setX(112);
-			featured_icon.setColor(1, 1, 1, 1);
-			featured_icon.setX(121);
+			featuredbg.setColor(1, 1, 1, 1);
+			featuredbg.setX(112);
 		} else if (fade < 30 && fade > -30) {
 			// While 'fade' is between 30 and -30, it will call iconfade.
 			// The text will remain invisible, and will update to the new
@@ -294,14 +381,15 @@ public class StoreHome implements Screen, StoreScreen {
 			fade--;
 			iconFade();
 			if (fade == 0) {
-				featured_icon.getStyle().up = skin.getDrawable(featured.id);
-				if(featured.description == null
-						|| featured.description.equals("N/A")) {
-					description.setText(featured.name
-							+ "\nNo Description Available");
-				} else if (featured.description.length() > 105) {
+				// Everything is invisible. Update Icon, Title and Description.
+				featuredIcon.getStyle().up = skin.getDrawable(featured.id);
+				if(featured.description == null) {
+					// No description found for game.
+					description.setText(featured.name + "\nNo Description Available");
+				} else if (featured.description.length() > 100) {
+					// Description is too long to safely print, crop to 100 chars.
 					description.setText(featured.name + "\n"
-							+ featured.description.substring(0, 105) + "...");
+							+ featured.description.substring(0, 100) + "...");
 				} else {
 					description.setText(featured.name + "\n" + featured.description);
 				}
@@ -325,24 +413,21 @@ public class StoreHome implements Screen, StoreScreen {
 	 */
 	private void iconFade() {
 		if (fade > -1) {
-			featured_bg.setX(featured_bg.getX() + 4); // move right first
-			featured_icon.setX(featured_icon.getX() + 4);
+			featuredbg.setX(featuredbg.getX() + 4); // move right first.
 		} else if (fade < -1) {
-			featured_bg.setX(featured_bg.getX() - 4); // then move back left
-			featured_icon.setX(featured_icon.getX() - 4);
+			featuredbg.setX(featuredbg.getX() - 4); // then move back left.
 		} else if (fade == -1) {
-			naptime(300); // stay hidden for a short while
+			naptime(300); // stay hidden for a short while.
 		}
-		featured_bg.setColor(1, 1, 1, Math.abs(fade) / 30);
-		featured_icon.setColor(1, 1, 1, Math.abs(fade) / 30);
-		// fade out icon
+		featuredbg.setColor(1, 1, 1, Math.abs(fade) / 30);
+		// Fade out icon and background.
 	}
 	
 	@Override
 	public void render(float arg0) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		textFade();
+		textFade(); // Every frame check if featured fading is underway.
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 	}
@@ -364,6 +449,7 @@ public class StoreHome implements Screen, StoreScreen {
 
 	@Override
 	public void show() {
+		player = arcadeUI.getPlayer();
 		ArcadeInputMux.getInstance().addProcessor(stage);
 	}
 	
@@ -391,7 +477,7 @@ public class StoreHome implements Screen, StoreScreen {
 
 	@Override
 	public Player getPlayer() {
-		return null;
+		return player;
 	}
 	
 	@Override
@@ -401,11 +487,21 @@ public class StoreHome implements Screen, StoreScreen {
 	
 	@Override
 	public boolean buyTokens(int amount) {
+		// TODO
+		// FIXME
+		// NEEDS IMPLEMENTING!
+		// TODO
+		// FIXME
 		return false;
 	}
 	
 	@Override
 	public boolean buyGame(Game game) {
+		// TODO
+		// FIXME
+		// NEEDS IMPLEMENTING!
+		// TODO
+		// FIXME
 		return false;
 	}
 	
@@ -421,6 +517,11 @@ public class StoreHome implements Screen, StoreScreen {
 	
 	@Override
 	public boolean addWishlist(Game game) {
+		// TODO
+		// FIXME
+		// NEEDS IMPLEMENTING!
+		// TODO
+		// FIXME
 		return true;
 	}
 }

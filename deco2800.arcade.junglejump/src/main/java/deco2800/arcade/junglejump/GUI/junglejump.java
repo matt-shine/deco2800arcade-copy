@@ -124,6 +124,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	BitmapFont achievementThresholdFont;
 	Texture achievementIconTexture;
 	String levelSelectText;
+	int levelS, worldS;
 
 	public static void main(String[] args) {
 		ArcadeSystem.goToGame("junglejump");
@@ -812,10 +813,69 @@ public class junglejump extends GameClient implements InputProcessor {
 					//clip.loop(Clip.LOOP_CONTINUOUSLY);
 				}
 			}
+			if (gameState == GameState.SELECT_LEVEL) {
+				if (levelS > 0) {
+					worldS = 1;
+					monkeyX = monkeyDefaultX;
+					monkeyY = monkeyDefaultY;
+					// Reset Bananas, Platforms and Level
+					currentCont = new LevelContainer();
+					getCurrentCont().setCurrentWorld(worldS);
+					currentLevel = LevelContainer.getLevel(levelS);
+					gameState = GameState.INPROGRESS;
+					levelS = 0;
+					gameState = GameState.INPROGRESS;
+				} else {
+					levelS = 1;
+					levelSelectText = "Which level?";
+				}
+			}
 		}
 		if (keycode == Keys.NUM_2) {
 			if (gameState == GameState.OPTIONS){
 				gameState = GameState.AT_MENU;
+			}
+			if (gameState == GameState.SELECT_LEVEL) {
+				if (levelS > 0) {
+					levelS = 0;
+					gameState = GameState.INPROGRESS;
+				} else {
+					levelS = 1;
+					levelSelectText = "Which level?";
+				}
+			}
+		}
+		if (keycode == Keys.NUM_3) {
+			if (gameState == GameState.SELECT_LEVEL) {
+				if (levelS > 0) {
+					levelS = 0;
+					gameState = GameState.INPROGRESS;
+				} else {
+					levelS = 1;
+					levelSelectText = "Which level?";
+				}
+			}
+		}
+		if (keycode == Keys.NUM_4) {
+			if (gameState == GameState.SELECT_LEVEL) {
+				if (levelS > 0) {
+					levelS = 0;
+					gameState = GameState.INPROGRESS;
+				} else {
+					levelS = 1;
+					levelSelectText = "Which level?";
+				}
+			}
+		}
+		if (keycode == Keys.NUM_5) {
+			if (gameState == GameState.SELECT_LEVEL) {
+				if (levelS > 0) {
+					levelS = 0;
+					gameState = GameState.INPROGRESS;
+				} else {
+					levelS = 1;
+					levelSelectText = "Which level?";
+				}
 			}
 		}
 		if (keycode == Keys.Y) {

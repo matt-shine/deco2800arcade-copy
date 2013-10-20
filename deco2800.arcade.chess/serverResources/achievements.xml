@@ -1,15 +1,18 @@
 <achievements>
+    
 	<achievement id="chess.winGame">
 		  <name>Winner!</name>
 		  <description>Win</description>
 		  <awardThreshold>1</awardThreshold>
 		  <icon>winner.png</icon>
 	</achievement>
+	
 	<achievement id="chess.start">
 		<name>start</name>
 		<description>start the program chess!</description>
 		<awardThreshold>1</awardThreshold>
 		<icon>chessMenu.png</icon></achievement>
+		
 	<achievement id="chess.360">
 		<name>360 overlay check</name>
 		<description>checking</description>
@@ -21,6 +24,14 @@
 		  <description>Win 5 games</description>
 		  <awardThreshold>5</awardThreshold>
 		  <icon>youwon5.png</icon>
+		  
+		  <components>
+		      <component id="chess.youwon5.won1" awardThreshold="0" />
+		      <component id="chess.youwon5.won2" awardThreshold="0" />
+		      <component id="chess.youwon5.won3" awardThreshold="0" />
+		      <component id="chess.youwon5.won4" awardThreshold="0" />
+		      <component id="chess.youwon5.won5" awardThreshold="0" />
+		  </components>
 	</achievement>
 	
 	<achievement id="chess.youwon">

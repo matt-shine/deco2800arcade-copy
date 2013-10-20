@@ -39,8 +39,7 @@ public class Topbar extends Group {
         int height = overlay.getHeight();
         texture.draw(batch, width - 675, height - 125, 700, 150);
         username.setPosition(width - 620, height - 70);
-        // Temporary comment out until I fix this.  Prevents a null value error.
-        //username.setText(overlay.getPlayer().getUsername());
+        username.setText(overlay.getPlayer().getUsername());
         clock.setPosition(width - 170, height - 70);
         clock.setText(simpleDateFormat.format(new Date()));
         this.addActor(username);

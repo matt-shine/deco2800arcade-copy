@@ -22,7 +22,7 @@ import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 
 import java.util.*;
 
-public class MultiGamelist implements Screen {
+public class JoinMatchList implements Screen {
 
 	private class FrontPageStage extends Stage {
 	}
@@ -41,10 +41,7 @@ public class MultiGamelist implements Screen {
 
 	ArrayList<ActiveMatchDetails> matches;
 
-	/*
-	 * public MultiGamelist(ArcadeUI ui) { arcadeUI = ui; }
-	 */
-	public MultiGamelist(ArcadeUI ui) {
+	public JoinMatchList(ArcadeUI ui) {
 
 		arcadeUI = ui;
 		skin = new Skin(Gdx.files.internal("loginSkin.json"));
@@ -110,33 +107,6 @@ public class MultiGamelist implements Screen {
 		listtable.setFillParent(true);
 		stage.addActor(listtable);
 
-		// make button sizes and positioning
-		pongButton.setSize(bWidth, bHeight);
-		pongButton.setPosition(bX, bY);
-
-		towerButton.setSize(bWidth, bHeight);
-		towerButton.setPosition(bX2, bY);
-
-		chessButton.setSize(bWidth, bHeight);
-		chessButton.setPosition(bX3, bY);
-
-		// adding panel for top and bottom bar
-		final Table topBox = new Table();
-		final Table bottomBox = new Table();
-
-		// set panel sizes and positions
-		topBox.setSize(1279, 60);
-		topBox.setPosition(1, 659);
-		topBox.setColor(255, 255, 255, 1);
-
-		bottomBox.setSize(1279, 60);
-		bottomBox.setPosition(1, 1);
-		bottomBox.setColor(255, 255, 255, 1);
-
-		// adding to stage
-		stage.addActor(topBox);
-		stage.addActor(bottomBox);
-
 		TextButton button3 = new TextButton("Return to Lobby", skin);
 		TextButton button4 = new TextButton("<", skin);
 		TextButton button5 = new TextButton(">", skin);
@@ -161,19 +131,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							raidenButton.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							raidenButton.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							raidenButton.setText(null);
+							
 							raidenButton.setText("Raiden");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							raidenButton.setSize(bWidth, bHeight);
-							raidenButton.setPosition(bX3, bY);
-							raidenButton.setText(null);
+							
 							raidenButton.setText("Raiden");
 						}
 					}));
@@ -188,19 +152,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							snakeButton.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							snakeButton.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							snakeButton.setText(null);
+							
 							snakeButton.setText("Snakes & Ladders");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							snakeButton.setSize(bWidth, bHeight);
-							snakeButton.setPosition(bX3, bY);
-							snakeButton.setText(null);
+							
 							snakeButton.setText("Snakes & Ladders");
 						}
 					}));
@@ -215,19 +173,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							tictacButton.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							tictacButton.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							tictacButton.setText(null);
+							
 							tictacButton.setText("TicTacToe");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							tictacButton.setSize(bWidth, bHeight);
-							tictacButton.setPosition(bX3, bY);
-							tictacButton.setText(null);
+							
 							tictacButton.setText("TicTacToe");
 						}
 					}));
@@ -252,19 +204,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							burnButton.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							burnButton.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							burnButton.setText(null);
+							
 							burnButton.setText("Burning Skies");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							burnButton.setSize(bWidth, bHeight);
-							burnButton.setPosition(bX3, bY);
-							burnButton.setText(null);
+							
 							burnButton.setText("Burning Skies");
 						}
 					}));
@@ -279,19 +225,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							checkersButton.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							checkersButton.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							checkersButton.setText(null);
+							
 							checkersButton.setText("Checkers");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							checkersButton.setSize(bWidth, bHeight);
-							checkersButton.setPosition(bX3, bY);
-							checkersButton.setText(null);
+							
 							checkersButton.setText("Checkers");
 						}
 					}));
@@ -306,19 +246,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							connect4Button.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							connect4Button.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							connect4Button.setText(null);
+							
 							connect4Button.setText("Connect 4");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							connect4Button.setSize(bWidth, bHeight);
-							connect4Button.setPosition(bX3, bY);
-							connect4Button.setText(null);
+							
 							connect4Button.setText("Connect 4");
 						}
 					}));
@@ -343,19 +277,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							pacmanButton.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							pacmanButton.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							pacmanButton.setText(null);
+							
 							pacmanButton.setText("Pacman");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							pacmanButton.setSize(bWidth, bHeight);
-							pacmanButton.setPosition(bX3, bY);
-							pacmanButton.setText(null);
+							
 							pacmanButton.setText("Pacman");
 						}
 					}));
@@ -370,19 +298,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							deerButton.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							deerButton.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							deerButton.setText(null);
+							
 							deerButton.setText("Deer Jungle");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							deerButton.setSize(bWidth, bHeight);
-							deerButton.setPosition(bX3, bY);
-							deerButton.setText(null);
+							
 							deerButton.setText("Deer Jungle");
 						}
 					}));
@@ -397,19 +319,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							jungleButton.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							jungleButton.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							jungleButton.setText(null);
+							
 							jungleButton.setText("Jungle Jump");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							jungleButton.setSize(bWidth, bHeight);
-							jungleButton.setPosition(bX3, bY);
-							jungleButton.setText(null);
+							
 							jungleButton.setText("Jungle Jump");
 						}
 					}));
@@ -434,19 +350,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							mixmazeButton.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							mixmazeButton.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							mixmazeButton.setText(null);
+							
 							mixmazeButton.setText("Mix Maze");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							mixmazeButton.setSize(bWidth, bHeight);
-							mixmazeButton.setPosition(bX3, bY);
-							mixmazeButton.setText(null);
+							
 							mixmazeButton.setText("Mix Maze");
 						}
 					}));
@@ -461,19 +371,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							landButton.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							landButton.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							landButton.setText(null);
+							
 							landButton.setText("Land Invaders");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							landButton.setSize(bWidth, bHeight);
-							landButton.setPosition(bX3, bY);
-							landButton.setText(null);
+							
 							landButton.setText("Land Invaders");
 						}
 					}));
@@ -502,20 +406,14 @@ public class MultiGamelist implements Screen {
 					pongButton2.addListener((new ClickListener() {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							pongButton2.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							pongButton2.setPosition(bX - (enlarge / 2), bY
-									- (enlarge / 2));
-							pongButton2.setText(null);
+							
 							pongButton2.setText("Pong");
 
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							pongButton2.setSize(bWidth, bHeight);
-							pongButton2.setPosition(bX, bY);
-							pongButton2.setText(null);
+							
 							pongButton2.setText("Pong");
 						}
 					}));
@@ -535,20 +433,14 @@ public class MultiGamelist implements Screen {
 					towerButton2.addListener((new ClickListener() {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							towerButton2.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							towerButton2.setPosition(bX2 - (enlarge / 2), bY
-									- (enlarge / 2));
-							towerButton2.setText(null);
+							
 							towerButton2.setText("Tower Defence");
 
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							towerButton2.setSize(bWidth, bHeight);
-							towerButton2.setPosition(bX2, bY);
-							towerButton2.setText(null);
+							
 							towerButton2.setText("Tower Defence");
 						}
 					}));
@@ -563,19 +455,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							chessButton2.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							chessButton2.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							chessButton2.setText(null);
+							
 							chessButton2.setText("Chess");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							chessButton2.setSize(bWidth, bHeight);
-							chessButton2.setPosition(bX3, bY);
-							chessButton2.setText(null);
+							
 							chessButton2.setText("Chess");
 						}
 					}));
@@ -600,19 +486,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							raidenButton.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							raidenButton.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							raidenButton.setText(null);
+							
 							raidenButton.setText("Raiden");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							raidenButton.setSize(bWidth, bHeight);
-							raidenButton.setPosition(bX3, bY);
-							raidenButton.setText(null);
+							
 							raidenButton.setText("Raiden");
 						}
 					}));
@@ -627,19 +507,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							snakeButton.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							snakeButton.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							snakeButton.setText(null);
+							
 							snakeButton.setText("Snakes & Ladders");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							snakeButton.setSize(bWidth, bHeight);
-							snakeButton.setPosition(bX3, bY);
-							snakeButton.setText(null);
+							
 							snakeButton.setText("Snakes & Ladders");
 						}
 					}));
@@ -654,19 +528,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							tictacButton.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							tictacButton.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							tictacButton.setText(null);
+							
 							tictacButton.setText("TicTacToe");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							tictacButton.setSize(bWidth, bHeight);
-							tictacButton.setPosition(bX3, bY);
-							tictacButton.setText(null);
+							
 							tictacButton.setText("TicTacToe");
 						}
 					}));
@@ -691,19 +559,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							pacmanButton.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							pacmanButton.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							pacmanButton.setText(null);
+							
 							pacmanButton.setText("Pacman");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							pacmanButton.setSize(bWidth, bHeight);
-							pacmanButton.setPosition(bX3, bY);
-							pacmanButton.setText(null);
+							
 							pacmanButton.setText("Pacman");
 						}
 					}));
@@ -718,19 +580,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							deerButton.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							deerButton.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							deerButton.setText(null);
+							
 							deerButton.setText("Deer Jungle");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							deerButton.setSize(bWidth, bHeight);
-							deerButton.setPosition(bX3, bY);
-							deerButton.setText(null);
+							
 							deerButton.setText("Deer Jungle");
 						}
 					}));
@@ -745,19 +601,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							jungleButton.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							jungleButton.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							jungleButton.setText(null);
+							
 							jungleButton.setText("Jungle Jump");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							jungleButton.setSize(bWidth, bHeight);
-							jungleButton.setPosition(bX3, bY);
-							jungleButton.setText(null);
+							
 							jungleButton.setText("Jungle Jump");
 						}
 					}));
@@ -782,19 +632,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							burnButton.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							burnButton.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							burnButton.setText(null);
+							
 							burnButton.setText("Burning Skies");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							burnButton.setSize(bWidth, bHeight);
-							burnButton.setPosition(bX3, bY);
-							burnButton.setText(null);
+							
 							burnButton.setText("Burning Skies");
 						}
 					}));
@@ -809,19 +653,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							checkersButton.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							checkersButton.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							checkersButton.setText(null);
+							
 							checkersButton.setText("Checkers");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							checkersButton.setSize(bWidth, bHeight);
-							checkersButton.setPosition(bX3, bY);
-							checkersButton.setText(null);
+							
 							checkersButton.setText("Checkers");
 						}
 					}));
@@ -836,19 +674,13 @@ public class MultiGamelist implements Screen {
 						public void enter(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
 
-							connect4Button.setSize(bWidth + enlarge, bHeight
-									+ enlarge);
-							connect4Button.setPosition(bX3 - (enlarge / 2), bY
-									- (enlarge / 2));
-							connect4Button.setText(null);
+							
 							connect4Button.setText("Connect 4");
 						}
 
 						public void exit(InputEvent event, float x, float y,
 								int pointer, Actor fromActor) {
-							connect4Button.setSize(bWidth, bHeight);
-							connect4Button.setPosition(bX3, bY);
-							connect4Button.setText(null);
+							
 							connect4Button.setText("Connect 4");
 						}
 					}));
@@ -884,18 +716,14 @@ public class MultiGamelist implements Screen {
 		pongButton.addListener((new ClickListener() {
 			public void enter(InputEvent event, float x, float y, int pointer,
 					Actor fromActor) {
-				pongButton.setSize(bWidth + enlarge, bHeight + enlarge);
-				pongButton.setPosition(bX - (enlarge / 2), bY - (enlarge / 2));
-				pongButton.setText(null);
+				
 				pongButton.setText("Pong");
 
 			}
 
 			public void exit(InputEvent event, float x, float y, int pointer,
 					Actor fromActor) {
-				pongButton.setSize(bWidth, bHeight);
-				pongButton.setPosition(bX, bY);
-				pongButton.setText(null);
+				
 				pongButton.setText("Pong");
 			}
 		}));
@@ -917,19 +745,14 @@ public class MultiGamelist implements Screen {
 		towerButton.addListener((new ClickListener() {
 			public void enter(InputEvent event, float x, float y, int pointer,
 					Actor fromActor) {
-				towerButton.setSize(bWidth + enlarge, bHeight + enlarge);
-				towerButton
-						.setPosition(bX2 - (enlarge / 2), bY - (enlarge / 2));
-				towerButton.setText(null);
+				
 				towerButton.setText("Tower Defence");
 
 			}
 
 			public void exit(InputEvent event, float x, float y, int pointer,
 					Actor fromActor) {
-				towerButton.setSize(bWidth, bHeight);
-				towerButton.setPosition(bX2, bY);
-				towerButton.setText(null);
+				
 				towerButton.setText("Tower Defence");
 			}
 		}));
@@ -944,18 +767,13 @@ public class MultiGamelist implements Screen {
 			public void enter(InputEvent event, float x, float y, int pointer,
 					Actor fromActor) {
 
-				chessButton.setSize(bWidth + enlarge, bHeight + enlarge);
-				chessButton
-						.setPosition(bX3 - (enlarge / 2), bY - (enlarge / 2));
-				chessButton.setText(null);
+				
 				chessButton.setText("Chess");
 			}
 
 			public void exit(InputEvent event, float x, float y, int pointer,
 					Actor fromActor) {
-				chessButton.setSize(bWidth, bHeight);
-				chessButton.setPosition(bX3, bY);
-				chessButton.setText(null);
+				
 				chessButton.setText("Chess");
 			}
 		}));
@@ -989,11 +807,7 @@ public class MultiGamelist implements Screen {
 
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
-		Table.drawDebug(stage); // Shows table debug lines
-
-		if (bclicked == true) {
-			ArcadeSystem.goToGame("arcadeui");
-		}
+		
 
 	}
 

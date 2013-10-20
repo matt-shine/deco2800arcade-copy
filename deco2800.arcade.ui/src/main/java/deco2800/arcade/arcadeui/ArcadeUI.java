@@ -28,9 +28,9 @@ public class ArcadeUI extends GameClient {
 	RegisterScreen register = null;
 	MultiplayerLobby lobby = null;
 	BettingWindow betting = null;
-	MultiGamelist multigame = null;
+	JoinMatchList multigame = null;
 	Gamewaiting wait = null;
-	MultiGamelist2 multigame2 = null;
+	CreateMatchList multigame2 = null;
 	BettingLobby bettingLobby = null;
 	private StoreHome storeHome = null;
 	private StoreTransactions storeTransactions = null;
@@ -57,9 +57,9 @@ public class ArcadeUI extends GameClient {
 		register = new RegisterScreen(this);
 		lobby = new MultiplayerLobby(this, player);
 		betting = new BettingWindow(this);
-		multigame = new MultiGamelist(this);
+		multigame = new JoinMatchList(this);
 		wait = new Gamewaiting(this);
-		multigame2 = new MultiGamelist2(this);
+		multigame2 = new CreateMatchList(this);
 		bettingLobby = new BettingLobby(this);
 		
 		storeHome = new StoreHome(this, player);
@@ -141,7 +141,7 @@ public class ArcadeUI extends GameClient {
 		return betting;
 	}
 
-	public MultiGamelist getMultigame() {
+	public JoinMatchList getMultigame() {
 		return multigame;
 	}
 
@@ -149,7 +149,7 @@ public class ArcadeUI extends GameClient {
 		return wait;
 	}
 
-	public MultiGamelist2 getMultigame2() {
+	public CreateMatchList getMultigame2() {
 		return multigame2;
 	}
 

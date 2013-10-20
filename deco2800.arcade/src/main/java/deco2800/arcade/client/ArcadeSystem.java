@@ -163,6 +163,9 @@ public class ArcadeSystem {
 	public static ArrayList<ActiveMatchDetails> requestLobbyGamesList() {
 		return Arcade.getMatches();
 	}
+	public static ArrayList<ArrayList<Object>> requestActiveGamesList() {
+		return Arcade.getActiveGames();
+	}
 	
 	/**
 	 * Requests a copy of the active game list from the server

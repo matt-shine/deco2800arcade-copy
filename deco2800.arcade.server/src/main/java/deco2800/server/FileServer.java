@@ -6,6 +6,7 @@ import deco2800.arcade.protocol.packman.FetchGameResponse;
 import deco2800.arcade.protocol.BlockingMessage;
 import deco2800.server.ArcadeServer;
 import deco2800.arcade.packman.PackageServer;
+import deco2800.arcade.packman.PackageUtils;
 import deco2800.server.database.GamePath;
 import deco2800.server.database.DatabaseException;
 
@@ -66,6 +67,7 @@ public class FileServer implements Runnable {
         resp.version = req.version;
         resp.byteOffset = req.byteOffset;
         resp.blockSize = req.blockSize;
+        resp.md5 = PackageUtils.genMD5(path);
 
         // Read the file data
         try {

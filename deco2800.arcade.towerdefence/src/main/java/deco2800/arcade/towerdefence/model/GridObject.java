@@ -320,9 +320,11 @@ public class GridObject {
 	 *         the grid.
 	 */
 	public Vector2 positionInTiles() {
-		Vector2 tilesPosition = new Vector2(position);
-		tilesPosition.x = (position.x / grid.getTileSize());
-		tilesPosition.y = (position.y /= grid.getTileSize());
+		Vector2 tilesPosition = new Vector2();
+		tilesPosition.x = position.x;
+		tilesPosition.x /= grid.getTileSize();
+		tilesPosition.y = position.y;
+		tilesPosition.y /= grid.getTileSize();
 		return tilesPosition;
 	}
 

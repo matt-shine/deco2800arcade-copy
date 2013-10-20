@@ -1,6 +1,8 @@
 package deco2800.arcade.userui.view;
 
 import java.awt.BorderLayout;
+
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -35,6 +37,11 @@ import javax.swing.border.EmptyBorder;
 
 import deco2800.arcade.userui.Model;
 
+/**
+ * 
+ * This class creates the EditScreen itself
+ *
+ */
 public class EditScreen extends JFrame{
 
 	// Declare JPanels and ImagePanels for later use
@@ -86,6 +93,11 @@ public class EditScreen extends JFrame{
 	 * The actual edit screen construction
 	 */
 
+	/**
+	 * This method constructs the edit screen
+	 * @param m
+	 * @throws HeadlessException
+	 */
 	public EditScreen(Model m) throws HeadlessException {
 
 		super("Edit Profile");

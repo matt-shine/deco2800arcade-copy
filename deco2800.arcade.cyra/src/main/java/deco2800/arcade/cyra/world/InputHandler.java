@@ -34,12 +34,13 @@ public class InputHandler implements InputProcessor{
 		
 		switch(keycode){
 			case Keys.LEFT:
-				if (acceptInput) ship.moveLeft();
+				if (acceptInput) {
+					ship.moveLeft();
+				}
 				break;
 
 			case Keys.RIGHT:
 				if (acceptInput) {
-					System.out.println("telling ship to move right from InputHandler");
 					ship.moveRight();
 				}
 				break;
@@ -74,7 +75,9 @@ public class InputHandler implements InputProcessor{
 			case Keys.SPACE:
 				if (acceptInput) {
 					int shootDir = 1;
-					if (!ship.isFacingRight()) shootDir = -1; 
+					if (!ship.isFacingRight()) {
+						shootDir = -1; 
+					}
 					world.addBullet(new Bullet(
 							Bullet.BULLET_SPEED,
 							0,
@@ -108,23 +111,27 @@ public class InputHandler implements InputProcessor{
 	public boolean keyUp(int keycode) {
 		switch(keycode){
 			case Keys.UP:
-				if (ship.getVelocity().y == 1 && acceptInput)
+				if (ship.getVelocity().y == 1 && acceptInput) {
 					ship.getVelocity().y = 0;
+				}
 				break;
 
 			case Keys.DOWN:
-				if (ship.getVelocity().y == -1 && acceptInput)
+				if (ship.getVelocity().y == -1 && acceptInput) {
 					ship.getVelocity().y = 0;
+				}
 				break;
 
 			case Keys.LEFT:
-				if (ship.getVelocity().x < -1 && acceptInput)
+				if (ship.getVelocity().x < -1 && acceptInput) {
 					ship.getVelocity().x = 0;
+				}
 				break;
 
 			case Keys.RIGHT:
-				if (ship.getVelocity().x > 1 && acceptInput)
+				if (ship.getVelocity().x > 1 && acceptInput) {
 					ship.getVelocity().x = 0;
+				}
 				break;
 
 			case Keys.Z:

@@ -1,7 +1,7 @@
 <achievements>
-	<achievement id="cyra.pressbutton">
-        <name>Open the game</name>
-        <description>Open the game!</description>
+	<achievement id="cyra.whataplayer">
+        <name>What a Player!</name>
+        <description>Complete the level.</description>
         <awardThreshold>1</awardThreshold>
         <icon>tempach.png</icon>
     </achievement>

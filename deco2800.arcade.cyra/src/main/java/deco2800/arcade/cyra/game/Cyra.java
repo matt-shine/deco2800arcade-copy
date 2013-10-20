@@ -70,9 +70,6 @@ public class Cyra extends GameClient {
 	
 	@Override
 	public void create() {		
-	
-
-		
 		super.create();
 		//Overlay
 		this.getOverlay().setListeners(new Screen() {

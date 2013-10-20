@@ -14,6 +14,7 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.game.CasinoServerUpdate;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.network.listener.CasinoListener;
 /**
  * A Blackjack Cainso game for use in the Arcade
  * @author Dane Cousins, Kristian Zembic, Robert Macdonald, Scott Fredericks, Fionntan Shanahan
@@ -47,6 +48,7 @@ public class Blackjack extends GameClient {
 	public Blackjack(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		this.networkClient = networkClient; //this is a bit of a hack
+		this.networkClient.addListener(new CasinoListener());
 	}
 	
 	/**
@@ -58,8 +60,8 @@ public class Blackjack extends GameClient {
 		
 		//  This is a test message and an example 
 		CasinoServerUpdate msg = new CasinoServerUpdate();
-		msg.username = "test";
-		msg.message = "message test";
+		msg.username = "test"; 
+		msg.message = "testme";
 		this.networkClient.sendNetworkObject(msg);
 		
 		//Initialise camera
@@ -110,4 +112,8 @@ public class Blackjack extends GameClient {
 		return game;
 	}
 	
+	@Override
+	public void updateCasinoState(CasinoServerUpdate obj) {
+		System.out.println("GOT THIS MESSAGE:" + obj.message);
+	}
 }

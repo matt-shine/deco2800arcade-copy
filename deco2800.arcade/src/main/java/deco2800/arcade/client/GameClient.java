@@ -8,6 +8,7 @@ import com.badlogic.gdx.ApplicationListener;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.protocol.game.CasinoServerUpdate;
 
 public abstract class GameClient implements ApplicationListener {
 
@@ -128,6 +129,10 @@ public abstract class GameClient implements ApplicationListener {
 
 	@Override
 	public void resume() {
+	}
+	
+	public void updateCasinoState(CasinoServerUpdate obj) {
+		
 	}
 	
 }

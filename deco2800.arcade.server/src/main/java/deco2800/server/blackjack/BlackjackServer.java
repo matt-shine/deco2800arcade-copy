@@ -97,6 +97,10 @@ public class BlackjackServer implements GameServer {
 		// TODO Auto-generated method stub 
 		if (update.message.equals("addme#20")) {
 			addPlayerToTable(connection, update.username, 25);
+		} else if (update.message.equals("testme")) {
+			
+			update.message = "WHAT DO YOU GET GOOD SIR";
+			connection.sendTCP(update);
 		}
 		else {
 			BlackjackTable table = FindTable(update.username);

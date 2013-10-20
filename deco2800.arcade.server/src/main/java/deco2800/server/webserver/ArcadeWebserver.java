@@ -53,7 +53,7 @@ public class ArcadeWebserver implements Container {
         public String param;
         
         public static final int ROUTE_NAME_INDEX = 1;
-        public static final int ROUTE_PARAM_INDEX = 1;
+        public static final int ROUTE_PARAM_INDEX = 2;
     }
 	
     /**

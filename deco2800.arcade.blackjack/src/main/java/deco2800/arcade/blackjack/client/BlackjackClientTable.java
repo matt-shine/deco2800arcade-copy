@@ -19,6 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -27,8 +29,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.Game;
+import deco2800.arcade.model.Player;
 
 public class BlackjackClientTable implements Screen{
+	
+	//local variables for the Client Table
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private Texture textureBackground;
@@ -37,11 +42,55 @@ public class BlackjackClientTable implements Screen{
 	private Stage stage;
 	JoinTableScreen JoinTableScreen;
 
-	public BlackjackClientTable(
-	        Blackjack myGame )
+	//seats labels
+	private Table tableSeat1;
+	private Table tableSeat2;
+	private Table tableSeat3;
+	private Table tableSeat4;
+	private Table tableSeat5;
+	private LabelStyle Seatlabel;
+	
+	//placards
+	private Table tablePlacard;
+	
+	//cards
+	private Table Tabdealercard1;
+	private Table Tabdealercard2;
+	private Table Tabdealercard3;
+	private Table Tabdealercard4;
+	private Table Tabdealercard5;
+	private Table player1card1;
+	private Table player1card2;
+	private Table player1card3;
+	private Table player1card4;
+	private Table player1card5;
+	private Table player2card1;
+	private Table player2card2;
+	private Table player2card3;
+	private Table player2card4;
+	private Table player2card5;
+	private Table player3card1;
+	private Table player3card2;
+	private Table player3card3;
+	private Table player3card4;
+	private Table player3card5;
+	private Table player4card1;
+	private Table player4card2;
+	private Table player4card3;
+	private Table player4card4;
+	private Table player4card5;
+	private Table player5card1;
+	private Table player5card2;
+	private Table player5card3;
+	private Table player5card4;
+	private Table player5card5;
+
+	// Constructor
+	public BlackjackClientTable(Blackjack myGame )
 	    {
 		this.myGame = myGame;
 	    }
+	
 	@Override
     public void show()
     {
@@ -52,33 +101,26 @@ public class BlackjackClientTable implements Screen{
 		camera = new OrthographicCamera();
 	    camera.viewportHeight = h;
 	    camera.viewportWidth = w;
-
 	    camera.position.set(camera.viewportWidth * .5f,
 	    camera.viewportHeight * .5f, 0f);
 	    camera.update();
 		
 		batch = new SpriteBatch();
- 
-        // load the image and create the texture region
         textureBackground = new Texture(Gdx.files.internal("data/Blackjacktable.png"));
- 
-        // we set the linear texture filter to improve the stretching
         textureBackground.setFilter(TextureFilter.Linear, TextureFilter.Linear);
  
         background = new Sprite(textureBackground);
 		background.setSize(w, h);
 		
-		//buttons
-		
+		//Initialise stage for sprites
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
-		
+
 		//placards
-		
-        Table table = new Table();
-        stage.addActor(table);
-        table.setSize(162, 113);
-		table.setPosition(25, 580);
+        Table tablePlacard = new Table();
+        stage.addActor(tablePlacard);
+        tablePlacard.setSize(162, 113);
+        tablePlacard.setPosition(25, 580);
 		
 		Texture texturePlacard10250 = new Texture(Gdx.files.internal("data/BetPlac10250.png"));
 		Texture texturePlacard1100 = new Texture(Gdx.files.internal("data/BetPlac1100.png"));
@@ -86,14 +128,13 @@ public class BlackjackClientTable implements Screen{
 		Texture texturePlacard25NL = new Texture(Gdx.files.internal("data/BetPlac25NL.png"));
 		Texture texturePlacard5100 = new Texture(Gdx.files.internal("data/BetPlac5100.png"));
 		
+		/* Test code for placing a placard
 		TextureRegion imagePlacard = new TextureRegion(texturePlacard10250);
-		
-		
 		Image placard = new Image(imagePlacard);
-		table.add(placard);
+		tablePlacard.add(placard);
+		*/
 		
 		//cards
-		
 		Texture S2 = new Texture(Gdx.files.internal("data/cards/2S.jpg"));
 		Texture S3 = new Texture(Gdx.files.internal("data/cards/3S.jpg"));
 		Texture S4 = new Texture(Gdx.files.internal("data/cards/4S.jpg"));
@@ -151,7 +192,6 @@ public class BlackjackClientTable implements Screen{
 		Texture DA = new Texture(Gdx.files.internal("data/AD.jpg"));
 		
 		//dealer card layout
-		
 		Table Tabdealercard1 = new Table();
 		Table Tabdealercard2 = new Table();
 		Table Tabdealercard3 = new Table();
@@ -174,7 +214,6 @@ public class BlackjackClientTable implements Screen{
 		Tabdealercard5.setPosition(660, 515);
 		
 		//player 1 card layout
-		
 		Table player1card1 = new Table();
 		Table player1card2 = new Table();
 		Table player1card3 = new Table();
@@ -197,7 +236,6 @@ public class BlackjackClientTable implements Screen{
 		player1card5.setPosition(195, 385);
 		
 		//player 2 card layout
-		
 		Table player2card1 = new Table();
 		Table player2card2 = new Table();
 		Table player2card3 = new Table();
@@ -220,7 +258,6 @@ public class BlackjackClientTable implements Screen{
 		player2card5.setPosition(425, 320);
 		
 		//player 3 card layout
-		
 		Table player3card1 = new Table();
 		Table player3card2 = new Table();
 		Table player3card3 = new Table();
@@ -243,7 +280,6 @@ public class BlackjackClientTable implements Screen{
 		player3card5.setPosition(665, 295);
 		
 		//player 4 card layout
-		
 		Table player4card1 = new Table();
 		Table player4card2 = new Table();
 		Table player4card3 = new Table();
@@ -266,7 +302,6 @@ public class BlackjackClientTable implements Screen{
 		player4card5.setPosition(915, 330);
 		
 		//player 5 card layout
-		
 		Table player5card1 = new Table();
 		Table player5card2 = new Table();
 		Table player5card3 = new Table();
@@ -288,8 +323,8 @@ public class BlackjackClientTable implements Screen{
 		player5card4.setPosition(1130, 410);
 		player5card5.setPosition(1155, 410);
 		
-		//Apply cards to player
-		TextureRegion TexRegCard = new TextureRegion(DQ);
+		/*Test code for player card positioning
+		TextureRegion TexRegCard = new TextureRegion(SQ);
 		
 		Image Imgdealercard1 = new Image(TexRegCard);
 		Image Imgdealercard2 = new Image(TexRegCard);
@@ -302,15 +337,65 @@ public class BlackjackClientTable implements Screen{
 		Tabdealercard3.add(Imgdealercard3);
 		Tabdealercard4.add(Imgdealercard4);
 		Tabdealercard5.add(Imgdealercard5);
+		*/
 		
-		//-----------------------------------------------
-		//----------------BUTTONS------------------------
+		//Seats username labels
+		LabelStyle Seatlabel = new LabelStyle(new BitmapFont(), Color.WHITE);
+				
+		Table tableSeat1 = new Table();
+		stage.addActor(tableSeat1);
+		tableSeat1.setSize(56, 81);
+		tableSeat1.setPosition(100,100);
+		Table tableSeat2 = new Table();
+		stage.addActor(tableSeat2);
+		tableSeat2.setSize(100, 100);
+		tableSeat2.setPosition(400,200);
+		Table tableSeat3 = new Table();
+		stage.addActor(tableSeat3);
+		tableSeat3.setSize(100, 100);
+		tableSeat3.setPosition(600,200);
+		Table tableSeat4 = new Table();
+		stage.addActor(tableSeat4);
+		tableSeat4.setSize(100, 100);
+		tableSeat4.setPosition(800,200);
+		Table tableSeat5 = new Table();
+		stage.addActor(tableSeat5);
+		tableSeat5.setSize(100, 100);
+		tableSeat5.setPosition(1000,200);
 		
+		/*Test code for username labels
+
+		Label seat2label = new Label("User2", Seatlabel);
+		Label seat2label2 = new Label("$2000", Seatlabel);
+		tableSeat2.add(seat2label);
+		tableSeat2.row();
+		tableSeat2.add(seat2label2);
+		Label seat3label = new Label("User3", Seatlabel);
+		Label seat3label2 = new Label("$2000", Seatlabel);
+		tableSeat3.add(seat3label);
+		tableSeat3.row();
+		tableSeat3.add(seat3label2);
+		Label seat4label = new Label("User4", Seatlabel);
+		Label seat4label2 = new Label("$2000", Seatlabel);
+		tableSeat4.add(seat4label);
+		tableSeat4.row();
+		tableSeat4.add(seat4label2);
+		Label seat5label = new Label("User5", Seatlabel);
+		Label seat5label2 = new Label("$2000", Seatlabel);
+		tableSeat5.add(seat5label);
+		tableSeat5.row();
+		tableSeat5.add(seat5label2);
+		*/
+		
+		// Buttons for controls
+		//button style for clickable button
 		Drawable buttontexture = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/null.png"))));
-		Drawable buttontexturegrayed = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/nullgray.png"))));
 		TextButtonStyle buttonstyle = new TextButtonStyle(buttontexture, buttontexture, buttontexture);
-		buttonstyle.font = new BitmapFont();
 		buttonstyle.fontColor = Color.BLACK;
+		buttonstyle.font = new BitmapFont();
+		
+		//button style for unclickable button
+		Drawable buttontexturegrayed = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/nullgray.png"))));
 		TextButtonStyle buttonstylegrayed = new TextButtonStyle(buttontexturegrayed, buttontexturegrayed, buttontexturegrayed);
 		buttonstylegrayed.fontColor = Color.GRAY;
 		buttonstylegrayed.font = new BitmapFont();
@@ -321,40 +406,36 @@ public class BlackjackClientTable implements Screen{
         stage.addActor(hit);
         hit.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				
 				return false;
 			}
 		});
         
-        TextButton stay = new TextButton("Stay", buttonstyle);
+        TextButton stay = new TextButton("Stay", buttonstylegrayed);
         stay.setSize(200, 20);
         stay.setPosition(240, 10);
         stage.addActor(stay);
         stay.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				
 				return false;
 			}
 		});
         
-        TextButton split = new TextButton("Split", buttonstyle);
+        TextButton split = new TextButton("Split", buttonstylegrayed);
         split.setSize(200, 20);
         split.setPosition(460, 10);
         stage.addActor(split);
         split.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				
 				return false;
 			}
 		});
         
-        TextButton doubledown = new TextButton("Double Down", buttonstyle);
+        TextButton doubledown = new TextButton("Double Down", buttonstylegrayed);
         doubledown.setSize(200, 20);
         doubledown.setPosition(680, 10);
         stage.addActor(doubledown);
         doubledown.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				
 				return false;
 			}
 		});
@@ -399,5 +480,76 @@ public class BlackjackClientTable implements Screen{
 	public void resume() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	//Message handler script when it receives messages from Server
+	public void parseMessage(String msg){
+	String[] stringArray = msg.split("|");
+	String function = stringArray[0];
+    switch (function) {
+        case "takeseat":
+        	//code for adding a user to a seat, takes format:
+        	//takeseat|player|seatno
+        		break;
+        case "startbettingphase":
+        	//code for notifying the betting phase has started, takes format:
+        	//startbettingphase
+                 break;
+        case "endbettingphase":
+        	//code for notifying the betting phase has ended, takes format:
+        	//endbettingphase
+                 break;
+        case "turn":
+        	//code for notifying that a players turn has begun, takes format:
+        	//turn|player
+                 break;
+        case "cardpull":
+        	//code for notifying that card in a hand has been updated, takes format:
+        	//cardpull|player|handposition|card
+                 break;
+        case "addchips":
+        	//code for notifying that a chip pile has been updated, takes format:
+        	//addchips|player|chippile total
+                 break;
+    	}
+	}
+	// Code for adding a player to a seat
+	private void fillSeat(Player player, int SeatNo, int Chipcount){
+		String username = player.getUsername();
+		if (SeatNo == 1){
+			Label namelabel = new Label(username, Seatlabel);
+			Label moneylabel = new Label(Integer.toString(Chipcount), Seatlabel);
+			tableSeat1.add(namelabel);
+			tableSeat1.row();
+			tableSeat1.add(moneylabel);
+		}
+		if (SeatNo == 2){
+			Label namelabel = new Label(username, Seatlabel);
+			Label moneylabel = new Label(Integer.toString(Chipcount), Seatlabel);
+			tableSeat2.add(namelabel);
+			tableSeat2.row();
+			tableSeat2.add(moneylabel);
+		}
+		if (SeatNo == 3){
+			Label namelabel = new Label(username, Seatlabel);
+			Label moneylabel = new Label(Integer.toString(Chipcount), Seatlabel);
+			tableSeat3.add(namelabel);
+			tableSeat3.row();
+			tableSeat3.add(moneylabel);
+		}
+		if (SeatNo == 4){
+			Label namelabel = new Label(username, Seatlabel);
+			Label moneylabel = new Label(Integer.toString(Chipcount), Seatlabel);
+			tableSeat4.add(namelabel);
+			tableSeat4.row();
+			tableSeat4.add(moneylabel);
+		}
+		if (SeatNo == 5){
+			Label namelabel = new Label(username, Seatlabel);
+			Label moneylabel = new Label(Integer.toString(Chipcount), Seatlabel);
+			tableSeat5.add(namelabel);
+			tableSeat5.row();
+			tableSeat5.add(moneylabel);
+		}
 	}
 }

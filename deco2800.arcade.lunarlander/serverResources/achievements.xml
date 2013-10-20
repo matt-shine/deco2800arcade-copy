@@ -1,62 +1,62 @@
 <achievements>
 	<achievement id="lunarlander.landed">
 		<name>Landed</name>
-		<description>Successfully landed the lander.</description>
+		<description>Congratulations! You landed the lander.</description>
 		<awardThreshold>1</awardThreshold>
-		<icon></icon>
+		<icon>ach_landed.png</icon>
 	</achievement>
 	<achievement id="lunarlander.fiftytimes">
 	  <name>FiftyTimes</name>
-	  <description>Successfully landed the lander 50 times.</description>
+	  <description>That is 50 times! A true lander.</description>
 	  <awardThreshold>50</awardThreshold>
-	  <icon></icon>
+	  <icon>ach_fiftytimes.png</icon>
 	</achievement>
 	<achievement id="lunarlander.grabachocolate">
 	  <name>Grab a Chocolate</name>
-	  <description>Successfully landed the lander 250 times.</description>
+	  <description>Talk about wasting time :D Reward yourself with a chocolate.</description>
 	  <awardThreshold>250</awardThreshold>
-	  <icon></icon>
+	  <icon>ach_grabachocolate.png</icon>
 	</achievement>
 	<achievement id="lunarlander.closecall">
 	  <name>Close Call</name>
-	  <description>Landed the lander with less than 10.</description>
+	  <description>Close Call! But you did it, kudos for that.</description>
 	  <awardThreshold>1</awardThreshold>
-	  <icon></icon>
+	  <icon>ach_closecall.png</icon>
 	</achievement>
 	<achievement id="lunarlander.incrediblyimpossible">
 	  <name>Incredibly Impossible</name>
-	  <description>Landed the lander with less than 1.</description>
+	  <description>Hacks or you are just too good.</description>
 	  <awardThreshold>1</awardThreshold>
-	  <icon></icon>
+	  <icon>ach_incrediblyimpossible.png</icon>
 	</achievement>
 	<achievement id="lunarlander.expresstrip">
 	  <name>Express Trip</name>
-	  <description>Landed the lander using less than 100 fuel.</description>
+	  <description>The BulletLander has landed.</description>
 	  <awardThreshold>1</awardThreshold>
-	  <icon></icon>
+	  <icon>ach_expresstrip.png</icon>
 	</achievement>
 	<achievement id="lunarlander.plummet">
 	  <name>Plummet To The Ground</name>
-	  <description>Falling to the ground at incredible high speed.</description>
+	  <description>Ouch... That does not look pretty.</description>
 	  <awardThreshold>1</awardThreshold>
-	  <icon></icon>
+	  <icon>ach_plummet.png</icon>
 	</achievement>
 	<achievement id="lunarlander.smashed">
 	  <name>Smashed</name>
-	  <description>Ouch. Got hit by a meteor.</description>
+	  <description>Time to make a wish. You got hit by a 1Tonne meteor.</description>
 	  <awardThreshold>1</awardThreshold>
-	  <icon></icon>
+	  <icon>ach_smashed.png</icon>
 	</achievement>
 	<achievement id="lunarlander.nojuice">
 	  <name>No Juice</name>
-	  <description>You ran out of juice!</description>
+	  <description>You ran out of juice! Quickly go buy some.</description>
 	  <awardThreshold>1</awardThreshold>
-	  <icon></icon>
+	  <icon>ach_nojuice.png</icon>
 	</achievement>
 	<achievement id="lunarlander.emergencylanding">
 	  <name>Emergency Landing</name>
-	  <description>You ran out of juice! and landed safely! Congratz</description>
+	  <description>Who needs juice? Clearly you did not.</description>
 	  <awardThreshold>1</awardThreshold>
-	  <icon></icon>
+	  <icon>ach_emergencylanding.png</icon>
 	</achievement>
 </achievements>

@@ -120,9 +120,11 @@ public class MainScreen implements Screen {
 		LabelStyle ls = new LabelStyle();
 		ls.font = font;
 		
+		game.getterSetter.setAnswerCount(0);
+		
 		titleLabel = new Label("Welcome to Guess The Word!" , ls);
 
-		
+		game.getterSetter.setAnswerCount(0);
 		startButton = new TextButton("Click to Play" , skin);
 		startButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
@@ -140,17 +142,18 @@ public class MainScreen implements Screen {
 			}
 		});
 		
-		achieveButton = new TextButton("Achievement " , skin);
+		achieveButton = new TextButton("Hall of Fame " , skin);
 		achieveButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
-				game.playerScore.getHighScore();
-				AchievementClient achClient = game.getAchievementClient();
-				AsyncFuture<AchievementProgress> playerProgress = achClient.getProgressForPlayer(game.getPlayer());
-				AsyncFuture<ArrayList<Achievement>> achievements = achClient.getAchievementsForGame(game.getGame());
-
-				for(Achievement ach  : achievements.get())
-					System.out.println(ach);
-//				achieveText.setMessageText("Your Achievement: ");
+//				game.playerScore.getHighScore();
+//				AchievementClient achClient = game.getAchievementClient();
+//				AsyncFuture<AchievementProgress> playerProgress = achClient.getProgressForPlayer(game.getPlayer());
+//				AsyncFuture<ArrayList<Achievement>> achievements = achClient.getAchievementsForGame(game.getGame());
+//
+//				for(Achievement ach  : achievements.get())
+//					System.out.println(ach);
+				
+				achieveText.setMessageText("Your HighScore: " + game.playerScore.getHighScore() );
 			}
 		});
 		

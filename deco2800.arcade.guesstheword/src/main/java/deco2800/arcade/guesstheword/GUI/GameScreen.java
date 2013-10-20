@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -26,44 +29,121 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import deco2800.arcade.guesstheword.gameplay.GameModel;
 import deco2800.arcade.guesstheword.gameplay.WordShuffler;
 
-public class GameScreen implements Screen {
-
+public class GameScreen implements Screen, InputProcessor {
+	/**
+	 * GuessTheWord instance
+	 * */
 	private GuessTheWord game;
+	/**
+	 * Skin instance
+	 * */
 	private Skin skin;
+	/**
+	 * SpriteBatch instance
+	 * */
 	private SpriteBatch batch;
+	/**
+	 * Stage instance
+	 * */
 	private Stage stage;
 	
-	// The different panels for the game screen 
-	private ButtonPanel buttonPanel;
-	private PicturePanel picturePanel;
-	private RightPanel rightPanel;
-	private LeftPanel leftPanel;
+	/**
+	 * WordShuffler instance
+	 * */
 	private WordShuffler word;
+	/**
+	 * GameModel instance
+	 * */
 	private GameModel gm;
+	
+	/**
+	 * InputMultxplexer 
+	 * */
+	private InputMultiplexer inputMultiplexer = new InputMultiplexer(this);
+	
+	// The different panels for the game screen 
+	/**
+	 * ButtonPanel instance
+	 * */
+	private ButtonPanel buttonPanel;
+	/**
+	 * PicturePanel instance
+	 * */
+	private PicturePanel picturePanel;
+	/**
+	 * RightPanel instance
+	 * */
+	private RightPanel rightPanel;
+	/**
+	 * LeftPanel instance
+	 * */
+	private LeftPanel leftPanel;
+
 
 	// The letters buttons for the games
+	/**
+	 * TextButton use for the letters. 
+	 * */
 	private TextButton button1, button2, button3, button4, button5, 
-	button6	, button7, button8, button9, button10 , backButton, playButton;
-	
+	button6	, button7, button8, button9, button10 ;
+	/**
+	 * Back Button. 
+	 * */
+	private TextButton  backButton ;
+	/**
+	 * Play Button. 
+	 * */
+	private TextButton playButton;
+
 	// The letters textfield for the game
-	public TextField textfield1, textfield2, textfield3, 
+	/**
+	 * Textfields for the letters
+	 * */
+	public TextField textfield0, textfield1, textfield2, textfield3, 
 					  textfield4, textfield5, textfield6;  
+	/**
+	 *Score Label
+	 * */
+	public Label scoreLabel; 
+	/**
+	 * Level Label
+	 * */
+	public Label levelLabel;
+	/**
+	 * Category Label 
+	 * */
+	private Label categoryLabel;
 	
-	public Label scoreLabel, levelLabel;
-	
+	/**
+	 * LabelStyle for the labels
+	 * */
 	private LabelStyle labelStyle;
 	
+	/**
+	 * ScrollPane for category window.
+	 * */
 	private ScrollPane scrollpane;
 	
+	/**
+	 * A list to store the category played
+	 * */
 	private ArrayList<String> catList;
-	
-    private int score = 0;     
+	 
+	/**
+	 * To store the timer allowance for each different level
+	 * */
     private int gameTime = 0;
-    
-//    private long startTime = System.currentTimeMillis();
+    /**
+	 * Texture for storing the background image.
+	 * */
 	private Texture backGroudTexture;
 	
-	public String level;
+
+	/**
+	 * Array of keys code for Letters (A-Z)
+	* */	
+	private String[] lettersCode = {"A" ,"B" ,"C"  , "D" , "E" , "F" , "G" , "H"  ,"I"  ,"J" , "K"  , "L"  
+			,"M" , "N", "O" ,"P", "Q", "R" ,"S" ,"T", "U", "V", "W", "X", "Y", "Z"};
 	
 	//PUBLC VARIABLES
 	public HashMap<String, HashMap<String, Texture>> hm;
@@ -78,6 +158,7 @@ public class GameScreen implements Screen {
 		//Creating Instances of the wordshuffler class 
 		word =  new WordShuffler();
 		
+		//Create an instance of GameModel
 		gm =  new GameModel(game, this, word);
 
 		hm = new HashMap<String, HashMap<String, Texture>>();
@@ -88,7 +169,7 @@ public class GameScreen implements Screen {
 	
 	@Override
 	public void render(float arg0) {
-		Gdx.gl.glClearColor( 0f, 0f, 75f, 70f );
+		Gdx.gl.glClearColor( 0f, 0f, 0f, 1f );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
 
         // Draw the background 
@@ -96,9 +177,6 @@ public class GameScreen implements Screen {
 		batch.draw(backGroudTexture, 0, 0, Gdx.graphics.getWidth(),
 				Gdx.graphics.getHeight());
 		batch.end();
-		
-		
-		gm.checkKeyboardInputs();	
 
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
@@ -133,7 +211,9 @@ public class GameScreen implements Screen {
 		setLevel();
 		createGameScreen();
 		gm.checkButtons();
-		Gdx.input.setInputProcessor(stage);
+		//Add input processor for stage
+		inputMultiplexer.addProcessor(stage);
+		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 
 	/**
@@ -144,20 +224,19 @@ public class GameScreen implements Screen {
 		String level = game.getterSetter.getLevel();
 		if(level.equalsIgnoreCase("Level 1 - 4 letters") 
 				|| level.equalsIgnoreCase("Default")){
-			
-			this.level = "LEVEL 1";	
+			game.getterSetter.setLevel("LEVEL 1");
 			backGroudTexture = new Texture(Gdx.files.internal("level1Screen.png"));
 			hm = game.picture.getLevel1();
 			gameTime = 60;		// 60 secs for level 1
 			
 		}else if(level.equalsIgnoreCase("Level 2 - 5 letters")){
-			this.level = "LEVEL 2";
+			game.getterSetter.setLevel("LEVEL 2");
 			backGroudTexture = new Texture(Gdx.files.internal("level2Screen.png"));
 			hm = game.picture.getLevel2();
 			gameTime = 50; // 50 secs for level 2
 			
 		}else if(level.equalsIgnoreCase("Level 3 - 6 letters")){
-			this.level = "LEVEL 3";
+			game.getterSetter.setLevel("LEVEL 3");
 			backGroudTexture = new Texture(Gdx.files.internal("level3Screen.png"));
 			hm = game.picture.getLevel3();
 			gameTime = 40; // 40 secs for level 3  , 5 sec for testing purposes
@@ -174,6 +253,9 @@ public class GameScreen implements Screen {
 	 * 
 	 * */
 	private void createGameScreen(){
+		
+		// Settting the game context
+		setGameContext();
 
 		//Initialise the Panels
 		buttonPanel =  new ButtonPanel();
@@ -183,14 +265,14 @@ public class GameScreen implements Screen {
 		Table rootTable =  new Table();
 		rootTable.setFillParent(true);
 		
-		//font
+		//BitmapFont
 		BitmapFont font = new BitmapFont(Gdx.files.internal("whitefont.fnt"), false);
 		// Label Style for the labels
 		labelStyle = new LabelStyle();
 		labelStyle.font = font;
 				
 		// LEVEL LABEL
-		levelLabel = new Label(level, labelStyle);
+		levelLabel = new Label(game.getterSetter.getLevel(), labelStyle);
 
 		// BACK BUTTON
 		backButton =  new TextButton("Back", skin);
@@ -203,20 +285,27 @@ public class GameScreen implements Screen {
 		
 		rootTable.add(backButton).expand(-5, 0).width(100f).height(40f).left();
 		rootTable.add(levelLabel).expand(100, 0);
-		
+		rightPanel.setPosition(500, 80);
+		leftPanel.setPosition(-550, 00);
 		stage.addActor(rootTable.top());
-		stage.addActor(rightPanel.right());
-		stage.addActor(leftPanel.left());
+		stage.addActor(rightPanel);
+		stage.addActor(leftPanel);
 		stage.addActor(buttonPanel.bottom()); 
-		setGameContext();
+		
+		
 	}
 	
+	/**
+	 * This method will set the game context namely the word and texture. 
+	 * */
 	public void setGameContext(){
-		System.out.println(hm);
-		game.getterSetter.setLevel(level);
+		//Reset the hint state
+		game.getterSetter.setHint(false);
+		
 		Object[] cat =  hm.keySet().toArray();
 		
-		//Random select a category!
+		//Random select a category, if category is used before 
+		//then will generate one more random category
 		int num = new Random().nextInt(hm.size() - 1); 
 		if(!catList.isEmpty()){
 			if( catList.contains(cat[num])  )
@@ -234,91 +323,52 @@ public class GameScreen implements Screen {
 		game.getterSetter.setCategoryItem(categoryItem);
 		game.getterSetter.setTexture(texture);
 
+		// Calling the generateWord method to shuffler the character
 		gm.generateWord(categoryItem);
+		// change the text on the buttons.
 		gm.checkButtons();
+		// Reset the timer.
 		gm.timer(gameTime);
+		
 		System.out.println(category + "  " + game.getterSetter.getCategoryItem() );
 	}
 	
+	/**
+	 * Check the letter agains the button letters. Removed the button letters
+	 * as per key typed.
+	 *  
+	 * @param input - letter to be set
+	 * */
+	private void checkLetter(String letter){
+		getInputText(letter);
+		for(TextButton btn : buttonList){	
+			if(letter.equalsIgnoreCase(btn.getText().toString())){
+				btn.setText("");
+				break;
+			}
+		}
+	}
 	
-	// SET TEXTFIELD BASED ON INPUT.
+	/**
+	 * Set the textfields based on the text from user. 
+	 * @param input - letter to be set
+	 * */
 	public void getInputText(String input){
-		String word = game.getterSetter.getCategoryItem();
-		Boolean occur = gm.checkWordOccurance(word);
-		 
-		 if(occur){
-			 String []spilt = word.split("");
-			 for(int i = 0; i <= word.length() ; i ++){
-				 if(spilt[i].equalsIgnoreCase(input)){
-					 
-					 if(i == 1){
-						 textfield1.setMessageText(input);
-						 spilt[i] = "";
-						 break;
-					 }
-					 if(i == 2){
-						textfield2.setMessageText(input);
-						spilt[i] = "";
-						break;
-					 }
-					if(i == 3){
-						textfield3.setMessageText(input);
-						spilt[i] = "";
-						break;
-					}
-					if(i == 4){
-						textfield4.setMessageText(input);
-						spilt[i] = "";
-						break;
-					}
-					if(i == 5){
-						textfield5.setMessageText(input);
-						spilt[i] = "";
-						break;
-					}
-					if(i == 6){
-						textfield6.setMessageText(input);
-						spilt[i] = "";
-						break;
-					 }
-						 
-				 }
-			 }//end of for loop
-		 }else{
-			 
-			 if(textfield1.getMessageText().isEmpty())
-					textfield1.setMessageText(input);
-				else if(textfield2.getMessageText().isEmpty() && !input.equalsIgnoreCase(textfield1.getMessageText()) 
-						&& !input.equalsIgnoreCase(textfield3.getMessageText()) 
-						&& !input.equalsIgnoreCase(textfield4.getMessageText())
-						&& !input.equalsIgnoreCase(textfield5.getMessageText())
-						&& !input.equalsIgnoreCase(textfield6.getMessageText()))
-					textfield2.setMessageText(input);
-				else if(textfield3.getMessageText().isEmpty() && !input.equalsIgnoreCase(textfield1.getMessageText()) 
-						&& !input.equalsIgnoreCase(textfield2.getMessageText()) 
-						&& !input.equalsIgnoreCase(textfield4.getMessageText())
-						&& !input.equalsIgnoreCase(textfield5.getMessageText())
-						&& !input.equalsIgnoreCase(textfield6.getMessageText()))
-					textfield3.setMessageText(input);
-				else if(textfield4.getMessageText().isEmpty() && !input.equalsIgnoreCase(textfield1.getMessageText()) 
-						&& !input.equalsIgnoreCase(textfield3.getMessageText()) 
-						&& !input.equalsIgnoreCase(textfield2.getMessageText())
-						&& !input.equalsIgnoreCase(textfield5.getMessageText())
-						&& !input.equalsIgnoreCase(textfield6.getMessageText()))
-					textfield4.setMessageText(input);
-				else if(textfield5.getMessageText().isEmpty() && !input.equalsIgnoreCase(textfield1.getMessageText()) 
-						&& !input.equalsIgnoreCase(textfield3.getMessageText()) 
-						&& !input.equalsIgnoreCase(textfield4.getMessageText())
-						&& !input.equalsIgnoreCase(textfield2.getMessageText())
-						&& !input.equalsIgnoreCase(textfield6.getMessageText()))
-					textfield5.setMessageText(input);
-				else if(textfield6.getMessageText().isEmpty() && !input.equalsIgnoreCase(textfield1.getMessageText()) 
-						&& !input.equalsIgnoreCase(textfield3.getMessageText()) 
-						&& !input.equalsIgnoreCase(textfield4.getMessageText())
-						&& !input.equalsIgnoreCase(textfield5.getMessageText())
-						&& !input.equalsIgnoreCase(textfield2.getMessageText()))
-					textfield6.setMessageText(input);
-		 }// end of if else (occur)
+		input = input.toUpperCase();
+		if(textfield0.getMessageText().isEmpty())		
+			textfield0.setMessageText(input);
+		else if(textfield1.getMessageText().isEmpty())
+			textfield1.setMessageText(input);
+		else if(textfield2.getMessageText().isEmpty())
+			textfield2.setMessageText(input);
+		else if(textfield3.getMessageText().isEmpty())
+			textfield3.setMessageText(input);
+		else if(textfield4.getMessageText().isEmpty())
+			textfield4.setMessageText(input);
+		else if(textfield5.getMessageText().isEmpty())
+			textfield5.setMessageText(input);
+		else if(textfield6.getMessageText().isEmpty())
+			textfield6.setMessageText(input);
 	}
 	private void clearEverything(){
 		levelLabel.clearActions();
@@ -326,6 +376,7 @@ public class GameScreen implements Screen {
 	}
 	
 	public void clearInputText(){
+		textfield0.setMessageText("");
 		textfield1.setMessageText("");
 		textfield2.setMessageText("");
 		textfield3.setMessageText("");
@@ -336,12 +387,20 @@ public class GameScreen implements Screen {
 
 	//----------RIGHT PANEL-------------//
 	//Right Panel to add score and time
+	/**
+	 * Inner Class for setting up of the RightPanel
+	 * */
 	private class RightPanel extends Table{
 		
 		RightPanel(){
 			this.setFillParent(true);
-			scoreLabel =  new Label("Score : " + score , skin);
-			this.add(scoreLabel).padBottom(30).width(100).row();
+			
+			categoryLabel = new Label("Category : " + game.getterSetter.getCategory(), skin);
+			this.add(categoryLabel).size(100, 50).padBottom(30).width(100).row();
+			
+			scoreLabel =  new Label("Score : " + 0 , skin);
+			this.add(scoreLabel).size(100, 50).padBottom(30).width(100).row();
+			
 			
 //			timeLabel = new Label("Time: " , skin);
 //			this.add(timeLabel).padBottom(30).width(100).row();
@@ -349,12 +408,18 @@ public class GameScreen implements Screen {
 	}
 	
 	//----------BUTTON PANEL-------------//
+	/**
+	 * Inner Class for setting up of the ButtonPanel
+	 * */
 	private class ButtonPanel extends Table{
 		
 		ButtonPanel(){
 			this.setFillParent(true);
 			
 			//Declarations of textfield
+			textfield0 =  new TextField("",skin); 
+			textfield0.setMessageText("");
+			
 			textfield1 =  new TextField("",skin); 
 			textfield2 =  new TextField("",skin); 
 			textfield3 =  new TextField("",skin); 
@@ -381,9 +446,9 @@ public class GameScreen implements Screen {
 			this.add(textfield2).width(50).height(50).spaceBottom(30);
 			this.add(textfield3).width(50).height(50).spaceBottom(30);
 			this.add(textfield4).width(50).height(50).spaceBottom(30);
-			if(level.equalsIgnoreCase("Level 2")){
+			if(game.getterSetter.getLevel().equalsIgnoreCase("Level 2")){
 				this.add(textfield5).width(50).height(50).spaceBottom(30);
-			}else if(level.equalsIgnoreCase("Level 3")){
+			}else if(game.getterSetter.getLevel().equalsIgnoreCase("Level 3")){
 				this.add(textfield5).width(50).height(50).spaceBottom(30);
 				this.add(textfield6).width(50).height(50).spaceBottom(30);
 			}
@@ -428,7 +493,8 @@ public class GameScreen implements Screen {
 	}
 	
 	/**
-	 * Method where all the buttons listeners are created. */
+	 * Method where all the buttons listeners are created. 
+	 * */
 	private void buttonListeners(){
 		for(final TextButton btn : buttonList){
 			btn.addListener(new ChangeListener(){
@@ -506,17 +572,7 @@ public class GameScreen implements Screen {
 	 * 
 	 * @return Category Window
 	 * */
-	public Window getWindow(){
-		// Set Timer to stop
-//		HashMap<String, HashMap<String, Texture>> hm = null ;
-//		if(level.equalsIgnoreCase("Level 1")){
-//			hm = game.picture.getLevel1();
-//		}else if(level.equalsIgnoreCase("Level 2")){
-//			hm = game.picture.getLevel2();
-//		}else if(level.equalsIgnoreCase("Level 3")){
-//			hm = game.picture.getLevel3();
-//		}
-		
+	public Window getWindow(){	
 		Object[] categories = hm.keySet().toArray();
 		final List categoryList =  new List(categories , skin);
 		scrollpane = new ScrollPane(categoryList, skin);
@@ -532,8 +588,7 @@ public class GameScreen implements Screen {
 			public void changed(ChangeEvent arg0, Actor arg1) {
 				
 				// Clear all the task in the timer
-				gm.timer(0);
-				
+				gm.timer(0);				
 //				HashMap<String, HashMap<String, Texture>> hm = null ;
 //				if(level.equalsIgnoreCase("Level 1")){
 //					hm = game.picture.getLevel1();
@@ -543,18 +598,23 @@ public class GameScreen implements Screen {
 //					hm = game.picture.getLevel3();
 //				}
 				String category = categoryList.getSelection();
+				System.out.println(hm);
 				String word =  "" + hm.get(category).keySet().toArray()[0];
 				Texture texture = hm.get(category).get(word);
 				game.getterSetter.setCategory(category);
 				game.getterSetter.setTexture(texture);
 				game.getterSetter.setCategoryItem(word);
+				
+				game.getterSetter.setAnswerCount(0);
 				catList.add(category);	
-				
+				System.out.println("Category : " +  category + " Word :" + word );
 				clearInputText();
+				gm.generateWord(word);
 				gm.checkButtons();
-				gm.timer(5);
+				categoryLabel.setText("Category : " +  category );
+				gm.timer(gameTime);
 				
-				 getWindow().setVisible(false);
+				getWindow().setVisible(false);
 			}});
 		
 		categoryWindow.add(scrollpane).width(categoryWindow.getWidth()).row();
@@ -565,4 +625,80 @@ public class GameScreen implements Screen {
 		return categoryWindow;
 	}
 
+	// INPUT PROCESSOR// 
+
+	@Override
+	public boolean keyDown(int code) {
+		// TODO Auto-generated method stub
+
+		if(code == Keys.BACKSPACE){
+			gm.backSpaceFunction();
+			gm.checkButtons();
+		}
+		else if(code == Keys.ENTER){
+			gm.checkAnswer();
+		}
+		else if(code == Keys.F1){
+			if(game.getterSetter.getHint() == false){
+				gm.getHints();
+				game.getterSetter.setHint(true);
+			}
+		}else if(code == Keys.F2){
+			getWindow().setVisible(true);
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean keyTyped(char c) {
+		String s = c + ""; 
+		for(String str : lettersCode){
+			if(str.equalsIgnoreCase(s)){
+				checkLetter(s);
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean keyUp(int arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean mouseMoved(int arg0, int arg1) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean scrolled(int arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean touchDragged(int arg0, int arg1, int arg2) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public boolean touchUp(int arg0, int arg1, int arg2, int arg3) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }// end of GameScreen

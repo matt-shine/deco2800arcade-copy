@@ -7,11 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.guesstheword.gameplay.Achievements;
 import deco2800.arcade.guesstheword.gameplay.GetterSetter;
 import deco2800.arcade.guesstheword.gameplay.Pictures;
 import deco2800.arcade.guesstheword.gameplay.PlayerScore;
-import deco2800.arcade.guesstheword.gameplay.WordShuffler;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -34,12 +32,13 @@ public class GuessTheWord extends GameClient{
 	Screen mainScreen;
 	Screen gameScreen;
 	Screen settingsScreen;
-//	Screen acheivementScreen;
+
 	Skin skin;
 
 //	public GuessTheWord(){
 //		super(player, networkClient);
 //	}
+	
 	public GuessTheWord(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		

@@ -39,14 +39,17 @@ public class PlayerScore {
 		highScorePlayer.storeScore("Number", game.getterSetter.getScore() );
 	}
 	
-	public void getHighScore(){
+	public List getHighScore(){
 		List<Highscore> topPlayers1 = highScorePlayer1.getGameTopPlayers(5, true, "Number");
 		List<Highscore> topPlayers2 = highScorePlayer2.getGameTopPlayers(5, true, "Number");
 		List<Highscore> topPlayers3 = highScorePlayer3.getGameTopPlayers(5, true, "Number");
 //		System.out.println(topPlayers);
+
 		highScorePlayer1.printHighscores(topPlayers1);
 		highScorePlayer2.printHighscores(topPlayers2);
 		highScorePlayer3.printHighscores(topPlayers3);
+		
+		return topPlayers1;
 	}
 
 }

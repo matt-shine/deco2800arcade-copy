@@ -8,7 +8,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-//public class SplashScreen extends AbstractScreen {
 public class SplashScreen implements Screen {
 	private final GuessTheWord game;
 	private final SpriteBatch batch;
@@ -52,6 +51,7 @@ public class SplashScreen implements Screen {
 
 	@Override
 	public void show() {
+		
 	}
 
 	@Override

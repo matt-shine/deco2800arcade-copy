@@ -15,29 +15,60 @@ import deco2800.arcade.guesstheword.GUI.GuessTheWord;
 import deco2800.arcade.guesstheword.GUI.MainScreen;
 
 public class GameModel {
-	
+	/**
+	 * GuessTheWord instance
+	 * */
 	private GuessTheWord game;
+	/**
+	 * GameScreen instance
+	 * */
 	private GameScreen gameScreen;
+	/**
+	 * WordShuffler instance
+	 * */
 	private WordShuffler word;
 	
-	private int score = 0;
-	private int count = 0;
-	private int hintPosition;
-	private boolean hintTaken;
+	/**
+	 * To keep track of the score and used for updating score label.
+	 * */
+	private int score = 0;	
+	/**
+	 * Array to store the generated words from word shuffler.
+	 * */
 	private String [] breakword;
 	
+	/**
+	 * HashMap where the textures are stored.
+	 * */
 	public HashMap<String, HashMap<String, Texture>> hm;
 	
-	
+	/**
+	 * Constructor
+	 * @param game -  instance of the game from GuessTheWord
+	 * @param gameScreen -  instance of GameScreen
+	 * @param word - instance of WordShuffler
+	 * */
 	public GameModel(GuessTheWord game, GameScreen gameScreen, WordShuffler word){
 		this.game = game;
 		this.gameScreen = gameScreen;
 		this.word =  word;
 	}
 	
+	/**
+	 * Empty Constructor
+	 * */
+	public GameModel(){}
 	
+	/**
+	 * Get the Hint from the word. 
+	 * 
+	 * @return the position of the hint in the word 
+	 * */
 	public int getHints(){
-		hintTaken = false;
+		game.getterSetter.setHint(true);
+		
+		//Called for Achievement
+		game.incrementAchievement("guesstheword.hint");
 		
 		// For each hint, 5 points will be deducted
 		game.getterSetter.setScore(-5);
@@ -71,7 +102,13 @@ public class GameModel {
 		
 	}
 	
-	// Search for the next word. used by check answers and timer. 
+	/**
+	 * Generate the next word after the user 
+	 * has answered correctly or Timer is up.
+	 * 
+	 * @param answer -  the current word
+	 * @param category -  the category that the word belong. 
+	 * */
 	public void nextWord(String answer ,  String category){
 		hm =  gameScreen.hm;
 		
@@ -96,6 +133,7 @@ public class GameModel {
 	 * This method will check the answer in which the user type. 
 	 * */
 	public void checkAnswer(){
+		// using a String builder to append the user inputs 
 		StringBuilder userAnswer = new StringBuilder();
 		userAnswer.append(gameScreen.textfield1.getMessageText());
 		userAnswer.append(gameScreen.textfield2.getMessageText());
@@ -112,29 +150,40 @@ public class GameModel {
 		
 		String answer = game.getterSetter.getCategoryItem();
 		
-//		System.out.println(userAnswer + " and " + answer);
 		if(userAnswer.toString().equalsIgnoreCase(answer)){
-			count ++;
+			int count = game.getterSetter.getAnswerCount() + 1;
+			game.getterSetter.setAnswerCount(count);
+			
 			String category = game.getterSetter.getCategory();
 			
-			if(count > 5){
+			// This means the user had finish the category. 
+			if(count >= 5){
+				// Clear game content and set up the next word content
 				gameScreen.clearInputText();
 				gameScreen.setGameContext();
 				
+				// Push the score to the high score counter.
 				setHighScoreCounter();
 				
-				count = 0; 
+				//Reset Count
+//				count = 0; 
+				game.getterSetter.setAnswerCount(0);
 			}else {
+				//Stop timer 
 				timer(0);
+				
+				// Add 10 points to score.
 				score += 10;
 				
+				// Update ScoreLabel and set score to setter method.
 				gameScreen.scoreLabel.setText("Score : " + score);
 				game.getterSetter.setScore(score);
 				
+				//Achievement will be prompted.
 				setAchievement(category);
 				
+				// Search for next word.
 				nextWord(answer, category);
-				hintTaken = false;
 				
 			}
 		}else{
@@ -144,6 +193,10 @@ public class GameModel {
 		}
 	}
 	
+	/**
+	 * Increment the Achievement based on the category. 
+	 * 
+	 * @param category - the category which user is playing.*/
 	private void setAchievement(String category){
 		if(category.equalsIgnoreCase("Animals"))
 			game.incrementAchievement("guesstheword.animals");
@@ -157,6 +210,9 @@ public class GameModel {
 			game.incrementAchievement("guesstheword.transports");
 	}
 	
+	/**
+	 * Call the respective highScore client to update the score to database.
+	 * */
 	private void setHighScoreCounter(){
 		String level = game.getterSetter.getLevel();
 		if(level.equalsIgnoreCase("Level 1"))
@@ -167,10 +223,14 @@ public class GameModel {
 			game.playerScore.countScore(game.playerScore.highScorePlayer3);
 	}
 	
-	//timer method
+	/**
+	 * Timer method -  timer will stop and clear if time = 0.
+	 * 
+	 *  @param time -  time for timer to start the task.
+	 * */
 	public void timer(int time){
 		if(time == 0){
-			Timer.instance.stop();
+			Timer.instance.clear();
 			System.out.println("Timer stop!!!");
 		}else{
 			System.out.println("Timer started!!!");
@@ -184,188 +244,89 @@ public class GameModel {
 			    }
 			}, time , time , 5);
 		}
-	}
+	}// end of timer
 	
-	
-	public void checkKeyboardInputs(){
-		// Checking of A-Z inputs. 
-		if(Gdx.input.isKeyPressed(Input.Keys.A)){
-			checkLetter(Input.Keys.A , "A");			
-		}else if(Gdx.input.isKeyPressed(Input.Keys.B)){
-			checkLetter(Input.Keys.B , "B");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.C)){
-			checkLetter(Input.Keys.C , "C");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.D)){
-			checkLetter(Input.Keys.D , "D");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.E)){
-			checkLetter(Input.Keys.E , "E");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.F)){
-			checkLetter(Input.Keys.F , "F");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.G)){
-			checkLetter(Input.Keys.G , "G");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.H)){
-			checkLetter(Input.Keys.H , "H");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.I)){
-			checkLetter(Input.Keys.I , "I");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.J)){
-			checkLetter(Input.Keys.J , "J");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.K)){
-			checkLetter(Input.Keys.K , "K");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.L)){
-			checkLetter(Input.Keys.L , "L");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.M)){
-			checkLetter(Input.Keys.M , "M");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.N)){
-			checkLetter(Input.Keys.N , "N");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.O)){
-			checkLetter(Input.Keys.O , "O");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.P)){
-			checkLetter(Input.Keys.P , "P");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.Q)){
-			checkLetter(Input.Keys.Q , "Q");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.R)){
-			checkLetter(Input.Keys.R , "R");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.S)){
-			checkLetter(Input.Keys.S , "S");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.T)){
-			checkLetter(Input.Keys.T , "T");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.U)){
-			checkLetter(Input.Keys.U , "U");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.V)){
-			checkLetter(Input.Keys.V , "V");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.W)){
-			checkLetter(Input.Keys.W , "W");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.X)){
-			checkLetter(Input.Keys.X , "X");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.Y)){
-			checkLetter(Input.Keys.Y , "Y");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.Z)){
-			checkLetter(Input.Keys.Z , "Z");
-		}
-
+	/**
+	 * Back space functions. All the textfields will be clear if there is 
+	 * a hint used then only the unknown letters will be deleted. 
+	 * */
+	public void backSpaceFunction(){
+		int hintPosition = game.getterSetter.getHintPosition();
 		// BACKSPACE - to clear all the textfields.
-		if(Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)){ 
-			// If user used hint then the hint will not be cleared. 
-			if(hintTaken == true){
-				String let = "";
-				if(hintPosition == 1){
-					gameScreen.textfield2.setMessageText("");
-					gameScreen.textfield3.setMessageText("");
-					gameScreen.textfield4.setMessageText("");
-					gameScreen.textfield5.setMessageText("");
-					gameScreen.textfield6.setMessageText("");
+		// If user used hint then the hint will not be cleared. 
+		if(game.getterSetter.getHint() == true){
+			String let = "";
+			if(hintPosition == 1){
+				gameScreen.textfield2.setMessageText("");
+				gameScreen.textfield3.setMessageText("");
+				gameScreen.textfield4.setMessageText("");
+				gameScreen.textfield5.setMessageText("");
+				gameScreen.textfield6.setMessageText("");
 
-					let = gameScreen.textfield1.getMessageText();
-				}
-				if(hintPosition == 2){
-					gameScreen.textfield1.setMessageText("");
-					gameScreen.textfield3.setMessageText("");
-					gameScreen.textfield4.setMessageText("");
-					gameScreen.textfield5.setMessageText("");
-					gameScreen.textfield6.setMessageText("");
+				let = gameScreen.textfield1.getMessageText();
+			}
+			if(hintPosition == 2){
+				gameScreen.textfield1.setMessageText("");
+				gameScreen.textfield3.setMessageText("");
+				gameScreen.textfield4.setMessageText("");
+				gameScreen.textfield5.setMessageText("");
+				gameScreen.textfield6.setMessageText("");
 
-					let = gameScreen.textfield2.getMessageText();
-				}
-				if(hintPosition == 3){
-					gameScreen.textfield1.setMessageText("");
-					gameScreen.textfield2.setMessageText("");
-					gameScreen.textfield4.setMessageText("");
-					gameScreen.textfield5.setMessageText("");
-					gameScreen.textfield6.setMessageText("");
+				let = gameScreen.textfield2.getMessageText();
+			}
+			if(hintPosition == 3){
+				gameScreen.textfield1.setMessageText("");
+				gameScreen.textfield2.setMessageText("");
+				gameScreen.textfield4.setMessageText("");
+				gameScreen.textfield5.setMessageText("");
+				gameScreen.textfield6.setMessageText("");
 
-					let = gameScreen.textfield3.getMessageText();
-				}
-				if(hintPosition == 4){
-					gameScreen.textfield1.setMessageText("");
-					gameScreen.textfield2.setMessageText("");
-					gameScreen.textfield3.setMessageText("");
-					gameScreen.textfield5.setMessageText("");
-					gameScreen.textfield6.setMessageText("");
+				let = gameScreen.textfield3.getMessageText();
+			}
+			if(hintPosition == 4){
+				gameScreen.textfield1.setMessageText("");
+				gameScreen.textfield2.setMessageText("");
+				gameScreen.textfield3.setMessageText("");
+				gameScreen.textfield5.setMessageText("");
+				gameScreen.textfield6.setMessageText("");
 
-					let = gameScreen.textfield4.getMessageText();
-				}
-				if(hintPosition == 5){
-					gameScreen.textfield1.setMessageText("");
-					gameScreen.textfield2.setMessageText("");
-					gameScreen.textfield3.setMessageText("");
-					gameScreen.textfield4.setMessageText("");
-					gameScreen.textfield6.setMessageText("");
+				let = gameScreen.textfield4.getMessageText();
+			}
+			if(hintPosition == 5){
+				gameScreen.textfield1.setMessageText("");
+				gameScreen.textfield2.setMessageText("");
+				gameScreen.textfield3.setMessageText("");
+				gameScreen.textfield4.setMessageText("");
+				gameScreen.textfield6.setMessageText("");
 
-					let = gameScreen.textfield5.getMessageText();
-				}
-				if(hintPosition == 6){
-					gameScreen.textfield1.setMessageText("");
-					gameScreen.textfield2.setMessageText("");
-					gameScreen.textfield3.setMessageText("");
-					gameScreen.textfield4.setMessageText("");
-					gameScreen.textfield5.setMessageText("");
+				let = gameScreen.textfield5.getMessageText();
+			}
+			if(hintPosition == 6){
+				gameScreen.textfield1.setMessageText("");
+				gameScreen.textfield2.setMessageText("");
+				gameScreen.textfield3.setMessageText("");
+				gameScreen.textfield4.setMessageText("");
+				gameScreen.textfield5.setMessageText("");
 
-					let = gameScreen.textfield6.getMessageText();
-				}
-				
-				for(int i = 0; i < gameScreen.buttonList.size(); i++){	
-					if(let.equalsIgnoreCase(
-							gameScreen.buttonList.get(i).getText().toString())){
-						gameScreen.buttonList.get(i).setText("");
-					}else 
-						gameScreen.buttonList.get(i).setText(breakword[i]);
-				}
-				
-			}else {
-				gameScreen.clearInputText();
-				for(int i = 0; i < gameScreen.buttonList.size(); i++){
+				let = gameScreen.textfield6.getMessageText();
+			}
+			
+			for(int i = 0; i < gameScreen.buttonList.size(); i++){	
+				if(let.equalsIgnoreCase(
+						gameScreen.buttonList.get(i).getText().toString())){
+					gameScreen.buttonList.get(i).setText("");
+				}else 
 					gameScreen.buttonList.get(i).setText(breakword[i]);
-				}	
-				
 			}
-		} 
-		
-		// back to main menu
-		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
-			System.out.println("Back to MainScreen");
+			
+		}else {
 			gameScreen.clearInputText();
-			game.setScreen(new MainScreen(game));
-		} 
-		
-		// ENTER - check answers
-		if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
-			System.out.println("Check answers");
-			checkAnswer();
-		} 
-		
-		// F1 - HINT
-		if(Gdx.input.isKeyPressed(Input.Keys.F1)){
+			for(int i = 0; i < gameScreen.buttonList.size(); i++){
+				gameScreen.buttonList.get(i).setText(breakword[i]);
+			}	
 			
-			// User can only use hint for once!
-			if(hintTaken == false){
-				hintPosition = getHints();
-				hintTaken = true;
-			}
 		}
-		
-		// F2 - CATEGORY
-		if(Gdx.input.isKeyPressed(Input.Keys.F2)){
-			//Stop TImer
-			timer(0);
-			gameScreen.getWindow().setVisible(true);
-			System.out.println("Change Category");
-			
-			// Stop the timer
-//			Timer.instance.stop();
-		}
-	}// end of check keyboards method 
-	
-	// this method will check the button clicked and 
-	// empty the button text. 
-	public void checkLetter(int key, String letter){
-		gameScreen.getInputText(letter);
-		for(TextButton btn : gameScreen.buttonList){	
-			if(letter.equalsIgnoreCase(btn.getText().toString())){
-				btn.setText("");
-				break;
-			}
-		}
-	}
+	} // end of backSpaceFunctions
 	
 	/**
 	 * Method to set the buttons text based on the word generated.
@@ -382,7 +343,12 @@ public class GameModel {
 		breakword = word.breakWord(category);
 	}
 	
-	// method to check for the number of occurance in the word 
+	/**
+	 * Check for any repetition of letter in the word, eg.  dell
+	 * @param str -  the word to be check on
+	 * 
+	 * @return true - if there is a repetition else false
+	 * */
 	public boolean checkWordOccurance(String str){
 		 Map<Character, Integer> charMap = new HashMap<Character, Integer>();
 		  char[] arr = str.toCharArray();

@@ -43,6 +43,7 @@ public class SettingScreen implements Screen{
 				String s = list.getSelection();
 				System.out.println(s);
 				game.getterSetter.setLevel(s);
+				game.getterSetter.setAnswerCount(0);
 				game.setScreen(new GameScreen(game));
 			}
 		});

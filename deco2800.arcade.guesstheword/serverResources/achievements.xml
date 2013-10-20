@@ -19,6 +19,13 @@
     <awardThreshold>1</awardThreshold>
     <icon>level3.png</icon>
   </achievement>
+  
+<achievement id="guesstheword.hint">
+    <name>You have used H I N T!</name>
+    <description>HINT used</description>
+    <awardThreshold>1</awardThreshold>
+    <icon>level1.png</icon>
+  </achievement>
 
 <achievement id="guesstheword.animals">
     <name>Animal Category Complete!</name>

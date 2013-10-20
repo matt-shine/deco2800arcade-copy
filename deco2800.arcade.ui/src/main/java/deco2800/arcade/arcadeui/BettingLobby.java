@@ -24,7 +24,6 @@ import com.badlogic.gdx.utils.Array;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 
 import java.util.*;
 

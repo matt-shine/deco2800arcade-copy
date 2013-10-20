@@ -18,6 +18,11 @@ public class Explosion extends Enemy {
 		
 	}
 	
+	/**
+	 * Constructor for new Explosion, requires a position, and velocity.
+	 * @param pos Position of Explosion
+	 * @param vel Velocity of Explosion
+	 */
 	public Explosion(Vector2 pos, Vector2 vel) {
 		super(0, 0, pos, WIDTH, HEIGHT);
 		
@@ -53,10 +58,17 @@ public class Explosion extends Enemy {
 		
 	}
 	
+	/**
+	 * Gets the bounds of the players damage
+	 */
 	public Array<Rectangle> getPlayerDamageBounds() {
 		return new Array<Rectangle>();
 	}
 	
+	/**
+	 * Gets the current frame
+	 * @return int - frame
+	 */
 	public int getFrame() {
 		return frame;
 	}

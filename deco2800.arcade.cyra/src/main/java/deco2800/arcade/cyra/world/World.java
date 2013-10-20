@@ -15,14 +15,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import deco2800.arcade.cyra.game.Cyra;
-import deco2800.arcade.cyra.game.AchievementsTracker;
 import deco2800.arcade.cyra.game.MainMenu;
 import deco2800.arcade.cyra.model.Block;
 import deco2800.arcade.cyra.model.BlockMaker;
-import deco2800.arcade.cyra.model.Bullet;
 import deco2800.arcade.cyra.model.BulletHomingDestructible;
 import deco2800.arcade.cyra.model.BulletSimple;
-import deco2800.arcade.cyra.model.CutsceneObject;
 import deco2800.arcade.cyra.model.Enemy;
 import deco2800.arcade.cyra.model.EnemySpawner;
 import deco2800.arcade.cyra.model.LaserBeam;
@@ -35,7 +32,7 @@ import deco2800.arcade.cyra.model.RandomizedEnemySpawner;
 import deco2800.arcade.cyra.model.ResultsScreen;
 import deco2800.arcade.cyra.model.SoldierEnemy;
 import deco2800.arcade.cyra.model.Sword;
-import deco2800.arcade.cyra.model.Zombie;
+
 
 /** World class describes the Model component of the game's MVC model.
  * It controls the interactions between various game objects - interactions
@@ -52,15 +49,11 @@ public class World {
 	public static final float GAME_INIT_X = 602.5f;
 	public static final int DEFAULT_LIVES = 3;
 	
-	private AchievementsTracker at = new AchievementsTracker();
-	
 	private Boolean firstUpdate;
 	private Player ship;
 	Rectangle sRec;
 	private Sword sword;
 	private Array<Enemy> enemies;
-	private Array<Bullet> bullets;
-	private Array<CutsceneObject> cutsceneObjects; 
 	private Array<MovablePlatform> movablePlatforms;
 	private Array<BlockMaker> blockMakers;
 	private ParallaxCamera cam;
@@ -85,9 +78,7 @@ public class World {
 	
 	
 	private Cyra game;
-	//He says this creates circular logic and hence is very bad. It's only really to get touchDown to access camera
-	// if not using mouse then remove this
-	//WorldRenderer wr;
+	
 	
 	public World(Cyra game, int level, float difficulty, ParallaxCamera cam) {
 		this.rank = difficulty;
@@ -136,27 +127,22 @@ public class World {
 			time += Gdx.graphics.getDeltaTime();
 		}
 		
-		//System.out.println("Delta = "+Gdx.graphics.getDeltaTime());
-		//System.out.println("State before ship = "+ship.getState());
 		ship.update(ship);		
 		//if (sword.inProgress()) sword.update(ship);
 		sword.update(ship);
-		//System.out.println("State after ship = "+ship.getState());
 		spawnEnemies();
 		spawnMovablePlatforms();
 
 		for (MovablePlatform mp: movablePlatforms) {
 			mp.update(ship);
 		}
-		for (int i = -1; i < enemies.size + bullets.size; i++) {
+		for (int i = -1; i < enemies.size; i++) {
 			MovableEntity mve;
 			if (i == -1) {
 				mve = ship;
-			} else if (i > -1 && i < enemies.size){
-				mve = enemies.get(i);
 			} else {
-				mve = bullets.get(i - enemies.size);
-			}
+				mve = enemies.get(i);
+			} 
 			if (mve.isSolid()) {
 				checkTileCollision(mve);
 			}
@@ -198,7 +184,6 @@ public class World {
 			updateCamera();
 			if( ship.getHearts() == 0 || ship.getPosition().y < -3) {
 				ship.setHasDied();
-				System.out.println("SHIP IN BAD POSITION!!!! hearts="+ship.getHearts()+" ship.getPosition().y"+ship.getPosition().y);
 				inputHandler.cancelInput();
 				count -= Gdx.graphics.getDeltaTime();
 				if (count <= 0) {
@@ -259,14 +244,11 @@ public class World {
 		return;
 	}
 	
-	public void addBullet(Bullet b) {
-		bullets.add(b);
-	}
+	
 	
 	/* ----- Object handlers ----- */	
 	private void checkTileCollision(MovableEntity mve) {
 		
-		//System.out.println("Checking the mve: "+ mve.getClass()+ " at ("+mve.getPosition().x+","+mve.getPosition().y+")");
 		/* MovablePlatform code */
 		boolean onMovable = false;
 		MovablePlatform onPlat = null;
@@ -275,11 +257,9 @@ public class World {
 		sRec = mve.getProjectionRect();
 		for (MovablePlatform mp: movablePlatforms) {
 			
-			//System.out.println("sRec: "+sRec.x+","+sRec.y+","+sRec.width+","+sRec.height+" mp: "+mp.getCollisionRectangle().x+","+mp.getCollisionRectangle().y+","+mp.getCollisionRectangle().width+","+mp.getCollisionRectangle().height);
 			if (sRec.overlaps(mp.getCollisionRectangle())) {
 				onMovable = true;
 				onPlat = mp;
-				//System.out.println("moving ship");
 				mve.getPosition().add(mp.getPositionDelta());
 				//ship.getVelocity().add(mp.getPositionDelta());
 				//ship.getPosition().y -= Ship.GRAVITY * Gdx.graphics.getDeltaTime();
@@ -287,7 +267,6 @@ public class World {
 				// Stop falling through the floor when going up if on the top of platform
 				float top = mp.getPosition().y + mp.getCollisionRectangle().height;
 				if (mve.getPosition().y < top + 24/32f && mve.getPosition().y > top - 24/32f) {
-					//System.out.println("****Fixing position on platform*****. Top: "+top+" Ship ypos: "+ship.getPosition().y);
 					mve.handleTopOfMovingPlatform(mp);
 					
 					//onMovable = true;
@@ -329,30 +308,17 @@ public class World {
 
 		for (float i = mve.getPosition().x - checkX; i < mve.getPosition().x + 1+ mve.getWidth() + checkX; i++) {
 			for (float j = mve.getPosition().y - checkY; j < mve.getPosition().y + mve.getHeight() + checkY; j++) {
-				//System.out.println("chcking cell at " + (int)i + "," + (int)j + " and collisionlayer is " + collisionLayer);
-		
-				//Cell cell = collisionLayer.getCell((int) i, (int) j);
+				
+				
 				
 				int xLength = collisionLayer.tiles[0].length;
 				int yLength = collisionLayer.tiles.length;
-				//int yLength = 59; //obviously this is wrong I just need to get this working
+				
 				if (i < xLength && i > 0 && j < yLength && j > 0) { 
 					int cell = collisionLayer.tiles[yLength-((int)j)-1][(int)i];
 					
-					//System.out.println("Cell ("+(int)i+","+(int)j+") test: "+cell + "  Mve = "+mve.getClass());
-					/*if (cell != null) {
-						//System.out.println("found cell at " + (int)i + "," + (int)j);
-						//System.out.println("floats were " + i +"," + j);
-						//System.out.println("i range: " + (ship.getPosition().x-checkX) +" to "+(ship.getPosition().x+ship.getWidth()+checkX));
-						//System.out.println("j range: " + (ship.getPosition().y-checkY)+" to "+(ship.getPosition().y+ship.getHeight()+checkY));
-						Rectangle rect = new Rectangle((int)i, (int)j, 1, 1);
-						tiles.add(rect);
-					}*/
-					//String type = map.getTileProperty(cell, "checkCollision");
-					//System.out.println(type);
-					//if (type != null && type.equals("solid")) {
+					
 					if (cell != 0) {
-						//System.out.println("I'm colliding with ("+(int)i+","+(int)j+")");
 						Rectangle rect = new Rectangle((int)i, (int)j, 1, 1);
 						tiles.add(rect);
 					}
@@ -376,16 +342,9 @@ public class World {
 		}
 
 		sRec = mve.getXProjectionRect();
-		//System.out.println("XProjectionRec="+sRec);
-		//System.out.println("Number of tiles checking: "+tiles.size);
 		for (Rectangle tile: tiles) {
 			if (sRec.overlaps(tile)) {
-			//if (ship.getBounds().overlaps(tile)) {
-				//ship.getVelocity().x = 0;
-				//System.out.println("Get knocked back from "+ship.getPosition().x + " by " + ship.getVelocity().x);
-				/*ship.getPosition().x -= ship.getVelocity().scl(Gdx.graphics.getDeltaTime()).x;
-				ship.getVelocity().scl(1/Gdx.graphics.getDeltaTime());*/
-				//System.out.println("@@@@@@@@@@@@@@@@X-Collision with tile at "+tile.x+", "+tile.y+ "   (w,h): "+tile.width+","+tile.height+"    @@@@@@@@@@@@@@");
+				
 				mve.handleXCollision(tile);
 				
 				
@@ -394,16 +353,11 @@ public class World {
 		}
 		
 		sRec = mve.getYProjectionRect();
-		//System.out.println("YProjectionRec="+sRec);
 		boolean tileUnderMve = false;
 		for (Rectangle tile:tiles) {
 			if (sRec.overlaps(tile)) {
-				//System.out.println("Y-Collision with tile at "+tile.x+", "+tile.y+ "   (w,h): "+tile.width+","+tile.height);
-				//to the bottom of player
 				mve.handleYCollision(tile, onMovable, onPlat);
 				
-					//ship.getVelocity().y = 0;
-					//System.out.println("after y state="+ship.getState());
 					tileUnderMve = true;
 					
 				
@@ -412,8 +366,7 @@ public class World {
 		if (!tileUnderMve) {
 			mve.handleNoTileUnderneath();
 		}
-		//System.out.println("after both state="+ship.getState());
-		//ship.update(ship);
+		
 		
 		
 		
@@ -444,9 +397,6 @@ public class World {
 						
 						if (Intersector.overlapConvexPolygons(laserPoly, shipPoly)) {
 							ship.decrementHearts();
-							at.incrementHeartsLost();
-
-							
 							ship.bounceBack(true);
 							
 							ship.setInvincibility(true);
@@ -456,7 +406,6 @@ public class World {
 					for (Rectangle r: e.getPlayerDamageBounds()) {
 						if ( r.overlaps(ship.getBounds()) ) {
 							ship.decrementHearts();
-							at.incrementHeartsLost();
 							
 							ship.bounceBack(true);
 							
@@ -482,28 +431,11 @@ public class World {
 			//Check if spawner is in the range of 2 blocks out of viewport. NOT USING VIEWPORT ATM> SHOULD PROBS CHAGNE
 			
 			if (s.increment()) {
-				//System.out.println("Ready to spawn. Sxy:"+s.getPosition().x+","+s.getPosition().y+" Shipxy"+ship.getPosition().x+","+ship.getPosition().y);
+				
 				Vector2 spp = s.getPosition();
-				//Vector2 shp = ship.getPosition();
 				float camX = cam.position.x;
 				float camY = cam.position.y;
-				/*if ((spp.x < shp.x + 7f && spp.x > shp.x + 6f)||
-						(spp.x > shp.x - 7f && spp.x < shp.x - 6f)||
-						(spp.y > shp.y -4f && spp.y < shp.y -3.5f)||
-						(spp.y < shp.y+4f && spp.y > shp.y+3.5f)) {
-					
-					enemies.add(s.spawnNew());
-				}*/
-				/*if (
-						(((spp.x < shp.x + 7f && spp.x > shp.x + 6f && ship.getVelocity().x>0)||
-						(spp.x > shp.x - 7f && spp.x < shp.x - 6f &&ship.getVelocity().x<0)) &&
-						(spp.y > shp.y -3.5f && spp.y < shp.y + 3.5f)) ||
-						
-						(((spp.y > shp.y -4f && spp.y < shp.y -3.5f && ship.getVelocity().y<0)||
-						(spp.y < shp.y+4f && spp.y > shp.y+3.5f && ship.getVelocity().y>0)) &&
-						(spp.x > shp.x - 6f && spp.x <shp.x + 6f)) 
-						
-						) {*/
+				
 				if (
 						(((spp.x > camX + cam.viewportWidth/2 && spp.x < camX + cam.viewportWidth/2+1f && ship.getVelocity().x > 0) ||
 						(spp.x > camX - cam.viewportWidth/2 - 1f && spp.x < camX - cam.viewportWidth/2 && ship.getVelocity().x < 0)) &&
@@ -513,7 +445,6 @@ public class World {
 						(spp.y > camY - cam.viewportHeight/2 - 1f && spp.y < camY - cam.viewportHeight/2 && ship.getVelocity().y < 0)) &&
 						(spp.x >camX - cam.viewportWidth/2 && spp.x < camX + cam.viewportWidth/2))
 						) {
-					//System.out.println("Spawn! Sxy:"+s.getPosition().x+","+s.getPosition().y+" Shipxy"+ship.getPosition().x+","+ship.getPosition().y);
 					enemies.add(s.spawnNew());
 				}
 			}
@@ -544,9 +475,7 @@ public class World {
 	}
 	
 	private void handleEnemies() {
-		Iterator<Bullet> bItr;
 		Iterator<Enemy> eItr;
-		Bullet b;
 		Enemy e;
 		
 		
@@ -559,14 +488,12 @@ public class World {
 				Array<Enemy> newEnemies = e.advance(Gdx.graphics.getDeltaTime(), ship, rank, cam);
 				
 				if (e.isDead()) {			
-					//System.out.println("removing " + e.getClass()+ " because dead");
 					score += e.getScore();
 					eItr.remove();
 					//Enemy is dead - achievement
 					if (e.getClass() == SoldierEnemy.class) {
 						game.incrementAchievement("cyra.slayer");
 					}
-					//System.out.println("removed enemy");
 					for (EnemySpawner spns: curLevel.getEnemySpawners() ) {
 						spns.removeEnemy(e);
 					}
@@ -591,7 +518,6 @@ public class World {
 			
 			/* Sword collisions */
 			if (e.getVulnerableBounds().overlaps(sword.getBounds())) {
-				//System.out.println("C");
 				boolean fromRight = false;
 				if (e.getPosition().x < sword.getPosition().x+sword.getWidth()/2) {
 					fromRight = true;
@@ -599,7 +525,7 @@ public class World {
 				e.handleDamage(fromRight);
 				
 				
-				//System.out.println("cleaned arrays");
+				
 				
 			} 
 
@@ -607,7 +533,6 @@ public class World {
 			//Remove enemies too far outside of camera view
 			if (e.getPosition().x > cam.position.x + cam.viewportWidth * 1.5 ||
 					e.getPosition().x < cam.position.x - cam.viewportWidth * 1.5) {
-				System.out.println("removing " + e.getClass()+ " because too far from x position");
 				eItr.remove();
 				for (EnemySpawner spns: curLevel.getEnemySpawners() ) {
 					spns.removeEnemy(e);
@@ -618,33 +543,7 @@ public class World {
 			}
 		}
 		
-		bItr = bullets.iterator();
-		while(bItr.hasNext()) {
-			b = bItr.next();
-			b.update(ship);
-
-			eItr = enemies.iterator();
-			while(eItr.hasNext()) {
-				e = eItr.next();
-				//e.advance(Gdx.graphics.getDeltaTime(), ship);
-			
-				if(e.getBounds().overlaps(b.getBounds())){
-					//System.out.println("C");
-					eItr.remove();
-					//System.out.println("removed enemy");
-					bItr.remove();
-					//System.out.println("removed bullet");
-					for (EnemySpawner spns: curLevel.getEnemySpawners() ) {
-						spns.removeEnemy(e);
-					}
-					//System.out.println("cleaned arrays");
-				}
-			}
-			
-			if(b.getExistTime() > b.getMAX_EXIST_TIME()) {
-				bItr.remove();
-			}
-		}
+		
 		return;
 	}
 
@@ -677,13 +576,10 @@ public class World {
 			}
 			if((ship.getPosition().y > cam.viewportHeight/2 && ship.getPosition().y + cam.viewportHeight/2< WORLD_HEIGHT) || 
 					(cam.position.y > cam.viewportHeight/2 && cam.position.y + cam.viewportHeight/2< WORLD_HEIGHT)) {
-			//if(cam.position.y > cam.viewportHeight/2 && cam.position.y + cam.viewportHeight/2< WORLD_HEIGHT) {
+			
 				float lerp = 0.035f;
 				cam.position.y += (ship.getPosition().y - cam.position.y) * lerp;
-			} /*else {
-				cam.position.y = (cam.viewportHeight/2);
-				System.out.println("posY "+cam.position.y+" viewportHeight="+cam.viewportHeight);
-			}*/
+			} 
 		} else {
 			//ensure ship stays within camera bounds
 			if (ship.getPosition().x < cam.position.x - cam.viewportWidth/2) {
@@ -730,16 +626,11 @@ public class World {
 		ship.getVelocity().x = 0;
 		Array<Object> temp = levelScenes.start(scenePosition, rank, (int)time);
 		for (Object obj: temp) {
-			if (obj.getClass() == CutsceneObject.class) {
-				cutsceneObjects.add( (CutsceneObject) obj );
-			} else if (obj.getClass() == MovablePlatform.class) {
-				System.out.println("that was a new movable platform!");
+			if (obj.getClass() == MovablePlatform.class) {
 				movablePlatforms.add( (MovablePlatform) obj );
 			} else if (obj.getClass() == MovablePlatformAttachment.class) {
-				System.out.println("that was a new movable platform attachment!");
 				movablePlatforms.add( (MovablePlatformAttachment) obj );
 			} else if (obj instanceof BlockMaker) {
-				System.out.println("adding blockmaker");
 				blockMakers.add( (BlockMaker) obj);
 			} else if (obj instanceof Enemy) {
 				enemies.add( (Enemy) obj);
@@ -748,10 +639,7 @@ public class World {
 		scenePosition++;
 	}
 	
-	private void addStaticEnemies() {
-		enemies.add( new Zombie(new Vector2(32f, 3f)) );
-		return;
-	}
+	
 	
 	public boolean isPaused() {
 		return isPaused;
@@ -782,14 +670,7 @@ public class World {
 		return enemies;
 	}
 	
-	public Array<Bullet> getBullets() {
-		return bullets;
-	}
-
-	public Array<CutsceneObject> getCutsceneObjects() {
-		return cutsceneObjects;
-	}
-
+	
 	public Array<MovablePlatform> getMovablePlatforms() {
 		return movablePlatforms;
 	}
@@ -832,7 +713,6 @@ public class World {
 	public void init(boolean completeInit) {
 		
 		count = 3f;
-		at.printStats();
 		
 		//Sounds.playBossMusic();
 		
@@ -844,8 +724,6 @@ public class World {
 		
 		sword = new Sword(new Vector2(-1, -1));
 		enemies = new Array<Enemy>();
-		bullets = new Array<Bullet>();
-		cutsceneObjects = new Array<CutsceneObject>();
 		movablePlatforms = new Array<MovablePlatform>();
 		blockMakers = new Array<BlockMaker>();
 		//resetCamera();
@@ -885,7 +763,6 @@ public class World {
 	}
 
 	public void resetLevel() {
-		at.addToTime( (int)time );
 		
 		respawnPosition = new Vector2(levelScenes.getPlayerReloadPosition(scenePosition));
 		scenePosition = levelScenes.getScenePositionAfterReload(scenePosition);
@@ -894,8 +771,6 @@ public class World {
 		ship = null;
 		sword = null;
 		enemies = null;
-		bullets = null;
-		cutsceneObjects = null;
 		movablePlatforms = null;
 		levelScenes = null;
 		cam.setFollowShip(true);

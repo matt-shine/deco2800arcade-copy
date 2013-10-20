@@ -12,7 +12,7 @@ import com.esotericsoftware.tablelayout.BaseTableLayout;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.arcadeui.frontPage;
+import deco2800.arcade.arcadeui.FrontPage;
 
 public class LoginScreen implements Screen {
 
@@ -85,7 +85,7 @@ public class LoginScreen implements Screen {
                 }
                 else {
                     ArcadeSystem.login(usernameText.getText());
-            	    frontPage.userName(usernameText.getText());  // This may need to be moved to somewhere more appropriate.
+            	    FrontPage.userName(usernameText.getText());  // This may need to be moved to somewhere more appropriate.
             	    arcadeUI.setScreen(arcadeUI.main);
                 }
             }

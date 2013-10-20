@@ -4,6 +4,13 @@ import deco2800.arcade.client.network.listener.NetworkListener;
 import deco2800.arcade.protocol.highscore.*;
 import com.esotericsoftware.kryonet.Connection;
 
+/**
+ * Sitting on the client-side of the Arcade, the HighscoreClientListener
+ * listens for incoming GetScoreResponses from the server, sending a message
+ * to the HighscoreClient when they arrive.
+ * 
+ * @author TeamA
+ */
 public class HighscoreClientListener extends NetworkListener {
 	
 	private HighscoreClient hsClient;

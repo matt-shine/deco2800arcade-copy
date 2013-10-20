@@ -8,6 +8,13 @@ import java.util.List;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.protocol.highscore.*;
 
+/**
+ * This class is designed to be used by game designers in order to allow access
+ * to the Highscore Database. It has a number of methods that allow scores
+ * to be added to and fetched from the database.
+ * 
+ * @author TeamA
+ */
 public class HighscoreClient {
 	private String Username;
 	private String Game_ID;

@@ -34,7 +34,7 @@ public class TestGameStorage {
 		Assert.assertEquals("junglejump",gs.getGameID(15));
 		Assert.assertEquals("",gs.getIconPath(15));
 	}
-	
+
 	@Test
 	public void testOutOfBound() throws SQLException, DatabaseException {
 		GameStorage gs = new GameStorage();

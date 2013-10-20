@@ -387,12 +387,6 @@ public class FrontPage implements Screen {
 //	                    }
 //	                })));
 	            
-	            logo.addListener((new ClickListener() {
-	            	public void clicked (InputEvent event, float x, float y){
-	            		arcadeUI.setScreen(arcadeUI.main);
-	            	}
-	            }));
-	            
 	           
 	           
 	            final Label username = new Label(pName , skin, "cgothic");
@@ -503,6 +497,14 @@ public class FrontPage implements Screen {
 		                	
 		                }
 	            })); 
+	            
+	            logo.addListener((new ClickListener() {
+	            	public void clicked (InputEvent event, float x, float y){
+	            		topBox.reset();
+	            		topBox.remove();
+	            		arcadeUI.setScreen(arcadeUI.main);
+	            	}
+	            }));
 	            
 	            
     }

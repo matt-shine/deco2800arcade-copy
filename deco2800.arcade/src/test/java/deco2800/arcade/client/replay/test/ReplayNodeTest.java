@@ -117,5 +117,20 @@ public class ReplayNodeTest {
         assertEquals(rn.getTime(), 999);
     }
     
+    @Test
+    public void testCopy()
+    {
+        items = new HashMap<String, ReplayItem>();
+        items.put("x", r1);
+        items.put("y", r2);
+        items.put("name", r3);
+        
+        ReplayNode rn = new ReplayNode("test_event", items);
+        
+        ReplayNode copy = new ReplayNode(rn);
+        
+        assertEquals(rn.toString(), copy.toString());
+    }
+    
 
 }

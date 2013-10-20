@@ -8,7 +8,7 @@ public class Board {
 	private FixedSizeList<FixedSizeList<Piece>> boardState;
 	// used to check if moves will move you into check without altering actual
 	// board
-	private ArrayList<Piece> whiteGraveyard, blackGraveyard;
+	private List<Piece> whiteGraveyard, blackGraveyard;
 	// true = blacks turn, false = whites turn
 	private boolean turn;
 	
@@ -69,7 +69,7 @@ public class Board {
 	 * @return
 	 * 			specified team's graveyard
 	 */
-	public ArrayList<Piece> getGraveyard(boolean team) {
+	public List<Piece> getGraveyard(boolean team) {
 		if (team) {
 			return blackGraveyard;
 		}
@@ -106,7 +106,6 @@ public class Board {
 			}
 			return false;
 		} catch (NullPointerException e) {
-			System.err.println("King has been taken");
 			return false;
 		}
 	}
@@ -145,7 +144,6 @@ public class Board {
 			}
 		}
 		// no pieces can move, in checkmate
-		System.err.println("In checkmate");
 		return true;
 	}
 
@@ -291,16 +289,13 @@ public class Board {
 		if ((piece.getClass() == blackKing.getClass())
 				|| (piece.getClass() == whiteKing.getClass())) {
 			// Check if the kingCastle swap can be performed, if so allow move
-			if (checkKingCastleSwap(piece)) {
-				if(performKingCastleSwap(piece, newPosition, oldPos)) {
-					return true;
-				}
+			if (checkKingCastleSwap(piece) && 
+					(performKingCastleSwap(piece, newPosition, oldPos))) {
+				return true;
 			}
 		}
 
 		if (!allowed) {
-			System.err.println("not allowable move for " + piece + ":"
-					+ newPosition[0] + ", " + newPosition[1]);
 			return false;
 		}
 
@@ -398,7 +393,6 @@ public class Board {
 		if (highestPref == 1) {
 			return;
 		}
-		System.out.println("replacing pawn with " + replaceWith.toString());
 		piece.deActivate();
 		//replace pawn with piece retrieved from graveyard
 		if (team) {
@@ -632,11 +626,6 @@ public class Board {
 
 		//choose which square to move to
 		int[] moveSquare = chooseAISquare(movePiece);
-		System.out.println("board3");
-
-		System.out.println("AI move: " + movePiece);
-		System.out.println("AI move: [" + moveSquare[0] + ", " + moveSquare[1]
-				+ "]");
 		//make move if not in stalemate
 		if (!checkForStaleMate(turn)) {
 			movePiece(movePiece, moveSquare);

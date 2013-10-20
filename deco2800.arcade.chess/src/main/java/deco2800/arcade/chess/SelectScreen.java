@@ -148,7 +148,7 @@ public class SelectScreen implements Screen {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				game.EasyComputerOpponent = true;
+				game.easyComputerOpponent = true;
 				game.setScreen(game);
 			}
 		});
@@ -161,7 +161,7 @@ public class SelectScreen implements Screen {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				game.EasyComputerOpponent = false;
+				game.easyComputerOpponent = false;
 				game.setScreen(game);
 			}
 		});

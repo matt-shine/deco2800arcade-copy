@@ -67,7 +67,6 @@ public class MenuScreen implements Screen {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Options worked!");
                 hunter.setScreen(new OptionScreen(hunter));
             }
         });
@@ -83,7 +82,6 @@ public class MenuScreen implements Screen {
         highScoreButton.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                System.out.println("HighScore worked!");
                 hunter.setScreen(new HighScoreScreen(hunter));
             }
         });
@@ -97,7 +95,6 @@ public class MenuScreen implements Screen {
         exitButton.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                System.out.println("Exit Works");
                 ArcadeSystem.goToGame(ArcadeSystem.UI);
             }
         });
@@ -150,7 +147,7 @@ public class MenuScreen implements Screen {
     }
 
     private void drawBackground() {
-        batch.draw(background, 0f, 0f, Hunter.State.screenWidth, Hunter.State.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
+        batch.draw(background, 0f, 0f, Hunter.Config.SCREEN_WIDTH, Hunter.Config.SCREEN_HEIGHT, 0, 0, background.getWidth(), background.getHeight(), false, false);
     }
 
 }

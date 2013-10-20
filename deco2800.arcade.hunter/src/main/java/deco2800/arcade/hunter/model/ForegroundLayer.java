@@ -15,26 +15,23 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ForegroundLayer extends Map {
-    private final ArrayList<MapPane> panes; //Set of the currently loaded panes
+    private final List<MapPane> panes; //Set of the currently loaded panes
     private final int paneCount; //How many panes should we keep loaded at a time, should be the number that can fit on the screen plus one
     private MapType currentType = MapType.GRASS;
 
     //Key is one of the MapType enums, value is a list of pane objects which can be instantiated
     private final HashMap<MapType, ArrayList<MapPane>> mapPanes = new HashMap<MapType, ArrayList<MapPane>>();
 
-    private final GameScreen gameScreen;
-
     /**
      * @param speedModifier How fast the pane should move relative to the camera. 1 is the same speed as the camera.
      * @param paneCount map panes to keep loaded at a time
-     * @param gameScreen the GameScreen that controls this ForegroundLayer instance
      */
-    public ForegroundLayer(float speedModifier, int paneCount, GameScreen gameScreen) {
+    public ForegroundLayer(float speedModifier, int paneCount) {
         super(speedModifier);
         this.paneCount = paneCount;
-        this.gameScreen = gameScreen;
 
         loadPanes(Gdx.files.internal("maps/maplist.txt"));
 
@@ -102,7 +99,7 @@ public class ForegroundLayer extends Map {
     private MapPane getRandomPane() {
         ArrayList<MapPane> typePanes = mapPanes.get(this.currentType);
 
-        return typePanes.get(Hunter.State.randomGenerator.nextInt(typePanes.size()));
+        return typePanes.get(Hunter.State.getRandomGenerator().nextInt(typePanes.size()));
     }
 
     /**
@@ -112,16 +109,15 @@ public class ForegroundLayer extends Map {
      * @param cameraPos current camera position
      */
     public void update(float delta, Vector3 cameraPos) {
-        if (cameraPos.x - Config.PANE_SIZE_PX * 2 > offset.x) {
-            offset.x += Config.PANE_SIZE_PX;
+        if (cameraPos.x - Config.PANE_SIZE_PX * 2 > getXOffset()) {
+            setXOffset(Config.PANE_SIZE_PX + getXOffset());
 
-            if (offset.x > (currentType.ordinal() + 1) * Config.PANES_PER_TYPE * Config.PANE_SIZE_PX) {
-                if (currentType.ordinal() < MapType.values().length - 1) {
+            if (getXOffset() > (currentType.ordinal() + 1) * Config.PANES_PER_TYPE * Config.PANE_SIZE_PX &&
+                    currentType.ordinal() < MapType.values().length - 1) {
                     currentType = MapType.values()[(currentType.ordinal() + 1)];
-                }
             }
 
-            offset.y += (panes.get(0).getEndOffset() - panes.get(1).getStartOffset());
+            setYOffset(panes.get(0).getEndOffset() - panes.get(1).getStartOffset() + getYOffset());
 
             panes.remove(0);
             panes.add(getRandomPane());
@@ -136,7 +132,7 @@ public class ForegroundLayer extends Map {
     public void draw(SpriteBatch batch) {
         float xOffset, yOffset;
         for (int i = 0; i < panes.size(); i++) {
-            xOffset = i * Config.PANE_SIZE_PX + offset.x;
+            xOffset = i * Config.PANE_SIZE_PX + getXOffset();
             yOffset = getPaneOffset(i);
             batch.draw(panes.get(i).getBgRendered(), xOffset, yOffset);
             batch.draw(panes.get(i).getFgRendered(), xOffset, yOffset);
@@ -148,7 +144,7 @@ public class ForegroundLayer extends Map {
      * @param paneIndex in the currently loaded set of panes
      */
     public int getPaneOffset(int paneIndex) {
-        int yOffset = (int) this.offset.y;
+        int yOffset = (int) this.getYOffset();
 
         if (paneIndex == 0) {
             return yOffset;
@@ -159,7 +155,6 @@ public class ForegroundLayer extends Map {
 
             return yOffset;
         } else {
-            System.out.println("DEBUG: Should never get to here");
             return 0;
         }
     }
@@ -171,7 +166,7 @@ public class ForegroundLayer extends Map {
      * @return pane index for the given x offset, -1 if the coordinate does not correspond to a valid pane
      */
     public int getPane(float x) {
-        int pane = (int) Math.floor((x - offset.x) / Config.PANE_SIZE_PX);
+        int pane = (int) Math.floor((x - getXOffset()) / Config.PANE_SIZE_PX);
         if (pane >= 0 && pane < paneCount) {
             return pane;
         }
@@ -185,7 +180,7 @@ public class ForegroundLayer extends Map {
      * @return corresponding column number
      */
     public int getColumn(float x) {
-        int tile = (int) ((x - offset.x) - getPane(x) * Config.PANE_SIZE_PX) / Config.TILE_SIZE;
+        int tile = (int) ((x - getXOffset()) - getPane(x) * Config.PANE_SIZE_PX) / Config.TILE_SIZE;
         if (tile >= 0 && tile < Config.PANE_SIZE) {
             return tile;
         }

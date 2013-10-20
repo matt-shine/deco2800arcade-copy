@@ -19,7 +19,6 @@ public class OptionScreen implements Screen {
     private boolean music;
     private boolean sound;
     private float volume;
-    private final Skin skin;
     private final Texture background;
     private final SpriteBatch batch;
 
@@ -33,7 +32,7 @@ public class OptionScreen implements Screen {
         batch = new SpriteBatch();
 
         getPreferences();
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 
         Table table = new Table(skin);
         table.setFillParent(true);
@@ -56,7 +55,6 @@ public class OptionScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 music = musicCheckBox.isChecked();
                 game.getPreferencesManager().setMusicEnabled(music);
-                System.out.println("Change music preference!");
             }
 
         });
@@ -73,7 +71,6 @@ public class OptionScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 sound = soundCheckBox.isChecked();
                 game.getPreferencesManager().setSoundEnabled(sound);
-                System.out.println("Changed sound preference!");
             }
         });
 
@@ -91,7 +88,6 @@ public class OptionScreen implements Screen {
                     Actor actor) {
                 volume = ((Slider) actor).getValue();
                 game.getPreferencesManager().setVolume(volume);
-                System.out.println("Volume is changed to" + volume);
             }
         });
 
@@ -168,6 +164,6 @@ public class OptionScreen implements Screen {
     }
 
     private void drawBackground() {
-        batch.draw(background, 0f, 0f, Hunter.State.screenWidth, Hunter.State.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
+        batch.draw(background, 0f, 0f, Hunter.Config.SCREEN_WIDTH, Hunter.Config.SCREEN_HEIGHT, 0, 0, background.getWidth(), background.getHeight(), false, false);
     }
 }

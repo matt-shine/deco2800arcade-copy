@@ -1,4 +1,4 @@
-package deco2800.arcade.hunter.platformergame;
+package deco2800.arcade.hunter.platformerGame;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 

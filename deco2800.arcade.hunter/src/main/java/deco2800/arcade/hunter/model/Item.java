@@ -3,13 +3,13 @@ package deco2800.arcade.hunter.model;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import deco2800.arcade.hunter.platformergame.Entity;
-import deco2800.arcade.hunter.platformergame.EntityCollection;
-import deco2800.arcade.hunter.platformergame.EntityCollision;
-import deco2800.arcade.hunter.platformergame.EntityCollision.CollisionType;
-import deco2800.arcade.hunter.screens.GameScreen;
+import deco2800.arcade.hunter.platformerGame.Entity;
+import deco2800.arcade.hunter.platformerGame.EntityCollection;
+import deco2800.arcade.hunter.platformerGame.EntityCollision;
+import deco2800.arcade.hunter.platformerGame.EntityCollision.CollisionType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Item extends Entity {
 
@@ -52,11 +52,12 @@ public class Item extends Entity {
      * @param entities collection of entities to search for collisions within
      */
     @Override
-    public ArrayList<EntityCollision> getCollisions(EntityCollection entities) {
-        ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
+    public List<EntityCollision> getCollisions(EntityCollection entities) {
+        List<EntityCollision> collisions = new ArrayList<EntityCollision>();
         //Check if this entity collides with the left edge of the screen
-        if (this.getX() <= 0) collisions.add(
-                new EntityCollision(this, null, CollisionType.ITEM_C_LEFT_EDGE));
+        if (this.getX() <= 0) {
+            collisions.add(new EntityCollision(this, null, CollisionType.ITEM_C_LEFT_EDGE));
+        }
         return collisions;
     }
 

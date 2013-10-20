@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import deco2800.arcade.hunter.Hunter;
-import deco2800.arcade.hunter.screens.GameScreen;
 
 public class BackgroundLayer extends Map {
     //Image which makes up the background
@@ -17,7 +16,7 @@ public class BackgroundLayer extends Map {
 
     @Override
     public void draw(SpriteBatch batch) {
-        batch.draw(background, 0, 0, Hunter.State.screenWidth, Hunter.State.screenHeight);
+        batch.draw(background, 0, 0, Hunter.Config.SCREEN_WIDTH, Hunter.Config.SCREEN_HEIGHT);
     }
 
     @Override

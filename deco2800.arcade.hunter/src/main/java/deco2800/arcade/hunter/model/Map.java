@@ -32,12 +32,15 @@ public abstract class Map {
         return offset.y;
     }
 
-    /**
-     * Setter for speedModifier
-     *
-     * @param speedModifier value to assign to speedModifier
-     */
-    public void setSpeedModifier(float speedModifier) {
-        this.speedModifier = speedModifier;
+    public void setXOffset(float newX) {
+        offset.x = newX;
+    }
+
+    public void setYOffset(float newY) {
+        offset.y = newY;
+    }
+
+    public float getSpeedModifier() {
+        return speedModifier;
     }
 }

@@ -1,9 +1,9 @@
 package deco2800.arcade.hunter;
 
 import deco2800.arcade.hunter.model.ForegroundLayer;
-import deco2800.arcade.hunter.platformergame.Entity;
-import deco2800.arcade.hunter.platformergame.EntityCollection;
-import deco2800.arcade.hunter.platformergame.EntityCollision;
+import deco2800.arcade.hunter.platformerGame.Entity;
+import deco2800.arcade.hunter.platformerGame.EntityCollection;
+import deco2800.arcade.hunter.platformerGame.EntityCollision;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,7 +63,7 @@ public class PhysicsHandler {
         while (i.hasNext()) {
             Entity e = i.next();
             boolean wasGrounded = false;
-            if (e.getCollider().bottom) {
+            if (e.getCollider().isBottom()) {
                 wasGrounded = true;
             }
             e.getCollider().clear();
@@ -75,7 +75,7 @@ public class PhysicsHandler {
             colTop = foregroundLayer.getColumnTop(mid);
             if (colTop > e.getY() || wasGrounded) {
                 e.setY(colTop);
-                e.getCollider().bottom = true;
+                e.getCollider().setBottom(true);
             }
         }
     }

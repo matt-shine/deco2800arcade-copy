@@ -9,10 +9,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.hunter.Hunter.Config;
-import deco2800.arcade.hunter.platformergame.Entity;
-import deco2800.arcade.hunter.platformergame.EntityCollection;
-import deco2800.arcade.hunter.platformergame.EntityCollision;
-import deco2800.arcade.hunter.platformergame.EntityCollision.CollisionType;
+import deco2800.arcade.hunter.platformerGame.Entity;
+import deco2800.arcade.hunter.platformerGame.EntityCollection;
+import deco2800.arcade.hunter.platformerGame.EntityCollision;
+import deco2800.arcade.hunter.platformerGame.EntityCollision.CollisionType;
 import deco2800.arcade.hunter.screens.GameScreen;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -23,6 +23,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Player extends Entity {
     /**
@@ -41,7 +42,7 @@ public class Player extends Entity {
      * A hashmap list of all the players
      */
     private final HashMap<String, Animation> animationList = new HashMap<String, Animation>();
-    private String Weapon; //Weapon that the player is wielding
+    private String weapon; //Weapon that the player is wielding
     private long attackTime = 0; //Time when the player last attacked
     private long damageTime = 0; //Time when last hit by a monster.
     private long cooldownModifier = 0; //Modifies the cooldown of the attacks
@@ -70,7 +71,7 @@ public class Player extends Entity {
         super(pos, width, height);
         loadAnimations();
         lives = 3;
-        Weapon = "Bow";
+        weapon = "Bow";
         currentAnimation = runAnimation();
         multiplier = 1;
         weaponAmmo = 10;
@@ -102,7 +103,6 @@ public class Player extends Entity {
                     animationList.put(eElement.getAttribute("id") + "death", createAnimation(1, new Texture(eElement.getElementsByTagName("death").item(0).getTextContent()), 10f));
                 }
             }
-            System.out.println("Player Animations Loaded");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -128,7 +128,7 @@ public class Player extends Entity {
      */
     public void jump() {
         setJumpVelocity(JUMP_VELOCITY);
-        this.collider.bottom = false;
+        this.getCollider().setBottom(false);
     }
 
 	/*
@@ -141,70 +141,75 @@ public class Player extends Entity {
      * Attack trigger for the player
      */
     public void attack() {
-        if (attackTime + Config.PLAYER_ATTACK_COOLDOWN - cooldownModifier < System.currentTimeMillis()) {
-            if (this.state != State.ATTACK && this.state != State.DAMAGED) {
-                Sound attack = Gdx.audio.newSound(Gdx.files.internal("attack.wav"));
-                if (Hunter.State.getPreferencesManager().isSoundEnabled()) {
-                    attack.play(Hunter.State.getPreferencesManager().getVolume());
-                }
-                state = State.ATTACK;
-                currentAnimation = attackAnimation();
-                attackTime = System.currentTimeMillis();
-                weaponAmmo -= 1;
-                if (weaponAmmo <= 0) {
-                    Weapon = "KnifeandFork";
-                }
-                if (Weapon.equals("KnifeandFork")) {
-                    attackTime -= 200;
-                    cooldownModifier = 0;
-                } else if (Weapon.equals("Trident")) {
-                    cooldownModifier = 100;
-                } else if (Weapon.equals("Spear")) {
-                    attackTime += 100;
-                    cooldownModifier = -200;
-                } else if (Weapon.equals("Bow")) {
-                    cooldownModifier = 0;
-                }
+        if (attackTime + Config.PLAYER_ATTACK_COOLDOWN - cooldownModifier < System.currentTimeMillis() &&
+                this.state != State.ATTACK && this.state != State.DAMAGED) {
+            Sound attack = Gdx.audio.newSound(Gdx.files.internal("attack.wav"));
+            if (Hunter.State.getPreferencesManager().isSoundEnabled()) {
+                attack.play(Hunter.State.getPreferencesManager().getVolume());
+            }
+            state = State.ATTACK;
+            currentAnimation = attackAnimation();
+            attackTime = System.currentTimeMillis();
+            weaponAmmo -= 1;
+            if (weaponAmmo <= 0) {
+                weapon = "KnifeandFork";
+            }
+            if (weapon.equals("KnifeandFork")) {
+                attackTime -= 200;
+                cooldownModifier = 0;
+            } else if (weapon.equals("Trident")) {
+                cooldownModifier = 100;
+            } else if (weapon.equals("Spear")) {
+                attackTime += 100;
+                cooldownModifier = -200;
+            } else if (weapon.equals("Bow")) {
+                cooldownModifier = 0;
             }
         }
     }
 
     @Override
     public void update(float delta) {
-        // Everything depends on everything else here, may have to rearrange, or
-        // even double up on checks
-        setJumpVelocity(getJumpVelocity() - delta * Hunter.State.gravity);
-        setX(getX() + delta * Hunter.State.playerVelocity.x);
+        setJumpVelocity(getJumpVelocity() - delta * Hunter.State.getGravity());
+        setX(getX() + delta * Hunter.State.getPlayerVelocity().x);
 
         if (state != State.DEAD) {
-            if (collider.bottom && Hunter.State.playerVelocity.y < 0) {
+            if (getCollider().isBottom() && Hunter.State.getPlayerVelocity().y < 0) {
                 setJumpVelocity(0);
                 setY(gamescreen.getForeground().getColumnTop(getX()));
             } else {
                 setY(getY() + getJumpVelocity());
             }
 
-            if (Hunter.State.playerVelocity.x < Hunter.State.gameSpeed) {
-                Hunter.State.playerVelocity.x += 100 * delta;
+            if (Hunter.State.getPlayerVelocity().x < Hunter.State.getGameSpeed()) {
+                Hunter.State.setPlayerVelocity(new Vector2(Hunter.State.getPlayerVelocity().x + 100 * delta,
+                        Hunter.State.getPlayerVelocity().y));
             }
+            updateState();
 
-            // Update the player state
-            if (isGrounded() && this.state != State.ATTACK && this.state != State.DAMAGED && this.state != State.DEAD) {
-                Hunter.State.playerVelocity.y = 0;
-                this.state = State.RUNNING;
-                currentAnimation = runAnimation();
-            } else if (Hunter.State.playerVelocity.y > 0 && this.state != State.ATTACK && this.state != State.DEAD) {
-                this.state = State.JUMPING;
-                currentAnimation = jumpAnimation();
-            } else if (Hunter.State.playerVelocity.y < -1 && this.state != State.ATTACK && this.state != State.DEAD) {
-                this.state = State.FALLING;
-                currentAnimation = fallAnimation();
-            }
 
             score += 100 * delta * multiplier;
         }
         checkDist();
         checkTimers();
+    }
+
+    /**
+     * Update the player state
+     */
+    private void updateState() {
+        // Update the player state
+        if (isGrounded() && this.state != State.ATTACK && this.state != State.DAMAGED && this.state != State.DEAD) {
+            Hunter.State.setPlayerVelocity(new Vector2(Hunter.State.getPlayerVelocity().x, 0));
+            this.state = State.RUNNING;
+            currentAnimation = runAnimation();
+        } else if (Hunter.State.getPlayerVelocity().y > 0 && this.state != State.ATTACK && this.state != State.DEAD) {
+            this.state = State.JUMPING;
+            currentAnimation = jumpAnimation();
+        } else if (Hunter.State.getPlayerVelocity().y < -1 && this.state != State.ATTACK && this.state != State.DEAD) {
+            this.state = State.FALLING;
+            currentAnimation = fallAnimation();
+        }
     }
 
     /**
@@ -235,8 +240,9 @@ public class Player extends Entity {
         }
 
         if (buffTime + 3000 < System.currentTimeMillis()) {
-            if (invulnerable)
+            if (invulnerable) {
                 invulnerable = false;
+            }
             if (multiplier != 1) {
                 multiplier = 1;
                 gamescreen.setMultiplier(1);
@@ -314,20 +320,19 @@ public class Player extends Entity {
      * Checks for entity collisions
      */
     @Override
-    public ArrayList<EntityCollision> getCollisions(EntityCollection entities) {
-        ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
+    public List<EntityCollision> getCollisions(EntityCollection entities) {
+        List<EntityCollision> collisions = new ArrayList<EntityCollision>();
         Player player = this;
         for (Entity e : entities) {
             if (player.getBounds().overlaps(e.getBounds())) {
                 if (e.getType().equals("Animal")) {
-                    if (player.state == State.ATTACK)
+                    if (player.state == State.ATTACK) {
                         collisions.add(new EntityCollision(player, e,
                                 CollisionType.PLAYER_PROJECTILE_C_ANIMAL));
-
-                    else
+                    } else {
                         collisions.add(new EntityCollision(player, e,
                                 CollisionType.WORLD_PROJECTILE_C_PLAYER));
-
+                    }
                 }
                 if (e.getType().equals("Items")) {
                     collisions.add(new EntityCollision(player, e,
@@ -350,64 +355,69 @@ public class Player extends Entity {
         if (e == null) {
             lives = 0;
         } else if (e.getType().equals("Items")) {
-            entities.remove(e);
-            if (Hunter.State.getPreferencesManager().isSoundEnabled()) {
-                pickup.play(Hunter.State.getPreferencesManager().getVolume());
-            }
-            if (((Item) e).getItemType() == Item.Type.WEAPON) {
-                setWeapon(((Item) e).getItem());
-                weaponAmmo = 10;
-                gamescreen.getGameReference().incrementAchievement("hunter.arsenal." + ((Item) e).getItem());
-            } else {
-                applyPlayerBuff(((Item) e).getItem());
-            }
+            handleItemCollision(e, entities);
         } else if (e.getType().equals("Animal")) {
-            if (getState() == State.ATTACK) {
-                if (!((Animal) e).isDead()) {
-                    addAnimalKilled();
-                    score = score + 200 * multiplier;
-                }
-                ((Animal) e).dead();
-            } else {
-                if (!invulnerable && !blink && !((Animal) e).isDead()) {
-                    if (Hunter.State.getPreferencesManager().isSoundEnabled()) {
-                        hurt.play(Hunter.State.getPreferencesManager().getVolume());
-                    }
-                    this.blink = true;
-                    damageTime = System.currentTimeMillis();
-					loseLife();
-					checkLives();
-				}
-			}
-		} else if(e.getType().equals("MapEntity") && !((MapEntity) e).getEntityType().equals("arrow")){
-			if (!invulnerable && !blink && !dead){
-				applyPlayerDebuff((MapEntity)e);
-			}
+            handleAnimalCollision((Animal) e);
+        } else if(e.getType().equals("MapEntity") && !((MapEntity) e).getEntityType().equals("arrow")
+                && !invulnerable && !blink && !dead){
+            applyPlayerDebuff((MapEntity)e);
 		}
 	}
 
-	private void applyPlayerDebuff(MapEntity ent){
+    private void handleAnimalCollision(Animal e) {
+        if (getState() == State.ATTACK) {
+            if (!e.isDead()) {
+                addAnimalKilled();
+                score = score + 200 * multiplier;
+            }
+            e.dead();
+        } else if (!invulnerable && !blink && !e.isDead()) {
+            if (Hunter.State.getPreferencesManager().isSoundEnabled()) {
+                hurt.play(Hunter.State.getPreferencesManager().getVolume());
+            }
+            this.blink = true;
+            damageTime = System.currentTimeMillis();
+            loseLife();
+            checkLives();
+        }
+    }
+
+    private void handleItemCollision(Entity e, EntityCollection entities) {
+        entities.remove(e);
+        if (Hunter.State.getPreferencesManager().isSoundEnabled()) {
+            pickup.play(Hunter.State.getPreferencesManager().getVolume());
+        }
+        if (((Item) e).getItemType() == Item.Type.WEAPON) {
+            setWeapon(((Item) e).getItem());
+            weaponAmmo = 10;
+            gamescreen.getGameReference().incrementAchievement("hunter.arsenal." + ((Item) e).getItem());
+        } else {
+            applyPlayerBuff(((Item) e).getItem());
+        }
+    }
+
+    private void applyPlayerDebuff(MapEntity ent) {
 		if (ent.getEntityType().equals("net")){
-			Hunter.State.playerVelocity.x = 0;
+			Hunter.State.setPlayerVelocity(new Vector2(0, Hunter.State.getPlayerVelocity().y));
 			gamescreen.getEntities().remove(ent);
-		}else if(ent.getEntityType().equals("bomb")){
+		} else if(ent.getEntityType().equals("bomb")) {
 			ent.explode();
-		}else if(ent.getEntityType().equals("spike trap")){
-			if (Hunter.State.getPreferencesManager().isSoundEnabled()){
+		} else if(ent.getEntityType().equals("spike trap")) {
+			if (Hunter.State.getPreferencesManager().isSoundEnabled()) {
 				hurt.play(Hunter.State.getPreferencesManager().getVolume());
 			}
 			this.blink = true;
 			damageTime = System.currentTimeMillis();
 			loseLife();
 			checkLives();
-		}else if(ent.getEntityType().equals("deathShroom")){
-			if (Hunter.State.getPreferencesManager().isSoundEnabled()){
+		} else if(ent.getEntityType().equals("deathShroom")) {
+			if (Hunter.State.getPreferencesManager().isSoundEnabled()) {
 				hurt.play(Hunter.State.getPreferencesManager().getVolume());
 			}
 			score -= 1000;
 			gamescreen.getEntities().remove(ent);
-		}else if(ent.getEntityType().equals("explosion")){
-			if (Hunter.State.getPreferencesManager().isSoundEnabled()){
+		} else if(ent.getEntityType().equals("explosion")) {
+			if (Hunter.State.getPreferencesManager().isSoundEnabled()) {
 				hurt.play(Hunter.State.getPreferencesManager().getVolume());
 			}
 			this.blink = true;
@@ -508,7 +518,7 @@ public class Player extends Entity {
      * @return grounded
      */
     public boolean isGrounded() {
-        return collider.bottom;
+        return getCollider().isBottom();
     }
 
     /**
@@ -517,7 +527,7 @@ public class Player extends Entity {
      * @param grounded Boolean value of whether its grounded
      */
     public void setGrounded(boolean grounded) {
-        this.collider.bottom = grounded;
+        this.getCollider().setBottom(grounded);
     }
 		
 	/*
@@ -581,10 +591,10 @@ public class Player extends Entity {
     }
 
     /**
-     * @return String - Weapon that is currently used by the player
+     * @return String - weapon that is currently used by the player
      */
     public String getWeapon() {
-        return Weapon;
+        return weapon;
     }
 
     /**
@@ -593,7 +603,7 @@ public class Player extends Entity {
      * @param s String
      */
     public void setWeapon(String s) {
-        Weapon = s;
+        weapon = s;
     }
 
     /**
@@ -607,7 +617,7 @@ public class Player extends Entity {
      * @return Integer of the ammo remaining on the current weapon, if the weapon is default then 0 is returned
      */
     public int getWeaponAmmo() {
-        if (!Weapon.equals("KnifeandFork")) {
+        if (!weapon.equals("KnifeandFork")) {
             return weaponAmmo;
         } else {
             return 0;
@@ -638,7 +648,7 @@ public class Player extends Entity {
      * @return float value of the JumpVelocity
      */
     public float getJumpVelocity() {
-        return Hunter.State.playerVelocity.y;
+        return Hunter.State.getPlayerVelocity().y;
     }
 
     /**
@@ -647,7 +657,7 @@ public class Player extends Entity {
      * @param jumpVelocity Float value of what the jump velocity will be set to
      */
     public void setJumpVelocity(float jumpVelocity) {
-        Hunter.State.playerVelocity.y = jumpVelocity;
+        Hunter.State.setPlayerVelocity(new Vector2(Hunter.State.getPlayerVelocity().x, jumpVelocity));
     }
 
     /**
@@ -674,7 +684,7 @@ public class Player extends Entity {
      * @return Animation - Hurt Animation
      */
     public Animation hurtAnimation() {
-        return animationList.get(Weapon + "damage");
+        return animationList.get(weapon + "damage");
     }
 	
 	/*
@@ -689,7 +699,7 @@ public class Player extends Entity {
      * @return Animation - Death animation
      */
     public Animation deathAnimation() {
-        return animationList.get(Weapon + "death");
+        return animationList.get(weapon + "death");
     }
 
     /**
@@ -698,7 +708,7 @@ public class Player extends Entity {
      * @return Animation - Attack Animation
      */
     public Animation attackAnimation() {
-        return animationList.get(Weapon + "attack");
+        return animationList.get(weapon + "attack");
     }
 
     /**
@@ -707,7 +717,7 @@ public class Player extends Entity {
      * @return Animation - Jump Animation
      */
     public Animation jumpAnimation() {
-        return animationList.get(Weapon + "jump");
+        return animationList.get(weapon + "jump");
     }
 
     /**
@@ -716,7 +726,7 @@ public class Player extends Entity {
      * @return Animation - Fall Animation
      */
     public Animation fallAnimation() {
-        return animationList.get(Weapon + "fall");
+        return animationList.get(weapon + "fall");
     }
 
     /**
@@ -725,7 +735,7 @@ public class Player extends Entity {
      * @return Animation - Damage Animation
      */
     public Animation damageAnimation() {
-        return animationList.get(Weapon + "damage");
+        return animationList.get(weapon + "damage");
     }
 
     /**
@@ -734,7 +744,7 @@ public class Player extends Entity {
      * @return Animation - Run animation
      */
     public Animation runAnimation() {
-        return animationList.get(Weapon + "running");
+        return animationList.get(weapon + "running");
     }
 
     /**

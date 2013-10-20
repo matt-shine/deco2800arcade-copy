@@ -1,26 +1,21 @@
 package deco2800.arcade.hunter.test;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import deco2800.arcade.hunter.model.Item;
-import deco2800.arcade.hunter.platformergame.Entity;
-import deco2800.arcade.hunter.platformergame.EntityCollection;
+import deco2800.arcade.hunter.model.BackgroundSprite;
+import deco2800.arcade.hunter.platformerGame.Entity;
+import deco2800.arcade.hunter.platformerGame.EntityCollection;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Iterator;
 
 public class EntityCollectionTest {
-    //Dummy item texture
-    Texture itemTexture = new Texture(Gdx.files.internal("textures/tilemap.png"));
 
     @Test
     public void testAddEntities() {
         EntityCollection ec = new EntityCollection();
-        Texture t = new Texture(Gdx.files.internal("textures/tilemap.png"));
         //Start with one item
-        ec.add(new Item(Vector2.Zero, 10, 10, "Coin", itemTexture));
+        ec.add(new BackgroundSprite(Vector2.Zero, 10, 10, 1));
         Assert.assertTrue(ec.size() == 1);
 
         //Make sure it isn't null
@@ -28,7 +23,7 @@ public class EntityCollectionTest {
 
         //Add another 5
         for (int i = 0; i < 5; i++) {
-            ec.add(new Item(Vector2.Zero, 10, 10, "Coin", itemTexture));
+            ec.add(new BackgroundSprite(Vector2.Zero, 10, 10, 1));
         }
         Assert.assertTrue(ec.size() == 6);
     }
@@ -38,7 +33,7 @@ public class EntityCollectionTest {
         EntityCollection ec = new EntityCollection();
 
         for (int i = 0; i < 20; i++) {
-            ec.add(new Item(Vector2.Zero, 10, 10, "Coin", itemTexture));
+            ec.add(new BackgroundSprite(Vector2.Zero, 10, 10, 1));
         }
         Assert.assertTrue(ec.size() == 20);
 

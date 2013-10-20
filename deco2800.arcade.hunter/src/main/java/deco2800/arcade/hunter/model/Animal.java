@@ -5,14 +5,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.hunter.Hunter;
-import deco2800.arcade.hunter.platformergame.Entity;
-import deco2800.arcade.hunter.platformergame.EntityCollection;
-import deco2800.arcade.hunter.platformergame.EntityCollision;
-import deco2800.arcade.hunter.platformergame.EntityCollision.CollisionType;
+import deco2800.arcade.hunter.platformerGame.Entity;
+import deco2800.arcade.hunter.platformerGame.EntityCollection;
+import deco2800.arcade.hunter.platformerGame.EntityCollision;
+import deco2800.arcade.hunter.platformerGame.EntityCollision.CollisionType;
 import deco2800.arcade.hunter.screens.GameScreen;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class Animal extends Entity {
     /**
@@ -59,15 +60,15 @@ public class Animal extends Entity {
     public void update(float delta) {
         //Move the animalType
         setX(getX() + moveSpeed);
-        setY(getY() - Hunter.State.gravity);
+        setY(getY() - Hunter.State.getGravity());
 
         //Removes the entity after a certain period, determined by timeOfDeath and timeout.
-        if (this.state == State.DEAD) {
-            if (timeOfDeath + Hunter.Config.PLAYER_BLINK_TIMEOUT <= System.currentTimeMillis()) {
-                Iterator it = gameScreen.getEntities().iterator();
-                while (it.hasNext()) {
-                    if (it.next().equals(this))
-                        it.remove();
+        if (this.state == State.DEAD &&
+                timeOfDeath + Hunter.Config.PLAYER_BLINK_TIMEOUT <= System.currentTimeMillis()) {
+            Iterator it = gameScreen.getEntities().iterator();
+            while (it.hasNext()) {
+                if (it.next().equals(this)) {
+                    it.remove();
                 }
             }
         }
@@ -88,7 +89,7 @@ public class Animal extends Entity {
         moveSpeed = 0;
         this.state = State.DEAD;
         timeOfDeath = System.currentTimeMillis();
-        currentAnimation = gameScreen.entityHandler.getAnimalAnimation(animalType + "DEAD");
+        currentAnimation = gameScreen.getEntityHandler().getAnimalAnimation(animalType + "DEAD");
     }
 
     /**
@@ -99,16 +100,15 @@ public class Animal extends Entity {
      *                 for collisions against.
      */
     @Override
-    public ArrayList<EntityCollision> getCollisions(EntityCollection entities) {
-        ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
+    public List<EntityCollision> getCollisions(EntityCollection entities) {
+        List<EntityCollision> collisions = new ArrayList<EntityCollision>();
         for (Entity e : entities) {
-            if (this.getX() <= 0)
+            if (this.getX() <= 0) {
                 collisions.add(new EntityCollision(this, null,
                         CollisionType.PREDATOR_C_LEFT_EDGE));
-            if (this.getBounds().overlaps(e.getBounds())) {
-                if (e.getType().equals("MapEntity")) {
-                    collisions.add(new EntityCollision(this, e, CollisionType.MAP_ENTITY_C_ANIMAL));
-                }
+            }
+            if (this.getBounds().overlaps(e.getBounds()) && e.getType().equals("MapEntity")) {
+                collisions.add(new EntityCollision(this, e, CollisionType.MAP_ENTITY_C_ANIMAL));
             }
         }
         return collisions;

@@ -21,8 +21,6 @@ public class HighScoreScreen implements Screen {
 
     private final Hunter hunter;
     private final Stage stage;
-    private final Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-    private final List<Highscore> topPlayers;
 
 
     private final Texture background;
@@ -33,11 +31,12 @@ public class HighScoreScreen implements Screen {
         stage = new Stage();
         ArcadeInputMux.getInstance().addProcessor(stage);
 
-        topPlayers = hunter.highscore.getGameTopPlayers(3, true, "Number");
+        List<Highscore> topPlayers = hunter.getHighscore().getGameTopPlayers(3, true, "Number");
         Texture.setEnforcePotImages(false);
         background = new Texture("textures/mainmenu.png");
         batch = new SpriteBatch();
 
+        Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
         Table table = new Table(skin);
         table.setFillParent(true);
         table.padRight(400f);
@@ -54,7 +53,6 @@ public class HighScoreScreen implements Screen {
 
         for (int i = 0; i < Math.min(3, topPlayers.size()); i++) {
             table.add("HighScore " + (i + 1) + " - " + topPlayers.get(i).playerName + " : ");
-            System.out.println("HighScore " + (i + 1) + " - " + topPlayers.get(i).playerName + " : " + topPlayers.get(i).score);
             table.add(String.valueOf(topPlayers.get(i).score)).colspan(2);
             table.row();
         }
@@ -69,7 +67,6 @@ public class HighScoreScreen implements Screen {
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Going back to the main menu!");
                 hunter.setScreen(new MenuScreen(hunter));
             }
         });
@@ -131,6 +128,6 @@ public class HighScoreScreen implements Screen {
     }
 
     private void drawBackground() {
-        batch.draw(background, 0f, 0f, Hunter.State.screenWidth, Hunter.State.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
+        batch.draw(background, 0f, 0f, Hunter.Config.SCREEN_WIDTH, Hunter.Config.SCREEN_HEIGHT, 0, 0, background.getWidth(), background.getHeight(), false, false);
     }
 }

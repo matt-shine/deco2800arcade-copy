@@ -1,15 +1,16 @@
-package deco2800.arcade.hunter.platformergame;
+package deco2800.arcade.hunter.platformerGame;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public abstract class Entity {
-    protected Rectangle bounds;
-    protected final EdgeCollider collider = new EdgeCollider();
+    private Rectangle bounds;
+    private final EdgeCollider collider = new EdgeCollider();
 
     public Entity(Vector2 pos, float width, float height) {
         bounds = new Rectangle(pos.x, pos.y, width, height);
@@ -77,7 +78,7 @@ public abstract class Entity {
     public void handleCollision(Entity entityTwo, EntityCollection entities) {
     }
 
-    public ArrayList<EntityCollision> getCollisions(EntityCollection entities) {
+    public List<EntityCollision> getCollisions(EntityCollection entities) {
         return null;
     }
 

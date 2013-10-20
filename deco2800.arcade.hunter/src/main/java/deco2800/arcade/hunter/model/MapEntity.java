@@ -1,6 +1,7 @@
 package deco2800.arcade.hunter.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.openal.Mp3.Sound;
@@ -9,10 +10,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.hunter.Hunter;
-import deco2800.arcade.hunter.platformergame.Entity;
-import deco2800.arcade.hunter.platformergame.EntityCollection;
-import deco2800.arcade.hunter.platformergame.EntityCollision;
-import deco2800.arcade.hunter.platformergame.EntityCollision.CollisionType;
+import deco2800.arcade.hunter.platformerGame.Entity;
+import deco2800.arcade.hunter.platformerGame.EntityCollection;
+import deco2800.arcade.hunter.platformerGame.EntityCollision;
+import deco2800.arcade.hunter.platformerGame.EntityCollision.CollisionType;
 import deco2800.arcade.hunter.screens.GameScreen;
 
 public class MapEntity extends Entity {
@@ -67,12 +68,13 @@ public class MapEntity extends Entity {
      * @param entities collection of entities to search for collisions within
      */
 	@Override
-	public ArrayList<EntityCollision> getCollisions(EntityCollection entities) {
-		ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
+	public List<EntityCollision> getCollisions(EntityCollection entities) {
+		List<EntityCollision> collisions = new ArrayList<EntityCollision>();
 		for (Entity e : entities) {
-			if (this.getX() <= 0)
+			if (this.getX() <= 0) {
 				collisions.add(new EntityCollision(this, null,
 						CollisionType.MAP_ENTITY_C_LEFT_EDGE));
+            }
 			if (e.getType().equals("Animal")) {
 				collisions.add(new EntityCollision(this, e,
 						CollisionType.MAP_ENTITY_C_ANIMAL));
@@ -127,7 +129,7 @@ public class MapEntity extends Entity {
     public void explode(){
     	if (this.mapEntityType.equals("bomb")){
     		explodeTime = System.currentTimeMillis();
-    		texture = gameScreen.entityHandler.getMapEntity("explosion");
+    		texture = gameScreen.getEntityHandler().getMapEntity("explosion");
     		explode = true;
     		this.mapEntityType = "explosion";
     		if (Hunter.State.getPreferencesManager().isSoundEnabled()){

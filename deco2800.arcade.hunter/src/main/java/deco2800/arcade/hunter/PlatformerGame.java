@@ -21,44 +21,51 @@ public abstract class PlatformerGame extends GameClient {
     }
 
     @Override
-    public void create() {
-        super.create();
-    }
-
-    @Override
     public void dispose() {
         super.dispose();
-        if (screen != null) screen.hide();
+        if (screen != null) {
+            screen.hide();
+        }
     }
 
     @Override
     public void pause() {
         super.pause();
-        if (screen != null) screen.pause();
+        if (screen != null) {
+            screen.pause();
+        }
     }
 
     @Override
     public void render() {
         super.render();
-        if (screen != null) screen.render(Gdx.graphics.getDeltaTime());
+        if (screen != null) {
+            screen.render(Gdx.graphics.getDeltaTime());
+        }
         super.render();
     }
 
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        if (screen != null) screen.resize(width, height);
+        if (screen != null) {
+            screen.resize(width, height);
+        }
     }
 
     @Override
     public void resume() {
         super.resume();
-        if (screen != null) screen.resume();
+        if (screen != null) {
+            screen.resume();
+        }
     }
 
     //Set the game screen
     public void setScreen(Screen screen) {
-        if (this.screen != null) this.screen.hide();
+        if (this.screen != null) {
+            this.screen.hide();
+        }
         this.screen = screen;
         if (this.screen != null) {
             this.screen.show();

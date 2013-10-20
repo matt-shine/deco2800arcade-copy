@@ -3,7 +3,7 @@ package deco2800.arcade.hunter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import deco2800.arcade.hunter.platformergame.EntityCollection;
+import deco2800.arcade.hunter.platformerGame.EntityCollection;
 
 import java.util.HashMap;
 
@@ -11,14 +11,12 @@ public class EntityHandler {
 	/**
 	 * Creates Entities
 	 */
-	private final EntityCollection entities;
 	private final HashMap<String,Animation> animalAnimations; //Animation HashMap for animals
 	private final HashMap<String,Texture> itemTextures; //Texture HashMap for items
 	private final HashMap<String,Texture> mapEntityTextures; //Texture HashMap for MapEntities
 	
 	
-	public EntityHandler(EntityCollection entities){
-		this.entities = entities;
+	public EntityHandler(){
 		animalAnimations = new HashMap<String,Animation>();
 		itemTextures = new HashMap<String,Texture>();
 		mapEntityTextures = new HashMap<String,Texture>();

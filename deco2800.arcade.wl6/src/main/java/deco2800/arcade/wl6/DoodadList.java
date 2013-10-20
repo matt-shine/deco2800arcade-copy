@@ -203,7 +203,7 @@ public class DoodadList {
                     //62: flag
                     DoodadInfo.solidScenery("flag"),
 
-                    //63: nothing
+                    //63: Aardwolf sign
                     new DoodadInfo(),
 
                     //64: bones 2
@@ -362,29 +362,29 @@ public class DoodadList {
                     //115: Guard 1 (Moving)
                     new DoodadInfo(true, "snowman", 0, 6, 0, 1, EnemyType.GUARD, 0, DIRS.DOWN, true),  // FIXME Not complete
 
-                    //116: nothing
-                    new DoodadInfo(),
+                    //116: Officer 1 (Standing)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
-                    //117: nothing
-                    new DoodadInfo(),
+                    //117: Officer 1 (Standing)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.UP, false),  // FIXME Not complete
 
-                    //118: nothing
-                    new DoodadInfo(),
+                    //118: Officer 1 (Standing)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.LEFT, false),  // FIXME Not complete
 
-                    //119: nothing
-                    new DoodadInfo(),
+                    //119: Officer 1 (Standing)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.DOWN, false),  // FIXME Not complete
 
-                    //120: nothing
-                    new DoodadInfo(),
+                    //120: Officer 1 (Moving)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.RIGHT, true),  // FIXME Not complete
 
-                    //121: nothing
-                    new DoodadInfo(),
+                    //121: Officer 1 (Moving)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.UP, true),  // FIXME Not complete
 
-                    //122: nothing
-                    new DoodadInfo(),
+                    //122: Officer 1 (Moving)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.LEFT, true),  // FIXME Not complete
 
-                    //123: nothing
-                    new DoodadInfo(),
+                    //123: Officer 1 (Moving)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 1, EnemyType.OFFICER, 0, DIRS.DOWN, true),  // FIXME Not complete
 
                     //124: dead guard
                     DoodadInfo.nonsolidScenery("headstone"),
@@ -470,29 +470,29 @@ public class DoodadList {
                     //151: Guard 3 (Moving)
                     new DoodadInfo(true, "snowman", 0, 6, 0, 3, EnemyType.GUARD, 0, DIRS.DOWN, true),  // FIXME Not complete
 
-                    //152: nothing
-                    new DoodadInfo(),
+                    //152: Officer 3 (Standing)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
-                    //153: nothing
-                    new DoodadInfo(),
+                    //153: Officer 3 (Standing)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.UP, false),  // FIXME Not complete
 
-                    //154: nothing
-                    new DoodadInfo(),
+                    //154: Officer 3 (Standing)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.LEFT, false),  // FIXME Not complete
 
-                    //155: nothing
-                    new DoodadInfo(),
+                    //155: Officer 3 (Standing)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.DOWN, false),  // FIXME Not complete
 
-                    //156: nothing
-                    new DoodadInfo(),
+                    //156: Officer 3 (Moving)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.RIGHT, true),  // FIXME Not complete
 
-                    //157: nothing
-                    new DoodadInfo(),
+                    //157: Officer 3 (Moving)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.UP, true),  // FIXME Not complete
 
-                    //158: nothing
-                    new DoodadInfo(),
+                    //158: Officer 3 (Moving)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.LEFT, true),  // FIXME Not complete
 
-                    //159: nothing
-                    new DoodadInfo(),
+                    //159: Officer 3 (Moving)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 3, EnemyType.OFFICER, 0, DIRS.DOWN, true),  // FIXME Not complete
 
                     //160: Fake Hitler
                     new DoodadInfo(true, "iceking_clone", 0, 0, 0, 0, EnemyType.FAKE_HITLER, 0, DIRS.RIGHT, false),  // FIXME Not complete
@@ -578,29 +578,29 @@ public class DoodadList {
                     //187: Guard 4 (Moving)
                     new DoodadInfo(true, "snowman", 0, 6, 0, 4, EnemyType.GUARD, 0, DIRS.DOWN, true),  // FIXME Not complete
 
-                    //188: nothing
-                    new DoodadInfo(),
+                    //188: Officer 4 (Standing)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
-                    //189: nothing
-                    new DoodadInfo(),
+                    //189: Officer 4 (Standing)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.UP, false),  // FIXME Not complete
 
-                    //190: nothing
-                    new DoodadInfo(),
+                    //190: Officer 4 (Standing)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.LEFT, false),  // FIXME Not complete
 
-                    //191: nothing
-                    new DoodadInfo(),
+                    //191: Officer 4 (Standing)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.DOWN, false),  // FIXME Not complete
 
-                    //192: nothing
-                    new DoodadInfo(),
+                    //192: Officer 4 (Moving)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.RIGHT, true),  // FIXME Not complete
 
-                    //193: nothing
-                    new DoodadInfo(),
+                    //193: Officer 4 (Moving)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.UP, true),  // FIXME Not complete
 
-                    //194: nothing
-                    new DoodadInfo(),
+                    //194: Officer 4 (Moving)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.LEFT, true),  // FIXME Not complete
 
-                    //195: nothing
-                    new DoodadInfo(),
+                    //195: Officer 4 (Moving)
+                    new DoodadInfo(true, "officer", 0, 6, 0, 4, EnemyType.OFFICER, 0, DIRS.DOWN, true),  // FIXME Not complete
 
                     //196: Dr. Schabbs
                     new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.SCHABBS, 0, DIRS.RIGHT, false),  // FIXME Not complete
@@ -657,19 +657,142 @@ public class DoodadList {
                     new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.DOWN, true),  // FIXME Not complete
 
                     //214: Hans Grosse
-                    new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.HANS, 0, DIRS.RIGHT, false),
+                    new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.HANS, 0, DIRS.RIGHT, false),  // FIXME Not complete
                     
                     //215: Otto Giftmacher
                     new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.GUARD, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
-                    //??: Officers of all types
+                    //216: Mutant 1 (Standing)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.MUTANT, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
+                    //217: Mutant 1 (Standing)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.MUTANT, 0, DIRS.UP, false),  // FIXME Not complete
 
-                    //??: Mutants of all types
+                    //218: Mutant 1 (Standing)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.MUTANT, 0, DIRS.LEFT, false),  // FIXME Not complete
 
+                    //219: Mutant 1 (Standing)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.MUTANT, 0, DIRS.DOWN, false),  // FIXME Not complete
 
-                    //??: Pacman ghosts
+                    //220: Mutant 1 (Moving)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.MUTANT, 0, DIRS.RIGHT, true),  // FIXME Not complete
 
+                    //221: Mutant 1 (Moving)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.MUTANT, 0, DIRS.UP, true),  // FIXME Not complete
+
+                    //222: Mutant 1 (Moving)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.MUTANT, 0, DIRS.LEFT, true),  // FIXME Not complete
+
+                    //223: Mutant 1 (Moving)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.MUTANT, 0, DIRS.DOWN, true),  // FIXME Not complete
+
+                    //224: Red PacMan
+                    new DoodadInfo(),
+
+                    //225: Yellow PacMan
+                    new DoodadInfo(),
+
+                    //226: Rose PacMan
+                    new DoodadInfo(),
+
+                    //227: Blue PacMan
+                    new DoodadInfo(),
+
+                    //228: Nothing
+                    new DoodadInfo(),
+
+                    //229: Nothing
+                    new DoodadInfo(),
+
+                    //230: Nothing
+                    new DoodadInfo(),
+
+                    //231: Nothing
+                    new DoodadInfo(),
+
+                    //232: Nothing
+                    new DoodadInfo(),
+
+                    //233: Nothing
+                    new DoodadInfo(),
+
+                    //234: Mutant 3 (Standing)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.MUTANT, 0, DIRS.RIGHT, false),  // FIXME Not complete
+
+                    //235: Mutant 3 (Standing)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.MUTANT, 0, DIRS.UP, false),  // FIXME Not complete
+
+                    //236: Mutant 3 (Standing)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.MUTANT, 0, DIRS.LEFT, false),  // FIXME Not complete
+
+                    //237: Mutant 3 (Standing)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.MUTANT, 0, DIRS.DOWN, false),  // FIXME Not complete
+
+                    //238: Mutant 3 (Moving)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.MUTANT, 0, DIRS.RIGHT, true),  // FIXME Not complete
+
+                    //239: Mutant 3 (Moving)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.MUTANT, 0, DIRS.UP, true),  // FIXME Not complete
+
+                    //240: Mutant 3 (Moving)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.MUTANT, 0, DIRS.LEFT, true),  // FIXME Not complete
+
+                    //241: Mutant 3 (Moving)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.MUTANT, 0, DIRS.DOWN, true),  // FIXME Not complete
+
+                    //242: Nothing
+                    new DoodadInfo(),
+
+                    //243: Nothing
+                    new DoodadInfo(),
+
+                    //244: Nothing
+                    new DoodadInfo(),
+
+                    //245: Nothing
+                    new DoodadInfo(),
+
+                    //246: Nothing
+                    new DoodadInfo(),
+
+                    //247: Nothing
+                    new DoodadInfo(),
+
+                    //248: Nothing
+                    new DoodadInfo(),
+
+                    //249: Nothing
+                    new DoodadInfo(),
+
+                    //250: Nothing
+                    new DoodadInfo(),
+
+                    //251: Nothing
+                    new DoodadInfo(),
+
+                    //252: Mutant 4 (Standing)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.MUTANT, 0, DIRS.RIGHT, false),  // FIXME Not complete
+
+                    //253: Mutant 4 (Standing)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.MUTANT, 0, DIRS.UP, false),  // FIXME Not complete
+
+                    //254: Mutant 4 (Standing)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.MUTANT, 0, DIRS.LEFT, false),  // FIXME Not complete
+
+                    //255: Mutant 4 (Standing)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.MUTANT, 0, DIRS.DOWN, false),  // FIXME Not complete
+
+                    //256: Mutant 4 (Moving)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.MUTANT, 0, DIRS.RIGHT, true),  // FIXME Not complete
+
+                    //257: Mutant 4 (Moving)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.MUTANT, 0, DIRS.UP, true),  // FIXME Not complete
+
+                    //258: Mutant 4 (Moving)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.MUTANT, 0, DIRS.LEFT, true),  // FIXME Not complete
+
+                    //259: Mutant 4 (Moving)
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.MUTANT, 0, DIRS.DOWN, true),  // FIXME Not complete
 
             };
 }

@@ -5,7 +5,7 @@ import deco2800.arcade.wl6.DoodadInfo;
 public class SS extends Enemy {
 
     // All difficulties = 100 health
-    private int STARTING_HEALTH = 100;
+    private final int STARTING_HEALTH = 100;
 
     public SS(int uid, DoodadInfo d) {
         super(uid);

@@ -7,7 +7,7 @@ public class Mutant extends Enemy {
 
     // Difficulty 1 = 45 health
     // Difficulty 2-4 = 55 health
-    private int STARTING_HEALTH = 45;
+    private final int STARTING_HEALTH = 45;
 
     public Mutant(int uid, DoodadInfo d) {
         super(uid);

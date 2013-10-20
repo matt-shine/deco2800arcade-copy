@@ -6,7 +6,7 @@ import deco2800.arcade.wl6.WL6Meta;
 public class Officer extends Enemy {
 
     // All difficulties = 50 health
-    private int STARTING_HEALTH = 50;
+    private final int STARTING_HEALTH = 50;
 
     public Officer(int uid, DoodadInfo d) {
         super(uid);

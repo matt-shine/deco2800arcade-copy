@@ -8,6 +8,7 @@ import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.ArcadeSystem;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 
 /* main game class, sets the screens to be displayed */
 
@@ -69,7 +70,26 @@ public class MiniGolf extends GameClient {
 		
 		
 	}	
+	
+	public void soundPlay{
+		public static Music music;
 		
+		public static void loadMusic(){
+		music = Gdx.audio.newMusic(Gdx.files.internal("src/main/resources/music.ogg"));
+		}
+		
+		public static void freeResources(){
+		music.dispose();
+		}
+		
+		static public void play(Music m){
+			if(m == null)return;
+			m.setLooping(true);
+			m.play();
+		}
+		
+		
+	}
 	
 	
 	@Override

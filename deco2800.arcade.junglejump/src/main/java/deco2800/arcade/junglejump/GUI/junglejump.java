@@ -373,7 +373,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			// Draws Instructions on Top Right and Top Left of screen
 			achievementTitleFont.draw(batch, "Press P to PAUSE", SCREENWIDTH-250, SCREENHEIGHT-10);
 			achievementTitleFont.draw(batch, "BACKSPACE for MENU", SCREENWIDTH-250, SCREENHEIGHT-30);
-			achievementTitleFont.draw(batch, ("Bananas found: " + BANANAS_FOUND), SCREENWIDTH-150, SCREENHEIGHT-10);
+			achievementTitleFont.draw(batch, ("Bananas found: " + BANANAS_FOUND), SCREENWIDTH-500, SCREENHEIGHT-10);
 
 			batch.end();
 			camera.update();

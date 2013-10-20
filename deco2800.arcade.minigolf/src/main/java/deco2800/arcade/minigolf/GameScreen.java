@@ -49,7 +49,7 @@ public class GameScreen implements Screen, InputProcessor {
 	
 	@SuppressWarnings("unused")
 	private int width, height, totalShots;
-	public int level, scoreX, scoreY; //hole
+	private int level, scoreX, scoreY; //hole
 	private float power, fadeInOut, fadeVar;
 	private boolean scoreYes;
 	boolean gamePaused;
@@ -90,17 +90,19 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override 
 	public void show() { 
 			Texture.setEnforcePotImages(false);
-			try { //opening a file in world so catch exceptions
+			
+			try { //opening a file in world, need to catch exceptions
 				world = new World(level);
 			} catch (Exception e) {
 				System.err.println("An error has occured while opening a level text file");
-			} //create hole 
+			} 
+			//create and display the current level
 			renderer = new WorldRenderer(world, false, this.level, scoreCard); //render objects 
 			wControl = new WorldController(world, this.level, scoreCard); //initialise controller
 			wControl.setHole(level); //set current hole 
 			ballCont = new BallController(world); //initialise controller
 			
-			// score card
+			// load score card image and set it's position when displayed
 			scoreBatch = new SpriteBatch();
 			scoreCardTexture = new Texture("scoreCard.png");
 			scoreCardSprite = new Sprite(scoreCardTexture);
@@ -110,7 +112,7 @@ public class GameScreen implements Screen, InputProcessor {
 			//background image for pause screen between levels
 			bgTexture = new Texture("background1.png");
 			
-			//button code
+			//Menu and Reset Button code + font
 			butBatch = new SpriteBatch();
 			butAtlas = new TextureAtlas("button.pack");
 			butSkin = new Skin();
@@ -129,24 +131,7 @@ public class GameScreen implements Screen, InputProcessor {
 			this.pause();
 		} else {
 		if(this.level != wControl.getHole()){ //if ball is in hole						
-			scoreYes = true;	
-			//set next level
-			int nextHole = (getLevel() + 1); 
-			if(nextHole == 19){
-				if(Gdx.input.isButtonPressed(Buttons.RIGHT)){
-				this.scoreCard = new ArrayList<Integer>();
-				totalScore = "";
-				totalShots = 0; 
-				golf.create();
-				}
-			} else {
-				setLevel(nextHole); //set the next hole
-				golf.setScreen(golf.hole, level); //render next hole	
-			}
-			if(totalShots == 1){
-				golf.incrementAchievement("minigolf.marksman");
-			}			
-			progressAchievements(nextHole);
+			endOfHole();
 			
 		}
 		//clear everything on screen
@@ -169,9 +154,6 @@ public class GameScreen implements Screen, InputProcessor {
 		totalShots += wControl.getHoleShots();
 		totalScore = " " + totalShots;
 		
-		//if end of level, display score-card
-		//displayScoreCard();
-		
 		//Button code
 		stage.act(delta);		
 		butBatch.begin();
@@ -187,7 +169,9 @@ public class GameScreen implements Screen, InputProcessor {
 		
 	}
 	
-	/* checks if the hole is over, if so fade in and out the score-card */
+	/* enables viewing of the score-card 
+	 * displays the scores across all playable holes, and the total score
+	 */
 	private void displayScoreCard(){
 		if(scoreYes){
 			//gamePaused = true;
@@ -219,7 +203,7 @@ public class GameScreen implements Screen, InputProcessor {
 		}
 	}
 	
-	@Override 
+	@Override /* sets the size of screen and adjusts button size and handles button presses */
 	public void resize(int width, int height) { 
 		renderer.setSize(width, height);
 		this.width = width; 
@@ -256,7 +240,7 @@ public class GameScreen implements Screen, InputProcessor {
 		resetButton.setY(680);
 		
 		
-		//menu
+		//menu action on click
 		mainButton.addListener(new InputListener(){
 			public boolean touchDown(InputEvent event, float x, float y, int pointer,int button){				
 				return true;
@@ -266,7 +250,7 @@ public class GameScreen implements Screen, InputProcessor {
 			}			
 			
 		});
-		//reset
+		//reset action on click
 		resetButton.addListener(new InputListener(){
 			public boolean touchDown(InputEvent event, float x, float y, int pointer,int button){			
 				return true;
@@ -283,7 +267,7 @@ public class GameScreen implements Screen, InputProcessor {
 		stage.addActor(resetButton);
 	
 	}
-	
+	/* playus the background music while in-game */
 	private void playMusic(){	
 		URL path = this.getClass().getResource("/");
 		try {
@@ -306,6 +290,7 @@ public class GameScreen implements Screen, InputProcessor {
 	
 	}
 	
+	/* contains a list of progressive achievements that can be obtained while playing */
 	private void progressAchievements(int nextHole){
 		switch(nextHole){
 			case 1:
@@ -336,6 +321,28 @@ public class GameScreen implements Screen, InputProcessor {
 			golf.incrementAchievement("minigolf.9hole.level9");
 			break;
 			}
+	}
+	/* When player sinks the ball, displays scorecard until a button is pressed*/
+	public void endOfHole(){
+		scoreYes = true; //enable scorecard	
+		int nextHole = (getLevel() + 1);  //get the next hole
+		if(nextHole == 19){ //only render up to level 18
+			if(Gdx.input.isButtonPressed(Buttons.RIGHT)){
+			this.scoreCard = new ArrayList<Integer>();
+			totalScore = "";
+			totalShots = 0; 
+			golf.create();
+			}
+		} else {
+			setLevel(nextHole); //set the next hole
+			golf.setScreen(golf.hole, level); //render next hole	
+		}
+		//enable achievement if player gets a hole in one
+		if(totalShots == 1){
+			golf.incrementAchievement("minigolf.marksman");
+		}		
+		//update progressive achievements
+		progressAchievements(nextHole);
 	}
 		
 	

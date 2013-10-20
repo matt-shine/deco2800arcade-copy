@@ -23,6 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Scaling;
 
+import deco2800.arcade.client.ArcadeInputMux;
+
 public class SettingsScreen implements Screen {
 
 	private final MixMaze game;
@@ -274,6 +276,7 @@ public class SettingsScreen implements Screen {
 
 	@Override
 	public void hide() {
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override
@@ -322,7 +325,7 @@ public class SettingsScreen implements Screen {
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(stage);
+		ArcadeInputMux.getInstance().addProcessor(stage);
 	}
 
 	private int getKeyCode(String keyText) {

@@ -3,12 +3,12 @@ package deco2800.arcade.towerdefence.controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Application;
-
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
+import deco2800.arcade.towerdefence.model.AnimationsList;
 import deco2800.arcade.towerdefence.view.CreditsScreen;
 import deco2800.arcade.towerdefence.view.GameScreen;
 import deco2800.arcade.towerdefence.view.LoreScreen;
@@ -19,6 +19,8 @@ import deco2800.arcade.towerdefence.view.SplashScreen;
 @ArcadeGame(id = "towerdefence")
 public class TowerDefence extends GameClient {
 	// Fields
+	// The rendering animations list static
+	public static AnimationsList toRender = new AnimationsList();
 	// All Tower Defence screens
 	public Screen splashScreen, menuScreen, loreScreen, gameScreen,
 			creditsScreen, optionsScreen;
@@ -50,7 +52,8 @@ public class TowerDefence extends GameClient {
 		setScreen(splashScreen);
 		
 		// Dan insert game creation code here.
-		//Tower FireI = new Tower(0, 0, 0, 0, null, null, null, 0, 0, null, 0, null, null, null, null);
+		
+		
 		
 		// Listener controls
 		this.getOverlay().setListeners(new Screen() {

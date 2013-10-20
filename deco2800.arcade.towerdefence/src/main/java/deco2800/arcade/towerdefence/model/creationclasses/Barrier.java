@@ -1,10 +1,12 @@
 package deco2800.arcade.towerdefence.model.creationclasses;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+import deco2800.arcade.towerdefence.controller.TowerDefence;
 import deco2800.arcade.towerdefence.model.Grid;
 import deco2800.arcade.towerdefence.model.Mortal;
 import deco2800.arcade.towerdefence.model.Team;
@@ -66,9 +68,8 @@ public class Barrier extends Mortal {
 		
 		// Build the idle sprite list
 		List<Sprite> sprList = (GameScreen.spriteBuild(this, fileStanding()));
-		 
-		 // Send the List of sprites for animation
-		 //GameScreen.animate(sprList);
-		sprList.size();
+		
+		// Add the list of sprites to the currently animating model
+		TowerDefence.toRender.add(sprList);
 	}
 }

@@ -3,7 +3,6 @@ package deco2800.arcade.towerdefence.view;
 import static com.badlogic.gdx.graphics.Color.*;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
@@ -55,7 +54,7 @@ public class GameScreen implements Screen {
 			penetrationBarRegion, armorBarRegion;
 	TexturePart healthBar, attackBar, costBar, penetrationBar, armorBar;
 	Image gridMap;
-	SpriteBatch batch;
+	public static SpriteBatch batch;
 	TextField resourceTF;
 	private OrthographicCamera camera;
 	private static final float BUTTON_HEIGHT = 64f;
@@ -167,6 +166,10 @@ public class GameScreen implements Screen {
 		costBar.Draw(batch);
 		penetrationBar.Draw(batch);
 		armorBar.Draw(batch);
+		//batch draw all the sprites in the AnimationsList toRender
+		for (int i=0; i<TowerDefence.toRender.size();i++) {
+			TowerDefence.toRender.get(i).draw(batch);
+		}
 		batch.end();
 
 	}
@@ -418,23 +421,5 @@ public class GameScreen implements Screen {
 		}
 		return builtSprites;
 		
-	}
-	
-	/**
-	 * Draw sprites to the screen.
-	 * @param sprites
-	 */
-	public void animate(List<Sprite> sprites) {
-		// Create an Iterator
-		Iterator<Sprite> sprIter = sprites.iterator();
-		// So long as there's more sprites in the animation
-		while (sprIter.hasNext()) {
-			// Get the next frame
-			Sprite currentFrame = sprIter.next();
-			batch.begin();
-			currentFrame.draw(batch);
-			batch.end();
-		}
-
 	}
 }

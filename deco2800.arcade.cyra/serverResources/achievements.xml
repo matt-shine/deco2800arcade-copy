@@ -3,18 +3,18 @@
         <name>What a Player!</name>
         <description>Complete the level.</description>
         <awardThreshold>1</awardThreshold>
-        <icon>tempach.png</icon>
+        <icon>cyrawhataplayer.png</icon>
     </achievement>
     <achievement id="cyra.slayer">
         <name>Slayer</name>
         <description>Kill 10 enemies.</description>
         <awardThreshold>10</awardThreshold>
-        <icon>tempach.png</icon>
+        <icon>cyraslayer.png</icon>
     </achievement>
     <achievement id="cyra.jumparound">
         <name>Jump Around</name>
         <description>Jump 5 times.</description>
 		<awardThreshold>5</awardThreshold>
-        <icon>tempach.png</icon>
+        <icon>cyrajumparound.png</icon>
      </achievement>
 </achievements>

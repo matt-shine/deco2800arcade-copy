@@ -4,7 +4,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import deco2800.arcade.cyra.model.Bullet;
 import deco2800.arcade.cyra.model.Player.State;
 import deco2800.arcade.cyra.model.Player;
 import deco2800.arcade.cyra.model.Sword;
@@ -72,31 +71,6 @@ public class InputHandler implements InputProcessor{
 				ship.getPosition().x = 220f;
 				ship.getPosition().y = 60f;
 				break;
-			case Keys.SPACE:
-				if (acceptInput) {
-					int shootDir = 1;
-					if (!ship.isFacingRight()) {
-						shootDir = -1; 
-					}
-					world.addBullet(new Bullet(
-							Bullet.getBULLET_SPEED(),
-							0,
-							new Vector2(ship.getPosition().x+ship.getWidth()/2-Bullet.getBULLET_SIZE()/2, ship.getPosition().y+ship.getHeight()/2),
-							Bullet.getBULLET_SIZE(), Bullet.getBULLET_SIZE(),
-							new Vector2( shootDir, 0),
-							false
-							));
-					world.addBullet(new Bullet(
-							Bullet.getBULLET_SPEED(),
-							0,
-							new Vector2(ship.getPosition().x+ship.getWidth()/2-Bullet.getBULLET_SIZE()/2, ship.getPosition().y+ship.getHeight()/2),
-							Bullet.getBULLET_SIZE(), Bullet.getBULLET_SIZE(),
-							new Vector2( shootDir, 0),
-							true
-							));
-				}
-				break;
-				
 			case Keys.P:
 				world.togglePause();
 				break;

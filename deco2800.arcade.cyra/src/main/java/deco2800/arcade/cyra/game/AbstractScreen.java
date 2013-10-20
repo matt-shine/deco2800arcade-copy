@@ -6,6 +6,12 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * Basic screen class for other screens to inherit from. 
+ * 
+ * @author Game Over
+ *
+ */
 public abstract class AbstractScreen implements Screen {
 
 	protected final Cyra game;

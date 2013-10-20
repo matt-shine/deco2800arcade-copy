@@ -123,6 +123,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	BitmapFont achievementDescriptionFont;
 	BitmapFont achievementThresholdFont;
 	Texture achievementIconTexture;
+	String levelSelectText;
 
 	public static void main(String[] args) {
 		ArcadeSystem.goToGame("junglejump");
@@ -464,17 +465,24 @@ public class junglejump extends GameClient implements InputProcessor {
 			super.render();
 			break;
 		case SELECT_LEVEL:
-			// Clear Buffers and prepare for drawing of Achievement List
-			Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			batch.setProjectionMatrix(camera.combined);
-			shapeRenderer.setProjectionMatrix(camera.combined);
-			batch.begin();
-			// Draw achievement labels and graphics here
-			achievementTitleFont.draw(batch, "Achievements", 100, SCREENHEIGHT); /* TITLE */
-			achievementTitleFont.draw(batch, "Press \"BACKSPACE\" to go back to the main menu.", 100, SCREENHEIGHT-20); /* navigation */
-			
-			batch.end();
+			Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+			batchContinue.setProjectionMatrix(camera.combined);
+		
+			Gdx.gl.glEnable(GL10.GL_BLEND);
+			Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+			shapeRenderer.begin(ShapeType.FilledRectangle);
+			shapeRenderer.filledRect(227, 117, 266, 106, Color.BLACK,
+					Color.BLACK, Color.BLACK, Color.BLACK);
+			shapeRenderer.filledRect(230, 120, 260, 100, Color.BLUE,
+					Color.BLUE, Color.BLUE, Color.BLUE);
+			shapeRenderer.end();
+			Gdx.gl.glDisable(GL10.GL_BLEND);
+			batchContinue.begin();
+			// Prompt to Continue previous Game
+			achievementTitleFont.draw(batchContinue, levelSelectText, 240, 200);
+			achievementTitleFont.draw(batchContinue, "Press 1 to 5", 310, 150);
+
+			batchContinue.end();
 			camera.update();
 			super.render();
 			break;
@@ -718,6 +726,7 @@ public class junglejump extends GameClient implements InputProcessor {
 				gameState = GameState.OPTIONS;
 			}
 			if (butY == LEVEL_SELECT) {
+				levelSelectText = "Which world?";
 				gameState = GameState.SELECT_LEVEL;
 			}
 		}

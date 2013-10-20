@@ -581,9 +581,6 @@ public class junglejump extends GameClient implements InputProcessor {
 					&& x < (p.getX()+p.getWidth() - 10)
 					&& y <= p.getY() + p.getHeight() // Top of platform
 					&& y >= p.getY() - monkeyHeight) {				// Bottom of platform
-
-				System.out.println("Width:" + p.getWidth() + " Height" + p.getHeight()
-						+ " X:" + p.getX() + " Y:" + p.getY() + " onPlatform: " + onPlatform + "  isFalling: " + isFalling);
 				
 				p.setActive();
 				

@@ -32,12 +32,15 @@ public class StoreWishlist implements Screen, StoreScreen {
 	private Skin skin = new Skin(Gdx.files.internal("store/storeSkin.json"));
 	private Stage stage = new Stage();
 	private ArcadeUI arcadeUI;
+	private Player player;
 	
 	/**
 	 * @author Addison Gourluck
 	 * @param ArcadeUI ui
+	 * @param Player user
 	 */
-	public StoreWishlist(ArcadeUI ui) {
+	public StoreWishlist(ArcadeUI ui, Player user) {
+		player = user;
 		arcadeUI = ui;
 		
 		Utilities.helper.loadIcons(skin); // load the icons into the skin.
@@ -97,16 +100,16 @@ public class StoreWishlist implements Screen, StoreScreen {
 		// HOME BUTTON
 		homeButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				arcadeUI.setScreen(new StoreHome(arcadeUI));
+				hide();
+				arcadeUI.setScreen(arcadeUI.getStoreHome());
 			}
 		});
 		
 		// TRANSACTIONS BUTTON
 		transactionsButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				arcadeUI.setScreen(new StoreTransactions(arcadeUI));
+				hide();
+				arcadeUI.setScreen(arcadeUI.getStoreTransactions());
 			}
 		});
 		
@@ -132,8 +135,8 @@ public class StoreWishlist implements Screen, StoreScreen {
 						searchResult.setText("No results.");
 						return;
 					}
-					dispose();
-					arcadeUI.setScreen(new StoreGame(arcadeUI, result));
+					hide();
+					arcadeUI.setScreen(new StoreGame(arcadeUI, player, result));
 				} catch (Exception e) {
 					searchResult.setText("Invalid Search");
 				}
@@ -198,14 +201,14 @@ public class StoreWishlist implements Screen, StoreScreen {
 			}
 			gameGridGlow.addListener(new ChangeListener() {
 				public void changed(ChangeEvent event, Actor actor) {
-					dispose();
-					arcadeUI.setScreen(new StoreGame(arcadeUI, game));
+					hide();
+					arcadeUI.setScreen(new StoreGame(arcadeUI, player, game));
 				}
 			});
 			gameGridIcon.addListener(new ChangeListener() {
 				public void changed(ChangeEvent event, Actor actor) {
-					dispose();
-					arcadeUI.setScreen(new StoreGame(arcadeUI, game));
+					hide();
+					arcadeUI.setScreen(new StoreGame(arcadeUI, player, game));
 				}
 			});
 			stage.addActor(gameGridGlow);
@@ -232,11 +235,13 @@ public class StoreWishlist implements Screen, StoreScreen {
 
 	@Override
 	public void show() {
+		player = arcadeUI.getPlayer();
 		ArcadeInputMux.getInstance().addProcessor(stage);
 	}
 	
 	@Override
 	public void hide() {
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 	
 	@Override

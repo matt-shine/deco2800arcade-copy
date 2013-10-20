@@ -12,7 +12,7 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.landInvaders.*;
 
 //Main Class
-@ArcadeGame(id = "LandInvaders")
+@ArcadeGame(id = "landInvaders")
 public class LandInvaders extends GameClient  {
 
 	private static final Game GAME;
@@ -33,8 +33,8 @@ public class LandInvaders extends GameClient  {
 
 	static {
 		GAME = new Game();
-		GAME.id = "LandInvaders";
-		GAME.name = "LandInvaders";
+		GAME.id = "landInvaders";
+		GAME.name = "landInvaders";
 		GAME.description = "funny game!";
 	}
 	@Override

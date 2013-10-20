@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 
+import deco2800.arcade.landInvaders.Screens.gameOver;
 import deco2800.arcade.landInvaders.Screens.stageClear;
 
 import java.util.ArrayList;
@@ -279,7 +280,6 @@ public class Invaders extends JFrame implements Runnable {
 				level = 1;
 			}
 			restart();
-			showStageClear();
 
 		}
 	}
@@ -292,6 +292,7 @@ public class Invaders extends JFrame implements Runnable {
 		if (bglevel != 3 && level == 1) {
 			bglevel++;
 			createWall = true;
+			showStageClear();
 
 		}
 		if (bglevel == 3 && level == 1) {
@@ -346,6 +347,10 @@ public class Invaders extends JFrame implements Runnable {
 							+ tank.height())) {
 				Eshots.remove(i);
 				healthBar--;
+				if(healthBar == 0){
+					gameOver a = new gameOver(score);
+					this.dispose();
+				}
 
 			}
 		}

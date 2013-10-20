@@ -103,7 +103,7 @@ public class Enemy extends Mob {
         
         
         if (canSee(gameModel.getPlayer(), gameModel)){
-        	delayedStateChange(STATES.ATTACK);
+        	delayedStateChange(STATES.CHASE);
         }
         
         
@@ -115,8 +115,12 @@ public class Enemy extends Mob {
         
         if (state == STATES.ATTACK) {
         	shootAtPlayer(gameModel);
+        	this.setVel(new Vector2(0, 0));
             instantStateChange(STATES.CHASE);
-            delayedStateChange(STATES.ATTACK);
+        }
+        
+        if (state == STATES.CHASE) {
+        	followPlayer(gameModel);
         }
 
         if (this.getHealth() <= 0) {
@@ -206,6 +210,22 @@ public class Enemy extends Mob {
     }
 
 
+    public void followPlayer(GameModel g) {
+    	Player p = g.getPlayer();
+    	
+    	Vector2 diff = p.getPos().sub(this.getPos());
+    	float dist = p.getPos().dst(this.getPos());
+    	
+    	if (dist > 2 && nextState != STATES.ATTACK) {
+    		this.setVel(diff.nor().mul(0.1f));
+    	} else {
+    		this.setVel(new Vector2(0, 0));
+    		this.delayedStateChange(STATES.ATTACK);
+    	}
+    	
+    	
+    }
+    
 
     @Override
     public void takeDamage(GameModel model, int damage) {

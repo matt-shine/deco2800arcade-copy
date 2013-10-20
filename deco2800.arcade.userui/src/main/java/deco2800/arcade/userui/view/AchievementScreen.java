@@ -65,14 +65,6 @@ public class AchievementScreen extends JFrame{
 	piconline, select, selecthover, logo;
 	private ImageIcon home, homehover, forum, forumhover, store, storehover,
 	library, libraryhover, profile, profilehover;
-			
-	//Declare Fonts
-	Font blackbold = new Font("Century Gothic", Font.BOLD, 20);
-	Font blacknormal = new Font("Century Gothic", Font.PLAIN, 16);
-	Font blacksmall = new Font("Century Gothic", Font.PLAIN, 13);
-	Font blacklink = new Font("Century Gothic", Font.PLAIN, 16);
-	Font linkbold = new Font("Century Gothic", Font.BOLD, 16);
-	Font sidebold = new Font("Century Gothic", Font.BOLD, 14);
 
 	private String name, description, count;
 	
@@ -175,13 +167,13 @@ public class AchievementScreen extends JFrame{
 		selectbutton.setRolloverIcon(selecthover);
 		
 		gamename = new JLabel();
-	    gamename.setFont(linkbold);
+	    gamename.setFont(model.linkbold);
 	    gamename.setForeground(Color.white);
 	    gameachievementcount = new JLabel();
-	    gameachievementcount.setFont(sidebold);
+	    gameachievementcount.setFont(model.sidebold);
 	    gameachievementcount.setForeground(Color.white);
 	    gamedescription = new JTextArea();
-	    gamedescription.setFont(blacksmall);
+	    gamedescription.setFont(model.blacksmall);
 	    gamedescription.setForeground(Color.white);
 	    gamedescription.setLineWrap(true);
 	    gamedescription.setOpaque(false);
@@ -213,7 +205,7 @@ public class AchievementScreen extends JFrame{
 	public void addachievementpanel(){
 				    
         achievementbar = new JLabel("Achievement List");
-        achievementbar.setFont(blackbold);
+        achievementbar.setFont(model.blackbold);
         achievementbar.setForeground(Color.white);
         
         achievementbarpanel = new JPanel(new MigLayout());
@@ -222,7 +214,7 @@ public class AchievementScreen extends JFrame{
 	    achievementlistpanel.setOpaque(false);
 	    achievementlist = new JTextArea();
 	    achievementlist.setLineWrap(true);
-	    achievementlist.setFont(blacknormal);
+	    achievementlist.setFont(model.blacknormal);
 	    achievementlist.setForeground(Color.white);
 	    achievementlist.setEditable(false);
 	    achievementlist.setMargin(new Insets(10,10,10,10));
@@ -271,9 +263,9 @@ public void addplayerinfopanel(){
         avatar.setIcon(picavatar);
         playername = new JLabel("Player");
         playername.setForeground(Color.white);
-        playername.setFont(blackbold);
+        playername.setFont(model.blackbold);
         playerlevel = new JLabel("Last Login: 8/3/2013");
-        playerlevel.setFont(blacksmall);
+        playerlevel.setFont(model.blacksmall);
         playerlevel.setForeground(Color.white);
         
 		//Add Elements to Panel

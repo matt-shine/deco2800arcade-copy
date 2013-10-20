@@ -29,17 +29,19 @@ public final class Ghost extends Mover {
 	private Tile previousTile;
 	// private Animation walkAnimation; this should move to PacView
 
-	public Ghost(GameMap gameMap, GhostName ghost, PacChar player) {
+	public Ghost(GameMap gameMap, GhostName ghostName, PacChar player) {
 		super(gameMap);
 		this.player = player;
-		this.ghostName = ghost;
+		this.ghostName = ghostName;
 		int num;
-		switch (ghost) {
+		switch (ghostName) {
 		case PINKY: num = 1; break;
 		case INKY: num = 2; break;
 		case CLYDE: num = 3; break;
 		default: num = 0; break;
 		}
+
+		facing = Dir.LEFT;
 //		currentTile = gameMap.getGhostStarts()[num];  //This is the actual starting positon in pen
 		currentTile = gameMap.getFruitRight(); // For testing purposes
 		// makes the previous tile the one to right, since he's facing left
@@ -47,18 +49,15 @@ public final class Ghost extends Mover {
 		previousTile = gameMap.getGrid()[current.getX() + 1][current.getY()];
 		drawX = gameMap.getTileCoords(currentTile).getX(); 
 		drawY = gameMap.getTileCoords(currentTile).getY(); 
-
-		facing = Dir.LEFT;
 		// DEBUGGING PRINT
 //		System.out.println("drawX % 16 is: " + (drawX % 16)
-//				+ ", drawY % 16 is: " + (drawY % 16));
-		
+//				+ ", drawY % 16 is: " + (drawY % 16));		
 		currentState = GhostState.CHASE;
 		width = widthVal;
 		height = heightVal;
+		currentTile.addMover(this);
 		updatePosition();
 		moveDist = 1;
-		currentTile.addMover(this);
 		// System.out.println(this);
 		// animation not necessary unless Pacman moving
 		// walkAnimation = new Animation(0.025f, pacmanFrames);
@@ -81,9 +80,8 @@ public final class Ghost extends Mover {
 		} 
 		
 		// Check ghost wall collision
-		if (!checkNoWallCollision(getCurTile())){
-//			currentState = GhostState.SCATTER;
-			facing = Dir.LEFT;
+		if (!checkNoWallCollision()){
+			facing = Dir.LEFT; // why this?
 		}
 		
 		// checks if ghost is moving, and if so keeps him moving in that
@@ -97,10 +95,7 @@ public final class Ghost extends Mover {
 				drawY += moveDist;
 			} else if (facing == Dir.DOWN) {
 				drawY -= moveDist;
-			} else {
-				currentState = GhostState.SCATTER;
-				facing = Dir.LEFT;
-			}
+			} 
 			updatePosition();
 		}
 	}

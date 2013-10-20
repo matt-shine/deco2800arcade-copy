@@ -44,14 +44,20 @@ public abstract class Mover {
 		Tile newTile = gameMap.findMoverTile(this);
 		if (!currentTile.equals(newTile)) {
 			currentTile.removeMover(this);
-			currentTile = newTile;
-			// Update the way pacman is shown to be facing
-			
+			currentTile = newTile;			
 			currentTile.addMover(this);
 			checkTile(currentTile);
 		}
 	}
 
+	/**
+	 * Checks if the proposed movement will make the mover hit a wall
+	 * Returns true if it can move and false if it can't
+	 */
+	public boolean checkNoWallCollision() {
+		return !(nextTile(currentTile, 1).getClass() == WallTile.class);
+	}
+	
 	/**
 	 * Returns the next tile in the direction Mover is facing.
 	 * @param tile, offset
@@ -61,16 +67,15 @@ public abstract class Mover {
 		int x = gameMap.getTilePos(tile).getX();
 		int y = gameMap.getTilePos(tile).getY();
 		Tile[][] grid = gameMap.getGrid();
-		//System.out.println(x + ", " + y);
 		if (this.getClass() == PacChar.class){
-			switch(this.getDrawFacing()) {
+			switch(drawFacing) {
 			case LEFT: x -= offset; break;
 			case RIGHT: x += offset; break;
 			case UP: y += offset; break;
 			case DOWN: y -= offset; break;
 			}
 		} else {
-			switch(this.getFacing()) {
+			switch(facing) {
 			case LEFT: x -= offset; break;
 			case RIGHT: x += offset; break;
 			case UP: y += offset; break;
@@ -82,15 +87,13 @@ public abstract class Mover {
 	
 	
 	/**
-	 * Checks whether 
-	 * @param tile
-	 * @return boolean
+	 * Checks whether the mover can turn
 	 */
-	public boolean canTurn(Tile tile){
-		int x = gameMap.getTilePos(tile).getX();
-		int y = gameMap.getTilePos(tile).getY();
+	public boolean canTurn(){
+		int x = gameMap.getTilePos(currentTile).getX();
+		int y = gameMap.getTilePos(currentTile).getY();
 		Tile[][] grid = gameMap.getGrid();
-		switch(this.getFacing()) {
+		switch(facing) {
 		case LEFT: x -= 1; break;
 		case RIGHT: x += 1; break;
 		case UP: y += 1; break;
@@ -124,38 +127,8 @@ public abstract class Mover {
 //			System.out.println("\ngetTargetY: " + ((TeleportTile) nextTile(tile, 1)).getTargetY());
 //			this.drawY = ((TeleportTile) nextTile(tile, 1)).getTargetY();
 		}
-//		System.out.println("score: " + this.getScore());
-//		displayScore(this); // This is broken at the moment
 	}
 
-	/**
-	 * Checks if the proposed movement will make the mover hit a wall
-	 * Returns true if it can move and false if it can't
-	 */
-	public boolean checkNoWallCollision(Tile pTile) {
-		return !(nextTile(pTile, 1).getClass() == WallTile.class);
-	}
-//	public boolean checkNoWallCollision(Tile pTile) {
-//		int x = gameMap.getTilePos(pTile).getX();
-//		int y = gameMap.getTilePos(pTile).getY();
-//		Tile[][] grid = gameMap.getGrid();
-//		//System.out.println(x + ", " + y);
-//		switch(this.getFacing()) {
-//		case LEFT: x -= 1; break;
-//		case RIGHT: x += 1; break;
-//		case UP: y += 1; break;
-//		case DOWN: y -= 1; break;
-//		case TEST: break;
-//		}		
-//		if (!test.equals(this + " wants to move to " + grid[x][y] + 
-//				" allowed=" + (grid[x][y].getClass() != WallTile.class))) {
-//			test = this + " wants to move to " + grid[x][y] + 
-//					" allowed=" + (grid[x][y].getClass() != WallTile.class);
-//			System.out.println(test);
-//		}
-//		return grid[x][y].getClass() != WallTile.class;
-//	}
-	
 	
 	/**
 	 * Overrides toString() so that trying to print the list won't crash the

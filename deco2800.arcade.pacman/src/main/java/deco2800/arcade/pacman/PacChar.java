@@ -27,13 +27,13 @@ public final class PacChar extends Mover{
 		drawY = gameMap.getTileCoords(currentTile).getY() - 4;
 		// initialise some variables
 		currentState = PacState.IDLE;
-		facing = Dir.LEFT;
-		drawFacing = Dir.LEFT;
+		facing = Dir.LEFT; // the way he'll turn at the next intersection if possible
+		drawFacing = Dir.LEFT; // the way pacman appears
 		width = widthVal;
 		height = heightVal;
-		updatePosition();
-		moveDist = 2;
 		currentTile.addMover(this);
+		updatePosition();
+		moveDist = 1.5f;
 		//System.out.println(this);
 //		animation not necessary unless Pacman moving		
 //		walkAnimation = new Animation(0.025f, pacmanFrames);
@@ -59,12 +59,12 @@ public final class PacChar extends Mover{
 		
 	
 		// If pacman is able to turn, update drawFacing
-		if (canTurn(this.getCurTile())) {
+		if (canTurn()) {
 			drawFacing = facing;
 			this.setCurrentState(PacState.MOVING);
 		}
 		
-		if (!this.checkNoWallCollision(this.getCurTile())){
+		if (!this.checkNoWallCollision()){
 			this.setCurrentState(PacState.IDLE);
 		}
 		

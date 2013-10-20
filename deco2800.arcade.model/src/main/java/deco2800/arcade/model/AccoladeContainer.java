@@ -43,6 +43,17 @@ public class AccoladeContainer implements Iterable<Accolade> {
     	this.gameID =  gameID;
     	return this;
     }
+    public int getGameID(){
+    	return this.gameID;
+    }
+    
+    public AccoladeContainer setPlayerID(int playerID){
+    	this.playerID =  playerID;
+    	return this;
+    }    
+    public int getPlayerID(){
+    	return this.playerID;
+    }
     
     /**Clears the list of accolades ready for repopulation
      */
@@ -112,12 +123,8 @@ public class AccoladeContainer implements Iterable<Accolade> {
 //Accolade accolade = new Accolade(ID,Value,Name,String,Unit,Modifier,Tag,Image);
     	//TODO Add in the dumb data stuff
     }
-    public int getGameID(){
-    	return this.gameID;
-    }
-    public int getPlayerID(){
-    	return this.playerID;
-    }
+    
+    
  
     public int size() {
         return this.size;
@@ -167,7 +174,8 @@ public class AccoladeContainer implements Iterable<Accolade> {
  
         @Override
         public void remove() {
-            // TODO Auto-generated method stub
+            // TODO Make this return an unsupported action exception 
+        	//do not want people to be able to individually remove accolades
         }
     }
     /**

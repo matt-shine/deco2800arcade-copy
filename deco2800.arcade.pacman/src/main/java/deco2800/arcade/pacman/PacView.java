@@ -245,15 +245,14 @@ public class PacView {
 		}
 
 		// Play sound if moving
-		if (player.getCurrentState() == PacState.MOVING) {
-			waka.setLooping(waka.play(), true);
+		if (player.getCurrentState() != PacState.MOVING) {
+			waka.stop();
+			waka.setLooping(waka.play(), false);
 			// Timer.schedule(new Task() { // Play waka on a 1 sec loop
 			// public void run() {
 			// waka.dispose();
 			// }
 			// }, 1);
-		} else {
-			waka.stop();
 		}
 	}
 

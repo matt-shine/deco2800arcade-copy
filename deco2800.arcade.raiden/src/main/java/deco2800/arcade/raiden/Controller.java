@@ -85,7 +85,7 @@ public class Controller extends KeyAdapter{
 			break;
 		case KeyEvent.VK_X:
 			PPlane.isFired = false;
-	}
+		}
 	}
 
 	public void StartRun(){
@@ -96,23 +96,33 @@ public class Controller extends KeyAdapter{
 				while(true){
 					pplane.pplaneMove();
 					// add bullet.
-					if(PPlane.isFired && count % 5 == 0){
-						PBullet pbullet1 =
-							new PBullet(pplane.x + 35, pplane.y + 50, 8, 15);
-						pbullets.add(pbullet1);
-						PBullet pbullet2 =
-							new PBullet(pplane.x + 5, pplane.y + 50, 8, 15);
-						pbullets.add(pbullet2);	
-					}else if(PPlane.isFired && DestoryNum > 30){
-						PBullet pbullet3 =
-								new PBullet(pplane.x + 37, pplane.y + 50, 8, 15);
-						pbullets.add(pbullet3);
-						PBullet pbullet4 =
-							new PBullet(pplane.x + 3, pplane.y + 50, 8, 15);
-						pbullets.add(pbullet4);
-						PBullet pbullet5 =
-								new PBullet(pplane.x + 20, pplane.y + 50, 8, 15);
-						pbullets.add(pbullet5);
+					if(DestoryNum < 30){
+						if(PPlane.isFired && count % 5 == 0){
+							PBullet pbullet1 =
+									new PBullet(pplane.x + 20, pplane.y + 50, 8, 15);
+							pbullets.add(pbullet1);
+						}
+					}else if(DestoryNum >= 30 && DestoryNum < 70){
+						if(PPlane.isFired && count % 5 == 0){
+							PBullet pbullet2 =
+									new PBullet(pplane.x + 35, pplane.y + 50, 8, 15);
+							pbullets.add(pbullet2);
+							PBullet pbullet3 =
+									new PBullet(pplane.x + 5, pplane.y + 50, 8, 15);
+							pbullets.add(pbullet3);	
+						}
+					}else if(DestoryNum >= 70){
+						if(PPlane.isFired && count % 5 == 0){
+							PBullet pbullet4 =
+									new PBullet(pplane.x + 35, pplane.y + 50, 8, 15);
+							pbullets.add(pbullet4);
+							PBullet pbullet5 =
+									new PBullet(pplane.x + 5, pplane.y + 50, 8, 15);
+							pbullets.add(pbullet5);
+							PBullet pbullet6 =
+									new PBullet(pplane.x + 20, pplane.y + 50, 8, 15);
+							pbullets.add(pbullet6);
+						}
 					}
 					count ++;
 					for(int i = 0; i < pbullets.size(); i++){
@@ -133,11 +143,27 @@ public class Controller extends KeyAdapter{
 							pbullets.remove(i);
 						}
 					}
-					if(eplanes.size() < Global.ENEMY_NUMBER){
-						int x = random.nextInt(Global.FRAME_WIDTH);
-						int y = -30;
-						EPlane eplane = new EPlane(x, y, 30, 30);
-						eplanes.add(eplane);
+					if(DestoryNum < 30){
+						if(eplanes.size() < Global.ENEMY_NUMBER){
+							int x = random.nextInt(Global.FRAME_WIDTH);
+							int y = -30;
+							EPlane eplane = new EPlane(x, y, 30, 30);
+							eplanes.add(eplane);
+						}
+					}else if(DestoryNum >= 30 && DestoryNum < 70){
+						if(eplanes.size() < Global.ENEMY_NUMBER + 15){
+							int x = random.nextInt(Global.FRAME_WIDTH);
+							int y = -30;
+							EPlane eplane = new EPlane(x, y, 30, 30);
+							eplanes.add(eplane);
+						}
+					}else if(DestoryNum >= 70){
+						if(eplanes.size() < Global.ENEMY_NUMBER + 30){
+							int x = random.nextInt(Global.FRAME_WIDTH);
+							int y = -30;
+							EPlane eplane = new EPlane(x, y, 30, 30);
+							eplanes.add(eplane);
+						}
 					}
 					for(int i=0; i < eplanes.size(); i++){
 						eplanes.elementAt(i).eplaneMove();

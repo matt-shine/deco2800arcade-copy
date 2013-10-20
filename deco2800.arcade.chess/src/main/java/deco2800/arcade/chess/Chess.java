@@ -536,6 +536,15 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 						}
 						this.finishGame(board.whoseTurn(), false);
 					}
+					// if team in checkmate, gameover, log win/loss
+					if (board.checkForCheckmate(board.whoseTurn())) {
+						this.finishGame(board.whoseTurn(), false);
+						return true;
+					}
+					if (board.checkForStaleMate(board.whoseTurn())) {
+						this.finishGame(board.whoseTurn(), true);
+						return true;
+					}
 					/*
 					 * If the easy computer opponent is playing, and black teams
 					 * turn (computer controlled team)
@@ -567,13 +576,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 						}
 						movePieceGraphic();
 
-					}
-					// if team in checkmate, gameover, log win/loss
-					if (board.checkForCheckmate(board.whoseTurn())) {
-						this.finishGame(board.whoseTurn(), false);
-					}
-					if (board.checkForStaleMate(board.whoseTurn())) {
-						this.finishGame(board.whoseTurn(), true);
 					}
 					return true;
 				}

@@ -660,12 +660,12 @@ public class Board {
 		for (Piece piece : activePieces) {
 			if (removeCheckMoves(piece).size() != 0) {
 				allowedPieces.add(piece);
-			}
+			} 
 		}
 
 		//pick piece at random
 		numPieces = allowedPieces.size();
-		int pieceIndex = (int) (Math.random() * ((numPieces - 1) + 1));
+		int pieceIndex = (int) (Math.random() * ((numPieces - 1)));
 
 		returnPiece = allowedPieces.get(pieceIndex);
 

@@ -3,6 +3,7 @@ package deco2800.arcade.pacman;
 import org.lwjgl.util.Point;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -99,6 +100,7 @@ public class PacView {
 	    batch.setProjectionMatrix(camera.combined);	    
 	    // start the drawing
 	    batch.begin();
+	    displayScore(player);
 	    drawGameMap();
 	    drawPacman();
 	    drawGhost();
@@ -197,7 +199,7 @@ public class PacView {
 		// TODO NOTE CURRENTLY ONLY DRAWS RED GHOST WHICHEVER GHOST IT IS
 		batch.draw(ghostFrames[0][blinky.getSpritePos()], blinky.getDrawX(), 
 				blinky.getDrawY(), blinky.getWidth(), blinky.getHeight());
-		batch.draw(ghostFrames[0][pinky.getSpritePos()], pinky.getDrawX(), 
+		batch.draw(ghostFrames[1][pinky.getSpritePos()], pinky.getDrawX(), 
 				pinky.getDrawY(), pinky.getWidth(), pinky.getHeight());
 	}
 	
@@ -212,11 +214,13 @@ public class PacView {
 	 * When support for multiple player-controlled movers is implemented, printing
 	 * will have to occur in different positions.
 	 */
-//	public void displayScore(Mover mover) {
-//		batch.begin();
-//		scoreText.setColor(Color.WHITE);
-//		scoreText.draw(batch, "Score:" + mover.getScore(), 50, 50);
-//		batch.end();
-//	}
+	public void displayScore(Mover mover) {
+		// Set score text
+		CharSequence str = "Score: " + mover.getScore();
+		scoreText = new BitmapFont(Gdx.files.internal("pacfont2.fnt"),
+		         Gdx.files.internal("pacfont2.png"), false);
+		scoreText.setColor(Color.WHITE);
+		scoreText.draw(batch, str, 50, 50);
+	}
 	
 }

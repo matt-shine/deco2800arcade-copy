@@ -157,72 +157,9 @@ public class MenuScreen implements Screen {
 		/*
 		 * add all buttons to the stage
 		 */
-
 		stage.addActor(gamebutton);
 		stage.addActor(quitbutton);
 		stage.addActor(helpbutton);
-
-
-		
-		//new game
-	    newgamebuttonUp = tmp[0][0];
-	    newgamebuttonDown = tmp[0][1];
-	    gameup = new TextureRegionDrawable(newgamebuttonUp);
-	    gamedown = new TextureRegionDrawable(newgamebuttonDown);
-	    gamebutton = new ImageButton(gameup, gamedown);
-	    gamebutton.setPosition(485, 350);
-	    gamebutton.addListener(new InputListener(){
-	    	public boolean touchDown(InputEvent event, float x, float y, int
-	    	   pointer, int button) { 
-	    			//touch down method is needed for the rest to work
-	        		return true; 
-	        	}
-        	public void touchUp(InputEvent event, float x, float y, int pointer,
-        		int button) { //on button release do this
-	        		game.setScreen(game.getModelscreen());
-        	}}
-	    );
-	    //help
-	    helpbuttonUp=tmp[1][2];
-	    helpbuttonDown=tmp[1][3];
-	    helpup = new TextureRegionDrawable(helpbuttonUp);
-	    helpdown = new TextureRegionDrawable(helpbuttonDown);
-	    helpbutton = new ImageButton(helpup, helpdown);
-	    helpbutton.setPosition(485, 250);
-	    helpbutton.addListener(new InputListener(){
-	    	public boolean touchDown(InputEvent event, float x, float y, int 
-	    	   pointer, int button) { 
-	    			//touch down method is needed for the rest to work
-	        		return true; 
-	        }
-	        	
-	        public void touchUp(InputEvent event, float x, float y, int pointer,
-	        		int button) { //on button release do this
-	        	game.setScreen(game.getHelpscreen1()); 
-	        }}
-	    );
-	    //quit
-	    quitbuttonUp=tmp[2][0];
-	    quitbuttonDown=tmp[2][1];
-	    quitup = new TextureRegionDrawable(quitbuttonUp);
-	    quitdown = new TextureRegionDrawable(quitbuttonDown);
-	    quitbutton = new ImageButton(quitup, quitdown);
-	    quitbutton.setPosition(485, 150);
-	    quitbutton.addListener(new InputListener(){
-	    	public boolean touchDown(InputEvent event, float x, float y, int 
-	    		pointer, int button) { 
-	    			//touch down method is needed for the rest to work
-        			return true; 
-        	}
-        	public void touchUp(InputEvent event, float x, float y, int pointer,
-        		int button) { //on button release do this
-	        		ArcadeSystem.goToGame(ArcadeSystem.UI);
-	        }}
-	    );
-       stage = new Stage(480, 640, true);
-       stage.addActor(gamebutton);
-       stage.addActor(quitbutton);     
-       stage.addActor(helpbutton);
 	}
 
 	@Override
@@ -233,7 +170,7 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void hide() {
-		ArcadeInputMux.getInstance().removeProcessor(stage);		
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override

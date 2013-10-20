@@ -402,8 +402,10 @@ public class Board {
 		piece.deActivate();
 		if (team) {
 			blackGraveyard.add(piece);
+			blackGraveyard.remove(replaceWith);
 		} else {
 			whiteGraveyard.add(piece);
+			whiteGraveyard.remove(replaceWith);
 		}
 		boardState.get(piecePos[0]).add(piecePos[1], replaceWith);
 		replaceWith.reActivate();

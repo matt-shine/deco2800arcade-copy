@@ -431,7 +431,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 	@Override
 	public void resize(int arg0, int arg1) {
-		// super.resize(arg0, arg1);
+		super.resize(arg0, arg1);
 	}
 
 	@Override

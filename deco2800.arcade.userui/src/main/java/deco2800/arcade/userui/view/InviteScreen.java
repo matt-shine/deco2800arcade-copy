@@ -6,14 +6,11 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -122,6 +119,9 @@ public class InviteScreen extends JFrame{
 		
 	}
 	
+	/**
+	 *  Adds the username textfield and label
+	 */
 	public void addtextpanel(){
 		
 	    usernamefield = new JTextField("", 20);
@@ -136,7 +136,7 @@ public class InviteScreen extends JFrame{
 	}
 	
 	/**
-	 * 	Adds the backbutton and addfriendbutton
+	 * 	Adds the accept and decline request buttons
 	 */
 	public void addactionpanel(){
 		
@@ -159,12 +159,22 @@ public class InviteScreen extends JFrame{
 	}
 
 	/**
-	 * Listener for the backbutton
-	 * @param listenForCancelButton
+	 * Listener for the acceptbutton
+	 * @param listenForAcceptButton
 	 */
 	public void addAcceptListener(ActionListener listenForAcceptButton){
 		
 		acceptbutton.addActionListener(listenForAcceptButton);
+	
+	}
+	
+	/**
+	 * Listener for the declinebutton
+	 * @param listenForDeclineButton
+	 */
+	public void addDeclineListener(ActionListener listenForDeclineButton){
+		
+		declinebutton.addActionListener(listenForDeclineButton);
 	
 	}
 	

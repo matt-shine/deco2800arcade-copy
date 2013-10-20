@@ -40,7 +40,7 @@ public class StoreWishlist implements Screen, StoreScreen {
 	public StoreWishlist(ArcadeUI ui) {
 		arcadeUI = ui;
 		
-		Utilities.helper.loadIcons(skin);
+		Utilities.helper.loadIcons(skin); // load the icons into the skin.
 		
 		skin.add("big_star", new Texture(Gdx.files.internal("store/big_stars.png")));
 		
@@ -90,8 +90,11 @@ public class StoreWishlist implements Screen, StoreScreen {
 		transactionsButton.setPosition(834, 353);
 		stage.addActor(transactionsButton);
 		
+		// The number 8 here is just a random index. Since nobody knows how to get
+		// a players wishlist, I just put in a placeholder number.
 		populateWishlist(8);
 		
+		// HOME BUTTON
 		homeButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				dispose();
@@ -99,6 +102,7 @@ public class StoreWishlist implements Screen, StoreScreen {
 			}
 		});
 		
+		// TRANSACTIONS BUTTON
 		transactionsButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				dispose();

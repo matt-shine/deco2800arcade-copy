@@ -1,4 +1,4 @@
-package deco2800.arcade.communication.communication.test;
+package deco2800.arcade.communication.test;
 
 import static org.junit.Assert.assertEquals;
 

@@ -88,14 +88,14 @@ public class Accolade {
 		return this.message;
 		}
 	
-	public int getValue(){
+	public Integer getValue(){
 		return this.value;
 		}
-	public int getPopup(){
+	public Integer getPopup(){
 		return this.popup;
 	}
 	
-	public int getGameID(){
+	public Integer getGameID(){
 		//TODO add in error throwing for a nullpointer exception
 		return this.gameID;
 		}

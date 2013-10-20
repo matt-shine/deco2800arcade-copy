@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<dataset>
+<REPLAY_SESSIONS GameID='pong' Recording='true' UserName='max' DateTime='12407120487' Comments='Comment'/>
+<REPLAY_SESSIONS GameID='pong' Recording='false' UserName='ben' DateTime='124071204879' Comments='Another comment'/>
+<REPLAY_SESSIONS GameID='tetris' Recording='true' UserName='max' DateTime='1240712879' Comments='DECO is fun'/>
+<REPLAY_EVENTS SessionID='1' EventIndex='0' Event='{"nodeTime":1750,"type":"bat_move","items":{"y_coord":{"type":1,"data":193}}}'/>
+<REPLAY_EVENTS SessionID='1' EventIndex='1' Event='{"nodeTime":1795,"type":"bat_move","items":{"y_coord":{"type":1,"data":205}}}'/>
+</dataset>

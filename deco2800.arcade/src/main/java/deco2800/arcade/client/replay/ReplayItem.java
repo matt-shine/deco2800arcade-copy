@@ -96,11 +96,16 @@ public class ReplayItem {
 		return this.data.toString();
 	}
 	
-	/**
-	 * Basic hashcode function
-	 * 
-	 * @return	hash of the item
-	 */
+	public boolean equals(Object r)
+	{
+		if ( !( r instanceof ReplayItem ) ) {
+			return false;
+		}
+		ReplayItem replayItem = ( ReplayItem )r;
+	    return this.type.equals(replayItem.type) && this.data.equals(replayItem.data);
+	}
+	
+	@Override
 	public int hashCode() {
 		return ( 17 * this.type.hashCode() ) * ( 7 * this.data.hashCode() );
 	}

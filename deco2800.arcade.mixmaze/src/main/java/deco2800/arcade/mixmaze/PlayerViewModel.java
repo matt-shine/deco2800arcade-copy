@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.utils.Timer;
 import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,8 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 	private final int tileSize;
 	private final TextureRegion bodyRegion;
 	private final TextureRegion headRegion;
+	private final TextureRegion buildRegion;
+	private final TextureRegion destroyRegion;
 	private final KeyManager km;
 	private final int id;
 	private final GameScreen.ScoreBar scorebar;
@@ -38,6 +41,8 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 	private int x;
 	private int y;
 	private int rotation;
+	private boolean building;
+	private boolean destroying;
 
 	/**
 	 * Constructor
@@ -48,7 +53,6 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 			int[] playerControls, GameScreen.ScoreBar scorebar,
 			GameScreen.SidePanel sidePanel,
 			TextureRegion headRegion) {
-		Texture texture;
 		HashMap<Integer, Integer> mapping = new HashMap<Integer, Integer>();
 
 		this.gameModel = gameModel;
@@ -73,13 +77,19 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 		km = new KeyManager(mapping);
 
 		/* load texture */
-		texture = new Texture(Gdx.files.internal("body.png"));
-		bodyRegion = new TextureRegion(texture);
+		bodyRegion = new TextureRegion(
+				new Texture(Gdx.files.internal("body.png")));
+		buildRegion = new TextureRegion(
+				new Texture(Gdx.files.internal("build.png")));
+		destroyRegion = new TextureRegion(
+				new Texture(Gdx.files.internal("destroy.png")));
 		/*
 		texture = new Texture(Gdx.files.internal((id == 1) ? "miner.png"
 				: "cowboy.png"));
 		*/
 		this.headRegion = headRegion;
+		building = false;
+		destroying = false;
 
 		if (id == 1)
 			this.setColor(1f, 0f, 0f, 1f);
@@ -96,6 +106,20 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 		batch.setColor(this.getColor());
 		batch.draw(bodyRegion, x * tileSize, 640 - (y + 1) * tileSize,
 				tileSize, tileSize);
+		if (building) {
+			batch.draw(buildRegion, x * tileSize, 
+					640 - (y + 1) * tileSize,
+					tileSize / 2, tileSize / 2,
+					tileSize, tileSize,
+					1, 1, rotation);
+		}
+		if (destroying) {
+			batch.draw(destroyRegion, x * tileSize, 
+					640 - (y + 1) * tileSize,
+					tileSize / 2, tileSize / 2,
+					tileSize, tileSize,
+					1, 1, rotation);
+		}
 		batch.setColor(old);
 		batch.draw(headRegion, x * tileSize, 640 - (y + 1) * tileSize,
 				tileSize / 2, tileSize / 2, tileSize, tileSize, 1, 1, rotation);
@@ -259,7 +283,23 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 				gameModel.switchPlayerAction(id);
 				break;
 			case NUM_6:
-				gameModel.usePlayerAction(id);
+				PlayerModel.Action act = 
+						gameModel.usePlayerAction(id);
+				if (act == PlayerModel.Action.USE_BRICK) {
+					building = true;
+					Timer.schedule(new Timer.Task(){
+						public void run() {
+							building = false;
+						}
+					}, 1);
+				} else if (act == PlayerModel.Action.USE_PICK) {
+					destroying = true;
+					Timer.schedule(new Timer.Task(){
+						public void run() {
+							destroying = false;
+						}
+					}, 1);
+				}
 				break;
 			default:
 				return false; // event not handled

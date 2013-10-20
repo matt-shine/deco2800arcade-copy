@@ -2,28 +2,26 @@ package deco2800.arcade.wl6.enemy;
 
 import deco2800.arcade.wl6.DoodadInfo;
 import deco2800.arcade.wl6.GameModel;
+import deco2800.arcade.wl6.Player;
+import deco2800.arcade.wl6.Projectile;
 
 public class Dog extends Enemy {
 
+    // All difficulties = 1 health
     private int STARTING_HEALTH = 1;
 
     public Dog(int uid, DoodadInfo d) {
         super(uid);
 
-        setState(STATES.PATH);
         setHealth(STARTING_HEALTH);
-        pathSpeed = 1500;
-        chaseSpeed = 3000;
-        pain = false;
-        this.setTextureName(d.texture);
+        setPathSpeed(1500);
+        setChaseSpeed(1536);
+        setPain(false);
+        setDamage(0);
+
+        initialiseFromEnemyData(d);
+        
     }
-
-    @Override
-    public void tick(GameModel gameModel) {
-        super.tick(gameModel);
-
-    }
-
 
     @Override
     public int calcDamage(int dist, boolean speed, boolean look) {
@@ -31,16 +29,33 @@ public class Dog extends Enemy {
         if (randInt(0, 255, getRand()) < 180 && dist == 1) {
             hit = true;
         }
-
-        damage = randInt(0, 255, getRand());
+        
+        setDamage(randInt(0, 255, getRand()));
 
         if (hit) {
-            damage = damage / 16;
+            setDamage(getDamage() / 16);
         }
         else {
-            damage = 0;
+            setDamage(0);
         }
-
-        return damage;
+	
+        return getDamage();
     }
+    
+    
+    @Override
+    public void shootAtPlayer(GameModel g) {
+    	
+    	Player p = g.getPlayer();
+    	if (p.getPos().dst(this.getPos()) < 1) {
+        	Projectile bullet = new Projectile(0, 10, true, "blank");
+        	g.addDoodad(bullet);
+        	bullet.setPos(this.getPos());
+        	bullet.setVel(p.getPos().sub(bullet.getPos()).nor().mul(0.2f));
+    	}
+    	
+    	
+    	
+    }
+    
 }

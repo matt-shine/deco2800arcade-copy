@@ -29,7 +29,7 @@ public class Wolfenstein {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 
-				arcade.connectAsUser("wolfTest");
+				//arcade.connectAsUser("wolfTest");
 				
 				ArcadeSystem.goToGame("Wolfenstein 3D");
 			}

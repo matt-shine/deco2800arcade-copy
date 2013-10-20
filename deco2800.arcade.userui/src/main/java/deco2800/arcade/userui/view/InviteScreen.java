@@ -16,6 +16,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import deco2800.arcade.model.Player;
+import deco2800.arcade.model.User;
 import deco2800.arcade.userui.Model;
 import net.miginfocom.swing.MigLayout;
 
@@ -193,7 +194,7 @@ public class InviteScreen extends JFrame{
 	 * Accept the friend invite, player gets added to friends list
 	 * @param friend
 	 */
-	public void acceptinvite(Player friend){
+	public void acceptinvite(User friend){
 		
 		model.getPlayer().acceptFriendInvite(friend);
 		invites.setText(model.getPlayer().getInvites().toString());
@@ -204,7 +205,7 @@ public class InviteScreen extends JFrame{
 	 * Reject the friend invite, player is remove from the list
 	 * @param friend
 	 */
-	public void declineinvite(Player friend){
+	public void declineinvite(User friend){
 		
 		model.getPlayer().removeInvite(friend);
 		invites.setText(model.getPlayer().getInvites().toString());

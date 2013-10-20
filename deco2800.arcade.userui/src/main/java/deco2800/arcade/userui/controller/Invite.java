@@ -40,6 +40,7 @@ public class Invite {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
+			inviteView.acceptinvite(theModel.getUser());
 			inviteView.dispose();
 			userView.setEnabled(true);
 			
@@ -52,6 +53,7 @@ public class Invite {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
+			inviteView.declineinvite(theModel.getUser());
 			inviteView.dispose();
 			userView.setEnabled(true);
 			

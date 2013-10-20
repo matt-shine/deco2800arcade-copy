@@ -27,8 +27,8 @@ public class WallBoss extends Enemy{
 		
 		count += delta;
 		Array<Enemy> newEnemies = new Array<Enemy>();
-		if (count > 3f-2.9*rank) {
-			newEnemies.add(new SoldierEnemy(new Vector2(cam.position.x-cam.viewportWidth-1.5f, cam.position.y), false));
+		if (count > 7f-2.9*rank) {
+			newEnemies.add(new SoldierEnemy(new Vector2(cam.position.x-cam.viewportWidth/2-1.5f, cam.position.y), false));
 			count =0;
 		}
 		if (invincibleTime >0) {

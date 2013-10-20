@@ -302,8 +302,11 @@ public class EnemySpiderBoss extends Enemy {
 						boolean throwUp = MathUtils.randomBoolean();
 						arms.beginAttack(throwUp);
 					} else {
-						if ((phase ==1 && !arms.isAttacking()) || phase != 1) {
+						if ((phase ==1 && !arms.isAttacking()) || phase == 2) {
 							count = ATTACK_RATE - rank * ATTACK_RANK_RATE;
+							state = State.IDLE;
+						} else if (phase == 3) {
+							count = ATTACK_RATE + 3.5f - rank * ATTACK_RANK_RATE;
 							state = State.IDLE;
 						}
 					}
@@ -504,7 +507,7 @@ public class EnemySpiderBoss extends Enemy {
 				}
 				
 				
-				laserBeam.setRotation(laserBeam.getRotation() + (angleDifference) *delta * (0.2f+rank/2));
+				laserBeam.setRotation(laserBeam.getRotation() + (angleDifference) *delta * (0.2f+rank/4));
 				
 			}
 		}

@@ -48,8 +48,10 @@ public class MainMenu extends AbstractScreen{
 		difficulty[0] = 0.21f;
 		difficulty[1] = 0.76f;
 		difficulty[2] = 0.91f;
-		
+		Sounds.setSoundEnabled(true);
 		Sounds.loadAll();
+		Sounds.playMenuMusic();
+		
 	}
 	
 	@Override
@@ -60,7 +62,7 @@ public class MainMenu extends AbstractScreen{
 		//blackFont = new BitmapFont(Gdx.files.internal("whitefont.fnt"), false);
 		blackFont = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);
 		//Sounds.load();
-		Sounds.playMenuMusic();
+		
 		
 	}
 	
@@ -74,7 +76,6 @@ public class MainMenu extends AbstractScreen{
 		batch.end();
 		
 		if (framecount++ == framecountmax) {
-			Sounds.playtest();
 			framecount = 0;
 			if (framecountmax > 25) {
 				framecountmax -= 9;
@@ -170,7 +171,7 @@ public class MainMenu extends AbstractScreen{
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				keydown = false;
-				game.setScreen(new HighscoreScreen(game));
+				//game.setScreen(new HighscoreScreen(game));
 			}
 		});
 		

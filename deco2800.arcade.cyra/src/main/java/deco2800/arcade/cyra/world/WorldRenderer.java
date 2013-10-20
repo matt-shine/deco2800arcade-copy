@@ -58,14 +58,13 @@ public class WorldRenderer {
 	private ParallaxCamera cam;
 	Integer rightCyraCount, leftCyraCount, rightFrameCounter, leftFrameCounter;
 	private BitmapFont font, fontBig;
-	private Texture shipTexture, followerTexture, bulletTexture, walkerTexture, bg, heartsTexture, 
+	private Texture shipTexture, followerTexture, bulletTexture, bg, heartsTexture, 
 	jumperBodyTexture, jumperFrontArmTexture, jumperFrontLegTexture, jumperFrontArmJumpingTexture,jumperFrontLegJumpingTexture,
 	wallTexture, sword1, sword2, sword3;
-	private TextureRegion followerFrame, cyraFrame;
+	private TextureRegion cyraFrame;
 	private TextureRegion walkerRegion;
 	private TextureAtlas groundTextureAtlas, laserTextures, explosionTextures, boss1Atlas, bossRam, firestarter, myEnemy;
 	private TextureRegion boss1body, boss1head0, boss1head1, boss1arms;
-	private Array<AtlasRegion> walkerRegions;
 	private Animation followerAnimation, cyraRightAnimation, cyraLeftAnimation; 
 	float width, height;
 	private Array<Bullet> bullets;
@@ -418,11 +417,7 @@ public class WorldRenderer {
 		eItr = enemies.iterator();
 		while (eItr.hasNext()) {
 			e = eItr.next();
-			if (e.getClass() == Follower.class) {
-				followerFrame = followerAnimation.getKeyFrame(e.getStateTime(), true);
-				batch.draw(followerFrame, e.getPosition().x, e.getPosition().y, e.getWidth()/2,
-						e.getHeight()/2, e.getWidth(), e.getHeight(), 1, 1, 0);
-			} else if (e.getClass() == SoldierEnemy.class){
+			if (e.getClass() == SoldierEnemy.class){
 				
 				if(e.isJumping() == true){
 				batch.draw(jumperFrontArmJumpingTexture, (e.getPosition().x)-.3f, (e.getPosition().y) +.55f, e.getWidth() /2, e.getHeight()/2,
@@ -628,47 +623,6 @@ public class WorldRenderer {
 						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
 						shipTexture.getHeight(), false, false);*/
 				batch.begin();
-			} else if (e.getClass() == Walker.class){
-				//draw the parts in order
-				int i=7; 
-				while (i <8) {
-					MovableEntity mve = ((Walker)e).getPart(i);
-					
-					AtlasRegion ar = walkerRegions.get(i);
-					Texture tx = ar.getTexture();
-					tx.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-					batch.draw(tx, mve.getPosition().x, mve.getPosition().y, 0,
-							ar.getRegionHeight()/64f, ar.getRegionWidth()/64f, ar.getRegionHeight()/64f, 1, 1, mve.getRotation(), ar.getRegionX(), ar.getRegionY(),
-							ar.getRegionWidth(), ar.getRegionHeight(), false, false);
-					//batch.draw
-					switch(i) {
-						case 7:
-							i =3;
-							break;
-						case 3:
-							i=6;
-							break;
-						case 6:
-							i=5;
-							break;
-						case 5:
-							i=2;
-							break;
-						case 2:
-							i=1;
-							break;
-						case 1:
-							i=4;
-							break;
-						case 4:
-							i=0;
-							break;
-						case 0:
-						default:
-							i=8;
-							break;
-					}
-				}
 			} else if (e.getClass() == WallBoss.class) {
 				if (!(e.isInvincible() && e.toggleFlash())) {
 					batch.draw(wallTexture, e.getPosition().x, e.getPosition().y, 0, 0,
@@ -937,10 +891,8 @@ public class WorldRenderer {
 		manager.load("projectiles/lightningball.png", Texture.class, linearFilteringParam);
 		manager.load("projectiles/lasers.txt", TextureAtlas.class);
 		manager.load("projectiles/explosion.txt", TextureAtlas.class);
-		manager.load("follower.txt", TextureAtlas.class);
 		manager.load("cyraRightMovement.txt", TextureAtlas.class);
 		manager.load("cyraLeftMovement.txt", TextureAtlas.class);
-		manager.load("modular3.txt", TextureAtlas.class);
 		manager.load("tiles/level packfile", TextureAtlas.class);
 		manager.load("wall.png",Texture.class,linearFilteringParam);
 		manager.load("frontbush1.png", Texture.class, linearFilteringParam);
@@ -1031,18 +983,7 @@ public class WorldRenderer {
 		
 		
 		
-		TextureAtlas atlas = manager.get("follower.txt", TextureAtlas.class);
-		/*TextureRegion[] followerFrames = new TextureRegion[3];
-		for (int i=0; i<3;i++) {
-			followerFrames[i] = atlas.findRegion("follower_"+(i+1));
-		}*/
-		Array<AtlasRegion> followerFrames = atlas.findRegions("follower");
-		System.out.println("Found " + followerFrames.size + " follower frames");
-		for (int i=0; i<followerFrames.size; i++) 
-			followerFrames.get(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		followerAnimation = new Animation(FOLLOWER_FRAME_DURATION, followerFrames);
-			/* Load follower texture - END*/
-		
+			
 		
 		Array<AtlasRegion> cyraRightFrames = cyraRightAtlas.findRegions("cyra");
 		System.out.println("Found " + cyraRightFrames.size + " cyra frames");
@@ -1056,17 +997,6 @@ public class WorldRenderer {
 			cyraLeftFrames.get(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		cyraLeftAnimation = new Animation(FOLLOWER_FRAME_DURATION, cyraLeftFrames);
 		
-		
-			/* Load walker texture */
-		//walkerTexture = new Texture("walker.png");
-		TextureAtlas walkerAtlas = manager.get("modular3.txt", TextureAtlas.class);
-		walkerRegions = walkerAtlas.findRegions("a");
-				
-		for (int i=0; i<walkerRegions.size; i++) {
-			walkerRegions.get(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-					
-		}
-		System.out.println("Found " + walkerRegions.size + " walker parts");
 		
 		groundTextureAtlas = manager.get("tiles/level packfile", TextureAtlas.class);
 			/* Load walker texture - END */

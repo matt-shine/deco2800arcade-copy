@@ -189,4 +189,20 @@ public class TDTests {
 				((Mortal) grid.getGridContents(6, 3).get(0)).health());
 		// HEAVY DAMAGE, ANOTHER ONE LIKE THAT SHOULD FINISH THEM SIR!
 	}
+	
+	@Test
+	public void targetingTest() {
+		// The grid
+		Grid grid = new Grid(100, 100, "grid", 10, null, null);
+		//Target and tower
+		Enemy target = new Enemy(100, 0, 60, 30, 0, grid, Team.Computer, 0, 0,
+				0, 0, 0, null, null, null, null, null);
+		grid.placeAlien(target);
+		Tower tower = new Tower(50, 10, 50, 30, grid, Team.Player, null, 1, 10,
+				null, 0, null, null, null, null);
+		//Acquire a target
+		tower.acquireTarget();
+		//TARGET ACQUIRED, COMMANDER
+		Assert.assertEquals(target, tower.target());
+	}
 }

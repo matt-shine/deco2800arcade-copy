@@ -584,17 +584,6 @@ public class junglejump extends GameClient implements InputProcessor {
 						isFalling = true;
 						return false;
 					}
-					
-	
-					// If monkey hits bottom of platform tough titties
-					/*if(y >= p.getY() - monkeyHeight
-							&& y <= p.getY()) {
-						monkeyY = p.getY() - monkeyHeight;
-						p.setInactive();
-						onPlatform = false;
-						isFalling = true;
-						return false;
-					}*/
 					return true;
 				}
 			}

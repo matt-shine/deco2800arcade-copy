@@ -26,7 +26,7 @@ public class Enemy8Pattern extends BulletPattern {
 	@Override
 	public void fire(float lag, float x, float y) {
 		PlayerBullet bullet;
-		bullet = new PlayerBullet(Affinity.ENEMY, 10*multiplier, emitter, player, new Vector2(x,y), 
+		bullet = new PlayerBullet(Affinity.ENEMY, 4*multiplier, emitter, player, new Vector2(x,y), 
 				emitter.getRotation() + 90, image);
 		screen.addBullet(bullet);
 		bullet.act(lag);

@@ -26,7 +26,7 @@ public class Level1EnemyPattern extends BulletPattern {
 	public void fire(float lag, float x, float y) {
 		EnemyBullet bullet;
 		for(int i=0;i<360;i+=36) {
-			bullet = new EnemyBullet(Affinity.ENEMY, 10*multiplier, emitter, player, new Vector2(x,y), i, image);
+			bullet = new EnemyBullet(Affinity.ENEMY, 5*multiplier, emitter, player, new Vector2(x,y), i, image);
 			screen.addBullet(bullet);
 		}
 	}

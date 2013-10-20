@@ -313,8 +313,7 @@ public class MenuScreen extends JFrame{
 	}
 	
 	public static void main (String args[]) throws IOException {
-		//MenuScreen w = new MenuScreen();
-		stageClear s = new stageClear(new Invaders(), 10);
+		MenuScreen w = new MenuScreen();
 	}
 	
 	public class HSmouse3 implements MouseListener {

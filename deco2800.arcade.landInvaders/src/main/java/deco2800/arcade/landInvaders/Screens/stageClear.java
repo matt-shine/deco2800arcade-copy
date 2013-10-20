@@ -48,7 +48,7 @@ public class stageClear extends JFrame{
 						java.awt.Image.SCALE_SMOOTH)));
 		next.addMouseListener(new mouse1());
 		t.add(next, gbc);
-		gbc.gridy++;
+		
 		JLabel l = new JLabel();
 		
 		GridBagConstraints gbd = new GridBagConstraints();
@@ -59,7 +59,8 @@ public class stageClear extends JFrame{
 		t.add(l,gbd);
 		l.setForeground(Color.black);
 		l.setFont(new Font("Algerian",1, 40));
-		l.setText("32");
+		l.setText(score + "");
+		
 		
 		this.setVisible(true);
 		this.setSize(800,530);
@@ -68,12 +69,6 @@ public class stageClear extends JFrame{
 
 	}
 	
-	
-	public void paint(Graphics g) {
-		
-		
-
-	}
 
 	public class mouse1 implements MouseListener {
 

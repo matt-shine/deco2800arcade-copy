@@ -2,12 +2,14 @@ package deco2800.arcade.junglejump.GUI;
 
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -60,7 +62,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	int SPEED_MULTIPLIER = 2;
 
 	private enum GameState {
-		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS, CONTINUE, PAUSE
+		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS, CONTINUE, PAUSE, OPTIONS
 	}
 
 	int monkeyLength = 35;
@@ -155,7 +157,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			File file = new File(resource);
 			new FileHandle(file);
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
-			Clip clip = AudioSystem.getClip();
+			this.clip = AudioSystem.getClip();
 			clip.open(audioIn);
 			clip.start();
 			clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -423,6 +425,35 @@ public class junglejump extends GameClient implements InputProcessor {
 			batch.begin();
 			achievementTitleFont.draw(batch, "PAUSED", SCREENWIDTH/2, SCREENHEIGHT/2);
 			batch.end();         
+			break;
+		case OPTIONS:
+			//Gdx.graphics.setVSync(true);
+			// set resolution to default and set full-screen to true
+			//Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, true);
+			
+			Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+//			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			batchContinue.setProjectionMatrix(camera.combined);
+//			shapeRenderer.setProjectionMatrix(camera.combined);
+			
+			// Load Previous game? If yes, continue to game, if not go back to menu.
+			Gdx.gl.glEnable(GL10.GL_BLEND);
+			Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+			shapeRenderer.begin(ShapeType.FilledRectangle);
+			shapeRenderer.filledRect(227, 117, 266, 106, Color.BLACK,
+					Color.BLACK, Color.BLACK, Color.BLACK);
+			shapeRenderer.filledRect(230, 120, 260, 100, Color.BLUE,
+					Color.BLUE, Color.BLUE, Color.BLUE);
+			shapeRenderer.end();
+			Gdx.gl.glDisable(GL10.GL_BLEND);
+			batchContinue.begin();
+			achievementTitleFont.draw(batchContinue, "OPTIONS", 240, 200);
+			achievementTitleFont.draw(batchContinue, "1. Toggle Music ON/OFF.", 290, 170);
+			achievementTitleFont.draw(batchContinue, "2. Back to Menu.", 290, 145);
+
+			batchContinue.end();
+			camera.update();
+			super.render();
 			break;
 		case CONTINUE:
 			Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
@@ -709,6 +740,9 @@ public class junglejump extends GameClient implements InputProcessor {
 			if (butY == CONTINUE) {
 				gameState = GameState.CONTINUE;
 			}
+			if (butY == OPTIONS) {
+				gameState = GameState.OPTIONS;
+			}
 		}
 		if (keycode == Keys.BACKSPACE) {
 			// pressed backspace
@@ -763,6 +797,37 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 
 			// Climb
+		}
+		if (keycode == Keys.NUM_1) {
+			if (gameState == GameState.OPTIONS){
+				if (clip.isActive()) {
+					clip.stop();
+				} else {
+					URL path = this.getClass().getResource("/");
+					String resource = path.toString().replace(".arcade/build/classes/main/", 
+							".arcade.junglejump/src/main/").replace("file:", "") + 
+							"resources/soundtrack.wav";
+					File file = new File(resource);
+					new FileHandle(file);
+					AudioInputStream audioIn;
+					try {
+						audioIn = AudioSystem.getAudioInputStream(file);
+						this.clip = AudioSystem.getClip();
+						clip.open(audioIn);
+						clip.start();
+						clip.loop(Clip.LOOP_CONTINUOUSLY);
+					} catch (Exception e) {
+						Gdx.app.log(junglejump.messages, "No File Found for Background Music");
+					}
+					
+					//clip.loop(Clip.LOOP_CONTINUOUSLY);
+				}
+			}
+		}
+		if (keycode == Keys.NUM_2) {
+			if (gameState == GameState.OPTIONS){
+				gameState = GameState.AT_MENU;
+			}
 		}
 		if (keycode == Keys.Y) {
 			if (gameState == GameState.CONTINUE) {

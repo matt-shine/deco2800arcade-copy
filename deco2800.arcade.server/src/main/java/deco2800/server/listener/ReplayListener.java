@@ -2,6 +2,7 @@ package deco2800.server.listener;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,7 +85,7 @@ public class ReplayListener extends Listener {
             
             logger.info("Got list replay session event.");
 
-            ArrayList<String> sessionStrings = null;
+            List<String> sessionStrings = null;
             
             try {
                 sessionStrings = ArcadeServer.instance().getReplayStorage().getSessionsForGame(lsr.gameId);

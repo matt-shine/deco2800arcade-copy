@@ -112,6 +112,14 @@ public class ForumStorage {
 			this.resetTables();
 			rs.close();
 			st.close();
+			/*
+			 * If check integrity constraint error occurs, use the next commented out function to drop
+			 * from table. If you want to make sure, run printConstraints() test case
+			 * in TestForumStorage unit test, and print the all and see TYPE (Do not run all test cases
+			 * because it would throw Exception before engaging the test case that you want to run). 
+			 * If it is 'C', it means CHECK constraint ('P' = Primary Key, 'F' = Foreign Key).
+			 */
+			//this.dropConstraint("parent_thread", "SQL131014143242970");
 			this.addChkCategory();
 			this.insertParentThread("Test parent thread", "Very fist parent thread", 1, "Others", "Test#Parent thread");
 			this.insertChildThread("Very first child thread.", 1, 1);
@@ -1793,6 +1801,9 @@ public class ForumStorage {
 	 */
 	public void dropConstraint(String tableName, String constraint) throws DatabaseException {
 		String query = "ALTER TABLE " + tableName + " DROP CONSTRAINT " + constraint;
+		if (tableName != "parent_thread" || tableName != "child_thread") {
+			throw new DatabaseException("invalid table name");
+		}
 		if (!this.checkConstraint(constraint)) {
 			throw new DatabaseException("constraint does not exist");
 		}

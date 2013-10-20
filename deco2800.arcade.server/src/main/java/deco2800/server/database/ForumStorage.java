@@ -1801,7 +1801,7 @@ public class ForumStorage {
 	 */
 	public void dropConstraint(String tableName, String constraint) throws DatabaseException {
 		String query = "ALTER TABLE " + tableName + " DROP CONSTRAINT " + constraint;
-		if (tableName != "parent_thread" || tableName != "child_thread") {
+		if (!(tableName == "parent_thread" || tableName == "child_thread")) {
 			throw new DatabaseException("invalid table name");
 		}
 		if (!this.checkConstraint(constraint)) {

@@ -147,6 +147,7 @@ public class Protocol {
 		kryo.register(GetChildThreadsResponse.class);
 		kryo.register(UpdateParentThreadRequest.class);
 		kryo.register(UpdateParentThreadResponse.class);
+		kryo.register(java.sql.Timestamp.class);
 		
 	}
 	

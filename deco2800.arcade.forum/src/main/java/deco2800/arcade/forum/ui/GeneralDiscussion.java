@@ -49,6 +49,8 @@ public class GeneralDiscussion {
 	private JButton btnSearch;
 	private JFrame f;
 	private int threadCount;
+	private JButton btnPrevButton;
+	private JButton btnNextButton;
 	
 
 	public GeneralDiscussion(JFrame window) {
@@ -69,6 +71,14 @@ public class GeneralDiscussion {
 	    this.btnNewButton.setBounds(7, 194, 116, 25);
 	    f.getContentPane().add(this.btnNewButton);
 	    addMakeThreadListener(this.btnNewButton);
+	    
+	    this.btnPrevButton = new JButton("Prev 10");
+	    this.btnPrevButton.setBounds(133, 194, 116, 25);
+	    f.getContentPane().add(this.btnPrevButton);
+	    
+	    this.btnNextButton = new JButton("Next 10");
+	    this.btnNextButton.setBounds(249, 194, 116, 25);
+	    f.getContentPane().add(this.btnNextButton);
 	      
 	    this.lblArcadeForum = new JLabel("ARCADE FORUM");
 	    this.lblArcadeForum.setForeground(Color.WHITE);

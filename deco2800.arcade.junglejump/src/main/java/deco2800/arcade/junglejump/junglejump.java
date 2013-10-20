@@ -363,8 +363,8 @@ public class junglejump extends GameClient implements InputProcessor {
 					level), SCREENWIDTH-750, SCREENHEIGHT-10);
 			
 			if(currentCont.getCurrentLevel() == 0) {
-				achievementTitleFont.draw(batch, "Use arrow keys to move", SCREENWIDTH-250, SCREENHEIGHT-100);
-				achievementTitleFont.draw(batch, "Use Spacebar to jump", SCREENWIDTH-250, SCREENHEIGHT-150);
+				achievementTitleFont.draw(batch, "Use arrow keys to move", SCREENWIDTH-750, SCREENHEIGHT-150);
+				achievementTitleFont.draw(batch, "Use Spacebar to jump", SCREENWIDTH-750, SCREENHEIGHT-200);
 			}
 			
 			batch.end();

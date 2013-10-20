@@ -39,7 +39,6 @@ public class ListScreen implements Screen, LibraryScreen {
     private int x = 0;
     private int y = 580;
     private TextButton button;
-    private TextButton storeButton;
     private TextButton userProfileButton;
     private TextButton currentButton;
     private TextButton homeButton;
@@ -200,24 +199,16 @@ public class ListScreen implements Screen, LibraryScreen {
         homeButton.setY(650);
         homeButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
 
-        storeButton = new TextButton("Game Store", libSkin);
-        storeButton.setWidth(150);
-        storeButton.setHeight(40);
-        storeButton.setX(300);
-        storeButton.setY(650);
-        storeButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
-
         userProfileButton = new TextButton("User Profile", libSkin);
         userProfileButton.setWidth(150);
         userProfileButton.setHeight(40);
-        userProfileButton.setX(500);
+        userProfileButton.setX(300);
         userProfileButton.setY(650);
-        userProfileButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
+        userProfileButton.addListener(new PlayButtonActionHandler(this, "profileui"));
 
         stage.addActor(label);
         stage.addActor(homeButton);
         stage.addActor(titleLabel);
-        stage.addActor(storeButton);
         stage.addActor(userProfileButton);
         stage.addActor(playButton);
         

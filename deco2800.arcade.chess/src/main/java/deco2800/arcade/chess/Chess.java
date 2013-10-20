@@ -394,6 +394,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		drawButton();
 	}
 
+
 	@Override
 	public void resume() {
 		super.resume();

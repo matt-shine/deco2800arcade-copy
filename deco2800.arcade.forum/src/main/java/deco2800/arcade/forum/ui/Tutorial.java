@@ -14,6 +14,9 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.Color;
 import javax.swing.JTextPane;
+
+import deco2800.arcade.forum.ForumException;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -126,6 +129,23 @@ public class Tutorial {
 		label.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				open_home();
+			}
+		});
+	}
+	
+	public void open_MakeThread() throws ForumException {
+		this.f.setContentPane(new JPanel(new BorderLayout()));
+		new MakeThreadController(new MakeThreadView(this.f));
+	}
+	
+	private void addMakeThreadListener(JButton button) {
+		button.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				try {
+					open_MakeThread();
+				} catch (ForumException e1) {
+					System.out.println("Didn't work");
+				}
 			}
 		});
 	}

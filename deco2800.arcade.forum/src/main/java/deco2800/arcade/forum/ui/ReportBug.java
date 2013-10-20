@@ -9,11 +9,16 @@ import javax.swing.JToolBar;
 import java.awt.Label;
 import java.awt.Button;
 import java.awt.Font;
+
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.Color;
 import javax.swing.JTextPane;
+
+import deco2800.arcade.forum.ForumException;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -114,8 +119,8 @@ public class ReportBug {
 	    this.panel_1.setBackground(Color.DARK_GRAY);
 	    this.panel_1.setBounds(0, 0, 1006, 57);
 	    f.getContentPane().add(this.panel_1);
-	    f.setVisible(true);      
-	}
+	    f.setVisible(true);
+	}	    
 
 	public void open_home() {
 		this.f.setContentPane(new JPanel(new BorderLayout()));
@@ -126,6 +131,23 @@ public class ReportBug {
 		label.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				open_home();
+			}
+		});
+	}
+
+	public void open_MakeThread() throws ForumException {
+		this.f.setContentPane(new JPanel(new BorderLayout()));
+		new MakeThreadController(new MakeThreadView(this.f));
+	}
+	
+	private void addMakeThreadListener(JButton button) {
+		button.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				try {
+					open_MakeThread();
+				} catch (ForumException e1) {
+					System.out.println("Didn't work");
+				}
 			}
 		});
 	}

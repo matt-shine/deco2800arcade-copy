@@ -12,6 +12,7 @@ public class enemy {
 	private int width;
 	private int height;
 	private String img;
+	private boolean enemyState = false;
 
 	
 /**
@@ -27,6 +28,11 @@ public enemy(int Px,int Py,int SizeW, int SizeH, String img){
 	width = SizeW;
 	height=SizeH;
 	this.img = img;
+	enemyState = true;
+}
+
+public boolean checkEnemyState(){
+	return enemyState;
 }
 
 /**

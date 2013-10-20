@@ -19,6 +19,7 @@ public class tank implements KeyListener {
 	private String img;
 	private int width;
 	private int height;
+	private boolean tankState = false;
 
 	/**
 	 * Tank initial starting point
@@ -32,7 +33,12 @@ public class tank implements KeyListener {
 		this.img = img;
 		width = 40;
 		height = 80;
-
+		tankState = true;
+	}
+	
+	public boolean checkTankState()
+	{
+		return tankState;
 	}
 
 	/**
@@ -95,7 +101,6 @@ public class tank implements KeyListener {
 	 */
 	public boolean shotCheck() {
 		return shotState;
-
 	}
 
 	/**

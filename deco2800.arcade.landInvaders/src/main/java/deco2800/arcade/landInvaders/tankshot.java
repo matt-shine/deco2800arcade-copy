@@ -9,6 +9,7 @@ public class tankshot {
 	private int p_y;
 	private int width;
 	private int height;
+	private boolean tankShotState = false;
 
 	/**
 	 * @param x x-coordinate of player sprite
@@ -19,7 +20,15 @@ public class tankshot {
 		p_y = y;
 		width = 5;
 		height = 10;
-
+		tankShotState = true;
+	}
+	
+	/**
+	 * @return true if tankshot is create successfully, false otherwise
+	 */
+	public boolean getTankShotState()
+	{
+		return tankShotState;
 	}
 
 	/**

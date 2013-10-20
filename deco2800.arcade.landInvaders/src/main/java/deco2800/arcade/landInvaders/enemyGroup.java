@@ -12,6 +12,7 @@ public class enemyGroup {
 	private enemy[] temp;
 	private enemy[][] lists;
 	private int shotRow;
+	private boolean enemyGroupState = false;
 
 	/**
 	 * @param rowNum number of enemy rows
@@ -26,9 +27,18 @@ public class enemyGroup {
 		this.rowEnemyNum = rowEnemyNum;
 		shotRow= 1;
 		lists = new enemy[rowNum][rowEnemyNum];
-
 		createGroup(img, EsizeW, EsizeH);
-
+		enemyGroupState = true;
+	}
+	
+	public enemy[][] checkList()
+	{
+		return lists;
+	}
+	
+	public boolean getEnemyGroupState()
+	{
+		return enemyGroupState;
 	}
 
 	/**

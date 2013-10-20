@@ -9,6 +9,7 @@ public class enemyShot {
 	private int p_y;
 	private int width;
 	private int height;
+	private boolean enemyShotState = false;
 
 	/**
 	 * @param x x-coordinate of enemy shot sprite
@@ -20,6 +21,11 @@ public class enemyShot {
 		width = 5;
 		height = 10;
 
+	}
+	
+	public boolean getEShotState()
+	{
+		return enemyShotState;
 	}
 
 	/**

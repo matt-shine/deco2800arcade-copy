@@ -11,6 +11,7 @@ public class blockWall {
 	private enemy[][] lists;
 	private int px;
 	private int py;
+	private boolean wallCondition = false;
 	
 	/**
 	 * @param px define the x-coordinates of the wall
@@ -26,8 +27,23 @@ public class blockWall {
 		this.px=px;
 		this.py=py;
 		createWall(img);
-		
-
+		wallCondition = true;
+	}
+	
+	/**
+	 * @return True if wall is successfully constructed, false otherwise
+	 */
+	public boolean checkWallCondition()
+	{
+		return wallCondition;
+	}
+	
+	/**
+	 * @return list of wall sprites
+	 */
+	public enemy[][] checkList()
+	{
+		return lists;
 	}
 
 	/**
@@ -57,10 +73,8 @@ public class blockWall {
 				if (lists[n][i] != null) {
 					lists[n][i].drawEnemy(g,p);
 				}
-
 			}
 		}
-
 	}
 
 

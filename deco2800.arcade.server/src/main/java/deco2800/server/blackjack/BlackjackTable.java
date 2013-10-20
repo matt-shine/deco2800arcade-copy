@@ -117,6 +117,9 @@ public class BlackjackTable extends Thread {
 					}
 					}
 				}
+				CasinoServerUpdate update = new CasinoServerUpdate();
+				update.message = "bettimeup";
+				broadcastCasinoServerUpdate(update);
 				interrupt();
 			}
 		}, 60000);
@@ -176,12 +179,18 @@ public class BlackjackTable extends Thread {
 		for (int i = 0; i < Playerarray.size(); i++) {
 			if (Playerarray.get(i) != null) {
 			Playerarray.get(i).hand.clear();
+			if (Playerarray.get(i).hand.size() >= 5 && totalhandNum(Playerarray.get(i).hand) <= 21) {
+				Playerarray.get(i).chippile += Playerarray.get(i).bet*3;
+			}
 			if (totalhandNum(Playerarray.get(i).hand) > totalhandNum(dealerHand) && totalhandNum(Playerarray.get(i).hand) <= 21) {
 				Playerarray.get(i).chippile += Playerarray.get(i).bet*3;
 			}
 			Playerarray.get(i).bet = 0;
 		}
 		}
+		CasinoServerUpdate update = new CasinoServerUpdate();
+		update.message = "endgame";
+		broadcastCasinoServerUpdate(update);
 		dealerHand.clear();
 		numofplayersbet = 0;
 		betsplaced = false;
@@ -218,7 +227,10 @@ public class BlackjackTable extends Thread {
 			players.remove(username);
 		}
 		players.put(username, connection);
-		//Watchers.add(new BlackjackUser(username, 500, connection));
+		Watchers.add(new BlackjackUser(username, 500, connection));
+		CasinoServerUpdate update = new CasinoServerUpdate();
+		update.message = "watcheradded";
+		broadcastCasinoServerUpdate(update);
 	}
 	
 	public void dealcards() {
@@ -276,6 +288,10 @@ public class BlackjackTable extends Thread {
 				Playerarray.set(i, newPlayer);
 			}
 		}
+		CasinoServerUpdate update = new CasinoServerUpdate();
+		update.message = "addplayerstotable";
+		broadcastCasinoServerUpdate(update);
+		dealerHand.clear();
 	}
 	
 	public void bet(BlackjackPlayer player, int amount){
@@ -293,6 +309,9 @@ public class BlackjackTable extends Thread {
  		String card = deck.getCard();
 		player.hand.add(card);	
 		if (totalhandNum(player.hand) > 21) {
+			interrupt();
+		}
+		if (player.hand.size() == 5) {
 			interrupt();
 		}
 		CasinoServerUpdate update = new CasinoServerUpdate();

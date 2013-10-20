@@ -361,11 +361,13 @@ public class junglejump extends GameClient implements InputProcessor {
 			int level = (currentLevel.getIndex()%5)+1;
 			achievementTitleFont.draw(batch, ("Level " + (LevelContainer.getCurrentWorld()+1) + " - " + 
 					level), SCREENWIDTH-750, SCREENHEIGHT-10);
-			batch.end();
 			
-			if(monkeyY > SCREENHEIGHT) {
-				this.incrementAchievement("junglejump.hax");
+			if(currentCont.getCurrentLevel() == 0) {
+				achievementTitleFont.draw(batch, "Use arrow keys to move", SCREENWIDTH-250, SCREENHEIGHT-100);
+				achievementTitleFont.draw(batch, "Use Spacebar to jump", SCREENWIDTH-250, SCREENHEIGHT-150);
 			}
+			
+			batch.end();
 			
 			camera.update();
 			super.render();

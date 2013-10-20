@@ -60,7 +60,7 @@ public class SplashScreen implements Screen{
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		//Gdx.app.log(TowerDefence.LOG, "Redering...");
+		//Gdx.app.log(TowerDefence.LOG, "Rendering...");
 		
 		batch.begin();
 		splashSprite.draw(batch);

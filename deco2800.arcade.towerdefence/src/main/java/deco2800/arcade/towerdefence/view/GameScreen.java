@@ -34,6 +34,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.towerdefence.controller.TowerDefence;
+import deco2800.arcade.towerdefence.view.TexturePart;
 
 /* GameScreen is where the game will take place
  * There are many buttons on the HUD for selecting different towers, etc.
@@ -65,7 +66,7 @@ public class GameScreen implements Screen{
     //static final int HEIGHT = 320;
 
 	Texture crystalsTexture;
-    private float                           rotationSpeed;
+    private float rotationSpeed;
 	
 	/*
 	 * Constructor for GameScreen, creates the platform for which the game will be played.
@@ -197,8 +198,8 @@ public class GameScreen implements Screen{
 				
 		// Setting the "Style of a TextButton",
 		TextButtonStyle style = new TextButtonStyle();
-		style.up = skin.getDrawable("buttonnormal");
-		style.down = skin.getDrawable("buttonpressed");
+		style.up = skin.getDrawable("button");
+		style.down = skin.getDrawable("button");
 		style.font = white;
 
 		frostB = new TextButton("1", style);
@@ -345,10 +346,10 @@ public class GameScreen implements Screen{
 		
 		//adding bars for showing information
 		healthBar = new TexturePart(healthBarRegion, towerInfo.getX() + towerInfo.getWidth() + 20, towerInfo.getY() + 50);
-		//getClass().attackBar = new TexturePart(attackBarRegion, healthBar.getX(), healthBar.getY() - 26);
-		//costBar = new TexturePart(costBarRegion, healthBar.getX(), attackBar.getY()- 26);
-		//penetrationBar = new TexturePart(penetrationBarRegion, healthBar.getX(), costBar.getY() - 26);
-		//armorBar = new TexturePart(armorBarRegion, healthBar.getX(), penetrationBar.getY() - 26);
+		attackBar = new TexturePart(attackBarRegion, healthBar.position.x, healthBar.position.y - 26);
+		costBar = new TexturePart(costBarRegion, healthBar.position.x, attackBar.position.y- 26);
+		penetrationBar = new TexturePart(penetrationBarRegion, healthBar.position.x, costBar.position.y - 26);
+		armorBar = new TexturePart(armorBarRegion, healthBar.position.x, penetrationBar.position.y - 26);
 		
 		//adding actors to the HUD
 		hudStage.addActor(frostB);

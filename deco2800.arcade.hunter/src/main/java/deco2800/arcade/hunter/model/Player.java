@@ -384,18 +384,18 @@ public class Player extends Entity {
 		} else if(e.getType().equals("MapEntity") && !((MapEntity) e).getEntityType().equals("arrow")){
 			if (!invulnerable && !blink && !dead){
 				String type = ((MapEntity)e).getEntityType();
-				applyPlayerDebuff(type);
-				entities.remove(e);
+				applyPlayerDebuff((MapEntity)e);
 			}
 		}
 	}
 
-	private void applyPlayerDebuff(String item){
-		if (item.equals("net")){
+	private void applyPlayerDebuff(MapEntity ent){
+		if (ent.getEntityType().equals("net")){
 			Hunter.State.playerVelocity.x = 0;
-		}else if(item.equals("bomb")){
-			
-		}else if(item.equals("spike trap")){
+			gamescreen.getEntites().remove(ent);
+		}else if(ent.getEntityType().equals("bomb")){
+			ent.explode();
+		}else if(ent.getEntityType().equals("spike trap")){
 			if (Hunter.State.getPreferencesManager().isSoundEnabled()){
 				hurt.play(Hunter.State.getPreferencesManager().getVolume());
 			}
@@ -403,8 +403,20 @@ public class Player extends Entity {
 			damageTime = System.currentTimeMillis();
 			loseLife();
 			checkLives();
-		}else if(item.equals("deathShroom")){
+		}else if(ent.getEntityType().equals("deathShroom")){
+			if (Hunter.State.getPreferencesManager().isSoundEnabled()){
+				hurt.play(Hunter.State.getPreferencesManager().getVolume());
+			}
 			score -= 1000;
+			gamescreen.getEntites().remove(ent);
+		}else if(ent.getEntityType().equals("explosion")){
+			if (Hunter.State.getPreferencesManager().isSoundEnabled()){
+				hurt.play(Hunter.State.getPreferencesManager().getVolume());
+			}
+			this.blink = true;
+			damageTime = System.currentTimeMillis();
+			loseLife();
+			checkLives();
 		}
 	}
 	

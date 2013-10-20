@@ -181,7 +181,7 @@ public class GameScreen implements Screen {
                 }
                 itemTime = System.currentTimeMillis();
             }
-            if (mapEntityTime + 4000 <= System.currentTimeMillis()) {
+            if (mapEntityTime + 1000 <= System.currentTimeMillis()) {
                 if (Hunter.State.randomGenerator.nextFloat() >= 0.5) {
                     createMapEntity();
                 }

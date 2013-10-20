@@ -171,6 +171,10 @@ public class Animal extends Entity {
             gameScreen.addScore(200);
             gameScreen.addAnimalKilled();
             entities.remove(e);
+        } else if (e.getType().equals("MapEntity") && ((MapEntity) e).getEntityType().equals("bomb") && this.state != State.DEAD){
+        	((MapEntity)e).explode();
+        } else if (e.getType().equals("MapEntity") && ((MapEntity) e).getEntityType().equals("explosion") && this.state != State.DEAD){
+        	this.dead();
         }
     }
 

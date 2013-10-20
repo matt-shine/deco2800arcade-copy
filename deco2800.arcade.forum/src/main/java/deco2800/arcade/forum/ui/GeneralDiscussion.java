@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JTextPane;
@@ -48,6 +49,7 @@ public class GeneralDiscussion {
 	private JLabel lblArcadeForum;
 	private JButton btnNewButton;
 	private JButton btnSearch;
+	private JScrollPane scrollPane;
 	private JFrame f;
 	private int threadCount;
 	public JButton btnPrevButton;
@@ -98,15 +100,15 @@ public class GeneralDiscussion {
 	    this.lblFaq.setBounds(147, 76, 74, 16);
 	    f.getContentPane().add(this.lblFaq);
 	     
-	    this.lblAnn = new JLabel("Announcement");
-	    this.lblAnn.setFont(new Font("Tahoma", Font.BOLD, 15));
-	    this.lblAnn.setBounds(776, 129, 141, 16);
-	    f.getContentPane().add(this.lblAnn);
+	  //  this.lblAnn = new JLabel("Announcement");
+	  //  this.lblAnn.setFont(new Font("Tahoma", Font.BOLD, 15));
+	  //  this.lblAnn.setBounds(776, 129, 141, 16);
+	  //  f.getContentPane().add(this.lblAnn);
 	      
-	    this.lblTag = new JLabel("Tag");
-	    this.lblTag.setFont(new Font("Tahoma", Font.BOLD, 15));
-	    this.lblTag.setBounds(546, 129, 97, 16);
-	    f.getContentPane().add(this.lblTag);
+	   // this.lblTag = new JLabel("Tag");
+	   // this.lblTag.setFont(new Font("Tahoma", Font.BOLD, 15));
+	   // this.lblTag.setBounds(546, 129, 97, 16);
+	   // f.getContentPane().add(this.lblTag);
 	      
 	    this.lblNewLabel = new JLabel("General Discussion");
 	    this.lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -118,15 +120,15 @@ public class GeneralDiscussion {
 	    f.getContentPane().add(this.textField);
 	    this.textField.setColumns(10);
 	      
-	    this.textArea = new JTextArea();
-	    this.textArea.setBackground(new Color(192, 192, 192));
-	    this.textArea.setBounds(776, 152, 218, 220);
-	    f.getContentPane().add(this.textArea);
+	    //this.textArea = new JTextArea();
+	    //this.textArea.setBackground(new Color(192, 192, 192));
+	   // this.textArea.setBounds(776, 152, 218, 220);
+	   // f.getContentPane().add(this.textArea);
 	      
-	    this.textArea_1 = new JTextArea();
-	    this.textArea_1.setBackground(new Color(30, 144, 255));
-	    this.textArea_1.setBounds(546, 152, 218, 496);
-	    f.getContentPane().add(this.textArea_1);
+	  // this.textArea_1 = new JTextArea();
+	   // this.textArea_1.setBackground(new Color(30, 144, 255));
+	    //this.textArea_1.setBounds(546, 152, 218, 496);
+	   // f.getContentPane().add(this.textArea_1);
 	      
 	    this.panel = new JPanel();
 	    this.panel.setBackground(Color.ORANGE);
@@ -143,8 +145,15 @@ public class GeneralDiscussion {
 	    this.ThreadPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
 	    this.ThreadPanel.setBounds(17, 232, 520, 464);
 	    f.getContentPane().add(ThreadPanel);
-	      
 	    f.setVisible(true);
+	    
+	    this.scrollPane = new JScrollPane(
+	            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+	            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	    this.scrollPane.setBounds(542, 155, 437, 541);
+	    this.f.getContentPane().add(scrollPane);	      
+	    f.setVisible(true); 
+	    
 	    
 	    
 	    try {

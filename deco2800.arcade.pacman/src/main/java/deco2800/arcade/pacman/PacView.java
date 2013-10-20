@@ -229,9 +229,9 @@ public class PacView {
 	private void drawPacman() {
 		//draw pacman facing the appropriate direction
 		if (player.getCurrentState() == PacState.DEAD){
-			
-		} else {
-		
+		batch.draw(pacmanFrames[player.getSpritePos()], player.getDrawX(), 
+				player.getDrawY(), player.getWidth(), player.getHeight());
+		} else {	
 		batch.draw(pacmanFrames[player.getSpritePos()], player.getDrawX(), 
 				player.getDrawY(), player.getWidth(), player.getHeight());
 		}

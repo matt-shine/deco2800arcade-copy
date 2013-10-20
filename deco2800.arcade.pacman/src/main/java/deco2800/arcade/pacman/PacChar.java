@@ -64,14 +64,16 @@ public final class PacChar extends Mover{
 				drawFacing = Dir.LEFT;
 			}
 		}
-		// If pacman is able to turn, update drawFacing
-		if (canTurn()) {
-			drawFacing = facing;
-			this.setCurrentState(PacState.MOVING);
-		}
-		
-		if (!this.checkNoWallCollision()){
-			this.setCurrentState(PacState.IDLE);
+		if (!(currentState == PacState.DEAD)){
+			// If pacman is able to turn, update drawFacing
+			if (canTurn()) {
+				drawFacing = facing;
+				this.setCurrentState(PacState.MOVING);
+			}
+			
+			if (!this.checkNoWallCollision()){
+				this.setCurrentState(PacState.IDLE);
+			}
 		}
 		
 		// checks if pacman is moving, and if so keeps him moving in that direction
@@ -129,7 +131,8 @@ public final class PacChar extends Mover{
 						this.setScore(this.getScore() + getGhostScore());
 						setGhostScore(getGhostScore() * 2);
 					} else if (((Ghost) colList.get(i)).getCurrentState() == GhostState.CHASE
-							&& currentState == PacState.MOVING) {
+							&& (currentState == PacState.MOVING ||
+									currentState == PacState.IDLE)) {
 						// Pacman has been hit!
 						currentState = PacState.DEAD;
 						Timer.schedule(new Task() { // Game's not over! Revive in 3
@@ -137,10 +140,12 @@ public final class PacChar extends Mover{
 								currentState = PacState.MOVING;
 							}
 						}, 3);
+						System.out.println(currentState);
+						System.out.println(" >>> life lsot!");
 						setLives(getLives() - 1);
-
+						System.out.println(" >>> lives: + " + getLives());
 						// Is it game over?
-						if (getLives() <= 1) {
+						if (getLives() <= 0) {
 							this.setCurrentState(PacState.DEAD);
 							// gamePaused = true;
 							gameMap.setGameOver(true);

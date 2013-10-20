@@ -27,7 +27,7 @@ public abstract class Mover {
 	protected int height;
 	protected int width;
 	private int score;
-	private int lives;
+	private int lives = 3;
 	private static final int dotScore = 10;
 	private static final int energizerScore = 50;
 	private int ghostScore = 400;

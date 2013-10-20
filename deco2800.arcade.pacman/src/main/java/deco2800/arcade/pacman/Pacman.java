@@ -109,6 +109,10 @@ public class Pacman extends GameClient {
 		AsyncFuture<ArrayList<Achievement>> achievements = achievementClient.getAchievementsForGame(game);
 		AsyncFuture<AchievementProgress> playerProgress = achievementClient.getProgressForPlayer(player);
 		
+		for (Achievement ach : achievements.get()) {
+			System.out.println(ach.toString());
+		}
+		
 		waka.loop();
 	}
 	

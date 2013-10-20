@@ -7,8 +7,6 @@ import java.util.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
-import deco2800.arcade.junglejump.GUI.junglejump;
-
 
 /**
  * Class holding a list of all the levels in the game
@@ -22,6 +20,7 @@ public class LevelContainer {
 	private static int currentWorld;
 	private static int levelAmount;
 	private static int worldAmount;
+	public int TOTAL_BANANAS;
 	
 	/**
 	 * Constructor where levels are created and placed
@@ -51,7 +50,6 @@ public class LevelContainer {
 	 */
 	public void addLevel(int worldNum, int levelNum) {
 		BufferedReader br;
-		int bananaCounter = 0;
 		Level level = new Level(); // Creating and adding to a level
 		
 		URL path = this.getClass().getResource("/");
@@ -80,10 +78,10 @@ public class LevelContainer {
 	        		char c = line.charAt(x);
 	        		Platform p;
 	        		if(c == 'b') {
+	        				TOTAL_BANANAS++;
 	        				level.addBanana(); // false means not found
 	        				p = new Platform(c, (x*xLength), (y*xLength), xLength, yLength);
 		        			level.addPlatform(p);
-		        			bananaCounter++;
 	        		} else if(c!='*' && c!= '.') {
 	        			p = new Platform(c, (x*xLength), (y*xLength), xLength, yLength);
 	        			level.addPlatform(p);

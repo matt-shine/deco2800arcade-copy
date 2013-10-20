@@ -1,15 +1,13 @@
-package deco2800.arcade.junglejump.GUI;
+package deco2800.arcade.junglejump;
 
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -29,9 +27,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Frustum;
 
-import deco2800.arcade.junglejump.Level;
-import deco2800.arcade.junglejump.LevelContainer;
-import deco2800.arcade.junglejump.Platform;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -56,8 +51,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	public float QUIT 				= (float) (242 - 37.5 * 5);
 	
 	/* Player Stats */
-	public int BANANAS_FOUND = 0;	// TODO remove caps, make dynamic-er
-	public int TOTAL_BANANAS = 50; // TODO put in levelcontainer
+	public int bananasFound = 0;
 	public static int deaths = 0;
 	int SPEED_MULTIPLIER = 3;
 	int monkeyLength = 35;
@@ -182,6 +176,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	/**
 	 * Loads Textures and other Images for use in the world. Fonts are
@@ -361,7 +356,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			// Draws Instructions on Top Right and Top Left of screen
 			achievementTitleFont.draw(batch, "Press P to PAUSE", SCREENWIDTH-250, SCREENHEIGHT-10);
 			achievementTitleFont.draw(batch, "BACKSPACE for MENU", SCREENWIDTH-250, SCREENHEIGHT-30);
-			achievementTitleFont.draw(batch, ("Bananas remaining: " + (TOTAL_BANANAS - BANANAS_FOUND)), SCREENWIDTH-500, SCREENHEIGHT-10);
+			achievementTitleFont.draw(batch, ("Bananas remaining: " + (currentCont.TOTAL_BANANAS - bananasFound)), SCREENWIDTH-500, SCREENHEIGHT-10);
 			achievementTitleFont.draw(batch, ("Lives: " + lives), SCREENWIDTH-750, SCREENHEIGHT-30);
 			int level = (currentLevel.getIndex()%5)+1;
 			achievementTitleFont.draw(batch, ("Level " + (LevelContainer.getCurrentWorld()+1) + " - " + 
@@ -557,8 +552,8 @@ public class junglejump extends GameClient implements InputProcessor {
 				if( p.platType == 'b') {
 					p.visible = false;
 					// TODO change this to a function to count bananas
-					BANANAS_FOUND++;
-					System.out.println(BANANAS_FOUND);
+					bananasFound++;
+					System.out.println(bananasFound);
 					p.setY(10000);
 					
 					// Play banana sound
@@ -843,7 +838,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					monkeyY = monkeyDefaultY;
 					// Reset Bananas, Platforms and Level
 					currentCont = new LevelContainer();
-					currentCont.setCurrentWorld(worldS);
+					LevelContainer.setCurrentWorld(worldS);
 					currentLevel = LevelContainer.getLevel(levelS-1);
 					gameState = GameState.INPROGRESS;
 					levelS = 0;
@@ -862,7 +857,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					monkeyY = monkeyDefaultY;
 					// Reset Bananas, Platforms and Level
 					currentCont = new LevelContainer();
-					currentCont.setCurrentWorld(worldS);
+					LevelContainer.setCurrentWorld(worldS);
 					currentLevel = LevelContainer.getLevel(levelS-1);
 					gameState = GameState.INPROGRESS;
 					levelS = 0;
@@ -881,7 +876,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					monkeyY = monkeyDefaultY;
 					// Reset Bananas, Platforms and Level
 					currentCont = new LevelContainer();
-					currentCont.setCurrentWorld(worldS);
+					LevelContainer.setCurrentWorld(worldS);
 					currentLevel = LevelContainer.getLevel(levelS-1);
 					gameState = GameState.INPROGRESS;
 					levelS = 0;
@@ -900,7 +895,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					monkeyY = monkeyDefaultY;
 					// Reset Bananas, Platforms and Level
 					currentCont = new LevelContainer();
-					currentCont.setCurrentWorld(worldS); 
+					LevelContainer.setCurrentWorld(worldS); 
 					currentLevel = LevelContainer.getLevel(levelS-1);
 					gameState = GameState.INPROGRESS;
 					levelS = 0;
@@ -944,7 +939,6 @@ public class junglejump extends GameClient implements InputProcessor {
 
 	@Override
 	public boolean keyTyped(char keycode) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -977,31 +971,26 @@ public class junglejump extends GameClient implements InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int arg0, int arg1) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean scrolled(int arg0) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean touchDragged(int arg0, int arg1, int arg2) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

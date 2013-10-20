@@ -4,8 +4,6 @@ package deco2800.arcade.junglejump;
 import java.io.File;
 import java.net.URL;
 
-import com.badlogic.gdx.*;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -14,16 +12,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 
-import deco2800.arcade.junglejump.GUI.junglejump;
-
 public class Platform {
 	
 	private int width, height, xPos, yPos;
-	private boolean active;
 	public boolean climbable = false;
 	private Texture platText;
 	public boolean visible = true;
-	private boolean inverted;
 	public char platType;
 	public String platformType = "";
 	public boolean inactive;
@@ -39,7 +33,6 @@ public class Platform {
 		this.height = pHeight;
 		this.xPos = pX;
 		this.yPos = pY;
-		this.active = false;
 		inactive = false;
 		moveRight = false;
 		platType = type;
@@ -220,7 +213,7 @@ public class Platform {
 						"resources/pickup.wav";
 				System.out.println(resource);
 				File file = new File(resource);
-				FileHandle fileh = new FileHandle(file);
+				new FileHandle(file);
 				AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 				Clip clip = AudioSystem.getClip();
 				clip.open(audioIn);
@@ -237,7 +230,6 @@ public class Platform {
 		if(this.platType == 'x') {
 			junglejump.killMonkey();
 		}
-		this.active = true;
 	}
 	
 	public void onActive() {

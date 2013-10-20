@@ -32,6 +32,7 @@ public class GameMap {
 	public final int SCREEN_HEIGHT;
 	public final int SCREEN_WIDTH;
 	private final int NUM_BUFFER_TILES; //the number of buffer tiles around the edge of the map on each side
+	private List<Tile> afterTeleports;
 	
 	public GameMap(int SCREEN_WIDTH, int SCREEN_HEIGHT, int numGhosts) {
 		vsym = false;
@@ -41,6 +42,7 @@ public class GameMap {
 		ghostStarts = new Tile[numGhosts];
 		tileSideLength = 16;
 		NUM_BUFFER_TILES = 4;
+		afterTeleports = new ArrayList<Tile>();
 	}
 	
 
@@ -147,12 +149,8 @@ public class GameMap {
 		//set up teleport target making- currently supports any even number 
 		//of teleporters, each targeting the next one which appears in the list
 		Tile target = null;
-		//create tiles		
-		//int count = 0; //for testing
-		
-		// check if it's a buffer tile around the edge of the grid
-
 		Tile square;
+		List<Point> afterTeleportsSetup = new ArrayList<Point>();
 		//create tiles
 		for (int lineNum = 0; lineNum < map.size(); lineNum++) {
 			char[] line = map.get(lineNum);
@@ -163,7 +161,7 @@ public class GameMap {
 				} else if (type == 'T') {
 					square = new TeleportTile(this);
 					//set up teleport targeting between two most recently
-					//made tiles
+					//made teleporttiles
 					if (target != null) {
 						((TeleportTile) square).setTarget(target);
 						((TeleportTile) target).setTarget(square);
@@ -190,8 +188,16 @@ public class GameMap {
 					}
  				}
 				grid[i+NUM_BUFFER_TILES][lineNum+NUM_BUFFER_TILES] = square;
+				if (square.getClass() == TeleportTile.class) {
+					if (afterTeleportsSetup.size() % 2 == 0) {						
+						afterTeleportsSetup.add(new Point(i+NUM_BUFFER_TILES - 1,lineNum+NUM_BUFFER_TILES));
+					} else {
+						afterTeleportsSetup.add(new Point(i+NUM_BUFFER_TILES + 1,lineNum+NUM_BUFFER_TILES));
+					}
+				}
 			}
 		}
+		//sets up buffer tiles
 		for (int x = 0; x < xSize; x++) {
 			for (int y = 0; y < ySize; y++) {
 				if (grid[x][y] == null) {
@@ -199,22 +205,9 @@ public class GameMap {
 				}
 			}
 		}
-	}
-	
-	private void createTiles() {
-		
-	}
-	
-	public List<WallTile> getGhostDoors() {
-		return ghostDoors;
-	}
-
-	public Tile getPacStart() {
-		return pacStart;
-	}
-
-	public Tile getFruitRight() {
-		return fruitRight;
+		for (Point p: afterTeleportsSetup) {
+			afterTeleports.add(grid[p.getX()][p.getY()]);
+		}
 	}
 	
 	/**
@@ -313,5 +306,21 @@ public class GameMap {
 
 	public void setGhostsEaten(int ghostsEaten) {
 		this.ghostsEaten = ghostsEaten;
+	}
+	
+	public List<WallTile> getGhostDoors() {
+		return ghostDoors;
+	}
+
+	public Tile getPacStart() {
+		return pacStart;
+	}
+
+	public Tile getFruitRight() {
+		return fruitRight;
+	}
+
+	public List<Tile> getAfterTeleports() {
+		return afterTeleports;
 	}
 }

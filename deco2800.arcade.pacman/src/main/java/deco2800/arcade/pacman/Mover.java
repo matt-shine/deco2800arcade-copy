@@ -112,10 +112,13 @@ public abstract class Mover {
 	 * @param tile
 	 */
 	public void checkTile(Tile tile){
-		if (nextTile(tile, 1).getClass() == TeleportTile.class){
-			this.drawX = ((TeleportTile) nextTile(tile, 1)).getTargetX();
-			this.drawY = ((TeleportTile) nextTile(tile, 1)).getTargetY();
-		}
+		// handle teleporters
+		for (Tile t: gameMap.getAfterTeleports()) {
+			if (nextTile(currentTile, 1).equals(t)) {
+				drawX = ((TeleportTile) currentTile).getTargetX();
+				drawY = ((TeleportTile) currentTile).getTargetY();
+			}
+		}		
 		// Only Pac man can eat dots!
 		if (this.getClass() != PacChar.class) {return;} 
 		if (tile.getClass() == DotTile.class) {

@@ -52,9 +52,9 @@ public class Tile {
 
 	// Equals method which compares tiles based on position
 	public boolean equals(Tile tile) {
-		return gameMap.getTilePos(this).getX() == gameMap.getTilePos(tile)
+		return gameMap.getTileCoords(this).getX() == gameMap.getTileCoords(tile)
 				.getX()
-				&& gameMap.getTilePos(this).getY() == gameMap.getTilePos(tile)
+				&& gameMap.getTileCoords(this).getY() == gameMap.getTileCoords(tile)
 						.getY();
 	}
 	

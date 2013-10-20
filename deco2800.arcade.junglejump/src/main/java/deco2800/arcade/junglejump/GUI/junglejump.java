@@ -482,6 +482,16 @@ public class junglejump extends GameClient implements InputProcessor {
 		}
 
 	}
+	
+	public static void drawLevel() {
+		batch.begin();
+		int size = currentLevel.platformAmount();
+		for (int i = 0; i < size; i++) {
+			Platform p = currentLevel.getPlatforms().get(i);
+			batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
+		}
+		batch.end();
+	}
 
 	public static void killMonkey() {
 		monkeyY = 100;
@@ -497,16 +507,6 @@ public class junglejump extends GameClient implements InputProcessor {
 			lives = 5;
 		}
 		livesNumText = new Texture(("" + lives + ".png"));
-	}
-
-	public static void drawLevel() {
-		batch.begin();
-		int size = currentLevel.platformAmount();
-		for (int i = 0; i < size; i++) {
-			Platform p = currentLevel.getPlatforms().get(i);
-			batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
-		}
-		batch.end();
 	}
 	
 	public  void playPickupSound() {

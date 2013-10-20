@@ -32,6 +32,7 @@ public class Invaders extends JFrame implements Runnable {
 	private int score;
 	private int totalLevel;
 	private boolean isPause;
+	private int highScore;
 
 	private ArrayList<blockWall> WallList;
 	private ArrayList<tankshot> shots;
@@ -48,6 +49,7 @@ public class Invaders extends JFrame implements Runnable {
 		WallList = new ArrayList<blockWall>();
 
 		healthBar = 3;
+		highScore = 0;
 		score = 0;
 		totalLevel = 1;
 		isPause = true;
@@ -101,7 +103,16 @@ public class Invaders extends JFrame implements Runnable {
 		isPause = false;
 		stageClear s = new stageClear(this, score);
 		this.setVisible(false);
-
+	}
+	
+	public int getScore()
+	{
+		return score;
+	}
+	
+	public int getHighScore()
+	{
+		return highScore;
 	}
 
 	public void nextStage() {
@@ -348,6 +359,7 @@ public class Invaders extends JFrame implements Runnable {
 				Eshots.remove(i);
 				healthBar--;
 				if(healthBar == 0){
+					highScore = score;
 					gameOver a = new gameOver(score);
 					this.dispose();
 				}

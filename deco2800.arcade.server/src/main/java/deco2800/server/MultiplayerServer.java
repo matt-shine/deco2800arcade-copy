@@ -143,6 +143,9 @@ public class MultiplayerServer {
 			queue.gameOver(sessionId, player1Id, player2Id, gameId,
 					request.winner);
 			return;
+		} else if (request.gameOver) {
+			queue.dropServer(sessionId);
+			return;
 		}
 		if (request.initial == false) {
 			player1.sendTCP(request);

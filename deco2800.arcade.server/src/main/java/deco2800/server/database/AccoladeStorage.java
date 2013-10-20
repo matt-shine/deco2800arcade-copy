@@ -10,6 +10,7 @@ import deco2800.arcade.model.AccoladeContainer;
 /**
  * Implements Accolades storage on database.
  */
+//TODO implement a view for each game based on gamedata.length
 public class AccoladeStorage{ 
 	private boolean initialised = false;
 

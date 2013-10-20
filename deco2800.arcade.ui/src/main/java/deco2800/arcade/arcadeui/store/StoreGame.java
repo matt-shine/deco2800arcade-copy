@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import deco2800.arcade.arcadeui.ArcadeUI;
 import deco2800.arcade.client.ArcadeInputMux;
@@ -32,16 +34,19 @@ public class StoreGame implements Screen, StoreScreen {
 	private Stage stage = new Stage();
 	private static Game featured;
 	private ArcadeUI arcadeUI;
-	private int rating; // The rating of the feature game.
+	private Player player;
+	private float rating; // The rating of the feature game.
 	
 	/**
 	 * @author Addison Gourluck
 	 * @param ArcadeUI ui
+	 * @param Player user
 	 * @param Game featuredGame
 	 */
-	public StoreGame(ArcadeUI ui, Game featuredGame) {
+	public StoreGame(ArcadeUI ui, Player user, Game featuredGame) {
 		featured = featuredGame;
 		arcadeUI = ui;
+		player = user;
 		
 		final Table bg = new Table();
 		final Table logo = new Table();
@@ -138,12 +143,12 @@ public class StoreGame implements Screen, StoreScreen {
 		starbg.setSize(142, 23);
 		stage.addActor(starbg);
 		
-		placeRatingStars();
+		placeRatingStars(ratingScore);
 		
 		homeButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				dispose();
-				arcadeUI.setScreen(new StoreHome(arcadeUI));
+				arcadeUI.setScreen(arcadeUI.getStoreHome());
 			}
 		});
 		
@@ -170,18 +175,31 @@ public class StoreGame implements Screen, StoreScreen {
 	 * Places 5 invisible checkboxs over each other, which will highlight on
 	 * mouseover, and stay highlighted on mouseclick.
 	 * @author Addison Gourluck
+	 * @param ratingScore 
 	 */
-	private void placeRatingStars() {
+	private void placeRatingStars(final Label ratingScore) {
 		for (int i = 5; i >= 1; --i) {
 			final CheckBox star = new CheckBox("", skin, "star" + i);
 			star.setSize(i * 28.4f, 23);
-			star.setName("S" + i);
+			star.setName("STAR" + i);
 			star.setPosition(882, 413);
-			// Listener to change rating when a star is changed.
-			star.addListener(new ChangeListener() {
-				public void changed(ChangeEvent event, Actor actor) {
-					rating = (int)actor.getName().charAt(1) - 48;
-					System.out.println("pressed star " + rating);
+			// Listener to change rating when a star is clicked (not changed).
+			star.addListener(new ClickListener() {
+				public void clicked(InputEvent event, float x, float y) {
+					// Sets all other stars to be unchecked.
+					for (Actor find : stage.getActors()) {
+						if (find.getName() != null && find != star
+								&& find.getName().startsWith("STAR")) {
+							((CheckBox)find).setChecked(false);
+						}
+					}
+					// Sets the ratings, only for star clicked.
+					if (!star.isChecked()) {
+						rating = 0;
+					} else {
+						rating = star.getName().charAt(4) - 48f;
+					}
+					ratingScore.setText(rating + "");
 				}
 			});
 			stage.addActor(star);
@@ -205,11 +223,13 @@ public class StoreGame implements Screen, StoreScreen {
 
 	@Override
 	public void show() {
+		player = arcadeUI.getPlayer();
 		ArcadeInputMux.getInstance().addProcessor(stage);
 	}
 	
 	@Override
 	public void hide() {
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 	
 	@Override

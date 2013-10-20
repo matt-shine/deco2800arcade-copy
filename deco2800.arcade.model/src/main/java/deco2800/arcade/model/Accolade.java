@@ -22,6 +22,9 @@ public class Accolade {
 	private Integer gameID, value;
 	private Double id;
 	private Accolade next, prev; //FOR THE ACCOLADECONTAINER
+	//Because the accolade is part of all the accolades for one player (playerID stored in accoladeContainer)
+	//OR it is the culmilation of all accolade progress for just one game (autocalculated by the derby view table)
+	//there will be no playerID variable for individual accolades
 	
 	
 	/** Create a new accolade. Use .setID and .setValue as required.

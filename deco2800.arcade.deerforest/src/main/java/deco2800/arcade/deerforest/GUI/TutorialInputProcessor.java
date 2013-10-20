@@ -17,36 +17,24 @@ import deco2800.arcade.deerforest.models.cardContainers.Field;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 
 /**
- * This class functions as the controller for the main menu
+ * This class functions as the controller for the tutorial page
  */
-public class MainMenuInputProcessor implements InputProcessor {
+public class TutorialInputProcessor implements InputProcessor {
 
-	private MainMenu game;
-	private MainMenuScreen view;
+	private Tutorial game;
+	private TutorialScreen view;
 	
 	/**
-	 * Initialises the main menu input processor
+	 * Initialises the tutoral input processor
 	 */
-	public MainMenuInputProcessor(MainMenu game, MainMenuScreen view) {
+	public TutorialInputProcessor(Tutorial game, TutorialScreen view) {
 		this.game = game;
 		this.view = view;
 	}
 
 	@Override
 	public boolean keyDown(int keycode) {
-		
-        if (keycode == Keys.NUM_0) {
-            DeerForestSingletonGetter.getDeerForest().changeScreen("game");
-        }
-        
-        if (keycode == Keys.NUM_1) {
-        	DeerForestSingletonGetter.getDeerForest().changeScreen("deck builder");
-        }
-        
-        if (keycode == Keys.NUM_2) {
-        	DeerForestSingletonGetter.getDeerForest().changeScreen("tutorial");
-        }
-        return false;
+		return false;
 	}
 
 	@Override

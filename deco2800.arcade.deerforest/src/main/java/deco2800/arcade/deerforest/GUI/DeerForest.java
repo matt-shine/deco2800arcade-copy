@@ -37,6 +37,9 @@ public class DeerForest extends GameClient {
 	MainMenuScreen menuView;
 	MainMenu mainMenu;
 	MainMenuInputProcessor menuInputProcessor;
+	Tutorial tutorial;
+	TutorialScreen tutorialView;
+	TutorialInputProcessor tutorialInputProcessor;
 	MainInputProcessor inputProcessor;
 	static DeckBuilder deckBuilder;
 	static DeckBuilderScreen deckBuilderView;
@@ -83,7 +86,12 @@ public class DeerForest extends GameClient {
 		deckBuilder = new DeckBuilder(deck);
 		deckBuilderView = new DeckBuilderScreen(deckBuilder);
 		deckInputProcessor = new DeckBuilderInputProcessor(deckBuilder, deckBuilderView);
-        
+		
+		// Setup the tutorial
+		tutorial = new Tutorial(null);
+		tutorialView = new TutorialScreen(tutorial);
+		tutorialInputProcessor = new TutorialInputProcessor(tutorial, tutorialView);
+		
 		// Set the menu as the screen
 		changeScreen("menu");
 		
@@ -109,6 +117,7 @@ public class DeerForest extends GameClient {
             mainMenu.dispose();
             mainGame.dispose();
             deckBuilder.dispose();
+            tutorial.dispose();
         } catch(Exception e) {
 
         }
@@ -164,6 +173,11 @@ public class DeerForest extends GameClient {
 	        mainMenu.create();
 	        setScreen(menuView);
 	        ArcadeInputMux.getInstance().addProcessor(menuInputProcessor);
+		} else if (scene.equals("tutorial")) {
+			
+			tutorial.create();
+			setScreen(tutorialView);
+			ArcadeInputMux.getInstance().addProcessor(tutorialInputProcessor);
 		}
 	}
 

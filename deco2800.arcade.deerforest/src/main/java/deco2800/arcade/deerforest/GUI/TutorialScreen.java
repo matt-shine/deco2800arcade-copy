@@ -12,11 +12,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
 /**
- * This class functions as the view for the main menu
+ * This class functions as the view for the main tutorial
  */
-public class MainMenuScreen implements Screen {
+public class TutorialScreen implements Screen {
 	
-	private final MainMenu menu;
+	private final Tutorial tutorial;
 	private OrthographicCamera camera;
 	AssetManager manager;
 
@@ -25,10 +25,10 @@ public class MainMenuScreen implements Screen {
 	private Arena arena;
 
 	/**
-	 * Initialises the main menu screen
+	 * Initialises the main tutorial screen
 	 */
-	public MainMenuScreen(final MainMenu men) {
-		this.menu = men;
+	public TutorialScreen(final Tutorial tut) {
+		this.tutorial = tut;
 		
 		//create the camera
 		camera = new OrthographicCamera();
@@ -40,16 +40,16 @@ public class MainMenuScreen implements Screen {
 		loadAssets();
 		manager.finishLoading();
 		
-		arena = new Arena(manager.get("DeerForestAssets/MenuScreen.png", Texture.class));
+		arena = new Arena(manager.get("DeerForestAssets/tutorialScreen.png", Texture.class));
 		
 		
 	}
 
 	/**
-	 * Loads the assets for the main menu
+	 * Loads the assets for the main tutorial
 	 */
 	private void loadAssets() {
-		manager.load("DeerForestAssets/MenuScreen.png", Texture.class);
+		manager.load("DeerForestAssets/tutorialScreen.png", Texture.class);
 		
 	}
 
@@ -65,20 +65,19 @@ public class MainMenuScreen implements Screen {
 		
 		//tell the SpriteBatch to render in the
 		//coordinate system specified by the camera
-		menu.batch.setProjectionMatrix(camera.combined);
+		tutorial.batch.setProjectionMatrix(camera.combined);
 	 
 		//Begin drawing the sprites
-		menu.batch.begin();
+		tutorial.batch.begin();
 		
-		arena.draw(menu.batch);
+		arena.draw(tutorial.batch);
 
-	    // Print menu text
-	    menu.font.draw(menu.batch, "We have a main menu!", 200, 200);
-	    menu.font.draw(menu.batch, "0 - Play Game", 200, 250);
-	    menu.font.draw(menu.batch, "1 - Build Deck", 200, 300);
-	    menu.font.draw(menu.batch, "2 - Tutorial", 200, 350);
+	    // Print tutorial text
+	    tutorial.font.draw(tutorial.batch, "We have a main tutorial!", 200, 200);
+	    tutorial.font.draw(tutorial.batch, "0 - Play Game", 200, 250);
+	    tutorial.font.draw(tutorial.batch, "1 - Build Deck", 200, 300);
 
-	    menu.batch.end();
+	    tutorial.batch.end();
 
 	}
 
@@ -115,28 +114,28 @@ public class MainMenuScreen implements Screen {
 	}
 
 	/**
-	 * Returns the sprite map for the main menu screen
+	 * Returns the sprite map for the main tutorial screen
 	 */
 	public Map<String, Set<ExtendedSprite>> getSpriteMap() {
 		return spriteMap;
 	}
 	
 	/**
-	 * Returns the arena for the main menu screen
+	 * Returns the arena for the main tutorial screen
 	 */
 	public Arena getArena() {
 		return arena;
 	}
 	
 	/**
-	 * Returns the width of the main menu
+	 * Returns the width of the main tutorial
 	 */
 	public int getWidth() {
 		return Gdx.graphics.getWidth();
 	}
 	
 	/**
-	 * Returns the height of the main menu
+	 * Returns the height of the main tutorial
 	 */
 	public int getHeight() {
 		return Gdx.graphics.getHeight();

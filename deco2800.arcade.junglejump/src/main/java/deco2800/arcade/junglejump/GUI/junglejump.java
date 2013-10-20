@@ -791,9 +791,9 @@ public class junglejump extends GameClient implements InputProcessor {
 		if (keycode == Keys.UP) {
 			if (gameState != GameState.INPROGRESS) {
 				if (butY < NEW_GAME) {
-					//menuSound.start();
+					menuSound.start();
 					butY += 37.5;
-					//menuSound.stop();
+					menuSound.stop();
 				}
 			}
 
@@ -832,6 +832,9 @@ public class junglejump extends GameClient implements InputProcessor {
 		}
 		if (keycode == Keys.Y) {
 			if (gameState == GameState.CONTINUE) {
+				if (monkeyX != monkeyDefaultX)
+				gameState = GameState.INPROGRESS;
+			} else {
 				gameState = GameState.INPROGRESS;
 			}
 		}

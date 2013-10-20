@@ -13,22 +13,13 @@ public class Mutant extends Enemy {
         super(uid);
 
         setHealth(STARTING_HEALTH);
-        setFaceDir(d.direction);
-        this.setAngle(WL6Meta.dirToAngle(d.direction));
-        if (!d.pathing) {
-            setPathing(false);
-            setState(STATES.STAND);
-        }
-        else {
-            setPathing(true);
-            setState(STATES.PATH);
-        }
         setPathSpeed(512);
         setChaseSpeed(1536);
         setPain(true);
         setDamage(0);
 
-        setTextureName(d.texture);
+        initialiseFromEnemyData(d);
+        
     }
 
 

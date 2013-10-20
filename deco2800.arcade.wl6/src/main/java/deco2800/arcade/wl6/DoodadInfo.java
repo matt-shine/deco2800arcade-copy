@@ -16,7 +16,7 @@ public class DoodadInfo {
 
 
     public static DoodadInfo treasurePickup(String texture, int value, int health) {
-        return new DoodadInfo(false, texture, value, 0, 0,
+        return new DoodadInfo(false, texture, value, 0, health,
                 0, EnemyType.NOT_AN_ENEMY, 0, null, false);
     }
 

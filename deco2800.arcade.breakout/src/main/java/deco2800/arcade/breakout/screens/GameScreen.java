@@ -168,8 +168,7 @@ public class GameScreen implements Screen  {
 			gameState = new GameOverState();
 		}
 		try {
-			bricks = levelSystem.readFile("levels/level" + getLevel() + ".txt",
-				bricks, this);
+			bricks = levelSystem.readFile("levels/level" + getLevel() + ".txt");
 			setBrickNum(bricks.length);
 		} catch (Exception e) {
 			System.err.println("Error is: " + e);
@@ -253,7 +252,9 @@ public class GameScreen implements Screen  {
 				setLastHitY(getBall().getY());
 			}
 		}
-		breaking.play();
+		if (breaking != null) {
+			breaking.play();
+		}
 		brickBreak++;
 		incrementScore(this.getLevel()*2);
 		setBrickNum(getBrickNum() - 1);
@@ -777,5 +778,9 @@ public class GameScreen implements Screen  {
 	
 	public Brick[] getBrickArray() {
 		return this.bricks;
+	}
+	
+	public Level getLevelSystem() {
+		return this.levelSystem;
 	}
 }

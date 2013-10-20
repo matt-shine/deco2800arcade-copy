@@ -35,13 +35,7 @@ public class Brick {
 	 * @param y - the y coordinate of the brick
 	 */
 	public Brick(float x, float y) {
-		brickImgs = new Sprite[6];
-		brickImgs[0] = new Sprite(new Texture(Gdx.files.classpath("imgs/green.png")));
-		brickImgs[1] = new Sprite(new Texture(Gdx.files.classpath("imgs/red.png")));
-		brickImgs[2] = new Sprite(new Texture(Gdx.files.classpath("imgs/yellow.png")));
-		brickImgs[3] = new Sprite(new Texture(Gdx.files.classpath("imgs/blue.png")));
-		brickImgs[4] = new Sprite(new Texture(Gdx.files.classpath("imgs/orange.png")));
-		brickImgs[5] = new Sprite(new Texture(Gdx.files.classpath("imgs/purple.png")));
+		initialiseBrickImgs();
 		brickShape = new Rectangle();
 		this.brickShape.x = x;
 		this.brickShape.y = y;
@@ -59,6 +53,19 @@ public class Brick {
 	 * @param height - the height of the brick
 	 */
 	public Brick(float x, float y, float width, float height) {
+		initialiseBrickImgs();
+		brickShape = new Rectangle();
+		this.brickShape.x = x;
+		this.brickShape.y = y;
+		this.brickShape.height = height;
+		this.brickShape.width = width;
+		this.state = true;
+	}
+	
+	/**
+	 * Method to initialise the brick images outside the constructor
+	 */
+	public void initialiseBrickImgs() {
 		brickImgs = new Sprite[6];
 		brickImgs[0] = new Sprite(new Texture(Gdx.files.classpath("imgs/green.png")));
 		brickImgs[1] = new Sprite(new Texture(Gdx.files.classpath("imgs/red.png")));
@@ -66,12 +73,6 @@ public class Brick {
 		brickImgs[3] = new Sprite(new Texture(Gdx.files.classpath("imgs/blue.png")));
 		brickImgs[4] = new Sprite(new Texture(Gdx.files.classpath("imgs/orange.png")));
 		brickImgs[5] = new Sprite(new Texture(Gdx.files.classpath("imgs/purple.png")));
-		brickShape = new Rectangle();
-		this.brickShape.x = x;
-		this.brickShape.y = y;
-		this.brickShape.height = height;
-		this.brickShape.width = width;
-		this.state = true;
 	}
 	
 	/**

@@ -33,45 +33,43 @@ public class MenuScreen implements Screen {
 	/*
 	 * creates instance variables for each image buttons.
 	 */
-	TextureRegionDrawable gameup;
-	TextureRegionDrawable gamedown;
-	TextureRegionDrawable levelup;
-	TextureRegionDrawable leveldown;
-	TextureRegionDrawable rankingup;
-	TextureRegionDrawable rankingdown;
-	TextureRegionDrawable helpup;
-	TextureRegionDrawable helpdown;
-	TextureRegionDrawable quitup;
-	TextureRegionDrawable quitdown;
-	TextureRegionDrawable modelup;
-	TextureRegionDrawable modeldown;
+	private TextureRegionDrawable gameup;
+	private TextureRegionDrawable gamedown;
+	private TextureRegionDrawable levelup;
+	private TextureRegionDrawable leveldown;
+	private TextureRegionDrawable rankingup;
+	private TextureRegionDrawable rankingdown;
+	private TextureRegionDrawable helpup;
+	private TextureRegionDrawable helpdown;
+	private TextureRegionDrawable quitup;
+	private TextureRegionDrawable quitdown;
+	private TextureRegionDrawable modelup;
+	private TextureRegionDrawable modeldown;
 
-	TextureRegion newgamebuttonUp;
-	TextureRegion newgamebuttonDown;
-	TextureRegion levelbuttonUp;
-	TextureRegion levelbuttonDown;
-	TextureRegion rankingbuttonUp;
-	TextureRegion rankingbuttonDown;
-	TextureRegion helpbuttonUp;
-	TextureRegion helpbuttonDown;
-	TextureRegion quitbuttonUp;
-	TextureRegion quitbuttonDown;
-	TextureRegion modelbuttonUp;
-	TextureRegion modelbuttonDown;
+	private TextureRegion newgamebuttonUp;
+	private TextureRegion newgamebuttonDown;
+	private TextureRegion levelbuttonUp;
+	private TextureRegion levelbuttonDown;
+	private TextureRegion rankingbuttonUp;
+	private TextureRegion rankingbuttonDown;
+	private TextureRegion helpbuttonUp;
+	private TextureRegion helpbuttonDown;
+	private TextureRegion quitbuttonUp;
+	private TextureRegion quitbuttonDown;
+	private TextureRegion modelbuttonUp;
+	private TextureRegion modelbuttonDown;
 
-	Texture tex;
-	ImageButton gamebutton;
-	ImageButton levelbutton;
-	ImageButton rankingbutton;
-	ImageButton helpbutton;
-	ImageButton quitbutton;
-	ImageButton modelbutton;
+	private Texture tex;
+	private ImageButton gamebutton;
+	private ImageButton levelbutton;
+	private ImageButton rankingbutton;
+	private ImageButton helpbutton;
+	private ImageButton quitbutton;
+	private ImageButton modelbutton;
 
 	/**
 	 * Instantiate a new instance of the MenuScreen class
-	 * 
-	 * @param game
-	 *            - The current Breakout class
+	 * @param game - The current Breakout class
 	 */
 	public MenuScreen(final Breakout game) {
 
@@ -96,28 +94,18 @@ public class MenuScreen implements Screen {
 		gamebutton.setPosition(485, 350);
 		// Instantiate a input listener
 		gamebutton.addListener(new InputListener() {
-			/**
-			 * called when a button goes down on the actor, if return true, it
+			/** called when a button goes down on the actor, if return true, it
 			 * will receive all touch up events.
-			 * 
-			 * @param event
-			 *            - Event for actor input: touch, mouse, keyboard, and
-			 *            scroll.
-			 * @return - true
+			 * @param event - Event for actor input
 			 */
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
 
 				return true;
 			}
-
-			/**
-			 * called when a button goes up, the screen will move to the model
-			 * screen
-			 * 
-			 * @param event
-			 *            - Event for actor input: touch, mouse, keyboard, and
-			 *            scroll.
+			/**called when a button press down occurs, the screen will move to 
+			 * the model screen
+			 * @param event - Event for actor input
 			 */
 
 			public void touchUp(InputEvent event, float x, float y,
@@ -137,14 +125,8 @@ public class MenuScreen implements Screen {
 		helpbutton.setPosition(485, 250);
 		// Instantiate a input listener
 		helpbutton.addListener(new InputListener() {
-			/**
-			 * called when a button goes down on the actor, if return true, it
-			 * will receive all touch up events.
-			 * 
-			 * @param event
-			 *            - Event for actor input: touch, mouse, keyboard, and
-			 *            scroll.
-			 * @return - true
+			/**called when a button press down occurs
+			 * @param event - Event for actor input
 			 */
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) { // touch down method is needed
@@ -153,12 +135,9 @@ public class MenuScreen implements Screen {
 			}
 
 			/**
-			 * called when a button goes up, the screen will move to the help
-			 * screen
-			 * 
-			 * @param event
-			 *            - Event for actor input: touch, mouse, keyboard, and
-			 *            scroll.
+			 * called when a button press down occurs, the screen will move to 
+			 * the help screen
+			 * @param event - Event for actor input
 			 */
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) { // on button release do this
@@ -176,14 +155,8 @@ public class MenuScreen implements Screen {
 		quitbutton.setPosition(485, 150);
 		// Instantiate a input listener
 		quitbutton.addListener(new InputListener() {
-			/**
-			 * called when a button goes down on the actor, if return true, it
-			 * will receive all touch up events.
-			 * 
-			 * @param event
-			 *            - Event for actor input: touch, mouse, keyboard, and
-			 *            scroll.
-			 * @return - true
+			/**called when a button press down occurs
+			 * @param event - Event for actor input
 			 */
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) { // touch down method is needed
@@ -191,14 +164,9 @@ public class MenuScreen implements Screen {
 
 				return true;
 			}
-
-			/**
-			 * called when a button goes up, the screen will move to the
+			/** called when a button press down occurs, the screen will move to the
 			 * arcadesystem.ui screen
-			 * 
-			 * @param event
-			 *            - Event for actor input: touch, mouse, keyboard, and
-			 *            scroll.
+			 * @param event - Event for actor input
 			 */
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) { // on button release do this
@@ -235,27 +203,6 @@ public class MenuScreen implements Screen {
 	        		game.setScreen(game.getModelscreen());
 	        	}}
 	    	   );
-	  
-	 /*
-	    //ranking
-	    rankingbuttonUp=tmp[1][0];
-	    rankingbuttonDown=tmp[1][1];
-	    rankingup = new TextureRegionDrawable(rankingbuttonUp);
-	    rankingdown = new TextureRegionDrawable(rankingbuttonDown);
-	    rankingbutton = new ImageButton(rankingup, rankingdown);
-	    rankingbutton.setPosition(480, 270);
-	    rankingbutton.addListener(new InputListener(){
-	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
-	        		
-	        		return true; 
-	        	}
-	        	
-	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
-	        		game.setScreen(game.RankingScreen); 
-	        		
-	        	}}
-	    	   );
-	    	   */
 	    
 	    //help
 	    helpbuttonUp=tmp[1][2];

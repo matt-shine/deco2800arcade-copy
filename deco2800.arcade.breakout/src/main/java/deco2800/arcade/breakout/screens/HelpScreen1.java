@@ -31,47 +31,37 @@ public class HelpScreen1 implements Screen  {
 	private final Texture texture;
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
-	Stage stage;
-	   TextureRegionDrawable backup;
-	   TextureRegionDrawable backdown;
-	   TextureRegion backUp;
-	   TextureRegion backDown;
-	   TextureRegion backbuttonUp;
-	   TextureRegion backbuttonDown;
-	   Texture tex;
-	   ImageButton backbutton;
+	private Stage stage;
+	private TextureRegionDrawable backup;
+	private TextureRegionDrawable backdown;
+	private TextureRegion backUp;
+	private TextureRegion backDown;
+	private TextureRegion backbuttonUp;
+	private TextureRegion backbuttonDown;
+	private Texture tex;
+	private ImageButton backbutton;
 	  
 	  
 	public HelpScreen1(final Breakout game) {
-		
 		this.game = game;
 		batch = new SpriteBatch();
 		Texture.setEnforcePotImages(false);
 		texture = new Texture(Gdx.files.classpath("imgs/HelpScreen1.png"));
-		
-	     
 	}
-	
-	
-	  
 	
 	@Override
 	public void dispose() {
 		batch.dispose();
 		texture.dispose();
-		
-		
 	}
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
 		
 	}
 

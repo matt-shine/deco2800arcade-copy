@@ -16,7 +16,7 @@ public class DecreasePaddle extends Powerup{
 	private GameScreen context;
 	//A variable for comparing floats
 	private final float EPSILON = 0.0001f;
-	Sprite sprite;
+	private Sprite sprite;
 	/**
 	 * Instantiate a new instance of the decrease paddle class
 	 * @param gs - The current game screen
@@ -44,8 +44,10 @@ public class DecreasePaddle extends Powerup{
 		return this.sprite;
 	}
 	
-	public Sprite setSprite(){
+	/**
+	 * Set the sprite for the powerup
+	 */
+	public void setSprite(){
 		this.sprite = new Sprite(new Texture(Gdx.files.classpath("imgs/" + img)));
-		return sprite;
 	}
 }

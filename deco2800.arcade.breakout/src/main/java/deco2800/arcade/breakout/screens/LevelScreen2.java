@@ -24,81 +24,68 @@ import deco2800.arcade.client.ArcadeSystem;
 
 public class LevelScreen2 implements Screen {
 	private final Breakout game;
-	private final SpriteBatch batch;
-	private final Texture texture;
+	private SpriteBatch batch;
+	private Texture texture;
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
-	Stage stage;
+	private Stage stage;
 	/*
 	 * creates instance variables for each image buttons.
 	 */
-	TextureRegionDrawable level6up;
-	TextureRegionDrawable level6down;
-	TextureRegionDrawable level7up;
-	TextureRegionDrawable level7down;
-	TextureRegionDrawable level8up;
-	TextureRegionDrawable level8down;
-	TextureRegionDrawable level9up;
-	TextureRegionDrawable level9down;
-	TextureRegionDrawable level10up;
-	TextureRegionDrawable level10down;
-	TextureRegionDrawable previousup;
-	TextureRegionDrawable previousdown;
-	TextureRegionDrawable backup;
-	TextureRegionDrawable backdown;
+	private TextureRegionDrawable level6up;
+	private TextureRegionDrawable level6down;
+	private TextureRegionDrawable level7up;
+	private TextureRegionDrawable level7down;
+	private TextureRegionDrawable level8up;
+	private TextureRegionDrawable level8down;
+	private TextureRegionDrawable level9up;
+	private TextureRegionDrawable level9down;
+	private TextureRegionDrawable level10up;
+	private TextureRegionDrawable level10down;
+	private TextureRegionDrawable previousup;
+	private TextureRegionDrawable previousdown;
+	private TextureRegionDrawable backup;
+	private TextureRegionDrawable backdown;
 
-	TextureRegion level6buttonUp;
-	TextureRegion level6buttonDown;
-	TextureRegion level7buttonUp;
-	TextureRegion level7buttonDown;
-	TextureRegion level8buttonUp;
-	TextureRegion level8buttonDown;
-	TextureRegion level9buttonUp;
-	TextureRegion level9buttonDown;
-	TextureRegion level10buttonUp;
-	TextureRegion level10buttonDown;
-	TextureRegion previousbuttonUp;
-	TextureRegion previousbuttonDown;
-	TextureRegion backbuttonUp;
-	TextureRegion backbuttonDown;
+	private TextureRegion level6buttonUp;
+	private TextureRegion level6buttonDown;
+	private TextureRegion level7buttonUp;
+	private TextureRegion level7buttonDown;
+	private TextureRegion level8buttonUp;
+	private TextureRegion level8buttonDown;
+	private TextureRegion level9buttonUp;
+	private TextureRegion level9buttonDown;
+	private TextureRegion level10buttonUp;
+	private TextureRegion level10buttonDown;
+	private TextureRegion previousbuttonUp;
+	private TextureRegion previousbuttonDown;
+	private TextureRegion backbuttonUp;
+	private TextureRegion backbuttonDown;
 
-	Texture tex;
-	Texture tex2;
-	ImageButton level6button;
-	ImageButton level7button;
-	ImageButton level8button;
-	ImageButton level9button;
-	ImageButton level10button;
-	ImageButton previousbutton;
-	ImageButton backbutton;
+	private Texture tex;
+	private Texture tex2;
+	private ImageButton level6button;
+	private ImageButton level7button;
+	private ImageButton level8button;
+	private ImageButton level9button;
+	private ImageButton level10button;
+	private ImageButton previousbutton;
+	private ImageButton backbutton;
 	// Instantiate a input listener called input6
-	InputListener input6 = new InputListener() {
-		/**
-		 * called when a button goes down on the actor, if return true, it will
-		 * receive all touch up events.
-		 * 
-		 * @param event
-		 *            - Event for actor input: touch, mouse, keyboard, and
-		 *            scroll.
-		 * @return - true
+	private InputListener input6 = new InputListener() {
+		/**called when a button press down occurs
+		 * @param event - Event for actor input
 		 */
 		public boolean touchDown(InputEvent event, float x, float y,
 				int pointer, int button) {
 			return true;
 		}
-
-		/**
-		 * called when a button goes up, the screen will move to the game screen
-		 * at level6, then disable all the listener which come from the
-		 * disableButton() class.
-		 * 
-		 * @param event
-		 *            - Event for actor input: touch, mouse, keyboard, and
-		 *            scroll.
+		/** called when a button is released, the screen will move to the game 
+		 * screen at level6, then disable the listeners
+		 * @param event - Event for actor input
 		 */
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
-			disableButton();
 			game.getGamescreen().setLevel(6);
 			dispose();
 			game.getGamescreen().gamearea();
@@ -106,33 +93,20 @@ public class LevelScreen2 implements Screen {
 		}
 	};
 	// Instantiate a input listener called input7
-	InputListener input7 = new InputListener() {
-		/**
-		 * called when a button goes down on the actor, if return true, it will
-		 * receive all touch up events.
-		 * 
-		 * @param event
-		 *            - Event for actor input: touch, mouse, keyboard, and
-		 *            scroll.
-		 * @return - true
+	private InputListener input7 = new InputListener() {
+		/** called when a button is released, the screen will move to the game
+		 * @param event - Event for actor input
 		 */
 		public boolean touchDown(InputEvent event, float x, float y,
 				int pointer, int button) {
 			return true;
 		}
-
-		/**
-		 * called when a button goes up, the screen will move to the game screen
-		 * at level7, then disable all the listener which come from the
-		 * disableButton() class.
-		 * 
-		 * @param event
-		 *            - Event for actor input: touch, mouse, keyboard, and
-		 *            scroll.
+		/**called when a button is released, the screen will move to the game 
+		 * screen at level7, then disable the listeners
+		 * @param event - Event for actor input
 		 */
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
-			disableButton();
 			game.getGamescreen().setLevel(7);
 			dispose();
 			game.getGamescreen().gamearea();
@@ -140,33 +114,20 @@ public class LevelScreen2 implements Screen {
 		}
 	};
 	// Instantiate a input listener called input8
-	InputListener input8 = new InputListener() {
-		/**
-		 * called when a button goes down on the actor, if return true, it will
-		 * receive all touch up events.
-		 * 
-		 * @param event
-		 *            - Event for actor input: touch, mouse, keyboard, and
-		 *            scroll.
-		 * @return - true
+	private InputListener input8 = new InputListener() {
+		/**called when a button is released, the screen will move to the game
+		 * @param event - Event for actor input
 		 */
 		public boolean touchDown(InputEvent event, float x, float y,
 				int pointer, int button) {
 			return true;
 		}
-
-		/**
-		 * called when a button goes up, the screen will move to the game screen
-		 * at level8, then disable all the listener which come from the
-		 * disableButton() class.
-		 * 
-		 * @param event
-		 *            - Event for actor input: touch, mouse, keyboard, and
-		 *            scroll.
+		/**called when a button is released, the screen will move to the game 
+		 * screen at level8, then disable the listeners
+		 * @param event - Event for actor input
 		 */
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
-			disableButton();
 			game.getGamescreen().setLevel(8);
 			dispose();
 			game.getGamescreen().gamearea();
@@ -174,33 +135,20 @@ public class LevelScreen2 implements Screen {
 		}
 	};
 	// Instantiate a input listener called input9
-	InputListener input9 = new InputListener() {
-		/**
-		 * called when a button goes down on the actor, if return true, it will
-		 * receive all touch up events.
-		 * 
-		 * @param event
-		 *            - Event for actor input: touch, mouse, keyboard, and
-		 *            scroll.
-		 * @return - true
+	private InputListener input9 = new InputListener() {
+		/**called when a button is released, the screen will move to the game
+		 * @param event - Event for actor input
 		 */
 		public boolean touchDown(InputEvent event, float x, float y,
 				int pointer, int button) {
 			return true;
 		}
-
-		/**
-		 * called when a button goes up, the screen will move to the game screen
-		 * at level9, then disable all the listener which come from the
-		 * disableButton() class.
-		 * 
-		 * @param event
-		 *            - Event for actor input: touch, mouse, keyboard, and
-		 *            scroll.
+		/**called when a button is released, the screen will move to the game 
+		 * screen at level9, then disable the listeners
+		 * @param event - Event for actor input
 		 */
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
-			disableButton();
 			game.getGamescreen().setLevel(9);
 			dispose();
 			game.getGamescreen().gamearea();
@@ -208,15 +156,9 @@ public class LevelScreen2 implements Screen {
 		}
 	};
 	// Instantiate a input listener called input10
-	InputListener input10 = new InputListener() {
-		/**
-		 * called when a button goes down on the actor, if return true, it will
-		 * receive all touch up events.
-		 * 
-		 * @param event
-		 *            - Event for actor input: touch, mouse, keyboard, and
-		 *            scroll.
-		 * @return - true
+	private InputListener input10 = new InputListener() {
+		/**called when a button is released, the screen will move to the game
+		 * @param event - Event for actor input
 		 */
 		public boolean touchDown(InputEvent event, float x, float y,
 				int pointer, int button) {
@@ -224,18 +166,12 @@ public class LevelScreen2 implements Screen {
 			return true;
 		}
 
-		/**
-		 * called when a button goes up, the screen will move to the game screen
-		 * at level10, then disable all the listener which come from the
-		 * disableButton() class.
-		 * 
-		 * @param event
-		 *            - Event for actor input: touch, mouse, keyboard, and
-		 *            scroll.
+		/**called when a button is released, the screen will move to the game 
+		 * screen at level10, then disable the listeners
+		 * @param event - Event for actor input
 		 */
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) { // on button release do this
-			disableButton();
 			game.getGamescreen().setLevel(10);
 			dispose();
 			game.getGamescreen().gamearea();
@@ -244,28 +180,17 @@ public class LevelScreen2 implements Screen {
 		}
 	};
 	// Instantiate a input listener called levelScreen1
-	InputListener levelScreen1 = new InputListener() {
-		/**
-		 * called when a button goes down on the actor, if return true, it will
-		 * receive all touch up events.
-		 * 
-		 * @param event
-		 *            - Event for actor input: touch, mouse, keyboard, and
-		 *            scroll.
-		 * @return - true
+	private InputListener levelScreen1 = new InputListener() {
+		/**called when a button is released, the screen will move to the game
+		 * @param event - Event for actor input
 		 */
 		public boolean touchDown(InputEvent event, float x, float y,
 				int pointer, int button) {
 			return true;
 		}
-
-		/**
-		 * called when a button goes up, the screen will move to the
+		/**called when a button is released, the screen will move to the
 		 * levelScreen1 screen
-		 * 
-		 * @param event
-		 *            - Event for actor input: touch, mouse, keyboard, and
-		 *            scroll.
+		 * @param event - Event for actor input
 		 */
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
@@ -273,27 +198,17 @@ public class LevelScreen2 implements Screen {
 		}
 	};
 	// Instantiate a input listener called backmenu screen
-	InputListener backmenu = new InputListener() {
-		/**
-		 * called when a button goes down on the actor, if return true, it will
-		 * receive all touch up events.
-		 * 
-		 * @param event
-		 *            - Event for actor input: touch, mouse, keyboard, and
-		 *            scroll.
-		 * @return - true
+	private InputListener backmenu = new InputListener() {
+		/**called when a button is released, the screen will move to the game
+		 * @param event - Event for actor input
 		 */
 		public boolean touchDown(InputEvent event, float x, float y,
 				int pointer, int button) {
 			return true;
 		}
-
-		/**
-		 * called when a button goes up, the screen will move to the menu screen
-		 * 
-		 * @param event
-		 *            - Event for actor input: touch, mouse, keyboard, and
-		 *            scroll.
+		/**called when a button is released, the screen will move to the menu 
+		 * screen
+		 * @param event - Event for actor input
 		 */
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
@@ -384,11 +299,14 @@ public class LevelScreen2 implements Screen {
 		level10button.addListener(this.input10);
 		previousbutton.addListener(this.levelScreen1);
 		backbutton.addListener(this.backmenu);
+		texture = new Texture(Gdx.files.classpath("imgs/Level_Select2.png"));
+		batch = new SpriteBatch();
 	}
 	
 	@Override
 	public void dispose() {
 		texture.dispose();
+		disableButton();
 		batch.dispose();
 	}
 

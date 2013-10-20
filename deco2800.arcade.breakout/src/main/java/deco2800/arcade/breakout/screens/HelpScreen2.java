@@ -31,15 +31,15 @@ public class HelpScreen2 implements Screen  {
 	private final Texture texture;
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
-	Stage stage;
-	   TextureRegionDrawable backup;
-	   TextureRegionDrawable backdown;
-	   TextureRegion backUp;
-	   TextureRegion backDown;
-	   TextureRegion backbuttonUp;
-	   TextureRegion backbuttonDown;
-	   Texture tex;
-	   ImageButton backbutton;
+	private Stage stage;
+	private TextureRegionDrawable backup;
+	private TextureRegionDrawable backdown;
+	private TextureRegion backUp;
+	private TextureRegion backDown;
+	private TextureRegion backbuttonUp;
+	private TextureRegion backbuttonDown;
+	private Texture tex;
+	private ImageButton backbutton;
 	  
 	  
 	public HelpScreen2(final Breakout game) {

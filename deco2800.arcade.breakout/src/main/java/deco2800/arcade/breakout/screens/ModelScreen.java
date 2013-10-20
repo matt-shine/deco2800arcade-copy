@@ -29,35 +29,34 @@ public class ModelScreen implements Screen {
 	private final Texture texture;
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
-	Stage stage;
-	TextureRegionDrawable model1up;
-	TextureRegionDrawable model1down;
-	TextureRegionDrawable backup;
-	TextureRegionDrawable backdown;
-	TextureRegion model1Up;
-	TextureRegion model1Down;
-	TextureRegion model1buttonUp;
-	TextureRegion model1buttonDown;
-	TextureRegion backUp;
-	TextureRegion backDown;
-	TextureRegion backbuttonUp;
-	TextureRegion backbuttonDown;
-	TextureRegionDrawable model2up;
-	TextureRegionDrawable model2down;
-	TextureRegion model2Up;
-	TextureRegion model2Down;
-	TextureRegion model2buttonUp;
-	TextureRegion model2buttonDown;
+	private Stage stage;
+	private TextureRegionDrawable model1up;
+	private TextureRegionDrawable model1down;
+	private TextureRegionDrawable backup;
+	private TextureRegionDrawable backdown;
+	private TextureRegion model1Up;
+	private TextureRegion model1Down;
+	private TextureRegion model1buttonUp;
+	private TextureRegion model1buttonDown;
+	private TextureRegion backUp;
+	private TextureRegion backDown;
+	private TextureRegion backbuttonUp;
+	private TextureRegion backbuttonDown;
+	private TextureRegionDrawable model2up;
+	private TextureRegionDrawable model2down;
+	private TextureRegion model2Up;
+	private TextureRegion model2Down;
+	private TextureRegion model2buttonUp;
+	private TextureRegion model2buttonDown;
 
-	Texture tex;
-	Texture tex2;
+	private Texture tex;
+	private Texture tex2;
 
-	ImageButton model1button;
-	ImageButton model2button;
-	ImageButton backbutton;
+	private ImageButton model1button;
+	private ImageButton model2button;
+	private ImageButton backbutton;
 
 	public ModelScreen(final Breakout game) {
-
 		this.game = game;
 		batch = new SpriteBatch();
 		Texture.setEnforcePotImages(false);

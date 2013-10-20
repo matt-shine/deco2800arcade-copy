@@ -173,7 +173,7 @@ public class PlayScreen implements Screen
     			levelTimer += delta;
     			score += 131*(0.5*(Configuration.getDifficulty()+1)); //Increment score per second.
     		}
-    		if(!bossActive && (levelTimer > 60.0 || Gdx.input.isKeyPressed(Keys.B))) { //unleash the beast
+    		if(!bossActive && (levelTimer > 90.0 || Gdx.input.isKeyPressed(Keys.B))) { //unleash the beast
     			bossActive = true;
     			game.playSong("boss");
     			boss = new Boss(this, player);

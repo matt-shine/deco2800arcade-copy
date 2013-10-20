@@ -26,7 +26,7 @@ public class BossPattern extends BulletPattern {
 		} else {
 			this.bossBulletDamage = 50*difficulty;
 		}
-		this.spawnTick = 10 - (2*(difficulty - 1));
+		this.spawnTick = 10 - difficulty;
 	}
 	
 	public void fire(float lag, float x, float y) {

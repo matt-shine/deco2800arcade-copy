@@ -1,6 +1,7 @@
 package deco2800.arcade.landInvaders;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 
@@ -82,6 +83,17 @@ public class Invaders extends JFrame implements Runnable {
 		setVisible(true);
 		setSize(Width, Height);
 		startGame();
+		
+		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+	    manager.addKeyEventPostProcessor(new KeyEventPostProcessor() {
+	        public boolean postProcessKeyEvent(KeyEvent e) {
+	            if (KeyEvent.VK_ESCAPE == e.getKeyCode()) {
+	                System.exit(0);
+	            }
+	            return true;
+	        }
+	    });
+		
 	}
 
 	/**

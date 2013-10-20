@@ -861,3 +861,78 @@ file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.tictactoe/bui
 jar:file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
 file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
 INFO main org.reflections.Reflections - Reflections took 315 ms to scan 23 urls, producing 92 keys and 401 values 
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.ui/build/classes/main/
+jar:file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.chess/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
+jar:file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.pong/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
+jar:file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
+jar:file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
+jar:file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+INFO main org.reflections.Reflections - Reflections took 301 ms to scan 23 urls, producing 93 keys and 402 values 
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.ui/build/classes/main/
+jar:file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.chess/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
+jar:file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.pong/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
+jar:file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
+jar:file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
+jar:file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+INFO main org.reflections.Reflections - Reflections took 302 ms to scan 23 urls, producing 93 keys and 403 values 
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.ui/build/classes/main/
+jar:file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.chess/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
+jar:file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.pong/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
+jar:file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
+jar:file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
+jar:file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
+file:/D:/Users/x007/Documents/GitHub/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+INFO main org.reflections.Reflections - Reflections took 319 ms to scan 23 urls, producing 93 keys and 403 values 

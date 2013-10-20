@@ -31,8 +31,8 @@ public static List<List<Integer>> createMap(){
 		
 		//creating the landing pads coordinates
 		int landPadLeftX = randNum(100, 700);
-		int landPadLeftY = randNum(50, 200);
-		int landPadRightX = landPadLeftX + 50; //makes the pad 50 pixels wide
+		int landPadLeftY = randNum(50, 55);
+		int landPadRightX = landPadLeftX + 100; //makes the pad 50 pixels wide
 		int landPadRightY = landPadLeftY;
 		
 		//adding the landPad as the first element of the array, TO DO, change color of landing pad

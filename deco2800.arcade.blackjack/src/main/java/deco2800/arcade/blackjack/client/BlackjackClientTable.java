@@ -134,13 +134,17 @@ public class BlackjackClientTable implements Screen{
 		//----------------BUTTONS------------------------
 		
 		Drawable buttontexture = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/null.png"))));
+		Drawable buttontexturegrayed = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/nullgray.png"))));
 		TextButtonStyle buttonstyle = new TextButtonStyle(buttontexture, buttontexture, buttontexture);
 		buttonstyle.font = new BitmapFont();
 		buttonstyle.fontColor = Color.BLACK;
+		TextButtonStyle buttonstylegrayed = new TextButtonStyle(buttontexturegrayed, buttontexturegrayed, buttontexturegrayed);
+		buttonstylegrayed.fontColor = Color.GRAY;
+		buttonstylegrayed.font = new BitmapFont();
 		
-        TextButton hit = new TextButton("Hit", buttonstyle);
+        TextButton hit = new TextButton("Hit", buttonstylegrayed);
         hit.setSize(200, 20);
-        hit.setPosition(20, 20);
+        hit.setPosition(20, 10);
         stage.addActor(hit);
         hit.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -151,7 +155,7 @@ public class BlackjackClientTable implements Screen{
         
         TextButton stay = new TextButton("Stay", buttonstyle);
         stay.setSize(200, 20);
-        stay.setPosition(240, 20);
+        stay.setPosition(240, 10);
         stage.addActor(stay);
         stay.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -162,7 +166,7 @@ public class BlackjackClientTable implements Screen{
         
         TextButton split = new TextButton("Split", buttonstyle);
         split.setSize(200, 20);
-        split.setPosition(460, 20);
+        split.setPosition(460, 10);
         stage.addActor(split);
         split.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -173,7 +177,7 @@ public class BlackjackClientTable implements Screen{
         
         TextButton doubledown = new TextButton("Double Down", buttonstyle);
         doubledown.setSize(200, 20);
-        doubledown.setPosition(680, 20);
+        doubledown.setPosition(680, 10);
         stage.addActor(doubledown);
         doubledown.addListener(new InputListener() {
 			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {

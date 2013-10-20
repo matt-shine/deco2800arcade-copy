@@ -24,7 +24,7 @@ import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
  * @author matt-shine
  * 
  */
-final public class Lobby {
+public class Lobby {
 
 	/* The Lobby instance */
 	private static Lobby instance;
@@ -276,8 +276,16 @@ final public class Lobby {
 	public Map<Integer, Connection> getConnectedPlayers() {
 		return connectedPlayers;
 	}
-
+	/* Test Helper methods */
 	public int getMatchIdCounter() {
 		return this.matchIdCounter;
 	}
+	
+	public void resetLobby() {
+		this.lobbyGames = new ArrayList<LobbyMatch>();
+		this.connectedPlayers = new HashMap<Integer, Connection>();
+		this.matchIdCounter = 0;
+	}
+	
+	
 }

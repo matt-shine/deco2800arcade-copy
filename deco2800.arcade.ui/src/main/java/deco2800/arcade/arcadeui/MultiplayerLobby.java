@@ -387,15 +387,24 @@ public class MultiplayerLobby implements Screen {
 
 	}
 	
-/**
- * 
- * Get and set the current player
- * @param player()
- */
-	
+	/**
+	 * 
+	 * Set the current player
+	 * @param player() - The player to set
+	 */
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
+	
+	/**
+	 * Gets the current player.
+	 * @return - Player, the current player.
+	 */
+	public Player getPlayer() {
+		return this.player;
+	}
+	
+	
 	
 /**
  * Join active multiplayer game

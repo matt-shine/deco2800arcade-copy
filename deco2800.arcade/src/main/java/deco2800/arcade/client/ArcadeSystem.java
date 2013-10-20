@@ -46,7 +46,6 @@ public class ArcadeSystem {
 		arcade.stopGame();
 		arcade.startGame(gameid);
 		arcade.getCurrentGame().setLobbySession(lobbySession);
-		System.out.println("Game with lobby: " + arcade.getCurrentGame().getGame().getName());
 	}
 	
 	/**

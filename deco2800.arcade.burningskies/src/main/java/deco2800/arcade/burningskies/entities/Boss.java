@@ -16,6 +16,7 @@ public class Boss extends Enemy {
 	private boolean intro = true;
 	private float pauseTimer = 1f;
 	private static int bossMaxHealth = 100000;
+	private int dir = 1;
 	
 	public Boss(PlayScreen screen, PlayerShip player) {
 		super(bossMaxHealth, tex, 
@@ -38,7 +39,10 @@ public class Boss extends Enemy {
 			if(!pattern.isFiring()) {
 				pattern.start();
 			}
-			//TODO: MAKE HIM SHOOT AND MOVE AND SHIT
+			position.add(delta*50*dir,0);
+			if(position.x - getWidth()/2 < 0 || position.x + getWidth()/2 > 1280) {
+				dir *= -1;
+			}
 		}
 		setPosition(position.x-getWidth()/2, position.y-getHeight()/2);
 	}

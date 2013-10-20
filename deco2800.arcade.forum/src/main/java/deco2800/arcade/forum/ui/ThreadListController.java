@@ -27,7 +27,9 @@ public class ThreadListController {
 		request.start = 0;
 		request.end = 0;
 		request.limit = 10;
-		System.out.println("request send");		
+		request.category = this.model.get_category();
+		request.userId = 0;
+		System.out.println("Request sent");		
 		this.connection.getClient().sendTCP(request);
 		System.out.println("pThread request is sent");
 		
@@ -42,6 +44,11 @@ public class ThreadListController {
 						if (response.result != null) {
 							model.thread_load(ParentThreadProtocol.getParentThreads(response.result));
 							System.out.println("Thread loaded");
+							view.clearThreadPanel();
+							for (int i = 0; i < model.get_size(); i++) {
+								view.addInnerThreadPanel(model.get_thread(i));
+							}
+							view.updateThreadPanel();
 						} else {
 							System.out.println("Failed to load thread");
 							JOptionPane.showMessageDialog(null, "Failed to load threads", 

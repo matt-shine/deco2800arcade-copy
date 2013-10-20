@@ -306,4 +306,10 @@ public class ForegroundLayer extends Map {
         }
         return -1;
     }
+
+    public void dispose() {
+        for (MapPane p : panes) {
+            p.dispose();
+        }
+    }
 }

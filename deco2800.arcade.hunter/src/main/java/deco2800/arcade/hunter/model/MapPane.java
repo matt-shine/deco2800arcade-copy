@@ -133,4 +133,9 @@ public class MapPane {
         }
         return -3;
     }
+
+    public void dispose() {
+        fgRendered.getTexture().dispose();
+        bgRendered.getTexture().dispose();
+    }
 }

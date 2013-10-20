@@ -73,17 +73,10 @@ public class GameScreen implements Screen {
 
         entityHandler = new EntityHandler(entities);
 
-        // Spawn entities
+        // Spawn player
         player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128, this);
-        Animal animal = new Animal(new Vector2(800, 10 * Config.TILE_SIZE), 128, 128, false, "hippo", entityHandler.getAnimalAnimation("hippo"), this);
-        Animal prey = new Animal(new Vector2(700, 10 * Config.TILE_SIZE), 128, 128, true, "lion", entityHandler.getAnimalAnimation("lion"), this);
-        Items item = new Items(new Vector2(Config.TILE_SIZE * 6, 5 * Config.TILE_SIZE), 64, 64, "Invulnerability", entityHandler.getItemTexture("Invulnerability"), this);
-
         entities.add(player);
-        hunter.incrementAchievement("hunter.beginner");
-        entities.add(animal);
-        entities.add(prey);
-        entities.add(item);
+        hunter.incrementAchievement("hunter.beginnings");
 
         // Plays the music
         if (Hunter.State.getPreferencesManager().isMusicEnabled() && Hunter.State.getPreferencesManager().isSoundEnabled()) {
@@ -115,6 +108,7 @@ public class GameScreen implements Screen {
         font.dispose();
         MapPaneRenderer.dispose();
         backgroundLayer.dispose();
+        foregroundLayer.dispose();
         player.dispose();
         spriteLayer.dispose();
         entityHandler.dispose();

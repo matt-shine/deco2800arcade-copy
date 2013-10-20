@@ -16,7 +16,10 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game;
 
-/** Cyra, a side-scrolling 2-D platformer game for use in the deco2800 Arcade.
+/** Cyra, a side-scrolling sci-fi themed 2-D platformer game. Run, jump and
+ *  swing your sword!
+ *  
+ *  For use in the 2013 deco2800 arcade.
  * 
  * @author Game Over
  */
@@ -31,7 +34,7 @@ public class Cyra extends GameClient {
       
     public Cyra(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		this.networkClient = networkClient; //this is a bit of a hack
+		this.networkClient = networkClient;
         this.achievementClient = new AchievementClient(networkClient);
         this.player = player;
         this.highscoreClient = new HighscoreClient(player.getUsername(), "Cyra", networkClient);

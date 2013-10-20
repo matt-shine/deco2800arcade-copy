@@ -44,22 +44,37 @@ public class ArcadeWebserver implements Container {
         response.setDate("Last-Modified", time);
 	}
 	
+    /**
+     * Private struct for describing a Route.
+     */
+    private class Route
+    {
+        public String route;
+        public String param;
+        
+        public static final int ROUTE_NAME_INDEX = 1;
+        public static final int ROUTE_PARAM_INDEX = 1;
+    }
 	
-	
-	private class Route
-	{
-	    String route;
-	    String param;
-	}
-	
+    /**
+     * Splits a path for a request into parameter and route.
+     * @param p Path String
+     * @return Route struct
+     */
 	private Route processPath(String p)
 	{
 	    Route r = new Route();
 	    r.route = "";
 	    r.param = "";
         String[] s = p.split("/");
-        if (s.length > 1) r.route = s[1];
-        if (s.length > 2) r.param = s[2];
+        
+        if (s.length > 1) {
+            r.route = s[Route.ROUTE_NAME_INDEX];
+        }
+        
+        if (s.length > 2) {
+            r.param = s[Route.ROUTE_PARAM_INDEX];
+        }
         
         return r;
 	}

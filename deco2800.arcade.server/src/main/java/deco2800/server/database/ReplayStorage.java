@@ -8,6 +8,12 @@ public class ReplayStorage {
     private final String sessions = "REPLAY_SESSIONS";
     private final String events = "REPLAY_EVENTS";
     
+    public static final int SESSION_ID_INDEX = 0;
+    public static final int RECORDING_INDEX = 1;
+    public static final int USER_INDEX = 2;
+    public static final int DATE_INDEX = 3;
+    public static final int COMMENT_INDEX = 4;
+    
 	public void initialise() throws DatabaseException {
 		
 		Connection connection = Database.getConnection();

@@ -58,7 +58,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	/* Player Stats */
 	public int BANANAS_FOUND = 0;
 	public static int deaths = 0;
-	int SPEED_MULTIPLIER = 2;
+	int SPEED_MULTIPLIER = 1;
 	int monkeyLength = 35;
 	int monkeyHeight = 40;
 	public static float monkeyX;

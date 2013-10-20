@@ -28,7 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.Game;
 
-public class JoinTable2Screen implements Screen{
+public class BlackjackClientTable implements Screen{
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private Texture textureBackground;
@@ -36,10 +36,8 @@ public class JoinTable2Screen implements Screen{
 	public Blackjack_UI myGame;
 	private Stage stage;
 	JoinTableScreen JoinTableScreen;
-	BlackjackClientTable BlackjackClientTable;
-	
 
-	public JoinTable2Screen(
+	public BlackjackClientTable(
 	        Blackjack_UI game )
 	    {
 		myGame = game;
@@ -62,7 +60,7 @@ public class JoinTable2Screen implements Screen{
 		batch = new SpriteBatch();
  
         // load the image and create the texture region
-        textureBackground = new Texture(Gdx.files.internal("data/menu1.png"));
+        textureBackground = new Texture(Gdx.files.internal("data/Blackjacktable.png"));
  
         // we set the linear texture filter to improve the stretching
         textureBackground.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -77,41 +75,6 @@ public class JoinTable2Screen implements Screen{
         Table table = new Table();
         Table table2 = new Table();
         stage.addActor(table);
-        table.setSize(187, 117);
-		table.setPosition(20, 20);
-		stage.addActor(table2);
-		table2.setSize(183, 138);
-		table2.setPosition(550, 275);
-
-        Texture textureButton1 = new Texture(Gdx.files.internal("data/backbutton.png"));
-        Texture textureButton2 = new Texture(Gdx.files.internal("data/blackjackbutton.png"));
-        TextureRegion imageBack = new TextureRegion(textureButton1);
-        TextureRegion imageBlackjack = new TextureRegion(textureButton2);
-        
-        Drawable imageUp = new TextureRegionDrawable(imageBack);
-        Drawable imageUp2 = new TextureRegionDrawable(imageBlackjack);
-
-        ImageButton backbutton = new ImageButton(new ImageButton.ImageButtonStyle(imageUp, imageUp, imageUp, imageUp, imageUp, imageUp));
-        ImageButton imagebuttonblackjack = new ImageButton(new ImageButton.ImageButtonStyle(imageUp2, imageUp2, imageUp2, imageUp2, imageUp2, imageUp2));
-
-        backbutton.addListener(new InputListener() {
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				JoinTableScreen = new JoinTableScreen(myGame);
-				myGame.setScreen(JoinTableScreen);
-				return false;
-			}
-		});
-
-        imagebuttonblackjack.addListener(new InputListener() {
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				BlackjackClientTable = new BlackjackClientTable(myGame);
-				myGame.setScreen(BlackjackClientTable);
-				return false;
-			}
-		});
-        
-        table.add(backbutton);
-        table2.add(imagebuttonblackjack);
 
     }
  

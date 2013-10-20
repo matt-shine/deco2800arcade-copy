@@ -94,96 +94,84 @@ public class BlackjackClientTable implements Screen{
 		
 		//cards
 		
-		Texture CardTwoSpade = new Texture(Gdx.files.internal("data/cards/2S.jpg"));
-		Texture CardThreeSpade = new Texture(Gdx.files.internal("data/cards/3S.jpg"));
-		Texture CardFourSpade = new Texture(Gdx.files.internal("data/cards/4S.jpg"));
-		Texture CardFiveSpade = new Texture(Gdx.files.internal("data/cards/5S.jpg"));
-		Texture CardSixSpade = new Texture(Gdx.files.internal("data/cards/6S.jpg"));
-		Texture CardSevenSpade = new Texture(Gdx.files.internal("data/cards/7S.jpg"));
-		Texture CardEightSpade = new Texture(Gdx.files.internal("data/cards/8S.jpg"));
-		Texture CardNineSpade = new Texture(Gdx.files.internal("data/cards/9S.jpg"));
-		Texture CardTenSpade = new Texture(Gdx.files.internal("data/cards/10S.jpg"));
-		Texture CardJackSpade = new Texture(Gdx.files.internal("data/cards/JS.jpg"));
-		Texture CardQueenSpade = new Texture(Gdx.files.internal("data/cards/QS.jpg"));
-		Texture CardKingSpade = new Texture(Gdx.files.internal("data/cards/KS.jpg"));
-		Texture CardAceSpade = new Texture(Gdx.files.internal("data/cards/AS.jpg"));
+		Texture S2 = new Texture(Gdx.files.internal("data/cards/2S.jpg"));
+		Texture S3 = new Texture(Gdx.files.internal("data/cards/3S.jpg"));
+		Texture S4 = new Texture(Gdx.files.internal("data/cards/4S.jpg"));
+		Texture S5 = new Texture(Gdx.files.internal("data/cards/5S.jpg"));
+		Texture S6 = new Texture(Gdx.files.internal("data/cards/6S.jpg"));
+		Texture S7 = new Texture(Gdx.files.internal("data/cards/7S.jpg"));
+		Texture S8 = new Texture(Gdx.files.internal("data/cards/8S.jpg"));
+		Texture S9 = new Texture(Gdx.files.internal("data/cards/9S.jpg"));
+		Texture S10 = new Texture(Gdx.files.internal("data/cards/10S.jpg"));
+		Texture SJ = new Texture(Gdx.files.internal("data/cards/JS.jpg"));
+		Texture SQ = new Texture(Gdx.files.internal("data/cards/QS.jpg"));
+		Texture SK = new Texture(Gdx.files.internal("data/cards/KS.jpg"));
+		Texture SA = new Texture(Gdx.files.internal("data/cards/AS.jpg"));
 		
-		Texture CardTwoHeart = new Texture(Gdx.files.internal("data/cards/2H.jpg"));
-		Texture CardThreeHeart = new Texture(Gdx.files.internal("data/cards/3H.jpg"));
-		Texture CardFourHeart = new Texture(Gdx.files.internal("data/cards/4H.jpg"));
-		Texture CardFiveHeart = new Texture(Gdx.files.internal("data/cards/5H.jpg"));
-		Texture CardSixHeart = new Texture(Gdx.files.internal("data/cards/6H.jpg"));
-		Texture CardSevenHeart = new Texture(Gdx.files.internal("data/cards/7H.jpg"));
-		Texture CardEightHeart = new Texture(Gdx.files.internal("data/cards/8H.jpg"));
-		Texture CardNineHeart = new Texture(Gdx.files.internal("data/cards/9H.jpg"));
-		Texture CardTenHeart = new Texture(Gdx.files.internal("data/cards/10H.jpg"));
-		Texture CardJackHeart = new Texture(Gdx.files.internal("data/cards/JH.jpg"));
-		Texture CardQueenHeart = new Texture(Gdx.files.internal("data/cards/QH.jpg"));
-		Texture CardKingHeart = new Texture(Gdx.files.internal("data/cards/KH.jpg"));
-		Texture CardAceHeart = new Texture(Gdx.files.internal("data/cards/AH.jpg"));
+		Texture H2 = new Texture(Gdx.files.internal("data/cards/2H.jpg"));
+		Texture H3 = new Texture(Gdx.files.internal("data/cards/3H.jpg"));
+		Texture H4 = new Texture(Gdx.files.internal("data/cards/4H.jpg"));
+		Texture H5 = new Texture(Gdx.files.internal("data/cards/5H.jpg"));
+		Texture H6 = new Texture(Gdx.files.internal("data/cards/6H.jpg"));
+		Texture H7 = new Texture(Gdx.files.internal("data/cards/7H.jpg"));
+		Texture H8 = new Texture(Gdx.files.internal("data/cards/8H.jpg"));
+		Texture H9 = new Texture(Gdx.files.internal("data/cards/9H.jpg"));
+		Texture H10 = new Texture(Gdx.files.internal("data/cards/10H.jpg"));
+		Texture HJ = new Texture(Gdx.files.internal("data/cards/JH.jpg"));
+		Texture HQ = new Texture(Gdx.files.internal("data/cards/QH.jpg"));
+		Texture HK = new Texture(Gdx.files.internal("data/cards/KH.jpg"));
+		Texture HA = new Texture(Gdx.files.internal("data/cards/AH.jpg"));
 		
-		Texture CardTwoClub = new Texture(Gdx.files.internal("data/cards/2C.jpg"));
-		Texture CardThreeClub = new Texture(Gdx.files.internal("data/cards/3C.jpg"));
-		Texture CardFourClub = new Texture(Gdx.files.internal("data/cards/4C.jpg"));
-		Texture CardFiveClub = new Texture(Gdx.files.internal("data/cards/5C.jpg"));
-		Texture CardSixClub = new Texture(Gdx.files.internal("data/cards/6C.jpg"));
-		Texture CardSevenClub = new Texture(Gdx.files.internal("data/cards/7C.jpg"));
-		Texture CardEightClub = new Texture(Gdx.files.internal("data/cards/8C.jpg"));
-		Texture CardNineClub = new Texture(Gdx.files.internal("data/cards/9C.jpg"));
-		Texture CardTenClub = new Texture(Gdx.files.internal("data/cards/10C.jpg"));
-		Texture CardJackClub = new Texture(Gdx.files.internal("data/cards/JC.jpg"));
-		Texture CardQueenClub = new Texture(Gdx.files.internal("data/cards/QC.jpg"));
-		Texture CardKingClub = new Texture(Gdx.files.internal("data/cards/KC.jpg"));
-		Texture CardAceClub = new Texture(Gdx.files.internal("data/cards/AC.jpg"));
+		Texture C2 = new Texture(Gdx.files.internal("data/cards/2C.jpg"));
+		Texture C3 = new Texture(Gdx.files.internal("data/cards/3C.jpg"));
+		Texture C4 = new Texture(Gdx.files.internal("data/cards/4C.jpg"));
+		Texture C5 = new Texture(Gdx.files.internal("data/cards/5C.jpg"));
+		Texture C6 = new Texture(Gdx.files.internal("data/cards/6C.jpg"));
+		Texture C7 = new Texture(Gdx.files.internal("data/cards/7C.jpg"));
+		Texture C8 = new Texture(Gdx.files.internal("data/cards/8C.jpg"));
+		Texture C9 = new Texture(Gdx.files.internal("data/cards/9C.jpg"));
+		Texture C10 = new Texture(Gdx.files.internal("data/cards/10C.jpg"));
+		Texture CJ = new Texture(Gdx.files.internal("data/cards/JC.jpg"));
+		Texture CQ = new Texture(Gdx.files.internal("data/cards/QC.jpg"));
+		Texture CK = new Texture(Gdx.files.internal("data/cards/KC.jpg"));
+		Texture CA = new Texture(Gdx.files.internal("data/cards/AC.jpg"));
 		
-		Texture CardTwoDiamond = new Texture(Gdx.files.internal("data/2D.jpg"));
-		Texture CardThreeDiamond = new Texture(Gdx.files.internal("data/3D.jpg"));
-		Texture CardFourDiamond = new Texture(Gdx.files.internal("data/4D.jpg"));
-		Texture CardFiveDiamond = new Texture(Gdx.files.internal("data/5D.jpg"));
-		Texture CardSixDiamond = new Texture(Gdx.files.internal("data/6D.jpg"));
-		Texture CardSevenDiamond = new Texture(Gdx.files.internal("data/7D.jpg"));
-		Texture CardEightDiamond = new Texture(Gdx.files.internal("data/8D.jpg"));
-		Texture CardNineDiamond = new Texture(Gdx.files.internal("data/9D.jpg"));
-		Texture CardTenDiamond = new Texture(Gdx.files.internal("data/10D.jpg"));
-		Texture CardJackDiamond = new Texture(Gdx.files.internal("data/JD.jpg"));
-		Texture CardQueenDiamond = new Texture(Gdx.files.internal("data/QD.jpg"));
-		Texture CardKingDiamond = new Texture(Gdx.files.internal("data/KD.jpg"));
-		Texture CardAceDiamond = new Texture(Gdx.files.internal("data/AD.jpg"));
+		Texture D2 = new Texture(Gdx.files.internal("data/2D.jpg"));
+		Texture D3 = new Texture(Gdx.files.internal("data/3D.jpg"));
+		Texture D4 = new Texture(Gdx.files.internal("data/4D.jpg"));
+		Texture D5 = new Texture(Gdx.files.internal("data/5D.jpg"));
+		Texture D6 = new Texture(Gdx.files.internal("data/6D.jpg"));
+		Texture D7 = new Texture(Gdx.files.internal("data/7D.jpg"));
+		Texture D8 = new Texture(Gdx.files.internal("data/8D.jpg"));
+		Texture D9 = new Texture(Gdx.files.internal("data/9D.jpg"));
+		Texture D10 = new Texture(Gdx.files.internal("data/10D.jpg"));
+		Texture DJ = new Texture(Gdx.files.internal("data/JD.jpg"));
+		Texture DQ = new Texture(Gdx.files.internal("data/QD.jpg"));
+		Texture DK = new Texture(Gdx.files.internal("data/KD.jpg"));
+		Texture DA = new Texture(Gdx.files.internal("data/AD.jpg"));
 		
 		//dealer card layout
 		
-		Table dealercard1 = new Table();
-		Table dealercard2 = new Table();
-		Table dealercard3 = new Table();
-		Table dealercard4 = new Table();
-		Table dealercard5 = new Table();
-		stage.addActor(dealercard1);
-		stage.addActor(dealercard2);
-		stage.addActor(dealercard3);
-		stage.addActor(dealercard4);
-		stage.addActor(dealercard5);
-		dealercard1.setSize(56, 81);
-		dealercard2.setSize(56, 81);
-		dealercard3.setSize(56, 81);
-		dealercard4.setSize(56, 81);
-		dealercard5.setSize(56, 81);
-		dealercard1.setPosition(560, 515);
-		dealercard2.setPosition(585, 515);
-		dealercard3.setPosition(610, 515);
-		dealercard4.setPosition(635, 515);
-		dealercard5.setPosition(660, 515);
-		
-		TextureRegion dealercardsTexReg = new TextureRegion(CardQueenClub);
-		Image dealercardfinal = new Image(dealercardsTexReg);
-		Image dealercardfinal2 = new Image(dealercardsTexReg);
-		Image dealercardfinal3 = new Image(dealercardsTexReg);
-		Image dealercardfinal4 = new Image(dealercardsTexReg);
-		Image dealercardfinal5 = new Image(dealercardsTexReg);
-		dealercard1.add(dealercardfinal);
-		dealercard2.add(dealercardfinal2);
-		dealercard3.add(dealercardfinal3);
-		dealercard4.add(dealercardfinal4);
-		dealercard5.add(dealercardfinal5);
+		Table Tabdealercard1 = new Table();
+		Table Tabdealercard2 = new Table();
+		Table Tabdealercard3 = new Table();
+		Table Tabdealercard4 = new Table();
+		Table Tabdealercard5 = new Table();
+		stage.addActor(Tabdealercard1);
+		stage.addActor(Tabdealercard2);
+		stage.addActor(Tabdealercard3);
+		stage.addActor(Tabdealercard4);
+		stage.addActor(Tabdealercard5);
+		Tabdealercard1.setSize(56, 81);
+		Tabdealercard2.setSize(56, 81);
+		Tabdealercard3.setSize(56, 81);
+		Tabdealercard4.setSize(56, 81);
+		Tabdealercard5.setSize(56, 81);
+		Tabdealercard1.setPosition(560, 515);
+		Tabdealercard2.setPosition(585, 515);
+		Tabdealercard3.setPosition(610, 515);
+		Tabdealercard4.setPosition(635, 515);
+		Tabdealercard5.setPosition(660, 515);
 		
 		//player 1 card layout
 		
@@ -208,18 +196,6 @@ public class BlackjackClientTable implements Screen{
 		player1card4.setPosition(170, 385);
 		player1card5.setPosition(195, 385);
 		
-		TextureRegion player1cardsTexReg = new TextureRegion(CardQueenClub);
-		Image player1cardfinal = new Image(player1cardsTexReg);
-		Image player1cardfinal2 = new Image(player1cardsTexReg);
-		Image player1cardfinal3 = new Image(player1cardsTexReg);
-		Image player1cardfinal4 = new Image(player1cardsTexReg);
-		Image player1cardfinal5 = new Image(player1cardsTexReg);
-		player1card1.add(player1cardfinal);
-		player1card2.add(player1cardfinal2);
-		player1card3.add(player1cardfinal3);
-		player1card4.add(player1cardfinal4);
-		player1card5.add(player1cardfinal5);
-		
 		//player 2 card layout
 		
 		Table player2card1 = new Table();
@@ -242,18 +218,6 @@ public class BlackjackClientTable implements Screen{
 		player2card3.setPosition(375, 320);
 		player2card4.setPosition(400, 320);
 		player2card5.setPosition(425, 320);
-		
-		TextureRegion player2cardsTexReg = new TextureRegion(CardQueenClub);
-		Image player2cardfinal = new Image(player2cardsTexReg);
-		Image player2cardfinal2 = new Image(player2cardsTexReg);
-		Image player2cardfinal3 = new Image(player2cardsTexReg);
-		Image player2cardfinal4 = new Image(player2cardsTexReg);
-		Image player2cardfinal5 = new Image(player2cardsTexReg);
-		player2card1.add(player2cardfinal);
-		player2card2.add(player2cardfinal2);
-		player2card3.add(player2cardfinal3);
-		player2card4.add(player2cardfinal4);
-		player2card5.add(player2cardfinal5);
 		
 		//player 3 card layout
 		
@@ -278,18 +242,6 @@ public class BlackjackClientTable implements Screen{
 		player3card4.setPosition(640, 295);
 		player3card5.setPosition(665, 295);
 		
-		TextureRegion player3cardsTexReg = new TextureRegion(CardQueenClub);
-		Image player3cardfinal = new Image(player3cardsTexReg);
-		Image player3cardfinal2 = new Image(player3cardsTexReg);
-		Image player3cardfinal3 = new Image(player3cardsTexReg);
-		Image player3cardfinal4 = new Image(player3cardsTexReg);
-		Image player3cardfinal5 = new Image(player3cardsTexReg);
-		player3card1.add(player3cardfinal);
-		player3card2.add(player3cardfinal2);
-		player3card3.add(player3cardfinal3);
-		player3card4.add(player3cardfinal4);
-		player3card5.add(player3cardfinal5);
-		
 		//player 4 card layout
 		
 		Table player4card1 = new Table();
@@ -312,18 +264,6 @@ public class BlackjackClientTable implements Screen{
 		player4card3.setPosition(865, 330);
 		player4card4.setPosition(890, 330);
 		player4card5.setPosition(915, 330);
-		
-		TextureRegion player4cardsTexReg = new TextureRegion(CardQueenClub);
-		Image player4cardfinal = new Image(player4cardsTexReg);
-		Image player4cardfinal2 = new Image(player4cardsTexReg);
-		Image player4cardfinal3 = new Image(player4cardsTexReg);
-		Image player4cardfinal4 = new Image(player4cardsTexReg);
-		Image player4cardfinal5 = new Image(player4cardsTexReg);
-		player4card1.add(player4cardfinal);
-		player4card2.add(player4cardfinal2);
-		player4card3.add(player4cardfinal3);
-		player4card4.add(player4cardfinal4);
-		player4card5.add(player4cardfinal5);
 		
 		//player 5 card layout
 		
@@ -348,17 +288,20 @@ public class BlackjackClientTable implements Screen{
 		player5card4.setPosition(1130, 410);
 		player5card5.setPosition(1155, 410);
 		
-		TextureRegion player5cardsTexReg = new TextureRegion(CardQueenClub);
-		Image player5cardfinal = new Image(player5cardsTexReg);
-		Image player5cardfinal2 = new Image(player5cardsTexReg);
-		Image player5cardfinal3 = new Image(player5cardsTexReg);
-		Image player5cardfinal4 = new Image(player5cardsTexReg);
-		Image player5cardfinal5 = new Image(player5cardsTexReg);
-		player5card1.add(player5cardfinal);
-		player5card2.add(player5cardfinal2);
-		player5card3.add(player5cardfinal3);
-		player5card4.add(player5cardfinal4);
-		player5card5.add(player5cardfinal5);
+		//Apply cards to player
+		TextureRegion TexRegCard = new TextureRegion(DQ);
+		
+		Image Imgdealercard1 = new Image(TexRegCard);
+		Image Imgdealercard2 = new Image(TexRegCard);
+		Image Imgdealercard3 = new Image(TexRegCard);
+		Image Imgdealercard4 = new Image(TexRegCard);
+		Image Imgdealercard5 = new Image(TexRegCard);
+		
+		Tabdealercard1.add(Imgdealercard1);
+		Tabdealercard2.add(Imgdealercard2);
+		Tabdealercard3.add(Imgdealercard3);
+		Tabdealercard4.add(Imgdealercard4);
+		Tabdealercard5.add(Imgdealercard5);
 		
 		//-----------------------------------------------
 		//----------------BUTTONS------------------------

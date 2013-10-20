@@ -7,8 +7,12 @@ import java.util.Random;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
-import deco2800.arcade.breakout.GameScreen;
-
+import deco2800.arcade.breakout.screens.GameScreen;
+/**
+ * Keeps track of the powerups in use and manages them as the game continues
+ * @author Carlie Smits
+ *
+ */
 public class PowerupManager {
 
 	// Record the number of active of each powerup

@@ -33,7 +33,11 @@ public class CreditStorage {
 		try {
 			ResultSet tableData = connection.getMetaData().getTables(null,
 					null, "CREDITS", null);
-			if (!tableData.next()) {
+			if (tableData.next()) {
+				Statement statement = connection.createStatement();
+				statement.execute("DROP TABLE CREDITS");
+			} 
+			if (!tableData.next()){
 				Statement statement = connection.createStatement();
 				statement.execute("CREATE TABLE CREDITS(id INT PRIMARY KEY,"
 						+ "CREDITS INT NOT NULL)");

@@ -4,6 +4,10 @@ import java.awt.Point;
 
 import com.badlogic.gdx.graphics.Texture;
 
+/**
+ * @author li.tang
+ * This is the class for storing tile
+ */
 public class Tile {
 	
 	private int index;
@@ -30,7 +34,11 @@ public class Tile {
 	public int getCoorX(){return coordinate.x;}
 	public int getCoorY(){return coordinate.y;}
 	
-	// initialize the coordinate based on position index
+	/**
+	 * initialize the coordinate based on position index
+	 * @param index tile index
+	 * @return
+	 */
 	public Point iniCoordinate(int index) {
 		index = index - 1;
 		int y = (index / 10) * dimension ;

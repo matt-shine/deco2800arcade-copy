@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -41,7 +40,7 @@ public class StatusScreen extends JFrame{
 	private JButton savebutton;
 	private JButton cancelbutton;
 	
-	//Declare Images 
+	//Declare ImageIcons
 	private ImageIcon piconline, picoffline, picaway, picbusy, 
 	save, savehover, cancel, cancelhover;
 	
@@ -81,7 +80,7 @@ public class StatusScreen extends JFrame{
 	}
 	
 	/**
-	 *  Adds the title label
+	 *  Add Title label
 	 */
 	public void addtitlepanel(){
 

@@ -7,6 +7,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementClient;
 
@@ -19,10 +20,11 @@ public class WL6 extends GameClient {
     private NetworkClient networkClient;
     @SuppressWarnings("unused")
     private AchievementClient achievementClient;
-
-    MainGameScreen gameScreen;
-    MenuScreen menuScreen;
-    SplashScreen splashScreen;
+    private HighscoreClient highscoreClient = null;
+    
+    private MainGameScreen gameScreen;
+    private MenuScreen menuScreen;
+    private SplashScreen splashScreen;
 
     public static int MAP_DIM = 64;
 
@@ -30,6 +32,7 @@ public class WL6 extends GameClient {
         super(player, networkClient);
         this.networkClient = networkClient;
         this.achievementClient = new AchievementClient(networkClient);
+        //highscoreClient = new HighscoreClient(player.getUsername(), "Wolfenstein", networkClient);
     }
 
     /**
@@ -127,6 +130,18 @@ public class WL6 extends GameClient {
         return GAME;
     }
 
+    
+    public void goToMenu() {
+    	this.setScreen(menuScreen);
+    }
+    
+    
+    public void goToGame() {
+    	this.setScreen(gameScreen);
+    }
 
+    
+    
+    
 
 }

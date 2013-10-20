@@ -9,6 +9,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
+/**
+ * @author li.tang
+ */
 public class RuleMapping {
 	private String icon;
 	private String implementationClass;
@@ -32,6 +35,11 @@ public class RuleMapping {
 		this.implementationClass = implementationClass;
 	}
 	
+	/**
+	 * A util method to parse the xml configuration file 
+	 * @param file xml configuration file
+	 * @return a rule string to RuleMapping Object mapping
+	 */
 	public static HashMap<String,RuleMapping> iniRuleMapping(FileHandle file)
 	{
 		HashMap<String,RuleMapping> returnMap = new HashMap<String,RuleMapping>();

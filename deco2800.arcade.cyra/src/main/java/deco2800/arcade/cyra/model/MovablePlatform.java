@@ -29,6 +29,17 @@ public class MovablePlatform extends MovableEntity{
 		this(texture, pos, width, height, pos, speed, false, 0);
 	}
 	
+	/**
+	 * Constructor for new MoveablePlatform, requires a texture, position, width, height, targetPosition, speed, rebound and wait.
+	 * @param texture - Texture of MoveablePlatform
+	 * @param pos - Position of MoveablePlatform
+	 * @param width - Width of MoveablePlatform
+	 * @param height - Height of MoveablePlatform
+	 * @param targetPos - Target Position of MoveablePlatform
+	 * @param speed - Speed of MoveablePlatform
+	 * @param rebound - Rebound of MoveablePlatform
+	 * @param wait - Wait of MoveablePlatform
+	 */
 	public MovablePlatform(Texture texture, Vector2 pos, float width, float height, Vector2 targetPos, float speed, boolean rebound, float wait) {
 		super(speed, 0, pos, width, height);
 		this.texture = texture;
@@ -44,9 +55,17 @@ public class MovablePlatform extends MovableEntity{
 		firstFrameOfWait = true;
 	}
 	
+	/**
+	 * Gets the texture for the MoveablePlatform
+	 * @return Texture - texture
+	 */
 	public Texture getTexture() {
 		return texture;
 	}
+	/**
+	 * Checks if the MoveablePlatform is moving
+	 * @return boolean
+	 */
 	public boolean isMoving() {
 		if (positionDelta.x == 0 && positionDelta.y == 0) {
 			return false;
@@ -55,31 +74,69 @@ public class MovablePlatform extends MovableEntity{
 		}
 	}
 	
+	/**
+	 * Gets the rebound of the MoveablePlatform
+	 * @return boolean - rebound
+	 */
 	public boolean getRebound() {
 		return rebound;
 	}
 	
+	/**
+	 * Gets the wait of the MoveablePlatform
+	 * @return float - wait
+	 */
 	public float getWait() {
 		return wait;
 	}
+	
+	/**
+	 * Gets the targetPosition of the MoveablePlatform
+	 * @return targetPosition
+	 */
 	public Vector2 getTargetPosition() {
 		return targetPos;
 	}
+	
+	/**
+	 * Sets the targetPosition of the MoveablePlatform
+	 * @param targetPos
+	 */
 	public void setTargetPosition(Vector2 targetPos) {
 		this.targetPos = targetPos;
 	}
+	
+	/**
+	 * Resets the target position to pre-existing value
+	 */
 	public void setTargetPositionToPosition() {
 		targetPos = position;
 	}
+	
+	/**
+	 * Gets the collisionRectangle
+	 * @return Rectangle
+	 */
 	public Rectangle getCollisionRectangle() {
 		return collRect;
 	}
 	
+	/**
+	 * Gets the PositionDelta
+	 * @return positionDelta
+	 */
 	public Vector2 getPositionDelta() {
 		
 		return positionDelta;
 	}
 	
+	/**
+	 * Sets the Collision Rectangle
+	 * @param xOrigin
+	 * @param yOrigin
+	 * @param width
+	 * @param height
+	 */
 	public void setCollisionRectangle(float xOrigin, float yOrigin, float width, float height) {
 		collRect.set( new Rectangle(getPosition().x + xOrigin, getPosition().y + yOrigin,width,height) );
 		this.xOrigin = xOrigin;

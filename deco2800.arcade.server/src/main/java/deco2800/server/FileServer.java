@@ -6,6 +6,9 @@ import deco2800.arcade.protocol.packman.FetchGameResponse;
 import deco2800.arcade.protocol.BlockingMessage;
 import deco2800.server.ArcadeServer;
 import deco2800.arcade.packman.PackageServer;
+import deco2800.arcade.packman.PackageUtils;
+import deco2800.server.database.GamePath;
+import deco2800.server.database.DatabaseException;
 
 import java.lang.*;
 
@@ -30,26 +33,41 @@ public class FileServer implements Runnable {
 
     private Connection connection;
 
+    private GamePath gamePath;
+
     public FileServer(FetchGameRequest req, Connection connection) {
         this.req = req;
         this.connection = connection;
+        this.gamePath = new GamePath();
     }
 
     @Override
     public void run() {
         System.out.println("[Server]:  FetchGameRequest recieved");
 
+        String path = "";
+
         PackageServer packServ = ArcadeServer.instance().packServ();
         FetchGameResponse resp = new FetchGameResponse();
 
         // Build path
-        String path = req.gameID + "-" + req.version + ".tar.gz";
+        if (req.version == null) {
+            req.version = "1.0";
+        }
+
+        try {
+            path = gamePath.getPath(req.gameID);
+        } catch (DatabaseException e) {
+            System.out.println("Error fetching game path for " + req.gameID);
+            e.printStackTrace();
+        }
         path = BASE_PATH + "/" + path;
 
         resp.gameID = req.gameID;
         resp.version = req.version;
         resp.byteOffset = req.byteOffset;
         resp.blockSize = req.blockSize;
+        resp.md5 = PackageUtils.genMD5(path);
 
         // Read the file data
         try {

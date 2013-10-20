@@ -2,9 +2,9 @@ package deco2800.arcade.breakout;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 
 import deco2800.arcade.breakout.screens.GameScreen;
 /**
@@ -14,10 +14,7 @@ import deco2800.arcade.breakout.screens.GameScreen;
  */
 public class InProgressState extends GameState {
 
-	private Intersector intersect;
-	
 	public InProgressState() {
-		intersect = new Intersector();
 	}
 	
 	/**
@@ -87,7 +84,8 @@ public class InProgressState extends GameState {
 	 * @param context - the current game screen
 	 */
 	private void handlePowerupBallOtherCollision(GameScreen context) {
-		if (overlap(context.getPowerupBall().ballCirc, context.getPaddle().paddleShape)
+		if (overlap(context.getPowerupBall().getBallCirc(), context.getPaddle().
+				getPaddleShape())
 				&& context.getPowerupBall().getYVelocity() < 0) {
 			context.getPowerupBall().updateVelocity(context.getLastHitX(), 
 					context.getLastHitY(), context.getPaddle());
@@ -97,25 +95,28 @@ public class InProgressState extends GameState {
 
 		}
 
-		if (context.getPowerupBall().ballCirc.y >= context.SCREENHEIGHT - 2*context.getPowerupBall().getRadius()) {
+		if (context.getPowerupBall().getY() >= GameScreen.SCREENHEIGHT - 
+				2*context.getPowerupBall().getRadius()) {
 			context.setLastHitX(context.getPowerupBall().getX());
 			context.setLastHitY(context.getPowerupBall().getY());
 			context.getPowerupBall().bounceY(-5);
 		}
 
-		if (context.getPowerupBall().ballCirc.x - context.getPowerupBall().getRadius() <= 0) {
+		if (context.getPowerupBall().getX() - context.getPowerupBall().
+				getRadius() <= 0) {
 			context.setLastHitX(context.getPowerupBall().getX());
 			context.setLastHitY(context.getPowerupBall().getY());
 			context.getPowerupBall().bounceX(5);
 		}
 		
-		if (context.getPowerupBall().ballCirc.x + context.getPowerupBall().getRadius() > context.SCREENWIDTH) {
+		if (context.getPowerupBall().getX() + context.getPowerupBall().
+				getRadius() > GameScreen.SCREENWIDTH) {
 			context.setLastHitX(context.getPowerupBall().getX());
 			context.setLastHitY(context.getPowerupBall().getY());
 			context.getPowerupBall().bounceX(-5);
 		}
 
-		if (context.getPowerupBall().ballCirc.y <= 0) {
+		if (context.getPowerupBall().getY() <= 0) {
 			context.destroyPowerupBall();
 			if (context.getNumBalls() <= 0) {
 				context.roundOver();
@@ -135,30 +136,36 @@ public class InProgressState extends GameState {
 	private void handlePowerupBallBrickCollision(GameScreen context) {
 		for (Brick b : context.getBrickArray()) {
 			if (b.getState()) {
-				if (b.checkLeftCollision(context.getPowerupBall().ballCirc)) {
+				if (b.checkLeftCollision(context.getPowerupBall().
+						getBallCirc())) {
 					b.setState(false);
-					if (Math.abs(context.getPowerupBall().getXVelocity()) < 80) {
+					if (Math.abs(context.getPowerupBall().getXVelocity()) < 
+							80) {
 						context.updateGameState(2, b, true);
 						break;
 					}
 					context.updateGameState(0, b, true);
 					break;
 				}
-				if (b.checkRightCollision(context.getPowerupBall().ballCirc)) {
+				if (b.checkRightCollision(context.getPowerupBall().
+						getBallCirc())) {
 					b.setState(false);
-					if (Math.abs(context.getPowerupBall().getXVelocity()) < 80) {
+					if (Math.abs(context.getPowerupBall().getXVelocity()) < 
+							80) {
 						context.updateGameState(2, b, true);
 						break;
 					}
 					context.updateGameState(0, b, true);
 					break;
 				}
-				if (b.checkTopCollision(context.getPowerupBall().ballCirc)) {
+				if (b.checkTopCollision(context.getPowerupBall().
+						getBallCirc())) {
 					b.setState(false);
 					context.updateGameState(1, b, true);
 					break;
 				}
-				if (b.checkBottomCollision(context.getPowerupBall().ballCirc)) {
+				if (b.checkBottomCollision(context.getPowerupBall().
+						getBallCirc())) {
 					b.setState(false);
 					context.updateGameState(1, b, true);
 					break;
@@ -173,30 +180,34 @@ public class InProgressState extends GameState {
 	 * @param context - the current game screen
 	 */
 	private void handleOtherCollision(GameScreen context) {
-		if (overlap(context.getBall().ballCirc, context.getPaddle().paddleShape)
+		if (overlap(context.getBall().getBallCirc(), context.getPaddle().
+				getPaddleShape())
 				&& context.getBall().getYVelocity() < 0) {
-			context.getBall().updateVelocity(context.getLastHitX(), context.getLastHitY(), context.getPaddle());
+			context.getBall().updateVelocity(context.getLastHitX(), context.
+					getLastHitY(), context.getPaddle());
 			context.bump.play();
 			context.incrementBumpCount();
 			context.getBall().bounceY(0);
 		}
 
-		if (context.getBall().ballCirc.y >= context.SCREENHEIGHT - 2*context.getBall().getRadius()) {
+		if (context.getBall().getY() >= GameScreen.SCREENHEIGHT - 
+				2*context.getBall().getRadius()) {
 			context.setLastHitX(context.getBall().getX());
 			context.setLastHitY(context.getBall().getY());
 			context.getBall().bounceY(-5);
 		}
-		if (context.getBall().ballCirc.x - context.getBall().getRadius() <= 0) {
+		if (context.getBall().getX() - context.getBall().getRadius() <= 0) {
 			context.setLastHitX(context.getBall().getX());
 			context.setLastHitY(context.getBall().getY());
 			context.getBall().bounceX(5);
 		}
-		if (context.getBall().ballCirc.x + context.getBall().getRadius() > context.SCREENWIDTH) {
+		if (context.getBall().getX() + context.getBall().getRadius() > 
+		GameScreen.SCREENWIDTH) {
 			context.setLastHitX(context.getBall().getX());
 			context.setLastHitY(context.getBall().getY());
 			context.getBall().bounceX(-5);
 		}
-		if (context.getBall().ballCirc.y <= 0) {
+		if (context.getBall().getY() <= 0) {
 			context.setNumBalls(context.getNumBalls() - 1);
 			context.destroyBall();
 			if (context.getNumBalls() <= 0) {
@@ -215,7 +226,8 @@ public class InProgressState extends GameState {
 	 * @param context - the current game screen
 	 */
 	public void handlePowerupCollision(GameScreen context) {
-		context.getPowerupManager().checkCollision(context.getPaddle().paddleShape);
+		context.getPowerupManager().checkCollision(context.getPaddle().
+				getPaddleShape());
 		context.getPowerupManager().checkBelowScreen();
 	}
 	
@@ -227,7 +239,7 @@ public class InProgressState extends GameState {
 	public void handleBrickCollision(GameScreen context) {
 		for (Brick b : context.getBrickArray()) {
 			if (b.getState()) {
-				if (b.checkLeftCollision(context.getBall().ballCirc)) {
+				if (b.checkLeftCollision(context.getBall().getBallCirc())) {
 					b.setState(false);
 					if (Math.abs(context.getBall().getXVelocity()) < 80) {
 						context.updateGameState(2, b, false);
@@ -236,7 +248,7 @@ public class InProgressState extends GameState {
 					context.updateGameState(0, b, false);
 					break;
 				}
-				if (b.checkRightCollision(context.getBall().ballCirc)) {
+				if (b.checkRightCollision(context.getBall().getBallCirc())) {
 					b.setState(false);
 					if (Math.abs(context.getBall().getXVelocity()) < 80) {
 						context.updateGameState(2, b, false);
@@ -245,12 +257,12 @@ public class InProgressState extends GameState {
 					context.updateGameState(0, b, false);
 					break;
 				}
-				if (b.checkTopCollision(context.getBall().ballCirc)) {
+				if (b.checkTopCollision(context.getBall().getBallCirc())) {
 					b.setState(false);
 					context.updateGameState(1, b, false);
 					break;
 				}
-				if (b.checkBottomCollision(context.getBall().ballCirc)) {
+				if (b.checkBottomCollision(context.getBall().getBallCirc())) {
 					b.setState(false);
 					context.updateGameState(1, b, false);
 					break;

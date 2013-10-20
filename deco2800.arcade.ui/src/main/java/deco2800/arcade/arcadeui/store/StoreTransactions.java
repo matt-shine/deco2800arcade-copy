@@ -45,15 +45,21 @@ public class StoreTransactions implements Screen, StoreScreen {
 		player = user;
 		arcadeUI = ui;
 		
-		final Table bg = new Table();
-		final Button homeButton = new Button(skin, "home");
-		final Label title = new Label("Buy More Coins", skin, "default-34");
-		final Button searchButton = new Button(skin, "search");
+		Table bg = new Table();
+		Button homeButton = new Button(skin, "home");
+		Label title = new Label("Buy More Coins", skin, "default-34");
+		Button searchButton = new Button(skin, "search");
 		final TextField searchField = new TextField("", skin);
 		final Label searchResult = new Label("", skin);
-		final Label balanceNumber = new Label(balance + "", skin, "current-coins");
-		final Label balanceTitle = new Label("Current Balance", skin, "default-28");
-		final TextButton wishlistButton = new TextButton("Wishlist", skin);
+		Label balanceNumber = new Label(balance + "", skin, "current-coins");
+		Label balanceTitle = new Label("Current Balance", skin, "default-28");
+		TextButton wishlistButton = new TextButton("Wishlist", skin);
+		
+		skin.add("blue_frame", new Texture(Gdx.files.internal("store/blue_frame.png")));
+		Button greyOverlay = new Button(skin, "black"); // grey shadow for popup
+		Button popupBox = new Button(skin, "white"); // popup container
+		// Creates, but doesn't show, the transactions popup.
+		Utilities.generatePopup(greyOverlay, popupBox, skin);
 		
 		// The background for the store.
 		skin.add("background", new Texture(
@@ -107,7 +113,7 @@ public class StoreTransactions implements Screen, StoreScreen {
 		
 		// Adds the images of the different coins, the text and buttons beside
 		// them, and the listeners for the buttons.
-		addCoins();
+		addCoins(greyOverlay, popupBox);
 		
 		// Top right Home button and listener.
 		homeButton.addListener(new ChangeListener() {
@@ -121,7 +127,7 @@ public class StoreTransactions implements Screen, StoreScreen {
 		searchField.setTextFieldListener(new TextFieldListener() {
 			public void keyTyped(TextField textField, char key) {
 				// Run search whenever a key is typed.
-				Game result = Utilities.helper.search(searchField.getText());
+				Game result = Utilities.search(searchField.getText());
 				// No results if search returns null.
 				if (result == null) {
 					searchResult.setText("No results.");
@@ -137,7 +143,7 @@ public class StoreTransactions implements Screen, StoreScreen {
 			public void changed(ChangeEvent event, Actor actor) {
 				try {
 					// Attempt to search for whatever is in the field.
-					Game result = Utilities.helper.search(searchField.getText());
+					Game result = Utilities.search(searchField.getText());
 					if (result == null) {
 						searchResult.setText("No results."); // Bad text
 						return;
@@ -164,38 +170,38 @@ public class StoreTransactions implements Screen, StoreScreen {
 	 * as well as the listener for the buy button.
 	 * @author Addison Gourluck
 	 */
-	private void addCoins() {
+	private void addCoins(final Button greyOverlay, final Button popupBox) {
 		int i = 0;
 		for (int check : Arrays.asList(5, 10, 20, 50, 100)) {
 			skin.add("coin" + check, new Texture(
 					Gdx.files.internal("store/coin_" + check + ".png")));
 			
 			// Buy options icons.
-			final Table coins = new Table();
+			Table coins = new Table();
 			coins.setBackground(skin.getDrawable("coin" + check));
 			coins.setSize(57, 39);
 			coins.setPosition(130, 390 - (i * 80));
 			stage.addActor(coins);
 			
 			// Buy options text.
-			final Label buyText = new Label("", skin, "default-26");
+			Label buyText = new Label("", skin, "default-26");
 			if (check == 5) {
-				buyText.setText("Booster Pack [5 coins]");
+				buyText.setText("Booster Pack [10 coins]");
 			} else if (check == 10) {
-				buyText.setText("Super Pack [10 coins]");
+				buyText.setText("Super Pack [20 coins]");
 			} else if (check == 20) {
-				buyText.setText("Mega Pack [20 coins]");
+				buyText.setText("Mega Pack [50 coins]");
 			} else if (check == 50) {
-				buyText.setText("Ultra Pack [50 coins]");
+				buyText.setText("Ultra Pack [100 coins]");
 			} else {
-				buyText.setText("Ultimate Pack [100 coins]");
+				buyText.setText("Ultimate Pack [500 coins]");
 			}
 			buyText.setSize(149, 62);
 			buyText.setPosition(200, 379 - (i * 80));
 			stage.addActor(buyText);
 			
 			// Buy options 'Buy' buttons.
-			final Button buyButton = new Button(skin, "buy");
+			Button buyButton = new Button(skin, "buy");
 			buyButton.setSize(149, 62);
 			buyButton.setPosition(620, 377 - (i * 80));
 			buyButton.setName(check + "");
@@ -204,10 +210,8 @@ public class StoreTransactions implements Screen, StoreScreen {
 			// Buy button Listener, which will buy tokens for user on click.
 			buyButton.addListener(new ChangeListener() {
 				public void changed(ChangeEvent event, Actor actor) {
-					System.out.println("buying "
-							+ Integer.parseInt(actor.getName()));
-					buyTokens(Integer.parseInt(actor.getName()));
-					// not yet implemented^
+					stage.addActor(greyOverlay);
+					stage.addActor(popupBox);
 				}
 			});
 			i++;

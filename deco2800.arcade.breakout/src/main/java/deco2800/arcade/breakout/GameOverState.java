@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
 import deco2800.arcade.breakout.screens.GameScreen;
-import deco2800.arcade.client.ArcadeSystem;
 /**
  * Handles when the game is over
  * @author Carlie Smits and Naveen Kumar
@@ -19,7 +18,7 @@ public class GameOverState extends GameState {
 	public void handleState(GameScreen context) {
 		if (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Keys.SPACE)) {
 			context.dispose();
-			context.bumpCount++;
+			context.incrementBumpCount();
 			context.setMenuScreen();
 			//ArcadeSystem.goToGame(ArcadeSystem.UI);
 		}

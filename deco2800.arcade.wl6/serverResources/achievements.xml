@@ -1,7 +1,61 @@
 <achievements>
-	<achievement id="wl6.winLevel1">
+	<achievement id="wolf.wine1l1">
 		  <name>Win The First Floor</name>
 		  <description>Reach the elavator on the first floor.</description>
+		  <awardThreshold>1</awardThreshold>
+		  <icon>wl6.winLevel1.png</icon>
+	</achievement>
+	<achievement id="wolf.wine1l2">
+		  <name>Win The First Floor</name>
+		  <description>Reach the elavator on the second floor.</description>
+		  <awardThreshold>1</awardThreshold>
+		  <icon>wl6.winLevel1.png</icon>
+	</achievement>
+	<achievement id="wolf.wine1l3">
+		  <name>Win The First Floor</name>
+		  <description>Reach the elavator on the third floor.</description>
+		  <awardThreshold>1</awardThreshold>
+		  <icon>wl6.winLevel1.png</icon>
+	</achievement>
+	<achievement id="wolf.wine1l4">
+		  <name>Win The First Floor</name>
+		  <description>Reach the elavator on the fourth floor.</description>
+		  <awardThreshold>1</awardThreshold>
+		  <icon>wl6.winLevel1.png</icon>
+	</achievement>
+	<achievement id="wolf.wine1l5">
+		  <name>Win The First Floor</name>
+		  <description>Reach the elavator on the fifth floor.</description>
+		  <awardThreshold>1</awardThreshold>
+		  <icon>wl6.winLevel1.png</icon>
+	</achievement>
+	<achievement id="wolf.wine1l6">
+		  <name>Win The First Floor</name>
+		  <description>Reach the elavator on the sixth floor.</description>
+		  <awardThreshold>1</awardThreshold>
+		  <icon>wl6.winLevel1.png</icon>
+	</achievement>
+	<achievement id="wolf.wine1l7">
+		  <name>Win The First Floor</name>
+		  <description>Reach the elavator on the seventh floor.</description>
+		  <awardThreshold>1</awardThreshold>
+		  <icon>wl6.winLevel1.png</icon>
+	</achievement>
+	<achievement id="wolf.wine1l8">
+		  <name>Win The First Floor</name>
+		  <description>Reach the elavator on the eighth floor.</description>
+		  <awardThreshold>1</awardThreshold>
+		  <icon>wl6.winLevel1.png</icon>
+	</achievement>
+	<achievement id="wolf.wine1boss">
+		  <name>Win The First Floor</name>
+		  <description>Reach the elavator on the first boss floor.</description>
+		  <awardThreshold>1</awardThreshold>
+		  <icon>wl6.winLevel1.png</icon>
+	</achievement>
+	<achievement id="wolf.wine1secret">
+		  <name>Win The First Floor</name>
+		  <description>Reach the elavator on the first secret floor.</description>
 		  <awardThreshold>1</awardThreshold>
 		  <icon>wl6.winLevel1.png</icon>
 	</achievement>

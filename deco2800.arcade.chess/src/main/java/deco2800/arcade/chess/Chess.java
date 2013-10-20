@@ -393,17 +393,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		movePieceGraphic();
 		drawButton();
 	}
-<<<<<<< HEAD
-	
-	/*public void resize(int arg0, int arg1) {
-	}*/
-=======
-
-	@Override
-	public void resize(int arg0, int arg1) {
-		super.resize(arg0, arg1);
-	}
->>>>>>> fdb01323596cf636f60391ab097f999985e205be
 
 	@Override
 	public void resume() {

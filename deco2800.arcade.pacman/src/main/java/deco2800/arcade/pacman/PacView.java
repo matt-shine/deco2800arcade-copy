@@ -80,7 +80,7 @@ public class PacView {
 				ghostFrames[i][j] = tmp[0][j];
 			}			
 		}
-		scoreText = new BitmapFont(Gdx.files.internal("pacfont2.fnt"), // MEMORY HOG
+		scoreText = new BitmapFont(Gdx.files.internal("pacfont2.fnt"),
 		         Gdx.files.internal("pacfont2.png"), false);
 		this.gameMap = model.getGameMap();
 		this.player = model.getPlayer();

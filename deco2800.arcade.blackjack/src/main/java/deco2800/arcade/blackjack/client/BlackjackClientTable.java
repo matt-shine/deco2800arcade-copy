@@ -73,9 +73,21 @@ public class BlackjackClientTable implements Screen{
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
         Table table = new Table();
-        Table table2 = new Table();
         stage.addActor(table);
-
+        table.setSize(162, 113);
+		table.setPosition(25, 580);
+		
+		Texture texturePlacard10250 = new Texture(Gdx.files.internal("data/BetPlac10250.png"));
+		Texture texturePlacard1100 = new Texture(Gdx.files.internal("data/BetPlac1100.png"));
+		Texture texturePlacard150 = new Texture(Gdx.files.internal("data/BetPlac150.png"));
+		Texture texturePlacard25NL = new Texture(Gdx.files.internal("data/BetPlac25NL.png"));
+		Texture texturePlacard5100 = new Texture(Gdx.files.internal("data/BetPlac5100.png"));
+		
+		TextureRegion imagePlacard = new TextureRegion(texturePlacard10250);
+		
+		Image placard = new Image(imagePlacard);
+		table.add(placard);
+		
     }
  
     @Override

@@ -31,6 +31,7 @@ public class AccoladeSystem {
 	//TODO set this to true when server communications is working
 	private boolean online = false; 
 	
+	
 	//when progress%popup = 0 a popup is overlayed on screen
 	private static final int PROGRESS = 0;
 	private static final int POPUP=1;

@@ -45,6 +45,23 @@ public class PlayerDatabaseManager {
 			// TODO Error catch?
 		}
 	}
+    /**
+	 * Updates the players library to that provided.
+	 *
+	 * @param playerID
+	 *            The Player's playerID.
+	 * @param style
+	 *            The player's library style.
+	 * @require Username is valid, that is it obeys all restrictions imposed by
+	 *          the Player class. Player with playerID exists.
+	 */
+	public void updateStyle(int playerID, int style) {
+		try {
+			playerStorage.updateStyle(playerID, style);
+		} catch (DatabaseException e) {
+			// TODO Error catch?
+		}
+	}
 
 	/**
 	 * Updates the players bio to that provided.
@@ -378,6 +395,7 @@ public class PlayerDatabaseManager {
 		List<Integer> blocked = friendStorage.getBlockedList(playerID);
 		List<Integer> privacyData = playerPrivacy.getPlayerData(playerID);
 		Set<String> gameData = playerGameStorage.getPlayerGames(playerID);
+        int style = playerStorage.getStyle(playerID);
 
 		Set<User> friendsSet = new HashSet<User>();
 		Set<User> invitesSet = new HashSet<User>();
@@ -412,6 +430,7 @@ public class PlayerDatabaseManager {
 
 		Player player = new Player(playerID, null, playerData, friendsSet,
 				invitesSet, blockedSet, gameSet, privacy);
+        player.setLibraryStyle(style);
 
 		return player;
 	}

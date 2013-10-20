@@ -713,18 +713,17 @@ public class Player extends User {
 		clearChanged();
 	}
 
-	/**
-	 * Update Player's library colour
-	 * 
-	 * @param colour
-	 *            Colour Scheme
+    /**
+	 * Update Player's library style
+	 *
+	 * @param style
+	 *            Library Style
 	 */
-	public void updateLibraryColour(int colour) {
-		libraryStyle.setColourScheme(colour);
-		setChanged();
-		notifyObservers(libraryStyle);
-		clearChanged();
+	public void setLibraryStyle(int style) {
+		libraryStyle.setLayout(style);
 	}
+
+
 
 	/**
 	 * Get Player's Library Style

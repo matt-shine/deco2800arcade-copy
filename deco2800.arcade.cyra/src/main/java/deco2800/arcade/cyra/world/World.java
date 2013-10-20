@@ -130,7 +130,6 @@ public class World {
 		ship.update(ship);		
 		//if (sword.inProgress()) sword.update(ship);
 		sword.update(ship);
-		//System.out.println("State after ship = "+ship.getState());
 		spawnEnemies();
 		spawnMovablePlatforms();
 
@@ -185,7 +184,6 @@ public class World {
 			updateCamera();
 			if( ship.getHearts() == 0 || ship.getPosition().y < -3) {
 				ship.setHasDied();
-				System.out.println("SHIP IN BAD POSITION!!!! hearts="+ship.getHearts()+" ship.getPosition().y"+ship.getPosition().y);
 				inputHandler.cancelInput();
 				count -= Gdx.graphics.getDeltaTime();
 				if (count <= 0) {
@@ -251,7 +249,6 @@ public class World {
 	/* ----- Object handlers ----- */	
 	private void checkTileCollision(MovableEntity mve) {
 		
-		//System.out.println("Checking the mve: "+ mve.getClass()+ " at ("+mve.getPosition().x+","+mve.getPosition().y+")");
 		/* MovablePlatform code */
 		boolean onMovable = false;
 		MovablePlatform onPlat = null;
@@ -260,11 +257,9 @@ public class World {
 		sRec = mve.getProjectionRect();
 		for (MovablePlatform mp: movablePlatforms) {
 			
-			//System.out.println("sRec: "+sRec.x+","+sRec.y+","+sRec.width+","+sRec.height+" mp: "+mp.getCollisionRectangle().x+","+mp.getCollisionRectangle().y+","+mp.getCollisionRectangle().width+","+mp.getCollisionRectangle().height);
 			if (sRec.overlaps(mp.getCollisionRectangle())) {
 				onMovable = true;
 				onPlat = mp;
-				//System.out.println("moving ship");
 				mve.getPosition().add(mp.getPositionDelta());
 				//ship.getVelocity().add(mp.getPositionDelta());
 				//ship.getPosition().y -= Ship.GRAVITY * Gdx.graphics.getDeltaTime();
@@ -272,7 +267,6 @@ public class World {
 				// Stop falling through the floor when going up if on the top of platform
 				float top = mp.getPosition().y + mp.getCollisionRectangle().height;
 				if (mve.getPosition().y < top + 24/32f && mve.getPosition().y > top - 24/32f) {
-					//System.out.println("****Fixing position on platform*****. Top: "+top+" Ship ypos: "+ship.getPosition().y);
 					mve.handleTopOfMovingPlatform(mp);
 					
 					//onMovable = true;
@@ -314,30 +308,17 @@ public class World {
 
 		for (float i = mve.getPosition().x - checkX; i < mve.getPosition().x + 1+ mve.getWidth() + checkX; i++) {
 			for (float j = mve.getPosition().y - checkY; j < mve.getPosition().y + mve.getHeight() + checkY; j++) {
-				//System.out.println("chcking cell at " + (int)i + "," + (int)j + " and collisionlayer is " + collisionLayer);
-		
-				//Cell cell = collisionLayer.getCell((int) i, (int) j);
+				
+				
 				
 				int xLength = collisionLayer.tiles[0].length;
 				int yLength = collisionLayer.tiles.length;
-				//int yLength = 59; //obviously this is wrong I just need to get this working
+				
 				if (i < xLength && i > 0 && j < yLength && j > 0) { 
 					int cell = collisionLayer.tiles[yLength-((int)j)-1][(int)i];
 					
-					//System.out.println("Cell ("+(int)i+","+(int)j+") test: "+cell + "  Mve = "+mve.getClass());
-					/*if (cell != null) {
-						//System.out.println("found cell at " + (int)i + "," + (int)j);
-						//System.out.println("floats were " + i +"," + j);
-						//System.out.println("i range: " + (ship.getPosition().x-checkX) +" to "+(ship.getPosition().x+ship.getWidth()+checkX));
-						//System.out.println("j range: " + (ship.getPosition().y-checkY)+" to "+(ship.getPosition().y+ship.getHeight()+checkY));
-						Rectangle rect = new Rectangle((int)i, (int)j, 1, 1);
-						tiles.add(rect);
-					}*/
-					//String type = map.getTileProperty(cell, "checkCollision");
-					//System.out.println(type);
-					//if (type != null && type.equals("solid")) {
+					
 					if (cell != 0) {
-						//System.out.println("I'm colliding with ("+(int)i+","+(int)j+")");
 						Rectangle rect = new Rectangle((int)i, (int)j, 1, 1);
 						tiles.add(rect);
 					}
@@ -361,16 +342,9 @@ public class World {
 		}
 
 		sRec = mve.getXProjectionRect();
-		//System.out.println("XProjectionRec="+sRec);
-		//System.out.println("Number of tiles checking: "+tiles.size);
 		for (Rectangle tile: tiles) {
 			if (sRec.overlaps(tile)) {
-			//if (ship.getBounds().overlaps(tile)) {
-				//ship.getVelocity().x = 0;
-				//System.out.println("Get knocked back from "+ship.getPosition().x + " by " + ship.getVelocity().x);
-				/*ship.getPosition().x -= ship.getVelocity().scl(Gdx.graphics.getDeltaTime()).x;
-				ship.getVelocity().scl(1/Gdx.graphics.getDeltaTime());*/
-				//System.out.println("@@@@@@@@@@@@@@@@X-Collision with tile at "+tile.x+", "+tile.y+ "   (w,h): "+tile.width+","+tile.height+"    @@@@@@@@@@@@@@");
+				
 				mve.handleXCollision(tile);
 				
 				
@@ -379,16 +353,11 @@ public class World {
 		}
 		
 		sRec = mve.getYProjectionRect();
-		//System.out.println("YProjectionRec="+sRec);
 		boolean tileUnderMve = false;
 		for (Rectangle tile:tiles) {
 			if (sRec.overlaps(tile)) {
-				//System.out.println("Y-Collision with tile at "+tile.x+", "+tile.y+ "   (w,h): "+tile.width+","+tile.height);
-				//to the bottom of player
 				mve.handleYCollision(tile, onMovable, onPlat);
 				
-					//ship.getVelocity().y = 0;
-					//System.out.println("after y state="+ship.getState());
 					tileUnderMve = true;
 					
 				
@@ -397,8 +366,7 @@ public class World {
 		if (!tileUnderMve) {
 			mve.handleNoTileUnderneath();
 		}
-		//System.out.println("after both state="+ship.getState());
-		//ship.update(ship);
+		
 		
 		
 		
@@ -463,28 +431,11 @@ public class World {
 			//Check if spawner is in the range of 2 blocks out of viewport. NOT USING VIEWPORT ATM> SHOULD PROBS CHAGNE
 			
 			if (s.increment()) {
-				//System.out.println("Ready to spawn. Sxy:"+s.getPosition().x+","+s.getPosition().y+" Shipxy"+ship.getPosition().x+","+ship.getPosition().y);
+				
 				Vector2 spp = s.getPosition();
-				//Vector2 shp = ship.getPosition();
 				float camX = cam.position.x;
 				float camY = cam.position.y;
-				/*if ((spp.x < shp.x + 7f && spp.x > shp.x + 6f)||
-						(spp.x > shp.x - 7f && spp.x < shp.x - 6f)||
-						(spp.y > shp.y -4f && spp.y < shp.y -3.5f)||
-						(spp.y < shp.y+4f && spp.y > shp.y+3.5f)) {
-					
-					enemies.add(s.spawnNew());
-				}*/
-				/*if (
-						(((spp.x < shp.x + 7f && spp.x > shp.x + 6f && ship.getVelocity().x>0)||
-						(spp.x > shp.x - 7f && spp.x < shp.x - 6f &&ship.getVelocity().x<0)) &&
-						(spp.y > shp.y -3.5f && spp.y < shp.y + 3.5f)) ||
-						
-						(((spp.y > shp.y -4f && spp.y < shp.y -3.5f && ship.getVelocity().y<0)||
-						(spp.y < shp.y+4f && spp.y > shp.y+3.5f && ship.getVelocity().y>0)) &&
-						(spp.x > shp.x - 6f && spp.x <shp.x + 6f)) 
-						
-						) {*/
+				
 				if (
 						(((spp.x > camX + cam.viewportWidth/2 && spp.x < camX + cam.viewportWidth/2+1f && ship.getVelocity().x > 0) ||
 						(spp.x > camX - cam.viewportWidth/2 - 1f && spp.x < camX - cam.viewportWidth/2 && ship.getVelocity().x < 0)) &&
@@ -494,7 +445,6 @@ public class World {
 						(spp.y > camY - cam.viewportHeight/2 - 1f && spp.y < camY - cam.viewportHeight/2 && ship.getVelocity().y < 0)) &&
 						(spp.x >camX - cam.viewportWidth/2 && spp.x < camX + cam.viewportWidth/2))
 						) {
-					//System.out.println("Spawn! Sxy:"+s.getPosition().x+","+s.getPosition().y+" Shipxy"+ship.getPosition().x+","+ship.getPosition().y);
 					enemies.add(s.spawnNew());
 				}
 			}
@@ -538,14 +488,12 @@ public class World {
 				Array<Enemy> newEnemies = e.advance(Gdx.graphics.getDeltaTime(), ship, rank, cam);
 				
 				if (e.isDead()) {			
-					//System.out.println("removing " + e.getClass()+ " because dead");
 					score += e.getScore();
 					eItr.remove();
 					//Enemy is dead - achievement
 					if (e.getClass() == SoldierEnemy.class) {
 						game.incrementAchievement("cyra.slayer");
 					}
-					//System.out.println("removed enemy");
 					for (EnemySpawner spns: curLevel.getEnemySpawners() ) {
 						spns.removeEnemy(e);
 					}
@@ -570,7 +518,6 @@ public class World {
 			
 			/* Sword collisions */
 			if (e.getVulnerableBounds().overlaps(sword.getBounds())) {
-				//System.out.println("C");
 				boolean fromRight = false;
 				if (e.getPosition().x < sword.getPosition().x+sword.getWidth()/2) {
 					fromRight = true;
@@ -578,7 +525,7 @@ public class World {
 				e.handleDamage(fromRight);
 				
 				
-				//System.out.println("cleaned arrays");
+				
 				
 			} 
 
@@ -586,7 +533,6 @@ public class World {
 			//Remove enemies too far outside of camera view
 			if (e.getPosition().x > cam.position.x + cam.viewportWidth * 1.5 ||
 					e.getPosition().x < cam.position.x - cam.viewportWidth * 1.5) {
-				System.out.println("removing " + e.getClass()+ " because too far from x position");
 				eItr.remove();
 				for (EnemySpawner spns: curLevel.getEnemySpawners() ) {
 					spns.removeEnemy(e);
@@ -630,13 +576,10 @@ public class World {
 			}
 			if((ship.getPosition().y > cam.viewportHeight/2 && ship.getPosition().y + cam.viewportHeight/2< WORLD_HEIGHT) || 
 					(cam.position.y > cam.viewportHeight/2 && cam.position.y + cam.viewportHeight/2< WORLD_HEIGHT)) {
-			//if(cam.position.y > cam.viewportHeight/2 && cam.position.y + cam.viewportHeight/2< WORLD_HEIGHT) {
+			
 				float lerp = 0.035f;
 				cam.position.y += (ship.getPosition().y - cam.position.y) * lerp;
-			} /*else {
-				cam.position.y = (cam.viewportHeight/2);
-				System.out.println("posY "+cam.position.y+" viewportHeight="+cam.viewportHeight);
-			}*/
+			} 
 		} else {
 			//ensure ship stays within camera bounds
 			if (ship.getPosition().x < cam.position.x - cam.viewportWidth/2) {
@@ -684,13 +627,10 @@ public class World {
 		Array<Object> temp = levelScenes.start(scenePosition, rank, (int)time);
 		for (Object obj: temp) {
 			if (obj.getClass() == MovablePlatform.class) {
-				System.out.println("that was a new movable platform!");
 				movablePlatforms.add( (MovablePlatform) obj );
 			} else if (obj.getClass() == MovablePlatformAttachment.class) {
-				System.out.println("that was a new movable platform attachment!");
 				movablePlatforms.add( (MovablePlatformAttachment) obj );
 			} else if (obj instanceof BlockMaker) {
-				System.out.println("adding blockmaker");
 				blockMakers.add( (BlockMaker) obj);
 			} else if (obj instanceof Enemy) {
 				enemies.add( (Enemy) obj);

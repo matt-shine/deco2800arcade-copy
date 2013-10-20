@@ -81,7 +81,6 @@ public class Level2Scenes extends LevelScenes {
 		closeNextUpdate = false;
 		Array<Object> output = new Array<Object>();
 		
-		System.out.println("***********************Starting scene " + scenePosition+"******************");
 		
 		if (scenePosition == 0) {
 			ship.getVelocity().x = 0;
@@ -175,7 +174,6 @@ public class Level2Scenes extends LevelScenes {
 
 	@Override
 	public boolean update(float delta) {
-		System.out.println("playing "+scenePosition);
 		if (scenePosition == 0) {
 			volume -= delta;
 			if (volume >0) {

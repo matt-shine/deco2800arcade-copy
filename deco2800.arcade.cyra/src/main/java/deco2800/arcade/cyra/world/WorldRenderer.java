@@ -161,7 +161,7 @@ public class WorldRenderer {
 			if((rightFrameCounter == 0) && (ship.isWalking() == true)){
 				cyraFrame = cyraRightAnimation.getKeyFrame(rightCyraCount, true);
 					rightCyraCount = (rightCyraCount+1) % 5;
-					System.out.println("Cyra Frame count is " + rightCyraCount);
+					
 			}
 			
 			cyraFrame = cyraRightAnimation.getKeyFrame(rightCyraCount+1, true);
@@ -193,7 +193,7 @@ public class WorldRenderer {
 			if((rightFrameCounter == 0) && (ship.isWalking() == true)){
 				cyraFrame = cyraLeftAnimation.getKeyFrame(rightCyraCount, true);
 					rightCyraCount = (rightCyraCount+1) % 5;
-					System.out.println("Cyra Frame count is " + rightCyraCount);
+					
 			}
 			
 			cyraFrame = cyraLeftAnimation.getKeyFrame(rightCyraCount+1, true);
@@ -403,7 +403,6 @@ public class WorldRenderer {
 						Array<Rectangle> pdb = se.getPlayerDamageBounds();
 						if (pdb != null) {
 							if (pdb.size >= 1) {
-								System.out.println("Size of array: "+pdb.size);
 								Rectangle swordBounds = pdb.get(0);
 								batch.draw(sword2, swordBounds.x, swordBounds.y, 0, 0, swordBounds.width, swordBounds.height,1,1,0,
 										0,0,sword2.getWidth(), sword2.getHeight(), !se.isFacingRight(), false);
@@ -687,7 +686,6 @@ public class WorldRenderer {
 			font.draw(textBatch, healthText, cam.position.x-14f, Gdx.graphics.getHeight()-172);
 			font.draw(textBatch, rankText, cam.position.x-14f, Gdx.graphics.getHeight()-222);
 			font.draw(textBatch, scoreText, cam.position.x-14f, Gdx.graphics.getHeight()-322);
-			//System.out.println("Drawing TotalScore at "+ (cam.position.x-14f) + ","+ (Gdx.graphics.getHeight()-272));
 			textBatch.end();
 			
 			
@@ -925,20 +923,18 @@ public class WorldRenderer {
 			
 		
 		Array<AtlasRegion> cyraRightFrames = cyraRightAtlas.findRegions("cyra");
-		System.out.println("Found " + cyraRightFrames.size + " cyra frames");
 		for (int i=0; i<cyraRightFrames.size; i++) 
 			cyraRightFrames.get(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		cyraRightAnimation = new Animation(FOLLOWER_FRAME_DURATION, cyraRightFrames);
 		
 		Array<AtlasRegion> cyraLeftFrames = cyraLeftAtlas.findRegions("cyra");
-		System.out.println("Found " + cyraLeftFrames.size + " cyra frames");
 		for (int i=0; i<cyraLeftFrames.size; i++) 
 			cyraLeftFrames.get(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		cyraLeftAnimation = new Animation(FOLLOWER_FRAME_DURATION, cyraLeftFrames);
 		
 		
 		groundTextureAtlas = manager.get("tiles/level packfile", TextureAtlas.class);
-			/* Load walker texture - END */
+		
 		
 		Texture parallaxTex = manager.get("frontbush1.png", Texture.class);
 		Array<Texture> textures= new Array<Texture>();

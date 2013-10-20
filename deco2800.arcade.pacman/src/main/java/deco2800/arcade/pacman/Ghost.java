@@ -86,6 +86,15 @@ public final class Ghost extends Mover {
 			facing = Dir.LEFT;
 		}
 		
+		// Check whether energised
+		if (gameMap.isEnergized() && currentState == GhostState.CHASE){
+			currentState = GhostState.SCATTER;
+			// TODO: more stuff
+		} else if (!gameMap.isEnergized() && currentState == GhostState.SCATTER) {
+			currentState = GhostState.CHASE;
+		}
+		
+		
 		// checks if ghost is moving, and if so keeps him moving in that
 		// direction
 		if (currentState == GhostState.CHASE) {

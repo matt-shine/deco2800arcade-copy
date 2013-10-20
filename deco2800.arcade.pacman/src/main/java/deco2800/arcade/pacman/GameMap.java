@@ -23,6 +23,7 @@ public class GameMap {
 	private Tile blinkyStart;
 	private Tile fruitRight; // the right tile that fruit appears on
 	private int dotsEaten;
+	private boolean energized;
 	private int hOffset;
 	private int vOffset;
 	private final int tileSideLength; // length of side of square- should be
@@ -30,7 +31,6 @@ public class GameMap {
 	public final int SCREEN_HEIGHT;
 	public final int SCREEN_WIDTH;
 	private final int NUM_BUFFER_TILES; //the number of buffer tiles around the edge of the map on each side
-	
 	
 	public GameMap(int SCREEN_WIDTH, int SCREEN_HEIGHT, int numGhosts) {
 		vsym = false;
@@ -372,5 +372,15 @@ public class GameMap {
 
 	public void setDotsEaten(int dotsEaten) {
 		this.dotsEaten = dotsEaten;
+	}
+
+
+	public boolean isEnergized() {
+		return energized;
+	}
+
+
+	public void setEnergized(boolean energized) {
+		this.energized = energized;
 	}
 }

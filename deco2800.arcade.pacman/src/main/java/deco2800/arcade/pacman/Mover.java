@@ -1,5 +1,8 @@
 package deco2800.arcade.pacman;
 
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
+
 /**
  * An abstract class for objects that can move and collide *
  */
@@ -21,7 +24,6 @@ public abstract class Mover {
 	protected int midY;
 	protected int height;
 	protected int width;
-	private String test = "";
 	private int score;
 	protected Tile currentTile; // current tile of the pacman/ghost
 	protected GameMap gameMap;
@@ -106,26 +108,34 @@ public abstract class Mover {
 	 * @param tile
 	 */
 	public void checkTile(Tile tile){
-		if (this.getClass() != PacChar.class) {return;} // Only Pac man can use special tiles!
+		if (nextTile(tile, 1).getClass() == TeleportTile.class){
+			System.out.println("\ngetTargetX: " + ((TeleportTile) nextTile(tile, 1)).getTargetX());
+			this.drawX = ((TeleportTile) nextTile(tile, 1)).getTargetX();
+			System.out.println("\ngetTargetY: " + ((TeleportTile) nextTile(tile, 1)).getTargetY());
+			this.drawY = ((TeleportTile) nextTile(tile, 1)).getTargetY();
+		}
+		// Only Pac man can eat dots!
+		if (this.getClass() != PacChar.class) {return;} 
 		if (tile.getClass() == DotTile.class) {
 			if (!((DotTile) tile).isEaten()) {
 				((DotTile) tile).dotEaten();
 				gameMap.setDotsEaten(gameMap.getDotsEaten() + 1);
 				if (((DotTile) tile).isEnergiser()) {
 					this.setScore(this.getScore() + 50);
+					gameMap.setEnergized(true);
+					System.out.println("Timer start!");
+					Timer.schedule(new Task() {
+						public void run() {
+							gameMap.setEnergized(false);
+							System.out.println("Time's up!");
+						}
+					}, 7);
 				} else {
 					this.setScore(this.getScore() + 10);
 				}
 			}
 		} 
-		if (nextTile(tile, 1).getClass() == TeleportTile.class){
-//			System.out.println("\ngetTargetX: " + ((TeleportTile) nextTile(tile, 1)).getTargetX());
-//			this.drawX = ((TeleportTile) nextTile(tile, 1)).getTargetX();
-//			System.out.println("\ngetTargetY: " + ((TeleportTile) nextTile(tile, 1)).getTargetY());
-//			this.drawY = ((TeleportTile) nextTile(tile, 1)).getTargetY();
-		}
-//		System.out.println("score: " + this.getScore());
-//		displayScore(this); // This is broken at the moment
+		
 	}
 
 	/**
@@ -135,26 +145,6 @@ public abstract class Mover {
 	public boolean checkNoWallCollision(Tile pTile) {
 		return !(nextTile(pTile, 1).getClass() == WallTile.class);
 	}
-//	public boolean checkNoWallCollision(Tile pTile) {
-//		int x = gameMap.getTilePos(pTile).getX();
-//		int y = gameMap.getTilePos(pTile).getY();
-//		Tile[][] grid = gameMap.getGrid();
-//		//System.out.println(x + ", " + y);
-//		switch(this.getFacing()) {
-//		case LEFT: x -= 1; break;
-//		case RIGHT: x += 1; break;
-//		case UP: y += 1; break;
-//		case DOWN: y -= 1; break;
-//		case TEST: break;
-//		}		
-//		if (!test.equals(this + " wants to move to " + grid[x][y] + 
-//				" allowed=" + (grid[x][y].getClass() != WallTile.class))) {
-//			test = this + " wants to move to " + grid[x][y] + 
-//					" allowed=" + (grid[x][y].getClass() != WallTile.class);
-//			System.out.println(test);
-//		}
-//		return grid[x][y].getClass() != WallTile.class;
-//	}
 	
 	
 	/**

@@ -52,11 +52,15 @@ public class GameMapTest {
 	}
 	
 	/** Disposes of things. Apparently no longer necessary */
-	//@AfterClass
+	@AfterClass
 	public static void tearDown() {
 		app.exit();
 		//dispose of audio properly. 
-		//((OpenALAudio) app.getAudio()).dispose();
+		try {
+			((OpenALAudio) app.getAudio()).dispose();
+		} catch (UnsatisfiedLinkError e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Test

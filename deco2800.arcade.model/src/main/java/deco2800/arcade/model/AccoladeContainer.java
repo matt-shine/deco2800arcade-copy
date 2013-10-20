@@ -2,6 +2,8 @@ package deco2800.arcade.model;
 import java.util.*;
 
 import javax.sql.rowset.*;
+//TODO extend the accolade.setID function to add the accolade to a hash list
+//Should make .get a lot faster.
  
 public class AccoladeContainer implements Iterable<Accolade> {
  
@@ -147,9 +149,18 @@ public class AccoladeContainer implements Iterable<Accolade> {
         return new Iterable();
     }
     
-    public Accolade get(Double accoladeID) {
+    public Accolade get(Double accoladeID) throws NoSuchElementException {
     	for (Accolade accolade:this){
     		if(accolade.getID()==accoladeID){
+    			return accolade;
+    		}
+    	}
+    	throw new NoSuchElementException("There was no accolade found with that ID");
+    }
+    
+    public Accolade get(String accoladeName) throws NoSuchElementException {
+    	for (Accolade accolade:this){
+    		if(accolade.getName().equalsIgnoreCase(accoladeName)){
     			return accolade;
     		}
     	}

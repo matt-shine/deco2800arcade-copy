@@ -59,6 +59,7 @@ public class XMLReaderTest {
 		try {
 			//this doesn't really do anything just yet.
 			String testFile = XMLReader.readXML("src/test/java/deco2800/arcade/model/test/xmlTests/newaccolade.xml");
+			System.out.println(new File("src/test/java/deco2800/arcade/model/test/xmlTests/newaccolade.xml").getAbsolutePath());
 			AccoladeContainer xmlReadTest = XMLReader.getAccolades("src/test/java/deco2800/arcade/model/test/xmlTests/newaccolade.xml");
 		}catch (FileNotFoundException error) {
 			fail("The test file is missing.");

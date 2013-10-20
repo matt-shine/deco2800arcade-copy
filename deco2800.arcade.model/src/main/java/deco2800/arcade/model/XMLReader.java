@@ -10,11 +10,6 @@ import java.io.UnsupportedEncodingException;
 import javax.xml.stream.*;
 
 public class XMLReader {
-	
-	//TODO add in a general read xml file
-		
-
-	
 		
 	public static AccoladeContainer getAccolades(String fileLocation) 
 			throws NumberFormatException, IOException{
@@ -39,9 +34,7 @@ public class XMLReader {
 			if(line.indexOf("<") != -1){
 				data = line.substring(0, line.indexOf("<"));
 				data = data.trim().replace("\"", "");
-			}
-			
-
+			} 
 			
 			if(tag.equals("id")){ tmpID = Integer.parseInt(data);
 			} else if(tag.equals("name")){ tmpName = data;
@@ -54,6 +47,8 @@ public class XMLReader {
 			} else if (tag.equals("image")){ tmpImage = data;
 			} else if (tag.equals("value")){ tmpValue = Integer.parseInt(data);
 			} else if (tag.equals("gameID")){ tmpGameID = Integer.parseInt(data);}
+			//TODO might not need to store the gameID inside of the xml file. 
+			//Meh (could maybe include multiple games in the one xml)
 			
 			if(tag.equals("/accolade")){
 				if((tmpName!=null) && (tmpMessage!=null) &&	(tmpPopup!=null) && (tmpPopupMessage!=null) && 
@@ -74,8 +69,11 @@ public class XMLReader {
 				} else {
 					//THROW SOME ERROR SAYING NOT ALL REQUIRED ELMENTS ARE HERE AND TO CHECK THE XML
 				}//DONE CHECKING IF ALL FIELDS WERE CREATED
-			}//DONE CREATING AND APPENDING THE ACCOLADE			
+			}//DONE CREATING AND APPENDING THE ACCOLADE	
+			
 		}
+		
+		xmlFile.close();
 		return output;
 		
 	}

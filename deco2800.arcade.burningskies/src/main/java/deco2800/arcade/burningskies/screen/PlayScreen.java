@@ -123,7 +123,7 @@ public class PlayScreen implements Screen
         game.playSong("level" + (int)(Math.random()+0.5));
     	
         int playerSpawnHp = 1000 - (125*Configuration.getDifficulty());
-    	player = new PlayerShip(playerSpawnHp, shipTex[game.zalgo], new Vector2(400, 100), this);
+    	player = new PlayerShip(playerSpawnHp, shipTex[game.zalgo], new Vector2(640, 360), this);
     	level = new Level(this);
 
     	stage.addActor(level);

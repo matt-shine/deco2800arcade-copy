@@ -34,7 +34,7 @@ public class TowerDefence extends GameClient {
 	// The rendering animations list static
 	public static AnimationsList toRender = new AnimationsList();
 	// All Tower Defence screens
-	public Screen splashScreen, menuScreen, loreScreen, gameScreen,
+	private Screen splashScreen, menuScreen, loreScreen, gameScreen,
 			creditsScreen, optionsScreen;
 	// Boolean to store if game is paused
 	private boolean isPaused = false;
@@ -179,11 +179,6 @@ public class TowerDefence extends GameClient {
 	}
 
 	@Override
-	public void render() {
-		super.render();
-	}
-
-	@Override
 	public void resize(int width, int height) {
 		Gdx.app.debug(LOG, "resizing to " + width + "x" + height);
 		super.resize(width, height);
@@ -223,6 +218,31 @@ public class TowerDefence extends GameClient {
 	// pause your game at once
 	public void setPause(boolean pause) {
 		isPaused = pause;
+	}
+	
+	//Screen getters
+	public Screen splashScreen(){
+		return splashScreen;
+	}
+	
+	public Screen menuScreen(){
+		return menuScreen;
+	} 
+	
+	public Screen loreScreen(){
+		return loreScreen;
+	}
+	
+	public Screen gameScreen(){
+		return gameScreen;
+	}
+	
+	public Screen creditsScreen(){
+		return creditsScreen;
+	}
+
+	public Screen optionsScreen(){
+		return optionsScreen;
 	}
 
 }

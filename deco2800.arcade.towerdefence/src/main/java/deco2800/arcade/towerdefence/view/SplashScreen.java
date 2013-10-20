@@ -13,10 +13,10 @@ import deco2800.arcade.towerdefence.controller.TowerDefence;
 
 public class SplashScreen implements Screen {
 
-	Texture splashTexture;
-	Sprite splashSprite;
-	SpriteBatch batch;
-	TowerDefence game;
+	private Texture splashTexture;
+	private Sprite splashSprite;
+	private SpriteBatch batch;
+	private TowerDefence game;
 
 	public SplashScreen(TowerDefence game) {
 		this.game = game;
@@ -46,7 +46,7 @@ public class SplashScreen implements Screen {
 
 		/* If LMB is pressed change to menuScreen */
 		if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
-			game.setScreen(game.menuScreen);
+			game.setScreen(game.menuScreen());
 		}
 	}
 

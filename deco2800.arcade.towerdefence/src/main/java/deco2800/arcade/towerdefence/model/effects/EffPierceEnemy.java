@@ -31,10 +31,10 @@ public class EffPierceEnemy extends Effect {
 		// Get the armour of the enemy
 		int originalArmour = target.armour();
 		// Lower the target's armour by amount
-		if (originalArmour - amount <= 0) {
+		if (originalArmour - amount() <= 0) {
 			target.armour(0);
 		} else {
-			target.armour((int) (originalArmour - amount));
+			target.armour((int) (originalArmour - amount()));
 		}
 	}
 }

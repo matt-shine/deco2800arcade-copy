@@ -28,22 +28,22 @@ public class MenuScreen implements Screen {
 	private static final String LOG = MenuScreen.class.getSimpleName();
 
 	private final TowerDefence game;
-	Stage stage;
-	BitmapFont black;
-	BitmapFont white;
-	TextureAtlas atlas;
-	Texture texture;
-	Skin skin;
-	SpriteBatch batch;
-	Music music;
-	Sound click;
-	Button newGameButton, continueButton, multiplayerButton, optionsButton,
+	private Stage stage;
+	private BitmapFont black;
+	private BitmapFont white;
+	private TextureAtlas atlas;
+	private Texture texture;
+	private Skin skin;
+	private SpriteBatch batch;
+	private Music music;
+	private Sound click;
+	private Button newGameButton, continueButton, multiplayerButton, optionsButton,
 			creditsButton, loreButton, quitButton;
-	TextButtonStyle style;
-	float buttonSpacing = 10f;
-	float buttonHeight = 50f;
-	float buttonWidth = 200f;
-	long id;
+	private TextButtonStyle style;
+	private float buttonSpacing = 10f;
+	private float buttonHeight = 50f;
+	private float buttonWidth = 200f;
+	private long id;
 
 	public MenuScreen(final TowerDefence game) {
 		this.game = game;
@@ -119,7 +119,7 @@ public class MenuScreen implements Screen {
 					int pointer, int button) {
 				Gdx.app.debug(LOG, "switching to game screen");
 				click.play(1.0f);
-				game.setScreen(game.gameScreen); // Set to gameScreen
+				game.setScreen(game.gameScreen()); // Set to gameScreen
 			}
 
 		});
@@ -157,7 +157,7 @@ public class MenuScreen implements Screen {
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
 				click.play(1.0f);
-				game.setScreen(game.optionsScreen);
+				game.setScreen(game.optionsScreen());
 			}
 
 		});
@@ -180,7 +180,7 @@ public class MenuScreen implements Screen {
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
 				click.play(1.0f);
-				game.setScreen(game.loreScreen);
+				game.setScreen(game.loreScreen());
 			}
 
 		});
@@ -204,7 +204,7 @@ public class MenuScreen implements Screen {
 					public void touchUp(InputEvent event, float x, float y,
 							int pointer, int button) {
 						click.play(1.0f);
-						game.setScreen(game.creditsScreen);
+						game.setScreen(game.creditsScreen());
 					}
 
 				});

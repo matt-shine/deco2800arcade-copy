@@ -30,10 +30,10 @@ public class EffSlowEnemyMS extends Effect {
 		// Get the Enemy Movement Speed
 		double originalSpeed = target.speed();
 		// Set the Enemy Movement Speed lower by amount
-		if (originalSpeed - amount <= 0) {
+		if (originalSpeed - amount() <= 0) {
 			target.speed(0);
 		} else {
-			target.speed(originalSpeed - amount);
+			target.speed(originalSpeed - amount());
 		}
 	}
 }

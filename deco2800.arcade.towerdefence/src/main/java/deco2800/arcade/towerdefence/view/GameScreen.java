@@ -43,24 +43,26 @@ public class GameScreen implements Screen {
 	private TowerDefence game;
 
 	private Stage stage, hudStage;
-	Button standardB, fireB, holyB, cryoB, piercingB, barricadeB, backB;
+	private Button standardB, fireB, holyB, cryoB, piercingB, barricadeB,
+			backB;
 	private Label towerInfo;
-	BitmapFont black;
-	BitmapFont white;
-	TextButtonStyle style;
-	Skin skin;
-	TextureAtlas atlas, barsAtlas;
-	TextureRegion healthBarRegion, attackBarRegion, costBarRegion,
+	private BitmapFont black;
+	private BitmapFont white;
+	private TextButtonStyle style;
+	private Skin skin;
+	private TextureAtlas atlas, barsAtlas;
+	private TextureRegion healthBarRegion, attackBarRegion, costBarRegion,
 			penetrationBarRegion, armorBarRegion;
-	TexturePart healthBar, attackBar, costBar, penetrationBar, armorBar;
-	Image gridMap;
+	private TexturePart healthBar, attackBar, costBar, penetrationBar,
+			armorBar;
+	private Image gridMap;
 	public static SpriteBatch batch;
-	TextField resourceTF;
+	private TextField resourceTF;
 	private OrthographicCamera camera;
 	private static final float BUTTON_HEIGHT = 64f;
 	private static final float BUTTON_WIDTH = 64f;
 	/* int for player's resources. */
-	int resource;
+	private int resource;
 
 	Texture crystalsTexture, gridMapTexture;
 	String fireStr, cryoStr, piercingStr, holyStr, attackStr, standardStr,
@@ -100,7 +102,7 @@ public class GameScreen implements Screen {
 		towerInfo.setWrap(true);
 
 		resource = 2000;
-		
+
 		fireStr = "Fire I: \n" + "Cost: 200\n" + "Max Health: 100\n"
 				+ "Damage: 15";
 		cryoStr = "Cryo I: \n" + "Cost: 200\n" + "Max Health: 100\n"
@@ -125,7 +127,7 @@ public class GameScreen implements Screen {
 		black.dispose();
 		stage.dispose();
 		hudStage.dispose();
-		game.gameScreen.dispose();
+		game.gameScreen().dispose();
 	}
 
 	@Override
@@ -161,13 +163,13 @@ public class GameScreen implements Screen {
 		batch.begin();
 		batch.draw(crystalsTexture, 5, Gdx.graphics.getHeight()
 				- crystalsTexture.getHeight() - 5);
-		healthBar.Draw(batch);
-		attackBar.Draw(batch);
-		costBar.Draw(batch);
-		penetrationBar.Draw(batch);
-		armorBar.Draw(batch);
-		//batch draw all the sprites in the AnimationsList toRender
-		for (int i=0; i<TowerDefence.toRender.size();i++) {
+		healthBar.draw(batch);
+		attackBar.draw(batch);
+		costBar.draw(batch);
+		penetrationBar.draw(batch);
+		armorBar.draw(batch);
+		// batch draw all the sprites in the AnimationsList toRender
+		for (int i = 0; i < TowerDefence.toRender.size(); i++) {
 			TowerDefence.toRender.get(i).draw(batch);
 		}
 		batch.end();
@@ -180,20 +182,24 @@ public class GameScreen implements Screen {
 	 */
 	private void handleInput() {
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-			if (camera.position.x > 0)
+			if (camera.position.x > 0){
 				camera.translate(-3, 0, 0);
+			}
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			if (camera.position.x < 4166)
+			if (camera.position.x < 4166){
 				camera.translate(3, 0, 0);
+			}
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-			if (camera.position.y > 0)
+			if (camera.position.y > 0){
 				camera.translate(0, -3, 0);
+			}
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-			if (camera.position.y < 4166)
+			if (camera.position.y < 4166){
 				camera.translate(0, 3, 0);
+			}
 		}
 	}
 
@@ -325,7 +331,7 @@ public class GameScreen implements Screen {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				game.setScreen(game.menuScreen);
+				game.setScreen(game.menuScreen());
 			}
 		});
 		backB.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - 5);
@@ -401,18 +407,20 @@ public class GameScreen implements Screen {
 		penetrationBarRegion = barsAtlas.findRegion("Purple_Bar");
 		armorBarRegion = barsAtlas.findRegion("White_Bar");
 	}
+
 	// Methods
 	/**
 	 * Create List of sprites from frame filenames with set rotation.
+	 * 
 	 * @param object
 	 * @param filenames
 	 * @param rotation
 	 */
-	public static List<Sprite> spriteBuild(GridObject object, List<String> files){
-		
+	public static List<Sprite> spriteBuild(GridObject object, List<String> files) {
+
 		List<Sprite> builtSprites = new ArrayList<Sprite>();
 		// Iterate over the list of filenames
-		for (int i=0; i<files.size();i++){
+		for (int i = 0; i < files.size(); i++) {
 			Texture texture = new Texture(Gdx.files.internal(files.get(i)));
 			Sprite sprite = new Sprite(texture);
 			sprite.setPosition(object.position().x, object.position().y);
@@ -420,6 +428,6 @@ public class GameScreen implements Screen {
 			builtSprites.add(sprite);
 		}
 		return builtSprites;
-		
+
 	}
 }

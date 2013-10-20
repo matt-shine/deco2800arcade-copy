@@ -12,38 +12,38 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class TexturePart {
 
-        Texture tex;
-        Vector2 position;
+	private Texture tex;
+        private Vector2 position;
 
         // Target Dimension of image
 
-        int targetWidth;
-        int targetHeight;
+        private int targetWidth;
+        private int targetHeight;
 
         // Src Dimensions of Image
 
-        int srcWidth;
-        int srcHeight;
-        int srcX;
-        int srcY;
+        private int srcWidth;
+        private int srcHeight;
+        private int srcX;
+        private int srcY;
 
         // Ratio of dimension of target and source
 
-        float srcTargetRatioX;
-        float srcTargetRatioY;
+        private float srcTargetRatioX;
+        private float srcTargetRatioY;
 
         // ImagePart variables with values between 0-100 to draw part of image
 
-        int startPercentX;
-        int endPercentX;
-        int startPercentY;
-        int endPercentY;
+        private int startPercentX;
+        private int endPercentX;
+        private int startPercentY;
+        private int endPercentY;
 
-        int clipWidth;
-        int clipHeight;
+        private int clipWidth;
+        private int clipHeight;
 
-        int clipSrcWidth;
-        int clipSrcHeight;
+        private int clipSrcWidth;
+        private int clipSrcHeight;
 
         public TexturePart(TextureRegion reg, float x, float y) {
 
@@ -59,10 +59,10 @@ public class TexturePart {
                 startPercentY = 0;
                 endPercentX = 100;
                 endPercentY = 100;
-                SetTargetDimension(srcWidth, srcHeight);
+                setTargetDimension(srcWidth, srcHeight);
         }
 
-        public void SetTargetDimension(int targetWidth, int targetHeight) {
+        public void setTargetDimension(int targetWidth, int targetHeight) {
                 this.targetWidth = targetWidth;
                 this.targetHeight = targetHeight;
                 clipWidth = targetWidth;
@@ -71,17 +71,17 @@ public class TexturePart {
                 srcTargetRatioY = (float) targetHeight / (float) srcHeight;
         }
 
-        public void SetStart(int x, int y) {
+        public void setStart(int x, int y) {
                 startPercentX = x;
                 startPercentY = y;
         }
 
-        public void SetEnd(int x, int y) {
+        public void setEnd(int x, int y) {
                 endPercentX = x;
                 endPercentY = y;
         }
 
-        public void Draw(SpriteBatch sp)
+        public void draw(SpriteBatch sp)
 {
                 clipSrcWidth = (int) (Math.abs(startPercentX - endPercentX) / 100f * srcWidth);
                 clipSrcHeight = (int) (Math.abs(startPercentX - endPercentY) / 100f * srcHeight);

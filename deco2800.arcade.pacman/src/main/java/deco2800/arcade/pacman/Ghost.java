@@ -203,7 +203,7 @@ public final class Ghost extends Mover {
 			case LEFT: opposite = Dir.RIGHT; break;
 			case RIGHT: opposite = Dir.LEFT; break;
 			}
-			Tile next = nextTile(1, dir);
+			Tile next = tileInDir(1, dir);
 			if (next.getClass() != WallTile.class && facing != opposite) {
 				testTiles.add(next);
 			}
@@ -211,21 +211,6 @@ public final class Ghost extends Mover {
 		return testTiles;
 	}	
 	
-	/**
-	 * Returns the next tile in the given direction
-	 * @param offset- the amount of tiles to offset from the currentTile
-	 */
-	private Tile nextTile(int offset, Dir dir){
-		int x = gameMap.getTilePos(currentTile).getX();
-		int y = gameMap.getTilePos(currentTile).getY();
-		switch(dir) {
-		case LEFT: x -= offset; break;
-		case RIGHT: x += offset; break;
-		case UP: y += offset; break;
-		case DOWN: y -= offset; break;
-		}
-		return gameMap.getGrid()[x][y];
-	}
 	
 	/**
 	 * Calculates the Euclidean distance between a tile

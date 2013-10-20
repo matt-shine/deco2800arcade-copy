@@ -1403,7 +1403,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		newGameButton.setWidth(200);
 		newGameButton.setHeight(50);
 		newGameButton.setX((float) (width * 0.78));
-		newGameButton.setY((float) (height * 0.28));
+		newGameButton.setY((float) (height * 0.78));
 	}
  
 	/**

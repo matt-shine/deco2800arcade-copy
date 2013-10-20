@@ -19,33 +19,65 @@ public class PPlane extends Plane{
 	public PPlane(){
 		
 	}
+	/**
+	 * The constructor of PPlane.
+	 * Load the image from source.
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
 	public PPlane(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		img = new javax.swing.ImageIcon(this.getClass().getResource("/Image/Boss1.png")).getImage();
+		img = new javax.swing.ImageIcon(this.getClass().
+				getResource("/Image/Boss1.png")).getImage();
 		// TODO Auto-generated constructor stub
 	}
+	/**
+	 * 
+	 * @return jpanel
+	 */
 	public JPanel getJpanel() {
 		return jpanel;
 	}
+	/**
+	 * Set the jpanel
+	 * @param jpanel
+	 */
 	public void setJpanel(JPanel jpanel) {
 		this.jpanel = jpanel;
 	}
-	
+	/**
+	 * 
+	 * @return direction
+	 */
 	public int getDirection() {
 		return direction;
 	}
+	/**
+	 * Set the direction.
+	 * @param direction
+	 */
 	public void setDirection(int direction) {
 		this.direction = direction;
 	}
+	/**
+	 * Draw the image on the screen.
+	 */
 	public void drawMe(Graphics g) {
 		// TODO Auto-generated method stub
 		g.drawImage(img, this.x, this.y, this.w, this.h, this.jpanel);
 	}
-
+	/**
+	 * Change the direction by user.
+	 * @param direction
+	 */
 	public void changeDirection(int direction){
 		this.direction = direction;
 	}
-	
+	/**
+	 * The move of PPlane.
+	 */
 	public void pplaneMove(){
 		if (UP)
 			y -= Global.SPEED;
@@ -56,6 +88,10 @@ public class PPlane extends Plane{
 		if (RIGHT)
 			x += Global.SPEED;
 	}
+	/**
+	 * Check if the Player is alive or not.
+	 * @return boolean value
+	 */
 	public boolean isAlive(){
 		if(PPlane.life <= 0){
 			PPlane.life = 0;

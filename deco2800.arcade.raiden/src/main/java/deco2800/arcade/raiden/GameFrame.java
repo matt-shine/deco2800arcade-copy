@@ -8,7 +8,7 @@ public class GameFrame extends JFrame{
 	
 	private GamePanel gamePanel = new GamePanel();
 	public GameFrame(){
-		
+		//set the size and game frame.
 		this.setTitle("Raiden");
 		this.setSize(Global.FRAME_WIDTH + 10, Global.FRAME_HEIGHT + 35);
 		this.setLocationRelativeTo(null);

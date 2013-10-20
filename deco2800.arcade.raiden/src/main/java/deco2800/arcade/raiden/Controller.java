@@ -20,7 +20,16 @@ public class Controller extends KeyAdapter{
 	private Random random = new Random();
 	public static int DestoryNum;
 	
-	
+	/**
+	 * Constructor of controller.
+	 * @param bang
+	 * @param ebullet
+	 * @param pbullet
+	 * @param eplane
+	 * @param pplane
+	 * @param gamePanel
+	 * 
+	 */
 	public Controller(Vector<Bang> bang,Vector<EBullet> ebullet,Vector<PBullet> 
 	pbullet, Vector<EPlane> eplane,PPlane pplane,GamePanel gamePanel) {
 		super();
@@ -45,6 +54,9 @@ public class Controller extends KeyAdapter{
 		}
 
 	@Override
+	/**
+	 * The interaction between user and keyboard
+	 */
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 		switch (e.getKeyCode()){
@@ -68,6 +80,9 @@ public class Controller extends KeyAdapter{
 
 	
 	@Override
+	/**
+	 * The interaction between player and keyboard.
+	 */
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 		switch (e.getKeyCode()){
@@ -87,7 +102,9 @@ public class Controller extends KeyAdapter{
 			PPlane.isFired = false;
 		}
 	}
-
+	/**
+	 * Thread function when the game is running.
+	 */
 	public void StartRun(){
 		//FIXME big method
 		new Thread(){
@@ -111,7 +128,7 @@ public class Controller extends KeyAdapter{
 									new PBullet(pplane.x + 5, pplane.y + 50, 8, 15);
 							pbullets.add(pbullet3);	
 						}
-					}else if(DestoryNum >= 70){
+					}else if(DestoryNum >= 150){
 						if(PPlane.isFired && count % 5 == 0){
 							PBullet pbullet4 =
 									new PBullet(pplane.x + 35, pplane.y + 50, 8, 15);
@@ -202,13 +219,17 @@ public class Controller extends KeyAdapter{
 			}
 		}.start();
 	}
-	
+	/**
+	 * To see if the game is over or not.
+	 */
 	public void JudgeLife(){
 		if(!pplane.isAlive()){
 				System.exit(0);
 				}
 		}
-	
+	/**
+	 * Reset the game.
+	 */
 	public void newGame(){
 		bangs.clear();		   		
 		ebullets.clear();

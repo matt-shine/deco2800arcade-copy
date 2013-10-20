@@ -3,14 +3,17 @@ package deco2800.arcade.towerdefence.model.creationclasses;
 import java.util.Iterator;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.towerdefence.controller.TowerDefence;
 import deco2800.arcade.towerdefence.model.Grid;
 import deco2800.arcade.towerdefence.model.GridObject;
 import deco2800.arcade.towerdefence.model.Mortal;
 import deco2800.arcade.towerdefence.model.Ranged;
 import deco2800.arcade.towerdefence.model.Team;
 import deco2800.arcade.towerdefence.model.TowerType;
+import deco2800.arcade.towerdefence.view.GameScreen;
 
 /**
  * The class for all Towers available throughout the game to the player. Do
@@ -270,7 +273,20 @@ public class Tower extends Mortal implements Ranged {
 	}
 
 	// Methods
-
+	/**
+	 * Start the AI and animations.
+	 */
+	public void start() {
+	// Remember to adjust the rotation before building the sprite if necessary
+	this.rotation(0);
+	
+	// Build the idle sprite list
+	List<Sprite> sprList = (GameScreen.spriteBuild(this, fileStanding()));
+	
+	// Add the list of sprites to the currently animating model
+	TowerDefence.toRender.add(sprList);
+	}
+	
 	/**
 	 * The method for firing a single projectile at a target.
 	 */

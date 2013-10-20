@@ -1,6 +1,7 @@
 package deco2800.arcade.towerdefence.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.towerdefence.view.GameScreen;
@@ -37,7 +38,7 @@ public class Ship {
 	// The grid used by this ship
 	private Grid grid;
 	// The GameScreen that is using this ship
-	private GameScreen gameScreen;
+	private Screen gameScreen;
 	// The resources of the ship
 	private int resources;
 	// The Ship (player) score
@@ -54,7 +55,7 @@ public class Ship {
 	 *            The GameScreen which this ship belongs to.
 	 * @Param targetPosition A vector representing the target (portal)
 	 */
-	public Ship(GameScreen gameScreen, Vector2 targetPosition) {
+	public Ship(Screen gameScreen, Vector2 targetPosition) {
 		this.gameScreen = gameScreen;
 		this.grid = new Grid(Gdx.graphics.getHeight(), Gdx.graphics.getWidth(),
 				"shipGrid", 25, this, targetPosition, "src/main/resources/testGrid");
@@ -75,7 +76,7 @@ public class Ship {
 	 * 
 	 * @return gameScreen
 	 */
-	public GameScreen gameScreen() {
+	public Screen gameScreen() {
 		return gameScreen;
 	}
 	

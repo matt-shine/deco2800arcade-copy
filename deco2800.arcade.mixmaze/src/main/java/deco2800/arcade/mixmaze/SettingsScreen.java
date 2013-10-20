@@ -2,25 +2,17 @@ package deco2800.arcade.mixmaze;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-
-import deco2800.arcade.client.ArcadeInputMux;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -30,13 +22,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Scaling;
 
-import deco2800.arcade.mixmaze.GameScreen.Settings;
+import deco2800.arcade.client.ArcadeInputMux;
 
 public class SettingsScreen implements Screen {
 
@@ -44,6 +34,7 @@ public class SettingsScreen implements Screen {
 	private Skin skin;
 	private Stage stage;
 	private TextButton playButton;
+	private TextButton networkButton;
 	private List difficultyList;
 	private Table rootTable = new Table();
 	private Table settingsPanel = new Table();
@@ -104,7 +95,20 @@ public class SettingsScreen implements Screen {
 						p2Controls);
 				game.setScreen(game.localScreen);
 			}
+		});
+		
+		networkButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				getPlayerControlls(p1Texts, p1Controls);
+				getPlayerControlls(p2Texts, p2Controls);
 
+				((GameScreen) game.clientScreen).new Settings(p1Controls,
+						p2Controls);
+				((GameScreen) game.localScreen).new Settings(p1Controls,
+						p2Controls);
+				game.setScreen(game.menuScreen);
+			}
 		});
 
 		p1Buttons[1].addListener(new ChangeListnr(p1HeadRegion, true));
@@ -115,7 +119,7 @@ public class SettingsScreen implements Screen {
 
 	/**
 	 * adds textFieldFilters to all the TextFields
-	 * 
+	 *
 	 * @param playerTexts
 	 *            array containing all TextFields
 	 */
@@ -128,7 +132,7 @@ public class SettingsScreen implements Screen {
 
 	/**
 	 * adds textFieldListeners to all the TextFields
-	 * 
+	 *
 	 * @param playerTexts
 	 *            array containing all TextFields
 	 */
@@ -153,6 +157,7 @@ public class SettingsScreen implements Screen {
 		this.stage = new Stage();
 		playButton = new TextButton("Play", skin);
 		playButton.pad(20);
+		networkButton = new TextButton("Test Network", skin);
 		avatarPng = "avatars.png";
 		skin.add("background", new Texture(Gdx.files.internal("settings.png")));
 		difficultyList = new List(new String[] { "Beginner", "Intermediate",
@@ -215,7 +220,7 @@ public class SettingsScreen implements Screen {
 	/**
 	 * Creates a complete avatar image as a stack, so that it can be inserted in
 	 * to the table layout.
-	 * 
+	 *
 	 * @param stack
 	 *            stack which holds the image of the avatar
 	 * @param background
@@ -238,7 +243,7 @@ public class SettingsScreen implements Screen {
 
 	/**
 	 * Creates the player panel in the settings screen
-	 * 
+	 *
 	 * @param panel
 	 *            table which acts as a column in the settings table
 	 * @param playerDetails
@@ -279,6 +284,8 @@ public class SettingsScreen implements Screen {
 		settingsPanel.add(difficultyList).padBottom(170);
 		settingsPanel.row();
 		settingsPanel.add(playButton);
+		settingsPanel.row();
+		settingsPanel.add(networkButton);
 	}
 
 	/**
@@ -325,7 +332,7 @@ public class SettingsScreen implements Screen {
 
 	@Override
 	public void hide() {
-        ArcadeInputMux.getInstance().removeProcessor(stage);
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override
@@ -370,17 +377,15 @@ public class SettingsScreen implements Screen {
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void show() {
-		//Gdx.input.setInputProcessor(stage);
-        ArcadeInputMux.getInstance().addProcessor(stage);
+		ArcadeInputMux.getInstance().addProcessor(stage);
 	}
 
 	/**
-	 * 
+	 *
 	 * @return true if the cursor is focused on one of the navigation input
 	 *         fields false otherwise.
 	 */
@@ -405,7 +410,7 @@ public class SettingsScreen implements Screen {
 
 	/**
 	 * finds matching Keys.code for a given Char or arrow keys
-	 * 
+	 *
 	 * @param keyText
 	 *            String in the textField
 	 * @return the key code for the given keyText
@@ -428,7 +433,7 @@ public class SettingsScreen implements Screen {
 
 	/**
 	 * finds matching Keys.code for a arrow keys
-	 * 
+	 *
 	 * @param keyText
 	 *            String in the textField
 	 * @return the key code for the given keyText

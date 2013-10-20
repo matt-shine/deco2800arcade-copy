@@ -2,11 +2,15 @@ package deco2800.arcade.towerdefence.model.creationclasses;
 
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
+import deco2800.arcade.towerdefence.controller.TowerDefence;
 import deco2800.arcade.towerdefence.model.Grid;
 import deco2800.arcade.towerdefence.model.GridObject;
 import deco2800.arcade.towerdefence.model.Melee;
 import deco2800.arcade.towerdefence.model.Mobile;
 import deco2800.arcade.towerdefence.model.Team;
+import deco2800.arcade.towerdefence.view.GameScreen;
 
 /**
  * The class for enemies invading the ship. Every enemy is able to use Melee,
@@ -202,6 +206,18 @@ public class Enemy extends Mobile implements Melee {
 	}
 
 	// Methods
+	/**
+	 * Start the AI and animations.
+	 */
+	public void start() {
+	// Remember to adjust the rotation before building the sprite if necessary
+	this.rotation(0);
 	
+	// Build the idle sprite list
+	List<Sprite> sprList = (GameScreen.spriteBuild(this, fileStanding()));
+	
+	// Add the list of sprites to the currently animating model
+	TowerDefence.toRender.add(sprList);
+	}
 
 }

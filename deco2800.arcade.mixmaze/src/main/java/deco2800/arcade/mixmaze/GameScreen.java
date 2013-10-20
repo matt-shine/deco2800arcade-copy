@@ -3,8 +3,7 @@ package deco2800.arcade.mixmaze;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.mixmaze.domain.IMixMazeModel;
 import deco2800.arcade.mixmaze.domain.PlayerModel;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
+
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +32,7 @@ import static deco2800.arcade.mixmaze.TileViewModel.*;
 abstract class GameScreen implements Screen {
 
 	final Logger logger = LoggerFactory.getLogger(GameScreen.class);
-	
+
 	static TextureRegion p1HeadRegion;
 	static TextureRegion p2HeadRegion;
 
@@ -61,7 +61,7 @@ abstract class GameScreen implements Screen {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param game
 	 *            the MixMaze game
 	 */
@@ -121,7 +121,7 @@ abstract class GameScreen implements Screen {
 		/*
 		 * gameBoard has two layers. The bottom one is the tileTable and the top
 		 * is gameArea.
-		 * 
+		 *
 		 * gameArea is used as a place holder as Stack always places its
 		 * children at (0, 0), but children of gameArea can move freely in
 		 * stage.
@@ -166,9 +166,7 @@ abstract class GameScreen implements Screen {
 
 	@Override
 	public void hide() {
-		//Gdx.input.setInputProcessor(null);
-        ArcadeInputMux.getInstance().removeProcessor(stage);
-		logger.debug("hid");
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override
@@ -191,7 +189,7 @@ abstract class GameScreen implements Screen {
 
 	/**
 	 * Sets up the timers for a game session.
-	 * 
+	 *
 	 * @param timeLimit
 	 *            the time limit of this session
 	 */
@@ -233,7 +231,7 @@ abstract class GameScreen implements Screen {
 				if (i < 2){
 					this.row();
 				}
-				
+
 				frameImages[i] = new Image(SELECTION_REGION);
 				itemStacks[i].add(frameImages[i]);
 			}
@@ -344,8 +342,8 @@ abstract class GameScreen implements Screen {
 		public Settings(int[] innerP1Controls, int[] innerP2Controls) {
 			for(int i = 0; i<innerP1Controls.length;i++){
 				p1Controls[i] = innerP1Controls[i];
-				p2Controls[i] = innerP2Controls[i];				
-			}			
+				p2Controls[i] = innerP2Controls[i];
+			}
 		}
 		public Settings() {
 

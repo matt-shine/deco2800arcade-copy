@@ -23,6 +23,7 @@ public class Platform {
 	public boolean inactive;
 	private boolean moveRight;
 	private int moveCounter = 250;
+	junglejump thing = null;
 	
 	/**
 	 * Platform constructor
@@ -222,6 +223,7 @@ public class Platform {
 				Gdx.app.log(junglejump.messages,
 						"Audio File for Banana Music Not Found");
 			}
+			this.thing.incrementAchievement("junglejump.firststeps");
 			LevelContainer.nextLevel();
 		}
 		if(this.platType == 'j') {

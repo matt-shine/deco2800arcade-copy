@@ -135,8 +135,6 @@ public class LevelContainer {
 				p.setX(p.getX()-1000);
 			}
 		}
-		junglejump thing = null;
-		thing.incrementAchievement("junglejump.firststeps");
 		return;
 	}
 	

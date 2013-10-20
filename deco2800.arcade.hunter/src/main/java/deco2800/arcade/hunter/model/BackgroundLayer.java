@@ -9,7 +9,7 @@ import deco2800.arcade.hunter.screens.GameScreen;
 
 public class BackgroundLayer extends Map {
     //Image which makes up the background
-    private TextureRegion background = new TextureRegion(new Texture("textures/background.png"));
+    private final TextureRegion background = new TextureRegion(new Texture("textures/background.png"));
 
     public BackgroundLayer(float speedModifier) {
         super(speedModifier);

@@ -10,9 +10,9 @@ public class MapPane {
      * Stores a fixed size 2D array of integers which represent the map tiles
      * in each layer of the pane
      */
-    private int[][] background = new int[Config.PANE_SIZE][Config.PANE_SIZE];
-    private int[][] foreground = new int[Config.PANE_SIZE][Config.PANE_SIZE];
-    private int[][] collision = new int[Config.PANE_SIZE][Config.PANE_SIZE];
+    private final int[][] background = new int[Config.PANE_SIZE][Config.PANE_SIZE];
+    private final int[][] foreground = new int[Config.PANE_SIZE][Config.PANE_SIZE];
+    private final int[][] collision = new int[Config.PANE_SIZE][Config.PANE_SIZE];
 
     /**
      * Start and end offsets correspond to the first and last columns of the pane,
@@ -30,13 +30,13 @@ public class MapPane {
     /**
      * The type of environment this pane represents
      */
-    private MapType type;
+    private final MapType type;
 
     /**
      * Rendered version of the two drawn layers of the pane
      */
-    private TextureRegion fgRendered;
-    private TextureRegion bgRendered;
+    private final TextureRegion fgRendered;
+    private final TextureRegion bgRendered;
 
     /**
      * @param filename file path for map relative to src/resources/

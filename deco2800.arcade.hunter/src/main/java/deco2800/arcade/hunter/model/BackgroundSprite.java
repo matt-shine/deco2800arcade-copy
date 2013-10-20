@@ -6,7 +6,7 @@ import deco2800.arcade.hunter.platformergame.Entity;
 
 public class BackgroundSprite extends Entity {
     //Speed to move relative to the player
-    public float speedModifier;
+    public final float speedModifier;
 
     /**
      *

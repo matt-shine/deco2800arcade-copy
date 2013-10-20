@@ -32,7 +32,7 @@ public class Player extends Entity {
     /**
      * The current animation for the player
      */
-    private Animation currAnim;
+    private Animation currentAnimation;
     /**
      * Lives counter for the player
      */
@@ -40,14 +40,14 @@ public class Player extends Entity {
     /**
      * A hashmap list of all the players
      */
-    private HashMap<String, Animation> animationList = new HashMap<String, Animation>();
+    private final HashMap<String, Animation> animationList = new HashMap<String, Animation>();
     private String Weapon; //Weapon that the player is wielding
-    private boolean animLoop; //Boolean if the animation loops
+    private boolean loopAnimation; //Boolean if the animation loops
     private long attackTime = 0; //Time when the player last attacked
     private long damageTime = 0; //Time when last hit by a monster.
     private long cooldownModifier = 0; //Modifies the cooldown of the attacks
     private long buffTime = 0; //Time when item was picked up
-    private GameScreen gamescreen; //Gamescreen which the player is in
+    private final GameScreen gamescreen; //Gamescreen which the player is in
     private int animalsKilled; //Number of animals killed by the player
     private int weaponAmmo; //Ammunition for the weapon the player is wielding
     private long deathTime = 0; //The time when the player is declared as dead
@@ -56,15 +56,15 @@ public class Player extends Entity {
     /**
      * The class type of the entity
      */
-    private String classType = "Player";
+    private final String classType = "Player";
     private int multiplier; //The score multiplier
     private boolean invulnerable; //Boolean of whether the player is invulnerable
     private boolean blink = false;//Boolean of whether they were
     private State state = State.RUNNING;
     //Sound files to be loaded
-    private Sound pickup = Gdx.audio.newSound(Gdx.files.internal("powerup.wav"));
-    private Sound death = Gdx.audio.newSound(Gdx.files.internal("death.wav"));
-    private Sound hurt = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
+    private final Sound pickup = Gdx.audio.newSound(Gdx.files.internal("powerup.wav"));
+    private final Sound death = Gdx.audio.newSound(Gdx.files.internal("death.wav"));
+    private final Sound hurt = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
 
     //States used to determine how to draw the player
     private enum State {
@@ -73,10 +73,10 @@ public class Player extends Entity {
 
     public Player(Vector2 pos, float width, float height, GameScreen game) {
         super(pos, width, height);
-        loadAnims();
+        loadAnimations();
         lives = 3;
         Weapon = "Bow";
-        currAnim = runAnimation();
+        currentAnimation = runAnimation();
         multiplier = 1;
         weaponAmmo = 10;
         this.gamescreen = game;
@@ -86,7 +86,7 @@ public class Player extends Entity {
     /**
      * Loads all the player animations and stores them in a HashMap
      */
-    private void loadAnims() {
+    private void loadAnimations() {
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -123,11 +123,11 @@ public class Player extends Entity {
     private Animation createAnimation(int frames, Texture text, float speed) {
         TextureRegion[][] tmp = TextureRegion.split(text, text.getWidth()
                 / frames, text.getHeight());
-        TextureRegion[] animFrames = new TextureRegion[frames];
+        TextureRegion[] animationFrames = new TextureRegion[frames];
         for (int j = 0; j < frames; j++) {
-            animFrames[j] = tmp[0][j];
+            animationFrames[j] = tmp[0][j];
         }
-        return new Animation(speed, animFrames);
+        return new Animation(speed, animationFrames);
     }
 
     /**
@@ -155,7 +155,7 @@ public class Player extends Entity {
                     attack.play(Hunter.State.getPreferencesManager().getVolume());
                 }
                 state = State.ATTACK;
-                currAnim = attackAnimation();
+                currentAnimation = attackAnimation();
                 attackTime = System.currentTimeMillis();
                 weaponAmmo -= 1;
                 if (weaponAmmo <= 0) {
@@ -199,13 +199,13 @@ public class Player extends Entity {
             if (isGrounded() && this.state != State.ATTACK && this.state != State.DAMAGED && this.state != State.DEAD) {
                 Hunter.State.playerVelocity.y = 0;
                 this.state = State.RUNNING;
-                currAnim = runAnimation();
+                currentAnimation = runAnimation();
             } else if (Hunter.State.playerVelocity.y > 0 && this.state != State.ATTACK && this.state != State.DEAD) {
                 this.state = State.JUMPING;
-                currAnim = jumpAnimation();
+                currentAnimation = jumpAnimation();
             } else if (Hunter.State.playerVelocity.y < -1 && this.state != State.ATTACK && this.state != State.DEAD) {
                 this.state = State.FALLING;
-                currAnim = fallAnimation();
+                currentAnimation = fallAnimation();
             }
 
             score += 100 * delta * multiplier;
@@ -220,21 +220,21 @@ public class Player extends Entity {
     private void checkTimers() {
         if (attackTime + Config.PLAYER_ATTACK_TIMEOUT > System.currentTimeMillis() && !dead) {
             this.state = State.ATTACK;
-            currAnim = attackAnimation();
+            currentAnimation = attackAnimation();
         } else {
             this.state = State.RUNNING;
         }
 
         if (damageTime + Config.PLAYER_BLINK_TIMEOUT > System.currentTimeMillis() && !dead) {
             this.state = State.DAMAGED;
-            currAnim = damageAnimation();
+            currentAnimation = damageAnimation();
         } else {
             this.blink = false;
         }
 
         if (deathTime + Config.PLAYER_BLINK_TIMEOUT > System.currentTimeMillis()) {
             this.state = State.DEAD;
-            currAnim = deathAnimation();
+            currentAnimation = deathAnimation();
         } else {
             if (dead) {
                 gamescreen.gameOver();
@@ -242,7 +242,7 @@ public class Player extends Entity {
         }
 
         if (buffTime + 3000 < System.currentTimeMillis()) {
-            if (invulnerable = true)
+            if (invulnerable == true)
                 invulnerable = false;
             if (multiplier != 1) {
                 multiplier = 1;
@@ -290,15 +290,15 @@ public class Player extends Entity {
             multiplier = 0;
 			Hunter.State.playerVelocity = new Vector2(0,0);
 			deathTime = System.currentTimeMillis();
-			this.currAnim = deathAnimation();
+			this.currentAnimation = deathAnimation();
 			dead = true;
 		}
 	}
 
 	@Override
 	public void draw(SpriteBatch batch, float stateTime) {
-        animLoop = state == State.RUNNING;
-        TextureRegion currFrame = currAnim.getKeyFrame(stateTime, animLoop);
+        loopAnimation = state == State.RUNNING;
+        TextureRegion currFrame = currentAnimation.getKeyFrame(stateTime, loopAnimation);
 
         if (blink) {
             batch.setColor(1f, 1f, 1f, 0.5f);
@@ -388,7 +388,6 @@ public class Player extends Entity {
 			}
 		} else if(e.getType().equals("MapEntity") && !((MapEntity) e).getEntityType().equals("arrow")){
 			if (!invulnerable && !blink && !dead){
-				String type = ((MapEntity)e).getEntityType();
 				applyPlayerDebuff((MapEntity)e);
 			}
 		}
@@ -397,7 +396,7 @@ public class Player extends Entity {
 	private void applyPlayerDebuff(MapEntity ent){
 		if (ent.getEntityType().equals("net")){
 			Hunter.State.playerVelocity.x = 0;
-			gamescreen.getEntites().remove(ent);
+			gamescreen.getEntities().remove(ent);
 		}else if(ent.getEntityType().equals("bomb")){
 			ent.explode();
 		}else if(ent.getEntityType().equals("spike trap")){
@@ -413,7 +412,7 @@ public class Player extends Entity {
 				hurt.play(Hunter.State.getPreferencesManager().getVolume());
 			}
 			score -= 1000;
-			gamescreen.getEntites().remove(ent);
+			gamescreen.getEntities().remove(ent);
 		}else if(ent.getEntityType().equals("explosion")){
 			if (Hunter.State.getPreferencesManager().isSoundEnabled()){
 				hurt.play(Hunter.State.getPreferencesManager().getVolume());
@@ -669,7 +668,7 @@ public class Player extends Entity {
      * @return Animation - Current Animation
      */
     public Animation getAnimation() {
-        return currAnim;
+        return currentAnimation;
     }
 
     /**

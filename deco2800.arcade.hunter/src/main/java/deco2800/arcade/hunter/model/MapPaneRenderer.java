@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import deco2800.arcade.hunter.Hunter.Config;
 
 public class MapPaneRenderer {
-    private static Pixmap tileMap = new Pixmap(Gdx.files.internal("textures/tilemap.png"));
-    private static int tileMapWidthTiles = tileMap.getWidth() / Config.TILE_SIZE;
+    private static final Pixmap tileMap = new Pixmap(Gdx.files.internal("textures/tilemap.png"));
+    private static final int tileMapWidthTiles = tileMap.getWidth() / Config.TILE_SIZE;
 
     /**
      * Render the given map pane to a TextureRegion for drawing to the screen

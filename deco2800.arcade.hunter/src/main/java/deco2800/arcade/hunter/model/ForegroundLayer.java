@@ -17,14 +17,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ForegroundLayer extends Map {
-    private ArrayList<MapPane> panes; //Set of the currently loaded panes
-    private int paneCount; //How many panes should we keep loaded at a time, should be the number that can fit on the screen plus one
+    private final ArrayList<MapPane> panes; //Set of the currently loaded panes
+    private final int paneCount; //How many panes should we keep loaded at a time, should be the number that can fit on the screen plus one
     private MapType currentType = MapType.GRASS;
 
     //Key is one of the MapType enums, value is a list of pane objects which can be instantiated
-    private HashMap<MapType, ArrayList<MapPane>> mapPanes = new HashMap<MapType, ArrayList<MapPane>>();
+    private final HashMap<MapType, ArrayList<MapPane>> mapPanes = new HashMap<MapType, ArrayList<MapPane>>();
 
-    private GameScreen gameScreen;
+    private final GameScreen gameScreen;
 
     /**
      * @param speedModifier How fast the pane should move relative to the camera. 1 is the same speed as the camera.

@@ -30,14 +30,10 @@ public class Animal extends Entity {
      */
     private Animation currentAnimation;
 
-    /**
-     * Whether or not the current animation should loop
-     */
-    private boolean loopAnimation;
     private long timeOfDeath;
     //GameScreen in which the Animal is located
-    private GameScreen gameScreen;
-    private String animalType;
+    private final GameScreen gameScreen;
+    private final String animalType;
 
     public Animal(Vector2 pos, float width, float height, String animalType,
                   Animation currentAnimation, GameScreen game) {
@@ -68,7 +64,7 @@ public class Animal extends Entity {
         //Removes the entity after a certain period, determined by timeOfDeath and timeout.
         if (this.state == State.DEAD) {
             if (timeOfDeath + Hunter.Config.PLAYER_BLINK_TIMEOUT <= System.currentTimeMillis()) {
-                Iterator it = gameScreen.getEntites().iterator();
+                Iterator it = gameScreen.getEntities().iterator();
                 while (it.hasNext()) {
                     if (it.next().equals(this))
                         it.remove();
@@ -97,7 +93,7 @@ public class Animal extends Entity {
 
     /**
      * Checks for collisions against all other entities in the given collection
-     * of entites.
+     * of entities.
      *
      * @param entities a collection of all entities which you want to check
      *                 for collisions against.
@@ -153,11 +149,12 @@ public class Animal extends Entity {
     /**
      * Draw the animal in its current state and animation frame.
      * @param batch batch to draw to
-     * @param stateTime
+     * @param stateTime animation state time
      */
     @Override
     public void draw(SpriteBatch batch, float stateTime) {
-        loopAnimation = state != State.DEAD;
+        boolean loopAnimation = state != State.DEAD;
+
         TextureRegion currFrame = currentAnimation.getKeyFrame(stateTime, loopAnimation);
         batch.draw(currFrame, getX(), getY(), getWidth(), getHeight());
     }

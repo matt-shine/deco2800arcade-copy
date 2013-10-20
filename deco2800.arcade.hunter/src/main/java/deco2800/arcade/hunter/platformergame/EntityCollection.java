@@ -11,17 +11,13 @@ public class EntityCollection implements Iterable<Entity> {
      * Store a collection of entities, and maintain a unique id for each one
      * Expose HashMap methods here as needed
      */
-    private ConcurrentHashMap<Integer, Entity> entities = new ConcurrentHashMap<Integer, Entity>();
-
-    public EntityCollection() {
-
-    }
+    private final ConcurrentHashMap<Integer, Entity> entities = new ConcurrentHashMap<Integer, Entity>();
 
     private int generateId() {
         //Get a random integer that isn't in the key set
         int id;
         Random random = new Random();
-        while (entities.containsKey(id = random.nextInt()) || id < 0) ;
+        while (entities.containsKey(id = random.nextInt()) || id < 0);
         return id;
     }
 

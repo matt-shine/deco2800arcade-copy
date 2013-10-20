@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 public abstract class Map {
-    protected Vector2 offset = new Vector2();
+    protected final Vector2 offset = new Vector2();
     protected float speedModifier;
 
     protected Map(float speedModifier) {
@@ -33,7 +33,9 @@ public abstract class Map {
     }
 
     /**
-     * @param speedModifier
+     * Setter for speedModifier
+     *
+     * @param speedModifier value to assign to speedModifier
      */
     public void setSpeedModifier(float speedModifier) {
         this.speedModifier = speedModifier;

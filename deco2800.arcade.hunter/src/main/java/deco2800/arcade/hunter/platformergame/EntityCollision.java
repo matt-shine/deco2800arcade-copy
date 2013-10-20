@@ -16,9 +16,9 @@ public class EntityCollision implements Comparable<Object> {
         MAP_ENTITY_C_LEFT_EDGE
     }
 
-    private Entity entityOne;
-    private Entity entityTwo;
-    private CollisionType type;
+    private final Entity entityOne;
+    private final Entity entityTwo;
+    private final CollisionType type;
 
     public EntityCollision(Entity entityOne, Entity entityTwo, CollisionType type) {
         this.entityOne = entityOne;

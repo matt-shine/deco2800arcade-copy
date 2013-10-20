@@ -20,11 +20,11 @@ import deco2800.arcade.hunter.Hunter;
  * @author Nessex, DLong94
  */
 public class GameOverScreen implements Screen {
-    private Hunter hunter;
-    private Stage stage;
-    private Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-    private Texture background;
-    private SpriteBatch batch;
+    private final Hunter hunter;
+    private final Stage stage;
+    private final Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+    private final Texture background;
+    private final SpriteBatch batch;
 
     public GameOverScreen(Hunter p, float distance, int score, int killCount) {
         hunter = p;
@@ -87,20 +87,17 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void dispose() {
-        // TODO Auto-generated method stub
         stage.dispose();
 
     }
 
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
         ArcadeInputMux.getInstance().removeProcessor(stage);
     }
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
 
     }
 
@@ -120,19 +117,16 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void show() {
-        // TODO Auto-generated method stub
         ArcadeInputMux.getInstance().addProcessor(stage);
     }
 

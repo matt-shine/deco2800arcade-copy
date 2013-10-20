@@ -16,12 +16,12 @@ public class Items extends Entity {
     /**
      * The Texture of the item
      */
-    private Texture texture;
+    private final Texture texture;
 
     /**
      * Name of the item
      */
-    private String item;
+    private final String item;
 
     //Item type
     public enum Type {
@@ -31,12 +31,12 @@ public class Items extends Entity {
     /**
      * Type of item: Weapon or Power up
      */
-    private Type type;
+    private final Type type;
 
     /**
      * The GameScreen which the item is in
      */
-    private GameScreen gameScreen;
+    private final GameScreen gameScreen;
 
     public Items(Vector2 pos, float width, float height, String item, Texture text, GameScreen gameScreen) {
         super(pos, width, height);

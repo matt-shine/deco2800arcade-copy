@@ -30,21 +30,20 @@ import java.util.Random;
  * @author Nessex, DLong94
  */
 public class GameScreen implements Screen {
-    private OrthographicCamera camera;
-    private Hunter hunter;
-    private EntityCollection entities = new EntityCollection();
-    private Player player;
-    private BackgroundLayer backgroundLayer;
-    private SpriteLayer spriteLayer;
-    private ForegroundLayer foregroundLayer;
+    private final OrthographicCamera camera;
+    private final Hunter hunter;
+    private final EntityCollection entities = new EntityCollection();
+    private final Player player;
+    private final BackgroundLayer backgroundLayer;
+    private final SpriteLayer spriteLayer;
+    private final ForegroundLayer foregroundLayer;
     private float speedIncreaseCountdown = Config.SPEED_INCREASE_COUNTDOWN_START;
-    private SpriteBatch batch = new SpriteBatch();
-    private SpriteBatch staticBatch = new SpriteBatch();
-    private BitmapFont font = new BitmapFont(); //Can specify font here if we don't want to use the default
-    public EntityHandler entityHandler;
+    private final SpriteBatch batch = new SpriteBatch();
+    private final SpriteBatch staticBatch = new SpriteBatch();
+    private final BitmapFont font = new BitmapFont(); //Can specify font here if we don't want to use the default
+    public final EntityHandler entityHandler;
     private Music musicResource;
     private float stateTime;
-    private float counter;
     private int multiplier;
     private long animalTime;
     private long itemTime;
@@ -52,8 +51,6 @@ public class GameScreen implements Screen {
     private long attackTime;
 
     public GameScreen(Hunter hunter) {
-
-
         this.hunter = hunter;
 
         // Initialise camera
@@ -86,12 +83,7 @@ public class GameScreen implements Screen {
             musicResource.play();
         }
 
-        stateTime = 0f;
         multiplier = 1;
-        animalTime = 0;
-        itemTime = 0;
-        mapEntityTime = 0;
-        attackTime = 0;
 
         hunter.incrementAchievement("hunter.beginnings");
         hunter.incrementAchievement("hunter.smallsteps");
@@ -100,7 +92,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        // TODO Auto-generated method stub
         batch.dispose();
         staticBatch.dispose();
         musicResource.dispose();
@@ -115,13 +106,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
+        //Auto-generated method stub
 
     }
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
+        //Auto-generated method stub
 
     }
 
@@ -145,45 +136,10 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         if (!Hunter.State.paused) {
-            pollInput();
-
-            stateTime += Gdx.graphics.getDeltaTime();
-
-            increaseGameSpeed(delta);
-
-            moveCamera();
-
-            entities.updateAll(delta);
-
-            PhysicsHandler.checkMapCollisions(entities, foregroundLayer);
-            PhysicsHandler.checkEntityCollisions(entities);
-
-            backgroundLayer.update(delta, camera.position);
-            spriteLayer.update(delta, camera.position);
-            foregroundLayer.update(delta, camera.position);
-
-            if (animalTime + 2500 <= System.currentTimeMillis()) {
-                if (Hunter.State.randomGenerator.nextFloat() >= 0.5) {
-                    createAnimals();
-                }
-                animalTime = System.currentTimeMillis();
-            }
-            if (itemTime + 4500 <= System.currentTimeMillis()) {
-                if (Hunter.State.randomGenerator.nextFloat() >= 0.5) {
-                    createItems();
-                }
-                itemTime = System.currentTimeMillis();
-            }
-            if (mapEntityTime + 4000 <= System.currentTimeMillis()) {
-                if (Hunter.State.randomGenerator.nextFloat() >= 0.5) {
-                    createMapEntity();
-                }
-                mapEntityTime = System.currentTimeMillis();
-            }
-
-
+            update(delta);
         }
-        //Draw everything
+
+
         staticBatch.begin();
         backgroundLayer.draw(staticBatch);
         staticBatch.end();
@@ -193,12 +149,60 @@ public class GameScreen implements Screen {
         foregroundLayer.draw(batch);
 
         entities.drawAll(batch, stateTime);
-
         batch.end();
 
         staticBatch.begin();
         drawGameUI(staticBatch);
         staticBatch.end();
+    }
+
+    /**
+     * Update the state of the game
+     * @param delta delta time since the last update
+     */
+    private void update(float delta) {
+        pollInput();
+
+        stateTime += Gdx.graphics.getDeltaTime();
+
+        increaseGameSpeed(delta);
+
+        moveCamera();
+
+        entities.updateAll(delta);
+
+        PhysicsHandler.checkMapCollisions(entities, foregroundLayer);
+        PhysicsHandler.checkEntityCollisions(entities);
+
+        backgroundLayer.update(delta, camera.position);
+        spriteLayer.update(delta, camera.position);
+        foregroundLayer.update(delta, camera.position);
+
+        checkSpawnTimers();
+    }
+
+    /**
+     * Check the spawn timers for animals, items and map entities.
+     */
+    private void checkSpawnTimers() {
+        if (animalTime + 2500 <= System.currentTimeMillis()) {
+            if (Hunter.State.randomGenerator.nextFloat() >= 0.5) {
+                createAnimals();
+            }
+            animalTime = System.currentTimeMillis();
+        }
+        if (itemTime + 4500 <= System.currentTimeMillis()) {
+            if (Hunter.State.randomGenerator.nextFloat() >= 0.5) {
+                createItems();
+            }
+            itemTime = System.currentTimeMillis();
+        }
+        if (mapEntityTime + 4000 <= System.currentTimeMillis()) {
+            if (Hunter.State.randomGenerator.nextFloat() >= 0.5) {
+                createMapEntity();
+            }
+            mapEntityTime = System.currentTimeMillis();
+        }
     }
 
     /**
@@ -225,7 +229,7 @@ public class GameScreen implements Screen {
     /**
      * @return EntityCollection of entities in the game screen
      */
-    public EntityCollection getEntites() {
+    public EntityCollection getEntities() {
         return entities;
     }
 
@@ -239,17 +243,17 @@ public class GameScreen implements Screen {
 	 * Creates a new map entity
 	 */
 	private void createMapEntity() {
-		String[] mapents = {"bomb", "net", "spike trap", "deathShroom"};
-		String mapent = mapents[Hunter.State.randomGenerator.nextInt(4)];
-		entities.add(new MapEntity(new Vector2(player.getX() + Hunter.State.screenWidth, getForeground().getColumnTop(player.getX() + Hunter.State.screenWidth)),entityHandler.getMapEntity(mapent).getWidth(),entityHandler.getMapEntity(mapent).getHeight(), mapent, entityHandler.getMapEntity(mapent), this));
+		String[] mapEntities = {"bomb", "net", "spike trap", "deathShroom"};
+		String mapEntity = mapEntities[Hunter.State.randomGenerator.nextInt(4)];
+		entities.add(new MapEntity(new Vector2(player.getX() + Hunter.State.screenWidth, getForeground().getColumnTop(player.getX() + Hunter.State.screenWidth)),entityHandler.getMapEntity(mapEntity).getWidth(),entityHandler.getMapEntity(mapEntity).getHeight(), mapEntity, entityHandler.getMapEntity(mapEntity), this));
 	}
 	
 	/**
 	 * Creates a new animal entity
 	 */
 	private void createAnimals(){
-		String[] anims= {"hippo","lion","zebra"};
-		String animal = anims[Hunter.State.randomGenerator.nextInt(3)];
+		String[] animals = {"hippo", "lion", "zebra"};
+		String animal = animals[Hunter.State.randomGenerator.nextInt(3)];
 		entities.add(new Animal(new Vector2(player.getX() + Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX() + Config.PANE_SIZE_PX)), 128, 128, animal, entityHandler.getAnimalAnimation(animal), this));
 	}
 	
@@ -273,10 +277,6 @@ public class GameScreen implements Screen {
 				entities.add(new MapEntity(new Vector2(player.getX() + player.getWidth(), player.getY()+20),8,8, "arrow", entityHandler.getMapEntity("arrow"), this));
 				attackTime = System.currentTimeMillis();
 			}
-		}
-
-		if (Gdx.input.isKeyPressed(Keys.V)){
-			gameOver();      //TEMPORARY, DON'T FORGET TO REMOVE! TODO
 		}
 				
 		if (Gdx.input.isKeyPressed(Keys.SPACE) && player.isGrounded() && !player.isDead()) {
@@ -414,24 +414,23 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        // TODO Auto-generated method stub
+        //Auto-generated method stub
 
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
+        //Auto-generated method stub
 
     }
 
     @Override
     public void show() {
-        // TODO Auto-generated method stub
+        //Auto-generated method stub
 
     }
 
     public GameClient getGameReference() {
-        // TODO Auto-generated method stub
         return hunter;
     }
 }

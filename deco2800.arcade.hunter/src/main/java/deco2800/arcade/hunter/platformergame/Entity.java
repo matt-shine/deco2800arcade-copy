@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public abstract class Entity {
     protected Rectangle bounds;
-    protected EdgeCollider collider = new EdgeCollider();
+    protected final EdgeCollider collider = new EdgeCollider();
 
     public Entity(Vector2 pos, float width, float height) {
         bounds = new Rectangle(pos.x, pos.y, width, height);
@@ -84,6 +84,4 @@ public abstract class Entity {
     public String getType() {
         return null;
     }
-
-
 }

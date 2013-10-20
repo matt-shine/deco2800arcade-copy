@@ -17,9 +17,9 @@ import deco2800.arcade.hunter.screens.GameScreen;
 
 public class MapEntity extends Entity {
 	private Texture texture;
-	private int moveSpeed;
+	private final int moveSpeed;
 	private String mapEntityType;
-	private GameScreen gameScreen;
+	private final GameScreen gameScreen;
 	private long explodeTime;
 	private boolean explode = false;
 
@@ -29,7 +29,7 @@ public class MapEntity extends Entity {
      * @param height initial height of the entity
      * @param mapEntityType the name of the MapEntity, eg. "spike trap".
      * @param texture Texture containing the image of the map entity
-     * @param gameScreen
+     * @param gameScreen the GameScreen which is controlling this game instance
      */
 	public MapEntity(Vector2 pos, float width, float height, String mapEntityType,
 			Texture texture, GameScreen gameScreen) {
@@ -125,7 +125,7 @@ public class MapEntity extends Entity {
      * explosion sound.
      */
     public void explode(){
-    	if (this.mapEntityType == "bomb"){
+    	if (this.mapEntityType.equals("bomb")){
     		explodeTime = System.currentTimeMillis();
     		texture = gameScreen.entityHandler.getMapEntity("explosion");
     		explode = true;

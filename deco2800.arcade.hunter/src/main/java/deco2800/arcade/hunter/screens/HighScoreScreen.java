@@ -19,14 +19,14 @@ import java.util.List;
 
 public class HighScoreScreen implements Screen {
 
-    private Hunter hunter;
-    private Stage stage;
-    private Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-    private List<Highscore> topPlayers;
+    private final Hunter hunter;
+    private final Stage stage;
+    private final Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+    private final List<Highscore> topPlayers;
 
 
-    private Texture background;
-    private SpriteBatch batch;
+    private final Texture background;
+    private final SpriteBatch batch;
 
     public HighScoreScreen(Hunter h) {
         hunter = h;
@@ -109,7 +109,6 @@ public class HighScoreScreen implements Screen {
 
     @Override
     public void show() {
-        // TODO Auto-generated method stub
         ArcadeInputMux.getInstance().addProcessor(stage);
     }
 
@@ -120,13 +119,11 @@ public class HighScoreScreen implements Screen {
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
 
     }
 

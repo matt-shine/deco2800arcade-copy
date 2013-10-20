@@ -24,10 +24,10 @@ import deco2800.arcade.hunter.Hunter;
  * @author Nessex, DLong94
  */
 public class MenuScreen implements Screen {
-    private Hunter hunter;
-    private Stage stage;
-    private SpriteBatch batch;
-    private Texture background;
+    private final Hunter hunter;
+    private final Stage stage;
+    private final SpriteBatch batch;
+    private final Texture background;
 
     public MenuScreen(Hunter p) {
         hunter = p;
@@ -114,13 +114,11 @@ public class MenuScreen implements Screen {
 
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
         ArcadeInputMux.getInstance().removeProcessor(stage);
     }
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
 
     }
 
@@ -146,7 +144,6 @@ public class MenuScreen implements Screen {
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
 
     }
 

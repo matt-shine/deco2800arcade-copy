@@ -14,14 +14,14 @@ import deco2800.arcade.hunter.Hunter;
 
 public class OptionScreen implements Screen {
 
-    private Hunter game;
-    private Stage stage;
+    private final Hunter game;
+    private final Stage stage;
     private boolean music;
     private boolean sound;
     private float volume;
-    private Skin skin;
-    private Texture background;
-    private SpriteBatch batch;
+    private final Skin skin;
+    private final Texture background;
+    private final SpriteBatch batch;
 
     public OptionScreen(Hunter p) {
         game = p;
@@ -144,7 +144,6 @@ public class OptionScreen implements Screen {
 
     @Override
     public void show() {
-        // TODO Auto-generated method stub
         ArcadeInputMux.getInstance().addProcessor(stage);
     }
 
@@ -155,13 +154,11 @@ public class OptionScreen implements Screen {
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
         ArcadeInputMux.getInstance().removeProcessor(stage);
     }
 

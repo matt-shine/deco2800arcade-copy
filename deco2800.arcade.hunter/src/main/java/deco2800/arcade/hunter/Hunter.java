@@ -14,8 +14,8 @@ import java.util.Random;
 @ArcadeGame(id = "hunter")
 public class Hunter extends PlatformerGame {
     private static PreferencesManager prefManage;
-    public HighscoreClient highscore;
-    private NetworkClient networkClient;
+    public final HighscoreClient highscore;
+    private final NetworkClient networkClient;
 
 
     public final static class Config {
@@ -41,10 +41,10 @@ public class Hunter extends PlatformerGame {
 
     public static class State {
         public static boolean paused = false;
-        public static int screenWidth = 1280;
-        public static int screenHeight = 720;
+        public static final int screenWidth = 1280;
+        public static final int screenHeight = 720;
         public static int gameSpeed = 512;
-        public static float gravity = 2 * 9.81f;
+        public static final float gravity = 2 * 9.81f;
         public static Random randomGenerator;
         /**
          * Velocity of the player

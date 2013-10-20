@@ -19,8 +19,8 @@ public class SpriteLayer extends Map {
     /**
      * Lists of textures for all the trees and clouds
      */
-    private ArrayList<TextureRegion> treeSprites = new ArrayList<TextureRegion>();
-    private ArrayList<TextureRegion> cloudSprites = new ArrayList<TextureRegion>();
+    private final ArrayList<TextureRegion> treeSprites = new ArrayList<TextureRegion>();
+    private final ArrayList<TextureRegion> cloudSprites = new ArrayList<TextureRegion>();
 
     /**
      * Collection of trees and clouds currently spawned into the world
@@ -28,7 +28,7 @@ public class SpriteLayer extends Map {
     private EntityCollection clouds = new EntityCollection();
     private EntityCollection trees = new EntityCollection();
 
-    private GameScreen gameScreen;
+    private final GameScreen gameScreen;
 
     /**
      * Get a random coordinate within the area of the width of the screen, and
@@ -188,7 +188,6 @@ public class SpriteLayer extends Map {
      */
     @Override
     public void draw(SpriteBatch batch) {
-        // TODO Auto-generated method stub
         for (int c : clouds.idSet()) {
             batch.draw(cloudSprites.get(c % cloudSprites.size()),
                     clouds.getById(c).getX(), clouds.getById(c).getY());

@@ -3,7 +3,6 @@ package deco2800.arcade.hunter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import deco2800.arcade.hunter.model.MapEntity;
 import deco2800.arcade.hunter.platformergame.EntityCollection;
 
 import java.util.HashMap;
@@ -12,15 +11,15 @@ public class EntityHandler {
 	/**
 	 * Creates Entities
 	 */
-	private EntityCollection entities;
-	private HashMap<String,Animation> animalAnims; //Animation HashMap for animals
-	private HashMap<String,Texture> itemTextures; //Texture HashMap for items
-	private HashMap<String,Texture> mapEntityTextures; //Texture HashMap for MapEntities
+	private final EntityCollection entities;
+	private final HashMap<String,Animation> animalAnimations; //Animation HashMap for animals
+	private final HashMap<String,Texture> itemTextures; //Texture HashMap for items
+	private final HashMap<String,Texture> mapEntityTextures; //Texture HashMap for MapEntities
 	
 	
 	public EntityHandler(EntityCollection entities){
 		this.entities = entities;
-		animalAnims = new HashMap<String,Animation>();
+		animalAnimations = new HashMap<String,Animation>();
 		itemTextures = new HashMap<String,Texture>();
 		mapEntityTextures = new HashMap<String,Texture>();
 		loadAnimals();
@@ -32,23 +31,23 @@ public class EntityHandler {
 	 * Loads all the animal animations into the game
 	 */
 	private void loadAnimals(){
-		String[] anims= {"hippo","lion","zebra"};
-		for (String x: anims){
+		String[] animations = {"hippo","lion","zebra"};
+		for (String x: animations){
 			Texture text = new Texture("textures/Animals/"+ x + ".png");
 			TextureRegion[][] tmp = TextureRegion.split(text, text.getWidth() / 2,
 					text.getHeight());
-			TextureRegion[] animFrames = new TextureRegion[2];
+			TextureRegion[] animationFrames = new TextureRegion[2];
 			int index = 0;
 			for (int i = 0; i < 2; i++) {
-				animFrames[index++] = tmp[0][i];
+				animationFrames[index++] = tmp[0][i];
 			}
-			animalAnims.put(x, new Animation(0.5f,animFrames));
+			animalAnimations.put(x, new Animation(0.5f, animationFrames));
 			
 			Texture text2 = new Texture("textures/Animals/" + x + "Dead.png");
 			TextureRegion[][] tmp2 = TextureRegion.split(text2, text2.getWidth(), text2.getHeight());
-			TextureRegion[] animFrames2 = new TextureRegion[1];
-			animFrames2[0] = tmp2[0][0]; 
-			animalAnims.put(x + "DEAD", new Animation(0.5f,animFrames2));
+			TextureRegion[] animationFrames2 = new TextureRegion[1];
+			animationFrames2[0] = tmp2[0][0];
+			animalAnimations.put(x + "DEAD", new Animation(0.5f, animationFrames2));
 		}
 		
 	}
@@ -82,7 +81,7 @@ public class EntityHandler {
 	 * @return Animation of the animal
 	 */
 	public Animation getAnimalAnimation(String animal){
-		return animalAnims.get(animal);
+		return animalAnimations.get(animal);
 	}
 	 /**
 	  * Returns an item texture

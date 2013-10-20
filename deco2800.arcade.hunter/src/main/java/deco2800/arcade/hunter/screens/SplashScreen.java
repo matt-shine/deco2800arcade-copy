@@ -11,10 +11,10 @@ import deco2800.arcade.hunter.Hunter;
 
 public class SplashScreen implements Screen {
 
-    private Hunter hunter;
-    private Stage stage;
+    private final Hunter hunter;
+    private final Stage stage;
 
-    private Image splashImage;
+    private final Image splashImage;
 
 
     public SplashScreen(Hunter h) {
@@ -48,13 +48,11 @@ public class SplashScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void show() {
-        // TODO Auto-generated method stub
 
     }
 
@@ -65,13 +63,11 @@ public class SplashScreen implements Screen {
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void resume() {
-        // TODO Auto-generated method stub
 
     }
 

@@ -12,6 +12,7 @@ import java.awt.GridLayout;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -184,6 +185,11 @@ public class CommunicationView extends JPanel {
 	public void setCommunicationNetwork(
 			CommunicationNetwork communicationNetwork) {
 		this.communicationNetwork = communicationNetwork;
+	}
+
+	public void addKeyPressListener(KeyListener listener) {
+		sendButton.addKeyListener(listener);
+		
 	}
 
 }

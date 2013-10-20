@@ -4,9 +4,7 @@ import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.TextureAtlasLoader.TextureAtlasParameter;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
@@ -23,12 +21,9 @@ import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.MathUtils;
-//import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
 import com.badlogic.gdx.utils.Array;
 import deco2800.arcade.cyra.model.*;
@@ -54,7 +49,6 @@ public class WorldRenderer {
 	Player ship;
 	Sword sword;
 	//Follower follower;
-	Walker walker;
 	private ParallaxCamera cam;
 	Integer rightCyraCount, leftCyraCount, rightFrameCounter, leftFrameCounter;
 	private BitmapFont font, fontBig;
@@ -62,21 +56,15 @@ public class WorldRenderer {
 	jumperBodyTexture, jumperFrontArmTexture, jumperFrontLegTexture, jumperFrontArmJumpingTexture,jumperFrontLegJumpingTexture,
 	wallTexture, sword1, sword2, sword3;
 	private TextureRegion cyraFrame;
-	private TextureRegion walkerRegion;
 	private TextureAtlas groundTextureAtlas, laserTextures, explosionTextures, boss1Atlas, bossRam, firestarter, myEnemy;
 	private TextureRegion boss1body, boss1head0, boss1head1, boss1arms;
-	private Animation followerAnimation, cyraRightAnimation, cyraLeftAnimation; 
+	private Animation cyraRightAnimation, cyraLeftAnimation; 
 	float width, height;
-	private Array<Bullet> bullets;
 	private Array<Enemy> enemies;
-	Iterator<Bullet> bItr;
 	Iterator<Enemy> eItr;
-	private Bullet b;
 	private Enemy e;
-	private Array<CutsceneObject> csObjects;
 	private Array<MovablePlatform> mvPlatforms;
 	private Array<BlockMaker> blockMakers;
-	//private float rotationArms;
 	private float sceneBarHeight;
 	private boolean enemyWithHealthOnScreen = false;
 	private float healthPercentage;
@@ -84,15 +72,12 @@ public class WorldRenderer {
 	private float redScreenAlpha;
 	private ParallaxLayer parallaxLayer;
 	
-	//attempting to use maps
 	TileMapRenderer tileMapRenderer;
-	//OrthogonalTiledMapRenderer oRenderer;
-	//TiledMap map;
-	//TileAtlas mapAtlas;
+	
 	
 	private boolean blinkShip;
 	
-	private static final int[] layersList = { 0 };
+	
 	
 	
 	//debug
@@ -100,6 +85,10 @@ public class WorldRenderer {
 	ShapeRenderer sr;
 	TextureRegion testRegion;
 	private FPSLogger fpsLogger;
+	
+	/**
+	 * Initialize variables and update screen
+	 */
 	
 	public WorldRenderer(World world, ParallaxCamera cam) {
 		this.world = world;
@@ -111,66 +100,27 @@ public class WorldRenderer {
 		cam.update();
 		
 		
-		//not good
-		//world.setRenderer(this);
-		
-		//make the map NOT SURE IF GOOD
-		/*map = TiledLoader.createMap(Gdx.files.internal("level.tmx"));
-		mapAtlas = new TileAtlas(map, Gdx.files.internal("level1"));
-		
-		tileMapRenderer = new TileMapRenderer(map, mapAtlas, 32, 32, 1, 1);*/
-		
-		
-		
-		
-		
-		//was using number of tiles to show each direction
-		
-		/*width = 24;
-		height = 15;*/
-		
-		//this is important for different phone sizes. about cutting off stuff on smaller screens etc
-		//cam.setToOrtho(false, width, height);
-		
-		
+
 		init();
 	}
+	
+	/**
+	 * Call draw functions
+	 */
 	
 	public void render() {
 		ship = world.getShip();
 		sword = world.getSword();
-		//follower = world.getFollower();
 		enemies = world.getEnemies();
-		bullets = world.getBullets();
-		csObjects = world.getCutsceneObjects();
 		mvPlatforms = world.getMovablePlatforms();
 		blockMakers = world.getBlockMakers();
 		
-		//System.out.println("Sxy: " + ship.getPosition().x+","+ship.getPosition().y+" Cwh: "+cam.viewportWidth+","+cam.viewportHeight);
-		/*if(ship.getPosition().x > cam.viewportWidth/2 && ship.getPosition().y > cam.viewportHeight/2) {
-			cam.position.set(ship.getPosition().x, ship.getPosition().y, 0);
-		}*/
-		//cam.position.x = ship.getPosition().x;
-		//cam.position.y = ship.getPosition().y;
-		
-		/* Camera code needs to be fixed later on. Currently it's set to always
-		 * follow the sprite so that camera's updated properly when reset*/
-		
+
 		
 		
 		cam.update();
 		
-		//batch.setProjectionMatrix(cam.combined);
 		
-		//ANIMATIONS
-		//followerFrame = followerAnimation.getKeyFrame(e.getStateTime(), true);
-		/*System.out.println(followerAnimation);
-		System.out.println(follower.getStateTime());
-		System.out.println(followerAnimation.getKeyFrame(follower.getStateTime(), true));
-		System.out.println(followerFrame);
-		System.out.println(testRegion);*/
-		
-		//tileMapRenderer.render(cam);
 		
 		drawLevel(batch);
 		drawGameObjects(batch);
@@ -180,7 +130,9 @@ public class WorldRenderer {
 		
 		return;
 	}
-	
+	/**
+	 * Draw player character
+	 */
 	private void drawShip() {
 		
 		
@@ -209,19 +161,13 @@ public class WorldRenderer {
 			if((rightFrameCounter == 0) && (ship.isWalking() == true)){
 				cyraFrame = cyraRightAnimation.getKeyFrame(rightCyraCount, true);
 					rightCyraCount = (rightCyraCount+1) % 5;
-					System.out.println("Cyra Frame count is " + rightCyraCount);
+					
 			}
 			
 			cyraFrame = cyraRightAnimation.getKeyFrame(rightCyraCount+1, true);
 			batch.draw(cyraFrame, ship.getPosition().x, ship.getPosition().y, ship.getWidth()/2,
 					ship.getHeight()/2, ship.getWidth(), ship.getHeight(), 1.8f, 1f, ship.getRotation());
 			
-			/*batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y+ship.getHeight()/2, ship.getWidth() /2, ship.getHeight()/2,
-					1f, 1f, 2, 2, ship.getRotation(), 0, 0, shipTexture.getWidth(),
-					shipTexture.getHeight(), false, false);*/
-		/*batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y, ship.getWidth() /2, ship.getHeight()/2,
-				ship.getWidth(), ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, shipTexture.getWidth(),
-				shipTexture.getHeight(), false, false);*/
 		} else {
 			if(sword.getFrame() == 1){
 				batch.draw(sword1, (ship.getPosition().x)-1.5f, (ship.getPosition().y) +1.4f, ship.getWidth() /2, ship.getHeight(),
@@ -241,33 +187,13 @@ public class WorldRenderer {
 						sword3.getHeight(), true, false);
 				
 			}
-			/*rightFrameCounter = 0;
-			rightCyraCount = 0;
-			System.out.println("woop derit is");
-			leftFrameCounter = (leftFrameCounter+1) %10;
-			//cyraFrame = cyraAnimation.getKeyFrame(e.getStateTime(), true);
-			/*batch.draw(cyraFrame, ship.getPosition().x, ship.getPosition().y, ship.getWidth()/2,
-					ship.getHeight()/2, ship.getWidth(), ship.getHeight(), 1, 1, 0);
-			if((leftFrameCounter == 0) && (ship.isWalking() == true)){
-				cyraFrame = cyraLeftAnimation.getKeyFrame(leftCyraCount, true);
-					leftCyraCount = (leftCyraCount+1) % 5;
-					System.out.println("Cyra Frame count is " + leftCyraCount+1);
-					System.out.println("woop derit is");
-			}
-			System.out.println("woop derit is");
-			cyraFrame = cyraLeftAnimation.getKeyFrame(leftCyraCount+1, true);
-			batch.draw(cyraFrame, ship.getPosition().x, ship.getPosition().y, ship.getWidth()/2,
-					ship.getHeight()/2, ship.getWidth(), ship.getHeight(), 1.5f, 1f, 0);
-			/*batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y+ship.getHeight()/2, ship.getWidth() /2, ship.getHeight()/2,
-					1f, 1f, 2, 2, ship.getRotation(), 0, 0, shipTexture.getWidth(),
-					shipTexture.getHeight(), true, false);*/
 			leftCyraCount = 0;
 			leftFrameCounter = 0;
 			rightFrameCounter = (rightFrameCounter+1) %8;
 			if((rightFrameCounter == 0) && (ship.isWalking() == true)){
 				cyraFrame = cyraLeftAnimation.getKeyFrame(rightCyraCount, true);
 					rightCyraCount = (rightCyraCount+1) % 5;
-					System.out.println("Cyra Frame count is " + rightCyraCount);
+					
 			}
 			
 			cyraFrame = cyraLeftAnimation.getKeyFrame(rightCyraCount+1, true);
@@ -276,10 +202,17 @@ public class WorldRenderer {
 		}
 	}
 	
+	/**
+	 * Camera get method
+	 * @return cam
+	 */
 	public OrthographicCamera getCamera() {
 		return cam;
 	}
-	
+	/**
+	 * Visually draw level layers
+	 * @param batch
+	 */
 	private void drawLevel(SpriteBatch batch) {
 		/* Draw background layers */
 		batch.setProjectionMatrix(cam.calculateParallaxMatrix(0f, 0));
@@ -290,67 +223,42 @@ public class WorldRenderer {
 		batch.begin();
 		Array<Vector2> positions = parallaxLayer.getAllDrawPositions();
 		Array<Texture> textures = parallaxLayer.getAllDrawTextures();
-		for (int i=0; i<textures.size; i++ ) {
-			//if (positions.get(i).x < cam.position.x +cam.viewportWidth && positions.get(i).x +textures.get(i).getWidth()/32f > cam.position.x - cam.viewportWidth) {
-				batch.draw(textures.get(i), positions.get(i).x, positions.get(i).y, textures.get(i).getWidth()/32f, textures.get(i).getHeight()/32f);
-			//}
+		for (int i=0; i<textures.size; i++ ) {batch.draw(textures.get(i), positions.get(i).x, positions.get(i).y, textures.get(i).getWidth()/32f, textures.get(i).getHeight()/32f);
+
 		}
 		batch.end();
 		
 		/* Draw tiled layers */
-		/*tileMapRenderer.setView(cam.calculateParallaxMatrix(0.25f, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
+
 		
-		tileMapRenderer.render(new int[]{0});
-		tileMapRenderer.setView(cam.calculateParallaxMatrix(0.5f, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
-		tileMapRenderer.render(new int[]{1});
-		tileMapRenderer.setView(cam.calculateParallaxMatrix(1, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
-		tileMapRenderer.render(new int[]{2});*/
-		
-		//tileMapRenderer.getProjectionMatrix().set(cam.combined);
-		//tileMapRenderer.render(cam, new int[]{0, 1, 2});
-		//tileMapRenderer.render(cam.position.x-cam.viewportWidth/2, cam.position.y-cam.viewportHeight/2,
-			//	cam.viewportWidth, cam.viewportHeight);
-		//tileMapRenderer.render(cam.position.x, cam.position.y, cam.viewportWidth*2, cam.viewportHeight*2);
-		/*tileMapRenderer.getProjectionMatrix().set(cam.calculateParallaxMatrix(0.25f, 1));
-		tileMapRenderer.render(cam, new int[]{0});
-		tileMapRenderer.getProjectionMatrix().set(cam.calculateParallaxMatrix(0.5f, 1));
-		tileMapRenderer.render(cam, new int[]{1});*/
-		//tileMapRenderer.render(cam.);
 		tileMapRenderer.getProjectionMatrix().set(cam.calculateParallaxMatrix(1, 1));
-		//tileMapRenderer.getProjectionMatrix().set(cam.combined);
 		
-		/*Vector3 tmp = new Vector3();
-		tmp.set(0,0,0);
-		cam.unproject(tmp);
-		tileMapRenderer.render((int) tmp.x, (int) tmp.y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());*/
-		//tileMapRenderer.render(cam, new int[]{3}); // THIS IS ONLY UNTIL layer 2's graphics are complete
-		//tileMapRenderer.render(cam, new int[]{2});
 		tileMapRenderer.render(cam, new int[]{0,1});
 		
-		
-		
-		//tileMapRenderer.render((int) cam.position.x-cam.viewportWidth/2, (int) cam.position.y-cam.viewportHeight/2, 999, 999,
-			//	new int[]{2});
+
 		
 		
 		
 		return;
 	}
-	
+	/**
+	 * Render the foreground layer
+	 * @param batch
+	 */
 	private void drawForeground(SpriteBatch batch) {
 		if (!ship.isOverForeground()) {
 			tileMapRenderer.render(cam, new int[]{2,3});
 		}
 		
 	}
-	
+	/**
+	 * Draw objects (blocks, enemies, effects etc)
+	 * @param batch
+	 */
 	private void drawGameObjects(SpriteBatch batch) {
 		/* Draw game objects */
 		batch.setProjectionMatrix(cam.combined);
 		batch.begin();
-		//batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y);
-		
-		//0,0 origin will be offcenter
 		
 		/* Draw BlockMaker Blocks */
 		for (BlockMaker bm: blockMakers) {
@@ -495,7 +403,6 @@ public class WorldRenderer {
 						Array<Rectangle> pdb = se.getPlayerDamageBounds();
 						if (pdb != null) {
 							if (pdb.size >= 1) {
-								System.out.println("Size of array: "+pdb.size);
 								Rectangle swordBounds = pdb.get(0);
 								batch.draw(sword2, swordBounds.x, swordBounds.y, 0, 0, swordBounds.width, swordBounds.height,1,1,0,
 										0,0,sword2.getWidth(), sword2.getHeight(), !se.isFacingRight(), false);
@@ -522,17 +429,7 @@ public class WorldRenderer {
 					batch.draw(log, xPos, (e.getPosition().y + 0.6f), e.getWidth()/2, e.getHeight()/2, log.getWidth()/32f/2, log.getHeight()/32f/2,0.2f,0.2f,90,
 							0,0,log.getWidth(), log.getHeight(), se.isFacingRight(), false);
 				}
-			}
-			else if (e.getClass() == Zombie.class){
-				batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
-						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
-						shipTexture.getHeight(), false, false);				
-			}
-			else if ((e.getClass() == EnemySpiderBossPopcorn.class)){
-				batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
-						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
-						shipTexture.getHeight(), false, false);
-			} else if (e.getClass() == Zombie.class){
+			} else if ((e.getClass() == EnemySpiderBossPopcorn.class)){
 				batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
 						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
 						shipTexture.getHeight(), false, false);
@@ -546,17 +443,8 @@ public class WorldRenderer {
 					} else {
 						rotation = -90f;
 					}
-					//rotation = MathUtils.random(359f);
-					TextureRegion bossRamFrame = bossRam.findRegion("stephenram", esb.getRamFrame());
-					//bossRamFrame.flip(true, false);
-					//batch.draw(bossRamFrame, e.getPosition().x-15f, e.getPosition().y-2f, 0,
-						//	0, bossRamFrame.getRegionWidth()/32f, bossRamFrame.getRegionHeight()/32f, scale, scale, rotation);
-					//batch.draw(bossRamFrame, e.getPosition().x+e.getWidth()/2, e.getPosition().y+e.getHeight()/2, bossRamFrame.getRegionWidth()/32f-e.getWidth()/2,
-					batch.draw(bossRamFrame, e.getPosition().x-bossRamFrame.getRegionWidth()/32f/2f-3f, e.getPosition().y+e.getHeight()/2-bossRamFrame.getRegionHeight()/2f/32f, bossRamFrame.getRegionWidth()/32f-e.getWidth()/2,
+					TextureRegion bossRamFrame = bossRam.findRegion("stephenram", esb.getRamFrame());batch.draw(bossRamFrame, e.getPosition().x-bossRamFrame.getRegionWidth()/32f/2f-3f, e.getPosition().y+e.getHeight()/2-bossRamFrame.getRegionHeight()/2f/32f, bossRamFrame.getRegionWidth()/32f-e.getWidth()/2,
 								bossRamFrame.getRegionHeight()/32f/2f, bossRamFrame.getRegionWidth()/32f, bossRamFrame.getRegionHeight()/32f, scale, scale, rotation);
-					
-					//region, las.getOriginPosition().x-las.getCurrentWidth()/2-bufferWidth, las.getOriginPosition().y, las.getCurrentWidth()/2+2*bufferWidth, 0, las.getCurrentWidth()+2*bufferWidth, 
-					//LaserBeam.DEFAULT_LENGTH, 1f,1f, e.getRotation()-90f
 				}
 				if (!(esb.isInvincible() && esb.toggleFlash())) { 
 					
@@ -570,7 +458,6 @@ public class WorldRenderer {
 						b1head = boss1head1;
 					}
 					Vector2 posForOriginZeroZero = new Vector2(e.getPosition().x+(45f/32f)*scale, e.getPosition().y+(188f/32f)*scale);
-					//Vector2 origin = new Vector2(b1head.getRegionWidth()/32f, -5f);
 					Vector2 origin = new Vector2(0,0);
 					batch.draw(b1head, posForOriginZeroZero.x, posForOriginZeroZero.y, origin.x,
 							origin.y, b1head.getRegionWidth()/32f, b1head.getRegionHeight()/32f, scale, scale, e.getRotation());
@@ -579,8 +466,6 @@ public class WorldRenderer {
 				
 				EnemySpiderBossArms arms = ((EnemySpiderBoss)e).getArms();
 				float rotationArms = arms.getRotation();
-				//System.out.println("scale*arms.getScale() = "+scale*arms.getScale());
-				//batch.draw(boss1arms, arms.getPosition().x, arms.getPosition().y+arms.getHeight()-2f, arms.getWidth()/2, arms.getHeight()/2, 
 				batch.draw(boss1arms, arms.getPosition().x, arms.getPosition().y+arms.getHeight()-1.5f, arms.getWidth()/2, arms.getHeight()/2,
 						boss1arms.getRegionWidth()/32f, boss1arms.getRegionHeight()/32f, scale*arms.getScale(), scale*arms.getScale(), e.getRotation() + rotationArms);
 				
@@ -601,8 +486,6 @@ public class WorldRenderer {
 				}
 			} else if (e.getClass() == SoldierBoss.class) {
 				SoldierBoss sb = (SoldierBoss)e;
-				//if (sb.getState() == 
-				
 					TextureRegion bossRegion = myEnemy.findRegion("myEnemy",sb.getAnimationFrame());
 					if ( (!sb.isFacingRight() && !bossRegion.isFlipX()) || (sb.isFacingRight() && bossRegion.isFlipX())) {
 						bossRegion.flip(true, false);
@@ -674,15 +557,10 @@ public class WorldRenderer {
 					position2 = new Vector2(overlay.getPositionOnScreen(pixels).x+distanceApart, overlay.getPositionOnScreen(pixels).y);
 				}
 				
-				//font.scale(overlay.getScale());
 				fontBig.draw(textBatch, "WARNING", overlay.getPositionOnScreen(pixels).x, overlay.getPositionOnScreen(pixels).y);
 				fontBig.draw(textBatch, "WARNING", position2.x, position2.y);
 				
 				textBatch.end();
-				//font.scale(1/overlay.getScale());
-				/*batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, 0, 0,
-						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
-						shipTexture.getHeight(), false, false);*/
 				batch.begin();
 			} else if (e.getClass() == WallBoss.class) {
 				if (!(e.isInvincible() && e.toggleFlash())) {
@@ -699,21 +577,6 @@ public class WorldRenderer {
 				healthName = e.getHealthName();
 			}
 		}
-		bItr = bullets.iterator();
-		while(bItr.hasNext()) {
-			b = bItr.next();
-			batch.draw(bulletTexture, b.getPosition().x, b.getPosition().y, b.getWidth() /2, b.getHeight()/2,
-					b.getWidth(), b.getHeight(), 1, 1, b.getRotation(), 0, 0, bulletTexture.getWidth(),
-					bulletTexture.getHeight(), false, false);
-		}
-		
-		for (CutsceneObject csObj: csObjects) {
-			//System.out.println("Texture: "+csObj.getTexture());
-			//batch.draw(csObj.getTexture(), csObj.getPosition().x, csObj.getPosition().y);
-			batch.draw(csObj.getTexture(), csObj.getPosition().x, csObj.getPosition().y, csObj.getWidth() /2, csObj.getHeight()/2,
-					csObj.getWidth(),csObj.getHeight(), 1, 1, csObj.getRotation(), 0, 0, csObj.getTexture().getWidth(),
-					csObj.getTexture().getHeight(), false, false);
-		}
 		
 		
 		
@@ -721,6 +584,11 @@ public class WorldRenderer {
 		batch.end();
 		return;
 	}
+	
+	/**
+	 * Draw visual information (health, time, score, etc.) and death scene.
+	 * @param batch
+	 */
 	
 	private void drawHUD(SpriteBatch batch) {
 		batch.begin();
@@ -756,11 +624,6 @@ public class WorldRenderer {
 			sr.filledRect(cam.position.x+offCenterOffset-barWidth/2+0.05f, cam.position.y-barHeight /2+0.05f-8f, barWidth * healthPercentage, barHeight-0.1f);
 			sr.end();
 			textBatch.begin();
-			//System.out.println(cam);
-			//System.out.println(font);
-			//System.out.println(textBatch);
-			//System.out.println(healthName);
-			//font.draw(textBatch, healthName, cam.position.x-cam.viewportWidth/2-4f, cam.position.y-cam.viewportHeight/2+4f);
 			font.draw(textBatch, healthName, 16f, 64f);
 			textBatch.end();
 		}
@@ -823,7 +686,6 @@ public class WorldRenderer {
 			font.draw(textBatch, healthText, cam.position.x-14f, Gdx.graphics.getHeight()-172);
 			font.draw(textBatch, rankText, cam.position.x-14f, Gdx.graphics.getHeight()-222);
 			font.draw(textBatch, scoreText, cam.position.x-14f, Gdx.graphics.getHeight()-322);
-			//System.out.println("Drawing TotalScore at "+ (cam.position.x-14f) + ","+ (Gdx.graphics.getHeight()-272));
 			textBatch.end();
 			
 			
@@ -851,6 +713,12 @@ public class WorldRenderer {
 		}
 	}
 	
+
+	/**
+	 * Draw visual aids for debugging
+	 */
+	
+	
 	private void drawDebugAids() {
 		/* ----- Debug stuff. Will slow game down!! ----- */
 		sr.setProjectionMatrix(cam.combined);
@@ -871,17 +739,7 @@ public class WorldRenderer {
 			for (Rectangle r: e.getPlayerDamageBounds()) {
 				sr.rect(r.x, r.y, r.width, r.height);
 			}
-			if (e.getClass() == Walker.class) {
-				for (int i=0; i<8; i++) {
-					WalkerPart wp = ((Walker)e).getPart(i);
-					//System.out.println("Id: " + wp.getId() + ", (x,y): " + wp.getPosition().x + ","+wp.getPosition().y+")");
-					//System.out.println("Bounds: "+wp.getBounds().x+","+wp.getBounds().y+","+wp.getBounds().width+","+wp.getBounds().height);
-					
-					sr.rect(wp.getBounds().x, wp.getBounds().y, wp.getBounds().width, wp.getBounds().height);
-					
-					
-				}
-			} 
+			
 			sr.end();
 			sr.begin(ShapeType.Line);
 			if (e.getClass() == LaserBeam.class) {
@@ -898,14 +756,6 @@ public class WorldRenderer {
 			
 		}
 		sr.begin(ShapeType.Rectangle);
-		for (CutsceneObject csObj: csObjects) {
-			sr.rect(csObj.getPosition().x, csObj.getPosition().y, csObj.getWidth(), csObj.getHeight());
-		}
-		bItr = bullets.iterator();
-		while(bItr.hasNext()) {
-			b = bItr.next();
-			sr.rect(b.getBounds().x, b.getBounds().y, b.getBounds().width, b.getBounds().height);
-		}
 		sr.rect(world.sRec.x, world.sRec.y, world.sRec.width, world.sRec.height);
 		
 		
@@ -927,9 +777,12 @@ public class WorldRenderer {
 		return;
 	}
 	
+	/**
+	 * Initialize level
+	 */
+	
 	private void init() {
-		csObjects = new Array<CutsceneObject>();
-
+		
 		textBatch = new SpriteBatch();
 		font = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);
 		fontBig = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);
@@ -947,6 +800,10 @@ public class WorldRenderer {
 		loadTextures();
 		return;
 	}
+	
+	/**
+	 * Load textures from resources so that they can be used in game
+	 */
 	
 	private void loadTextures() {
 		AssetManager manager = new AssetManager();
@@ -1024,10 +881,8 @@ public class WorldRenderer {
 		laserTextures = manager.get("projectiles/lasers.txt");
 		explosionTextures = manager.get("projectiles/explosion.txt");
 		wallTexture = manager.get("wall.png");
-		//laserTextures.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
 			/* Load follower texture */
-		//followerTexture = new Texture("follower.png");
 		followerTexture = manager.get("ship.png");
 		followerTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
@@ -1068,20 +923,18 @@ public class WorldRenderer {
 			
 		
 		Array<AtlasRegion> cyraRightFrames = cyraRightAtlas.findRegions("cyra");
-		System.out.println("Found " + cyraRightFrames.size + " cyra frames");
 		for (int i=0; i<cyraRightFrames.size; i++) 
 			cyraRightFrames.get(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		cyraRightAnimation = new Animation(FOLLOWER_FRAME_DURATION, cyraRightFrames);
 		
 		Array<AtlasRegion> cyraLeftFrames = cyraLeftAtlas.findRegions("cyra");
-		System.out.println("Found " + cyraLeftFrames.size + " cyra frames");
 		for (int i=0; i<cyraLeftFrames.size; i++) 
 			cyraLeftFrames.get(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		cyraLeftAnimation = new Animation(FOLLOWER_FRAME_DURATION, cyraLeftFrames);
 		
 		
 		groundTextureAtlas = manager.get("tiles/level packfile", TextureAtlas.class);
-			/* Load walker texture - END */
+		
 		
 		Texture parallaxTex = manager.get("frontbush1.png", Texture.class);
 		Array<Texture> textures= new Array<Texture>();
@@ -1099,6 +952,10 @@ public class WorldRenderer {
 		
 		
 	}
+	
+	/**
+	 * Dispose of batch
+	 */
 	
 	public void dispose() {
 		batch.dispose();

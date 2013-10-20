@@ -107,9 +107,9 @@ public class Blackjack extends GameClient {
 	private static final Game game;
 	static {
 		game = new Game();
-		game.gameId = "blackjack";
+		game.id = "blackjack";
 		game.name = "Blackjack";
-		game.availableAchievements = achievements;
+		game.description = "Try your hand at Blackjack.";
 	}
 	
 	public Game getGame() {

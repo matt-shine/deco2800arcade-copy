@@ -12,7 +12,7 @@ import deco2800.server.GameServer;
  * BlackjackServer is the controller of all Blackjack tables.
  * It handles adding tables and players to tables.
  */
-public class BlackjackServer implements GameServer {
+public class BlackjackServer extends GameServer {
 	
 	List<BlackjackTable> tables;
 	static int MAX_PLAYERS = 5;

@@ -24,4 +24,31 @@ system) or the shell script (if on a UN*X system).
 
 Client should print 'Creating directory: ..\games'
 Client should print 'Created: ..\games'
- 
+
+
+File Server Tests
+=================
+
+ o   gradle clean
+ o   gradle build
+ o   gradle pack
+ o   ls deco2800.arcade.server/Release
+
+Should output list of games with valid VERSION files in their root directories.
+
+Write some code that utilises the fetchGameJar method made available in
+deco2800.arcade.client.Arcade
+
+ o   gradle runServer
+ o   gradle runArcade (in another console)
+ o   Perform action to trigger fetchGameJar call written in above.
+
+Client side should have request .jar file in games directory in project root.
+
+ o   On Server:
+ o   unpack200 deco2800.arcade.server/Release/GAME_PATH.tar.gz ./GAME.jar
+ o   tar -tvf GAME.jar
+
+Output should list same files (sizes and dates may vary slightly) as:
+ o   On Client:
+ o   tar -tvf games/GAME.jar

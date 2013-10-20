@@ -74,8 +74,8 @@ public class Breakout extends GameClient {
 		this.highscoreUser = new HighscoreClient(this.player, "Breakout",
 				networkClient);
 		this.accolades = new AccoladeSystem();
-		accoladeBumpCounter = accolades.fetchID("bumpCount");
-		accoladeBrickBreak = accolades.fetchID("brickBreak");
+		//accoladeBumpCounter = accolades.fetchID("bumpCount");
+		//accoladeBrickBreak = accolades.fetchID("brickBreak");
 	}
 
 	/**

@@ -11,9 +11,11 @@ import java.awt.Button;
 import java.awt.Font;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import java.awt.Color;
 import javax.swing.JTextPane;
+
 
 import deco2800.arcade.forum.ForumException;
 
@@ -41,6 +43,7 @@ public class Tutorial {
 	private JLabel lblArcadeForum;
 	private JButton btnNewButton;
 	private JButton btnSearch;
+	private JScrollPane scrollPaneTut;
 	private JFrame f;
 	
 
@@ -53,10 +56,42 @@ public class Tutorial {
 	    btnLogIn.setBounds(897, 16, 97, 25);
 	    f.getContentPane().add(btnLogIn);
 	      
+	    /*
 	    this.btnSearch = new JButton("Search");
 	    this.btnSearch.setBounds(897, 73, 97, 25);
 	    f.getContentPane().add(this.btnSearch);
+	    
+	    this.lblFaq = new JLabel("FAQ");
+	    this.lblFaq.setFont(new Font("Cambria", Font.BOLD, 15));
+	    this.lblFaq.setBounds(147, 76, 74, 16);
+	    f.getContentPane().add(this.lblFaq);
+	    
+	    this.textField = new JTextField();
+	    this.textField.setBounds(769, 74, 116, 22);
+	    f.getContentPane().add(this.textField);
+	    this.textField.setColumns(10);	    	 
+	    
+	    this.textArea = new JTextArea();
+	    this.textArea.setBackground(new Color(192, 192, 192));
+	    this.textArea.setBounds(776, 152, 218, 220);
+	    f.getContentPane().add(this.textArea);
 	      
+	    this.textArea_1 = new JTextArea();
+	    this.textArea_1.setBackground(new Color(30, 144, 255));
+	    this.textArea_1.setBounds(546, 152, 218, 496);
+	    f.getContentPane().add(this.textArea_1);
+	    
+	    this.lblAnn = new JLabel("Announcement");
+	    this.lblAnn.setFont(new Font("Tahoma", Font.BOLD, 15));
+	    this.lblAnn.setBounds(776, 129, 141, 16);
+	    f.getContentPane().add(this.lblAnn);
+	      
+	    this.lblTag = new JLabel("Tag");
+	    this.lblTag.setFont(new Font("Tahoma", Font.BOLD, 15));
+	    this.lblTag.setBounds(546, 129, 97, 16);
+	    f.getContentPane().add(this.lblTag);	    
+	    
+	    */ 
 	    this.btnNewButton = new JButton("New Thread");
 	    this.btnNewButton.setBounds(7, 194, 116, 25);
 	    f.getContentPane().add(this.btnNewButton);
@@ -73,40 +108,19 @@ public class Tutorial {
 	    f.getContentPane().add(this.lblHome);
 	    addHomeLabelListener(this.lblHome);
 	      
-	    this.lblFaq = new JLabel("FAQ");
-	    this.lblFaq.setFont(new Font("Cambria", Font.BOLD, 15));
-	    this.lblFaq.setBounds(147, 76, 74, 16);
-	    f.getContentPane().add(this.lblFaq);
-	     
-	    this.lblAnn = new JLabel("Announcement");
-	    this.lblAnn.setFont(new Font("Tahoma", Font.BOLD, 15));
-	    this.lblAnn.setBounds(776, 129, 141, 16);
-	    f.getContentPane().add(this.lblAnn);
-	      
-	    this.lblTag = new JLabel("Tag");
-	    this.lblTag.setFont(new Font("Tahoma", Font.BOLD, 15));
-	    this.lblTag.setBounds(546, 129, 97, 16);
-	    f.getContentPane().add(this.lblTag);
-	      
 	    this.lblNewLabel = new JLabel("Tutorial");
 	    this.lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
 	    this.lblNewLabel.setBounds(12, 155, 163, 26);
 	    f.getContentPane().add(this.lblNewLabel);
 	      
-	    this.textField = new JTextField();
-	    this.textField.setBounds(769, 74, 116, 22);
-	    f.getContentPane().add(this.textField);
-	    this.textField.setColumns(10);
+	    this.scrollPaneTut = new JScrollPane(
+	            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+	            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	    this.scrollPaneTut.setBounds(542, 155, 437, 541);
+	    this.f.getContentPane().add(scrollPaneTut);	      
+	    f.setVisible(true); 
 	      
-	    this.textArea = new JTextArea();
-	    this.textArea.setBackground(new Color(192, 192, 192));
-	    this.textArea.setBounds(776, 152, 218, 220);
-	    f.getContentPane().add(this.textArea);
-	      
-	    this.textArea_1 = new JTextArea();
-	    this.textArea_1.setBackground(new Color(30, 144, 255));
-	    this.textArea_1.setBounds(546, 152, 218, 496);
-	    f.getContentPane().add(this.textArea_1);
+
 	      
 	    this.panel = new JPanel();
 	    this.panel.setBackground(Color.ORANGE);

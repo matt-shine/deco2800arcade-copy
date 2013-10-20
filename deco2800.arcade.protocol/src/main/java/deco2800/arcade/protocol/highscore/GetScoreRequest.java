@@ -13,7 +13,6 @@ import deco2800.arcade.protocol.UserRequest;
 public class GetScoreRequest extends UserRequest {
 	public String username;
 	public String game_ID;
-	public int player_ID;
 	
 	//The type of request that is being fetched
 	public int requestID;

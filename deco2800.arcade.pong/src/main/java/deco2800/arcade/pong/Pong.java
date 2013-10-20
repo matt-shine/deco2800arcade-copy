@@ -78,12 +78,6 @@ public class Pong extends GameClient {
         this.networkClient = networkClient; //this is a bit of a hack
         //this.achievementClient = new AchievementClient(networkClient);
 
-        
-        //These calls are just used for testing HighscoreClient 
-        //Creating new HighscoreClient connection
-        HighscoreClient hsd = new HighscoreClient(player.getUsername(), "Pong", networkClient);
-        
-        //hsd.storeScore("Number", 1234567890);
 	}
 	
 	/**

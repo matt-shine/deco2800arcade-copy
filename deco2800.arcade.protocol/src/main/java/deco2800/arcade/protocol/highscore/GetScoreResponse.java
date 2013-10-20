@@ -11,5 +11,6 @@ import deco2800.arcade.protocol.UserRequest;
  * @author TeamA
  */
 public class GetScoreResponse extends UserRequest {
+	/* The data that is being sent back from the database */
 	public String data;
 }

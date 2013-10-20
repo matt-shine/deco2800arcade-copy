@@ -6,21 +6,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.VertexAttribute;
-import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -58,8 +51,12 @@ public class GameScreen implements Screen{
         SpriteBatch batch;
         TextField resourceTF;
         private OrthographicCamera camera;
-        private static final float BUTTON_HEIGHT = 64f, CAMERA_HEIGHT = (720- STATUS_HEIGHT - BOTTOM_HEIGHT), BUTTON_WIDTH = 64f;
-        int resource; //int for player's resources.
+        private static final float BUTTON_HEIGHT = 64f;
+        //unused
+        //private static final float CAMERA_HEIGHT = (720- STATUS_HEIGHT - BOTTOM_HEIGHT);
+        private static final float BUTTON_WIDTH = 64f;
+        //A ship needs to be instantiated and called to determine things like resources.
+        int resources; //int for player's resources.
         
         //static final int WIDTH  = 480;
     //static final int HEIGHT = 320;
@@ -82,13 +79,13 @@ public class GameScreen implements Screen{
             textFieldStyle.font = new BitmapFont(Gdx.files.internal("white_font.fnt"), false);
             textFieldStyle.fontColor = Color.WHITE;
                
-                resource = 0;
+                resources = 0;
                 resourceTF = new TextField("", textFieldStyle);
                 
                 //Need to work out how to add this sprite to the table.
                 crystalsTexture = new Texture(Gdx.files.internal("crystals.png"));
-        crystalsTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-                Sprite crystals = new Sprite(crystalsTexture);
+                crystalsTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+                //Sprite crystals = new Sprite(crystalsTexture);
                 
                 towerInfo = new Label("......\n......\nTower Info goes here.", //Label for displaying each tower's info
                                 new Label.LabelStyle(new BitmapFont(),
@@ -125,7 +122,7 @@ public class GameScreen implements Screen{
                 
                 camera.update();
                 
-                resourceTF.setMessageText("" + resource);
+                resourceTF.setMessageText("" + resources);
                 
                 stage.act(delta);
                 stage.draw();

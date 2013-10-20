@@ -7,7 +7,6 @@ import deco2800.arcade.burningskies.BurningSkies;
 import deco2800.arcade.burningskies.Configuration;
 import deco2800.arcade.client.ArcadeSystem;
 
-
 public class MenuInputProcessor extends InputAdapter {
 	
 	private BurningSkies game;

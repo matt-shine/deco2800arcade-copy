@@ -368,6 +368,23 @@ public class GameModel {
 //		checkWordOccurance(category);
 		breakword = word.breakWord(category);
 	}
+
+	/**
+	 * Private method to restore JDK 1.6 compatibility, because
+	 * java.lang.Character.isAlphabetic only works in 1.7
+	 * @see java.lang.Character
+	 * @param codePoint
+	 * @return
+	 */
+	private static boolean isAlphabetic(int codePoint) {
+		return (((((1 << Character.UPPERCASE_LETTER) |
+				(1 << Character.LOWERCASE_LETTER) |
+				(1 << Character.TITLECASE_LETTER) |
+				(1 << Character.MODIFIER_LETTER) |
+				(1 << Character.OTHER_LETTER) |
+				(1 << Character.LETTER_NUMBER)) >> Character.getType(codePoint)) & 1) != 0) /*||
+		            Character.CharacterData.of(codePoint).isOtherAlphabetic(codePoint)*/;
+	}
 	
 	/**
 	 * Check for any repetition of letter in the word, eg.  dell
@@ -381,7 +398,7 @@ public class GameModel {
 		  
 		  	// Loop to check the same letter in the word.
 		    for (char value: arr) {
-		       if (Character.isAlphabetic(value)) {
+		       if (/*Character.*/isAlphabetic(value)) {
 		           if (charMap.containsKey(value)) {
 		               charMap.put(value, charMap.get(value) + 1);
 

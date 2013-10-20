@@ -93,7 +93,7 @@ public class RemoveFriendScreen extends JFrame{
 	}
 	
 	/**
-	 * 
+	 *  Adds the username label and textfield
 	 */
 	public void addcontentpanel(){
 
@@ -108,7 +108,7 @@ public class RemoveFriendScreen extends JFrame{
 	}
 	
 	/**
-	 * 
+	 *  Adds the remove and cancel buttons
 	 */
 	public void addactionpanel(){
 		
@@ -135,12 +135,20 @@ public class RemoveFriendScreen extends JFrame{
 	     		
 	}
 
+	/**
+	 * Listener for the Remove Button
+	 * @param listenForRemoveFriendButton
+	 */
 	public void addRemoveFriendListener(ActionListener listenForRemoveFriendButton){
 		
 		removefriendbutton.addActionListener(listenForRemoveFriendButton);
 	
 	}
 	
+	/**
+	 * Listener for the Cancel Button
+	 * @param listenForCancelButton
+	 */
 	public void addCancelListener(ActionListener listenForCancelButton){
 		
 		cancelbutton.addActionListener(listenForCancelButton);

@@ -361,6 +361,16 @@ public class ReplayStorage {
 	}	
 	
 	
+	/**
+	 * Handles the closing of a database connection, taking into account
+	 * that the method could be called from any state.
+	 * 
+	 * @param connection
+	 * 			the database connection to close
+	 * @param state
+	 * 			the statement to close
+	 * @throws DatabaseException
+	 */
 	private void cleanUp (Connection connection, Statement state) throws DatabaseException {
 		
 		try{
@@ -374,9 +384,8 @@ public class ReplayStorage {
 		}catch ( Exception e ){
 			//Shouldn't occur
 			e.printStackTrace();
-			throw new DatabaseException("Insertion went awry.", e);
+			throw new DatabaseException("Could not close the resources.", e);
 		}	
-		
 	}
 }
 	

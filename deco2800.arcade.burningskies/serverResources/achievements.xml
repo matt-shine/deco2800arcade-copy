@@ -3,19 +3,27 @@
     <name>Dead</name>
     <description>Experience your first death.</description>
     <awardThreshold>1</awardThreshold>
-    <icon>winner.png</icon>
+    <icon>death_achievement.png</icon>
   </achievement>
   
-  <achievement id="burningskies.twenth">
+  <achievement id="burningskies.fodder">
     <name>Alien food</name>
-    <description>Die 20 times.</description>
-    <awardThreshold>20</awardThreshold>
-    <icon>some.png</icon>
+    <description>Die over 500 times.</description>
+    <awardThreshold>500</awardThreshold>
+    <icon>death_achievement.png</icon>
   </achievement>
   
   <achievement id="burningskies.defeatBoss">
     <name>Saviour</name>
-    <description>Defeating the alien Overlord.</description>
-    <icon>some.png</icon>
+    <description>Defeat the alien Overlord.</description>
+    <awardThreshold>1</awardThreshold>
+    <icon>boss_defeat_achievement.png</icon>
+  </achievement>
+  
+  <achievement id="burningskies.killer">
+    <name>Flight Veteran</name>
+    <description>Destroy over 10000 enemy ships.</description>
+    <awardThreshold>10000</awardThreshold>
+    <icon>killed_achievement.png</icon>
   </achievement>
 </achievements>

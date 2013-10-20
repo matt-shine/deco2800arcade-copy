@@ -13,8 +13,8 @@ public class BossBullet extends Bullet {
 	
 	private static Texture tex = new Texture(Gdx.files.internal("images/bullets/boss_bullet.png"));
 
-	public BossBullet(Ship parent, PlayerShip player, Vector2 initialPosition, float direction) {
-		super(Affinity.ENEMY, 100, parent, player, initialPosition, direction, tex);
+	public BossBullet(int damage, Ship parent, PlayerShip player, Vector2 initialPosition, float direction) {
+		super(Affinity.ENEMY, damage, parent, player, initialPosition, direction, tex);
 		velocity = new Vector2(0,-500);
 	}
 	

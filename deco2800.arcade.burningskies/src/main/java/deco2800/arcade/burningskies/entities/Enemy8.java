@@ -24,7 +24,7 @@ public class Enemy8 extends Enemy {
 		} else {
 			accelIntensity = 0.2f +  0.2f*(difficulty%5);
 		}	
-		pattern = new Enemy8Pattern(this, player, screen);
+		pattern = new Enemy8Pattern(this, player, screen, difficulty);
 		
 		this.length = 0.12f * difficulty;
 	}

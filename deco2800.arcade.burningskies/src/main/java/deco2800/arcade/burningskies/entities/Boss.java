@@ -21,7 +21,7 @@ public class Boss extends Enemy {
 		super(bossMaxHealth, tex, 
 		new Vector2(640, 880), new Vector2(0,0), screen, player, 10000000000L, Configuration.getDifficulty());
 
-		pattern = new BossPattern(this, player, screen);
+		pattern = new BossPattern(this, player, screen, (Configuration.getDifficulty()+1));
 	}
 	
 	@Override

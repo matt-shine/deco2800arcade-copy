@@ -13,25 +13,33 @@ public class BossPattern extends BulletPattern {
 	
 	private PlayerShip player;
 	private int counter;
+	private int bossBulletDamage;
+	private int spawnTick;
 	private static Texture image = new Texture(Gdx.files.internal("images/bullets/bullet_2.png"));
 	
-	public BossPattern(Ship emitter, PlayerShip player, PlayScreen screen) {
+	public BossPattern(Ship emitter, PlayerShip player, PlayScreen screen, int difficulty) {
 		super(emitter, screen);
 		interval = 0.4f;
 		this.player = player;
+		if (difficulty < 3) {
+			this.bossBulletDamage = 100;
+		} else {
+			this.bossBulletDamage = 50*difficulty;
+		}
+		this.spawnTick = 10 - (2*(difficulty - 1));
 	}
 	
 	public void fire(float lag, float x, float y) {
 		float angle = new Vector2(player.getCenterX() - x, player.getCenterY() - y).angle();
 		BossBullet bullet;
-		bullet = new BossBullet(emitter, player, new Vector2(x,y), angle);
+		bullet = new BossBullet(bossBulletDamage, emitter, player, new Vector2(x,y), angle);
 		screen.addBullet(bullet);
 		counter++;
-		if(counter % 10 == 0) {
+		if(counter % spawnTick == 0) {
 			screen.spawnRandomEnemy();
 			EnemyBullet bullet2;
 			for(int i=0;i<360;i+=12) {
-				bullet2 = new EnemyBullet(Affinity.ENEMY, 10, emitter, player, new Vector2(x,y), i, image);
+				bullet2 = new EnemyBullet(Affinity.ENEMY, bossBulletDamage, emitter, player, new Vector2(x,y), i, image);
 				screen.addBullet(bullet2);
 			}
 			counter = 0;

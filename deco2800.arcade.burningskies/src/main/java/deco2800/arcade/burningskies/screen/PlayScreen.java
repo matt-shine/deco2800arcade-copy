@@ -152,7 +152,7 @@ public class PlayScreen implements Screen
     			respawnTimer -= delta;
     			if(respawnTimer <= 0) {
     				game.incrementAchievement("burningskies.die");
-        			game.incrementAchievement("burningskies.twenth");
+        			game.incrementAchievement("burningskies.fodder");
     				stage.addActor(player);
     				if (lives > 0) {
     					player.respawn();
@@ -169,7 +169,7 @@ public class PlayScreen implements Screen
     			}
     		} else {
     			levelTimer += delta;
-    			score += 131;
+    			score += 131*(0.5*(Configuration.getDifficulty()+1));
     		}
     		if(!bossActive && (levelTimer > 60.0 || Gdx.input.isKeyPressed(Keys.B))) { //unleash the beast
     			bossActive = true;
@@ -336,6 +336,7 @@ public class PlayScreen implements Screen
     
     public void removeEntity(Enemy e) {
     	e.remove();
+		game.incrementAchievement("burningskies.killer");
     	enemies.remove(e);
     }
     

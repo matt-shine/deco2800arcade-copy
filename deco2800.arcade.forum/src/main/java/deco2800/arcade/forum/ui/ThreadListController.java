@@ -43,6 +43,7 @@ public class ThreadListController {
 						System.out.println("yeah... didnt work");
 					} else {
 						if (response.result != null) {
+							view.clearThreadPanel();
 							model.thread_load(ParentThreadProtocol.getParentThreads(response.result));
 							System.out.println("Thread loaded");
 							view.clearThreadPanel();
@@ -68,7 +69,7 @@ public class ThreadListController {
 	private void nextTen() {
 		System.out.println("Request load");
 		GetParentThreadsRequest request = new GetParentThreadsRequest();
-		request.start = this.model.get_thread(this.model.get_size() - 1).getId() - 1;
+		request.start = this.model.get_thread(this.model.get_size() - 1).getId();
 		request.end = 0;
 		request.limit = 10;
 		request.category = this.model.get_category();

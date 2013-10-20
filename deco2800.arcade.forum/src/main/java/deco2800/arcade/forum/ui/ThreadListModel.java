@@ -1,6 +1,8 @@
 package deco2800.arcade.forum.ui;
 
 import deco2800.arcade.model.forum.*;
+import deco2800.arcade.protocol.forum.ParentThreadProtocol;
+
 import java.util.*;
 
 public class ThreadListModel {
@@ -25,8 +27,11 @@ public class ThreadListModel {
 	 */
 	public void thread_load(ParentThread[] threads) {
 		int i;
+		this.list = new ArrayList<ParentThread>();
 		for (i = 0; i < threads.length; i++) {
 			this.list.add(threads[i]);
+			System.out.println(threads[i].getTopic());
+			System.out.println(threads[i].getId());
 		}
 		this.size = i;
 	}

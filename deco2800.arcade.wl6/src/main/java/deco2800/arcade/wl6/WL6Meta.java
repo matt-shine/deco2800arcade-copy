@@ -23,6 +23,7 @@ public class WL6Meta {
     public static final int SILVERKEY = 44;
     public static final int SECRET_DOOR = 98;
     public static final int SECRET_ELEVATOR = 107;
+    public static final int ENDGAME = 99;
 
 
     public static enum DIRS {
@@ -132,9 +133,7 @@ public class WL6Meta {
         if (x >= 64 || x <= 0 || y >= 64 || y <=0) {
             return true;
         }
-        // TODO Change this so to check actually spawned doodads rather than all potential ones
-        return WL6Meta.block(map.getTerrainAt(x, y)).solid ||
-                WL6Meta.doodad(map.getDoodadAt(x, y)).solid;
+        return WL6Meta.block(map.getTerrainAt(x, y)).solid;
     }
 
     private static BlockList blockList = new BlockList();

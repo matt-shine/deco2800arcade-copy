@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -13,10 +14,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.network.NetworkException;
+import deco2800.arcade.client.network.listener.FileServerListener;
 import deco2800.arcade.arcadeui.ArcadeUI;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.client.FileClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
@@ -30,32 +36,41 @@ import deco2800.arcade.model.Player;
 public class StoreGame implements Screen, StoreScreen {
 	private Skin skin = new Skin(Gdx.files.internal("store/storeSkin.json"));
 	private Stage stage = new Stage();
-	private static Game featured;
+	private static Game featured; // featured game
 	private ArcadeUI arcadeUI;
-	private int rating; // The rating of the feature game.
+	private Player player; // The currently logged in player.
+	private float rating; // The rating of the feature game.
 	
 	/**
 	 * @author Addison Gourluck
 	 * @param ArcadeUI ui
+	 * @param Player user
 	 * @param Game featuredGame
 	 */
-	public StoreGame(ArcadeUI ui, Game featuredGame) {
+	public StoreGame(ArcadeUI ui, Player user, Game featuredGame) {
 		featured = featuredGame;
 		arcadeUI = ui;
+		player = user;
 		
-		final Table bg = new Table();
-		final Table logo = new Table();
-		final Button logoGlow = new Button(skin, "icon");
-		final Label gameTitle = new Label(featuredGame.name, skin, "default-34");
-		final Label gameDescription = new Label(featuredGame.description, skin);
-		final Label ratingTitle = new Label("Ratings + Reviews", skin, "default-28");
-		final Label ratingScore = new Label("0.0", skin, "rating-score");
-		final Label ratingScoreText = new Label("Average Rating", skin, "default-14");
-		final Table starbg = new Table();
-		final Button homeButton = new Button(skin, "home");
-		final Button buyButton = new Button(skin, "buy");
-		final Button reviewButton = new Button(skin, "review");
-		final CheckBox wishButton = new CheckBox("", skin, "wish");
+		Table bg = new Table();
+		Table logo = new Table();
+		Button logoGlow = new Button(skin, "icon");
+		Label gameTitle = new Label(featuredGame.name, skin, "default-34");
+		Label gameDescription = new Label(featuredGame.description, skin);
+		Label ratingTitle = new Label("Ratings + Reviews", skin, "default-28");
+		Label ratingScore = new Label("0.0", skin, "rating-score");
+		Label ratingScoreText = new Label("Rating", skin, "default-14");
+		Table starbg = new Table();
+		Button homeButton = new Button(skin, "home");
+		Button buyButton = new Button(skin, "buy");
+		Button reviewButton = new Button(skin, "review");
+		CheckBox wishButton = new CheckBox("", skin, "wish");
+		
+		skin.add("blue_frame", new Texture(Gdx.files.internal("store/blue_frame.png")));
+		final Button greyOverlay = new Button(skin, "black"); // grey shadow for popup
+		final Button popupBox = new Button(skin, "white"); // popup container
+		// Creates, but doesn't show, the transactions popup.
+		Utilities.generatePopup(greyOverlay, popupBox, skin);
 		
 		// The background for the store.
 		skin.add("background", new Texture(Gdx.files.internal("store/game_bg.png")));
@@ -138,27 +153,43 @@ public class StoreGame implements Screen, StoreScreen {
 		starbg.setSize(142, 23);
 		stage.addActor(starbg);
 		
-		placeRatingStars();
-		
+		// Places the checkbox-style rating stars over the grey starbg, and
+		// adds listeners to allow user to select rating.
+		placeRatingStars(ratingScore);
+
+		// Button linking to back to the home page
 		homeButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				dispose();
-				arcadeUI.setScreen(new StoreHome(arcadeUI));
+				arcadeUI.setScreen(arcadeUI.getStoreHome());
 			}
 		});
-		
+
+		// Button for purchasing the game.
 		buyButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("buy");
+				////stage.addActor(greyOverlay);
+				////stage.addActor(popupBox);
+				///////////////////////////////////////////////////////////////////////////////////
+				NetworkClient fileClient = null;
+				try {
+					fileClient = new NetworkClient("127.0.0.1", 54666);
+				} catch (NetworkException e) {}
+				fileClient.addListener(new FileServerListener());
+		        FileClient fc = new FileClient(featured.id, fileClient);
+		        Thread t = new Thread(fc);
+		        t.start();
 			}
 		});
-		
+
+		// Button for adding/removing featured game to wishlist.
 		wishButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				System.out.println("wishlist");
 			}
 		});
-		
+
+		// Button adding a review to the featured game.
 		reviewButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				System.out.println("review");
@@ -170,18 +201,33 @@ public class StoreGame implements Screen, StoreScreen {
 	 * Places 5 invisible checkboxs over each other, which will highlight on
 	 * mouseover, and stay highlighted on mouseclick.
 	 * @author Addison Gourluck
+	 * @param Label ratingScore 
 	 */
-	private void placeRatingStars() {
+	private void placeRatingStars(final Label ratingScore) {
 		for (int i = 5; i >= 1; --i) {
 			final CheckBox star = new CheckBox("", skin, "star" + i);
 			star.setSize(i * 28.4f, 23);
-			star.setName("S" + i);
+			star.setName("STAR" + i); // "STAR1", "STAR2", etc
 			star.setPosition(882, 413);
-			// Listener to change rating when a star is changed.
-			star.addListener(new ChangeListener() {
-				public void changed(ChangeEvent event, Actor actor) {
-					rating = (int)actor.getName().charAt(1) - 48;
-					System.out.println("pressed star " + rating);
+			// Listener to change rating when a star is clicked (not changed).
+			star.addListener(new ClickListener() {
+				public void clicked(InputEvent event, float x, float y) {
+					// Sets all other stars to be unchecked.
+					for (Actor find : stage.getActors()) {
+						if (find.getName() != null && find != star
+								&& find.getName().startsWith("STAR")) {
+							((CheckBox)find).setChecked(false);
+						}
+					}
+					// Sets the ratings, only for star clicked.
+					if (!star.isChecked()) {
+						rating = 0; // Star unchecked. Set rating to 0.
+					} else {
+						// Star checked, set rating to stars number.
+						rating = star.getName().charAt(4) - 48f;
+					}
+					// Update rating text.
+					ratingScore.setText(rating + "");
 				}
 			});
 			stage.addActor(star);
@@ -205,11 +251,13 @@ public class StoreGame implements Screen, StoreScreen {
 
 	@Override
 	public void show() {
+		player = arcadeUI.getPlayer();
 		ArcadeInputMux.getInstance().addProcessor(stage);
 	}
 	
 	@Override
 	public void hide() {
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 	
 	@Override
@@ -230,7 +278,7 @@ public class StoreGame implements Screen, StoreScreen {
 
 	@Override
 	public Player getPlayer() {
-		return null;
+		return player;
 	}
 	
 	@Override
@@ -240,11 +288,21 @@ public class StoreGame implements Screen, StoreScreen {
 	
 	@Override
 	public boolean buyTokens(int amount) {
+		// TODO
+		// FIXME
+		// NEEDS IMPLEMENTING!
+		// TODO
+		// FIXME
 		return false;
 	}
 	
 	@Override
 	public boolean buyGame(Game game) {
+		// TODO
+		// FIXME
+		// NEEDS IMPLEMENTING!
+		// TODO
+		// FIXME
 		return false;
 	}
 	
@@ -260,6 +318,11 @@ public class StoreGame implements Screen, StoreScreen {
 	
 	@Override
 	public boolean addWishlist(Game game) {
+		// TODO
+		// FIXME
+		// NEEDS IMPLEMENTING!
+		// TODO
+		// FIXME
 		return true;
 	}
 }

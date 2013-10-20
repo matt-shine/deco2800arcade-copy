@@ -22,6 +22,9 @@ public class Accolade {
 	private Integer gameID, value;
 	private Double id;
 	private Accolade next, prev; //FOR THE ACCOLADECONTAINER
+	//Because the accolade is part of all the accolades for one player (playerID stored in accoladeContainer)
+	//OR it is the culmilation of all accolade progress for just one game (autocalculated by the derby view table)
+	//there will be no playerID variable for individual accolades
 	
 	
 	/** Create a new accolade. Use .setID and .setValue as required.
@@ -36,13 +39,13 @@ public class Accolade {
 	 * @param image The location of the associated accolade image.
 	 */
 	public Accolade(String name, String message, int popup, String popupMessage, 
-			Double f, String unit, String tag, String imagePath){
+			Double modifier, String unit, String tag, String imagePath){
 		this.name = name;
 		this.message = message;
 		this.popup = popup;
 		this.popupMessage = popupMessage;
 		//.replace("%VALUE", "{0}").replace("%%UNIT", "{1}")
-		this.modifier = f;
+		this.modifier = modifier;
 		this.unit = unit;
 		this.tag = tag; 
 		this.imagePath = imagePath; //this might end up being stored as a directory type.
@@ -88,6 +91,9 @@ public class Accolade {
 	public int getValue(){
 		return this.value;
 		}
+	public int getPopup(){
+		return this.popup;
+	}
 	
 	public int getGameID(){
 		//TODO add in error throwing for a nullpointer exception
@@ -116,7 +122,7 @@ public class Accolade {
 		return parseString(this.message);
 		}
 	
-	public String getPopup(){
+	public String getPopupMessage(){
 		return parseString(this.popupMessage);
 		}
 	

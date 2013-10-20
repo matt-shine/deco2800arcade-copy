@@ -1,7 +1,6 @@
 package deco2800.arcade.chess.pieces;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import deco2800.arcade.chess.FixedSizeList;
@@ -15,76 +14,17 @@ public class Rook extends Piece {
 	 */
 	public Rook(boolean team, int pieceNo) {
 		super(team, pieceNo);
-		this.preference = 3;
+		this.preference = 4;
 	}
 
 	public List<int[]> possibleMoves(int[] currentPos, FixedSizeList<FixedSizeList<Piece>> board_state) {
 		List<int[]> moves = new ArrayList<int[]>();
-		int x = currentPos[0];// current row position
-		int y = currentPos[1];// current column position
-		
-		// moves.add(castle);
-		for (int i = 1; i <= 7; i++) {
-
-			int[] a = { x + i, y };// move up i spaces
-			int[] b = { x - i, y };// move down i spaces
-			int[] c = { x, y + i };// move right
-			int[] d = { x, y - i };// move left
-			moves.add(a);
-			moves.add(b);
-			moves.add(c);
-			moves.add(d);
-			if ((x + i) > 7) {
-				// don't add this move
-				moves.remove(a);
-
-			}
-
-			if ((x - i) < 0) {
-				// break;
-				moves.remove(b);
-
-			}
-
-			if ((y + i) > 7) {
-				// break;
-				moves.remove(c);
-			}
-
-			if ((y - i) < 0) {
-				// break;
-				moves.remove(d);
-			}
-
-			if (x == 0) {
-
-				moves.remove(b);
-			}
-			if (y == 0) {
-
-				moves.remove(d);
-			}
-			if (y == 7) {
-
-				moves.remove(c);
-			}
-			if (x == 7) {
-
-				moves.remove(a);
-			}
-			
-		}
-		HashSet<int []> hs = new HashSet<int []>();
-		hs.addAll(moves);
-		moves.clear();
-		moves.addAll(hs);
-		
-		List<int[]> allowableMoves;
-		
-		allowableMoves = new ArrayList<int[]>(removeJumpsUp(
-				moves, currentPos, board_state));
-		
-		return allowableMoves;
+		//add all possible moves for directions rook can move in
+		moves.addAll(removeJumps(currentPos, board_state, 5));
+		moves.addAll(removeJumps(currentPos, board_state, 6));
+		moves.addAll(removeJumps(currentPos, board_state, 7));
+		moves.addAll(removeJumps(currentPos, board_state, 8));
+		return moves;
 		
 		
 	}

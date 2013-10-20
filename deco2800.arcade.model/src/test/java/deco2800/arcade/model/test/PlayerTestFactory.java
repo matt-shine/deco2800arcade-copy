@@ -32,7 +32,15 @@ public class PlayerTestFactory {
 		info.add("ARTS");
 		info.add("#Rickroll");
 		info.add("20");
-		boolean[] privset = { true, true, true, true, true, true, true };
+		
+		ArrayList<Boolean> privset = new ArrayList<Boolean>();
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
 
 		player = new Player(id, "THIS IS NOT A VALID PATH.html", info, null,
 				null, null, null, privset);

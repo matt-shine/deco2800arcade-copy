@@ -35,7 +35,9 @@ public class CommunicationNetwork {
 	 * Initialises an empty list of chat instances.
 	 * 
 	 * @param player
+	 *            the player using this CommunicationNetwork
 	 * @param networkClient
+	 *            the NetworkClient being used to send and recieve messages
 	 */
 	public CommunicationNetwork(Player player, NetworkClient networkClient) {
 		this.networkClient = networkClient;
@@ -45,10 +47,11 @@ public class CommunicationNetwork {
 	 * Creates a chatNode with the playerIDs of the participants
 	 * 
 	 * @param chatParticipants
+	 *            List of player IDs that will be added to the chat
 	 */
 	public void createChat(List<Integer> chatParticipants) {
 
-		if(!chatNodes.containsKey(chatParticipants.hashCode())) {
+		if (!chatNodes.containsKey(chatParticipants.hashCode())) {
 			ChatNode node = new ChatNode(chatParticipants);
 			node.setOwner(player.getUsername());
 			chatNodes.put(chatParticipants.hashCode(), node);
@@ -65,11 +68,12 @@ public class CommunicationNetwork {
 	 * Forwards the TextMessage to the server so it can handle it
 	 * 
 	 * @param message
+	 *            the message to be sent
 	 */
 	public void sendTextMessage(TextMessage message) {
 		networkClient.sendNetworkObject(message);
 	}
-	
+
 	public ChatNode getChatNode(int chatID) {
 		return chatNodes.get(chatID);
 	}
@@ -79,12 +83,13 @@ public class CommunicationNetwork {
 	 * instance.
 	 * 
 	 * @param textMessage
+	 *            the message to be added to the chat history
 	 */
 	public void recieveTextMesage(TextMessage textMessage) {
-		
+
 		int chatID = textMessage.getChatID();
 		ChatNode node = chatNodes.get(chatID);
-		
+
 		if (node == null) {
 			node = new ChatNode(textMessage.getRecipients());
 			chatNodes.put(textMessage.getRecipients().hashCode(), node);
@@ -93,10 +98,12 @@ public class CommunicationNetwork {
 
 		// Create chat-friendly string
 		date = new Date();
-		String chatLine = sdf.format(date) + " - " + textMessage.getSenderUsername() + ": " + textMessage.getText();
+		String chatLine = sdf.format(date) + " - "
+				+ textMessage.getSenderUsername() + ": "
+				+ textMessage.getText();
 		node.addMessage(chatLine);
-		
-		if (currentChat == node){
+
+		if (currentChat == node) {
 			controller.receiveText(textMessage);
 		} else if (currentChat == null) {
 			controller.revieceNotification(node);
@@ -107,7 +114,9 @@ public class CommunicationNetwork {
 	 * Adds a user to an existing chat.
 	 * 
 	 * @param chat
+	 *            ChatNode that player will be invited to
 	 * @param playerId
+	 *            ID of the player being invited
 	 */
 	public void inviteUser(ChatNode chat, int playerId) {
 		ChatNode node = chat;
@@ -118,7 +127,9 @@ public class CommunicationNetwork {
 	 * Leaves an existing chat instance.
 	 * 
 	 * @param chatId
+	 *            ChatID of chatNode that is being left
 	 * @param playerId
+	 *            The ID of the player wishing to leave
 	 */
 	public void leaveChat(int chatId, int playerId) {
 		ChatNode node = chatNodes.get(chatId);
@@ -132,10 +143,21 @@ public class CommunicationNetwork {
 		return chatNodes;
 	}
 
+	/**
+	 * Get the currentChat
+	 * 
+	 * @return ChatNode that contains details of players current chat
+	 */
 	public ChatNode getCurrentChat() {
 		return currentChat;
 	}
 
+	/**
+	 * Sets the current chat for quick access
+	 * 
+	 * @param chat
+	 *            the ChatNode currently being used by the player
+	 */
 	public void setCurrentChat(ChatNode chat) {
 		currentChat = chat;
 	}
@@ -198,7 +220,8 @@ public class CommunicationNetwork {
 	public void receiveChatHistory(ChatHistory receivedHistory) {
 		chatNodes = receivedHistory.getChatHistory();
 		for (Entry<Integer, ChatNode> entry : chatNodes.entrySet()) {
-			controller.addChatLabel(entry.getValue(), entry.getValue().getOwner());
+			controller.addChatLabel(entry.getValue(), entry.getValue()
+					.getOwner());
 		}
 	}
 }

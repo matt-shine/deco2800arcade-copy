@@ -21,6 +21,15 @@ public class ChatStorage {
 		return chatStorage.get(playerID);
 	}
 
+	/**
+	 * Adds TextMessage to the chatHistory storage. Will create a new entry if
+	 * one does not exist or append if an entry does exist
+	 * 
+	 * @param textMessage
+	 *            to be stored
+	 * @param playerID
+	 *            to be used as key for this message
+	 */
 	public void addChatHistory(TextMessage textMessage, int playerID) {
 		HashMap<Integer, ChatNode> chatHistory = new HashMap<Integer, ChatNode>();
 		int nodeID = textMessage.getChatID();
@@ -34,16 +43,16 @@ public class ChatStorage {
 		if (chatStorage.containsKey(playerID)) {
 			if (chatStorage.get(playerID).containsKey(nodeID)) {
 				ChatNode node = chatStorage.get(playerID).get(nodeID);
-				//node.addMessage(chatLine, textMessage.getSenderUsername());
+				// node.addMessage(chatLine, textMessage.getSenderUsername());
 				node.addMessage(chatLine);
-				
+
 			} else { // Fairly certain test does not cover this branch yet
 				ChatNode node = new ChatNode(textMessage.getRecipients());
 
 				node.setOwner(textMessage.getSenderUsername());
 				node.addMessage(chatLine);
 
-				//node.addMessage(chatLine, textMessage.getSenderUsername());
+				// node.addMessage(chatLine, textMessage.getSenderUsername());
 
 				chatStorage.get(playerID).put(nodeID, node);
 			}
@@ -53,7 +62,7 @@ public class ChatStorage {
 			node.setOwner(textMessage.getSenderUsername());
 			node.addMessage(chatLine);
 
-			//node.addMessage(chatLine, textMessage.getSenderUsername());
+			// node.addMessage(chatLine, textMessage.getSenderUsername());
 
 			chatHistory.put(nodeID, node);
 			chatStorage.put(playerID, chatHistory);

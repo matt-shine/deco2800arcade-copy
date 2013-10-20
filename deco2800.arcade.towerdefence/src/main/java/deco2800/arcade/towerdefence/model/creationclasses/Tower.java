@@ -3,7 +3,6 @@ package deco2800.arcade.towerdefence.model.creationclasses;
 import java.util.Iterator;
 import java.util.List;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.towerdefence.model.Grid;
@@ -28,8 +27,8 @@ public class Tower extends Mortal implements Ranged {
 	private int health;
 	// The armour the tower has.
 	private int armour;
-	// The death (explosion) sprites this tower uses.
-	private List<Sprite> sprDeath;
+	// The death (explosion) files this tower uses.
+	private List<String> fileDeath;
 	// The type of the tower
 	private TowerType type;
 	// The attackRate of the tower.
@@ -45,8 +44,8 @@ public class Tower extends Mortal implements Ranged {
 	// The cost to upgrade the
 	// The current target of the tower.
 	private GridObject target = null;
-	// The shooting sprites of the tower.
-	private List<Sprite> sprShooting;
+	// The shooting files of the tower.
+	private List<String> fileShooting;
 
 	/**
 	 * The Tower Constructor.
@@ -77,25 +76,25 @@ public class Tower extends Mortal implements Ranged {
 	 *            The cost to build the base tower
 	 * @param upgradeCost
 	 *            A list of upgrade costs for each level of the tower
-	 * @param sprStanding
-	 *            The in order list of Standing sprites
-	 * @param sprShooting
-	 *            The in order list of Shooting sprites
-	 * @param sprDeath
-	 *            The in order list of Death sprites
+	 * @param fileStanding
+	 *            The in order list of Standing files
+	 * @param fileShooting
+	 *            The in order list of Shooting files
+	 * @param fileDeath
+	 *            The in order list of Death files
 	 */
 	public Tower(int maxHealth, int armour, int x, int y, Grid grid, Team team,
 			TowerType type, double attackRate, double range,
 			Projectile projectile, int baseCost, List<Integer> upgradeCost,
-			List<Sprite> sprStanding, List<Sprite> sprShooting,
-			List<Sprite> sprDeath) {
-		super(maxHealth, armour, x, y, grid, team, sprStanding, sprDeath);
+			List<String> fileStanding, List<String> fileShooting,
+			List<String> fileDeath) {
+		super(maxHealth, armour, x, y, grid, team, fileStanding, fileDeath);
 		this.health = maxHealth;
 		this.type = type;
 		this.attackRate = attackRate;
 		this.range = range;
 		this.projectile = projectile;
-		this.sprShooting = sprShooting;
+		this.fileShooting = fileShooting;
 		this.baseCost = baseCost;
 		this.upgradeCost = upgradeCost;
 	}
@@ -123,10 +122,10 @@ public class Tower extends Mortal implements Ranged {
 	}
 
 	/**
-	 * The Death sprites of the tower.
+	 * The Death files of the tower.
 	 */
-	public List<Sprite> sprDeath() {
-		return sprDeath;
+	public List<String> fileDeath() {
+		return fileDeath;
 	}
 
 	/**
@@ -179,10 +178,10 @@ public class Tower extends Mortal implements Ranged {
 	}
 
 	/**
-	 * The list of sprites for the shooting animation.
+	 * The list of files for the shooting animation.
 	 */
-	public List<Sprite> shootingSprites() {
-		return sprShooting;
+	public List<String> fileShooting() {
+		return fileShooting;
 	}
 
 	// Setters
@@ -208,10 +207,10 @@ public class Tower extends Mortal implements Ranged {
 	}
 
 	/**
-	 * Sets the list of Death sprites for the tower.
+	 * Sets the list of Death files for the tower.
 	 */
-	public void sprDeath(List<Sprite> sprites) {
-		this.sprDeath = sprites;
+	public void fileDeath(List<String> files) {
+		this.fileDeath = files;
 	}
 
 	/**
@@ -264,10 +263,10 @@ public class Tower extends Mortal implements Ranged {
 	}
 
 	/**
-	 * Sets the list of sprites for the shooting animation
+	 * Sets the list of files for the shooting animation
 	 */
-	public void shootingSprites(List<Sprite> sprites) {
-		this.sprShooting = sprites;
+	public void fileShooting(List<String> files) {
+		this.fileShooting = files;
 	}
 
 	// Methods

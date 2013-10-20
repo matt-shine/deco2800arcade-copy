@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.towerdefence.model.Grid;
@@ -52,8 +51,8 @@ public class Projectile extends GridObject {
 	 *            The maximum distance the projectile can travel.
 	 * @param team
 	 *            The team the projectile belongs to.
-	 * @param sprStanding
-	 *            The sprite used by the projectile.
+	 * @param fileStanding
+	 *            The file used by the projectile.
 	 * @param damage
 	 *            The damage the projectile deals on impact.
 	 * @param penetration
@@ -62,9 +61,9 @@ public class Projectile extends GridObject {
 	 *            The explosion radius of the projectile.
 	 */
 	public Projectile(int x, int y, Grid grid, Vector2 speed, float range,
-			Team team, List<Sprite> sprStanding, int damage, int penetration,
+			Team team, List<String> fileStanding, int damage, int penetration,
 			int explosionRadius) {
-		super(x, y, grid, team, sprStanding);
+		super(x, y, grid, team, fileStanding);
 		this.speed = speed;
 		this.range = range;
 		this.damage = damage;
@@ -82,7 +81,7 @@ public class Projectile extends GridObject {
 	 */
 	public Projectile(Projectile other, Vector2 speed, Vector2 position) {
 		super((int) position.x, (int) position.y, other.grid(), other.team(),
-				other.standingSprites());
+				other.fileStanding());
 		this.speed = speed;
 		this.range = other.range;
 		this.damage = other.damage;

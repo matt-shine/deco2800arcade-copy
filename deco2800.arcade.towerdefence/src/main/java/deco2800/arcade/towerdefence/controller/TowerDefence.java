@@ -3,7 +3,6 @@ package deco2800.arcade.towerdefence.controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Application;
-
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
@@ -31,7 +30,7 @@ public class TowerDefence extends GameClient {
 	public TowerDefence(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 	}
-
+	
 	@Override
 	public void create() {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
@@ -50,6 +49,7 @@ public class TowerDefence extends GameClient {
 		setScreen(splashScreen);
 		
 		// Dan insert game creation code here.
+		
 		
 		// Listener controls
 		this.getOverlay().setListeners(new Screen() {
@@ -84,7 +84,7 @@ public class TowerDefence extends GameClient {
 			}
 		});
 	}
-
+	
 	@Override
 	public void dispose() {
 		Gdx.app.debug(LOG, "disposing");

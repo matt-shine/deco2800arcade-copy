@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.towerdefence.model.effects.Effect;
@@ -33,14 +32,16 @@ public class GridObject {
 	private int opaqueness = 100;
 	// The direction the object is facing.
 	private Direction facing = Direction.S;
-	// The standing sprites this object uses.
-	protected List<Sprite> sprStanding;
+	// The standing files this object uses.
+	protected List<String> fileStanding;
 	// The team this object belongs to.
 	protected Team team;
 	// The maximum number of effects that can be stacked on this GridObject.
 	private final static int effectStackingLimit = 15;
 	// The number of effects applied to this GridObject.
 	private int effectStacks = 0;
+	// Rotation angle for sprite
+	private int rotation;
 
 	// Constructor
 	/**
@@ -54,12 +55,12 @@ public class GridObject {
 	 *            The grid the object belongs to.
 	 */
 	public GridObject(int x, int y, Grid grid, Team team,
-			List<Sprite> sprStanding) {
+			List<String> fileStanding) {
 		this.position = new Vector2(x, y);
 		this.grid = grid;
 		this.id = UUID.randomUUID();
 		this.team = team;
-		this.sprStanding = sprStanding;
+		this.fileStanding = fileStanding;
 	}
 
 	// Getters
@@ -129,15 +130,6 @@ public class GridObject {
 	}
 
 	/**
-	 * Returns the List of sprites for the object.
-	 * 
-	 * @return A List of sprites for the standing animation.
-	 */
-	public List<Sprite> sprites() {
-		return sprStanding;
-	}
-
-	/**
 	 * Returns the ID of this object.
 	 * 
 	 * @return The ID of the object, as a UUID.
@@ -171,12 +163,19 @@ public class GridObject {
 	}
 
 	/**
-	 * Return the list of standing sprites.
+	 * Return the list of standing files.
 	 */
-	public List<Sprite> standingSprites() {
-		return sprStanding;
+	public List<String> fileStanding() {
+		return fileStanding;
 	}
-
+	
+	/**
+	 * Return the rotation for the sprites.
+	 */
+	public int rotation() {
+		return rotation;
+	}
+	
 	// Setters
 	/**
 	 * Set the grid the object belongs to.
@@ -249,13 +248,13 @@ public class GridObject {
 	}
 
 	/**
-	 * Set the array list of standing sprites this object uses.
+	 * Set the array list of standing files this object uses.
 	 * 
-	 * @param standingSprites
-	 *            The new standing sprites for the object
+	 * @param files
+	 *            The new standing files for the object
 	 */
-	public void standingSprites(List<Sprite> sprites) {
-		this.sprStanding = sprites;
+	public void fileStanding(List<String> files) {
+		this.fileStanding = files;
 	}
 
 	/**
@@ -273,6 +272,13 @@ public class GridObject {
 	 */
 	public void effectStacks(int amount) {
 		this.effectStacks = amount;
+	}
+	
+	/**
+	 * Set the rotation for the sprites.
+	 */
+	public void rotation(int rotation) {
+		this.rotation = rotation;
 	}
 
 	// Methods
@@ -366,7 +372,7 @@ public class GridObject {
 		result = prime * result
 				+ ((position == null) ? 0 : position.hashCode());
 		result = prime * result
-				+ ((sprStanding == null) ? 0 : sprStanding.hashCode());
+				+ ((fileStanding == null) ? 0 : fileStanding.hashCode());
 		result = prime * result + ((team == null) ? 0 : team.hashCode());
 		result = prime * result + (visible ? 1231 : 1237);
 		return result;

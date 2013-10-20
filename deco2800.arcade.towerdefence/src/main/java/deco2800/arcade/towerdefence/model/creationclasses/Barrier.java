@@ -2,8 +2,6 @@ package deco2800.arcade.towerdefence.model.creationclasses;
 
 import java.util.List;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
-
 import deco2800.arcade.towerdefence.model.Grid;
 import deco2800.arcade.towerdefence.model.Mortal;
 import deco2800.arcade.towerdefence.model.Team;
@@ -33,8 +31,8 @@ public class Barrier extends Mortal {
 	 *            The grid the object belongs to
 	 */
 	public Barrier(int maxHealth, int armour, int x, int y, Grid grid,
-			Team team, List<Sprite> sprStanding, List<Sprite> sprDeath) {
-		super(maxHealth, armour, x, y, grid, team, sprStanding, sprDeath);
+			Team team, List<String> fileStanding, List<String> fileDeath) {
+		super(maxHealth, armour, x, y, grid, team, fileStanding, fileDeath);
 	}
 
 	// Getters

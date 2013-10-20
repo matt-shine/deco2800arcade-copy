@@ -137,7 +137,7 @@ public class Sounds {
 		}
 		
 		public static void playLevelMusic() {
-			stopMusic();
+			pauseMusic();
 			level1bgm.play();
 			level1bgm.setVolume(LEVEL1BGM_VOLUME);
 			level1bgm.setLooping(true);

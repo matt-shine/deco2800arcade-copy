@@ -81,9 +81,7 @@ public class World {
 	
 	
 	private Cyra game;
-	//He says this creates circular logic and hence is very bad. It's only really to get touchDown to access camera
-	// if not using mouse then remove this
-	//WorldRenderer wr;
+	
 	
 	public World(Cyra game, int level, float difficulty, ParallaxCamera cam) {
 		this.rank = difficulty;
@@ -132,8 +130,6 @@ public class World {
 			time += Gdx.graphics.getDeltaTime();
 		}
 		
-		//System.out.println("Delta = "+Gdx.graphics.getDeltaTime());
-		//System.out.println("State before ship = "+ship.getState());
 		ship.update(ship);		
 		//if (sword.inProgress()) sword.update(ship);
 		sword.update(ship);

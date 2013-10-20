@@ -22,7 +22,7 @@ public class Brick {
 	private float width = 120f;
 	private float height = 40f;
 	// A float for setting the size of small rectangles for collision detection
-	private float E = 0.001f;
+	private final float EPSILON = 0.001f;
 	private boolean state;
 	private Rectangle brickShape;
 
@@ -141,9 +141,9 @@ public class Brick {
 	public boolean checkLeftCollision(Circle ball) {
 		Rectangle leftSide = new Rectangle();
 		leftSide.x = this.brickShape.x;
-		leftSide.y = this.brickShape.y - this.E;
-		leftSide.width = this.E;
-		leftSide.height = this.brickShape.height - this.E;
+		leftSide.y = this.brickShape.y - this.EPSILON;
+		leftSide.width = this.EPSILON;
+		leftSide.height = this.brickShape.height - this.EPSILON;
 		return Intersector.overlapCircleRectangle(ball, leftSide);
 	}
 
@@ -158,10 +158,10 @@ public class Brick {
 	 */
 	public boolean checkRightCollision(Circle ball) {
 		Rectangle rightSide = new Rectangle();
-		rightSide.x = this.brickShape.x + this.brickShape.width - this.E;
-		rightSide.y = this.brickShape.y - this.E;
-		rightSide.width = this.E;
-		rightSide.height = this.brickShape.height - this.E;
+		rightSide.x = this.brickShape.x + this.brickShape.width - this.EPSILON;
+		rightSide.y = this.brickShape.y - this.EPSILON;
+		rightSide.width = this.EPSILON;
+		rightSide.height = this.brickShape.height - this.EPSILON;
 		return Intersector.overlapCircleRectangle(ball, rightSide);
 	}
 
@@ -179,7 +179,7 @@ public class Brick {
 		topSide.x = this.brickShape.x;
 		topSide.y = this.brickShape.y;
 		topSide.width = this.brickShape.width;
-		topSide.height = this.E;
+		topSide.height = this.EPSILON;
 		return Intersector.overlapCircleRectangle(ball, topSide);
 	}
 
@@ -195,9 +195,9 @@ public class Brick {
 	public boolean checkBottomCollision(Circle ball) {
 		Rectangle bottomSide = new Rectangle();
 		bottomSide.x = this.brickShape.x;
-		bottomSide.y = this.brickShape.y + this.brickShape.height - this.E;
+		bottomSide.y = this.brickShape.y + this.brickShape.height - this.EPSILON;
 		bottomSide.width = this.brickShape.width;
-		bottomSide.height = this.E;
+		bottomSide.height = this.EPSILON;
 		return Intersector.overlapCircleRectangle(ball, bottomSide);
 	}
 
@@ -242,17 +242,6 @@ public class Brick {
 		if (level == 10) {
 			renderLevelTen(b, index);
 		}
-		// if (level == 11) {
-		// renderLevelEleven(b);
-		// }
-	}
-
-	// TODO: Delete this method when finished debugging
-	public void renderLevelEleven(SpriteBatch b) {
-		sBatch = b;
-		sBatch.begin();
-		sBatch.draw(brickImgs[0], brickShape.x, brickShape.y);
-		sBatch.end();
 	}
 
 	/**

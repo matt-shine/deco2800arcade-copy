@@ -40,6 +40,7 @@ public class ThreadListController {
 					System.out.println("Server response is received");
 					GetParentThreadsResponse response = (GetParentThreadsResponse) object;
 					if (response.error != "") {
+						System.out.println(response.error);
 						System.out.println("yeah... didnt work");
 					} else {
 						if (response.result != null) {
@@ -84,6 +85,7 @@ public class ThreadListController {
 		GetParentThreadsRequest request = new GetParentThreadsRequest();
 		request.start = 0;
 		request.end = this.model.get_thread(0).getId() + 1;
+		System.out.println(request.end);
 		request.limit = 10;
 		request.category = this.model.get_category();
 		request.userId = 0;

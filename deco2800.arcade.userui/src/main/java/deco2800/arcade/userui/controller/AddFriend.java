@@ -10,16 +10,13 @@ import deco2800.arcade.userui.view.StatusScreen;
 import deco2800.arcade.userui.view.UserScreen;
 
 public class AddFriend {
-	/** 
-	 * Public class for adding friends
-	 * 
-	 */
+
 	private UserScreen userView;
 	private AddFriendScreen friendView;
 	private Model theModel;
 
 	/**
-	 * Controller for the status page
+	 * Controller for adding friends
 	 * @param theModel
 	 * @param friendView
 	 */
@@ -34,12 +31,13 @@ public class AddFriend {
 		
 	}
 
+	/**
+	 *  Adds the username of friend inputed to the friends invite list
+	 *  The user must exist in the database to be valid,
+	 *  else throw a new InvalidUserException
+	 *  
+	 */
 	class AddFriendListener implements ActionListener{
-		/**
-		 * AddFriendListener; listens for user input on Add Friend pop up
-		 * Removes pop up when user clicks "Add Friend"
-		 * 
-		 */
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -51,12 +49,12 @@ public class AddFriend {
 		
 	}
 	
+	/**
+	 * The actions are dismissed and view is closed
+	 *
+	 */
 	public class CancelListener implements ActionListener{
-		/**
-		 * CancelListener; listens for user input on Add Friend pop up
-		 * Removes pop up when user clicks "Cancel" Button
-		 * 
-		 */
+
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			

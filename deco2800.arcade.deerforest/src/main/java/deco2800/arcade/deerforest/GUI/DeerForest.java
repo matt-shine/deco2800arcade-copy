@@ -116,6 +116,8 @@ public class DeerForest extends GameClient {
 		game = new Game();
 		game.id = "deerforest";
 		game.name = "Deer Forest";
+		game.description = "A battle of minds, fought with pieces of paper with"
+				+ "deer on them (probably). More dramatic than it sounds.";
 	}
 
 	public Game getGame() {

@@ -6,7 +6,7 @@
  <tileset firstgid="1" name="level" tilewidth="32" tileheight="32" spacing="2">
   <image source="level.png" width="128" height="512"/>
  </tileset>
- <layer name="house-back" width="620" height="60" opacity="0">
+ <layer name="house-back" width="620" height="60">
   <data encoding="base64" compression="zlib">
    eJzt2zFqA1EQBUEl9i0Mvv8pzeZCOFj9aTRV8NKJO5nHAwAAAAAAAAAAAAAAAAAAAPiP7xsHAMD99BoAQJteAwBo02sAAG16DQCgTa8BALTpNQCANr0GANCm1wAA2vQaAECbXgMAaNNrAABteg0AoE2vAQC06TUAgDa9BgDQptcAANr0GgBAm16Dtq8XA2AHvQZ9Wg1gN70GfXoNYDe9Bn16DWA3vQZ9eg1gN70GfXoNYDe9Bn16DWA3vQZ9eg1gN70GfXoNYDe9Bn16DWA3vQZ9eg1gN70GfXoNYDe9Bn16DWC3O3vtkwYleg1gt+kuqo6zfuzlnvXanfcBaJvuouo4a7qH6tNrALtNd1F1nDXdQ/XpNYDdpruoOs6a7qH69BrAbtNdVB1nTfdQfXoNYLfpLqqOs6Z7qD69BrDbdBdVx1nTPVSfXgPYbbqLquOs6R6qT68B7DbdRdVx1nQP1afXAHab7qLqOGu6h+rTawC7TXdRdZw13UP16TWA3aa7qDrOmu6h+vQawG4ah4LpHqruWae9o9sAaNNrFEx3UXVXj/2+mF4D2EGvUTDdRdXpNQAueo2C6S6qTq8BcNFrFEx3UXV6DYCLXqNguouq02sAQMV0F1XnPxQAAAAAAADg/f4AjmvuAA==
   </data>

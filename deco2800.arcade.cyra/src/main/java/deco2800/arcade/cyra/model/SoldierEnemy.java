@@ -31,8 +31,9 @@ public class SoldierEnemy extends Enemy {
 	private boolean deathFromRight;
 	private float deathCount;
 	private float deathRotation;
+	private int otherAnimationFrame;
 	
-	private enum State {
+	public enum State {
 		INIT, WALK, WAIT, JUMP, SHOOT, AOE, RAM, SWORD, GRENADE, DEATH
 	}
 	
@@ -52,6 +53,7 @@ public class SoldierEnemy extends Enemy {
 		jumpTime = 0;
 		swordTime = 0;
 		score = 100;
+		otherAnimationFrame = 0;
 		
 		if (startOnRight) {
 			velocity.x = -SPEED;
@@ -115,7 +117,7 @@ public class SoldierEnemy extends Enemy {
 						velocity.x = -SPEED * 1.5f;
 					}
 					jumpTime = JUMP_TIME;
-					stateTime = 3f;
+					stateTime = 4f-rank;
 					break;
 				
 				case SHOOT:
@@ -135,10 +137,10 @@ public class SoldierEnemy extends Enemy {
 								position.y + height/2), 1f, 1f, direction, BulletSimple.Graphic.FIRE));
 						Sounds.playShootSound(0.5f);
 					}
-					stateTime = 1f;
+					stateTime = 3f-2.5f*rank;
 					break;
 				case AOE:
-					stateTime = 2f;
+					stateTime = 3f-rank;
 					velocity.x = 0f;
 					break;
 				case RAM:
@@ -146,10 +148,10 @@ public class SoldierEnemy extends Enemy {
 					if (!facingRight) {
 						velocity.x = -velocity.x;
 					}
-					stateTime = 1f;
+					stateTime = 2f-rank;
 					break;
 				case SWORD:
-					stateTime = 2f;
+					stateTime = 3f-rank;
 					swordTime = 1.5f;
 					break;
 				case GRENADE:
@@ -448,4 +450,22 @@ public class SoldierEnemy extends Enemy {
 		}
 	}
 
+	public State getState() {
+		return state;
+	}
+	
+	public boolean isPerformingTell() {
+		return performingTell;
+	}
+	
+	public boolean isFacingRight() {
+		return facingRight;
+	}
+	
+	public int getOtherAnimationFrame() {
+		if (++otherAnimationFrame == 4) {
+			otherAnimationFrame = 0;
+		}
+		return otherAnimationFrame;
+	}
 }

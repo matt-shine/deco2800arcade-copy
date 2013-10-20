@@ -58,7 +58,7 @@ public class WorldRenderer {
 	private ParallaxCamera cam;
 	Integer rightCyraCount, leftCyraCount, rightFrameCounter, leftFrameCounter;
 	private BitmapFont font, fontBig;
-	private Texture shipTexture, followerTexture, bulletTexture, bg, heartsTexture, 
+	private Texture shipTexture, followerTexture, bulletTexture, bg, heartsTexture, log,
 	jumperBodyTexture, jumperFrontArmTexture, jumperFrontLegTexture, jumperFrontArmJumpingTexture,jumperFrontLegJumpingTexture,
 	wallTexture, sword1, sword2, sword3;
 	private TextureRegion cyraFrame;
@@ -96,7 +96,7 @@ public class WorldRenderer {
 	
 	
 	//debug
-	private boolean debugMode = true;
+	private boolean debugMode = false;
 	ShapeRenderer sr;
 	TextureRegion testRegion;
 	private FPSLogger fpsLogger;
@@ -339,6 +339,20 @@ public class WorldRenderer {
 		while (eItr.hasNext()) {
 			e = eItr.next();
 			if (e.getClass() == SoldierEnemy.class){
+				SoldierEnemy se = (SoldierEnemy)e;
+				
+				if (se.getState() == SoldierEnemy.State.RAM){
+					
+					TextureRegion region = myEnemy.findRegion("drill", se.getOtherAnimationFrame());
+					float drillRotation;
+					if (se.isFacingRight()) {
+						drillRotation = -90;
+					} else {
+						drillRotation = 90;
+					}
+					batch.draw(region, e.getPosition().x+e.getWidth()/2-region.getRegionWidth()/32f/2f, e.getPosition().y+e.getHeight()/2-region.getRegionHeight()/32f/2f,
+							region.getRegionWidth()/32f/2f,region.getRegionHeight()/32f/2f, region.getRegionWidth()/32f, region.getRegionHeight()/32f, 2,1.5f,drillRotation);
+				}
 				
 				if(e.isJumping() == true){
 				batch.draw(jumperFrontArmJumpingTexture, (e.getPosition().x)-.3f, (e.getPosition().y) +.55f, e.getWidth() /2, e.getHeight()/2,
@@ -381,6 +395,53 @@ public class WorldRenderer {
 					batch.draw(jumperFrontLegTexture, (e.getPosition().x)+.2f, (e.getPosition().y), e.getWidth() /2, e.getHeight()/2,
 							e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, jumperFrontLegTexture.getWidth(),
 							jumperFrontLegTexture.getHeight(), false, false);
+				}
+				
+				if (se.getState() == SoldierEnemy.State.SWORD) {
+					
+					float xPos;
+					if (se.isFacingRight()) {
+						xPos = e.getPosition().x+e.getWidth()-sword1.getWidth()/32f;
+					} else {
+						xPos = e.getPosition().x - sword1.getWidth()/32f;
+					}
+					
+					if (se.isPerformingTell()) {
+				
+						
+						batch.draw(sword1, xPos, (e.getPosition().y + 0.7f), e.getWidth()/2, e.getHeight()/2, sword1.getWidth()/32f, sword1.getHeight()/32f,1,1,0,
+								0,0,sword1.getWidth(), sword1.getHeight(), !se.isFacingRight(), false);
+						
+					} else {
+						Array<Rectangle> pdb = se.getPlayerDamageBounds();
+						if (pdb != null) {
+							if (pdb.size >= 1) {
+								System.out.println("Size of array: "+pdb.size);
+								Rectangle swordBounds = pdb.get(0);
+								batch.draw(sword2, swordBounds.x, swordBounds.y, 0, 0, swordBounds.width, swordBounds.height,1,1,0,
+										0,0,sword2.getWidth(), sword2.getHeight(), !se.isFacingRight(), false);
+							}
+						}
+					}
+				} else if (se.getState() == SoldierEnemy.State.AOE) {
+					if (se.isPerformingTell()) {
+						TextureRegion region = myEnemy.findRegion("pentagram", se.getOtherAnimationFrame());
+						batch.draw(region, e.getPosition().x+e.getWidth()/2-region.getRegionWidth()/32f/2f, e.getPosition().y,
+								region.getRegionWidth()/32f/2f,0, region.getRegionWidth()/32f, region.getRegionHeight()/32f, 0.8f, 0.8f,0);
+					} else {
+						TextureRegion region = laserTextures.findRegion("laser_charge");
+						batch.draw(region, e.getPosition().x+e.getWidth()/2-region.getRegionWidth()/32f/2f, e.getPosition().y+e.getHeight()/2-region.getRegionHeight()/32f/2,
+								region.getRegionWidth()/32f/2f,region.getRegionHeight()/32f/2, region.getRegionWidth()/32f, region.getRegionHeight()/32f, 4,4,0);
+					}
+				} else if (se.getState() == SoldierEnemy.State.SHOOT && se.isPerformingTell()) {
+					float xPos;
+					if (se.isFacingRight()) {
+						xPos = e.getPosition().x+e.getWidth()/2-2.5f;
+					} else {
+						xPos = e.getPosition().x +e.getWidth()/2-0.5f;
+					}
+					batch.draw(log, xPos, (e.getPosition().y + 0.6f), e.getWidth()/2, e.getHeight()/2, log.getWidth()/32f/2, log.getHeight()/32f/2,0.2f,0.2f,90,
+							0,0,log.getWidth(), log.getHeight(), se.isFacingRight(), false);
 				}
 			}
 			else if (e.getClass() == Zombie.class){
@@ -659,15 +720,32 @@ public class WorldRenderer {
 			CharSequence timeText= "TIME BONUS: " + resultsScreen.getTimeBonus();
 			CharSequence healthText = "HEALTH BONUS: "+resultsScreen.getHealthBonus();
 			CharSequence scoreText = "TOTAL SCORE: "+ world.getScore();
+			CharSequence rankText = "DIFFICULTY MULTIPLIER: " + resultsScreen.getRankMultiplier();
 			font.draw(textBatch, timeText, cam.position.x-14f, Gdx.graphics.getHeight()-122);
 			font.draw(textBatch, healthText, cam.position.x-14f, Gdx.graphics.getHeight()-172);
-			font.draw(textBatch, scoreText, cam.position.x-14f, Gdx.graphics.getHeight()-272);
+			font.draw(textBatch, rankText, cam.position.x-14f, Gdx.graphics.getHeight()-222);
+			font.draw(textBatch, scoreText, cam.position.x-14f, Gdx.graphics.getHeight()-322);
 			//System.out.println("Drawing TotalScore at "+ (cam.position.x-14f) + ","+ (Gdx.graphics.getHeight()-272));
 			textBatch.end();
 			
 			
 		}
 		
+		if (world.getLevelScenes().isGameWon()) {
+			textBatch.begin();
+			Array<CharSequence> lines = new Array<CharSequence>(); 
+			lines.add("CONGRATULATIONS!");
+			lines.add("YOU HAVE COMPLETED YOUR QUEST TO STEAL");
+			lines.add("THE JEWEL OF POWER.");
+			lines.add("NOW YOU RULE THE WORLD!");
+			lines.add("HOW IS IT?");
+			for (int i=0; i<lines.size; i++) {
+				CharSequence line = lines.get(i);
+				font.draw(textBatch, line, 64f, Gdx.graphics.getHeight()-64f-64f*i);
+			}
+			textBatch.end();
+			
+		}
 
 		//If game is paused render pause overlay
 		if (world.isPaused()) {
@@ -815,6 +893,7 @@ public class WorldRenderer {
 		manager.load("sword1.png", Texture.class, linearFilteringParam);
 		manager.load("sword2.png", Texture.class, linearFilteringParam);
 		manager.load("sword3.png", Texture.class, linearFilteringParam);
+		manager.load("log.png", Texture.class, linearFilteringParam);
 		manager.finishLoading();
 		
 		boss1Atlas = manager.get("stephen.txt", TextureAtlas.class);
@@ -865,6 +944,9 @@ public class WorldRenderer {
 			/* Load follower texture */
 		followerTexture = manager.get("ship.png");
 		followerTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		log = manager.get("log.png");
+		log.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
 		jumperBodyTexture = manager.get("body-jumper.png");
 		jumperBodyTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);

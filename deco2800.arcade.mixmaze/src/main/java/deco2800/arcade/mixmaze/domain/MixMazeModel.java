@@ -17,7 +17,7 @@ import static deco2800.arcade.mixmaze.domain.Direction.*;
 public class MixMazeModel implements IMixMazeModel {
 
 	final Logger logger = LoggerFactory.getLogger(MixMazeModel.class);
-
+	
 	/**
 	 * Game difficulty specifies certain rules of the game play.
 	 * <p>
@@ -156,6 +156,8 @@ public class MixMazeModel implements IMixMazeModel {
 	/** Item spawner */
 	private Random spawner;
 
+	private static int playerConsecutiveWins = 0;
+	
 	/*
 	 * TODO: doc
 	 */
@@ -270,10 +272,13 @@ public class MixMazeModel implements IMixMazeModel {
 	}
 
 	@Override
-	public void usePlayerAction(int id) {
+	public PlayerModel.Action usePlayerAction(int id) {
 		PlayerModel p = player[id - 1];
+		PlayerModel.Action act = p.getAction();
+		boolean res;
 
-		p.useAction(board[p.getY()][p.getX()]);
+		res = p.useAction(board[p.getY()][p.getX()]);
+		return res ? act : null; 
 	}
 
 	@Override
@@ -314,11 +319,27 @@ public class MixMazeModel implements IMixMazeModel {
 		gameEndTime = Calendar.getInstance().getTime();
 		int player1Score = getPlayerScore(player[0]);
 		int player2Score = getPlayerScore(player[1]);
-		Achievements.getInstance().incrementAchievement(
-				Achievements.AchievementType.Playa);
+		
+		Achievements.incrementAchievement(Achievements.AchievementType.Playa);
+		Achievements.incrementAchievement(Achievements.AchievementType.TenMatches);
+		Achievements.incrementAchievement(Achievements.AchievementType.TwentyMatches);
 
 		if (player1Score != player2Score) {
-			return (player1Score > player2Score) ? player[0] : player[1];
+			if(player1Score > player2Score) {
+				playerConsecutiveWins++;
+				Achievements.incrementAchievement(Achievements.AchievementType.FirstWin);
+				if(playerConsecutiveWins == 5) {
+					Achievements.incrementAchievement(Achievements.AchievementType.RisingStar);
+				}
+				
+				if(playerConsecutiveWins == 10) {
+					Achievements.incrementAchievement(Achievements.AchievementType.OnFire);
+				}
+				return player[0];
+			} else {
+				playerConsecutiveWins = 0;
+				return player[1];
+			}
 		} else {
 			return null;
 		}
@@ -448,12 +469,15 @@ public class MixMazeModel implements IMixMazeModel {
 	private int getMaxItemCount() {
 		int count = 0;
 
-		for (int i = 0; i < boardSize; i++)
-			for (int j = 0; j < boardSize; j++)
+		for (int i = 0; i < boardSize; i++){
+			for (int j = 0; j < boardSize; j++){
 				if (!(board[i][j].isBoxBuilt()
 						|| player[0].isAtLocation(j, i)
-						|| player[1].isAtLocation(j, i)))
+						|| player[1].isAtLocation(j, i))){
 					count++;
+				}
+			}
+		}
 		return Math.min(difficulty.maxItems, count);
 	}
 

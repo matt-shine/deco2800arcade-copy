@@ -38,6 +38,9 @@
     	default: { font: default-28, fontColor: white, up: green_button, down: green_button, over: green_button_glow },
     	icon: { font: default, fontColor: white, up: textField }
     },
+    com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
+		default-horizontal: { background: slider_bg, knob: slider_knob }
+	},
     com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
     	default: { up: green_button, down: green_button, over: green_button_glow },
     	home: { up: home_button },

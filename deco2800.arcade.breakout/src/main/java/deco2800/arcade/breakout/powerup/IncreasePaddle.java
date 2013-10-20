@@ -4,13 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import deco2800.arcade.breakout.GameScreen;
+import deco2800.arcade.breakout.screens.GameScreen;
 
+/**
+ * Increases the paddle size for the increase paddle powerup
+ * @author Carlie Smits
+ *
+ */
 public class IncreasePaddle extends Powerup{
 
 	private final String img = "increasepaddle.png";
-	private Sprite sprite = new Sprite(new Texture(Gdx.files.classpath("imgs/" + img)));
 	private GameScreen context;
+	private Sprite sprite;
 	//A variable for comparing floats
 	private final float EPSILON = 0.0001f;
 	
@@ -20,6 +25,7 @@ public class IncreasePaddle extends Powerup{
 	 */
 	public IncreasePaddle(GameScreen gs) {
 		context = gs;
+		setSprite();
 	}
 	
 	/**
@@ -27,7 +33,8 @@ public class IncreasePaddle extends Powerup{
 	 * Adds to the score if the increase power up is already active.
 	 */
 	public void applyPowerup() {
-		if ((context.getPaddle().getPaddleShapeWidth() - context.getPaddle().getStandardWidth()) > EPSILON) {
+		if ((context.getPaddle().getPaddleShapeWidth() - context.getPaddle().
+				getStandardWidth()) > EPSILON) {
 			context.incrementScore(20 * context.getLevel());
 			return;
 		}
@@ -38,5 +45,12 @@ public class IncreasePaddle extends Powerup{
 	 */
 	public Sprite getSprite() {
 		return this.sprite;
+	}
+	/**
+	 * Set the sprite for the powerup
+	 */
+	public void setSprite(){
+		this.sprite = new Sprite(new Texture(Gdx.files.classpath("imgs/" + img))
+		);
 	}
 }

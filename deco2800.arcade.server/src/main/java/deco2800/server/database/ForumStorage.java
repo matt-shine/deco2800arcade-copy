@@ -1679,7 +1679,7 @@ public class ForumStorage {
 	
 	private void insertThreadExamples() throws DatabaseException {
 		int num = 0;
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 20; i++) {
 			this.insertParentThread("Parent Thread test " + i, "Test message", 1, CATEGORY[num], "test");
 			if (num != 3) {
 				num++;

@@ -51,13 +51,13 @@ public class BuilderArena extends Sprite{
 	//5 Card Zones 
 	final private float cardZonesY = 0.28f;//constant for the card zones
 	
-	final private float cardZoneX1 = 0.245f;
-	final private float cardZoneX2 = 0.307f;
-	final private float cardZoneX3 = 0.369f;
-	final private float cardZoneX4 = 0.431f;
-	final private float cardZoneX5 = 0.493f;
-	final private float cardZoneX6 = 0.555f;
-	final private float cardZoneX7 = 0.617f;
+	final private float cardZoneX1 = 0.235f;
+	final private float cardZoneX2 = 0.297f;
+	final private float cardZoneX3 = 0.359f;
+	final private float cardZoneX4 = 0.421f;
+	final private float cardZoneX5 = 0.483f;
+	final private float cardZoneX6 = 0.545f;
+	final private float cardZoneX7 = 0.607f;
 	
 	final private float[] cardZonesX = {cardZoneX1, cardZoneX2, cardZoneX3, 
 			cardZoneX4, cardZoneX5, cardZoneX6, cardZoneX7};

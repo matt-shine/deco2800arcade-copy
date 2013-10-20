@@ -53,7 +53,7 @@ public class DeckBuilderScreen implements Screen {
 		manager.finishLoading();
 		
 		//initialises the areana
-		arena = new BuilderArena(manager.get("DeerForestAssets/builderBackground.png", Texture.class));
+		arena = new BuilderArena(manager.get("DeerForestAssets/builderBackground1.png", Texture.class));
 		
 		//create map of sprites
 		spriteMap = new HashMap<String, Set<BuilderSprite>>();
@@ -68,7 +68,7 @@ public class DeckBuilderScreen implements Screen {
 	 * Loads images used
 	 */
 	private void loadAssets() {
-		manager.load("DeerForestAssets/builderBackground.png", Texture.class);
+		manager.load("DeerForestAssets/builderBackground1.png", Texture.class);
 		CardCollection deck = deckBuilder.getModel().getDeck();
         deck.addAll(deckBuilder.getModel().getDeck());
         ArrayList<AbstractCard> decks = new ArrayList<AbstractCard>(deck);

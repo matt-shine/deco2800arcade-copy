@@ -8,6 +8,6 @@ x.......-~~-.......x
 x........ii........x
 x........==.....---x
 x........~~........x
-x..xx..xxiixx..xx..x
+x..xx..xxiixx..xx.bx
 x--------ii--------x
 xxxxxxxxxiixxxxxxxxx

@@ -9,16 +9,31 @@ public class ThreadListModel {
 	private String category;
 	private int size;
 	private List<ParentThread> list;
-	private final int MAX_THREAD = 10;
-	private int page;
+	private ChildListModel childs;
 	
 	//assume cat var is between 1-4
 	public ThreadListModel(int cat) {
 		set_category(cat);
+		this.childs = new ChildListModel();
 		this.list = new ArrayList<ParentThread>();
-		this.size = 0;
-		this.page = 1;
 	}
+	
+	public void child_thread_load(ChildThread[] c) {
+		this.childs.thread_load(c);
+	}
+	
+	public int get_child_size() {
+		return this.childs.get_size();
+	}
+	
+	public ChildThread get_child_thread(int index) {
+		return this.childs.get_thread(index);
+	}
+	
+	public void clear_child_threads() {
+		this.childs.clear_threads();
+	}
+	
 	
 	/**
 	 * Load Parent threads from given Array into this.List

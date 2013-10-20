@@ -60,6 +60,29 @@ public class ThreadListController {
 						}*/
 					}
 				}
+				if (object instanceof GetChildThreadsResponse) {
+					System.out.println("Server response is received");
+					GetChildThreadsResponse response = (GetChildThreadsResponse) object;
+					if (response.error != "") {
+						System.out.println(response.error);
+						System.out.println("yeah... didnt work");
+					} else {
+						if (response.result != null) {
+							model.child_thread_load(ChildThreadProtocol.getChildThreads(response.result));
+							System.out.println("Thread loaded");
+							view.threadGrid.setRows(model.get_child_size() + 1);
+							for(int j = 0; j < model.get_child_size(); j++) {
+								view.display_child(model.get_child_thread(j));
+							}
+							view.update_display();
+						} 
+						/*else {
+							System.out.println("Failed to load thread");
+							JOptionPane.showMessageDialog(null, "Failed to load threads", 
+									"Error", JOptionPane.ERROR_MESSAGE);
+						}*/
+					}
+				}
 				return;
 			}
 		});		
@@ -104,6 +127,17 @@ public class ThreadListController {
 		public void actionPerformed(ActionEvent e) {
 			prevTen();
 		}
+	}
+	
+	public void request_childs(int parentid) {
+		GetChildThreadsRequest request = new GetChildThreadsRequest();
+		request.pid = parentid;
+		request.start = 0;
+		request.end = 0;
+		request.limit = 0;
+		request.userId = 0;
+		System.out.println("Get childs request sent");		
+		this.connection.getClient().sendTCP(request);
 	}
 	
 	

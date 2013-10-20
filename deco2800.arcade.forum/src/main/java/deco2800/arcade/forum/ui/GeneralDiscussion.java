@@ -57,6 +57,8 @@ public class GeneralDiscussion {
 	public JButton btnPrevButton;
 	public JButton btnNextButton;
 	private JPanel threadDisplay;
+	private ThreadListController controller;
+	public GridLayout threadGrid;
 	
 
 	public GeneralDiscussion(JFrame window) {
@@ -159,6 +161,7 @@ public class GeneralDiscussion {
 	    f.setVisible(true);
 	    
 	    this.threadDisplay = new JPanel();
+	    this.threadDisplay.setLayout(this.threadGrid = new GridLayout(1, 1));
 	    
 	    
 	    this.scrollPane = new JScrollPane(this.threadDisplay,
@@ -173,7 +176,7 @@ public class GeneralDiscussion {
 	    
 	    
 	    try {
-			new ThreadListController(this, new ThreadListModel(1));
+			this.controller = new ThreadListController(this, new ThreadListModel(1));
 		} catch (ForumException e) {
 			System.out.println("Threads failed to load");
 			JOptionPane.showMessageDialog(null, "Failed to load threads", 
@@ -196,18 +199,39 @@ public class GeneralDiscussion {
 		JTextArea title = new JTextArea();
 		JTextArea author = new JTextArea();
 		JTextArea date = new JTextArea();
-		message.setColumns(30);
-		title.setColumns(35);
+		window.setBackground(Color.DARK_GRAY);
+		window.setBorder(new LineBorder(new Color(0, 0, 0)));
+		message.setColumns(35);
+		title.setColumns(30);
 		author.setText("By: " + p.getCreatedBy().getName());
 		date.setText("Written on: " + p.getTimestamp().toString());
 		message.setText(p.getMessage());
 		title.setText(p.getTopic());
+		title.setFont(new Font("Cambria", Font.BOLD, 15));
 		window.add(title);
 		window.add(message);
 		window.add(author);
 		window.add(date);
 		this.threadDisplay.add(window);
 		
+	}
+	
+	public void display_child(ChildThread c) {
+		JPanel window = new JPanel();
+		window.setLayout(new GridLayout(3, 1));
+		JTextArea message = new JTextArea();
+		JTextArea author = new JTextArea();
+		JTextArea date = new JTextArea();
+		window.setBackground(Color.DARK_GRAY);
+		window.setBorder(new LineBorder(new Color(0, 0, 0)));
+		message.setColumns(35);
+		author.setText("By: " + c.getCreatedBy().getName());
+		date.setText("Written on: " + c.getTimestamp().toString());
+		message.setText(c.getMessage());
+		window.add(message);
+		window.add(author);
+		window.add(date);
+		this.threadDisplay.add(window);
 	}
 
 	public void open_home() {
@@ -260,6 +284,7 @@ public class GeneralDiscussion {
 	    		clear_display();
 	    		display_parent(thread);
 	    		update_display();
+	    		controller.request_childs(thread.getId());
 	    	}
 	    });
 	    this.ThreadPanel.add(threadDisplay);	

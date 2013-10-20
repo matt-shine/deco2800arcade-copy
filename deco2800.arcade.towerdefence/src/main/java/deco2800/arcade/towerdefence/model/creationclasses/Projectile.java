@@ -49,10 +49,17 @@ public class Projectile extends GridObject {
 	 *            The speed and direction of the object in pixels per second,
 	 *            represented as a vector
 	 * @param range
+	 *            The maximum distance the projectile can travel.
 	 * @param team
+	 *            The team the projectile belongs to.
 	 * @param sprStanding
+	 *            The sprite used by the projectile.
 	 * @param damage
+	 *            The damage the projectile deals on impact.
 	 * @param penetration
+	 *            The penetration of the projectile against armoured targets.
+	 * @param explosionRadius
+	 *            The explosion radius of the projectile.
 	 */
 	public Projectile(int x, int y, Grid grid, Vector2 speed, float range,
 			Team team, List<Sprite> sprStanding, int damage, int penetration,
@@ -127,25 +134,29 @@ public class Projectile extends GridObject {
 	 * Continually move in the given vector until a collision, or the maximum
 	 * range is reached.
 	 */
-	private void move() {
+	public void move() {
 		// Move at speed in the object's direction until it collides with
 		// something
 		float moved = 0;
 		long t0, t1;
+		Vector2 addVector = speed.cpy();
+		addVector.mul((float)1/30);
 		while (moved < range) {
 			//Check for collisions
+			//System.out.println(position);
 			for (int i =0;i < getCurrentGrid().size(); i++){
 				if (getCurrentGrid().get(i).team() != this.team){
-					//Collision occured
+					//Collision occurred
 					collide(getCurrentGrid().get(i));
+					return;
 				}
 			}
 			
 			t0 = System.currentTimeMillis();
 			t1 = t0;
 			// Move
-			position.add(speed.mul(1 / 30));
-			moved += speed.mul(1 / 30).len();
+			position.add(addVector);
+			moved += addVector.len();
 			// Wait 1/30th of a second before moving again
 			while (t1 - t0 < 33) {
 				t1 = System.currentTimeMillis();

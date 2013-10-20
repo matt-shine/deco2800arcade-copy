@@ -92,6 +92,37 @@ public abstract class Mover {
 	}
 	
 	/**
+	 * Returns the next tile in the given direction
+	 * @param offset- the amount of tiles to offset from the currentTile
+	 */
+	private Tile nextTile(int offset, Dir dir){
+		int x = gameMap.getTilePos(currentTile).getX();
+		int y = gameMap.getTilePos(currentTile).getY();
+		switch(dir) {
+		case LEFT: x -= offset; break;
+		case RIGHT: x += offset; break;
+		case UP: y += offset; break;
+		case DOWN: y -= offset; break;
+		}
+		return gameMap.getGrid()[x][y];
+	}
+	/**
+	 * Returns the next tile in the given direction
+	 * @param offset- the amount of tiles to offset from the currentTile
+	 */
+	protected Tile tileInDir(int offset, Dir dir){
+		int x = gameMap.getTilePos(currentTile).getX();
+		int y = gameMap.getTilePos(currentTile).getY();
+		switch(dir) {
+		case LEFT: x -= offset; break;
+		case RIGHT: x += offset; break;
+		case UP: y += offset; break;
+		case DOWN: y -= offset; break;
+		}
+		return gameMap.getGrid()[x][y];
+	}
+	
+	/**
 	 * Checks whether the mover can turn
 	 */
 	public boolean canTurn(){
@@ -116,7 +147,8 @@ public abstract class Mover {
 	public void checkTile(Tile tile){
 		
 		if (this.getClass() == Ghost.class){
-			if (tile == gameMap.getGhostDoors().get(0) &&
+			
+			if (tileInDir(1, Dir.DOWN) == gameMap.getGhostDoors().get(0) &&
 					((Ghost)this).getCurrentState() == GhostState.DEAD){
 				// Move ghost and revive!
 				((Ghost)this).setCurrentState(GhostState.CHASE);

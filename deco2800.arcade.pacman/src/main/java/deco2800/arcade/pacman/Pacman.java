@@ -104,19 +104,7 @@ public class Pacman extends GameClient {
 				new AchievementClient(networkClient);
 		AsyncFuture<ArrayList<Achievement>> achievements = achievementClient.getAchievementsForGame(game);
 		AsyncFuture<AchievementProgress> playerProgress = achievementClient.getProgressForPlayer(player);
-
-		for(Achievement ach : achievements.get()) {
-		    int achProgress = playerProgress.get().progressForAchievement(ach);
-		    double percentage = 100 * (achProgress / (double)ach.awardThreshold);
-		}
-
-		// getting a list of the achievements a player has been awarded
-//		ArrayList<String> awardedIDs = playerProgress.awardedAchievementIDs();
-//		achievements = achievementClient.getAchievementsForIDs(awardedIDs);
-
-		for(Achievement achh : achievements.get()) {
-		    System.out.println(achh.name);
-		}
+		
 	}
 	
 	/**

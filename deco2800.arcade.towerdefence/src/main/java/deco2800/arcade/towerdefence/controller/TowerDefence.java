@@ -79,11 +79,6 @@ public class TowerDefence extends GameClient {
 	@Override
 	public void dispose() {
 		Gdx.app.debug(LOG, "disposing");
-		splashScreen.dispose();
-		menuScreen.dispose();
-		gameScreen.dispose();
-		loreScreen.dispose();
-		creditsScreen.dispose();
 		super.dispose();
 	}
 

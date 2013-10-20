@@ -268,6 +268,6 @@ public class MenuScreen implements Screen {
 		style = new TextButtonStyle();
 		style.up = skin.getDrawable("buttonnormal");
 		style.down = skin.getDrawable("buttonpressed");
-		style.font = black;
+		style.font = white;
 	}
 }

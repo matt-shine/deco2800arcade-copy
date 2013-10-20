@@ -78,8 +78,8 @@ public class MatchmakerQueue {
 		ArrayList<ArrayList<Object>> map = new ArrayList<ArrayList<Object>>(
 				queuedUsers);
 		return map;
-	}
-
+	}	
+	
 	/**
 	 * Returns a copy of the current server list
 	 * 
@@ -90,7 +90,29 @@ public class MatchmakerQueue {
 				activeServers);
 		return map;
 	}
-
+	
+	/**
+	 * Returns a copy of the current server list as an ArrayList for sending over
+	 * the network
+	 * 
+	 * @return A copy of the current server list as an ArrayList
+	 */
+	public ArrayList<ArrayList<Object>> getServerListAsList() {
+		ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
+		for (Map.Entry<Integer, MultiplayerServer> entry : activeServers.entrySet()) {
+			ArrayList<Object> server = new ArrayList<Object>();
+			server.add(entry.getKey());
+			server.add(entry.getValue().getPlayer1());
+			server.add(entry.getValue().getPlayer1Rating());
+			server.add(entry.getValue().getPlayer2());
+			server.add(entry.getValue().getPlayer2Rating());
+			server.add(entry.getValue().getSessionId());
+			server.add(entry.getValue().getServerType());
+			list.add(server);
+		}
+		return list;
+	}
+	
 	/**
 	 * Add a user to the matchmaking queue.
 	 * 
@@ -258,7 +280,6 @@ public class MatchmakerQueue {
 			p1Rating = getDatabase().getPlayerRating(player1ID, game);
 			p2Rating = getDatabase().getPlayerRating(player2ID, game);
 		} catch (DatabaseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		MultiplayerServer gameServer = new MultiplayerServer(player1ID,

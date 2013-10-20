@@ -163,6 +163,11 @@ public class ArcadeSystem {
 	public static ArrayList<ActiveMatchDetails> requestLobbyGamesList() {
 		return Arcade.getMatches();
 	}
+	
+	public static ArrayList<ArrayList<Object>> requestCurrentMultiplayerList() {
+		arcade.requestActiveGames();
+		return arcade.getActiveGames();
+	}
 
 	/**
 	 * Forwards on a request from the game to create a new multiplayer game

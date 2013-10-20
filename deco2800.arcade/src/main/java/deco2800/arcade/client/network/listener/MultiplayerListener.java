@@ -4,6 +4,7 @@ import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.client.Arcade;
 import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.protocol.multiplayerGame.ActiveGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
@@ -47,7 +48,10 @@ public class MultiplayerListener extends NetworkListener {
 				arcade.getCurrentGame().startMultiplayerGame();
 				arcade.getCurrentGame().updateGameState((GameStateUpdateRequest) object);
 			}
-		} 
+		//Update the list of current MultiplayerGames
+		} else if (object instanceof ActiveGameRequest) {
+			arcade.setActiveGames(((ActiveGameRequest) object).serverList)
+		}
 	}
 
 }

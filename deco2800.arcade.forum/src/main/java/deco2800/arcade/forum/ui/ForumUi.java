@@ -52,6 +52,7 @@ public class ForumUi {
 	public JTextPane txtpnForDiscussionOf;
 	public JTextPane txtpnTipsAndTrick;
 	public JTextPane txtpnFacingBugIssue;
+	public JTextField txtArcade;
 	public JPanel panel;
 	public JPanel panel_1;
 	private JFrame f;
@@ -128,28 +129,6 @@ public class ForumUi {
 		this.lblTag.setBounds(546, 129, 97, 16);
 		f.getContentPane().add(this.lblTag);
 		
-	  	*/
-		
-		this.lblGeneralDiscussion = new JLabel("General Discussion");
-		this.lblGeneralDiscussion.setFont(new Font("Tahoma", Font.BOLD, 13));
-		this.lblGeneralDiscussion.setBounds(12, 130, 946, 73);
-		addGDLabelListener(this.lblGeneralDiscussion);
-		f.getContentPane().add(this.lblGeneralDiscussion);
-	 
-		//Tutorial Label
-		this.lblTutorial = new JLabel("Tutorial");
-		this.lblTutorial.setFont(new Font("Tahoma", Font.BOLD, 13));
-		this.lblTutorial.setBounds(12, 280, 141, 16);
-		addTUTLabelListener(this.lblTutorial);
-		f.getContentPane().add(this.lblTutorial);
-	
-		//Bug Reporting
-		this.lblReportBug = new JLabel("Report Bug");
-		this.lblReportBug.setFont(new Font("Tahoma", Font.BOLD, 13));
-		this.lblReportBug.setBounds(12, 432, 141, 16);
-		addRBLabelListener(this.lblReportBug);
-		f.getContentPane().add(this.lblReportBug);
-	  
 		this.txtpnForDiscussionOf = new JTextPane();
 		this.txtpnForDiscussionOf.setEnabled(false);
 		this.txtpnForDiscussionOf.setEditable(false);
@@ -157,7 +136,8 @@ public class ForumUi {
 		this.txtpnForDiscussionOf.setText("For discussion of non technical stuff");
 		this.txtpnForDiscussionOf.setBounds(12, 184, 946, 73);
 		f.getContentPane().add(this.txtpnForDiscussionOf);
-	  
+		
+		
 		this.txtpnTipsAndTrick = new JTextPane();
 		this.txtpnTipsAndTrick.setEnabled(false);
 		this.txtpnTipsAndTrick.setText("Tips and trick of doing work");
@@ -172,7 +152,29 @@ public class ForumUi {
 		this.txtpnFacingBugIssue.setFont(new Font("Tahoma", Font.ITALIC, 13));
 		this.txtpnFacingBugIssue.setBounds(14, 461, 946, 73);
 		f.getContentPane().add(this.txtpnFacingBugIssue);
-
+		
+	  	*/
+		
+		this.lblGeneralDiscussion = new JLabel("General Discussion");
+		this.lblGeneralDiscussion.setFont(new Font("Tahoma", Font.BOLD, 20));
+		this.lblGeneralDiscussion.setBounds(380, 130, 946, 73);
+		addGDLabelListener(this.lblGeneralDiscussion);
+		f.getContentPane().add(this.lblGeneralDiscussion);
+	 
+		//Tutorial Label
+		this.lblTutorial = new JLabel("Tutorial");
+		this.lblTutorial.setFont(new Font("Tahoma", Font.BOLD, 20));
+		this.lblTutorial.setBounds(430, 295, 141, 16);
+		addTUTLabelListener(this.lblTutorial);
+		f.getContentPane().add(this.lblTutorial);
+	
+		//Bug Reporting
+		this.lblReportBug = new JLabel("Report Bug");
+		this.lblReportBug.setFont(new Font("Tahoma", Font.BOLD, 20));
+		this.lblReportBug.setBounds(420, 445, 141, 16);
+		addRBLabelListener(this.lblReportBug);
+		f.getContentPane().add(this.lblReportBug);
+	  
 		this.panel = new JPanel();
 		this.panel.setBackground(Color.ORANGE);
 		this.panel.setBounds(0, 59, 1006, 57);
@@ -182,6 +184,17 @@ public class ForumUi {
 		this.panel_1.setBackground(Color.DARK_GRAY);
 		this.panel_1.setBounds(0, 0, 1006, 57);
 		f.getContentPane().add(this.panel_1);
+		
+		
+	      txtArcade = new JTextField();
+	      txtArcade.setFont(new Font("Tahoma", Font.PLAIN, 13));
+	      txtArcade.setText("                                                                                          Arcade Forum - Design by Team Forum");
+	      txtArcade.setBackground(Color.ORANGE);
+	      txtArcade.setBounds(0, 676, 1006, 45);
+	      f.getContentPane().add(txtArcade);
+	      txtArcade.setColumns(10);
+	      
+	      
 		f.setVisible(true);
 	}
    

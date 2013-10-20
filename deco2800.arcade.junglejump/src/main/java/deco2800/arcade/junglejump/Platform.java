@@ -28,7 +28,7 @@ public class Platform {
 	public String platformType = "";
 	private boolean inactive;
 	private boolean moveRight;
-	private int moveCounter;
+	private int moveCounter = 250;
 	
 	/**
 	 * Platform constructor
@@ -249,24 +249,23 @@ public class Platform {
 		int moveSpeed = 2;
 		if(this.platType == 'J') {
 			
-			if(moveRight) {
-				this.xPos += moveSpeed;
-				moveCounter += moveSpeed;
-			} else {
-				this.xPos -= moveSpeed;
-				moveCounter += moveSpeed;
-			}
-			
-			if(moveCounter > 500) {
-				moveCounter = 0;
-				moveRight = !moveRight;
-			}
+				if(moveRight) {
+					this.xPos += moveSpeed;
+					moveCounter += moveSpeed;
+				} else {
+					this.xPos -= moveSpeed;
+					moveCounter += moveSpeed;
+				}
+				
+				if(moveCounter > 500) {
+					moveCounter = 0;
+					moveRight = !moveRight;
+				}
 			
 			if(inactive) {
+				moveCounter = 0;
 				this.yPos -= 5;
 			}
-			
 		}
 	}
-	
 }

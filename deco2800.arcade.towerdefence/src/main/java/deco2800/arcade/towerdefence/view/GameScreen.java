@@ -157,16 +157,10 @@ public class GameScreen implements Screen {
 
 	}
 
-	/*
-	 * Taken from libGDX google docs, tweaked very slightly
+	/* Input handler for navigating the map
+	 * Taken from libGDX google docs, edited.
 	 */
 	private void handleInput() {
-		if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-			camera.zoom += 0.02;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
-			camera.zoom -= 0.02;
-		}
 		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 			if (camera.position.x > 0)
 				camera.translate(-3, 0, 0);
@@ -182,12 +176,6 @@ public class GameScreen implements Screen {
 		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
 			if (camera.position.y < 1024)
 				camera.translate(0, 3, 0);
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			camera.rotate(-rotationSpeed, 0, 0, 1);
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.E)) {
-			camera.rotate(rotationSpeed, 0, 0, 1);
 		}
 	}
 

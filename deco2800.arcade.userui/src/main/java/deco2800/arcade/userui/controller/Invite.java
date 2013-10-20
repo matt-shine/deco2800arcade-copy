@@ -30,6 +30,7 @@ public class Invite {
 		this.inviteView.addAcceptListener(new AcceptListener());
 		this.inviteView.addDeclineListener(new DeclineListener());
 		
+		theModel.getPlayer().addInvite(theModel.player2);
 		inviteView.displayinvites();
 		
 	}

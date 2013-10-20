@@ -24,15 +24,17 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
 /**
- * TODO describe.
+ * The transactions page is used exclusively for buying tokens, and shows the
+ * prices of different token packs. The transactions page was intended to have
+ * the ability to buy individual games, but this was not implemented.
  * @author Addison Gourluck
  */
 public class StoreTransactions implements Screen, StoreScreen {
 	private Skin skin = new Skin(Gdx.files.internal("store/storeSkin.json"));
 	private Stage stage = new Stage();
 	private ArcadeUI arcadeUI;
-	private Player player;
-	private int balance = 0;
+	private Player player; // The currently logged in player.
+	private int balance = 0; // TEMPORARY: The players credit balance.
 	
 	/**
 	 * @author Addison Gourluck
@@ -98,12 +100,16 @@ public class StoreTransactions implements Screen, StoreScreen {
 		balanceNumber.setAlignment(Align.center);
 		stage.addActor(balanceNumber);
 		
+		// Button linking to wishlist page.
 		wishlistButton.setSize(360, 95);
 		wishlistButton.setPosition(833, 176);
 		stage.addActor(wishlistButton);
 		
+		// Adds the images of the different coins, the text and buttons beside
+		// them, and the listeners for the buttons.
 		addCoins();
 		
+		// Top right Home button and listener.
 		homeButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				hide();
@@ -111,33 +117,40 @@ public class StoreTransactions implements Screen, StoreScreen {
 			}
 		});
 		
+		// Search Field, with listen. Located top right.
 		searchField.setTextFieldListener(new TextFieldListener() {
 			public void keyTyped(TextField textField, char key) {
+				// Run search whenever a key is typed.
 				Game result = Utilities.helper.search(searchField.getText());
+				// No results if search returns null.
 				if (result == null) {
 					searchResult.setText("No results.");
 					return;
 				}
+				// Else display closest match.
 				searchResult.setText(result.name);
 			}
 		});
 		
+		// Search button, paired with search field. Top right screen.
 		searchButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				try {
+					// Attempt to search for whatever is in the field.
 					Game result = Utilities.helper.search(searchField.getText());
 					if (result == null) {
-						searchResult.setText("No results.");
+						searchResult.setText("No results."); // Bad text
 						return;
 					}
-					hide();
+					hide(); // On successful search, go to its page.
 					arcadeUI.setScreen(new StoreGame(arcadeUI, player, result));
 				} catch (Exception e) {
-					searchResult.setText("Invalid Search");
+					searchResult.setText("Invalid Search"); // No text
 				}
 			}
 		});
 		
+		// Button linking to wishlist page.
 		wishlistButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				hide();
@@ -194,6 +207,7 @@ public class StoreTransactions implements Screen, StoreScreen {
 					System.out.println("buying "
 							+ Integer.parseInt(actor.getName()));
 					buyTokens(Integer.parseInt(actor.getName()));
+					// not yet implemented^
 				}
 			});
 			i++;
@@ -244,21 +258,31 @@ public class StoreTransactions implements Screen, StoreScreen {
 
 	@Override
 	public Player getPlayer() {
-		return null;
+		return player;
 	}
 	
 	@Override
 	public Game getSelected() {
-		return null;
+		return null; // No selected game for transactions screen.
 	}
 	
 	@Override
 	public boolean buyTokens(int amount) {
+		// TODO
+		// FIXME
+		// NEEDS IMPLEMENTING!
+		// TODO
+		// FIXME
 		return false;
 	}
 	
 	@Override
 	public boolean buyGame(Game game) {
+		// TODO
+		// FIXME
+		// NEEDS IMPLEMENTING!
+		// TODO
+		// FIXME
 		return false;
 	}
 	
@@ -269,6 +293,11 @@ public class StoreTransactions implements Screen, StoreScreen {
 	
 	@Override
 	public boolean addWishlist(Game game) {
+		// TODO
+		// FIXME
+		// NEEDS IMPLEMENTING!
+		// TODO
+		// FIXME
 		return true;
 	}
 }

@@ -62,7 +62,7 @@ public class JoinTableScreen implements Screen{
 		batch = new SpriteBatch();
  
         // load the image and create the texture region
-        textureBackground = new Texture(Gdx.files.internal("data/menu1.png"));
+        textureBackground = new Texture(Gdx.files.internal("menu1.png"));
  
         // we set the linear texture filter to improve the stretching
         textureBackground.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -87,11 +87,11 @@ public class JoinTableScreen implements Screen{
 		table3.setSize(183, 138);
 		table3.setPosition(550, 100);
         
-        Texture textureButton1 = new Texture(Gdx.files.internal("data/backbutton.png"));
+        Texture textureButton1 = new Texture(Gdx.files.internal("backbutton.png"));
         TextureRegion imageBack = new TextureRegion(textureButton1);
-        Texture textureButton2 = new Texture(Gdx.files.internal("data/tables.png"));
+        Texture textureButton2 = new Texture(Gdx.files.internal("tables.png"));
         TextureRegion imageTables = new TextureRegion(textureButton2);
-        Texture textureButton3 = new Texture(Gdx.files.internal("data/howto.png"));
+        Texture textureButton3 = new Texture(Gdx.files.internal("howto.png"));
         TextureRegion imageHowTo = new TextureRegion(textureButton3);
         
         Drawable imageUp = new TextureRegionDrawable(imageBack);

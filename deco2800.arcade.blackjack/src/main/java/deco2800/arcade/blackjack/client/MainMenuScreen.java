@@ -78,8 +78,8 @@ public class MainMenuScreen implements Screen{
 		table2.setSize(183, 138);
 		table2.setPosition(550, 275);
         
-        Texture textureButton1 = new Texture(Gdx.files.internal("data/exitbutton.png"));
-        Texture textureButton2 = new Texture(Gdx.files.internal("data/blackjackbutton.png"));
+        Texture textureButton1 = new Texture(Gdx.files.internal("exitbutton.png"));
+        Texture textureButton2 = new Texture(Gdx.files.internal("blackjackbutton.png"));
         TextureRegion imageExit = new TextureRegion(textureButton1);
         TextureRegion imageBlackjack = new TextureRegion(textureButton2);
         

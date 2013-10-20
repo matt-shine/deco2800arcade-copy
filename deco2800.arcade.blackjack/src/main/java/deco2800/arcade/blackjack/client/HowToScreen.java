@@ -61,7 +61,7 @@ public class HowToScreen implements Screen{
 		batch = new SpriteBatch();
  
         // load the image and create the texture region
-        textureBackground = new Texture(Gdx.files.internal("data/menu1.png"));
+        textureBackground = new Texture(Gdx.files.internal("menu1.png"));
  
         // we set the linear texture filter to improve the stretching
         textureBackground.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -79,7 +79,7 @@ public class HowToScreen implements Screen{
         table.setSize(187, 117);
 		table.setPosition(20, 20);
 
-        Texture textureButton1 = new Texture(Gdx.files.internal("data/backbutton.png"));
+        Texture textureButton1 = new Texture(Gdx.files.internal("backbutton.png"));
         TextureRegion imageBack = new TextureRegion(textureButton1);
         
         Drawable imageUp = new TextureRegionDrawable(imageBack);
@@ -106,7 +106,7 @@ public class HowToScreen implements Screen{
         stage.addActor(rules);
         rules.setSize(783, 520);
         rules.setPosition(150, 20);
-        Texture tex = new Texture(Gdx.files.internal("data/Rules.png"));
+        Texture tex = new Texture(Gdx.files.internal("Rules.png"));
         TextureRegion RulesTexReg = new TextureRegion(tex);
         Image Imgrules = new Image(RulesTexReg);
         rules.add(Imgrules);

@@ -158,7 +158,7 @@ public class BlackjackClientTable implements Screen{
 	    camera.update();
 		
 		batch = new SpriteBatch();
-        textureBackground = new Texture(Gdx.files.internal("data/Blackjacktable.png"));
+        textureBackground = new Texture(Gdx.files.internal("Blackjacktable.png"));
         textureBackground.setFilter(TextureFilter.Linear, TextureFilter.Linear);
  
         background = new Sprite(textureBackground);
@@ -174,11 +174,11 @@ public class BlackjackClientTable implements Screen{
         tablePlacard.setSize(162, 113);
         tablePlacard.setPosition(25, 580);
 		
-		Texture texturePlacard10250 = new Texture(Gdx.files.internal("data/BetPlac10250.png"));
-		Texture texturePlacard1100 = new Texture(Gdx.files.internal("data/BetPlac1100.png"));
-		Texture texturePlacard150 = new Texture(Gdx.files.internal("data/BetPlac150.png"));
-		Texture texturePlacard25NL = new Texture(Gdx.files.internal("data/BetPlac25NL.png"));
-		Texture texturePlacard5100 = new Texture(Gdx.files.internal("data/BetPlac5100.png"));
+		Texture texturePlacard10250 = new Texture(Gdx.files.internal("BetPlac10250.png"));
+		Texture texturePlacard1100 = new Texture(Gdx.files.internal("BetPlac1100.png"));
+		Texture texturePlacard150 = new Texture(Gdx.files.internal("BetPlac150.png"));
+		Texture texturePlacard25NL = new Texture(Gdx.files.internal("BetPlac25NL.png"));
+		Texture texturePlacard5100 = new Texture(Gdx.files.internal("BetPlac5100.png"));
 		
 		/* Test code for placing a placard
 		TextureRegion imagePlacard = new TextureRegion(texturePlacard10250);
@@ -187,61 +187,61 @@ public class BlackjackClientTable implements Screen{
 		*/
 		
 		//cards
-		Texture S2 = new Texture(Gdx.files.internal("data/cards/2S.jpg"));
-		Texture S3 = new Texture(Gdx.files.internal("data/cards/3S.jpg"));
-		Texture S4 = new Texture(Gdx.files.internal("data/cards/4S.jpg"));
-		Texture S5 = new Texture(Gdx.files.internal("data/cards/5S.jpg"));
-		Texture S6 = new Texture(Gdx.files.internal("data/cards/6S.jpg"));
-		Texture S7 = new Texture(Gdx.files.internal("data/cards/7S.jpg"));
-		Texture S8 = new Texture(Gdx.files.internal("data/cards/8S.jpg"));
-		Texture S9 = new Texture(Gdx.files.internal("data/cards/9S.jpg"));
-		Texture S10 = new Texture(Gdx.files.internal("data/cards/10S.jpg"));
-		Texture SJ = new Texture(Gdx.files.internal("data/cards/JS.jpg"));
-		Texture SQ = new Texture(Gdx.files.internal("data/cards/QS.jpg"));
-		Texture SK = new Texture(Gdx.files.internal("data/cards/KS.jpg"));
-		Texture SA = new Texture(Gdx.files.internal("data/cards/AS.jpg"));
+		Texture S2 = new Texture(Gdx.files.internal("cards/2S.jpg"));
+		Texture S3 = new Texture(Gdx.files.internal("cards/3S.jpg"));
+		Texture S4 = new Texture(Gdx.files.internal("cards/4S.jpg"));
+		Texture S5 = new Texture(Gdx.files.internal("cards/5S.jpg"));
+		Texture S6 = new Texture(Gdx.files.internal("cards/6S.jpg"));
+		Texture S7 = new Texture(Gdx.files.internal("cards/7S.jpg"));
+		Texture S8 = new Texture(Gdx.files.internal("cards/8S.jpg"));
+		Texture S9 = new Texture(Gdx.files.internal("cards/9S.jpg"));
+		Texture S10 = new Texture(Gdx.files.internal("cards/10S.jpg"));
+		Texture SJ = new Texture(Gdx.files.internal("cards/JS.jpg"));
+		Texture SQ = new Texture(Gdx.files.internal("cards/QS.jpg"));
+		Texture SK = new Texture(Gdx.files.internal("cards/KS.jpg"));
+		Texture SA = new Texture(Gdx.files.internal("cards/AS.jpg"));
 		
-		Texture H2 = new Texture(Gdx.files.internal("data/cards/2H.jpg"));
-		Texture H3 = new Texture(Gdx.files.internal("data/cards/3H.jpg"));
-		Texture H4 = new Texture(Gdx.files.internal("data/cards/4H.jpg"));
-		Texture H5 = new Texture(Gdx.files.internal("data/cards/5H.jpg"));
-		Texture H6 = new Texture(Gdx.files.internal("data/cards/6H.jpg"));
-		Texture H7 = new Texture(Gdx.files.internal("data/cards/7H.jpg"));
-		Texture H8 = new Texture(Gdx.files.internal("data/cards/8H.jpg"));
-		Texture H9 = new Texture(Gdx.files.internal("data/cards/9H.jpg"));
-		Texture H10 = new Texture(Gdx.files.internal("data/cards/10H.jpg"));
-		Texture HJ = new Texture(Gdx.files.internal("data/cards/JH.jpg"));
-		Texture HQ = new Texture(Gdx.files.internal("data/cards/QH.jpg"));
-		Texture HK = new Texture(Gdx.files.internal("data/cards/KH.jpg"));
-		Texture HA = new Texture(Gdx.files.internal("data/cards/AH.jpg"));
+		Texture H2 = new Texture(Gdx.files.internal("cards/2H.jpg"));
+		Texture H3 = new Texture(Gdx.files.internal("cards/3H.jpg"));
+		Texture H4 = new Texture(Gdx.files.internal("cards/4H.jpg"));
+		Texture H5 = new Texture(Gdx.files.internal("cards/5H.jpg"));
+		Texture H6 = new Texture(Gdx.files.internal("cards/6H.jpg"));
+		Texture H7 = new Texture(Gdx.files.internal("cards/7H.jpg"));
+		Texture H8 = new Texture(Gdx.files.internal("cards/8H.jpg"));
+		Texture H9 = new Texture(Gdx.files.internal("cards/9H.jpg"));
+		Texture H10 = new Texture(Gdx.files.internal("cards/10H.jpg"));
+		Texture HJ = new Texture(Gdx.files.internal("cards/JH.jpg"));
+		Texture HQ = new Texture(Gdx.files.internal("cards/QH.jpg"));
+		Texture HK = new Texture(Gdx.files.internal("cards/KH.jpg"));
+		Texture HA = new Texture(Gdx.files.internal("cards/AH.jpg"));
 		
-		Texture C2 = new Texture(Gdx.files.internal("data/cards/2C.jpg"));
-		Texture C3 = new Texture(Gdx.files.internal("data/cards/3C.jpg"));
-		Texture C4 = new Texture(Gdx.files.internal("data/cards/4C.jpg"));
-		Texture C5 = new Texture(Gdx.files.internal("data/cards/5C.jpg"));
-		Texture C6 = new Texture(Gdx.files.internal("data/cards/6C.jpg"));
-		Texture C7 = new Texture(Gdx.files.internal("data/cards/7C.jpg"));
-		Texture C8 = new Texture(Gdx.files.internal("data/cards/8C.jpg"));
-		Texture C9 = new Texture(Gdx.files.internal("data/cards/9C.jpg"));
-		Texture C10 = new Texture(Gdx.files.internal("data/cards/10C.jpg"));
-		Texture CJ = new Texture(Gdx.files.internal("data/cards/JC.jpg"));
-		Texture CQ = new Texture(Gdx.files.internal("data/cards/QC.jpg"));
-		Texture CK = new Texture(Gdx.files.internal("data/cards/KC.jpg"));
-		Texture CA = new Texture(Gdx.files.internal("data/cards/AC.jpg"));
+		Texture C2 = new Texture(Gdx.files.internal("cards/2C.jpg"));
+		Texture C3 = new Texture(Gdx.files.internal("cards/3C.jpg"));
+		Texture C4 = new Texture(Gdx.files.internal("cards/4C.jpg"));
+		Texture C5 = new Texture(Gdx.files.internal("cards/5C.jpg"));
+		Texture C6 = new Texture(Gdx.files.internal("cards/6C.jpg"));
+		Texture C7 = new Texture(Gdx.files.internal("cards/7C.jpg"));
+		Texture C8 = new Texture(Gdx.files.internal("cards/8C.jpg"));
+		Texture C9 = new Texture(Gdx.files.internal("cards/9C.jpg"));
+		Texture C10 = new Texture(Gdx.files.internal("cards/10C.jpg"));
+		Texture CJ = new Texture(Gdx.files.internal("cards/JC.jpg"));
+		Texture CQ = new Texture(Gdx.files.internal("cards/QC.jpg"));
+		Texture CK = new Texture(Gdx.files.internal("cards/KC.jpg"));
+		Texture CA = new Texture(Gdx.files.internal("cards/AC.jpg"));
 		
-		Texture D2 = new Texture(Gdx.files.internal("data/2D.jpg"));
-		Texture D3 = new Texture(Gdx.files.internal("data/3D.jpg"));
-		Texture D4 = new Texture(Gdx.files.internal("data/4D.jpg"));
-		Texture D5 = new Texture(Gdx.files.internal("data/5D.jpg"));
-		Texture D6 = new Texture(Gdx.files.internal("data/6D.jpg"));
-		Texture D7 = new Texture(Gdx.files.internal("data/7D.jpg"));
-		Texture D8 = new Texture(Gdx.files.internal("data/8D.jpg"));
-		Texture D9 = new Texture(Gdx.files.internal("data/9D.jpg"));
-		Texture D10 = new Texture(Gdx.files.internal("data/10D.jpg"));
-		Texture DJ = new Texture(Gdx.files.internal("data/JD.jpg"));
-		Texture DQ = new Texture(Gdx.files.internal("data/QD.jpg"));
-		Texture DK = new Texture(Gdx.files.internal("data/KD.jpg"));
-		Texture DA = new Texture(Gdx.files.internal("data/AD.jpg"));
+		Texture D2 = new Texture(Gdx.files.internal("cards/2D.jpg"));
+		Texture D3 = new Texture(Gdx.files.internal("cards/3D.jpg"));
+		Texture D4 = new Texture(Gdx.files.internal("cards/4D.jpg"));
+		Texture D5 = new Texture(Gdx.files.internal("cards/5D.jpg"));
+		Texture D6 = new Texture(Gdx.files.internal("cards/6D.jpg"));
+		Texture D7 = new Texture(Gdx.files.internal("cards/7D.jpg"));
+		Texture D8 = new Texture(Gdx.files.internal("cards/8D.jpg"));
+		Texture D9 = new Texture(Gdx.files.internal("cards/9D.jpg"));
+		Texture D10 = new Texture(Gdx.files.internal("cards/10D.jpg"));
+		Texture DJ = new Texture(Gdx.files.internal("cards/JD.jpg"));
+		Texture DQ = new Texture(Gdx.files.internal("cards/QD.jpg"));
+		Texture DK = new Texture(Gdx.files.internal("cards/KD.jpg"));
+		Texture DA = new Texture(Gdx.files.internal("cards/AD.jpg"));
 		
 		//dealer card layout
 		Table Tabdealercard1 = new Table();
@@ -441,13 +441,13 @@ public class BlackjackClientTable implements Screen{
 		
 		// Buttons for controls
 		//button style for clickable button
-		Drawable buttontexture = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/null.png"))));
+		Drawable buttontexture = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("null.png"))));
 		TextButtonStyle buttonstyle = new TextButtonStyle(buttontexture, buttontexture, buttontexture);
 		buttonstyle.fontColor = Color.BLACK;
 		buttonstyle.font = new BitmapFont();
 		
 		//button style for unclickable button
-		Drawable buttontexturegrayed = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("data/nullgray.png"))));
+		Drawable buttontexturegrayed = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("nullgray.png"))));
 		TextButtonStyle buttonstylegrayed = new TextButtonStyle(buttontexturegrayed, buttontexturegrayed, buttontexturegrayed);
 		buttonstylegrayed.fontColor = Color.GRAY;
 		buttonstylegrayed.font = new BitmapFont();

@@ -31,10 +31,6 @@ public class MainMenu extends AbstractScreen{
 	private TextButton button2;
 	private TextButton button3;
 	private Label label;
-	private int framecount = 0;
-	private int framecountmax = 80;
-	private int buttonframe = 0;
-	private boolean keydown = false;
 	
 	private float[] difficulty = new float[3];
 	private int difficultyIndex = 1;
@@ -64,32 +60,10 @@ public class MainMenu extends AbstractScreen{
 	public void render(float delta) {
 		super.render(delta);
 		stage.act(delta);
-		
 		batch.begin();
 		stage.draw();
 		batch.end();
-		
-		if (framecount++ == framecountmax) {
-			framecount = 0;
-			if (framecountmax > 25) {
-				framecountmax -= 9;
-			} else {
-				framecountmax--;
-			}
-		}
-		if (++buttonframe == 9) {
-			buttonframe = 0;
-		}
-		
-		if(((buttonframe % 3) == 0)) {
-			button.setVisible(false);
-		} else if(((buttonframe % 3) != 0)) {
-			button.setVisible(true);
-		}
-		
-		if(keydown) {
-			button.setVisible(true);
-		}
+
 	}
 	
 	@Override
@@ -108,17 +82,15 @@ public class MainMenu extends AbstractScreen{
 		button = new TextButton("START!", style);
 		button.setHeight(90);
 		button.setX(Gdx.graphics.getWidth()/2 - button.getWidth()/2);
-		button.setY(Gdx.graphics.getHeight()/2 - button.getHeight()/2 - 200);
+		button.setY(Gdx.graphics.getHeight()/2 - button.getHeight()/2 - 130);
 		
 		button.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				keydown = true;
 				return true;
 			}
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				keydown = false;
 				game.setScreen(new GameScreen(game, difficulty[difficultyIndex]));
 			}
 		});
@@ -156,17 +128,15 @@ public class MainMenu extends AbstractScreen{
 		button3 = new TextButton("Highscores", style);
 		button3.setHeight(90);
 		button3.setX(Gdx.graphics.getWidth()/2 - button.getWidth()/2);
-		button3.setY(Gdx.graphics.getHeight()/2 - button.getHeight()/2 - 130);
+		button3.setY(Gdx.graphics.getHeight()/2 - button.getHeight()/2 - 200);
 		
 		button3.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				keydown = true;
 				return true;
 			}
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				keydown = false;
 				game.setScreen(new HighscoreScreen(game));
 			}
 		});

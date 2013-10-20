@@ -15,7 +15,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import deco2800.arcade.cyra.game.Cyra;
-import deco2800.arcade.cyra.game.AchievementsTracker;
 import deco2800.arcade.cyra.game.MainMenu;
 import deco2800.arcade.cyra.model.Block;
 import deco2800.arcade.cyra.model.BlockMaker;
@@ -49,8 +48,6 @@ public class World {
 	public static final float PLAYER_INIT_X = 20f;
 	public static final float GAME_INIT_X = 602.5f;
 	public static final int DEFAULT_LIVES = 3;
-	
-	private AchievementsTracker at = new AchievementsTracker();
 	
 	private Boolean firstUpdate;
 	private Player ship;
@@ -432,9 +429,6 @@ public class World {
 						
 						if (Intersector.overlapConvexPolygons(laserPoly, shipPoly)) {
 							ship.decrementHearts();
-							at.incrementHeartsLost();
-
-							
 							ship.bounceBack(true);
 							
 							ship.setInvincibility(true);
@@ -444,7 +438,6 @@ public class World {
 					for (Rectangle r: e.getPlayerDamageBounds()) {
 						if ( r.overlaps(ship.getBounds()) ) {
 							ship.decrementHearts();
-							at.incrementHeartsLost();
 							
 							ship.bounceBack(true);
 							
@@ -780,7 +773,6 @@ public class World {
 	public void init(boolean completeInit) {
 		
 		count = 3f;
-		at.printStats();
 		
 		//Sounds.playBossMusic();
 		
@@ -831,7 +823,6 @@ public class World {
 	}
 
 	public void resetLevel() {
-		at.addToTime( (int)time );
 		
 		respawnPosition = new Vector2(levelScenes.getPlayerReloadPosition(scenePosition));
 		scenePosition = levelScenes.getScenePositionAfterReload(scenePosition);

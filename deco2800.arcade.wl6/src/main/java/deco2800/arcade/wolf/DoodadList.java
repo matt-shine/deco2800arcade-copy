@@ -105,7 +105,7 @@ public class DoodadList {
                     DoodadInfo.healthPickup("health", 5, 0),
 
                     //30: white column
-                    DoodadInfo.solidScenery("column"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //31: green plant
                     DoodadInfo.solidScenery("plant"),
@@ -114,31 +114,31 @@ public class DoodadList {
                     DoodadInfo.nonsolidScenery("headstone"),
 
                     //33: sink
-                    DoodadInfo.solidScenery("sink"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //34: brown plant
                     DoodadInfo.solidScenery("plant"),
 
                     //35: vase
-                    DoodadInfo.solidScenery("vase"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //36: table
-                    DoodadInfo.solidScenery("table"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //37: ceiling light (green)
                     DoodadInfo.nonsolidScenery("manfried"),
 
                     //38: utensils brown
-                    DoodadInfo.solidScenery("utensils"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //39: armor
                     DoodadInfo.solidScenery("armour"),
 
                     //40: empty cage
-                    DoodadInfo.solidScenery("cage"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //41: cage / skeleton
-                    DoodadInfo.solidScenery("cage"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //42: bones 1
                     DoodadInfo.nonsolidScenery("headstone"),
@@ -150,10 +150,10 @@ public class DoodadList {
                     new DoodadInfo().specialCase(),
 
                     //45: bed
-                    DoodadInfo.solidScenery("bed"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //46: basket
-                    DoodadInfo.solidScenery("dogbed"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //47: food
                     DoodadInfo.healthPickup("health", 10, 0),
@@ -225,7 +225,7 @@ public class DoodadList {
                     DoodadInfo.solidScenery("plant"),
 
                     //70: vines
-                    DoodadInfo.nonsolidScenery("vines"),
+                    DoodadInfo.nonsolidScenery("manfried"),
 
                     //71: nothing
                     new DoodadInfo(),

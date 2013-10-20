@@ -111,10 +111,10 @@ public class MapProcessor {
         door.setTextureName(bInfo.texture);
         if (id == WL6Meta.DOOR_ELEVATOR) {
         	door.setTextureName("elevator_door");
-        } else if (id == WL6Meta.DOOR_GOLDKEY) {
+        } else if (id == WL6Meta.DOOR_GOLDKEY || id == WL6Meta.DOOR_GOLDKEY + 1) {
         	door.setTextureName("gold_door");
-        } else if (id == WL6Meta.SILVERKEY) {
-        	door.setTextureName("solver_door");
+        } else if (id == WL6Meta.DOOR_SILVERKEY || id == WL6Meta.DOOR_SILVERKEY + 1) {
+        	door.setTextureName("silver_door");
         } else {
         	door.setTextureName("door");
         }

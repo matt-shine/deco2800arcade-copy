@@ -1,9 +1,14 @@
 package deco2800.arcade.wolf;
 
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Mouse;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -149,10 +154,33 @@ public class Renderer {
 
     }
 
+    private static org.lwjgl.input.Cursor emptyCursor = null;
 
     public void draw(boolean debug) {
         debugMode = debug;
 
+        
+        //hide cursor
+        if (emptyCursor == null) {
+        	int min = org.lwjgl.input.Cursor.getMinCursorSize();
+    		IntBuffer tmp = BufferUtils.createIntBuffer(min * min);
+    		try {
+				emptyCursor = new org.lwjgl.input.Cursor(min, min, min / 2, min / 2, 1, tmp, null);
+			} catch (LWJGLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+        }
+        
+		try {
+			Mouse.setNativeCursor(emptyCursor);
+		} catch (LWJGLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        
         
         //reload the level if we've changed levels
         if (!game.getLevel().equals(level)) {

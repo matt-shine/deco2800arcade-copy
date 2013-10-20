@@ -24,41 +24,44 @@ public class WL6InputProcessor implements InputProcessor {
     @Override
     public boolean keyDown(int c) {
 
+        // DEBUGGING
+
         //debug
-        if (c == Keys.NUM_1) {
+        if (c == Keys.F1) {
             game.toggleDebugMode();
         }
 
         //panic
-        if (c == Keys.NUM_2) {
+        if (c == Keys.F2) {
             ArcadeSystem.exit();
         }
 
         //reset level
-        if (c == Keys.NUM_3) {
+        if (c == Keys.R) {
             model.reset();
         }
 
         //increment level
-        if (c == Keys.NUM_4) {
+        if (c == Keys.NUM_0) {
             model.nextLevel();
         }
 
         //go to secret level
-        if (c == Keys.NUM_5) {
+        if (c == Keys.NUM_9) {
             model.secretLevel();
         }
 
         //increment difficulty
-        if (c == Keys.NUM_6) {
+        if (c == Keys.PLUS) {
             model.setDifficulty(model.getDifficulty() + 1);
         }
 
         //decrement difficulty
-        if (c == Keys.NUM_7) {
+        if (c == Keys.EQUALS || c == Keys.MINUS) {
         	model.setDifficulty(model.getDifficulty() - 1);
         }
-        
+
+        // GAMEPLAY
         
         //look left
         if (c == Keys.LEFT) {
@@ -74,7 +77,28 @@ public class WL6InputProcessor implements InputProcessor {
         if (c == Keys.SPACE) {
         	model.getPlayer().shoot(model, true);
         }
-        
+
+        if (c == Keys.NUM_1) {
+            //knife
+        }
+        if (c == Keys.NUM_2) {
+            //pistol
+            if (model.getPlayer().getGuns().contains(1)) {
+                model.getPlayer().setCurrentGun(1);
+            }
+        }
+        if (c == Keys.NUM_3) {
+            //machine gun
+            if (model.getPlayer().getGuns().contains(2)) {
+                model.getPlayer().setCurrentGun(2);
+            }
+        }
+        if (c == Keys.NUM_4) {
+            //chain gun
+            if (model.getPlayer().getGuns().contains(2)) {
+                model.getPlayer().setCurrentGun(2);
+            }
+        }
 
         if (c == Keys.W || c == Keys.S || c == Keys.A || c == Keys.D) {
             updatePlayerSpeed();

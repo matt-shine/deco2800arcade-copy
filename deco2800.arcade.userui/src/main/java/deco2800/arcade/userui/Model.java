@@ -9,6 +9,7 @@ import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.model.Friends;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.model.User;
 
 public class Model {
 		
@@ -37,7 +38,7 @@ public class Model {
 	private AchievementClient achievements;
 	private ArcadeSystem arcadesystem;
 	private Player player;
-	public Player player2;
+	private User user;
 	
 	//Declare Fonts
 	public Font blackbold = new Font("Century Gothic", Font.BOLD, 20);
@@ -184,6 +185,14 @@ public class Model {
 	 */
 	public void setPlayer(Player player) {
 		this.player = player;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 }

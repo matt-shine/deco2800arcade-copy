@@ -26,62 +26,63 @@ import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.highscores.HighscoreClient;
-import deco2800.arcade.accolades.AccoladeSystem;
+import deco2800.arcade.client.AccoladeSystem;
 
 /**
  * The game client
+ * 
  * @author Carlie Smits and Naveen Kumar
- *
+ * 
  */
 @ArcadeGame(id = "Breakout")
 public class Breakout extends GameClient {
 
-		private SplashScreen splashScreen;
-		private GameScreen gamescreen;
-		private MenuScreen MenuScreen;
-		private LevelScreen1 LevelScreen1;
-		private LevelScreen2 LevelScreen2;
-		private HelpScreen1 helpscreen1;
-		//RankingScreen RankingScreen;
-		private ModelScreen modelscreen;
-		private HelpScreen2 helpscreen2;
+	private SplashScreen splashScreen;
+	private GameScreen gamescreen;
+	private MenuScreen menuScreen;
+	private LevelScreen1 levelScreen1;
+	private LevelScreen2 levelScreen2;
+	private HelpScreen1 helpscreen1;
+	private ModelScreen modelscreen;
+	private HelpScreen2 helpscreen2;
 
-
-
-	/*
-	 * Creates private instance variables for each element of The
-	 */
+	// Creates private instance variables for each element of the game
 	public String player;
 	private NetworkClient networkClient;
 	private AchievementClient achievementClient;
 	HighscoreClient highscoreUser;
 	private AccoladeSystem accolades;
-	
+
 	// Screen Parameters
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
-	
 
-
-
+	/**
+	 * Stores the player name and network client. Also creates instances of
+	 * shared game mechanics ie achievements, highscore and accolades
+	 * 
+	 * @param player
+	 * @param networkClient
+	 */
 	public Breakout(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		this.player = player.getUsername();
 		this.networkClient = networkClient;
 		this.achievementClient = new AchievementClient(networkClient);
-		this.highscoreUser = new HighscoreClient(player.getUsername(), "Breakout", networkClient);
+		this.highscoreUser = new HighscoreClient(player.getUsername(),
+				"Breakout", networkClient);
 		this.accolades = new AccoladeSystem();
 	}
 
 	/**
-	 * change to the screen to the splashscreen.
+	 * Creates the game.
 	 */
 	@Override
 	public void create() {
 		super.create();
-		
-        //add the overlay listeners
-        this.getOverlay().setListeners(new Screen() {
+
+		// add the overlay listeners
+		this.getOverlay().setListeners(new Screen() {
 
 			@Override
 			public void dispose() {
@@ -112,31 +113,33 @@ public class Breakout extends GameClient {
 			public void show() {
 				pause();
 			}
-			
-        });
-		splashScreen = new SplashScreen(this);
-		MenuScreen=new MenuScreen(this);
-		gamescreen = new GameScreen(this);
-		LevelScreen1=new LevelScreen1(this);
-		LevelScreen2=new LevelScreen2(this);
-		helpscreen1=new HelpScreen1(this);
-		helpscreen2=new HelpScreen2(this);		
-		modelscreen=new ModelScreen(this);
-		//RankingScreen=new RankingScreen(this);
 
+		});
+		splashScreen = new SplashScreen(this);
+		menuScreen = new MenuScreen(this);
+		gamescreen = new GameScreen(this);
+		levelScreen1 = new LevelScreen1(this);
+		levelScreen2 = new LevelScreen2(this);
+		helpscreen1 = new HelpScreen1(this);
+		helpscreen2 = new HelpScreen2(this);
+		modelscreen = new ModelScreen(this);
 		setScreen(splashScreen);
-		HighscoreClient player1 = new HighscoreClient(player, "Breakout", networkClient);
+		HighscoreClient player1 = new HighscoreClient(player, "Breakout",
+				networkClient);
 	}
 
+	/**
+	 * Properly disposes of game data from memory.
+	 */
 	@Override
 	public void dispose() {
-		
+
 		splashScreen.dispose();
 		gamescreen.dispose();
-		LevelScreen1.dispose();
-		MenuScreen.dispose();
+		levelScreen1.dispose();
+		menuScreen.dispose();
 		helpscreen1.dispose();
-		
+
 		super.dispose();
 	}
 
@@ -160,15 +163,25 @@ public class Breakout extends GameClient {
 	 * Renders game mechanics.
 	 */
 	public void render() {
-		 super.render();
+		super.render();
 
 	}
 
+	/**
+	 * Return game details
+	 * 
+	 * @return Game game
+	 */
 	@Override
 	public Game getGame() {
 		return game;
 	}
 
+	/**
+	 * Returns the players name
+	 * 
+	 * @return String player
+	 */
 	public String playerName() {
 		return player;
 	}
@@ -183,41 +196,86 @@ public class Breakout extends GameClient {
 		game.name = "Breakout";
 		game.description = "Bounce the ball off your paddle to keep it from falling off the bottom of the screen.";
 	}
-	
+
+	/**
+	 * Returns the highscore for the user
+	 * 
+	 * @return HighscoreClient highscoreUser
+	 */
 	public HighscoreClient getHighScoreClient() {
 		return this.highscoreUser;
 	}
 
+	/**
+	 * Returns the splashscreen
+	 * 
+	 * @return SplashScreen splashScreen
+	 */
 	public SplashScreen getSplashScreen() {
 		return splashScreen;
 	}
 
+	/**
+	 * Returns the gamescreen
+	 * 
+	 * @return GameScreen gamescreen
+	 */
 	public GameScreen getGamescreen() {
 		return gamescreen;
 	}
 
+	/**
+	 * Returns the MenuScreen
+	 * 
+	 * @return MenuScreen menuScreen
+	 */
 	public MenuScreen getMenuScreen() {
-		return MenuScreen;
+		return menuScreen;
 	}
 
+	/**
+	 * Returns the LevelScreen1
+	 * 
+	 * @return LevelScreen1 levelScreen1
+	 */
 	public LevelScreen1 getLevelScreen1() {
-		return LevelScreen1;
+		return levelScreen1;
 	}
 
+	/**
+	 * Returns the LevelScreen2
+	 * 
+	 * @return LevelScreen2 levelScreen2
+	 */
 	public LevelScreen2 getLevelScreen2() {
-		return LevelScreen2;
+		return levelScreen2;
 	}
 
+	/**
+	 * Returns the HelpScreen1
+	 * 
+	 * @return HelpScreen1 helpscreen1
+	 */
 	public HelpScreen1 getHelpscreen1() {
 		return helpscreen1;
 	}
 
+	/**
+	 * ModelScreen
+	 * 
+	 * @return ModelScreen modelscreen
+	 */
 	public ModelScreen getModelscreen() {
 		return modelscreen;
 	}
 
+	/**
+	 * HelpScreen2
+	 * 
+	 * @return HelpScreen2 helpscreen2
+	 */
 	public HelpScreen2 getHelpscreen2() {
 		return helpscreen2;
 	}
-	
+
 }

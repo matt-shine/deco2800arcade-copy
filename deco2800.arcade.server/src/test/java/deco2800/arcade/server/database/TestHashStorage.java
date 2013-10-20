@@ -97,7 +97,7 @@ public class TestHashStorage {
 	 * 
 	 * @throws DatabaseException
 	 */
-	//@Test
+	@Test
 	public void registerPasswordTest() throws DatabaseException {
 		String password = "It's just a flesh wound.";
 		String username = "Black_Knight";
@@ -108,7 +108,7 @@ public class TestHashStorage {
 		assertTrue(hashStorage.checkPassword(username, password));
 	}
 	
-	//@Test
+	@Test
 	public void updatePasswordTest() throws DatabaseException {
 		String password = "It's just a flesh wound.";
 		String newPassword = "No it isn't!";

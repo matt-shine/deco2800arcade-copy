@@ -212,6 +212,7 @@ public class TestForumStorage {
 	@Test
 	public void printConstraints() throws Exception{
 		this.forumStorage.printConstraints();
+		this.forumStorage.checkConstraint("CHK_CATEGORY");
 		assertEquals(true, this.forumStorage.checkConstraint("CHK_CATEGORY"));
 	}
 	

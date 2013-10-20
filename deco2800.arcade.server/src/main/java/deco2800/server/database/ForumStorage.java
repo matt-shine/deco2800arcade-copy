@@ -1749,14 +1749,15 @@ public class ForumStorage {
 	 * @throws DatabaseExcetion
 	 */
 	public boolean checkConstraint(String constraint) throws DatabaseException {
-		String query = "SELECT constraint-name FROM sys.sysconstraint";
+		String query = "SELECT * FROM sys.sysconstraints";
 		boolean result = false;
 		Connection con = Database.getConnection();
 		try {
 			Statement st = con.createStatement();
 			ResultSet rs = st.executeQuery(query);
 			while (rs.next()) {
-				if (constraint == rs.getString(1)) {
+				String constName = rs.getString(3).trim();
+				if (constraint.equalsIgnoreCase(constName)) {
 					result = true;
 					break;
 				}

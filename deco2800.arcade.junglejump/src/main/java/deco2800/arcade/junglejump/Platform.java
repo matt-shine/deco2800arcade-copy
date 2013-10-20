@@ -26,6 +26,9 @@ public class Platform {
 	private boolean inverted;
 	public char platType;
 	public String platformType = "";
+	private boolean inactive;
+	private boolean moveRight;
+	private int moveCounter;
 	
 	/**
 	 * Platform constructor
@@ -37,6 +40,8 @@ public class Platform {
 		this.xPos = pX;
 		this.yPos = pY;
 		this.active = false;
+		inactive = false;
+		moveRight = true;
 		platType = type;
 		setTexture(type);
 	}
@@ -213,7 +218,7 @@ public class Platform {
 	public void setActive() {
 		if(this.platType == '^') {
 			// Play banana sound
-			/*URL path = this.getClass().getResource("/");
+			URL path = this.getClass().getResource("/");
 			try{ 
 				String resource = path.toString().replace(".arcade/build/classes/main/", 
 						".arcade.junglejump/src/main/").replace("file:", "") + 
@@ -228,7 +233,7 @@ public class Platform {
 			} catch (Exception e) {
 				Gdx.app.log(junglejump.messages,
 						"Audio File for Banana Music Not Found");
-			}*/
+			}
 			LevelContainer.nextLevel();
 		}
 		if(this.platType == 'j') {
@@ -238,6 +243,27 @@ public class Platform {
 			junglejump.killMonkey();
 		}
 		this.active = true;
+	}
+	
+	private void onActive() {
+		int moveSpeed = 2;
+		if(this.platType == 'J') {
+			if(moveRight) {
+				this.xPos += moveSpeed;
+				moveCounter += moveSpeed;
+			} else {
+				this.xPos -= moveSpeed;
+				moveCounter += moveSpeed;
+			}
+			if(moveCounter > 500) {
+				moveCounter = 0;
+				moveRight = !moveRight;
+			}
+			if(inactive) {
+				this.yPos -= 5;
+			}
+			
+		}
 	}
 	
 }

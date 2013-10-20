@@ -29,8 +29,8 @@ public class LevelContainer {
 	 */
 	public LevelContainer() {
 		levels = new ArrayList<Level>();
-		setCurrentLevel(0);
-		setCurrentWorld(0);
+		setCurrentLevel(4);
+		setCurrentWorld(4);
 		levelAmount = 5;
 		worldAmount = 5;
 		

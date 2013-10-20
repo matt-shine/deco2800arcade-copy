@@ -30,6 +30,7 @@ public abstract class Mover {
 	private int lives;
 	private static final int dotScore = 10;
 	private static final int energizerScore = 50;
+	private int ghostScore = 400;
 	protected Tile currentTile; // current tile of the pacman/ghost
 	protected GameMap gameMap;
 	protected float moveDist; //the distance moved each frame
@@ -120,8 +121,11 @@ public abstract class Mover {
 		if (this.getClass() == Ghost.class){
 			if (tileInDir(1, Dir.DOWN) == gameMap.getGhostDoors().get(0) &&
 					((Ghost)this).getCurrentState() == GhostState.DEAD){
+				this.currentTile = gameMap.getGhostStarts()[0];
+				this.drawX = gameMap.getTileCoords(currentTile).getX();
+				this.drawY = gameMap.getTileCoords(currentTile).getY();
+				this.updatePosition();
 				((Ghost)this).setCurrentState(GhostState.CHASE);
-				currentTile = gameMap.getGhostStarts()[0];
 			}
 		}
 		
@@ -255,6 +259,14 @@ public abstract class Mover {
 
 	public void setLives(int lives) {
 		this.lives = lives;
+	}
+
+	public int getGhostScore() {
+		return ghostScore;
+	}
+
+	public void setGhostScore(int ghostScore) {
+		this.ghostScore = ghostScore;
 	}
 	
 }

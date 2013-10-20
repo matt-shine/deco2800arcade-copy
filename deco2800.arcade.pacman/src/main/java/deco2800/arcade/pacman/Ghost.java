@@ -147,7 +147,8 @@ public final class Ghost extends Mover {
 			} else {
 				targetTile = player.getCurTile();
 			}
-		} else if (currentState == GhostState.SCATTER){
+		} else if (currentState == GhostState.SCATTER ||
+				currentState == GhostState.DEAD){
 			targetTile = gameMap.getGhostDoors().get(0);
 		}
 	}

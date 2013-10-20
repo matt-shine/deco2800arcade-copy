@@ -120,9 +120,9 @@ public final class PacChar extends Mover{
 						// Ghost is scared! Time to feast :>
 						((Ghost)colList.get(i)).setCurrentState(GhostState.DEAD);
 						gameMap.setGhostsEaten(gameMap.getGhostsEaten() + 1);
-						System.out.println("Yummy ghost");
+						this.setScore(this.getScore() + getGhostScore());
+						setGhostScore(getGhostScore() * 2);
 					} else if(((Ghost)colList.get(i)).getCurrentState() == GhostState.CHASE){
-						System.out.println("Disaster!! Pacman hit a ghost!");
 						if (getLives() <= 1){
 							this.setCurrentState(PacState.DEAD);
 //							gamePaused = true;

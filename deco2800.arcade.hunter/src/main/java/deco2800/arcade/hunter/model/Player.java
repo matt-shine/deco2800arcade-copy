@@ -42,7 +42,6 @@ public class Player extends Entity {
      */
     private final HashMap<String, Animation> animationList = new HashMap<String, Animation>();
     private String Weapon; //Weapon that the player is wielding
-    private boolean loopAnimation; //Boolean if the animation loops
     private long attackTime = 0; //Time when the player last attacked
     private long damageTime = 0; //Time when last hit by a monster.
     private long cooldownModifier = 0; //Modifies the cooldown of the attacks
@@ -53,10 +52,6 @@ public class Player extends Entity {
     private long deathTime = 0; //The time when the player is declared as dead
     private boolean dead; //Boolean of whether the player is dead or not
     private int score = 0; //The player's score
-    /**
-     * The class type of the entity
-     */
-    private final String classType = "Player";
     private int multiplier; //The score multiplier
     private boolean invulnerable; //Boolean of whether the player is invulnerable
     private boolean blink = false;//Boolean of whether they were
@@ -124,9 +119,7 @@ public class Player extends Entity {
         TextureRegion[][] tmp = TextureRegion.split(text, text.getWidth()
                 / frames, text.getHeight());
         TextureRegion[] animationFrames = new TextureRegion[frames];
-        for (int j = 0; j < frames; j++) {
-            animationFrames[j] = tmp[0][j];
-        }
+        System.arraycopy(tmp[0], 0, animationFrames, 0, frames);
         return new Animation(speed, animationFrames);
     }
 
@@ -242,7 +235,7 @@ public class Player extends Entity {
         }
 
         if (buffTime + 3000 < System.currentTimeMillis()) {
-            if (invulnerable == true)
+            if (invulnerable)
                 invulnerable = false;
             if (multiplier != 1) {
                 multiplier = 1;
@@ -297,7 +290,7 @@ public class Player extends Entity {
 
 	@Override
 	public void draw(SpriteBatch batch, float stateTime) {
-        loopAnimation = state == State.RUNNING;
+        boolean loopAnimation = state == State.RUNNING;
         TextureRegion currFrame = currentAnimation.getKeyFrame(stateTime, loopAnimation);
 
         if (blink) {
@@ -621,9 +614,13 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     *
+     * @return the type of entity this is
+     */
     @Override
     public String getType() {
-        return classType;
+        return "Player";
     }
 
     /**

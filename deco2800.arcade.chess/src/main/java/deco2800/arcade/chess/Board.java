@@ -326,8 +326,8 @@ public class Board {
 			Piece onSquare = Board_State.get(x).get(y);
 			onSquare.deActivate();
 
-			/*boolean temp = onSquare.getTeam() ? blackGraveyard.add(onSquare) : 
-													whiteGraveyard.add(onSquare);*/
+			boolean temp = onSquare.getTeam() ? blackGraveyard.add(onSquare) : 
+													whiteGraveyard.add(onSquare);
 			
 			Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
 			Board_State.get(x).add(y, piece);

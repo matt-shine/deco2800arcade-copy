@@ -687,6 +687,7 @@ public class junglejump extends GameClient implements InputProcessor {
 				getCurrentCont();
 				currentLevel = LevelContainer.getLevel(LevelContainer.getCurrentLevel());
 				gameState = GameState.INPROGRESS;
+				butY = -1; // Should stop newgame from being accessed in game
 			}
 			if (butY == ACHIEVEMENTS) {
 				gameState = GameState.ACHIEVEMENTS;
@@ -713,6 +714,17 @@ public class junglejump extends GameClient implements InputProcessor {
 			movingRight = true;
 		}
 		if (keycode == Keys.SPACE) {
+			if (butY == NEW_GAME) {
+				monkeyX = monkeyDefaultX;
+				monkeyY = monkeyDefaultY;
+				// Reset Bananas, Platforms and Level
+				currentCont = new LevelContainer();
+				getCurrentCont();
+				getCurrentCont();
+				currentLevel = LevelContainer.getLevel(LevelContainer.getCurrentLevel());
+				gameState = GameState.INPROGRESS;
+				butY = -1; // Should stop newgame from being accessed in game
+			}
 			// Jump
 			if (!jumping && !isFalling) {
 				velocity = 5.0f;

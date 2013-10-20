@@ -16,8 +16,8 @@ import deco2800.arcade.breakout.screens.GameScreen;
  */
 public class Level {
 	
-	private final int SCREENHEIGHT = 720;
-	private final int SCREENWIDTH = 1280;
+	//private static final int SCREENHEIGHT = 720;
+	//private static final int SCREENWIDTH = 1280;
 	
 	public Level() {
 		

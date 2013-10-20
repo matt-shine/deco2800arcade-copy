@@ -1,11 +1,10 @@
 package deco2800.arcade.breakout;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+//import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Circle;
@@ -21,10 +20,10 @@ public class Brick {
 	private SpriteBatch sBatch;
 	private Sprite[] brickImgs;
 	//The default height and width of the brick
-	private final float width = 120f;
-	private final float height = 40f;
+	private float width = 120f;
+	private float height = 40f;
 	//A float for setting the size of small rectangles for collision detection
-	private final float E = 0.001f;
+	private float E = 0.001f;
 	private boolean state;
 	private Rectangle brickShape;
 

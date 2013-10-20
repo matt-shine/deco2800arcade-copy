@@ -128,6 +128,17 @@ public class LevelContainer {
 		junglejump.levelNumText = new Texture(Gdx.files.internal((getCurrentLevel() + 1) + ".png"));
 		junglejump.monkeyX = junglejump.monkeyDefaultX;
 		junglejump.monkeyY = junglejump.monkeyDefaultY;
+		
+		int size = junglejump.currentLevel.platformAmount();
+		for (int i = 0; i < size; i++) {
+			Platform p = junglejump.currentLevel.getPlatforms().get(i);
+			// Place platform onto screen
+			if(p.getX() >= 1000) {
+				p.setX(p.getX()-1000);
+			}
+//This causes the lag				batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
+		}
+		
 		return;
 	}
 	

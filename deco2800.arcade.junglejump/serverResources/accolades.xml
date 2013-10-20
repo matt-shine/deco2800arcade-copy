@@ -1,0 +1,19 @@
+<game>
+<title>Jungle Jump</title>>
+<gameID>junglejump</gameID>
+<accolades>
+    <accolade>
+        <refcode>XXXX</refcode> 
+        <title>Monkeys Dead</title>
+        <string>The equivalent of $VALUE $UNIT of monkey has gone off.</string>
+        <unit>"Kilograms"</unit>
+        <modifier> "$VALUE * 40" </modifier> 
+        #this will be a relative location to both your game client and the serverresource
+        <image>./build/main/resources/monkeySit.png</image>   
+        #When the value reaches a multiple of this, the popup occurs
+        <popup>1</popup>
+        #Message for ingame popup - contains an example of hardcoded $unit (use if different)
+        <popup_message>"You've died a whopping $VALUE times! Be more careful"</popup_message>
+    </accolade>
+</accolades>
+</game>

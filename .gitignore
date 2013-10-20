@@ -11,7 +11,7 @@ Thumbs.db
 
 # Gradle
 build
-.gradle
+.gradle/
 
 # emacs stuff
 *~

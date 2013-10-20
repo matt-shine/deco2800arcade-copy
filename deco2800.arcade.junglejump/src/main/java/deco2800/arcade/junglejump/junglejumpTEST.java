@@ -32,7 +32,13 @@ public class junglejumpTEST {
 		assertEquals(true, level.getBanana(0));
 		assertEquals(true, level.getBanana(1));
 	}
-	
+	@Test 
+	public void removeBnanas () {
+		int bananas = container.TOTAL_BANANAS;
+		container.clearCurrentLevel();
+		assertEquals(true, bananas > container.TOTAL_BANANAS);
+		
+	}
 	
 	
 }

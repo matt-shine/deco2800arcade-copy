@@ -327,6 +327,14 @@ public class GridObject {
 		tilesPosition.y /= grid.getTileSize();
 		return tilesPosition;
 	}
+	
+	/**
+	 * Get the contents of the grid the object is currently in.
+	 * @return A list of objects in the current tile.
+	 */
+	public List<GridObject> getCurrentGrid(){
+		return grid.getGridContents((int)positionInTiles().x, (int)positionInTiles().y);
+	}
 
 	/**
 	 * Begin running the AI for the object, if any. Objects with AI should

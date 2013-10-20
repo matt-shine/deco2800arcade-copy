@@ -91,7 +91,6 @@ public class TDTests {
 		path.appendStep(2, 2);
 		((Mobile) grid.getGridContents(1, 1).get(0)).path(path);
 		((Mobile) grid.getGridContents(1, 1).get(0)).followPath();
-		//Dan disabled temporarily for master merge.
 		Assert.assertTrue(grid.getGridContents(1,1).size() == 0);
 		Assert.assertTrue(grid.getGridContents(2,2).size() == 1);
 	}

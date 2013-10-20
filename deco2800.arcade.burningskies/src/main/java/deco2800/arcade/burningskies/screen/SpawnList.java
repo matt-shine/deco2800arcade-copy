@@ -68,7 +68,7 @@ public class SpawnList {
 	/**
 	 * Automatically random spawn an enemy around the edge of the screen
 	 */
-	private void addRandomEnemy() {
+	public void addRandomEnemy() {
 			float startX = (float) 0;
 			float startY = (float) 0;
 			

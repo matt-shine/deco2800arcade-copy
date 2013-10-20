@@ -39,7 +39,7 @@ public class Boss extends Enemy {
 			if(!pattern.isFiring()) {
 				pattern.start();
 			}
-			position.add(delta*50*dir,0);
+			position.add(delta*70*dir,0);
 			if(position.x - getWidth()/2 < 0 || position.x + getWidth()/2 > 1280) {
 				dir *= -1;
 			}

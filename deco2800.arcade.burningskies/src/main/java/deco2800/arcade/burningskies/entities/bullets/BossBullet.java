@@ -9,6 +9,8 @@ import deco2800.arcade.burningskies.entities.Ship;
 
 public class BossBullet extends Bullet {
 	
+	private float spin = 0;
+	
 	private static Texture tex = new Texture(Gdx.files.internal("images/bullets/boss_bullet.png"));
 
 	public BossBullet(Ship parent, PlayerShip player, Vector2 initialPosition, float direction) {
@@ -18,11 +20,8 @@ public class BossBullet extends Bullet {
 	
 	@Override
 	void moveBullet(float delta) {
-		position.add( velocity.x * delta, velocity.y * delta );
-		setX(position.x);
-		setY(position.y);
-		setRotation(direction);
-		direction += 360*delta;
+		super.moveBullet(delta);
+		setRotation(spin);
+		spin += 360*delta;
 	}
-
 }

@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Array;
 
 import deco2800.arcade.cyra.game.Cyra;
 import deco2800.arcade.cyra.game.AchievementsTracker;
+import deco2800.arcade.cyra.game.MainMenu;
 import deco2800.arcade.cyra.model.Block;
 import deco2800.arcade.cyra.model.BlockMaker;
 import deco2800.arcade.cyra.model.Bullet;
@@ -32,6 +33,7 @@ import deco2800.arcade.cyra.model.MovablePlatformSpawner;
 import deco2800.arcade.cyra.model.Player;
 import deco2800.arcade.cyra.model.RandomizedEnemySpawner;
 import deco2800.arcade.cyra.model.ResultsScreen;
+import deco2800.arcade.cyra.model.SoldierEnemy;
 import deco2800.arcade.cyra.model.Sword;
 import deco2800.arcade.cyra.model.Zombie;
 
@@ -111,6 +113,10 @@ public class World {
 	}
 	
 	
+	//Used to count number of jumps - for achievements
+	public void incrementJumps() {
+		game.incrementAchievement("cyra.jumparound");
+	}
 	
 	public void update() {
 		
@@ -564,8 +570,10 @@ public class World {
 					score += e.getScore();
 					eItr.remove();
 					//Enemy is dead - achievement
-					System.out.println("ACHIEVE INC");
-					game.incrementAchievement("cyra.slayer");
+					if (e.getClass() == SoldierEnemy.class) {
+						System.out.println("ACHIEVE INC");
+						game.incrementAchievement("cyra.slayer");
+					}
 					//System.out.println("removed enemy");
 					for (EnemySpawner spns: curLevel.getEnemySpawners() ) {
 						spns.removeEnemy(e);
@@ -918,11 +926,16 @@ public class World {
 	public void gameOver() {
 		// go back to menu
 		System.out.println("GAME OVER!!!");
+		game.addHighscore(score);
+		game.setScreen(new MainMenu(game));
+
 		
 	}
 	
 	public void gameWin() {
 		// show some message/credits then go back to menu
+		game.addHighscore(score);
+		game.setScreen(new MainMenu(game));
 	}
 	
 	public void dispose() {

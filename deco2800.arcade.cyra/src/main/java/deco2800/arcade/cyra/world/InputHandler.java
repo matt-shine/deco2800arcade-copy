@@ -58,6 +58,7 @@ public class InputHandler implements InputProcessor{
 
 			case Keys.Z:
 				if ( acceptInput && (ship.getState() == State.IDLE || ship.getState() == State.WALK || ship.getState() == State.WALL) ){
+					world.incrementJumps();
 					ship.jump();
 				}
 				break;

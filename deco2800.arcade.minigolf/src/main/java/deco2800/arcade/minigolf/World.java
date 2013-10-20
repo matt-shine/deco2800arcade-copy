@@ -81,7 +81,8 @@ public class World {
 				".arcade.minigolf/src/main/").replace("file:", "") + 
 				"resources/Levels/level" + state + ".txt" ;
 		
-	createHole(resource);  
+	createHole(resource);
+	
 		
 	}
 	/* clears all arrays before they are used */

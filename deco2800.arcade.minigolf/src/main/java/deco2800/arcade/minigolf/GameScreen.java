@@ -132,7 +132,45 @@ public class GameScreen implements Screen, InputProcessor {
 				System.out.println("level is: "+ this.level); 
 				golf.setScreen(golf.hole, level); //render next hole	
 			}
+			if(totalShots == 1){
+				golf.incrementAchievement("minigolf.marksman");
+			}
+			
+			switch(nextHole){
+			case 1:
+			golf.incrementAchievement("minigolf.9hole.level1");
+			break;
+			case 2:
+			golf.incrementAchievement("minigolf.9hole.level2");
+			break;
+			case 3:
+			golf.incrementAchievement("minigolf.9hole.level3");
+			break;
+			case 4:
+			golf.incrementAchievement("minigolf.9hole.level4");
+			break;
+			case 5:
+			golf.incrementAchievement("minigolf.9hole.level5");
+			break;
+			case 6:
+			golf.incrementAchievement("minigolf.9hole.level6");
+			break;
+			case 7:
+			golf.incrementAchievement("minigolf.9hole.level7");
+			break;
+			case 8:
+			golf.incrementAchievement("minigolf.9hole.level8");
+			break;
+			case 9:
+			golf.incrementAchievement("minigolf.9hole.level9");
+			break;
+			}
+			
+					
+			
+			
 		}
+	
 		//clear everything on screen
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);

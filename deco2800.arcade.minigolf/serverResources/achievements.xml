@@ -4,22 +4,38 @@
 	        <description> Complete first course.</description>
 	        <awardThreshold>1</awardThreshold>
 	        <icon>youwon.png</icon>
-        	</achievement>
+        </achievement>
 
 	<achievement id="minigolf.marksman">
 	        <name>Makrsman</name>
 	        <description> Get a hole in one.</description>
 	        <awardThreshold>1</awardThreshold>
 	        <icon>youwon.png</icon>
-        	</achievement>
+        </achievement>
 
 	<achievement id="minigolf.360">
-	        <name>Open the game O_O</name>
-	        <description>Click on play</description>
-	        <awardThreshold>1</awardThreshold>
-	        <icon>youwon.png</icon>
-        	</achievement>
-
+		<name>360 Overlay Check</name>
+		<description>Check the overlay</description>
+		<awardThreshold>1</awardThreshold>
+		<icon>youwon.png</icon>
+	</achievement>
 	
-        
+	 <achievement id="minigolf.9hole">
+        	<name>Half course Hero</name>
+			<description>Beat half the maps.</description>
+        	<icon>youwon.png</icon>
+
+        	<components>
+				<component id="minigolf.9hole.level1" awardThreshold="1" />
+           		<component id="minigolf.9hole.level2" awardThreshold="1" />
+           		<component id="minigolf.9hole.level3" awardThreshold="1" />
+           		<component id="minigolf.9hole.level4" awardThreshold="1" />
+				<component id="minigolf.9hole.level5" awardThreshold="1" />
+				<component id="minigolf.9hole.level6" awardThreshold="1" />
+				<component id="minigolf.9hole.level7" awardThreshold="1" />
+				<component id="minigolf.9hole.level8" awardThreshold="1" />
+				<component id="minigolf.9hole.level9" awardThreshold="1" />
+        	</components>
+   	  </achievement>
+	  
 </achievements>

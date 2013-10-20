@@ -30,7 +30,7 @@ public class MultiGamelist implements Screen {
 	private Skin skin;
 	private FrontPageStage stage;
 
-	boolean multiplayerEnabled;
+	public boolean multiplayerEnabled;
 	private boolean bclicked;
 
 	Texture bg;
@@ -488,21 +488,12 @@ public class MultiGamelist implements Screen {
 					listtable.add(landButton).width(300).height(300);
 
 				}
-
-				else if (mixmazeButton.getStage() != null) {
-					// Do Nothing
-				}
-
 			}
 		});
 
 		// Scroll Left
 		button4.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				if (chessButton.getStage() != null
-						|| chessButton2.getStage() != null) {
-					// Do Nothing
-				}
 
 				if (raidenButton.getStage() != null) {
 
@@ -532,7 +523,6 @@ public class MultiGamelist implements Screen {
 					// AFTER SCROLLED
 					pongButton2.addListener((new ChangeListener() {
 						public void changed(ChangeEvent event, Actor actor) {
-							System.out.println("Pong clicked");
 							dispose();
 							ArcadeSystem.setMatchMaking(true);
 							ArcadeSystem.setMultiplayerEnabled(true);
@@ -921,8 +911,6 @@ public class MultiGamelist implements Screen {
 				ArcadeSystem.setGameWaiting(true);
 				arcadeUI.setScreen(arcadeUI.getWait());
 				ArcadeSystem.goToGame("Pong");
-
-				// System.out.println("paused");
 			}
 		}));
 
@@ -1004,7 +992,6 @@ public class MultiGamelist implements Screen {
 		Table.drawDebug(stage); // Shows table debug lines
 
 		if (bclicked == true) {
-			System.out.println("going to arcadeui");
 			ArcadeSystem.goToGame("arcadeui");
 		}
 

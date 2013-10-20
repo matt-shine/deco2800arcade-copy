@@ -193,9 +193,6 @@ public class Pong extends GameClient {
 		AchievementClient achClient = getAchievementClient();
 		ArrayList<Achievement> achievements = achClient
 				.achievementsForGame(getGame());
-		for (Achievement ach : achievements) {
-			System.out.println(ach.toString());
-		}
 		// Multiplayer Game waiting for opponent
 		if (ArcadeSystem.isGameWaiting() && ArcadeSystem.isMatchMaking()) {
 			requestMatchmakingGame();
@@ -203,16 +200,6 @@ public class Pong extends GameClient {
 			requestLobbyGame();
 		}
 
-	}
-
-	@Override
-	public void dispose() {
-		super.dispose();
-	}
-
-	@Override
-	public void pause() {
-		super.pause();
 	}
 
 	/**
@@ -339,7 +326,6 @@ public class Pong extends GameClient {
 		// Do not allow game to start if it is multiplayer without an opponent
 		if (getMPHost() || !ArcadeSystem.isMultiplayerEnabled()) {
 			getBall().randomizeVelocity();
-			Ball ball = getBall();
 			if (ArcadeSystem.isMultiplayerEnabled()) {
 				sendInitState();
 			}
@@ -415,11 +401,14 @@ public class Pong extends GameClient {
 	 * Starts the Multiplayer Game once an opponent is found
 	 */
 	public void startMultiplayerGame() {
-		System.out.println("Pong started");
 		getBall().randomizeVelocity();
 		if (getMPHost()) {
 			long time = System.currentTimeMillis();
-			while (time + 3000 > System.currentTimeMillis());
+			while (true) {
+				if (time + 3000 > System.currentTimeMillis()) {
+					break;
+				}
+			}
 			sendInitState();
 		}
 		gameState = new InProgressState();
@@ -467,8 +456,7 @@ public class Pong extends GameClient {
 	 */
 	public void updateGameState(GameStateUpdateRequest request) {
 		// The first request will contain information about the ball
-		if (request.initial == true) {
-			System.out.println("init game start");
+		if (request.initial) {
 			startMultiplayerGame();
 			getBall().setVelocity((Vector2) request.stateChange);
 			return;

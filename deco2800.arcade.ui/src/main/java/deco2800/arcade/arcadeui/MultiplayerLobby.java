@@ -48,7 +48,7 @@ public class MultiplayerLobby implements Screen {
 	private ShapeRenderer shapeRenderer;
 	private ArcadeUI arcadeUI;
 	private MultiplayerLobby lobby;
-	ArrayList<ActiveMatchDetails> matches;
+	private ArrayList<ActiveMatchDetails> matches;
 	private Player player;
 	public String name;
 	
@@ -57,7 +57,6 @@ public class MultiplayerLobby implements Screen {
 	SpriteBatch batch;
 
 	public MultiplayerLobby(ArcadeUI ui, Player player) {
-		System.out.println(ui);
 		arcadeUI = ui;
 		this.player = player;
 		this.lobby = this;
@@ -318,8 +317,6 @@ public class MultiplayerLobby implements Screen {
 			public void changed(ChangeEvent event, Actor actor) {
 
 				String message = chatfield.getText();
-				System.out.println("You Said: " + chatfield.getText());
-
 				chat(message);
 				chatfield.setText("");
 				
@@ -352,10 +349,7 @@ public class MultiplayerLobby implements Screen {
 			//ArcadeSystem.setPlayerBetting(true);
 			//arcadeUI.setScreen(arcadeUI.getBetting());
 		}
-		if (Gdx.input.isKeyPressed(Keys.L)) {
-
-		}
-
+		
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 
@@ -418,7 +412,6 @@ public class MultiplayerLobby implements Screen {
 	public void displayChat(LobbyMessageResponse request) {
 		String message = request.message;
 		String username = request.username;
-		System.out.println(username + ": " + message);
 
 		name = username + ": " + message;
 	

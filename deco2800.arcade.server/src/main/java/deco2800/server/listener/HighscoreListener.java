@@ -92,7 +92,7 @@ public class HighscoreListener extends Listener {
 			 try {
 				 hsDatabase.updateScore(asr.game_ID, asr.username, scores, types);
 			 } catch (Exception e) {
-				 e.printStackTrace();
+				 //Silently fail
 			 }
 			 
 		 

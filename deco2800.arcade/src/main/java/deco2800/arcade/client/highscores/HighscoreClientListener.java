@@ -30,8 +30,9 @@ public class HighscoreClientListener extends NetworkListener {
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
 		
-		if (object instanceof GetScoreResponse){
-			hsClient.responseRecieved((GetScoreResponse)object); //Send the response back to the highscore client
+		if (object instanceof GetScoreResponse) {
+			//Send the response back to the highscore client
+			hsClient.responseRecieved((GetScoreResponse)object);
 		}
 	}
 }

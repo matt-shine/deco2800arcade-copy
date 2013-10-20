@@ -297,7 +297,6 @@ public class HighscoreClient {
 	 * 
 	 * @return A list of Highscore objects 
 	 */
-
 	public List<Highscore> getWinLoss() {
 		GetScoreRequest gsReq = new GetScoreRequest();
 		gsReq.requestID = 4;

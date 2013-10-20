@@ -17,7 +17,7 @@ public class ChildThreadProtocol {
 	public int id;
 	public String message;
 	public ForumUserProtocol createdBy;
-	public Timestamp timestamp;
+	public String timestamp;
 	public int vote;
 	
 	public static ChildThreadProtocol getChildThreadProtocol(ChildThread thread) {
@@ -25,13 +25,14 @@ public class ChildThreadProtocol {
 		result.id = thread.getId();
 		result.createdBy = ForumUserProtocol.getForumUserProtocol(thread.getCreatedBy());
 		result.message = thread.getMessage();
-		result.timestamp = thread.getTimestamp();
+		result.timestamp = thread.getTimestamp().toString();
 		result.vote = thread.getLike();
 		return result;
 	}
 	
 	public static ChildThread getChildThread(ChildThreadProtocol object) {
-		return new ChildThread(object.id, object.message, ForumUserProtocol.getForumUser(object.createdBy), object.timestamp, object.vote);
+		return new ChildThread(object.id, object.message, ForumUserProtocol.getForumUser(object.createdBy)
+				, Timestamp.valueOf(object.timestamp), object.vote);
 	}
 	
 	public static ChildThreadProtocol[] getChildThreadProtocols(ChildThread[] threads) {

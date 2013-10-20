@@ -19,7 +19,7 @@ public class ParentThreadProtocol {
 	public String topic;
 	public String message;
 	public ForumUserProtocol createdBy;
-	public Timestamp timestamp;
+	public String timestamp;
 	public String category;
 	public String[] tags;
 	public int vote;
@@ -30,7 +30,7 @@ public class ParentThreadProtocol {
 		result.topic = thread.getTopic();
 		result.message = thread.getMessage();
 		result.createdBy = ForumUserProtocol.getForumUserProtocol(thread.getCreatedBy());
-		result.timestamp = thread.getTimestamp();
+		result.timestamp = thread.getTimestamp().toString();
 		result.category = thread.getCategory();
 		result.tags = thread.getTags();
 		result.vote = thread.getVote();
@@ -39,7 +39,7 @@ public class ParentThreadProtocol {
 	
 	public static ParentThread getParentThread(ParentThreadProtocol object) {
 		return new ParentThread(object.id, object.topic, object.message, ForumUserProtocol.getForumUser(object.createdBy)
-				, object.timestamp, object.category, getTagString(object.tags), object.vote);
+				, Timestamp.valueOf(object.timestamp), object.category, getTagString(object.tags), object.vote);
 	}
 	
 	public static String getTagString(String[] tagArray) {

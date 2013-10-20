@@ -21,7 +21,6 @@ public class Raiden extends GameClient {
 	 * @param networkClient
 	 */
 	//private String statusMessage;
-	
 	public Raiden(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		GameFrame raiden = new GameFrame();
@@ -30,7 +29,9 @@ public class Raiden extends GameClient {
 	public void resume() {
 		//super.resume();
 	}
-	
+	/**
+	 * The game description.
+	 */
 	private static final Game game;
 	static {
 		game = new Game();
@@ -38,7 +39,9 @@ public class Raiden extends GameClient {
 		game.name = "Raiden";
         game.description = "Flight Fighter";
 	}
-	
+	/**
+	 * Get game.
+	 */
 	public Game getGame() {
 		return game;
 	}

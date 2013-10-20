@@ -1,7 +1,6 @@
 package deco2800.arcade.towerdefence.model.creationclasses;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -20,8 +19,6 @@ import deco2800.arcade.towerdefence.view.GameScreen;
  * 
  */
 public class Barrier extends Mortal {
-	// Fields
-
 	/**
 	 * The constructor for Barrier.
 	 * 
@@ -52,6 +49,9 @@ public class Barrier extends Mortal {
 	}
 
 	// Methods
+	/**
+	 * Start the AI and animations.
+	 */
 	public void start() {
 		// Create the list of filenames for standingFiles
 		// The hard-coded file path for the frame

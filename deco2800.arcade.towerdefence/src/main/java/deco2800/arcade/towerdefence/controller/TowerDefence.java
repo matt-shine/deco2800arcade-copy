@@ -3,8 +3,6 @@ package deco2800.arcade.towerdefence.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.input.Mouse;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Application;
@@ -20,6 +18,7 @@ import deco2800.arcade.towerdefence.model.Grid;
 import deco2800.arcade.towerdefence.model.Ship;
 import deco2800.arcade.towerdefence.model.Team;
 import deco2800.arcade.towerdefence.model.TowerType;
+import deco2800.arcade.towerdefence.model.creationclasses.Enemy;
 import deco2800.arcade.towerdefence.model.creationclasses.Projectile;
 import deco2800.arcade.towerdefence.model.creationclasses.Tower;
 import deco2800.arcade.towerdefence.view.CreditsScreen;
@@ -82,15 +81,62 @@ public class TowerDefence extends GameClient {
 		// Create a blank Vector2
 		Vector2 blank = new Vector2();
 		// Create the projectile to load into the tower
-		Projectile projStand = new Projectile(0, 0, grid, blank,
-				1000, Team.Player, null, 10, 0, 0);
+		Projectile projStand = new Projectile(0, 0, grid, blank, 1000,
+				Team.Player, null, 10, 0, 0);
+		// Create animation filepaths
+		List<String> fileStanding = new ArrayList<String>();
+		fileStanding
+				.add("frames\\TowerStandard\\Standing\\StandardStanding.png");
+		List<String> fileDying = new ArrayList<String>();
+		for (int i = 0; i < 9; i++) {
+			fileDying.add("frames\\TowerStandard\\Death\\StandardDeath000" + i
+					+ ".png");
+		}
+		List<String> fileDeath = new ArrayList<String>();
+		for (int i = 0; i < 9; i++) {
+			fileDeath.add("frames\\TowerStandard\\Dead\\StandardDead000" + i
+					+ ".png");
+		}
+
 		// StandardI
 		Tower standardI = new Tower(100, 2, 2472, 2083, grid, Team.Player,
 				TowerType.STANDARD, 2.0, 9.0, projStand, 100, upgradeCosts,
-				null, null, null);
-		
-		//Draw
+				fileStanding, fileDying, fileDeath);
+
+		// Draw
 		standardI.start();
+
+		// Create a wave of enemies
+		// Create animation filepaths
+		List<String> fileStanding1 = new ArrayList<String>();
+		fileStanding1.add("frames\\SmallBug\\Walk\\SmBugWalk0001.png");
+		List<String> fileMoving1 = new ArrayList<String>();
+		for (int i = 0; i < 9; i++) {
+			fileMoving1.add("frames\\SmallBug\\Walk\\SmBugWalk000" + i
+					+ ".png");
+		}
+		List<String> fileDying1 = new ArrayList<String>();
+		for (int i = 0; i < 9; i++) {
+			fileStanding.add("frames\\SmallBug\\Death\\SmBugDeath0001" + i
+					+ ".png");
+		}
+		List<String> fileDeath1 = new ArrayList<String>();
+		for (int i = 0; i < 9; i++) {
+			fileStanding.add("frames\\SmallBug\\Dead\\SmBugDead000" + i
+					+ ".png");
+		}
+		List<String> fileAttacking = new ArrayList<String>();
+		for (int i = 0; i < 9; i++) {
+			fileStanding.add("frames\\SmallBug\\Attack\\SmBugAttack000" + i
+					+ ".png");
+		}
+		// Enemy constructor
+		for (int i = 0; i < 20; i++) {
+			Enemy OrdinaryI = new Enemy(15, 2600, 2200, 0, 25, grid, Team.Computer,
+					0, 0, 0, 0, 10, fileStanding1, fileMoving1, fileDying1, fileDeath1, fileAttacking);
+			//Draw
+			OrdinaryI.start();
+		}
 
 		// Listener controls
 		this.getOverlay().setListeners(new Screen() {

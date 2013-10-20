@@ -68,10 +68,7 @@ public class FrontPage implements Screen {
             
             /*
              * Creating Skin and Textures
-             */
-        	
-        	// this.setName(pName);
-        	
+             */	
         	
             arcadeUI = ui;
             skin = new Skin(Gdx.files.internal("loginSkin.json"));
@@ -119,11 +116,7 @@ public class FrontPage implements Screen {
             final TextButton recentButton = new TextButton("Recently Played", skin, "blue");
             recentButton.setSize(300, 300);        
             recentButton.setPosition(bX, bY);
-            
-         /*   final TextButton lobbyButton = new TextButton("Multiplayer", skin, "default-red");
-            recentButton.setSize(100, 200);        
-            recentButton.setPosition(bX2, bY-enlarge);
-            */
+         
             final Table recentTable = new Table();
             recentTable.setBackground(skin.getDrawable("recentBar"));
             recentTable.setSize(350, 800);
@@ -292,33 +285,7 @@ public class FrontPage implements Screen {
                 	arcadeUI.setScreen(arcadeUI.store);
                 }
             })); 
-            
-          /*  //Mouse Over Listener for Lobby Button
-            lobbyButton.addListener((new ClickListener() {        	
-                public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	    	
-                lobbyButton.setSize(bSize + enlarge,  bSize + enlarge);
-                lobbyButton.setPosition(bX2 -(enlarge/2), (bY-enlarge)-(enlarge/2));	
-                    lobbyButton.setText(null);
-                    lobbyButton.setText("Lobby");
-                }
-                public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
-                	lobbyButton.setSize(bSize, bSize);
-                	lobbyButton.setPosition(bX2, bY-(enlarge));
-                	lobbyButton.setText(null);
-                	lobbyButton.setText("Lobby");
-            }}));   
-            
-           //Click Listener for Lobby Button
-            lobbyButton.addListener((new ChangeListener() {
-                public void changed (ChangeEvent event, Actor actor) {
-                	ArcadeSystem.goToGame("lobby");
-                }
-            })); */
-            
-    		
-            
-            
-            
+              
             /*
              * This method listens for a click outside the text boxes.
              * It checks if 'Recently Played' button is on the stage,
@@ -363,31 +330,10 @@ public class FrontPage implements Screen {
     }
     
     public static void setName(String playerName){
-//		pName = playerName.toString();
-//		System.out.println("Logged in as: " + pName);
-
 	          
 	    	//Top Box Labels
 	            final Label logo = new Label("VAPOR", skin, "cgothic");
 	            logo.setAlignment(Align.left);
-	            
-	            
-//	            logo.addListener((new ClickListener() {        	
-//	                public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	    	
-//	                	logo.setWidth(490);
-//	                }
-//	                public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
-//	                	logo.setWidth(465);
-//	            }}));   
-	              
-//	            logo.addListener(((new ChangeListener() {
-//	                    public void changed (ChangeEvent event, Actor actor) {
-//	                    	ArcadeSystem.goToGame("main");
-//	                    	System.out.println("CLICKED");
-//	                    }
-//	                })));
-	            
-	           
 	           
 	            final Label username = new Label(pName , skin, "cgothic");
 	            
@@ -402,7 +348,6 @@ public class FrontPage implements Screen {
 	            
 	            username.addListener((new ClickListener() {
 	            	public void clicked (InputEvent event, float x, float y){
-	            		//arcadeUI.setScreen(arcadeUI.profile);
 	            		
 	            		System.out.println("WHERE IS PROFILE GOD DAMN");
 	            	}
@@ -414,7 +359,6 @@ public class FrontPage implements Screen {
 	            divider.setAlignment(Align.right);
 	            
 	            final Button settingsIcon = new Button(skin.getDrawable("settingsIcon"));
-	           // recentIcon.setName("recenticon");
 	            settingsIcon.setSize(15, 15);
 	            
 	            final Table topBox = new Table();
@@ -458,11 +402,7 @@ public class FrontPage implements Screen {
 		            		
 		            		popUp.add(profile).padBottom(10);
 		            		popUp.row();
-		            		//popUp.add(space);
-		            		//popUp.row();
 		            		popUp.add(forum).padBottom(10);
-		            		//popUp.row();
-		            		//popUp.add(space);
 		            		popUp.row();
 		            		popUp.add(logout).padBottom(10);
 		            		
@@ -475,13 +415,11 @@ public class FrontPage implements Screen {
 				            		popUp.remove();
 				            		settingsClicked = false;
 		     	            		arcadeUI.setScreen(arcadeUI.login);
-		     	            		//ArcadeSystem.exit();
 		     	            	}
 		     	            }));
 		            		
 		            		forum.addListener((new ClickListener() {
 		     	            	public void clicked (InputEvent event, float x, float y){
-		     	            		//arcadeUI.setScreen(arcadeUI.forum);
 		     	            		System.out.println("LINK TO FORUM GOD DAMN");
 		     	            	}
 		     	            }));

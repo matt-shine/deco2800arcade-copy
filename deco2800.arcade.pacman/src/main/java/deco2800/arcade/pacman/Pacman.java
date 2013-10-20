@@ -22,6 +22,8 @@ public class Pacman extends GameClient {
 	public final int SCREEN_HEIGHT = 720;
 	public final int SCREEN_WIDTH = 1280;	
 	private final int NUM_GHOSTS = 4;
+	private boolean gamePaused;
+	
 	
 	private PacModel model; // model for Pacman	
 	private PacView view; // view for Pacman	
@@ -53,12 +55,12 @@ public class Pacman extends GameClient {
 
 			@Override
 			public void hide() {
-				//TODO implement stuff to pause game here
+				gamePaused = false;
 			}
 			 
 			@Override
 			public void show() {
-				//TODO implement stuff to unpause game here
+				gamePaused = true;
 			}
 
 			@Override
@@ -144,8 +146,11 @@ public class Pacman extends GameClient {
 			view = new PacView(model);
 			viewNotSetUp = false;
 		}
-		//make changes in the model to prepare for rendering
-		model.prepareDraw();
+		
+		// make changes in the model to prepare for rendering if overlay
+		// not active
+		if (!gamePaused) model.prepareDraw();
+		
 		view.render();
 		super.render();		
 	}

@@ -14,7 +14,7 @@
         </achievement>
 
 	<achievement id="minigolf.360">
-		<name>360 Overlay Check</name>
+		<name>Open Game O_O</name>
 		<description>Check the overlay</description>
 		<awardThreshold>1</awardThreshold>
 		<icon>youwon.png</icon>

@@ -5,7 +5,8 @@ import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
 
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
@@ -15,6 +16,7 @@ import deco2800.arcade.protocol.game.CasinoServerUpdate;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.listener.CasinoListener;
+
 /**
  * A Blackjack Cainso game for use in the Arcade
  * @author Dane Cousins, Kristian Zembic, Robert Macdonald, Scott Fredericks, Fionntan Shanahan
@@ -23,23 +25,15 @@ import deco2800.arcade.client.network.listener.CasinoListener;
 @ArcadeGame(id="blackjack")
 public class Blackjack extends GameClient {
 	
-	private OrthographicCamera camera;
-	
-	public static final int WINNINGSCORE = 3;
-	public static final int SCREENHEIGHT = 480;
-	public static final int SCREENWIDTH = 800;
 
-	//Reusable list of achievements
-	private static Set<Achievement> achievements = new HashSet<Achievement>();
-	static {
-		Achievement randomAchievement = new Achievement("Create these later");
-		achievements.add(randomAchievement);
-	}
-	
+    // Screen Parameters
+    public static final int SCREENHEIGHT = 720;
+    public static final int SCREENWIDTH = 1280;
+    
+	private MainMenuScreen MainMenuScreen;
 	//Network client for communicating with the server.
-	//Should games reuse the client of the arcade somehow? Probably!
 	private NetworkClient networkClient;
-
+	
 	/**
 	 * Basic constructor for the Blackjack game
 	 * @param userName The name of the player
@@ -51,27 +45,34 @@ public class Blackjack extends GameClient {
 		this.networkClient.addListener(new CasinoListener());
 	}
 	
+	//Reusable list of achievements
+	private static Set<Achievement> achievements = new HashSet<Achievement>();
+	static {
+		Achievement randomAchievement = new Achievement("Create these later");
+		achievements.add(randomAchievement);
+	}
+	
+	
 	/**
 	 * Creates the game
 	 */
 	@Override
 	public void create() {
 		super.create();
-		
+		MainMenuScreen = new MainMenuScreen(this);
+    	setScreen(MainMenuScreen);
+    	
 		//  This is a test message and an example 
 		CasinoServerUpdate msg = new CasinoServerUpdate();
 		msg.username = "test"; 
 		msg.message = "testme";
-		this.networkClient.sendNetworkObject(msg);
-		
-		//Initialise camera
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);		
+		this.networkClient.sendNetworkObject(msg);	
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
+		MainMenuScreen.dispose();
 	}
 
 	@Override

@@ -38,9 +38,9 @@ public class MainMenuScreen implements Screen{
 	JoinTableScreen JoinTableScreen;
 
 	public MainMenuScreen(
-	        Blackjack_UI game )
+	        Blackjack blackjack )
 	    {
-		myGame = game;
+		myGame = blackjack;
 	    }
 	@Override
     public void show()

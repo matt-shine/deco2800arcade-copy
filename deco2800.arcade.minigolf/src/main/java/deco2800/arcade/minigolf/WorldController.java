@@ -13,6 +13,12 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.input.*;
 import com.badlogic.gdx.math.Vector2;
 
+/** 
+ * WorldController handles the ball velocity and values to be placed into score-card 
+ * This class updates the balls direction and velocity as well as keeps track of the 
+ * current hole and triggers the end of hole event within GameScreen.java
+ */
+
 @SuppressWarnings("unused")
 public class WorldController{
 		
@@ -24,14 +30,15 @@ public class WorldController{
 	
 	boolean leftButtonClick = false; //left mouse click
 	private float deceleration = 1f;
-	private boolean notZero = true; //speed 
+	private boolean notZero = true; //for power
 	private float newDirX, newDirY; 
 	
 	public int hole;
 	boolean inHole;
 	private int shotNum; //shot counter
-	private int holeShots;
+	private int holeShots; //shots for score card
 	private ArrayList<Integer> scoreCardCopy;
+	
 	
 	public WorldController(World world, int level, ArrayList<Integer> scoreCard) {
 		this.world = world; 
@@ -43,30 +50,30 @@ public class WorldController{
 		this.scoreCardCopy = scoreCard;
 	}
 	
-	//left mouse button clicked
-	public void leftKeyPressed() { 
-	
-	}
-	//left mouse button released
+	/* True if the left mouse button has been pressed */
 	public void leftKeyReleased() {
-		//buttons.get(buttons.put(Buttons.LEFT, false));
 		leftButtonClick = true;
 	}
-	
+	/* set the current hole that's being used */
 	public void setHole(int level){
 		this.hole = level;
 	}
+	/* get the current hole */
 	public int getHole(){
 		return this.hole;
 	}
+	/* get the number of shots that have been used */
 	public int getNumShots(){
 		return this.shotNum;
 	}
+	/* get number of shots used in score-card */
 	public int getHoleShots(){
 		return this.holeShots;
 	}
 	
-	//get input and update ball gets power and dir from direcLogic class
+	/* gets power and direction the ball is to move in from GameScreen.java 
+	 * Updates ball position
+	 */
 	public void update(float delta, float power, Vector2 dir) {
 		processInput(delta, power, dir); 
 		if (ball.inHole == true){
@@ -74,9 +81,9 @@ public class WorldController{
 			ball.getVelocity().y = 0;
 			shotNum++;
 			holeShots = shotNum;
+			if(this.hole != 19){
 			scoreCardCopy.add(holeShots);
-			System.out.println(scoreCardCopy.toString());
-			
+			}			
 			if(this.inHole == false){
 				this.hole += 1; 
 				this.inHole = true;
@@ -85,62 +92,62 @@ public class WorldController{
 		ball.update(delta);
 	}
 	
-	//updates the speed and position of the ball when the mouse is clicked
+	/* Using the power and direction, update the balls velocity
+	 * and reverse in case of collision.
+	 */
 	private void processInput(float delta, float power, Vector2 dir) {
-		//if(power < 110) power = 110;
-		if(leftButtonClick == false){
-			ball.getVelocity().x = 0; 
-			ball.getVelocity().y = 0;
-			ball.hillX = 0f;
-			ball.hillY = 0f;
-		}
-		//if left mouse clicked (and released)
+		
+		//if player left clicks
 		if(leftButtonClick == true){
 			if(this.notZero){ //if speed doesn't equal zero
 				power -= (5.0f * deceleration); //apply deceleration
 				deceleration += 0.25;
-				if(power <= 0 || ball.inWater){
+				//if power is less than 0 make it zero so ball doesn't move backwards
+				if(power <= 0 || ball.inWater){ 
+					//speed is now zero, stop decelerating
 					power = 0; 
-					ball.hillX = 0f;
-					ball.hillY = 0f;
-					if (ball.inWater) shotNum++;
+					if (ball.inWater) shotNum++; //increment shot counter by 1 if contacts water
 					ball.inWater = false;
-					this.notZero = false; //speed is now zero, stop decelerating
+					this.notZero = false; 
 				}
+				//diagonal block direction changes
+				diagFixes(dir);
 				
-				//if(power > 150) power = 150; //cap speed (if not already)
-				if(ball.bounceDiagX){
-				     newDirX = dir.x;
-				     newDirY = dir.y;     
-				     dir.x = newDirY;
-				     dir.y = newDirX;
-				     ball.bounceDiagX = false;
-				    }
-				    else if(ball.bounceDiagY){
-				     newDirX = dir.x;
-				     newDirY = dir.y;     
-				     dir.x = newDirY*(-1);
-				     dir.y = newDirX*(-1);
-				     ball.bounceDiagY = false;
-				    }
+				//apply velocity and directional changes to the ball
+				if(ball.bounceX) ball.getVelocity().x = ((-(dir.x)) * power * delta ); 
+				else ball.getVelocity().x = ((dir.x) * power * delta); 
+				if(ball.bounceY) ball.getVelocity().y = ((-(dir.y)) * power * delta ) ; 
+				else ball.getVelocity().y = ((dir.y) * power * delta);
 				
-				//apply velocity directional changes on wall/object contact
-				if(ball.bounceX) ball.getVelocity().x = ((-(dir.x)) * power * delta ) - ball.getHillX(); 
-				else ball.getVelocity().x = ((dir.x) * power * delta) + ball.getHillX(); 
-				if(ball.bounceY) ball.getVelocity().y = ((-(dir.y)) * power * delta ) - ball.getHillY(); 
-				else ball.getVelocity().y = ((dir.y) * power * delta) + ball.getHillY();
-				
-			} else { //ball has stopped and waiting for input
-				//so reset everything for next move
+				//ball has stopped moving so reset everything for next mouse click.
+			} else { 
 				ball.bounceX = false; 
 				ball.bounceY = false;  
-				ball.hillX = 0f;
-				ball.hillY = 0f;
 				this.notZero = true;
 				deceleration = 1;
+				ball.getVelocity().x = 0; 
+				ball.getVelocity().y = 0;
 				leftButtonClick = false;
 				shotNum++; //increase shot counter
 			}
 		}
+	}
+	
+	/* Check if ball is in contact with diagonal blocks, apply direction changes */
+	private void diagFixes(Vector2 dir){
+		if(ball.bounceDiagX){
+		     newDirX = dir.x;
+		     newDirY = dir.y;     
+		     dir.x = newDirY;
+		     dir.y = newDirX;
+		     ball.bounceDiagX = false;
+		    }
+		    else if(ball.bounceDiagY){
+		     newDirX = dir.x;
+		     newDirY = dir.y;     
+		     dir.x = newDirY*(-1);
+		     dir.y = newDirX*(-1);
+		     ball.bounceDiagY = false;
+		    }
 	}
 }

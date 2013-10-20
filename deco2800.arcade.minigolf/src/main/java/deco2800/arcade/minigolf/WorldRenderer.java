@@ -21,7 +21,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-/* Renders all blocks in the arrays from World as well as Trajectory */
+/**
+ * 
+ * This class is used to render the various blocks and objects onto the game
+ * screen.
+ * 
+ * 
+ */
 
 @SuppressWarnings("unused")
 public class WorldRenderer { 
@@ -32,7 +38,6 @@ public class WorldRenderer {
 	private World world; 
 	private DirectionValues controller;
 	private WorldController wControl;
-	private GameScreen game;
 	private OrthographicCamera cam;	
 	ShapeRenderer debugRend = new ShapeRenderer();
 	
@@ -43,13 +48,13 @@ public class WorldRenderer {
 	wallEastTexture, wallNorthTexture, invWallNorthTexture,
 	invWallSouthTexture, invWallEastTexture, invWallWestTexture; 
 	
-	private Texture invWallTexture, capBlockTexture;
+	private Texture capBlockTexture;
 	
 	private Texture cornerSouthTexture, cornerNorthTexture,
 	cornerEastTexture, cornerWestTexture, invCornerWestTexture,
 	invCornerEastTexture, invCornerNorthTexture, invCornerSouthTexture;
 	
-	private Texture backgroundTexture, trajectoryTexture, diagNorthTexture,
+	private Texture backgroundTexture, arrowTexture, diagNorthTexture,
 	diagSouthTexture, diagEastTexture, diagWestTexture; 
 	
 	private SpriteBatch sprite; 
@@ -89,11 +94,13 @@ public class WorldRenderer {
 	public void render() {
 		Ball ball = world.getBall();		
 		if((ball.getVelocity().x == 0 && ball.getVelocity().y == 0)){
-			
-			//loads images to draw and logic needed, actually drawn bellow 
-			loadBallTrajectory(ball);
+			drawBallTrajectory();
+			directLogic.update();
 		}
-		//begin drawing all other assets
+		if((ball.getVelocity().x == 0 && ball.getVelocity().y == 0 && !(ball.inHole))){
+			  stage.act(); 
+			  stage.draw();
+			}				
 		sprite.begin();
 		    sprite.draw(backgroundTexture, 0, 0);
 			drawGround();
@@ -105,25 +112,17 @@ public class WorldRenderer {
 			drawWater();
 			drawTele();
 			drawHole();
-			drawBall();			
+			drawBall();
+			
 		sprite.end();
-		
-		//draw the direction trajectory
 		if((ball.getVelocity().x == 0 && ball.getVelocity().y == 0 && !(ball.inHole))){
-			//draws from trajectory class which overrides the stage functions
-		  	stage.act(); 
-		  	stage.draw();
+		  stage.act(); 
+		  stage.draw();
 		}
-		//for debugging purposes, will draw surrounding bounds of blocks
+		
 		if(debug) {
 			debug(); 
 		}		
-	}
-	
-	public void dispose(){
-		this.sprite.dispose();
-		this.stage.dispose();
-		
 	}
 	
 	/* get the power and direction of the ball trajectory, used in GameScreen */
@@ -134,7 +133,7 @@ public class WorldRenderer {
 		return directLogic.getDirection();
 	}
 	
-	/* load textures from file */
+	/* load textures from file into specific variables */
 	private void loadTextures() {
 		ballTexture = new Texture (Gdx.files.internal("ball.png"));
 		groundTexture = new Texture (Gdx.files.internal("grass.png"));
@@ -143,10 +142,7 @@ public class WorldRenderer {
 		wallSouthTexture = new Texture (Gdx.files.internal("wall-s.png"));
 		wallNorthTexture = new Texture (Gdx.files.internal("wall-n.png"));
 		wallEastTexture = new Texture (Gdx.files.internal("wall-e.png"));
-		wallWestTexture = new Texture (Gdx.files.internal("wall-w.png"));
-		
-		invWallTexture = new Texture(Gdx.files.internal("grass.png"));		
-		capBlockTexture = new Texture(Gdx.files.internal("grass.png"));
+		wallWestTexture = new Texture (Gdx.files.internal("wall-w.png"));		
 		
 		cornerWestTexture = new Texture (Gdx.files.internal("corner-n.png"));
 		cornerNorthTexture = new Texture (Gdx.files.internal("corner-e.png"));
@@ -158,30 +154,33 @@ public class WorldRenderer {
 		diagEastTexture = new Texture (Gdx.files.internal("diag-e.png"));
 		diagSouthTexture = new Texture (Gdx.files.internal("diag-s.png"));
 		
+		capBlockTexture = new Texture(Gdx.files.internal("grass.png"));
+		
 		holeTexture = new Texture (Gdx.files.internal("hole.png"));
 		teleTexture = new Texture (Gdx.files.internal("tele.png"));
 		waterTexture = new Texture (Gdx.files.internal("water.png"));
-		
 		backgroundTexture.setEnforcePotImages(false);//disable base 2 images
 		backgroundTexture = new Texture(Gdx.files.internal("background1.png"));
-		trajectoryTexture = new Texture(Gdx.files.internal("circle.png"));
-		trajectoryTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		arrowTexture = new Texture(Gdx.files.internal("circle.png"));
+		arrowTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 	}
 	
-	/* load the trajectory image, add the actor and get logic */
-	private void loadBallTrajectory(Ball ball) {	
-		trajectorySprite = new Sprite(trajectoryTexture);
+	/* draw the shot trajectory for the ball */
+	private void drawBallTrajectory() {
+		Ball ball = world.getBall();		
+		trajectorySprite = new Sprite(arrowTexture);
 		controller = new DirectionValues();
 		
 		directLogic = new DirectionLogic(controller, ball.getPosition());
 		traject = new Trajectory(controller, trajectorySprite, this.world);
+		
 		stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 		stage.addActor(traject);
 		directLogic.update();
 		
 	}
 	
-	/* draw the ball based on position from World */
+	// Draw the ball blocks
 	private void drawBall() {			
 		Ball ball = world.getBall();
 		if (ball.inHole) return;
@@ -189,25 +188,21 @@ public class WorldRenderer {
 				Ball.SIZE * ppuX, Ball.SIZE * ppuY);		
 	}
 	
-	
-	/* 
-	 * Next few function draw the blocks to the screen based on the World arrays 
-	 */
-	
+	// Draw all ground blocks
 	private void drawGround(){
 		for(Block1 block : world.getGroundBlocks()){
 			sprite.draw(groundTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, 
 					Block1.SIZE * ppuX, Block1.SIZE * ppuY);
 		}
 	}
-	
+	// Draw all water blocks
 	private void drawWater() {
 		for(Block1 block : world.getWaterBlocks()){
 			sprite.draw(waterTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, 
 					Block1.SIZE * ppuX, Block1.SIZE * ppuY);
 		}
 	}
-	
+	// Draw all teleporters
 	private void drawTele() {
 		  for(Block1 block : world.getTeleBlocks()){
 			  sprite.draw(teleTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, 
@@ -215,8 +210,11 @@ public class WorldRenderer {
 		  }
 		}
 	
+	// Draw all walls
 	private void drawWall() {
 		for(Block1 block : world.getWallBlocks()){
+			//if(block.type == BlockType.Wall)
+			//change texture position based on it's FacingDir
 			if(block.dir == FacingDir.NORTH){ //draw blocks from getWallBlocks() that face north
 				sprite.draw(wallNorthTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, 
 						Block1.SIZE * ppuX, Block1.SIZE * ppuY, 0, 0, 32, 32, false, false); 
@@ -235,9 +233,10 @@ public class WorldRenderer {
 				}
 			}
 		}
-	
+	//Draw all corners
 	private void drawCorners() {
 		for(Block1 block : world.getCornerBlocks()){
+			//change texture position based on FacingDir
 			if(block.dir == FacingDir.NORTH){ //draw blocks from getCornerBlocks() 
 				sprite.draw(cornerNorthTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, 
 						Block1.SIZE * ppuX, Block1.SIZE * ppuY, 0, 0, 32, 32, false, false); 
@@ -256,7 +255,7 @@ public class WorldRenderer {
 			}
 		}
 	}	
-	
+	// Draw all diagonals
 	private void drawDiags() {
 		for(Block1 block : world.getDiagBlocks()){
 			if(block.dir == FacingDir.NORTH)
@@ -273,17 +272,19 @@ public class WorldRenderer {
 						Block1.SIZE * ppuX, Block1.SIZE * ppuY, 0,0,32,32,false,false);
 		}
 	}
+	// Draw all Inverted Walls
 	private void drawInvWalls() {
 		for(Block1 block : world.getInvWallBlocks()){
-			sprite.draw(invWallTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY,
+			sprite.draw(capBlockTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY,
 					Block1.SIZE * ppuX, Block1.SIZE * ppuY, 0,0,32,32,false,false);
 		}
 	}
 	
+	// Draw all the cap blocks
 	private void drawCaps(){
 		for(Block1 block : world.getCapBlocks()){
 			sprite.draw(capBlockTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY,
-					Block1.SIZE * ppuX, Block1.SIZE * ppuY, 0,0,32,32,false,false);
+						Block1.SIZE * ppuX, Block1.SIZE * ppuY, 0,0,32,32,false,false);
 		}
 	}
 	
@@ -293,7 +294,7 @@ public class WorldRenderer {
 					Block1.SIZE * ppuX, Block1.SIZE * ppuY);
 		}
 	}
-	
+
 	/* if the constructor is called with a true value, will enable debugging 
 	 * This draws a coloured outline of the specified objects' bounds (Wall, Ball)
 	 */
@@ -316,6 +317,14 @@ public class WorldRenderer {
 		debugRend.setColor(new Color(0,1,0,1)); //green
 		debugRend.rect(x1, y1, Ball.SIZE, Ball.SIZE);
 		debugRend.end();
+	}
+	
+	public void dispose() { 
+		stage.dispose();
+		sprite.dispose();
+		
+		
+		
 	}
 	
 }

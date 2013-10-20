@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-/*
- * This class draws the direction trajectory from the ball, which the ball will travel in 
- * This class overrides some stage/actor functions
+/**
+ * This class draws the direction trajectory which the ball will travel in 
+ * This class overrides some stage/actor functions to draw
  */
 
 public class Trajectory extends Actor {
@@ -20,8 +20,8 @@ public class Trajectory extends Actor {
 	
 	public Vector2 startVelocity = new Vector2();  
 	
-	private int trajectoryPoints = 5; //number of images
-	private float timeSeparation = 0.5f; //the size of separation of images
+	private int trajectoryPoints = 5; //number of trajectory images (circles) to appear
+	private float timeSeparation = 0.5f; //the size of separation of the trajectory images
 	
 	public Trajectory(DirectionValues control, Sprite trajectorySprite, World world){
 		this.controller = control; 
@@ -29,41 +29,41 @@ public class Trajectory extends Actor {
 		this.world = world;
 	}
 	
-	@Override //update
+	@Override //update the trajectory position that will appear on screen
 	public void act(float delta){
 		super.act(delta); 
 		startVelocity.set(controller.getPower(), 0f); 
 		startVelocity.rotate(controller.getAngle());
 	}
 	
-	@Override //render the trajectory direction
+	@Override //draw the trajectory to the screen
 	public void draw(SpriteBatch batch, float parentAlpha) {
-		float t = 0f; 
+		float imgSpace = 0f; 
 		//width and height of the trajectory image
 		float width = 8; 
 		float height = 8; 		
 		float timeSep = this.timeSeparation;
-		//loop through and draw the trajectory images
+		//loop through and draw the trajectory circles to screen
 		for(int i = 0; i < trajectoryPoints; i++){
-			//get the x and y positions to draw the trajectory
-			float x = (width) + this.getX(t);
-			float y = (height) + this.getY(t);
+			//get the x and y ball position to draw the trajectory at
+			float x = (width) + this.getX(imgSpace);
+			float y = (height) + this.getY(imgSpace);
 			
-			//don't draw the first image (under ball)
+			//don't draw the first circle image (it's on top of the ball)
 			if(i != 0) {
 				batch.draw(trajectorySprite, (x-8), (y-8), width, height);
 			}			
-			t += timeSep;
+			imgSpace += timeSep;
 		}
 	}
-	//get the ball's current position
-	public float getX(float a){
+	/* get the balls x and y position */
+	public float getX(float space){
 		ball = world.getBall();
-		return startVelocity.x * a + ball.getPosition().x ; 
+		return startVelocity.x * space + ball.getPosition().x ; 
 	}
-	public float getY(float a){
+	public float getY(float space){
 		ball = world.getBall();
-		return startVelocity.y * a + ball.getPosition().y; 
+		return startVelocity.y * space + ball.getPosition().y; 
 	}
 
 }

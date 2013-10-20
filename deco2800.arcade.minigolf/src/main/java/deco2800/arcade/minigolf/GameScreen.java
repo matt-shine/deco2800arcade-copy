@@ -22,11 +22,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.audio.Music;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import java.net.URL;
+import java.io.File;
+import javax.sound.sampled.Clip;
+
 import java.util.ArrayList;
 
-/* Gamescreen is the main game loop of minigolf.
- * It calls all render and update methods from other classes 
- * It also handles input from user */
+/**
+ * GameScreen is the main game loop of minigolf.
+ * It calls all render and update methods from other classes. 
+ * It also handles input from user. 
+ */
 
 public class GameScreen implements Screen, InputProcessor {
 	
@@ -40,7 +51,8 @@ public class GameScreen implements Screen, InputProcessor {
 	private int width, height, totalShots;
 	public int level, scoreX, scoreY; //hole
 	private float power, fadeInOut, fadeVar;
-	public boolean scoreYes, gamePaused;
+	private boolean scoreYes;
+	public boolean gamePaused;
 	
 	//Variables for the button
 	BitmapFont font1, font2, font3;
@@ -63,7 +75,8 @@ public class GameScreen implements Screen, InputProcessor {
 		this.fadeInOut = 0;
 		this.fadeVar = 0.0001f;
 		gamePaused = false;
-		System.out.println("hole num: "+this.level);
+		playMusic();
+		
 	}
 	
 	/* get and set current level */
@@ -129,48 +142,14 @@ public class GameScreen implements Screen, InputProcessor {
 				}
 			} else {
 				setLevel(nextHole); //set the next hole
-				System.out.println("level is: "+ this.level); 
 				golf.setScreen(golf.hole, level); //render next hole	
 			}
 			if(totalShots == 1){
 				golf.incrementAchievement("minigolf.marksman");
-			}
-			
-			switch(nextHole){
-			case 1:
-			golf.incrementAchievement("minigolf.9hole.level1");
-			break;
-			case 2:
-			golf.incrementAchievement("minigolf.9hole.level2");
-			break;
-			case 3:
-			golf.incrementAchievement("minigolf.9hole.level3");
-			break;
-			case 4:
-			golf.incrementAchievement("minigolf.9hole.level4");
-			break;
-			case 5:
-			golf.incrementAchievement("minigolf.9hole.level5");
-			break;
-			case 6:
-			golf.incrementAchievement("minigolf.9hole.level6");
-			break;
-			case 7:
-			golf.incrementAchievement("minigolf.9hole.level7");
-			break;
-			case 8:
-			golf.incrementAchievement("minigolf.9hole.level8");
-			break;
-			case 9:
-			golf.incrementAchievement("minigolf.9hole.level9");
-			break;
-			}
-			
-					
-			
+			}			
+			progressAchievements(nextHole);
 			
 		}
-	
 		//clear everything on screen
 		Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -280,8 +259,7 @@ public class GameScreen implements Screen, InputProcessor {
 		
 		//menu
 		mainButton.addListener(new InputListener(){
-			public boolean touchDown(InputEvent event, float x, float y, int pointer,int button){
-				System.out.println("down");				
+			public boolean touchDown(InputEvent event, float x, float y, int pointer,int button){				
 				return true;
 			}			
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
@@ -291,8 +269,7 @@ public class GameScreen implements Screen, InputProcessor {
 		});
 		//reset
 		resetButton.addListener(new InputListener(){
-			public boolean touchDown(InputEvent event, float x, float y, int pointer,int button){
-				System.out.println("down");				
+			public boolean touchDown(InputEvent event, float x, float y, int pointer,int button){			
 				return true;
 			}
 			
@@ -302,23 +279,70 @@ public class GameScreen implements Screen, InputProcessor {
 			}
 			
 			
-		});
-		
-		
+		});				
 		stage.addActor(mainButton);
 		stage.addActor(resetButton);
-		
- 
 	
 	}
 	
+	private void playMusic(){	
+		URL path = this.getClass().getResource("/");
+		try {
+			System.out.println("path: \n\n" + path.toString());
+			String resource = path.toString().replace(".arcade/build/classes/main/", 
+			".arcade.minigolf/src/main/").replace("file:", "") + 
+			"resources/newHero.wav";
+			System.out.println(resource);
+			File file = new File(resource);
+			new FileHandle(file);
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioIn);
+			clip.start();
+			clip.loop(Clip.LOOP_CONTINUOUSLY);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}			
 	
+	}
+	
+	private void progressAchievements(int nextHole){
+		switch(nextHole){
+			case 1:
+			golf.incrementAchievement("minigolf.9hole.level1");
+			break;
+			case 2:
+			golf.incrementAchievement("minigolf.9hole.level2");
+			break;
+			case 3:
+			golf.incrementAchievement("minigolf.9hole.level3");
+			break;
+			case 4:
+			golf.incrementAchievement("minigolf.9hole.level4");
+			break;
+			case 5:
+			golf.incrementAchievement("minigolf.9hole.level5");
+			break;
+			case 6:
+			golf.incrementAchievement("minigolf.9hole.level6");
+			break;
+			case 7:
+			golf.incrementAchievement("minigolf.9hole.level7");
+			break;
+			case 8:
+			golf.incrementAchievement("minigolf.9hole.level8");
+			break;
+			case 9:
+			golf.incrementAchievement("minigolf.9hole.level9");
+			break;
+			}
+	}
+		
 	
 	@Override 
 	public void hide() { 
-		Gdx.input.setInputProcessor(null);
-		//dispose();
-		
+		Gdx.input.setInputProcessor(null);		
 	}
 	
 	@Override 
@@ -375,8 +399,6 @@ public class GameScreen implements Screen, InputProcessor {
 	//a key from keyboard is pressed
 	@Override
 	public boolean keyDown(int keycode) {
-		if(keycode == Keys.LEFT)
-			wControl.leftKeyPressed();
 		return true;
 	}
 
@@ -404,9 +426,6 @@ public class GameScreen implements Screen, InputProcessor {
 	//mouse click pressed
 	@Override
 	public boolean touchDown(int arg0, int arg1, int arg2, int button) {
-		if(button == Buttons.LEFT){
-			wControl.leftKeyPressed();
-		}
 		return true;
 	}
 	

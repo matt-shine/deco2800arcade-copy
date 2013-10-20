@@ -2,7 +2,6 @@ package deco2800.arcade.minigolf;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
@@ -11,13 +10,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
-@SuppressWarnings("unused")
+/**
+ * Class that manages the main menu screen.
+ */
 public class MenuScreen implements Screen, InputProcessor {
 	
 	MiniGolf golf; 	
@@ -59,21 +58,24 @@ public class MenuScreen implements Screen, InputProcessor {
 	@Override 
 	public void show() { 
 		Texture.setEnforcePotImages(false);
+		// starts the sprite batches up
 		butBatch = new SpriteBatch();
 		logoMenuBatch = new SpriteBatch();
 		splashBatch = new SpriteBatch();
 		
+		// sets textures
 		logoTexture = new Texture("logo.png");	
 		splashTexture = new Texture("teamlogo.png");
 		splashBGTexture = new Texture("background2.png");
 		menuBGTexture = new Texture("menubg.png");
 		
-		
+		// Loads the textures into the sprites
 		splashSprite = new Sprite(splashTexture);
 		splashBGSprite = new Sprite(splashBGTexture);
 		logoSprite = new Sprite(logoTexture);		
 		menuBGSprite = new Sprite(menuBGTexture);
 		
+		// Sets the position of the logo and splash screen
 		logoSprite.setX(Gdx.graphics.getWidth()/2 - logoSprite.getWidth()/2);
 		logoSprite.setY(Gdx.graphics.getHeight()/2 - Gdx.graphics.getHeight()/7);
 		splashSprite.setX(Gdx.graphics.getWidth()/2 - logoSprite.getWidth()/2);
@@ -92,15 +94,20 @@ public class MenuScreen implements Screen, InputProcessor {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		stage.act(delta);
 		
+		// draws the minigolf logo and background image
 		logoMenuBatch.begin();
 		menuBGSprite.draw(logoMenuBatch);		
 		logoSprite.draw(logoMenuBatch);			
 		logoMenuBatch.end();
 		
+		// draws all the buttons
 		butBatch.begin();
 		stage.draw();		
 		butBatch.end();		
 		
+		// Do this if Minigolf has just re/started. Draws the splash screen
+		// and progressively changes the alpha value to give it a fade in/out
+		// effect
 		if(splashYes){
 			
 			splashBatch.begin();
@@ -133,18 +140,18 @@ public class MenuScreen implements Screen, InputProcessor {
 		
 		Gdx.input.setInputProcessor(stage);
 		
+		// Sets the button styles to be the images in texture atlas
 		TextButtonStyle butStyle = new TextButtonStyle();
 		butStyle.up = butSkin.getDrawable("butdown");
 		butStyle.down = butSkin.getDrawable("butup");
 		butStyle.font = font1;
-		butStyle.fontColor = Color.BLACK;
+		butStyle.fontColor = Color.BLACK;	
 		
-		LabelStyle labelStyle = new LabelStyle();
-		labelStyle.font = font1;		
-		
+		// Makes new buttons using butStyle
 		mainButton = new TextButton("Start Game!", butStyle);
 		closeButton = new TextButton("Do nothing", butStyle);
 		
+		// Sets the sizes and position of both buttons
 		mainButton.setWidth(400);
 		mainButton.setHeight(100);
 		mainButton.setX(Gdx.graphics.getWidth()/2 - mainButton.getWidth()/2);
@@ -155,7 +162,8 @@ public class MenuScreen implements Screen, InputProcessor {
 		closeButton.setX(Gdx.graphics.getWidth()/2 - closeButton.getWidth()/2);
 		closeButton.setY(Gdx.graphics.getHeight()/2 - 2*(closeButton.getHeight()/1.2f)- (closeButton.getHeight()+5));
 		
-		
+		// Adds a listener to mainButton so when clicked it moves to the
+		// first hole
 		mainButton.addListener(new InputListener(){
 			public boolean touchDown(InputEvent event, float x, float y, int pointer,int button){			
 				return true;
@@ -170,6 +178,7 @@ public class MenuScreen implements Screen, InputProcessor {
 			
 		});
 		
+		// Adds the button onto stage
 		stage.addActor(mainButton);
 		stage.addActor(closeButton);
 		

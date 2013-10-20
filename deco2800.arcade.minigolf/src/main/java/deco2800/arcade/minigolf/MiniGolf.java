@@ -9,6 +9,16 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.ArcadeSystem;
 import com.badlogic.gdx.Screen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.audio.Music;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import java.net.URL;
+import java.io.File;
+import javax.sound.sampled.Clip;
+import java.util.ArrayList;
+
 /* main game class, sets the screens to be displayed */
 
 @ArcadeGame(id = "MiniGolf")
@@ -32,7 +42,9 @@ public class MiniGolf extends GameClient {
 	
 	
 		this.getOverlay().setListeners(new Screen() {
-
+			@Override
+			public void dispose() {}
+			
 			@Override
 			public void hide() {
 			hole.gamePaused = false;
@@ -55,8 +67,7 @@ public class MiniGolf extends GameClient {
 			@Override
 			public void resume() {}
 
-			@Override
-			public void dispose() {}
+			
         });
 		menu = new MenuScreen(this, this.firstCall);
 		hole = new GameScreen(this, 1);

@@ -11,11 +11,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
 import java.util.Scanner;
 
 
-/* Gets a level and reads characters from its text file. 
+/**
+ * Gets a level and reads the characters from its text file. 
  * Places blocks into different arrays based on the character in the text file. 
  * The arrays hold the object type and positions to be rendered on screen. 
  */
@@ -73,7 +73,7 @@ public class World {
 		return ball; 
 	}
 	
-	/* construct level/hole based upon @param */
+	/* constructs level/hole based upon @param value */
 	public World(int state) throws Exception {
 	URL path = this.getClass().getResource("/");
 	
@@ -81,11 +81,10 @@ public class World {
 				".arcade.minigolf/src/main/").replace("file:", "") + 
 				"resources/Levels/level" + state + ".txt" ;
 		
-	createHole(resource);
-	
-		
+	createHole(resource);		
 	}
-	/* clears all arrays before they are used */
+	
+	/* clears all arrays before they are used in each level */
 	private void clearArrays(){
 		cornerArray = new Array<Block1>();
 		wallArray = new Array<Block1>();
@@ -107,7 +106,7 @@ public class World {
 		int heightNum;
 		char currentChar = 0;
 		try{
-			//store the first 2 integer values found
+			//scan the file and store the first 2 integer values found at top of file
 			Scanner scan = new Scanner(file);
 			int[] listVar = new int[3]; 
 			int a = 0; 
@@ -116,23 +115,23 @@ public class World {
 			}
 			widthNum = listVar[0]; //width
 			heightNum = listVar[1];//height
-			//check that the width and height are correct values
 			scan.close();
+			//check that the width and height are the correct values
 			if(widthNum <= 0 || heightNum <= 0){
 				throw new InvalidNumberException("width and height must be greater than 0");  
 			}
+			//find the best possible starting position to rend the level
 			int startWidth = CreateXStartPos(widthNum);
 			int startHeight = CreateYStartPos(heightNum);
 			
 			FileReader input = new FileReader(file); 
-			a = 0;
-			
+			a = 0;			
 			while(currentChar != (char)-1){ //while not end of file
 				//ignore first line since we have dimensions
 				while (a < 7){ 
 					currentChar = (char)input.read();
 					a++;
-					//check that the first line only holds 2 values
+					//check that the first line only holds 2 ints and ends with a \n
 					if(a == 7 && currentChar != '\n'){
 						throw new InvalidNumberException
 						("only 2 values (width height) can be on the first line eg (10 20\n)");
@@ -141,9 +140,10 @@ public class World {
 				
 				//loop through file incrementing by the block size, find currentChar and replace with block
 				for(int i = startHeight; i>=(90); i-=Block1.SIZE){ //height or y
-					for(int j = startWidth; j <= ((widthNum * Block1.SIZE) + (15+startWidth)); j+=Block1.SIZE){ //width or x
+					for(int j = startWidth; j <= ((widthNum * Block1.SIZE) + (15+startWidth)); j+=Block1.SIZE){
 						currentChar = (char)input.read();//get current character
-						//check if current character is:
+						
+						//check what the current character is:
 						checkIfWall(currentChar, j, i);						
 						checkIfCorner(currentChar, j, i);						
 						checkIfDiag(currentChar, j, i);
@@ -159,12 +159,9 @@ public class World {
 							 groundArray.add(new Block1(new Vector2(j,i), BlockType.OPEN, FacingDir.NORTH,0));
 						 }						
 					}
-				}
-				
+				}				
 				input.close();
 			}	
-			//input.close();
-			//scan.close();
 			
 		//catch any exceptions found while reading the file
 		}catch (FileNotFoundException e) {
@@ -181,7 +178,7 @@ public class World {
 	    }
 	}
 	
-	/* takes the width of the map, returns startX based upon it*/
+	/* gets the width specified, returns startX position to be used based upon it*/
 	private int CreateXStartPos(int width){
 		int xPos = 0;
 		if(width >= 1 && width <= 10 )
@@ -199,7 +196,7 @@ public class World {
 		
 		return xPos;
 	}
-	/* takes the height of the map, returns startY based upon it*/
+	/* gets the height specified, returns startY position to be used based upon it*/
 	private int CreateYStartPos(int height){
 		int yPos = 0;
 		if(height >= 1 && height <= 10 )
@@ -215,7 +212,7 @@ public class World {
 		
 		return yPos;
 	}
-	
+	/* if the character found is a wall add it to the wallArray */
 	private void checkIfWall(char currentChar, int j, int i){
 		if(currentChar == 'N')//north wall
 			wallArray.add(new Block1(new Vector2(j,i), BlockType.WALL, FacingDir.NORTH,0));
@@ -227,6 +224,7 @@ public class World {
 			wallArray.add(new Block1(new Vector2(j,i), BlockType.WALL, FacingDir.WEST,0));
 	}
 	
+	/* if the character found is a corner add it to the cornerArray */
 	private void checkIfCorner(char currentChar, int j, int i){
 		if(currentChar == 'n')//north corner
 			cornerArray.add(new Block1(new Vector2(j,i), BlockType.CORNER, FacingDir.NORTH,0));
@@ -238,6 +236,7 @@ public class World {
 			cornerArray.add(new Block1(new Vector2(j,i), BlockType.CORNER, FacingDir.WEST,0));
 	}
 	
+	/* if the character found is a diagonal add it to the diagArray */
 	private void checkIfDiag(char currentChar, int j, int i){
 		 if(currentChar == 'L')
 			 diagArray.add(new Block1(new Vector2(j,i), BlockType.DIAGONAL, FacingDir.SOUTH,0));
@@ -249,6 +248,7 @@ public class World {
 			 diagArray.add(new Block1(new Vector2(j,i), BlockType.DIAGONAL, FacingDir.NORTH,0));
 	}
 	
+	/* if the character found is a cap block add it to the capBlockArray */
 	private void checkIfCapBlock(char currentChar, int j, int i){
 		 if(currentChar == '-')
 			 invWallArray.add(new Block1(new Vector2(j,i), BlockType.INVWALL, FacingDir.NORTH,0));
@@ -268,6 +268,7 @@ public class World {
 			 capBlockArray.add(new Block1(new Vector2(j,i), BlockType.INVWALL, FacingDir.SOUTH,0));
 	}
 	
+	/* if the character found is a Teleporter number add it to the TeleArray */
 	private void checkIfTele(char currentChar, int j, int i){
 		 if(currentChar == '1')
 			 teleArray.add(new Block1(new Vector2(j,i), BlockType.TELEPORTER, FacingDir.NORTH,1));
@@ -285,6 +286,7 @@ public class World {
 		 }
 	}
 	
+	/* if the character found is a water,ground or the hole add it to their arrays */
 	private void checkForRest(char currentChar, int j, int i){
 		if(currentChar == 'V')
 			waterArray.add(new Block1(new Vector2(j,i), BlockType.WATER, FacingDir.NORTH,0));

@@ -25,7 +25,7 @@
 // * 
 // * For this test package to run the following lines must be commented out:
 // * line 38 - Brick.java (initialiseBrickImgs())
-// * line 56 - Brick.java (initialiseBrickImgs())
+// * line 61 - Brick.java (initialiseBrickImgs())
 // * REMEMBER TO UNCOMMENT THE LINES ONCE TESTING IS DONE.
 // * REMEMBER TO COMMENT THIS FILE OUT AS WELL.
 // */

@@ -444,7 +444,6 @@ public class JoinMatchList implements Screen {
 							ArcadeSystem.setMatchMaking(true);
 							ArcadeSystem.setMultiplayerEnabled(true);
 							ArcadeSystem.setGameWaiting(true);
-							arcadeUI.setScreen(arcadeUI.getWait());
 							ArcadeSystem.goToGame("Pong");
 						}
 					}));
@@ -756,7 +755,6 @@ public class JoinMatchList implements Screen {
 				ArcadeSystem.setMatchMaking(true);
 				ArcadeSystem.setMultiplayerEnabled(true);
 				ArcadeSystem.setGameWaiting(true);
-				arcadeUI.setScreen(arcadeUI.getWait());
 				ArcadeSystem.goToGame("Pong");
 			}
 		}));

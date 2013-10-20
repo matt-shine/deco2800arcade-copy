@@ -807,7 +807,6 @@ public class CreateMatchList implements Screen {
 		arcadeUI.setScreen(arcadeUI.getLobby());
 		ArcadeSystem.setGameWaiting(true);
 		ArcadeSystem.setMultiplayerEnabled(true);
-		arcadeUI.setScreen(arcadeUI.getWait());
 		ArcadeSystem.goToGame(gameId);
 
 	}

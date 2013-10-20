@@ -415,7 +415,6 @@ public class MultiplayerLobby implements Screen {
 	public void joinGame(int matchId, String gameId) {
 		ArcadeSystem.setMultiplayerEnabled(true);
 		ArcadeSystem.setGameWaiting(true);
-		arcadeUI.setScreen(arcadeUI.getWait());
 		ArcadeSystem.goToGame(gameId, matchId);		
 	}
 	

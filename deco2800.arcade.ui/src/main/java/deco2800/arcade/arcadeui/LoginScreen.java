@@ -1,5 +1,11 @@
 package deco2800.arcade.arcadeui;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
@@ -40,11 +46,28 @@ public class LoginScreen implements Screen {
 		table.setBackground(skin.getDrawable("background"));
 		stage.addActor(table);
 
-		final Label announce = new Label("Welcome to Vapor!\n\nPlease login with your\nUsername and Password.", skin);
+		final Label announce = new Label(
+				"Welcome to Vapor!\n\nPlease login with your\nUsername and Password.",
+				skin);
 		announce.setAlignment(Align.center);
 		final Label errorLabel = new Label("", skin, "error");
 		errorLabel.setAlignment(Align.center);
-		final TextField usernameText = new TextField("", skin);
+		String line = "";
+		String everything = "";
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("user.txt"));
+			StringBuilder sb = new StringBuilder();
+			line = br.readLine();
+			while (line != null) {
+				sb.append(line);
+				line = br.readLine();
+				br.close();
+			}
+			everything = sb.toString();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		final TextField usernameText = new TextField(everything + "", skin);
 		usernameText.setMessageText("Username");
 		final TextField passwordText = new TextField("", skin);
 		passwordText.setMessageText("Password");
@@ -52,7 +75,7 @@ public class LoginScreen implements Screen {
 		passwordText.setPasswordCharacter('*');
 		final TextField serverText = new TextField("", skin);
 		serverText.setMessageText("Server");
-		CheckBox rememberBox = new CheckBox("Remember Me", skin);
+		final CheckBox rememberBox = new CheckBox("Remember Me", skin);
 		rememberBox.getCells().get(0).size(25, 25);
 		rememberBox.getCells().get(0).pad(5);
 		rememberBox.getCells().get(1).pad(2);
@@ -74,6 +97,7 @@ public class LoginScreen implements Screen {
 		table.row();
 		table.add(rememberBox).width(190).height(25).pad(5).colspan(2)
 				.align(BaseTableLayout.LEFT);
+		rememberBox.setChecked(true);
 		table.row();
 		table.add(loginButton).width(190).height(50).pad(5);
 		table.add(registerButton).width(190).height(50).pad(5);
@@ -115,6 +139,20 @@ public class LoginScreen implements Screen {
 						arcadeUI.setScreen(arcadeUI.login);
 					} else {
 						if (connectionResponse.playerID >= 0) {
+							if (rememberBox.isChecked()) {
+								byte dataToWrite[] = usernameText.getText()
+										.getBytes();
+								FileOutputStream out;
+								try {
+									out = new FileOutputStream("user.txt");
+									out.write(dataToWrite);
+									out.close();
+								} catch (FileNotFoundException e) {
+									e.printStackTrace();
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+							}
 							FrontPage.setName(usernameText.getText());
 							arcadeUI.setScreen(arcadeUI.main);
 						}

@@ -299,7 +299,7 @@ public class LunarLander extends GameClient {
 				gameState = GameState.GAME_OVER_LOSE;
 			} else if(landerX > terrain.get(0).get(0) && landerX < 
 					terrain.get(0).get(2)){
-				if(landerY - 5 < terrain.get(0).get(1)){
+				if(landerY < terrain.get(0).get(1)){
 					score += 10; //not incrementing properly					
 					gameOver = true;
 					velY = 0;

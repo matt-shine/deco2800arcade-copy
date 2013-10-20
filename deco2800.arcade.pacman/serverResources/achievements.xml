@@ -9,7 +9,7 @@
         <name>Completionist</name>
         <description>Win a game of Pacman.</description>
         <awardThreshold>1</awardThreshold>
-        <icon>test.png</icon>
+        <icon>staricon.png</icon>
     </achievement>
     <achievement id="pacman.ghostbuster">
         <name>Ghost Buster</name>

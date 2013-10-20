@@ -2,6 +2,9 @@ package deco2800.arcade.landInvaders;
 
 
 import javax.swing.JFrame;
+
+import com.badlogic.gdx.Screen;
+
 import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -9,38 +12,36 @@ import deco2800.arcade.landInvaders.Screens.MenuScreen;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.landInvaders.*;
 
 //Main Class
 @ArcadeGame(id = "landInvaders")
 public class LandInvaders extends GameClient  {
 
 	private static final Game GAME;
-	private Invaders invader;
 
 	public LandInvaders(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		this.networkClient = networkClient;
-		HighscoreClient player1 = new HighscoreClient(player.getUsername(), GAME.id, networkClient);
-		player1.storeScore("points", invader.getHighScore());
-		
 		MenuScreen w = new MenuScreen();
-	}
-
-	public void resume() {
-		super.resume();
-	}
-
-	static {
-		GAME = new Game();
-		GAME.id = "landInvaders";
-		GAME.name = "landInvaders";
-		GAME.description = "funny game!";
-	}
-	@Override
-	public Game getGame() {
+		//this.networkClient = networkClient;
+		//HighscoreClient player1 = new HighscoreClient(player.getUsername(), GAME.id, networkClient);
+		//player1.storeScore("points", invader.getHighScore());
 		
-		return GAME;
 	}
+	
+	public void resume() {
+        super.resume();
+}
+
+static {
+        GAME = new Game();
+        GAME.id = "LandInvaders";
+        GAME.name = "LandInvaders";
+        GAME.description = "funny game!";
+}
+@Override
+public Game getGame() {
+        
+        return GAME;
+}
 
 }

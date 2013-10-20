@@ -113,6 +113,12 @@ public class IngameUI extends Stage {
         lvl.setText(game.getLevelInChapter());
         difficulty.setText("" + game.getDifficulty());
         score.setText("" + game.getPlayer().getPoints());
+        if (game.getPlayer().getHealth() <= 15) {
+            health.setColor(Color.RED);
+        }
+        else {
+            health.setColor(Color.WHITE);
+        }
         health.setText("" + game.getPlayer().getHealth() + "%");
         ammo.setText("" + game.getPlayer().getAmmo());
         keys.setText("" + (game.getPlayer().hasKey(KEY_TYPE.GOLD) ? "Gold " : "") + (game.getPlayer().hasKey(KEY_TYPE.SILVER) ? "Silver " : ""));

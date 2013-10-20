@@ -76,7 +76,9 @@ public class Player extends Mob {
 
         }
 
-
+        if (this.getHealth() <= 0) {
+            model.reset();
+        }
 
         super.tick(model);
     }

@@ -58,7 +58,6 @@ public final class PacChar extends Mover{
 		} else {
 			drawFacing = Dir.LEFT;
 		}
-		
 	
 		// If pacman is able to turn, update drawFacing
 		if (canTurn()) {
@@ -69,7 +68,6 @@ public final class PacChar extends Mover{
 		if (!this.checkNoWallCollision()){
 			this.setCurrentState(PacState.IDLE);
 		}
-		
 		
 		// checks if pacman is moving, and if so keeps him moving in that direction
 		if (currentState == PacState.MOVING) {
@@ -96,6 +94,21 @@ public final class PacChar extends Mover{
 		checkGhostCollision(currentTile);
 	}
 	
+	/**
+	 * Checks whether pac man can turn
+	 */
+	public boolean canTurn(){
+		int x = gameMap.getTilePos(currentTile).getX();
+		int y = gameMap.getTilePos(currentTile).getY();
+		Tile[][] grid = gameMap.getGrid();
+		switch(facing) {
+		case LEFT: x -= 1; break;
+		case RIGHT: x += 1; break;
+		case UP: y += 1; break;
+		case DOWN: y -= 1; break;
+		}
+		return grid[x][y].getClass() != WallTile.class;
+	}
 	
 	private void checkGhostCollision(Tile pTile) {	
 		List<Mover> colList = pTile.getMovers();
@@ -112,6 +125,8 @@ public final class PacChar extends Mover{
 						System.out.println("Disaster!! Pacman hit a ghost!");
 						if (getLives() <= 1){
 							this.setCurrentState(PacState.DEAD);
+//							gamePaused = true;
+							gameMap.setGameOver(true);
 							// Do gameover stuff
 						} else {
 							setLives(getLives() - 1);

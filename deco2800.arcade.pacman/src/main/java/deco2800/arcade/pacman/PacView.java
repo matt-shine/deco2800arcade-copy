@@ -25,6 +25,7 @@ public class PacView {
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private BitmapFont scoreText; 
+	private BitmapFont gameOverText; 
 	
 	// sprite sheet, divided into array of arrays of 8x8 tile images
 	private final TextureRegion[][] tileSprites;
@@ -36,6 +37,8 @@ public class PacView {
 	private TextureRegion currentFrame; // for pacman animation
 	private static final int NUM_GHOSTS = 5;
 	private TextureRegion[][] ghostFrames = new TextureRegion[NUM_GHOSTS][MOVER_SPRITE_NUM];
+	private static int SCREEN_WIDTH;
+	private static int SCREEN_HEIGHT;
 	
 	private GameMap gameMap;
 	private PacChar player;
@@ -47,10 +50,12 @@ public class PacView {
 	 * the main Pacman class, then just pass the gameMap here like it currently is.
 	 */
 	public PacView(PacModel model) {
+		SCREEN_WIDTH = model.getSCREENWIDTH();
+		SCREEN_HEIGHT = model.getSCREENHEIGHT();
 		//Initialize camera
 		camera = new OrthographicCamera();
 		// set resolution
-		camera.setToOrtho(false, model.getSCREENWIDTH(), model.getSCREENHEIGHT());
+		camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
 		// initialise spriteBatch for drawing things
 		batch = new SpriteBatch();		
 		//get tile sprites
@@ -85,6 +90,8 @@ public class PacView {
 		}
 		scoreText = new BitmapFont(Gdx.files.internal("pacfont2.fnt"),
 		         Gdx.files.internal("pacfont2.png"), false);
+		gameOverText = new BitmapFont(Gdx.files.internal("pacfont.fnt"),
+		         Gdx.files.internal("pacfont1.png"), false);
 		this.gameMap = model.getGameMap();
 		this.player = model.getPlayer();
 		this.blinky = model.getBlinky();
@@ -109,11 +116,6 @@ public class PacView {
 	    drawGameMap();
 	    drawPacman();
 	    drawGhost();
-	    
-	    //testing bitmap text print
-//	    scoreText.setColor(Color.WHITE);
-//	    scoreText.draw(batch, "Pacman!", 10, 10);
-	    
 	    //end the drawing
 	    batch.end();
 	}
@@ -214,7 +216,7 @@ public class PacView {
 				pinky.getCurrentState() == GhostState.SCATTER){
 			batch.draw(ghostFrames[4][pinky.getSpritePos()], pinky.getDrawX(), 
 					pinky.getDrawY(), pinky.getWidth(), pinky.getHeight());
-		}else {
+		} else {
 			batch.draw(ghostFrames[1][pinky.getSpritePos()], pinky.getDrawX(), 
 					pinky.getDrawY(), pinky.getWidth(), pinky.getHeight());
 		}
@@ -234,8 +236,14 @@ public class PacView {
 	public void displayScore(Mover mover) {
 		// Set score text
 		CharSequence str = "Score: " + mover.getScore();
+		CharSequence str2 = "";	
 		scoreText.setColor(Color.WHITE);
 		scoreText.draw(batch, str, 50, 50);
+		if (gameMap.isGameOver()){
+			str2 = "Game Over";	
+		}
+		gameOverText.setColor(Color.WHITE);
+		gameOverText.draw(batch, str2, 170, 170);
 	}
 	
 }

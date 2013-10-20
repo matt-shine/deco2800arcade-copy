@@ -25,6 +25,7 @@ public class GameMap {
 	private int dotsEaten;
 	private int ghostsEaten;
 	private boolean energized;
+	private boolean gameOver;
 	private int hOffset;
 	private int vOffset;
 	private final int tileSideLength; // length of side of square- should be
@@ -322,5 +323,15 @@ public class GameMap {
 
 	public List<Tile> getAfterTeleports() {
 		return afterTeleports;
+	}
+
+
+	public boolean isGameOver() {
+		return gameOver;
+	}
+
+
+	public void setGameOver(boolean gameOver) {
+		this.gameOver = gameOver;
 	}
 }

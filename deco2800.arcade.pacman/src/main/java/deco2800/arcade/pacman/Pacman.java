@@ -28,7 +28,7 @@ public class Pacman extends GameClient {
 	public final int SCREEN_HEIGHT = 720;
 	public final int SCREEN_WIDTH = 1280;	
 	private final int NUM_GHOSTS = 4;
-	private boolean gamePaused;
+	public boolean gamePaused;
 	
 	
 	private PacModel model; // model for Pacman	
@@ -146,8 +146,8 @@ public class Pacman extends GameClient {
 		}
 		
 		// make changes in the model to prepare for rendering if overlay
-		// not active
-		if (!gamePaused) {
+		// not active and game not over.
+		if (!gamePaused && !getModel().getGameMap().isGameOver()) {
 			model.prepareDraw();
 		}
 		

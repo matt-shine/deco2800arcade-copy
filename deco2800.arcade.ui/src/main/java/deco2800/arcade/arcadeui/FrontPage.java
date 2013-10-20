@@ -135,6 +135,8 @@ public class FrontPage implements Screen {
             divider2.setAlignment(Align.right);
             final Label chatLink = new Label("Online (" + nFriends +")" , skin, "cgothic");
             chatLink.setAlignment(Align.right);
+            final Label lobby = new Label ("Lobby", skin, "cgothic");
+            lobby.setAlignment(Align.right);
             
             //Bottom bar
             final Table bottomBox = new Table();
@@ -144,7 +146,8 @@ public class FrontPage implements Screen {
             bottomBox.setBackground(skin.getDrawable("menuBar"));
             
             //add bottom labels to bar
-            bottomBox.add(divider2).width(1100).pad(20);
+            bottomBox.add(lobby).width(1100);
+            bottomBox.add(divider2).width(5).pad(20);
             bottomBox.add(chatLink).width(100);
             
             //adding to buttons and menu bar on stage
@@ -165,6 +168,12 @@ public class FrontPage implements Screen {
             		(Gdx.files.internal("logos/default.png")));
             	}
             }
+            
+            lobby.addListener((new ClickListener() {
+            	public void clicked (InputEvent event, float x, float y){
+            		arcadeUI.setScreen(arcadeUI.lobby);
+            	}
+            })); 
     
             // Icon event listeners, mouseOver and mouseClick
             recentButton.addListener((new ClickListener() {        	
@@ -347,9 +356,15 @@ public class FrontPage implements Screen {
      * @author William, Adeleen
      * @param playerName player name
      */
-    public static void setName(String playerName){
-		pName = playerName.toString();
+        
+    public static void userName(String playerName){
+    	pName = playerName.toString();
 		System.out.println("Logged in as: " + pName);
+    }
+    
+    public static void setName(String playerName){
+//		pName = playerName.toString();
+//		System.out.println("Logged in as: " + pName);
 
 	          
 	    	//Top Box Labels
@@ -357,20 +372,28 @@ public class FrontPage implements Screen {
 	            logo.setAlignment(Align.left);
 	            
 	            
-	            logo.addListener((new ClickListener() {        	
-	                public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	    	
-	                	logo.setWidth(490);
-	                }
-	                public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
-	                	logo.setWidth(465);
-	            }}));   
+//	            logo.addListener((new ClickListener() {        	
+//	                public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	    	
+//	                	logo.setWidth(490);
+//	                }
+//	                public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+//	                	logo.setWidth(465);
+//	            }}));   
 	              
-	            logo.addListener(((new ChangeListener() {
-	                    public void changed (ChangeEvent event, Actor actor) {
-	                    	ArcadeSystem.goToGame("main");
-	                    	System.out.println("CLICKED");
-	                    }
-	                })));
+//	            logo.addListener(((new ChangeListener() {
+//	                    public void changed (ChangeEvent event, Actor actor) {
+//	                    	ArcadeSystem.goToGame("main");
+//	                    	System.out.println("CLICKED");
+//	                    }
+//	                })));
+	            
+	            logo.addListener((new ClickListener() {
+	            	public void clicked (InputEvent event, float x, float y){
+	            		arcadeUI.setScreen(arcadeUI.main);
+	            	}
+	            }));
+	            
+	           
 	           
 	            final Label username = new Label(pName , skin, "cgothic");
 	            
@@ -381,6 +404,16 @@ public class FrontPage implements Screen {
 	            
 	            username.setAlignment(Align.right);
 	            
+	            //TODO profile
+	            
+	            username.addListener((new ClickListener() {
+	            	public void clicked (InputEvent event, float x, float y){
+	            		//arcadeUI.setScreen(arcadeUI.profile);
+	            		
+	            		System.out.println("WHERE IS PROFILE GOD DAMN");
+	            	}
+	            }));
+	            
 	            final Label credits = new Label( creditVal + " Credits", skin, "cgothic");
 	            credits.setAlignment(Align.right);
 	            final Label divider = new Label("|", skin, "cgothic");
@@ -389,49 +422,7 @@ public class FrontPage implements Screen {
 	            final Button settingsIcon = new Button(skin.getDrawable("settingsIcon"));
 	           // recentIcon.setName("recenticon");
 	            settingsIcon.setSize(15, 15);
-	            settingsIcon.addListener((new ClickListener() {
-	            public void clicked(InputEvent event, float x, float y) {
-
-	            	if (settingsClicked == false){
-	            		trial.setBackground(skin.getDrawable("toolTip"));
-	            		trial.setPosition(950,380);
-	            		trial.setSize(200, 300);
-	            		trial.setName("tooltip");
-	            		
-	            		final Label profile = new Label ("Profile", skin, "cgothic");
-	            		profile.setAlignment(Align.left);
-	            		
-	            		final Label forum = new Label ("Forum", skin, "cgothic");
-	            		forum.setAlignment(Align.left);
-	            		
-	            		final Label logout = new Label ("Logout", skin, "cgothic");
-	            		logout.setAlignment(Align.left);
-	            		
-	            		final Label space = new Label (" ", skin, "cgothic");
-	            		
-	            		stage.addActor(trial);
-	            		
-	            		trial.add(profile);
-	            		trial.row();
-	            		trial.add(space);
-	            		trial.row();
-	            		trial.add(forum);
-	            		trial.row();
-	            		trial.add(space);
-	            		trial.row();
-	            		trial.add(logout);
-		                      
-	            		settingsClicked = true;
-		                      
-	            	}else{
-	            		trial.reset();
-	            		trial.remove();
-	            		settingsClicked = false;
-	            	}
-	                	
-	                	
-	                }
-	            })); 
+	            
 	            final Table topBox = new Table();
 	            
 	            //set panel sizes and positions
@@ -448,11 +439,77 @@ public class FrontPage implements Screen {
 	            topBox.add(credits).width(100);
 	            
 	            stage.addActor(topBox);
+	            
+	            settingsIcon.addListener((new ClickListener() {
+	            	public void clicked(InputEvent event, float x, float y) {
+
+		            	if (settingsClicked == false){
+		            		trial.setBackground(skin.getDrawable("toolTip"));
+		            		trial.setPosition(950,380);
+		            		trial.setSize(200, 300);
+		            		trial.setName("tooltip");
+		            		
+		            		final Label profile = new Label ("Profile", skin, "cgothic");
+		            		profile.setAlignment(Align.left);
+		            		
+		            		final Label forum = new Label ("Forum", skin, "cgothic");
+		            		forum.setAlignment(Align.left);
+		            		
+		            		final Label logout = new Label ("Logout", skin, "cgothic");
+		            		logout.setAlignment(Align.left);
+		            		
+		            		final Label space = new Label (" ", skin, "cgothic");
+		            		
+		            		stage.addActor(trial);
+		            		
+		            		trial.add(profile);
+		            		trial.row();
+		            		trial.add(space);
+		            		trial.row();
+		            		trial.add(forum);
+		            		trial.row();
+		            		trial.add(space);
+		            		trial.row();
+		            		trial.add(logout);
+		            		
+		            		logout.addListener((new ClickListener() {
+		     	            	public void clicked (InputEvent event, float x, float y){
+		     	            		topBox.reset();
+		     	            		topBox.remove();
+		     	            		trial.reset();
+				            		trial.remove();
+				            		settingsClicked = false;
+		     	            		arcadeUI.setScreen(arcadeUI.login);
+		     	            		//ArcadeSystem.exit();
+		     	            	}
+		     	            }));
+		            		
+		            		forum.addListener((new ClickListener() {
+		     	            	public void clicked (InputEvent event, float x, float y){
+		     	            		//arcadeUI.setScreen(arcadeUI.forum);
+		     	            		System.out.println("LINK TO FORUM GOD DAMN");
+		     	            	}
+		     	            }));
+			                      
+		            		settingsClicked = true;
+			                      
+		            	}else{
+		            		trial.reset();
+		            		trial.remove();
+		            		settingsClicked = false;
+		            	}
+		                	
+		                	
+		                }
+	            })); 
+	            
+	            
     }
 
     @Override
     public void show() {
         ArcadeInputMux.getInstance().addProcessor(stage);
+        setName(pName);
     }
     
     @Override

@@ -210,7 +210,7 @@ public class FrontPage implements Screen {
                                    storeButton.setText("Store");
                         }
                         public void clicked(InputEvent event, float x, float y) {
-                                arcadeUI.setScreen(arcadeUI.store);
+                                arcadeUI.setScreen(arcadeUI.getStoreHome());
                         }
                 });
         }

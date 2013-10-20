@@ -18,7 +18,7 @@ public class Level1Enemy extends Enemy {
 		if (difficulty < 3) {
 			accelIntensity = 0.65f;
 		} else {
-			accelIntensity = 0.35f +  0.1f*(difficulty%5);
+			accelIntensity = 0.35f +  0.1f*difficulty;
 		}
 		pattern = new Level1EnemyPattern(this, player, screen, difficulty);
 		pattern.start();

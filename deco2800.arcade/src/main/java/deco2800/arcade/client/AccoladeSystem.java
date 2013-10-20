@@ -1,4 +1,4 @@
-package deco2800.arcade.model;
+package deco2800.arcade.client;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;

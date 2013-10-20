@@ -26,7 +26,7 @@ import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.highscores.HighscoreClient;
-import deco2800.arcade.model.AccoladeSystem;
+import deco2800.arcade.client.AccoladeSystem;
 
 /**
  * The game client

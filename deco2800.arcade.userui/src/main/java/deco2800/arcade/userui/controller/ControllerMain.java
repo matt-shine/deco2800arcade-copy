@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.userui.Model;
 import deco2800.arcade.userui.view.AchievementScreen;
+import deco2800.arcade.userui.view.BlockScreen;
 import deco2800.arcade.userui.view.EditScreen;
 import deco2800.arcade.userui.view.AddFriendScreen;
 import deco2800.arcade.userui.view.InviteScreen;
@@ -24,18 +25,14 @@ public class ControllerMain {
 	private AddFriendScreen addfriendView;
 	private RemoveFriendScreen removefriendView;
 	private InviteScreen inviteView;
-	
 	private AchievementScreen achievementView;
+	private BlockScreen blockView;
 	private Model theModel;
-	
-
-	//Logger
-	static Logger log = Logger.getLogger(UserScreen.class);
 	
 	/**
 	 * Controller for the main profile page
-	 * @param theModel
-	 * @param userView
+	 * @param theModel The Model
+	 * @param userView The Main Profile Screen
 	 */
 	public ControllerMain(Model theModel, UserScreen userView) {
 		
@@ -53,40 +50,56 @@ public class ControllerMain {
 		this.userView.addFriendListener(new AddFriendListener());
 		this.userView.addRemoveFriendListener(new RemoveFriendListener());
 		this.userView.addInviteListener(new InviteListener());
+		this.userView.addBlockListener(new BlockListener());
 					
 		checkstatus();
 			
 	}
 	
+	/**
+	 *  Update status Icon using value stored in Model
+	 */
 	public void checkstatus(){
 		
 		userView.setStatus(theModel.getStatusIcon());
 
 	}
-	
+
+	/**
+	 *  Open on the Edit Page
+	 */
 	class EditListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
+			
 			editView = new EditScreen(theModel);
+			ControllerEdit editcontrol = new ControllerEdit(theModel, editView, userView);
 						
 		}
 		
 	}
 	
+	/**
+	 *  Navigates to the Arcade Home Page
+	 */
 	public class HomeListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Open the home page
-			log.info("this works");
+			System.out.println("this works");
+			System.out.println(theModel.arcadesystem.getArcadeGames().toString());
 			
 		}
 		
 	}
 	
+	/**
+	 *  Navigates to the Forum Page
+	 */
 	class ForumListener implements ActionListener{
 
 		@Override
@@ -99,6 +112,9 @@ public class ControllerMain {
 		
 	}
 	
+	/**
+	 *  Navigates to the Game Store
+	 */
 	class StoreListener implements ActionListener{
 
 		@Override
@@ -111,6 +127,9 @@ public class ControllerMain {
 		
 	}
 	
+	/**
+	 *  Navigates to the Arcade Library
+	 */
 	class LibraryListener implements ActionListener{
 
 		@Override
@@ -123,6 +142,10 @@ public class ControllerMain {
 		
 	}
 	
+	
+	/**
+	 *  Return to Main Profile Page
+	 */
 	class MyProfileListener implements ActionListener{
 
 		@Override
@@ -134,6 +157,9 @@ public class ControllerMain {
 		
 	}
 	
+	/**
+	 *  Opens the Add Friends Screen
+	 */
 	class AddFriendListener implements ActionListener{
 
 		@Override
@@ -148,6 +174,9 @@ public class ControllerMain {
 		
 	}
 	
+	/**
+	 *  Opens the Remove Friends Screen
+	 */
 	class RemoveFriendListener implements ActionListener{
 
 		@Override
@@ -162,6 +191,9 @@ public class ControllerMain {
 		
 	}
 	
+	/**
+	 *  Opens the Status Selection Screen
+	 */
 	class StatusListener implements ActionListener{
 
 		@Override
@@ -176,6 +208,9 @@ public class ControllerMain {
 		
 	}
 	
+	/**
+	 *  Navigates to the achievements page
+	 */
 	class AchievementListener implements ActionListener{
 
 		@Override
@@ -190,6 +225,9 @@ public class ControllerMain {
 		
 	}
 	
+	/**
+	 *  Lists the invites of the User
+	 */
 	class InviteListener implements ActionListener{
 
 		@Override
@@ -198,6 +236,22 @@ public class ControllerMain {
 			//Open invites Screen
 			inviteView = new InviteScreen(theModel);
 			Invite invite = new Invite(theModel, inviteView, userView);
+			
+		}
+		
+	}
+	
+	/**
+	 *  Lists the Blocked users
+	 */
+	class BlockListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+			//Open Blocked users Screen
+			blockView = new BlockScreen(theModel);
+			BlockFriend block = new BlockFriend(theModel, userView, blockView);
 			
 		}
 		

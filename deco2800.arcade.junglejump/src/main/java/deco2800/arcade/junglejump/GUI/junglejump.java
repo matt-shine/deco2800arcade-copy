@@ -47,40 +47,20 @@ import deco2800.arcade.model.Achievement;
  */
 @ArcadeGame(id = "junglejump")
 public class junglejump extends GameClient implements InputProcessor {
-	//FIXME difficult to read - add some whitespace etc. and some methods need shrinking
 	// MENU ENUMS
-	public float NEW_GAME = 242;
-	public float CONTINUE = (float) (242 - 37.5);
-	public float LEVEL_SELECT = (float) (242 - 37.5 * 2);
-	public float ACHIEVEMENTS = (float) (242 - 37.5 * 3);
-	public float OPTIONS = (float) (242 - 37.5 * 4);
-	public float QUIT = (float) (242 - 37.5 * 5);
+	public float NEW_GAME 			= 242;
+	public float CONTINUE 			= (float) (242 - 37.5);
+	public float LEVEL_SELECT 		= (float) (242 - 37.5 * 2);
+	public float ACHIEVEMENTS 		= (float) (242 - 37.5 * 3);
+	public float OPTIONS 			= (float) (242 - 37.5 * 4);
+	public float QUIT 				= (float) (242 - 37.5 * 5);
 	
+	/* Player Stats */
 	public int BANANAS_FOUND = 0;
 	public static int deaths = 0;
-	
 	int SPEED_MULTIPLIER = 2;
-
-	private enum GameState {
-		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS, CONTINUE, PAUSE, OPTIONS
-	}
-
 	int monkeyLength = 35;
 	int monkeyHeight = 40;
-
-	private GameState gameState;
-	PerspectiveCamera cam;
-	private static SpriteBatch batch;
-
-	Frustum camGone = new Frustum();
-	public static int world;
-	// Store details about the activity of junglejump and the players
-	public static final String messages = junglejump.class.getSimpleName();
-	private OrthographicCamera camera;
-	public static final int SCREENHEIGHT = 480;
-	public static final int SCREENWIDTH = 800;
-	float butX;
-	float butY;
 	public static float monkeyX;
 	public static float monkeyY;
 	float monkeyYoriginal;
@@ -90,19 +70,25 @@ public class junglejump extends GameClient implements InputProcessor {
 	boolean sit = false;
 	public static boolean onVine = false;
 	boolean jumping = false;
-	float velocity = 5.0f;
-	boolean correct = false;
-	boolean onPlatform, isFalling = false;
-	public static int lives = 3;
-
-//	public int currentLevelIndex = 0;
-	private static LevelContainer currentCont;
-	public static Level currentLevel;// = LevelContainer.getLevel(LevelContainer.getCurrentLevel());
-//	public static int currentWorld = 0;
-
-	public static float monkeyDefaultX;
-	public static float monkeyDefaultY;
-
+	
+	/* Game Sate Enum - Used for Menu Handling */
+	private enum GameState {
+		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS, CONTINUE, PAUSE, OPTIONS
+	}
+	private GameState gameState;
+	
+	/* Camera and Rendering Variables */
+	PerspectiveCamera cam;
+	private static SpriteBatch batch;
+	Frustum camGone = new Frustum();
+	public static int world;
+	// Store details about the activity of junglejump and the players
+	public static final String messages = junglejump.class.getSimpleName();
+	private OrthographicCamera camera;
+	public static final int SCREENHEIGHT = 480;
+	public static final int SCREENWIDTH = 800;
+	float butX;
+	float butY;
 	Texture texture;
 	Clip clip;
 	Texture monkeySit, monkeyRun1, monkeyRun2;
@@ -112,21 +98,30 @@ public class junglejump extends GameClient implements InputProcessor {
 	public static Texture platform, levelText, hyphenText, livesText, levelNumText, 
 	worldNumText, livesNumText;
 	ShapeRenderer shapeRenderer;
+	Music themeMusic;
+	Clip menuSound, jump, die, levelup, loselife, collect;
+	private SpriteBatch batchContinue;
+	
+	/* Monkey Info */
+	float velocity = 5.0f;
+	boolean correct = false;
+	boolean onPlatform, isFalling = false;
+	public static int lives = 3;
+	public static float monkeyDefaultX;
+	public static float monkeyDefaultY;
 
-	/* ACHIEVEMENT VARIABLES */
+	/* Level Storage and Achievment Vars */
+	private static LevelContainer currentCont;
+	public static Level currentLevel;
 	ArrayList<Achievement> achievementArray;
 
-	// achievement fonts used for achievement screen
+	/* Fonts used for Menus */
 	BitmapFont achievementTitleFont;
 	BitmapFont achievementIDFont;
 	BitmapFont achievementNameFont;
 	BitmapFont achievementDescriptionFont;
 	BitmapFont achievementThresholdFont;
 	Texture achievementIconTexture;
-
-	Music themeMusic;
-	Clip menuSound, jump, die, levelup, loselife, collect;
-	private SpriteBatch batchContinue;
 
 	public static void main(String[] args) {
 		ArcadeSystem.goToGame("junglejump");
@@ -721,7 +716,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		}
 		if (keycode == Keys.ENTER) {
 			if (butY == QUIT) {
-				this.dispose();
+				Gdx.app.exit();
 			}
 			if (butY == NEW_GAME) {
 				monkeyX = monkeyDefaultX;

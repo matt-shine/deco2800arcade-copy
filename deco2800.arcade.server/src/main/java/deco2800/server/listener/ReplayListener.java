@@ -3,7 +3,6 @@ package deco2800.server.listener;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +28,6 @@ public class ReplayListener extends Listener {
 	private Logger logger = LoggerFactory.getLogger( ReplayListener.class );
     
 	public ReplayListener() {
-        PropertyConfigurator.configure( "src/main/resources/replay_log4j.properties" );
 		try {
 			ArcadeServer.instance().getReplayStorage().initialise();
 		} catch( DatabaseException e ) {

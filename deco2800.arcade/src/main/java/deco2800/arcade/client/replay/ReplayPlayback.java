@@ -99,7 +99,7 @@ public class ReplayPlayback {
 	 * Starts playback of game
 	 */
 	private void startPlayback() {
-		if ( this.replayHistory == null ) {
+		if ( this.replayHistory == null || this.replayHistory.size() == 0 ) {
 			throw new PlaybackException( "Started replay with no data" );
 		}
 		playbackStartTime = System.currentTimeMillis();

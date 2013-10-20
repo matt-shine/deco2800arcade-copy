@@ -221,7 +221,7 @@ public class Renderer {
             m.rotate(1, 0, 0, 270);
         } else {
             //if not debug mode, rotate to face the player
-            m.rotate(0, 0, 1, angle);
+        	m.rotate(0, 0, 1, angle + 180);
         }
 
 

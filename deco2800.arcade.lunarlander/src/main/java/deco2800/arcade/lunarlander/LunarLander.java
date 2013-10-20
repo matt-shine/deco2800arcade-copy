@@ -28,6 +28,7 @@ import deco2800.arcade.client.network.NetworkClient;
 @ArcadeGame(id="lunarlander")
 public class LunarLander extends GameClient {
 
+	//states that a game can be in
 	private enum GameState {
 		AT_MENU, IN_GAME, GAME_PAUSED, GAME_OVER_LOSE,
 		GAME_OVER_WIN
@@ -54,6 +55,7 @@ public class LunarLander extends GameClient {
 	private TextureRegion backgroundTextureRegion; 
 	private BitmapFont font;
 	Sound flameSound;
+	private boolean loseAsteroid;
 
 	// lander variables
 	private float landerWidth; // the width of the lander png
@@ -133,8 +135,7 @@ public class LunarLander extends GameClient {
 
 		});
 
-		
-		// setting up various GDX tools	
+		// setting up various GDX tools, setting textures to variables
 		batch = new SpriteBatch();
 		backgroundTexture1 = new Texture(Gdx.files.internal
 				("lunarlanderassets/rose_nebula.png")); 
@@ -160,10 +161,10 @@ public class LunarLander extends GameClient {
 				(backgrounds.random(), 0, 0, 1200, 800); 
 		flames = new Texture(Gdx.files.internal
 				("lunarlanderassets/flames.png"));
-		landerTexture = new Texture(Gdx.files.internal
-				("lunarlanderassets/lander.png")); 
 		asteroidTexture = new Texture(Gdx.files.internal
 				("lunarlanderassets/asteroid.png"));
+		landerTexture = new Texture(Gdx.files.internal
+				("lunarlanderassets/lander.png"));
 		font = new BitmapFont(Gdx.files.internal
 				("lunarlanderassets/game_font_half.fnt"),
 				Gdx.files.internal
@@ -177,9 +178,11 @@ public class LunarLander extends GameClient {
 		// setting up game variables 
 		score = 0;
 		fuel = 1000;
+		
 		//creates the map 
 		terrain = LunarLanderTerrain.createMap();
 		asteroidArray = LunarLanderTerrain.generateAsteroidArray();
+		
 		//set game state
 		gameState = GameState.AT_MENU;
 	}
@@ -192,6 +195,7 @@ public class LunarLander extends GameClient {
 		backgroundTextureRegion = new TextureRegion
 				(backgrounds.random(), 0, 0, 1200, 800);
 		terrain = LunarLanderTerrain.createMap();
+		asteroidArray = LunarLanderTerrain.generateAsteroidArray();
 	}
 
 	/**
@@ -280,13 +284,15 @@ public class LunarLander extends GameClient {
 					isPointBelowLine(landerX + landerWidth, landerY, 
 							terrain.get(i).get(0),
 							terrain.get(i).get(1), terrain.get(i).get(2), 
-							terrain.get(i).get(3)) || 
-							hasCollidedWithAsteroid(landerX, landerY)) {
+							terrain.get(i).get(3))) {
 				gameOver = true;
 				gameState = GameState.GAME_OVER_LOSE;
-			} else if(landerX > terrain.get(0).get(0) - 20 && landerX + 20 < 
-					terrain.get(0).get(2)){
-				if(landerY < terrain.get(0).get(1)){
+			} else if (hasCollidedWithAsteroid(landerX, landerY)){
+				gameOver = true;
+				gameState = GameState.GAME_OVER_LOSE;
+				loseAsteroid = true;
+			} else if((landerX + 30) > terrain.get(0).get(0) && (landerX + 30) < terrain.get(0).get(2)){
+				if(landerY < terrain.get(0).get(1) + 10){
 					score += 10; //not incrementing properly					
 					gameOver = true;
 					velY = 0;		
@@ -301,15 +307,11 @@ public class LunarLander extends GameClient {
 	 */
 	private boolean hasCollidedWithAsteroid(float landerX2, float landerY2) {
 		for (int i = 0; i < asteroidArray.size(); i++){
-			if ((landerX2 > asteroidArray.get(i).get(0) && 
+			if ((landerX2 + 20 > asteroidArray.get(i).get(0) && 
 					landerX2 < asteroidArray.get(i).get(0) + 20) &&
-					(landerY2 > asteroidArray.get(i).get(1) && 
+					(landerY2 + 20 > asteroidArray.get(i).get(1) && 
 							landerY2 < asteroidArray.get(i).get(1) + 20)){
 				return true;
-//				gameOver = true;
-//				velY = 0;
-//				gameState = GameState.GAME_OVER_LOSE;
-//				gameOverLoseScreen();
 			}
 		}
 		return false;
@@ -326,14 +328,14 @@ public class LunarLander extends GameClient {
 			if ((Gdx.input.isKeyPressed(Keys.A)) || 
 					(Gdx.input.isKeyPressed(Keys.LEFT))) {
 				landerX -= Gdx.graphics.getDeltaTime() * sideSpeed;
-				velXleft += 0.005;
+				velXleft += 0.02;
 				fuel -= 0.025;
 			}
 			// move lander right
 			if ((Gdx.input.isKeyPressed(Keys.D)) || 
 					(Gdx.input.isKeyPressed(Keys.RIGHT))) {
 				landerX += Gdx.graphics.getDeltaTime() * sideSpeed;
-				velXright += 0.005;
+				velXright += 0.02;
 				fuel -= 0.025;
 			}
 			// boost the lander's speed
@@ -355,8 +357,8 @@ public class LunarLander extends GameClient {
 	 */
 	private void velocity() {
 		if(!(gameOver == true) ) {
-			velY += 0.005;
-			landerY -= (0.10 + velY);
+			velY += 0.006;
+			landerY -= (0.15 + velY);
 			landerX += velXright;
 			landerX -= velXleft;
 
@@ -367,11 +369,23 @@ public class LunarLander extends GameClient {
 			}
 			//moves asteroids
 			for (int i = 0; i < asteroidArray.size(); i++){
+				if(asteroidArray.get(i).get(1) < 20){
+					asteroidArray.get(i).clear();
+					asteroidArray.get(i).add(LunarLanderTerrain.randNum(50, 1200));
+					asteroidArray.get(i).add(LunarLanderTerrain.randNum(790, 795));
+					asteroidArray.get(i).add(LunarLanderTerrain.randNum(20, 40));
+				}
 				int tempAsteroidX = asteroidArray.get(i).get(0);
 				int tempAsteroidY = asteroidArray.get(i).get(1);
 				int tempAsteroidZ = asteroidArray.get(i).get(2);
-				tempAsteroidX -= tempAsteroidZ/10;
-				tempAsteroidY -= tempAsteroidZ/10;
+				
+				if((tempAsteroidZ % 2) == 0){
+					tempAsteroidX -= tempAsteroidZ/10;
+					tempAsteroidY -= tempAsteroidZ/10;
+				}else if((tempAsteroidZ % 2) != 0){
+					tempAsteroidX += tempAsteroidZ/10;
+					tempAsteroidY -= tempAsteroidZ/10;
+				}
 				asteroidArray.get(i).clear();
 				asteroidArray.get(i).add(tempAsteroidX);
 				asteroidArray.get(i).add(tempAsteroidY);
@@ -390,6 +404,11 @@ public class LunarLander extends GameClient {
 		batch.draw(splashScreenBackground, 0, 0, 1200, 800);
 		batch.end();
 		camera.update();
+		if ((Gdx.input.isKeyPressed(Keys.NUM_1))) {
+			landerTexture.dispose();
+			landerTexture = new Texture(Gdx.files.internal
+					("lunarlanderassets/lander2.png"));
+		}
 		super.render();
 	}
 
@@ -401,7 +420,11 @@ public class LunarLander extends GameClient {
 		batch.begin();
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		batch.setProjectionMatrix(camera.combined);
-		batch.draw(gameOverBackground, 0, 0, 1200, 800);
+		if(loseAsteroid == true){
+			batch.draw(gameOverBackground, 0, 0, 1200, 800);
+		}else{
+			batch.draw(gameOverBackground, 0, 0, 1200, 800);
+		}
 		font.draw(batch, "Final score: " + Integer.toString(score), 
 				SCREENWIDTH - 710, SCREENHEIGHT - 340);
 		batch.end();
@@ -424,6 +447,7 @@ public class LunarLander extends GameClient {
 		camera.update();
 		super.render();
 	}
+
 
 	/**
 	 * Determines whether the lander texture has collided with the line

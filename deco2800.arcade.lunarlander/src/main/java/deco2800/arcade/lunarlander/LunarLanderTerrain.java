@@ -32,10 +32,10 @@ public static List<List<Integer>> createMap(){
 		//creating the landing pads coordinates
 		int landPadLeftX = randNum(100, 700);
 		int landPadLeftY = randNum(50, 55);
-		int landPadRightX = landPadLeftX + 100; //makes the pad 50 pixels wide
+		int landPadRightX = landPadLeftX + 100; //makes the pad 100 pixels wide
 		int landPadRightY = landPadLeftY;
 		
-		//adding the landPad as the first element of the array, TO DO, change color of landing pad
+		//adds the landing pad as the first element of the array
 		terrain.add(new ArrayList<Integer>());
 		terrain.get(0).add(landPadLeftX);
 		terrain.get(0).add(landPadLeftY);
@@ -153,11 +153,11 @@ public static List<List<Integer>> createMap(){
 	//generates random placement of asteroids in an array
 	public static List<List<Integer>> generateAsteroidArray(){
 		List<List<Integer>> asteroidArray = new ArrayList<List<Integer>>();
-		int asteroidY = 750;
-		for (int i = 0; i < 7; i++){
+		for (int i = 0; i < 5; i++){
 			asteroidArray.add(new ArrayList<Integer>());
-			int asteroidX = randNum(50, 1200);
-			int asteroidZ = randNum(1, 50);
+			int asteroidX = randNum(900, 1200);
+			int asteroidY = randNum(790, 795);
+			int asteroidZ = randNum(20, 40);
 			asteroidArray.get(i).add(asteroidX);
 			asteroidArray.get(i).add(asteroidY);
 			asteroidArray.get(i).add(asteroidZ);

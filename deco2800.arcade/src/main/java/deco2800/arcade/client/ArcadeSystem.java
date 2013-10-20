@@ -42,6 +42,12 @@ public class ArcadeSystem {
 		arcade.startGame(gameid);
 	}
 
+	public static void goToGame(String gameid, int lobbySession) {
+		arcade.stopGame();
+		arcade.startGame(gameid);
+		arcade.getCurrentGame().setLobbySession(lobbySession);
+	}
+	
 	/**
 	 * Start GameClient
 	 * 
@@ -156,6 +162,19 @@ public class ArcadeSystem {
 	public static ArrayList<ActiveMatchDetails> requestLobbyGamesList() {
 		return Arcade.getMatches();
 	}
+	public static ArrayList<ArrayList<Object>> requestActiveGamesList() {
+		return Arcade.getActiveGames();
+	}
+	
+	/**
+	 * Requests a copy of the active game list from the server
+	 *  
+	 * @return a copy of the active game list from the server
+	 */
+	public static ArrayList<ArrayList<Object>> requestActiveGames() {
+		arcade.requestActiveGames();
+		return arcade.getActiveGames();
+	}
 
 	/**
 	 * Forwards on a request from the game to create a new multiplayer game
@@ -222,9 +241,7 @@ public class ArcadeSystem {
 	 * @param response: The server's response
 	 */
 	public static void newMultiplayerGame(NewMultiSessionResponse response) {
-		int playerID = response.playerID;
 		String gameID = response.gameId;
-		int session = response.sessionId;
 		goToGame(gameID);
 
 	}

@@ -38,25 +38,21 @@ public class LobbyListener extends Listener {
 				break;
 			
 			}
-			
-			
-		}
-		else if (object instanceof CreateMatchRequest) {
+		} else if (object instanceof CreateMatchRequest) {
 			
 			CreateMatchRequest request = (CreateMatchRequest) object;
 			String gameId = request.gameId;
 			int playerId = request.playerID;
-			Connection hostConnection = connection;
-			
+			Connection hostConnection = connection;	
 			lobby.createMatch(gameId, playerId, hostConnection);
-		}
-		else if (object instanceof JoinLobbyMatchRequest) {
+		} else if (object instanceof JoinLobbyMatchRequest) {
 			
 			JoinLobbyMatchRequest request = (JoinLobbyMatchRequest) object;
 			int matchId = request.matchId;
 			int playerId = request.playerID;
 			lobby.joinMatch(matchId, playerId, connection);
 		} else if (object instanceof LobbyMessageRequest) {
+			
 			LobbyMessageRequest request = (LobbyMessageRequest) object;
 			Lobby.instance().sendChat(request);
 		}

@@ -84,7 +84,7 @@ public class MultiplayerServer {
 	 * 
 	 * @return The ID of player 2
 	 */
-	public int getplayer2() {
+	public int getPlayer2() {
 		return player2Id;
 	}
 
@@ -151,4 +151,5 @@ public class MultiplayerServer {
 			player2.sendTCP(request);
 		}
 	}
+
 }

@@ -1,13 +1,18 @@
 package deco2800.arcade.raiden;
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.net.URL;
 import java.util.Random;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
+
+
 
 
 public class Controller extends KeyAdapter{
@@ -20,7 +25,7 @@ public class Controller extends KeyAdapter{
 	private GamePanel gamePanel;
 	private Random random = new Random();
 	public static int DestoryNum;
-	
+	//private Music bgm;
 	/**
 	 * Constructor of controller.
 	 * @param bang
@@ -40,6 +45,8 @@ public class Controller extends KeyAdapter{
 		Controller.eplanes = eplane; 
 		Controller.pplane = pplane;
 		this.gamePanel = gamePanel;
+		
+		//bgm = Gdx.audio.newMusic(Gdx.files.internal("/sounds/mbgm.m4a"));
 			Timer timer = new Timer(1000, new ActionListener() {		
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -114,6 +121,10 @@ public class Controller extends KeyAdapter{
 				while(true){
 					pplane.pplaneMove();
 					// Add bullet. Gun upgrade.
+					// bgm.play();
+					URL myMusic = this.getClass().getResource("/sounds/mbgm.mp3");
+					AudioClip audioClip = Applet.newAudioClip(myMusic);
+					audioClip.loop();
 					if(DestoryNum < 30){
 						if(PPlane.isFired && count % 5 == 0){
 							PBullet pbullet1 = new PBullet(pplane.x + 20, 
@@ -239,10 +250,12 @@ public class Controller extends KeyAdapter{
 	    	 if(result == 0){
 	    		 newGame();
 	    		 }else{
+	    			 // bgm.stop();
 	    			 System.exit(0);
 	    			 }
 	    	 }
 	     }
+	
 	/**
 	 * Reset the game.
 	 */

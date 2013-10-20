@@ -6,7 +6,6 @@ import deco2800.arcade.mixmaze.domain.WallModel;
 import deco2800.arcade.mixmaze.domain.WallModelObserver;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

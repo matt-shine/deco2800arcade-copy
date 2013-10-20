@@ -18,7 +18,13 @@ public class Bang {
 	public boolean isBang = false;
 	private int xpic;
 	private Image img = new javax.swing.ImageIcon(this.getClass().getResource("/Image/flame.png")).getImage();
-	
+	/**
+	 * The basic attributes for bang.
+	 * @param x
+	 * @param y
+	 * @param w
+	 * @param h
+	 */
 	public Bang(int x, int y, int w, int h) {
 		super();
 		this.x = x;
@@ -38,17 +44,26 @@ public class Bang {
 		timer.start();
 	}
 
-	
+	/**
+	 * 
+	 * @return jpanel
+	 */
 	public JPanel getJpanel() {
 		return jpanel;
 	}
 
-
+	/**
+	 * Set the jpanel
+	 * @param jpanel
+	 */
 	public void setJpanel(JPanel jpanel) {
 		this.jpanel = jpanel;
 	}
 
-
+	/**
+	 * draw the image.
+	 * @param g
+	 */
 	public void drawMe(Graphics g){
 		g.drawImage(img, x, y, x + w, y + h, xpic, 0, xpic + 66, 66, jpanel);
 	}

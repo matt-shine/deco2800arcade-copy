@@ -1,5 +1,6 @@
 package deco2800.arcade.mixmaze;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.mixmaze.domain.IMixMazeModel;
 
 import com.badlogic.gdx.Gdx;
@@ -130,28 +131,9 @@ class ClientScreen extends GameScreen {
 		}, 0, 1, timeLimit - 1);
 		Timer.schedule(new Timer.Task() {
 			public void run() {
-				// PlayerModel winner;
-
 				stage.setKeyboardFocus(null);
-
-				// winner = model.endGame();
-				// if (winner == null) {
-				// /* draw */
-				// resultLabel.setText("Draw");
-				// } else {
-				// /* winner */
-				// resultLabel.setText("Player "
-				// + winner.getId()
-				// + " win");
-				// }
-
 				endGameTable.setVisible(true);
 			}
-			/*
-			 * FIXME: this does not look like a good solution. It takes some
-			 * time for timerLabel to change text, and therefore, without the
-			 * extra 1, the game will end before the timer showing up 00:00.
-			 */
 		}, timeLimit);
 	}
 
@@ -167,7 +149,7 @@ class ClientScreen extends GameScreen {
 					((RemoteObject) model).setTransmitExceptions(false);
 				} else if ("signal: game started".equals(msg)) {
 					setupTimer(timeLimit);
-					Gdx.input.setInputProcessor(stage);
+					ArcadeInputMux.getInstance().addProcessor(stage);
 					stage.setKeyboardFocus(gameArea);
 				}
 			}

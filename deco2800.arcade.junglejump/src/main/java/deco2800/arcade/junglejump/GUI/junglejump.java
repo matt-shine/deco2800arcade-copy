@@ -29,6 +29,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Frustum;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.junglejump.Level;
 import deco2800.arcade.junglejump.LevelContainer;
 import deco2800.arcade.junglejump.Platform;
@@ -136,8 +137,9 @@ public class junglejump extends GameClient implements InputProcessor {
 
 		super(player, networkClient);
 		this.networkClient = networkClient; // this is a bit of a hack
-		Gdx.input.setCatchBackKey(true);
-		Gdx.input.setInputProcessor(this);
+		Gdx.input.setCatchBackKey(true);  // According to documentation, this only has effect on Android, not desktop
+		//Gdx.input.setInputProcessor(this);
+        ArcadeInputMux.getInstance().addProcessor(this);
 		butX = 488f;
 		butY = 242f;
 		monkeyDefaultX = 60f;
@@ -289,6 +291,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	@Override
 	public void dispose() {
 		super.dispose();
+        ArcadeInputMux.getInstance().removeProcessor(this);
 	}
 
 	public void resize(int w, int h) {

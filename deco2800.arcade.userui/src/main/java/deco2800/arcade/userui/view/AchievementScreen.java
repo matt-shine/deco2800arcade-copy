@@ -14,14 +14,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import org.apache.log4j.Logger;
 
-import deco2800.arcade.model.Achievement;
-import deco2800.arcade.model.Game;
-import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.userui.Model;
 import net.miginfocom.swing.MigLayout;
 

@@ -12,4 +12,10 @@
     <awardThreshold>20</awardThreshold>
     <icon>some.png</icon>
   </achievement>
+  
+  <achievement id="burningskies.defeatBoss">
+    <name>Saviour</name>
+    <description>Defeating the alien Overlord.</description>
+    <icon>some.png</icon>
+  </achievement>
 </achievements>

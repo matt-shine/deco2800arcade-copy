@@ -122,7 +122,8 @@ public class PlayScreen implements Screen
     	
         game.playSong("level" + (int)(Math.random()+0.5));
     	
-    	player = new PlayerShip(1000, shipTex[game.zalgo], new Vector2(400, 100), this);
+        int playerSpawnHp = 1000 - (125*Configuration.getDifficulty());
+    	player = new PlayerShip(playerSpawnHp, shipTex[game.zalgo], new Vector2(400, 100), this);
     	level = new Level(this);
 
     	stage.addActor(level);
@@ -171,16 +172,17 @@ public class PlayScreen implements Screen
     			score += 131;
     		}
     		//TODO: PRESS B TO SPAWN BOSS, REMOVE AFTER DEBUG
-//    		if(!bossActive && (levelTimer > 60 || Gdx.input.isKeyPressed(Keys.B))) { //unleash the beast
-//    			bossActive = true;
-//    			game.playSong("boss");
-//    			boss = new Boss(this, player);
-//    			addEnemy(boss);
-//    		}
+    		if(!bossActive && (levelTimer > 60.0 || Gdx.input.isKeyPressed(Keys.B))) { //unleash the beast
+    			bossActive = true;
+    			game.playSong("boss");
+    			boss = new Boss(this, player);
+    			addEnemy(boss);
+    		}
 
     		if(bossActive && boss.getHealth() <= 0) {
     			goodEnd = true;
     			game.playSong("gameover");
+    			game.incrementAchievement("burningskies.defeatBoss");
 				GameOverScreen.setScore(score);
 				game.setScreen(game.gameOverScreen);
     		}
@@ -359,5 +361,9 @@ public class PlayScreen implements Screen
 	
 	public static boolean getGoodEnd() {
 		return goodEnd;
+	}
+
+	public void spawnRandomEnemy() {
+		sp.addRandomEnemy();
 	}
 }

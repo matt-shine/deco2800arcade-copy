@@ -99,7 +99,7 @@ public class DoodadList {
                     DoodadInfo.nonsolidScenery("manfried"),
 
                     //28: hanging skeleton
-                    DoodadInfo.solidScenery("skeleton"),
+                    DoodadInfo.solidScenery("headstone"),
 
                     //29: dog food
                     DoodadInfo.healthPickup("health", 5, 0),
@@ -111,7 +111,7 @@ public class DoodadList {
                     DoodadInfo.solidScenery("plant"),
 
                     //32: skeleton
-                    DoodadInfo.nonsolidScenery("skeleton"),
+                    DoodadInfo.nonsolidScenery("headstone"),
 
                     //33: sink
                     DoodadInfo.solidScenery("sink"),

@@ -443,11 +443,11 @@ public class Enemy extends Mob {
                     break;
             }
             if (path.size() > 10000) {
-                System.out.println("infinite loop in a path");
+                //System.out.println("infinite loop in a path");
                 return;
             }
             if (WL6Meta.block(gameModel.getMap().getTerrainAt(x, y)).texture != null) {
-                System.out.println("waypoints led into a wall");
+                //System.out.println("waypoints led into a wall");
                 return;
             }
             path.add(new Vector2(x, y));

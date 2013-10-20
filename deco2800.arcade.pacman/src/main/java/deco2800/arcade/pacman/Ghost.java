@@ -105,13 +105,17 @@ public final class Ghost extends Mover {
 			updatePosition();
 		} else if (currentState == GhostState.SCATTER) {
 			if (facing == Dir.LEFT) {
-				drawX -= moveDist/1.25;
+//				drawX -= moveDist/1.25;
+				drawX -= moveDist;
 			} else if (facing == Dir.RIGHT) {
-				drawX += moveDist/1.25;
+//				drawX += moveDist/1.25;
+				drawX += moveDist;
 			} else if (facing == Dir.UP) {
-				drawY += moveDist/1.25;
+//				drawY += moveDist/1.25;
+				drawY += moveDist;
 			} else if (facing == Dir.DOWN) {
-				drawY -= moveDist/1.25;
+//				drawY -= moveDist/1.25;
+				drawY -= moveDist;
 			} 
 			updatePosition();
 		}

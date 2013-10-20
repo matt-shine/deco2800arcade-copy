@@ -25,6 +25,9 @@ public abstract class Mover {
 	protected int height;
 	protected int width;
 	private int score;
+	private int lives;
+	private static final int dotScore = 10;
+	private static final int energizerScore = 50;
 	protected Tile currentTile; // current tile of the pacman/ghost
 	protected GameMap gameMap;
 	protected float moveDist; //the distance moved each frame
@@ -33,7 +36,6 @@ public abstract class Mover {
 	public Mover(GameMap gameMap) {
 		this.gameMap = gameMap;
 	}
-
 	
 	/**
 	 * Updates the middle coordinate of the mover and its tile. Also updates the
@@ -57,7 +59,7 @@ public abstract class Mover {
 	 * Returns true if it can move and false if it can't
 	 */
 	public boolean checkNoWallCollision() {
-		return !(nextTile(currentTile, 1).getClass() == WallTile.class);
+		return nextTile(currentTile, 1).getClass() != WallTile.class;
 	}
 	
 	/**
@@ -87,7 +89,6 @@ public abstract class Mover {
 		return grid[x][y];
 	}
 	
-	
 	/**
 	 * Checks whether the mover can turn
 	 */
@@ -112,9 +113,7 @@ public abstract class Mover {
 	 */
 	public void checkTile(Tile tile){
 		if (nextTile(tile, 1).getClass() == TeleportTile.class){
-			System.out.println("\ngetTargetX: " + ((TeleportTile) nextTile(tile, 1)).getTargetX());
 			this.drawX = ((TeleportTile) nextTile(tile, 1)).getTargetX();
-			System.out.println("\ngetTargetY: " + ((TeleportTile) nextTile(tile, 1)).getTargetY());
 			this.drawY = ((TeleportTile) nextTile(tile, 1)).getTargetY();
 		}
 		// Only Pac man can eat dots!
@@ -124,8 +123,9 @@ public abstract class Mover {
 				((DotTile) tile).dotEaten();
 				gameMap.setDotsEaten(gameMap.getDotsEaten() + 1);
 				if (((DotTile) tile).isEnergiser()) {
-					this.setScore(this.getScore() + 50);
+					this.setScore(this.getScore() + energizerScore);
 					gameMap.setEnergized(true);
+					// Set the scatter timer
 					System.out.println("Timer start!");
 					Timer.schedule(new Task() {
 						public void run() {
@@ -134,11 +134,10 @@ public abstract class Mover {
 						}
 					}, 7);
 				} else {
-					this.setScore(this.getScore() + 10);
+					this.setScore(this.getScore() + dotScore);
 				}
 			}
 		} 
-		
 	}
 
 	/**
@@ -148,7 +147,6 @@ public abstract class Mover {
 	public boolean checkNoWallCollision(Tile pTile) {
 		return !(nextTile(pTile, 1).getClass() == WallTile.class);
 	}
-
 	
 	/**
 	 * Overrides toString() so that trying to print the list won't crash the
@@ -231,6 +229,16 @@ public abstract class Mover {
 	
 	public Tile getCurTile() {
 		return currentTile;
+	}
+
+
+	public int getLives() {
+		return lives;
+	}
+
+
+	public void setLives(int lives) {
+		this.lives = lives;
 	}
 	
 }

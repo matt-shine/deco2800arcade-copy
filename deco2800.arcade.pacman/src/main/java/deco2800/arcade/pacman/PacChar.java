@@ -108,7 +108,7 @@ public final class PacChar extends Mover{
 						((Ghost)colList.get(i)).setCurrentState(GhostState.DEAD);
 						gameMap.setGhostsEaten(gameMap.getGhostsEaten() + 1);
 						System.out.println("Yummy ghost");
-					} else {
+					} else if(((Ghost)colList.get(i)).getCurrentState() == GhostState.CHASE){
 						System.out.println("Disaster!! Pacman hit a ghost!");
 						//TODO some death thing
 						this.setCurrentState(PacState.DEAD);

@@ -24,10 +24,6 @@ public class Platform {
 	private Texture platText;
 	public boolean visible = true;
 	private boolean inverted;
-	private enum world {
-		WORLD_ONE, WORLD_TWO, WORLD_THREE
-	}
-	private world currentWorld;
 	public char platType;
 	public String platformType = "";
 	
@@ -35,13 +31,12 @@ public class Platform {
 	 * Platform constructor
 	 * Takes width, height and X and Y position as parameters
 	 */
-	public Platform(char type, boolean flipped, int pX, int pY, int pWidth, int pHeight) {
+	public Platform(char type, int pX, int pY, int pWidth, int pHeight) {
 		this.width = pWidth;
 		this.height = pHeight;
 		this.xPos = pX;
 		this.yPos = pY;
 		this.active = false;
-		this.inverted = flipped;
 		platType = type;
 		setTexture(type);
 	}
@@ -147,17 +142,6 @@ public class Platform {
 	
 	public Texture getTexture() {
 		// Texture changes depending on world
-		/* switch(currentWorld) {
-		case WORLD_ONE:
-			platText = new Texture("junglejumpassets/branch.png");
-			break;
-		case WORLD_TWO:
-			// World 2 texture
-			break;
-		case WORLD_THREE:
-			// World 3 texture
-			break;
-		} */
 		platText = new Texture(Gdx.files.internal("world" + (junglejump.world + 1) + "/" + platformType + ".png"));
 		return this.platText;
 	}
@@ -225,7 +209,7 @@ public class Platform {
 	public void setActive() {
 		if(this.platType == '^') {
 			// Play banana sound
-			URL path = this.getClass().getResource("/");
+			/*URL path = this.getClass().getResource("/");
 			try{ 
 				String resource = path.toString().replace(".arcade/build/classes/main/", 
 						".arcade.junglejump/src/main/").replace("file:", "") + 
@@ -240,7 +224,7 @@ public class Platform {
 			} catch (Exception e) {
 				Gdx.app.log(junglejump.messages,
 						"Audio File for Banana Music Not Found");
-			}
+			}*/
 			LevelContainer.nextLevel();
 		}
 		if(this.platType == 'j') {
@@ -249,7 +233,7 @@ public class Platform {
 		if(this.platType == 'x') {
 			junglejump.killMonkey();
 		}
-		//this.active = true;
+		this.active = true;
 	}
 	
 }

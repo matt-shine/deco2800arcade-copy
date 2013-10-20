@@ -81,12 +81,11 @@ public class LevelContainer {
 	        		Platform p;
 	        		if(c == 'b') {
 	        				level.addBanana(); // false means not found
-	        				p = new Platform(c, false, (x*xLength), (y*xLength), xLength, yLength);
+	        				p = new Platform(c, (x*xLength), (y*xLength), xLength, yLength);
 		        			level.addPlatform(p);
 		        			bananaCounter++;
-	        		}
-	        		if(c!='*' && c!= '.') {
-	        			p = new Platform(c, false, (x*xLength), (y*xLength), xLength, yLength);
+	        		} else if(c!='*' && c!= '.') {
+	        			p = new Platform(c, (x*xLength), (y*xLength), xLength, yLength);
 	        			level.addPlatform(p);
 	        		}
 	        	}
@@ -116,11 +115,10 @@ public class LevelContainer {
 		setCurrentLevel(getCurrentLevel() + 1);
 		if(getCurrentLevel() > levelAmount-1) {
 			setCurrentLevel(0);
-			
+			currentWorld++;
 			if(currentWorld > worldAmount-1) {
 				currentWorld = 0;
 			}
-			currentWorld++;
 			junglejump.world = currentWorld;
 			junglejump.gameBackground = new Texture(Gdx.files.internal("world" + (currentWorld+1) + "/background.png"));
 			junglejump.worldNumText = new Texture(Gdx.files.internal((currentWorld + 1) + ".png"));

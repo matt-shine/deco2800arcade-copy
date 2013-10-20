@@ -14,8 +14,7 @@ public class Mutant extends Enemy {
         super(uid);
 
         setHealth(STARTING_HEALTH_1);
-        setPathSpeed(512);
-        setChaseSpeed(1536);
+        setSpeed(512);
         setPain(true);
         setDamage(0);
 

@@ -25,8 +25,9 @@ public class OptionsScreen implements Screen {
 	SpriteBatch batch;
 	TextureAtlas atlas;
 	Button backButton;
-	BitmapFont black;
+	BitmapFont white;
 	Skin skin;
+	TextButtonStyle style;
 	
 	float buttonSpacing = 10f;
 	float buttonHeight = 50f;
@@ -41,8 +42,7 @@ public class OptionsScreen implements Screen {
 		batch.dispose();
 		skin.dispose();
 		atlas.dispose();
-		//white.dispose();
-		black.dispose();
+		white.dispose();
 		stage.dispose();
 	}
 
@@ -77,13 +77,6 @@ public class OptionsScreen implements Screen {
 		
 		ArcadeInputMux.getInstance().addProcessor(stage);	
 
-		// Setting the "Style of a TextButton",
-		TextButtonStyle style = new TextButtonStyle();
-		style.up = skin.getDrawable("buttonnormal");
-		style.down = skin.getDrawable("buttonpressed");
-		style.font = black;
-						
-		
 		backButton = new TextButton("BACK" , style);
 		backButton.setWidth(buttonWidth);
 		backButton.setHeight(buttonHeight);
@@ -110,11 +103,16 @@ public class OptionsScreen implements Screen {
 	@Override
 	public void show() {
 		batch = new SpriteBatch();
-		atlas = new TextureAtlas(Gdx.files.internal("button.pack"));
+		atlas = new TextureAtlas(Gdx.files.internal("black_button.pack"));
 		skin = new Skin();
         skin.addRegions(atlas);
-        //white = new BitmapFont(Gdx.files.internal("white_font.fnt"), false);
-        black = new BitmapFont(Gdx.files.internal("black_font.fnt"), false);
+        white = new BitmapFont(Gdx.files.internal("white_font.fnt"), false);
+        
+        /*Setting the "Style of a TextButton",*/
+		style = new TextButtonStyle();
+		style.up = skin.getDrawable("buttonnormal");
+		style.down = skin.getDrawable("buttonpressed");
+		style.font = white;
 		
 	}
 

@@ -4,14 +4,18 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import deco2800.arcade.model.Accolade;
+import deco2800.arcade.model.AccoladeContainer;
 import deco2800.arcade.model.XMLReader;
 
 
@@ -46,15 +50,25 @@ public class XMLReaderTest {
 	
 	/** test the read from xml and the readToString funtion
 	 * @throws FileNotFoundException 
+	 * @throws XMLStreamException 
+	 * @throws UnsupportedEncodingException 
 	 * 
 	 */
 	@Test
-	public void XMLReaderTest1() throws FileNotFoundException {
+	public void XMLReaderTest1() throws FileNotFoundException, UnsupportedEncodingException, XMLStreamException {
 		try {
+			//this doesn't really do anything just yet.
 			String testFile = XMLReader.readXML("src/test/java/deco2800/arcade/model/test/xmlTests/newaccolade.xml");
+			AccoladeContainer xmlReadTest = XMLReader.getAccolades("src/test/java/deco2800/arcade/model/test/xmlTests/newaccolade.xml");
 		}catch (FileNotFoundException error) {
 			fail("The test file is missing.");
 			error.printStackTrace();
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		//XMLStreamReader xmlTestFile = XMLReader.readXML("src/test/java/deco2800/arcade/model/test/xmlTests/newaccolade.xml");

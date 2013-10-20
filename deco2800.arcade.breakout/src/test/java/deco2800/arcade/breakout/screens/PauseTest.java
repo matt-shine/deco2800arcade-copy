@@ -24,6 +24,7 @@
 // * 
 // * This testing package requires no modifications of any other files.
 // * Comment out here since it breaks on Jenkins
+// * REMEMBER TO COMMENT THIS FILE OUT WHEN FINISHED.
 // *
 // */
 //public class PauseTest {

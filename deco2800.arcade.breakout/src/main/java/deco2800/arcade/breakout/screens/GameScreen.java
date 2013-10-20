@@ -417,7 +417,7 @@ public class GameScreen implements Screen {
 					new Vector2(getPaddle().getPaddleX(), getPaddle()
 							.getPaddleY()));
 			setNumBalls(1);
-			slowBallsActivated = 0;
+			resetSlowBallsActivated();
 			destroyPowerupBall();
 			decrementLives(1);
 			decrementScore(5);
@@ -580,9 +580,6 @@ public class GameScreen implements Screen {
 
 	/**
 	 * Sets the sequence to be null
-	 * 
-	 * @param sequence
-	 * 
 	 */
 	public void setSequence() {
 		this.sequence = null;
@@ -601,7 +598,7 @@ public class GameScreen implements Screen {
 	 * 
 	 * Sets the currentButton
 	 * 
-	 * @param int currentButton
+	 * @param currentButton
 	 */
 	public void setCurrentButton(int currentButton) {
 		this.currentButton = currentButton;
@@ -610,7 +607,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns the pressed variable
 	 * 
-	 * @return int pressed
+	 * @return pressed
 	 */
 	public int getPressed() {
 		return pressed;
@@ -619,7 +616,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the pressed button
 	 * 
-	 * @param int pressed
+	 * @param pressed
 	 */
 	public void setPressed(int pressed) {
 		this.pressed = pressed;
@@ -629,7 +626,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns the Paddle
 	 * 
-	 * @return Paddle paddle
+	 * @return paddle
 	 */
 	public Paddle getPaddle() {
 		return paddle;
@@ -638,8 +635,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the Paddle
 	 * 
-	 * @param Paddle
-	 *            paddle
+	 * @param paddle
 	 */
 	public void setPaddle(Paddle paddle) {
 		this.paddle = paddle;
@@ -648,7 +644,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns the ball
 	 * 
-	 * @return Ball ball
+	 * @return ball
 	 */
 	public Ball getBall() {
 		return ball;
@@ -657,8 +653,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the Ball
 	 * 
-	 * @param Ball
-	 *            ball
+	 * @param ball
 	 */
 	public void setBall(Ball ball) {
 		this.ball = ball;
@@ -689,7 +684,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns the Number of Bricks
 	 * 
-	 * @return int brickNum
+	 * @return brickNum
 	 */
 	public int getBrickNum() {
 		return brickNum;
@@ -698,7 +693,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the number of Bricks
 	 * 
-	 * @param int brickNum
+	 * @param brickNum
 	 */
 	public void setBrickNum(int brickNum) {
 		this.brickNum = brickNum;
@@ -707,7 +702,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns the Level number
 	 * 
-	 * @return int level
+	 * @return level
 	 */
 	public int getLevel() {
 		return level;
@@ -716,7 +711,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the level number
 	 * 
-	 * @param int level
+	 * @param level
 	 * 
 	 */
 	public void setLevel(int level) {
@@ -726,7 +721,7 @@ public class GameScreen implements Screen {
 	/**
 	 * returns the last hit x variable of the ball
 	 * 
-	 * @return float lastHitX
+	 * @return lastHitX
 	 */
 	public float getLastHitX() {
 		return lastHitX;
@@ -735,7 +730,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the last hit x variable of the ball
 	 * 
-	 * @param int lastHitX
+	 * @param lastHitX
 	 */
 	public void setLastHitX(float lastHitX) {
 		this.lastHitX = lastHitX;
@@ -744,7 +739,7 @@ public class GameScreen implements Screen {
 	/**
 	 * returns the last hit y variable of the ball
 	 * 
-	 * @return float lastHitY
+	 * @return lastHitY
 	 */
 	public float getLastHitY() {
 		return lastHitY;
@@ -753,7 +748,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the last hit y variable of the ball
 	 * 
-	 * @param int lastHity
+	 * @param lastHity
 	 */
 	public void setLastHitY(float lastHitY) {
 		this.lastHitY = lastHitY;
@@ -762,7 +757,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns the number of ball that are currently in play
 	 * 
-	 * @return int numBalls
+	 * @return numBalls
 	 */
 	public int getNumBalls() {
 		return this.numBalls;
@@ -771,7 +766,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the number of plays in play
 	 * 
-	 * @param int newNum
+	 * @param newNum
 	 */
 	public void setNumBalls(int newNum) {
 		this.numBalls = newNum;
@@ -780,7 +775,7 @@ public class GameScreen implements Screen {
 	/**
 	 * returns the powerupManager
 	 * 
-	 * @return PowerupManager powerupManager
+	 * @return powerupManager
 	 */
 	public PowerupManager getPowerupManager() {
 		return powerupManager;
@@ -789,7 +784,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns true if powerups are turned on
 	 * 
-	 * @return boolean powerupsOn
+	 * @return powerupsOn
 	 */
 	public boolean isPowerupOn() {
 		return this.powerupsOn;
@@ -798,7 +793,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the powerup mode. True means that enchanced mode is on
 	 * 
-	 * @param boolean mode
+	 * @param mode
 	 */
 	public void switchGameMode(boolean mode) {
 		this.powerupsOn = mode;
@@ -807,7 +802,7 @@ public class GameScreen implements Screen {
 	/**
 	 * returns the PowerUpBall
 	 * 
-	 * @return Ball powerupBall
+	 * @return powerupBall
 	 */
 	public Ball getPowerupBall() {
 		return this.powerupBall;
@@ -824,7 +819,7 @@ public class GameScreen implements Screen {
 	}
 
 	/**
-	 * Destorys the Ball
+	 * Destroys the Ball
 	 */
 	public void destroyBall() {
 		if (ball != null) {
@@ -835,7 +830,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Return the remaining number of lives
 	 * 
-	 * @return int lives
+	 * @return lives
 	 */
 	public int getLives() {
 		return lives;
@@ -844,7 +839,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the number of Lives
 	 * 
-	 * @param int lives
+	 * @param lives
 	 */
 	public void setLives(int lives) {
 
@@ -854,7 +849,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Increases the number of Lives by desired value
 	 * 
-	 * @param int value
+	 * @param value
 	 */
 	public void incrementLives(int value) {
 		this.lives = this.lives + value;
@@ -863,7 +858,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Decreases the number of Lives by desired value
 	 * 
-	 * @param int value
+	 * @param value
 	 */
 	public void decrementLives(int value) {
 		this.lives = this.lives - value;
@@ -872,7 +867,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Return the score
 	 * 
-	 * @return int score
+	 * @return score
 	 */
 	public int getScore() {
 		return score;
@@ -888,7 +883,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Increases the score by desired value
 	 * 
-	 * @param int value
+	 * @param value
 	 */
 	public void incrementScore(int value) {
 		this.score = this.score + value;
@@ -897,7 +892,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Decreases the score by desired value
 	 * 
-	 * @param int value
+	 * @param value
 	 */
 	public void decrementScore(int value) {
 		this.score = this.score - value;
@@ -906,7 +901,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Set the value of Highscore
 	 * 
-	 * @param int score
+	 * @param score
 	 */
 	public void setHighScore(int score) {
 		if (score > 0) {
@@ -920,7 +915,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns the value of Highscore
 	 * 
-	 * @return int highScore
+	 * @return highScore
 	 */
 	public int getHighScore() {
 		return highScore;
@@ -946,11 +941,18 @@ public class GameScreen implements Screen {
 	public void incrementNumSlowBallsActivated() {
 		slowBallsActivated++;
 	}
+	
+	/**
+	 * Set the number of slow balls activated to be 0
+	 */
+	public void resetSlowBallsActivated() {
+		this.slowBallsActivated = 0;
+	}
 
 	/**
 	 * Returns the number of slow balls activated
 	 * 
-	 * @return int slowBallsActivated
+	 * @return slowBallsActivated
 	 */
 	public int getNumSlowBallsActivated() {
 		return slowBallsActivated;
@@ -966,7 +968,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns the Bump Counter
 	 * 
-	 * @return int bumpCount
+	 * @return bumpCount
 	 */
 	public int getBumpCount() {
 		return bumpCount;
@@ -982,7 +984,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns the Brick break counter
 	 * 
-	 * @return int brickBreak
+	 * @return brickBreak
 	 */
 	public int getBrickBreak() {
 		return brickBreak;
@@ -991,7 +993,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Return the Brick array
 	 * 
-	 * @return Brick[] bricks
+	 * @return bricks
 	 */
 	public Brick[] getBrickArray() {
 		return this.bricks;

@@ -102,22 +102,17 @@ public class World {
 		initCount = 2.5f;
 		init(true);
 		//hardcode
-<<<<<<< HEAD
-				if(level == 1) {
-					levelScenes = new Level1Scenes(ship, cam, resultsScreen);
-				} else {
-					levelScenes = new Level2Scenes(ship, cam, resultsScreen);
-					
-				}
-		
-=======
+
 		if(level == 1) {
 			levelScenes = new Level1Scenes(ship, cam, resultsScreen);
 		} else {
 			levelScenes = new Level2Scenes(ship, cam, resultsScreen);
-			Sounds.playLevelMusic();
+			
 		}
->>>>>>> 2ed1e711e397f9c0d038fc94c4edc171b7a4d9cd
+		
+
+		
+
 	}
 	
 	//Used to count number of jumps - for achievements
@@ -915,10 +910,9 @@ public class World {
 	
 	public void gameOver() {
 		// go back to menu
-<<<<<<< HEAD
-=======
+
 		Sounds.stopMusic();
->>>>>>> 2ed1e711e397f9c0d038fc94c4edc171b7a4d9cd
+
 		game.addHighscore(score);
 		game.setScreen(new MainMenu(game));
 
@@ -927,12 +921,10 @@ public class World {
 	
 	public void gameWin() {
 		// show some message/credits then go back to menu
-<<<<<<< HEAD
-		
-=======
+
 		Sounds.stopMusic();
 		game.incrementAchievement("cyra.whataplayer");
->>>>>>> 2ed1e711e397f9c0d038fc94c4edc171b7a4d9cd
+
 		game.addHighscore(score);
 		game.setScreen(new MainMenu(game));
 	}

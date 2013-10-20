@@ -44,16 +44,16 @@ public class StoreWishlist implements Screen, StoreScreen {
 		arcadeUI = ui;
 		
 		// Load the Icons into the skin, with names as game id's.
-		Utilities.helper.loadIcons(skin);
+		Utilities.loadIcons(skin);
 		skin.add("big_star", new Texture(Gdx.files.internal("store/big_stars.png")));
 		
-		final Table bg = new Table();
-		final Button homeButton = new Button(skin, "home");
-		final Label title = new Label("Wish List", skin, "default-34");
-		final Button searchButton = new Button(skin, "search");
+		Table bg = new Table();
+		Button homeButton = new Button(skin, "home");
+		Label title = new Label("Wish List", skin, "default-34");
+		Button searchButton = new Button(skin, "search");
 		final TextField searchField = new TextField("", skin);
 		final Label searchResult = new Label("", skin);
-		final TextButton transactionsButton = new TextButton("Transactions", skin);
+		TextButton transactionsButton = new TextButton("Transactions", skin);
 		
 		// The background for the store.
 		skin.add("background", new Texture(Gdx.files.internal("store/wishlist_bg.png")));
@@ -117,7 +117,7 @@ public class StoreWishlist implements Screen, StoreScreen {
 		searchField.setTextFieldListener(new TextFieldListener() {
 			public void keyTyped(TextField textField, char key) {
 				// Run search whenever a key is typed.
-				Game result = Utilities.helper.search(searchField.getText());
+				Game result = Utilities.search(searchField.getText());
 				// No results if search returns null.
 				if (result == null) {
 					searchResult.setText("No results.");
@@ -133,7 +133,7 @@ public class StoreWishlist implements Screen, StoreScreen {
 			public void changed(ChangeEvent event, Actor actor) {
 				try {
 					// Attempt to search for whatever is in the field.
-					Game result = Utilities.helper.search(searchField.getText());
+					Game result = Utilities.search(searchField.getText());
 					if (result == null) {
 						searchResult.setText("No results."); // Bad text
 						return;

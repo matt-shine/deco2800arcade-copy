@@ -71,7 +71,7 @@ public class ReplayListener extends NetworkListener {
 		} else if (object instanceof GetEventsResponse)
 		{
 		    GetEventsResponse ger = (GetEventsResponse) object;
-		    
+	
 		    replayHandler.eventsForSessionReceived(ger);
 		}
 	}

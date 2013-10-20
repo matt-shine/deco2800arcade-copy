@@ -15,8 +15,11 @@ public class MovingState extends GameState {
 		movePlayer(context,context.gamePlayers[playerIndex]);	    	
 	}
 
+	
 	/**
-	 * @param context
+	 * This method move the player accordingly
+	 * @param context snakeLadder game context
+	 * @param gamePlayer the game player whoes movement need to be performed
 	 */
 	private void movePlayer(SnakeLadder context, GamePlayer gamePlayer) {
 		gamePlayer.move(Gdx.graphics.getDeltaTime());

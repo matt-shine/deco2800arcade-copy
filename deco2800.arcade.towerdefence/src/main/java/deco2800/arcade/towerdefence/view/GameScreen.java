@@ -168,19 +168,19 @@ public class GameScreen implements Screen {
 	 * Taken from libGDX google docs, edited.
 	 */
 	private void handleInput() {
-		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 			if (camera.position.x > 0)
 				camera.translate(-3, 0, 0);
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 			if (camera.position.x < 4000)
 				camera.translate(3, 0, 0);
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
 			if (camera.position.y > 0)
 				camera.translate(0, -3, 0);
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
 			if (camera.position.y < 4000)
 				camera.translate(0, 3, 0);
 		}

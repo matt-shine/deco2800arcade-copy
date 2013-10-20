@@ -52,6 +52,7 @@ public class WorldRenderer {
 	SpriteBatch batch;
 	SpriteBatch textBatch;
 	Player ship;
+	Sword sword;
 	//Follower follower;
 	Walker walker;
 	private ParallaxCamera cam;
@@ -59,7 +60,7 @@ public class WorldRenderer {
 	private BitmapFont font, fontBig;
 	private Texture shipTexture, followerTexture, bulletTexture, walkerTexture, bg, heartsTexture, 
 	jumperBodyTexture, jumperFrontArmTexture, jumperFrontLegTexture, jumperFrontArmJumpingTexture,jumperFrontLegJumpingTexture,
-	wallTexture;
+	wallTexture, sword1, sword2, sword3;
 	private TextureRegion followerFrame, cyraFrame;
 	private TextureRegion walkerRegion;
 	private TextureAtlas groundTextureAtlas, laserTextures, explosionTextures, boss1Atlas, bossRam, firestarter, myEnemy;
@@ -138,6 +139,7 @@ public class WorldRenderer {
 	
 	public void render() {
 		ship = world.getShip();
+		sword = world.getSword();
 		//follower = world.getFollower();
 		enemies = world.getEnemies();
 		bullets = world.getBullets();
@@ -184,6 +186,24 @@ public class WorldRenderer {
 		
 		
 		if (ship.isFacingRight()) {
+			if(sword.getFrame() == 1){
+				batch.draw(sword1, (ship.getPosition().x)+.2f, (ship.getPosition().y) +1.44f, ship.getWidth() /2, ship.getHeight()/2,
+						ship.getWidth()*2, ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, sword1.getWidth(),
+						sword1.getHeight(), false, false);
+				
+			}
+			else if(sword.getFrame() == 2){
+				batch.draw(sword2, (ship.getPosition().x)+.4f, (ship.getPosition().y) +.55f, ship.getWidth() /2, ship.getHeight()/2,
+						ship.getWidth() * 4, ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, sword2.getWidth(),
+						sword2.getHeight(), false, false);
+				
+			}
+			else if(sword.getFrame() == 3){
+				batch.draw(sword3, (ship.getPosition().x)+.2f, (ship.getPosition().y) -.25f, ship.getWidth() /2, ship.getHeight()/2,
+						ship.getWidth()*2, ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, sword3.getWidth(),
+						sword3.getHeight(), false, false);
+				
+			}
 			leftCyraCount = 0;
 			leftFrameCounter = 0;
 			rightFrameCounter = (rightFrameCounter+1) %8;
@@ -204,6 +224,24 @@ public class WorldRenderer {
 				ship.getWidth(), ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, shipTexture.getWidth(),
 				shipTexture.getHeight(), false, false);*/
 		} else {
+			if(sword.getFrame() == 1){
+				batch.draw(sword1, (ship.getPosition().x)-1.5f, (ship.getPosition().y) +1.4f, ship.getWidth() /2, ship.getHeight(),
+						ship.getWidth()*2, ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, sword1.getWidth(),
+						sword1.getHeight(), true, false);
+				
+			}
+			else if(sword.getFrame() == 2){
+				batch.draw(sword2, (ship.getPosition().x)-2.7f , (ship.getPosition().y) +.55f, ship.getWidth(), ship.getHeight(),
+						ship.getWidth()*4, ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, sword2.getWidth(),
+						sword2.getHeight(), true, false);
+				
+			}
+			else if(sword.getFrame() == 3){
+				batch.draw(sword3, (ship.getPosition().x)-1.5f, (ship.getPosition().y)-.25f,  ship.getWidth() /2, ship.getHeight()/2,
+						ship.getWidth()*2, ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, sword3.getWidth(),
+						sword3.getHeight(), true, false);
+				
+			}
 			/*rightFrameCounter = 0;
 			rightCyraCount = 0;
 			System.out.println("woop derit is");
@@ -228,12 +266,12 @@ public class WorldRenderer {
 			leftFrameCounter = 0;
 			rightFrameCounter = (rightFrameCounter+1) %8;
 			if((rightFrameCounter == 0) && (ship.isWalking() == true)){
-				cyraFrame = cyraRightAnimation.getKeyFrame(rightCyraCount, true);
+				cyraFrame = cyraLeftAnimation.getKeyFrame(rightCyraCount, true);
 					rightCyraCount = (rightCyraCount+1) % 5;
 					System.out.println("Cyra Frame count is " + rightCyraCount);
 			}
 			
-			cyraFrame = cyraRightAnimation.getKeyFrame(rightCyraCount+1, true);
+			cyraFrame = cyraLeftAnimation.getKeyFrame(rightCyraCount+1, true);
 			batch.draw(cyraFrame, ship.getPosition().x, ship.getPosition().y, ship.getWidth()/2,
 					ship.getHeight()/2, ship.getWidth(), ship.getHeight(), 1.8f, 1f, ship.getRotation());
 		}
@@ -906,6 +944,9 @@ public class WorldRenderer {
 		manager.load("tiles/level packfile", TextureAtlas.class);
 		manager.load("wall.png",Texture.class,linearFilteringParam);
 		manager.load("frontbush1.png", Texture.class, linearFilteringParam);
+		manager.load("sword1.png", Texture.class, linearFilteringParam);
+		manager.load("sword2.png", Texture.class, linearFilteringParam);
+		manager.load("sword3.png", Texture.class, linearFilteringParam);
 		manager.finishLoading();
 		
 		boss1Atlas = manager.get("stephen.txt", TextureAtlas.class);
@@ -974,11 +1015,19 @@ public class WorldRenderer {
 		jumperFrontArmJumpingTexture = manager.get("frontarm-jumping-jumper.png");
 		jumperFrontArmJumpingTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
+		sword1 = manager.get("sword1.png", Texture.class);
+		sword1.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
+		sword2 = manager.get("sword2.png", Texture.class);
+		sword2.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
+		sword3 = manager.get("sword3.png", Texture.class);
+		sword3.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
 		
 		
 		TextureAtlas cyraRightAtlas = manager.get("cyraRightMovement.txt", TextureAtlas.class);
-		TextureAtlas cyraLeftAtlas = manager.get("cyraRightMovement.txt", TextureAtlas.class);
+		TextureAtlas cyraLeftAtlas = manager.get("cyraLeftMovement.txt", TextureAtlas.class);
 		
 		
 		

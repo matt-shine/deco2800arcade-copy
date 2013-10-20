@@ -1,5 +1,7 @@
 package deco2800.arcade.cyra.game;
 
+import java.util.List;
+
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 
@@ -7,6 +9,8 @@ import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.UIOverlay.PopupMessage;
+import deco2800.arcade.client.highscores.HighscoreClient;
+import deco2800.arcade.client.highscores.Highscore;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -23,14 +27,24 @@ public class Cyra extends GameClient {
 
 	private NetworkClient networkClient;
 	private AchievementClient achievementClient;
+	private HighscoreClient highscoreClient;
+	private Player player;
+	
 	private boolean isPaused = false;
       
     public Cyra(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		this.networkClient = networkClient; //this is a bit of a hack
         this.achievementClient = new AchievementClient(networkClient);
+        this.player = player;
+        this.highscoreClient = new HighscoreClient(player.getUsername(), "Cyra", networkClient);
+        
         //this.incrementAchievement("cyra.opengame");
 	}
+    
+    public void addHighscore(int score) {
+    	highscoreClient.storeScore("Number", score);
+    }
 
     
     public void createPopup(final String message) {
@@ -45,7 +59,9 @@ public class Cyra extends GameClient {
 		});
 	}
     
-	
+	public List<Highscore> getHighscores() {
+		return highscoreClient.getGameTopPlayers(10, true, "Number");
+	}
     
     
 	public SplashScreen getSplashScreen() {
@@ -59,7 +75,7 @@ public class Cyra extends GameClient {
 		
 		super.create();
 		//Overlay
-		/*this.getOverlay().setListeners(new Screen() {
+		this.getOverlay().setListeners(new Screen() {
 			@Override
 			public void hide() {
 				//Unpause your game here
@@ -82,13 +98,13 @@ public class Cyra extends GameClient {
 			public void resume() {}
 			@Override
 			public void dispose() {}
-		});*/
+		});
 		// End Overlay
 		//setScreen(new MainMenu(this));
 		//Set to splash screen
-		//setScreen(getSplashScreen());
+		setScreen(getSplashScreen());
 		//OR go straight to the action
-		setScreen(new GameScreen(this, 0.3f));
+
 		
 		
 		

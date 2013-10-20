@@ -1,5 +1,7 @@
 package deco2800.arcade.cyra.game;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,39 +19,31 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import deco2800.arcade.cyra.world.Sounds;
+
+import deco2800.arcade.client.highscores.Highscore;
 
 /** This class controls the components that make up the main menu - buttons,
  * images, texts and draw them onto the GameScreen.
  *
  * @author Game Over
  */
-public class MainMenu extends AbstractScreen{
+public class HighscoreScreen extends AbstractScreen{
 	Stage stage;
 	BitmapFont blackFont;
 	TextureAtlas atlas;
 	Skin skin;
 	//SpriteBatch batch;
 	TextButton button;
-	TextButton button2;
-	TextButton button3;
 	Label label;
-	private int framecount = 0;
-	private int framecountmax = 80;
-	private int buttonframe = 0;
+	Label playerLabel;
+	Label scoreLabel;
 	private boolean keydown = false;
 	
-	float[] difficulty = new float[3];
-	int difficultyIndex = 1;
+	private List<Highscore> highscores;
 	
-	public MainMenu(Cyra game) {
+	public HighscoreScreen(Cyra game) {
 		super(game);
 		
-		difficulty[0] = 0.21f;
-		difficulty[1] = 0.76f;
-		difficulty[2] = 0.91f;
-		
-		Sounds.loadAll();
 	}
 	
 	@Override
@@ -57,10 +51,12 @@ public class MainMenu extends AbstractScreen{
 		atlas = new TextureAtlas("buttons.txt");
 		skin = new Skin();
 		skin.addRegions(atlas);
-		//blackFont = new BitmapFont(Gdx.files.internal("whitefont.fnt"), false);
 		blackFont = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);
-		//Sounds.load();
-		Sounds.playMenuMusic();
+		game.addHighscore(60044);
+		game.addHighscore(2334);
+		
+		highscores = game.getHighscores();
+		System.out.println("size of hs list " + highscores.size());
 		
 	}
 	
@@ -73,26 +69,7 @@ public class MainMenu extends AbstractScreen{
 		stage.draw();
 		batch.end();
 		
-		if (framecount++ == framecountmax) {
-			Sounds.playtest();
-			framecount = 0;
-			if (framecountmax > 25) {
-				framecountmax -= 9;
-			} else framecountmax--;
-		}
-		if (++buttonframe == 9) {
-			buttonframe = 0;
-		}
-		
-		if(((buttonframe % 3) == 0)) {
-			button.setVisible(false);
-		} else if(((buttonframe % 3) != 0)) {
-			button.setVisible(true);
-		}
-		
-		if(keydown) {
-			button.setVisible(true);
-		}
+
 	}
 	
 	@Override
@@ -108,7 +85,7 @@ public class MainMenu extends AbstractScreen{
 		style.down = skin.getDrawable("buttonclose0");
 		
 		style.font = blackFont;
-		button = new TextButton("START!", style);
+		button = new TextButton("Back", style);
 		button.setHeight(90);
 		button.setX(Gdx.graphics.getWidth()/2 - button.getWidth()/2);
 		button.setY(Gdx.graphics.getHeight()/2 - button.getHeight()/2 - 200);
@@ -122,67 +99,46 @@ public class MainMenu extends AbstractScreen{
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				keydown = false;
-				game.setScreen(new GameScreen(game, difficulty[difficultyIndex]));
+				game.setScreen(new MainMenu(game));
 			}
 		});
 		
-		button2 = new TextButton("Difficulty: Medium", style);
-		button2.setX(Gdx.graphics.getWidth()/2 - button2.getWidth()/2);
-		button2.setY(Gdx.graphics.getHeight()/2 - button.getHeight()/2 - 270);
-		button2.setHeight(90);
-		button2.addListener(new InputListener() {
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				return true;
-			}
-			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				switch(difficultyIndex) {
-					case 0:
-						difficultyIndex++;
-						button2.setText("Difficulty: Medium");
-						break;
-					case 1:
-						difficultyIndex++;
-						button2.setText("Difficulty: Hard");
-						break;
-					case 2:
-						difficultyIndex = 0;
-						button2.setText("Difficulty: Easy");
-						break;
-					default:
-						break;
-				}
-			}
-		});
 		
-		button3 = new TextButton("Highscores", style);
-		button3.setHeight(90);
-		button3.setX(Gdx.graphics.getWidth()/2 - button.getWidth()/2);
-		button3.setY(Gdx.graphics.getHeight()/2 - button.getHeight()/2 - 130);
-		
-		button3.addListener(new InputListener() {
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-				keydown = true;
-				return true;
-			}
-			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				keydown = false;
-				game.setScreen(new HighscoreScreen(game));
-			}
-		});
 		
 		LabelStyle ls = new LabelStyle(blackFont, Color.WHITE);
-		label = new Label("CYRA", ls);
-		label.setX(85);
+		label = new Label("Highscores", ls);
+		//label.setX(Gdx.graphics.getWidth()/2 - button.getWidth()/2);
 		label.setY(Gdx.graphics.getHeight()/2 - label.getHeight()/2 + 115);
 		label.setWidth(width);
-		label.setAlignment(Align.center);
+		label.setAlignment(Align.top);
+		
+		String playerText = "";
+		String scoreText = "";
+		//Create string of scores
+		for (Highscore hs: highscores) {
+			playerText += hs.playerName;
+			playerText += "\n";
+			scoreText += hs.score;
+			scoreText += "\n";
+		}
+		
+		
+		
+		
+		
+		playerLabel = new Label(playerText, ls);
+		playerLabel.setY(Gdx.graphics.getHeight()/2 - label.getHeight()/2 + 50);
+		playerLabel.setX(Gdx.graphics.getWidth()/2 - 200);
+		
+		scoreLabel = new Label(scoreText, ls);
+		scoreLabel.setY(Gdx.graphics.getHeight()/2 - label.getHeight()/2 + 50);
+		scoreLabel.setX(Gdx.graphics.getWidth()/2 + 200);
+		
+		
+		
 		
 		Image cyra = new Image(new Texture(Gdx.files.internal("cyra.png")));
-		cyra.setX(Gdx.graphics.getWidth()/2 - cyra.getWidth()/2 - 90);
+		cyra.setX(Gdx.graphics.getWidth()/2 - cyra.getWidth()/2);
 		cyra.setY(Gdx.graphics.getHeight()/2 - cyra.getHeight()/2 + 115);
 		
 		Image bg = new Image(new Texture(Gdx.files.internal("main_bg.png")));
@@ -190,13 +146,13 @@ public class MainMenu extends AbstractScreen{
 		bg.setY(Gdx.graphics.getHeight() - bg.getHeight()*0.75f + 30);
 		bg.setScale(0.75f);
 		
-		stage.addActor(bg);
+		//stage.addActor(bg);
 		stage.addActor(button);
-		stage.addActor(button2);
-		stage.addActor(button3);
 		stage.addActor(label);
+		stage.addActor(playerLabel);
+		stage.addActor(scoreLabel);
 		
-		stage.addActor(cyra);
+		//stage.addActor(cyra);
 	}
 	
 	

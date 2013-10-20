@@ -35,6 +35,26 @@ public class Sword extends MovableEntity {
 		inProgress = false;
 	}
 	
+	public int getFrame(){
+		if(inProgress == true){
+			if(frame < FRAME_LENGTH){
+				return 1;
+			}
+			else if(frame < 2f * FRAME_LENGTH){
+				return 2;
+			}
+			else if(frame < 3f * FRAME_LENGTH){
+				return 3;
+			}
+			else{
+				return 0;
+			}
+		}
+		else{
+			return 0;
+		}
+	}
+	
 	@Override
 	public void update(Player ship) {
 		super.update(ship);

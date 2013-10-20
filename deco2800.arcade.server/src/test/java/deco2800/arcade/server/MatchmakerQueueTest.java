@@ -61,6 +61,15 @@ public class MatchmakerQueueTest {
 		assertTrue(MMQ.getQueue().size() == 1);
 		assertTrue(MMQ.getServerList().isEmpty());
 		
+		/* Add random player for different game (shouldn't start server */
+		NewMultiGameRequest diff = new NewMultiGameRequest();
+		diff.gameId = "Moisture is the essence of wetness";
+		diff.playerID = player2ID;
+		MMQ.checkForGame(diff, player2Connection);
+		assertTrue(MMQ.getQueue().size() == 2);
+		assertTrue(MMQ.getServerList().isEmpty());
+		
+		
 		/* Add 2nd player for same game (Should start server) */
 		NewMultiGameRequest req2 = new NewMultiGameRequest();
 		req2.gameId = testGame;
@@ -72,7 +81,7 @@ public class MatchmakerQueueTest {
 		NewMultiSessionResponse response = (NewMultiSessionResponse)arg.getValue();
 		int sessionId = response.sessionId;
 		
-		assertTrue(MMQ.getQueue().size() == 0);
+		assertTrue(MMQ.getQueue().size() == 1);
 		assertTrue(MMQ.getServerList().size() == 1);
 		MMQ.dropServer(sessionId);
 		assertTrue(MMQ.getServerList().isEmpty());
@@ -198,7 +207,72 @@ public class MatchmakerQueueTest {
 		assertEquals(expected4[1], result4[1]);
 	}
 	
+	@Test
+	public void testGetServerListAsList() {
+		MMQ.resetQueuedUsers();
+		MMQ.resetActiveServers();
+		assertTrue(MMQ.getServerListAsList().isEmpty());
+		
+		/* Create a Game */
+		NewMultiGameRequest req = new NewMultiGameRequest();
+		req.gameId = testGame;
+		req.playerID = player1ID;
+		MMQ.checkForGame(req, player1Connection);
+		
+		NewMultiGameRequest req2 = new NewMultiGameRequest();
+		req2.gameId = testGame;
+		req2.playerID = player2ID;
+		MMQ.checkForGame(req2, player1Connection);
+		
+		assertEquals(MMQ.getServerListAsList().size(), 1);
+	}
 	
+	@Test
+	public void testAddLobbyGame() {
+		MMQ.resetQueuedUsers();
+		MMQ.resetActiveServers();
+		assertEquals(0, MMQ.addLobbyGame(player1ID, player2ID, player1Connection, player2Connection, testGame));
+	}
+	
+	@Test
+	public void testTimeInQueue() throws DatabaseException {
+		MMQ.resetQueuedUsers();
+		MMQ.resetActiveServers();
+		
+		MMQ.setDatabase(mock(PlayerGameStorage.class));
+		when(MMQ.getDatabase().getPlayerRating(player1ID, testGame)).thenReturn(1550);
+		when(MMQ.getDatabase().getPlayerRating(player2ID, testGame)).thenReturn(1400);
+		
+		/* Create a Game */
+		NewMultiGameRequest req = new NewMultiGameRequest();
+		req.gameId = testGame;
+		req.playerID = player1ID;
+		MMQ.checkForGame(req, player1Connection);
+		
+		NewMultiGameRequest req2 = new NewMultiGameRequest();
+		req2.gameId = testGame;
+		req2.playerID = player2ID;
+		MMQ.checkForGame(req2, player1Connection);
+		
+		/* Verify game didn't launch */
+		assertTrue(MMQ.getServerList().size() == 0);
+		assertTrue(MMQ.getQueue().size() == 2);
+		
+		/* Simulate 30-seconds passing */
+		MMQ.callCheckList(System.currentTimeMillis() + 30000);
+		
+		/* Verify game didn't launch */
+		assertTrue(MMQ.getServerList().size() == 0);
+		assertTrue(MMQ.getQueue().size() == 2);
+		
+		
+		/* Simulate 1-min passing */
+		MMQ.callCheckList(System.currentTimeMillis() + 60000);
+
+		/* Verify game did launch after wait time*/
+		assertTrue(MMQ.getServerList().size() == 1);
+		assertTrue(MMQ.getQueue().isEmpty());
+	}
 	
 	
 	

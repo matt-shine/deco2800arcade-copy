@@ -1,6 +1,7 @@
 package deco2800.server;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class MatchmakerQueue {
 			public void run() {
 				// Checks the queued players list to see if any games have
 				// become available
-				checkList();
+				checkList(null);
 			}
 		}
 		timer.schedule(new ListTask(), 0, 10000);
@@ -168,7 +169,7 @@ public class MatchmakerQueue {
 			player1.add(playerID);
 			player1.add(connection);
 			ArrayList<Object> player2 = queuedUsers.get(i);
-			if (goodGame(player1, player2)) {
+			if (goodGame(player1, player2,  null)) {
 				launchGame(player1, player2);
 				queuedUsers.remove(i);
 				return;
@@ -216,7 +217,10 @@ public class MatchmakerQueue {
 	 * @return True if a game can be started between the two players
 	 */
 	private boolean goodGame(ArrayList<Object> player1,
-			ArrayList<Object> player2) {
+			ArrayList<Object> player2, Long systime) {
+		if (systime == null) {
+			systime = System.currentTimeMillis();
+		}
 		int p1Rating = 0, p2Rating = 0, ratingDiff;
 		long timeAllowance;
 		int p1ID = (Integer) player1.get(2);
@@ -252,7 +256,7 @@ public class MatchmakerQueue {
 		// quality
 		// game in favour of finding one immediately
 		long time = (Long) player2.get(1);
-		timeAllowance = (((System.currentTimeMillis() - time) / 60000) + 1) * 100;
+		timeAllowance = (((systime - time) / 60000) + 1) * 100;
 		if (p1Rating >= p2Rating) {
 			ratingDiff = p1Rating - p2Rating;
 		} else {
@@ -301,7 +305,10 @@ public class MatchmakerQueue {
 	 * Checks the queued user list to see if games may be formed between users
 	 * due to relaxed rank settings due to extra time in the queue
 	 */
-	private void checkList() {
+	private void checkList(Long systime) {
+		if (systime == null) {
+			systime = System.currentTimeMillis();
+		}
 		if (queuedUsers.size() < 2) {
 			return;
 		}
@@ -309,7 +316,7 @@ public class MatchmakerQueue {
 			for (int j = i + 1; j < queuedUsers.size(); j++) {
 				if (((String) queuedUsers.get(i).get(0))
 						.equals(((String) queuedUsers.get(j).get(0)))) {
-					if (goodGame(queuedUsers.get(i), queuedUsers.get(j))) {
+					if (goodGame(queuedUsers.get(i), queuedUsers.get(j), systime)) {
 						ArrayList<Object> player1 = new ArrayList<Object>(
 								queuedUsers.get(i));
 						ArrayList<Object> player2 = new ArrayList<Object>(
@@ -462,6 +469,10 @@ public class MatchmakerQueue {
 	public void resetActiveServers() {
 		this.activeServers = new HashMap<Integer, MultiplayerServer>();
 		this.serverNumber = 0;
+	}
+	
+	public void callCheckList(Long systime) {
+		this.checkList(systime);
 	}
 	
 	/* END TEST HELPER METHODS */

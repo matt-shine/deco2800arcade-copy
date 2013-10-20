@@ -8,6 +8,7 @@ public class AccoladeContainer implements Iterable<Accolade> {
     //instantiate variables
     private Accolade head;
     private Accolade tail;
+    private HashMap<Double, Accolade> quickReference;
     private int gameID;
     private int size;
     private int playerID;
@@ -144,6 +145,15 @@ public class AccoladeContainer implements Iterable<Accolade> {
  
     public Iterator<Accolade> iterator() {
         return new Iterable();
+    }
+    
+    public Accolade get(Double accoladeID) {
+    	for (Accolade accolade:this){
+    		if(accolade.getID()==accoladeID){
+    			return accolade;
+    		}
+    	}
+    	throw new NoSuchElementException("There was no accolade found with that ID");
     }
  
     public class Iterable implements Iterator<Accolade> {

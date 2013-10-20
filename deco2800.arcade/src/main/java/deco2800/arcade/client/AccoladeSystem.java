@@ -3,6 +3,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+import deco2800.arcade.model.Accolade;
+import deco2800.arcade.model.AccoladeContainer;
+
 //import deco.arcade.accolades.servercommunicator //this will be what ever jerry calls it
 
 /** CHANGES
@@ -10,20 +13,23 @@ import java.util.*;
  * Accolades now can longer be referred to by string name. They must be declared in the xml
  * The timer is now part of the accolade system, and multiple timer events are scheduled
  */
-
+//TODO CHANEG THE LOCAL ACCOLADE STORAGE TO A ACCOLADECONTAINER
+//TODO fix up the parameter comments for the methods
 public class AccoladeSystem {
 	//ServerCommunicator server = new ServerCommunicator();
 		
 	
 	private Map<String,Integer> nameIDPairs;
-	private Map<Integer,int[]> localAccolades; //progress for popupevent
-	private Map<Integer,WatchedAccolade> watchedVariables; //Prepared variables ready for scheduling
-	private Map<Integer, TimedPush> timerTasks; //timertasks recreated when the timer begins
+	private AccoladeContainer localAccolades; //progress for popupevent
+	private Map<Double,WatchedAccolade> watchedVariables; //Prepared variables ready for scheduling
+	private Map<Double, TimedPush> timerTasks; //timertasks recreated when the timer begins
 	private Timer timer;
 	private ResultSet serverData; 
 	private int playerID;
 	private int gameID;
 	private boolean timerRunning = false;
+	//TODO set this to false when the server is working
+	private boolean offlineMode = true; 
 	
 	//when progress%popup = 0 a popup is overlayed on screen
 	private static final int PROGRESS = 0;
@@ -53,7 +59,7 @@ public class AccoladeSystem {
 		//This is the local copy of the accolade progress, it's to save 
 		//bandwidth for checking when to do the accolade popup message
 		try {
-			localAccolades = this.makeLocal(this.serverData);
+			this.localAccolades = this.makeLocal(this.serverData);
 		} catch (SQLException error) {
 			// TODO Auto-generated catch block
 			System.console().printf("There was an error creating the localCopy "
@@ -86,9 +92,17 @@ public class AccoladeSystem {
 	 * @param accolade The accolade to be modified in string form.
 	 * @param increment The total you would like to increment the accolade by.
 	 */
-	public void push(int accoladeID, int increment){
-		int progress = this.localAccolades.get(accoladeID)[0];
-		int popup = this.localAccolades.get(accoladeID)[1];
+	public void push(Double accoladeID, int increment){
+		//TODO check that the increment is a positive value
+		Accolade tmpAccolade = localAccolades.get(accoladeID);
+		int progress = tmpAccolade.getValue();
+		int popup = tmpAccolade.getPopup();
+		
+		tmpAccolade.setValue(progress + increment);
+		//DO THe same increment to the server
+		
+
+		
 		/**
 		 * try {
 		 * 		server.put(this.playerID.toString() + "," 
@@ -124,15 +138,23 @@ public class AccoladeSystem {
 	 * @return An accolade Hashmap<accolade_id, accolade_progress> for local tracking of popups
 	 * @throws SQLException //TODO find out when the sql exception is thrown
 	 */
-	private HashMap<Integer,int[]> makeLocal(ResultSet table) throws SQLException{
-		HashMap<Integer, int[]> accolades = new HashMap<Integer,int[]>();
-		int[] accoladeInfo;
+	//TODO
+	private AccoladeContainer makeLocal(ResultSet table) throws SQLException{
+		//this is supposed to be fetching from the server but i'll instead use just the 
+		AccoladeContainer accolades = 
+				new AccoladeContainer().setGameID(this.gameID).setPlayerID(this.playerID);
+		
+		//MAKE THE WHOLE ACCOLADE
 		while(table.next()){
-			//accoladeID, AccoladeProgress/popup event
-			accoladeInfo = new int[2];//TODO reduce this to 1 if needed
-			accoladeInfo[PROGRESS] = table.getInt("value");
-			accoladeInfo[POPUP] = table.getInt("popup");
-			accolades.put(table.getInt("accolade_id"),accoladeInfo);
+			Accolade tmpAccolade = new Accolade(table.getString("name"), 
+					table.getString("message"), 
+					table.getInt("popup"), 
+					table.getString("popupMessage"), 
+					table.getDouble("modifier"), 
+					table.getString("unit"),
+					table.getString("tag"),
+					table.getString("imagePath")
+					).setValue(table.getInt("value"));
 		}
 		return accolades;
 	}
@@ -159,7 +181,7 @@ public class AccoladeSystem {
 	 * @param variable The Integer that is being watched
 	 * @param pushInterval How often in milliseconds the game performs the push
 	 */
-	public void watch(int accoladeID, Object variable, int pushInterval){
+	public void watch(Double accoladeID, Object variable, int pushInterval){
 		//Creates a new scheduled push or updates the old one.
 		watchedVariables.put(accoladeID,
 					new WatchedAccolade(accoladeID, variable, pushInterval));
@@ -219,22 +241,22 @@ public class AccoladeSystem {
 	
 	private class WatchedAccolade{		
 		public Object variable;
-		public int accoladeID;
+		public Double accoladeID;
 		public int interval;
 
-		public WatchedAccolade(int accoladeID, Object variable, int interval){
+		public WatchedAccolade(Double accoladeID2, Object variable, int interval){
 			this.variable = variable;
-			this.accoladeID = accoladeID;
+			this.accoladeID = accoladeID2;
 			this.interval = interval;
 		}
 	} //end of watched accolade
 	
 	private class TimedPush extends TimerTask{
 		Object variable;
-		int accoladeID;
+		Double accoladeID;
 		int prevValue;
 		
-		public TimedPush(int accoladeID, Object variable){
+		public TimedPush(Double accoladeID, Object variable){
 			this.accoladeID = accoladeID;
 			this.variable = variable;
 			this.prevValue = Integer.valueOf((String) variable);

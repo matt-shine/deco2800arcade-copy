@@ -31,7 +31,14 @@ public class CommunicationTest {
 
 	@Before
 	public void initialise() {
-		boolean[] privset = { true, true, true, true, true, true, true };
+		ArrayList<Boolean> privset = new ArrayList<Boolean>();
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
 
 		List<String> info = new ArrayList<String>();
 		info.add("Ricky");
@@ -57,14 +64,12 @@ public class CommunicationTest {
 		info3.add("Skill");
 		info3.add("7");
 
-		/*
 		player1 = new Player(123, "THIS IS NOT A VALID PATH.html", info, null,
 				null, null, null, privset);
 		player2 = new Player(234, "THIS IS NOT A VALID PATH.html", info2, null,
 				null, null, null, privset);
 		player3 = new Player(235, "THIS IS NOT A VALID PATH.html", info3, null,
 				null, null, null, privset);
-		*/
 
 		view = new CommunicationView(600);
 
@@ -74,9 +79,6 @@ public class CommunicationTest {
 		comm2.loggedIn(player2, view);
 		comm3 = new CommunicationNetwork(player3, null);
 		comm3.loggedIn(player3, view);
-		//listener1 = new CommunicationListener(comm1);
-		//listener2 = new CommunicationListener(comm2);
-		//listener3 = new CommunicationListener(comm3);
 		listener1 = new CommunicationListener(comm1, null);
 		listener2 = new CommunicationListener(comm2, null);
 		listener3 = new CommunicationListener(comm3, null);
@@ -85,7 +87,7 @@ public class CommunicationTest {
 	/**
 	 * Tests the creating of CommunicationNetwork.
 	 */
-	//@Test
+	@Test
 	public void initTest() {
 		assertEquals(player1, comm1.getPlayer());
 		assertEquals(123, comm1.getPlayer().getID());
@@ -98,7 +100,7 @@ public class CommunicationTest {
 	/**
 	 * Tests the creating of a node and adding participants into it.
 	 */
-	//@Test
+	@Test
 	public void initChat() {
 		List<Integer> chatParticipants = new ArrayList<Integer>();
 		chatParticipants.add(player1.getID());
@@ -114,7 +116,7 @@ public class CommunicationTest {
 	 * Need to update this to use the CommuncationNetwork inviteUser method once
 	 * NetworkClient mock is working
 	 */
-	//@Test
+	@Test
 	public void addAndRemove() {
 		List<Integer> chatParticipants = new ArrayList<Integer>();
 		chatParticipants.add(player1.getID());
@@ -140,7 +142,7 @@ public class CommunicationTest {
 	 * Tests the chat history. Mostly just tests the transferring of ChatHistory
 	 * object between CommunicationListener -> CommunicationNetwork
 	 */
-	//@Test
+	@Test
 	public void chatHistory() {
 		List<Integer> chatParticipants = new ArrayList<Integer>();
 		chatParticipants.add(player1.getID());

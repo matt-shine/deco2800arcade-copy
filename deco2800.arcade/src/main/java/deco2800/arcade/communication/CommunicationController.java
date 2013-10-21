@@ -113,9 +113,6 @@ public class CommunicationController {
 			textMessage.setText(message);
 
 			if (node.getParticipants() == null) {
-				System.out
-						.println("You are trying to send to nobody! This won't happen normally because a chat window will only be open if you have someone to talk to. "
-								+ "It will however, happen during testing because this chat window is open by default!");
 			} else {
 				textMessage.setRecipients(node.getParticipants());
 				network.sendTextMessage(textMessage);

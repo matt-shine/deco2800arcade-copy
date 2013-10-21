@@ -31,7 +31,7 @@ public class Pacman extends GameClient {
 	public final int SCREEN_WIDTH = 1280;	
 	private final int NUM_GHOSTS = 4;
 	public boolean gamePaused;
-	Sound waka = Gdx.audio.newSound(Gdx.files.internal("Chomping.mp3"));
+	private Sound waka;
 	
 	
 	private PacModel model; // model for Pacman	
@@ -41,7 +41,7 @@ public class Pacman extends GameClient {
 	/** Checks to make sure View isn't set up more than once
 	 * View can't be set up normally until the rendering starts because
 	 *  it causes NullPointers for the tests when it tries to load Textures */
-	private boolean viewNotSetUp; 
+	private boolean setUpNotDone; 
 	
     private NetworkClient networkClient;
     private AchievementClient achievementClient;
@@ -96,7 +96,7 @@ public class Pacman extends GameClient {
 			}
         });           
 		super.create();		
-		viewNotSetUp = true;		
+		setUpNotDone = true;		
 		model = new PacModel(SCREEN_WIDTH, SCREEN_HEIGHT, NUM_GHOSTS);		
 		//initialise receiver for input- use the Arcade Multiplexer
 		controller = new PacController(model);
@@ -121,6 +121,7 @@ public class Pacman extends GameClient {
 	@Override
 	public void dispose() {
 		super.dispose();
+		waka.dispose();
 		ArcadeInputMux.getInstance().removeProcessor(controller);
 		
 		//TODO dispose more stuff here? Perhaps the view things?
@@ -136,10 +137,11 @@ public class Pacman extends GameClient {
 	 */
 	@Override
 	public void render() {	
-		// makes sure view is only set up once
-		if (viewNotSetUp) {
+		// makes sure view and sound is only set up once
+		if (setUpNotDone) {
 			view = new PacView(model);
-			viewNotSetUp = false;
+			waka = Gdx.audio.newSound(Gdx.files.internal("Chomping.mp3"));
+			setUpNotDone = false;
 		}		
 		updateAchievements();		
 		// make changes in the model to prepare for rendering if overlay

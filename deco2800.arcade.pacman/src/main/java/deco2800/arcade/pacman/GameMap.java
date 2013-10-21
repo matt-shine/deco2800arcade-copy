@@ -3,7 +3,6 @@ package deco2800.arcade.pacman;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.lwjgl.util.Point;
 
@@ -20,7 +19,6 @@ public class GameMap {
 	private List<WallTile> ghostDoors; //list of ghost doors for ghosts to access
 	private Tile pacStart; //the right starting tile for pacman (appears on two tiles)
 	private Tile[] ghostStarts; //starting positions for ghosts
-	private Tile blinkyStart;
 	private Tile fruitRight; // the right tile that fruit appears on
 	private int dotsEaten;
 	private int ghostsEaten;

@@ -16,8 +16,14 @@ import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.pacman.Mover.Dir;
 // TESTS DO NOT RUN ON JENKINS BUT WORK FINALLY OTHERWISE. DO NOT DELETE THEM, 
 // THE OFFENDING ONES ARE COMMENTED OUT
+import deco2800.arcade.pacman.PacChar.PacState;
+
+// Note also that one of the tests (possibly not from this class) causes 
+// an exception in a LWJGL thread sometimes, but the build and tests still
+// run correctly whether or not it happens.
 
 /**
  * A main test class for Pacman, also testing the model. 
@@ -55,7 +61,7 @@ public class MainTest {
 	/** Disposes of things. AL library still seems to cause occasional errors. */
 	@AfterClass
 	public static void tearDown() {
-		pacGame.dispose();
+		ArcadeInputMux.getInstance().removeProcessor(pacGame.getController());
 		app.exit();
 		//dispose of audio properly- try catch necessary so it passes both in Eclipse and in a build
 		try {
@@ -90,6 +96,25 @@ public class MainTest {
 		Assert.assertNotNull(pModel.getPlayer());
 		Assert.assertNotNull(pModel.getBlinky());
 		Assert.assertNotNull(pModel.getPinky());
+	}
+	
+	/** Tests initialisation of the player */
+	@Test
+	public void pacCharInit() {
+		PacChar player = model.getPlayer();
+		Assert.assertEquals(gameMap.getGrid()[18][11], player.getCurTile());
+		Assert.assertEquals(PacState.IDLE, player.getCurrentState());
+		Assert.assertEquals(Dir.DOWN, player.getFacing());
+		Assert.assertEquals(Dir.DOWN, player.getDrawFacing());
+		Assert.assertEquals(400, player.getGhostScore());
+	}
+	
+	@Test
+	/** Tests the drawing preparations in PacChar */
+	public void testPreparePlayerDraw() {
+		PacChar player = model.getPlayer();
+		player.prepareDraw();
+		Assert.assertNotNull(player.getSpritePos());
 	}
 	
 }

@@ -11,8 +11,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.Task;
 
 import deco2800.arcade.pacman.Ghost.GhostState;
 import deco2800.arcade.pacman.PacChar.PacState;
@@ -39,13 +37,11 @@ public class PacView {
 	private static final int PACMAN_SIDE_PIX = 13;
 	private static final int GHOST_SIDE_PIX = 14;
 	private TextureRegion[] pacmanFrames = new TextureRegion[MOVER_SPRITE_NUM];
-	private TextureRegion currentFrame; // for pacman animation
 	private static final int NUM_GHOSTS = 5;
 	private TextureRegion[][] ghostFrames = new TextureRegion[NUM_GHOSTS][MOVER_SPRITE_NUM];
 	private static int SCREEN_WIDTH;
 	private static int SCREEN_HEIGHT;
-	Sound waka = Gdx.audio.newSound(Gdx.files.internal("Chomping.mp3"));
-	
+	private Sound waka;
 	private GameMap gameMap;
 	private PacChar player;
 	private Ghost blinky;
@@ -106,6 +102,7 @@ public class PacView {
 		this.player = model.getPlayer();
 		this.blinky = model.getBlinky();
 		this.pinky = model.getPinky();
+		waka = Gdx.audio.newSound(Gdx.files.internal("Chomping.mp3"));
 	}
 	
 	/**

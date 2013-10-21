@@ -46,7 +46,7 @@ public class ReplyThreadController implements ActionListener {
 		System.out.println("submit clicked");
 		InsertChildThreadRequest request = new InsertChildThreadRequest();
 		request.message = this.view.textPane.getText();
-		request.createdBy = 0;
+		request.createdBy = ForumUser.GUEST_ID;
 		request.pThread = this.pid;
 		this.connection.getClient().sendTCP(request);
 		System.out.println("cThread request is sent");

@@ -44,7 +44,7 @@ public class ForumStorage {
 	private boolean initialized = false;
 	private static final String[] CATEGORY = {"General_Discussion", "Report_Bug", "Tutorial", "Others"};
 	private static final String TAG_SPLITTER = "#";
-	private int uid;
+	private ForumUser admin;
 	/* maxPid is a highest pid that parent_thread table has.
 	 * Increment this only if parent_thread SQL insert (Not for delete). And call
 	 * setMaxPid() in initialise().
@@ -60,6 +60,15 @@ public class ForumStorage {
 	 */
 	public boolean getInitialized() {
 		return this.initialized;
+	}
+	
+	/**
+	 * Get forum administrator as FroumUser (registered in Players).
+	 * 
+	 * @return ForumUser this.admin
+	 */
+	public ForumUser getAdmin() {
+		return this.admin;
 	}
 	
 	/**
@@ -121,8 +130,9 @@ public class ForumStorage {
 			 */
 			//this.dropConstraint("parent_thread", "SQL131014143242970");
 			this.addChkCategory();
-			this.insertParentThread("Test parent thread", "Very fist parent thread", 1, "Others", "Test#Parent thread");
-			this.insertChildThread("Very first child thread.", 1, 1);
+			this.insertForumUserAdmin();
+			this.insertParentThread("Test parent thread", "Very fist parent thread", this.admin.getId(), "Others", "Test#Parent thread");
+			this.insertChildThread("Very first child thread.", this.admin.getId(), 1);
 			this.insertThreadExamples();
 			//this.printAllThreads();
 			con.commit();
@@ -148,7 +158,6 @@ public class ForumStorage {
 				throw new DatabaseException("Fail to close DB connectoin: " + e);
 			}
 		}
-		this.uid = 0;
 		this.setMaxPid();
 		this.setMaxCid();
 	}
@@ -383,7 +392,7 @@ public class ForumStorage {
 			ResultSet rs = st.executeQuery();
 			if (rs.next()) {
 				result = new ParentThread(rs.getInt("pid"), rs.getString("topic"), rs.getString("message")
-						, new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp"), rs.getString("category")
+						, this.getForumUser(rs.getString("created_by")), rs.getTimestamp("timestamp"), rs.getString("category")
 						, rs.getString("tags"), rs.getInt("vote"));
 			} else {
 				result = null;
@@ -428,7 +437,7 @@ public class ForumStorage {
 				for (String temp : tag_array) {
 					if (temp.equals(tag)) {
 						result.add(new ParentThread(rs.getInt("pid"), rs.getString("topic"), rs.getString("message")
-								, new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp"), rs.getString("category")
+								, this.getForumUser(rs.getString("created_by")), rs.getTimestamp("timestamp"), rs.getString("category")
 								, rs.getString("tags"), rs.getInt("vote")));
 					}
 				}
@@ -478,7 +487,7 @@ public class ForumStorage {
 				for (String temp : tag_array) {
 					if (temp.equals(tag)) {
 						result.add(new ParentThread(rs.getInt("pid"), rs.getString("topic"), rs.getString("message")
-								, new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp"), rs.getString("category")
+								, this.getForumUser(userId), rs.getTimestamp("timestamp"), rs.getString("category")
 								, rs.getString("tags"), rs.getInt("vote")));
 					}
 				}
@@ -564,7 +573,7 @@ public class ForumStorage {
 					temp.trim();
 					if (temp.equals(tag)) {
 						result.add(new ParentThread(rs.getInt("pid"), rs.getString("topic"), rs.getString("message")
-								, new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp"), rs.getString("category")
+								, this.getForumUser(rs.getString("created_by")), rs.getTimestamp("timestamp"), rs.getString("category")
 								, rs.getString("tags"), rs.getInt("vote")));
 						numRecords++;
 					}
@@ -655,7 +664,7 @@ public class ForumStorage {
 			ResultSet rs = st.executeQuery();
 			while (rs.next()) {
 				ParentThread pThread = new ParentThread(rs.getInt("pid"), rs.getString("topic")
-						, rs.getString("message"), new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp")
+						, rs.getString("message"), this.getForumUser(rs.getString("created_by")), rs.getTimestamp("timestamp")
 						, rs.getString("category"), rs.getString("tags"), rs.getInt("vote"));
 				result.add(pThread);
 			}
@@ -744,7 +753,7 @@ public class ForumStorage {
 			ResultSet rs = st.executeQuery();
 			while (rs.next()) {
 				ParentThread pThread = new ParentThread(rs.getInt("pid"), rs.getString("topic")
-						, rs.getString("message"), new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp")
+						, rs.getString("message"), this.getForumUser(userId), rs.getTimestamp("timestamp")
 						, rs.getString("category"), rs.getString("tags"), rs.getInt("vote"));
 				result.add(pThread);
 			}
@@ -833,7 +842,7 @@ public class ForumStorage {
 			ResultSet rs = st.executeQuery();
 			while (rs.next()) {
 				ParentThread pThread = new ParentThread(rs.getInt("pid"), rs.getString("topic")
-						, rs.getString("message"), new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp")
+						, rs.getString("message"), this.getForumUser(rs.getString("created_by")), rs.getTimestamp("timestamp")
 						, rs.getString("category"), rs.getString("tags"), rs.getInt("vote"));
 				result.add(pThread);
 			}
@@ -878,7 +887,7 @@ public class ForumStorage {
 			ResultSet rs = st.executeQuery();
 			if (rs.next()) {
 				result = new ChildThread(rs.getInt("cid"), rs.getString("message")
-						, new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp") 
+						, this.getForumUser(rs.getString("created_by")), rs.getTimestamp("timestamp") 
 						, rs.getInt("vote"));
 			} else {
 				result = null;
@@ -953,7 +962,7 @@ public class ForumStorage {
 			ResultSet rs = st.executeQuery();
 			while (rs.next()) {
 				ChildThread temp = new ChildThread(rs.getInt("cid"), rs.getString("message")
-						, new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp") 
+						, this.getForumUser(rs.getString("created_by")), rs.getTimestamp("timestamp") 
 						, rs.getInt("vote"));
 				result.add(temp);
 			}
@@ -1035,7 +1044,7 @@ public class ForumStorage {
 			ResultSet rs = st.executeQuery();
 			while (rs.next()) {
 				ChildThread temp = new ChildThread(rs.getInt("cid"), rs.getString("message")
-						, new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp") 
+						, this.getForumUser(userId), rs.getTimestamp("timestamp") 
 						, rs.getInt("vote"));
 				result.add(temp);
 			}
@@ -1088,11 +1097,11 @@ public class ForumStorage {
 	 * Retrieve user information (extracted) from given id and return it as ForumUser
 	 * 
 	 * @param id	non-negative int, user's id.
-	 * @return ForumUser, containing id and name. If no result, return null.
+	 * @return ForumUser, containing id and name. If no result, return id, "Guest".
 	 * @throws DatabaseException	if invalid parameter and SQLException.
 	 */
 	public ForumUser getForumUser(int id) throws DatabaseException {
-		String query = "SELECT playerid, username FROM Player WHERE playerid = ?";
+		String query = "SELECT playerid, username FROM Players WHERE playerid = ?";
 		ForumUser result;
 		if (id < 0) {
 			throw new DatabaseException("Invalid parameter (id was a negative integer).");
@@ -1105,7 +1114,7 @@ public class ForumStorage {
 			if (rs.next()) {
 				result = new ForumUser(id, rs.getString("username"));
 			} else {
-				result = null;
+				result = new ForumUser(id, "Guest");
 			}
 			rs.close();
 			st.close();
@@ -1128,11 +1137,38 @@ public class ForumStorage {
 	 * 
 	 * @param username	String, username
 	 * @return	ForumUser containing id and name of forum user.
+	 * 			If no result, return (ForumUser.GUEST_ID, username).
+	 * @throws DatabaseException 
 	 */
-	public ForumUser getForumUser(String username) {
+	public ForumUser getForumUser(String username) throws DatabaseException {
+		String query = "SELECT playerid, username FROM Players WHERE username = ?";
 		ForumUser result;
-		result = new ForumUser(uid, username);
-		uid++;
+		if (username == "") {
+			throw new DatabaseException("Invalid parameter (username is empty).");
+		}
+		Connection con = Database.getConnection();
+		try {
+			PreparedStatement st = con.prepareStatement(query);
+			st.setString(1, username);
+			ResultSet rs = st.executeQuery();
+			if (rs.next()) {
+				result = new ForumUser(rs.getInt("playerid"), username);
+			} else {
+				result = new ForumUser(ForumUser.GUEST_ID, username);
+			}
+			rs.close();
+			st.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Failed to get user information: " + e.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException("Fail to close the connection: " + e.getMessage());
+			}
+		}
 		return result;
 	}
 	
@@ -1630,6 +1666,70 @@ public class ForumStorage {
 		}
 	}
 	
+	/**
+	 * Insert Forum Admin into players table
+	 * 
+	 * @throws DatabaseException
+	 */
+	public void insertForumUserAdmin() throws DatabaseException {
+		String query = "SELECT playerid, username FROM players WHERE username = ?";
+		String update = "INSERT INTO players (playerid, username, name, email, program, bio) "
+				+ "VALUES (?, ?, ?, ?, ?, ?)";
+		Connection con = Database.getConnection();
+		try {
+			/* Check existance of player table */
+			ResultSet rs = con.getMetaData().getTables(null, null, "PLAYERS", null);
+			if (!rs.next()) {
+				throw new DatabaseException("PlayerStorage is not initialized");
+			} else {
+				rs.close();
+				/* Find Web Admin */
+				PreparedStatement st = con.prepareStatement(query);
+				st.setString(1, "Forum Admin");
+				rs = st.executeQuery();
+				if (rs.next()) {
+					this.admin = new ForumUser(rs.getInt("playerid"), rs.getString("username"));
+					rs.close();
+					st.close();
+				} else {
+					rs.close();
+					st.close();
+					st = con.prepareStatement(update);
+					st.setInt(1, 2013);
+					st.setString(2, "Forum Admin");
+					st.setString(3, "Forum Administrator");
+					st.setString(4, "forum@admin.com");
+					st.setString(5, "");
+					st.setString(6, "");
+					st.executeUpdate();
+					st.close();
+					st = con.prepareStatement(query);
+					st.setString(1, "Forum Admin");
+					rs = st.executeQuery();
+					if (rs.next()) {
+						this.admin = new ForumUser(rs.getInt("playerid"), rs.getString("username"));
+						rs.close();
+						st.close();
+					} else {
+						this.admin = new ForumUser(0, "Forum User");
+						rs.close();
+						st.close();
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Fail to insert new child_thread, " + e.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException("Fail to close connection, " + e.getMessage());
+			}
+		}
+	}
+	
 	/* Private methods */
 	private String getCategoryConstraint() {
 		String result = "ALTER TABLE parent_thread ADD CONSTRAINT chk_category CHECK (category IN (";
@@ -1680,7 +1780,7 @@ public class ForumStorage {
 	private void insertThreadExamples() throws DatabaseException {
 		int num = 0;
 		for (int i = 0; i < 20; i++) {
-			this.insertParentThread("Parent Thread test " + i, "Test message", 1, CATEGORY[num], "test");
+			this.insertParentThread("Parent Thread test " + i, "Test message", this.admin.getId(), CATEGORY[num], "test");
 			if (num != 3) {
 				num++;
 			} else {

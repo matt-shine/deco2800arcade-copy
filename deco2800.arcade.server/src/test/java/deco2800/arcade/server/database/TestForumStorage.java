@@ -17,7 +17,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import deco2800.server.database.ForumStorage;
+import deco2800.server.database.PlayerStorage;
 import deco2800.arcade.model.forum.ChildThread;
+import deco2800.arcade.model.forum.ForumUser;
 import deco2800.arcade.model.forum.ParentThread;
 
 /**
@@ -30,6 +32,7 @@ import deco2800.arcade.model.forum.ParentThread;
 public class TestForumStorage {
 	private static IDatabaseTester tester;
 	private ForumStorage forumStorage;
+	private ForumUser admin;
 	
 	/**
 	 * This method is run once when this class is instantiated
@@ -45,6 +48,8 @@ public class TestForumStorage {
 	
 	@Before
 	public void setUp() throws Exception {
+		PlayerStorage playerStorage = new PlayerStorage();
+		playerStorage.initialise();
 		this.forumStorage = new ForumStorage();
 		this.forumStorage.initialise();
 		IDataSet ds = this.getDataSet();
@@ -214,6 +219,14 @@ public class TestForumStorage {
 		this.forumStorage.printConstraints();
 		this.forumStorage.checkConstraint("CHK_CATEGORY");
 		assertEquals(true, this.forumStorage.checkConstraint("CHK_CATEGORY"));
+	}
+	
+	@Test
+	public void testGetForumUser() throws Exception {
+		assertEquals(this.forumStorage.getAdmin().getId()
+				, this.forumStorage.getForumUser(this.forumStorage.getAdmin().getName()).getId());
+		assertEquals(this.forumStorage.getAdmin().getName()
+				, this.forumStorage.getForumUser(this.forumStorage.getAdmin().getId()).getName());
 	}
 	
 	private IDataSet getDataSet() throws DataSetException, IOException {

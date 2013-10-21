@@ -8,6 +8,7 @@ import java.util.Observable;
 public class ForumUser extends Observable {
 	private int id;
 	private String name;
+	public static final int GUEST_ID = 6666;
 	
 	/**
 	 * Constructor

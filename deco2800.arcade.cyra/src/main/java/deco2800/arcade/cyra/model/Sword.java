@@ -14,11 +14,19 @@ public class Sword extends MovableEntity {
 	private boolean facingRight = false;
 	private boolean inProgress = false;
 	
+	/**
+	 * Intanciate sword.
+	 * @param pos
+	 */
 	public Sword(Vector2 pos) {
 		super(0, 0, pos, BASE_WIDTH, BASE_HEIGHT);
 		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * Initialize variables
+	 * @param facingRight
+	 */
 	public void begin(boolean facingRight) {
 		this.facingRight = facingRight;
 		frame = 0;
@@ -26,15 +34,49 @@ public class Sword extends MovableEntity {
 		
 	}
 	
+	/**
+	 * Getter method to find out if currently attacking with sword.
+	 * @return
+	 */
 	public boolean inProgress() {
 		return inProgress;
 	}
 	
+	/**
+	 * Stop sword attack
+	 */
 	public void cancel() {
 		position = new Vector2 (-1, -1);
 		inProgress = false;
 	}
 	
+	/**
+	 * Find out the current frame
+	 * @return current frame of sword attack.
+	 */
+	public int getFrame(){
+		if(inProgress == true){
+			if(frame < FRAME_LENGTH){
+				return 1;
+			}
+			else if(frame < 2f * FRAME_LENGTH){
+				return 2;
+			}
+			else if(frame < 3f * FRAME_LENGTH){
+				return 3;
+			}
+			else{
+				return 0;
+			}
+		}
+		else{
+			return 0;
+		}
+	}
+	
+	/**
+	 * Actual sword movement
+	 */
 	@Override
 	public void update(Player ship) {
 		super.update(ship);

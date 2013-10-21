@@ -84,7 +84,7 @@ public class MultiplayerServer {
 	 * 
 	 * @return The ID of player 2
 	 */
-	public int getplayer2() {
+	public int getPlayer2() {
 		return player2Id;
 	}
 
@@ -143,6 +143,8 @@ public class MultiplayerServer {
 			queue.gameOver(sessionId, player1Id, player2Id, gameId,
 					request.winner);
 			return;
+		} else if (request.gameOver) {
+			queue.dropServer(sessionId);
 		}
 		if (request.initial == false) {
 			player1.sendTCP(request);
@@ -151,4 +153,5 @@ public class MultiplayerServer {
 			player2.sendTCP(request);
 		}
 	}
+
 }

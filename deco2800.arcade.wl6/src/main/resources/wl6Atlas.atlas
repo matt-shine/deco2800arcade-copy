@@ -1,236 +1,306 @@
 
-wl6Atlas.png
+wl6atlas.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 ammo
   rotate: false
-  xy: 1, 1611
-  size: 320, 320
-  orig: 320, 320
+  xy: 1, 1695
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 armour
   rotate: false
-  xy: 1, 1289
-  size: 320, 320
-  orig: 320, 320
+  xy: 1, 1453
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 blank
   rotate: false
-  xy: 323, 1611
-  size: 320, 320
-  orig: 320, 320
+  xy: 243, 1695
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 bluebrick
   rotate: false
-  xy: 1, 967
-  size: 320, 320
-  orig: 320, 320
+  xy: 1, 1211
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 candywall
   rotate: false
-  xy: 323, 1289
-  size: 320, 320
-  orig: 320, 320
+  xy: 243, 1453
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 cell
   rotate: false
-  xy: 645, 1611
-  size: 320, 320
-  orig: 320, 320
+  xy: 485, 1695
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+chaingun
+  rotate: false
+  xy: 1, 969
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 clownnurse
   rotate: false
-  xy: 1, 645
-  size: 320, 320
-  orig: 320, 320
+  xy: 243, 1211
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 door
   rotate: false
-  xy: 323, 967
-  size: 320, 320
-  orig: 320, 320
+  xy: 485, 1453
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+elevator
+  rotate: false
+  xy: 727, 1695
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+elevator_door
+  rotate: false
+  xy: 1, 727
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 frame_bp
   rotate: false
-  xy: 645, 1289
-  size: 320, 320
-  orig: 320, 320
+  xy: 243, 969
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 frame_erp
   rotate: false
-  xy: 967, 1611
-  size: 320, 320
-  orig: 320, 320
+  xy: 485, 1211
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 frame_lsp
   rotate: false
-  xy: 1, 323
-  size: 320, 320
-  orig: 320, 320
+  xy: 727, 1453
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 frame_pb
   rotate: false
-  xy: 323, 645
-  size: 320, 320
-  orig: 320, 320
+  xy: 969, 1695
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 frame_rp
   rotate: false
-  xy: 645, 967
-  size: 320, 320
-  orig: 320, 320
+  xy: 1, 485
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 frame_wp
   rotate: false
-  xy: 967, 1289
-  size: 320, 320
-  orig: 320, 320
+  xy: 243, 727
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 gold_door
   rotate: false
-  xy: 1289, 1611
-  size: 320, 320
-  orig: 320, 320
+  xy: 485, 969
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+gold_key
+  rotate: false
+  xy: 727, 1211
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+greenbrick
+  rotate: false
+  xy: 969, 1453
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 greybrick
   rotate: false
-  xy: 1, 1
-  size: 320, 320
-  orig: 320, 320
+  xy: 1211, 1695
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 headstone
   rotate: false
-  xy: 323, 323
-  size: 320, 320
-  orig: 320, 320
+  xy: 1, 243
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 health
   rotate: false
-  xy: 645, 645
-  size: 320, 320
-  orig: 320, 320
+  xy: 243, 485
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 iceking
   rotate: false
-  xy: 967, 967
-  size: 320, 320
-  orig: 320, 320
+  xy: 485, 727
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 icekingboss
   rotate: false
-  xy: 1289, 1289
-  size: 320, 320
-  orig: 320, 320
+  xy: 727, 969
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 iceking_clone
   rotate: false
-  xy: 1611, 1611
-  size: 320, 320
-  orig: 320, 320
+  xy: 969, 1211
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 icewall
   rotate: false
-  xy: 323, 1
-  size: 320, 320
-  orig: 320, 320
+  xy: 1211, 1453
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 lemongrab
   rotate: false
-  xy: 645, 323
-  size: 320, 320
-  orig: 320, 320
+  xy: 1453, 1695
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+life
+  rotate: false
+  xy: 1, 1
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+machinegun
+  rotate: false
+  xy: 243, 243
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 manfried
   rotate: false
-  xy: 967, 645
-  size: 320, 320
-  orig: 320, 320
+  xy: 485, 485
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 penguin
   rotate: false
-  xy: 1289, 967
-  size: 320, 320
-  orig: 320, 320
+  xy: 727, 727
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 plant
   rotate: false
-  xy: 1611, 1289
-  size: 320, 320
-  orig: 320, 320
+  xy: 969, 969
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+purplewall
+  rotate: false
+  xy: 1211, 1211
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 redbrick
   rotate: false
-  xy: 645, 1
-  size: 320, 320
-  orig: 320, 320
+  xy: 1453, 1453
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 silver_door
   rotate: false
-  xy: 967, 323
-  size: 320, 320
-  orig: 320, 320
+  xy: 1695, 1695
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+silver_key
+  rotate: false
+  xy: 243, 1
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+snowball
+  rotate: false
+  xy: 485, 243
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 snowman
   rotate: false
-  xy: 1289, 645
-  size: 320, 320
-  orig: 320, 320
+  xy: 727, 485
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 steel
   rotate: false
-  xy: 1611, 967
-  size: 320, 320
-  orig: 320, 320
+  xy: 969, 727
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 unknown
   rotate: false
-  xy: 967, 1
-  size: 320, 320
-  orig: 320, 320
+  xy: 1211, 969
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 woodwall
   rotate: false
-  xy: 1289, 323
-  size: 320, 320
-  orig: 320, 320
+  xy: 1453, 1211
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1
 worm
   rotate: false
-  xy: 1611, 645
-  size: 320, 320
-  orig: 320, 320
+  xy: 1695, 1453
+  size: 240, 240
+  orig: 240, 240
   offset: 0, 0
   index: -1

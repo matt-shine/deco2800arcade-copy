@@ -1,6 +1,7 @@
 package deco2800.arcade.chess;
 
 import deco2800.arcade.chess.SplashScreen;
+import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -9,11 +10,15 @@ import deco2800.arcade.client.replay.ReplayEventListener;
 import deco2800.arcade.client.replay.ReplayHandler;
 import deco2800.arcade.client.replay.ReplayNode;
 import deco2800.arcade.client.replay.ReplayNodeFactory;
+import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.AchievementProgress;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
+import deco2800.arcade.utils.AsyncFuture;
 import deco2800.arcade.chess.pieces.Piece;
 import deco2800.arcade.client.highscores.*;
+
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -44,12 +49,12 @@ import com.badlogic.gdx.Input.Keys;
 
 @ArcadeGame(id = "chess")
 public class Chess extends GameClient implements InputProcessor, Screen {
-	private static final Game game;
+	private static final Game Game;
 	static {
-		game = new Game();
-		game.id = "chess";
-		game.name = "Chess";
-		game.description = "A game of Chess, where 2 players, dubbed white"
+		Game = new Game();
+		Game.id = "chess";
+		Game.name = "Chess";
+		Game.description = "A game of Chess, where 2 players, dubbed white"
 				+ "or black, aim to CheckMate their opponent before being"
 				+ "CheckMated themselves."; 
 	}
@@ -69,6 +74,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	private BitmapFont gameInfo;
 	private String teamCheck;
 	private BitmapFont checkInfo;
+	
+	private List<Highscore> hs;
+	private int rowWins;
 	
 	// Piece positions
 	private int[] whiteRook1Pos, whiteKnight1Pos, whiteBishop1Pos, whiteKingPos,
@@ -98,10 +106,10 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	private Texture chessBoard;
 
 	// Buttons and screens
-	private TextButton replayButton, startreplayButton, backButton,
-			newGameButton, newGameButtonEasy;
+	private TextButton replayButton, startreplayButton, 
+						newGameButton , backButton;
 	private Stage stage;
-	private BitmapFont BmFontB;
+	private BitmapFont bmFontB;
 	private TextureAtlas map;
 	private Skin skin;
 	private Texture splashTexture;
@@ -122,19 +130,23 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	// Tracks whether the game is paused
 	private boolean paused = false;
 	// Tracks level of single player mode
-	public boolean EasyComputerOpponent;
-	public boolean HardComputerOpponent;
+	public boolean easyComputerOpponent;
+	public boolean hardComputerOpponent;
 
 	// Tracks if multiplayer is on
-	private boolean Multiplayer = false;
+	private boolean multiplayer = false;
 
 	// Network client for communicating with the server.
 	// Should games reuse the client of the arcade somehow? Probably!
 	private NetworkClient networkClient;
+	
+	//Achievements client
+	private AchievementClient achClient;
 
 	public SplashScreen splashScreen;
 	public MenuScreen menuScreen;
-	HighscoreClient player1;
+	public SelectScreen SelectScreen;
+	HighscoreClient player1, player2;
 
 	/**
 	 * Initialises a new game
@@ -142,14 +154,18 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	public Chess(Player player, NetworkClient networkClient) {
 
 		super(player, networkClient);
-		this.incrementAchievement("chess.winGame");
 		initPiecePos();
 		board = new Board();
 		movePieceGraphic();
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
+		SelectScreen = new SelectScreen(this);
 		setScreen(splashScreen);
 		this.networkClient = networkClient;
+		//Set up achievement
+		achClient = new AchievementClient(networkClient);
+		this.incrementAchievement("chess.start");
+		
 		players[0] = player.getUsername();
 		players[1] = "Player 2";
 		// setup highscore client
@@ -164,9 +180,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		replayHandler.addReplayEventListener(initReplayEventListener());
 		ReplayNodeFactory.registerEvent("movePiece", new String[] { "start_x",
 				"start_y", "target_x", "target_y" });
-
-		// True means AI is playing, false if it isn't
-		// EasyComputerOpponent = false;
+		
+		hs = player1.getWinLoss();
+		rowWins = 0;
 
 		styles = new ArrayList<String>();
 
@@ -184,7 +200,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
 		}
-
 		loadedStyle = 2;
 	}
 
@@ -193,11 +208,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		super.create();
 		this.getOverlay().setListeners(new Screen() {
 			@Override
-			public void hide() {
-			}
+			public void hide() {}
 			@Override
-			public void show() {
-			}
+			public void show() {}
 			@Override
 			public void pause() {}
 			@Override
@@ -206,12 +219,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			public void resume() {}
 			@Override
 			public void dispose() {}
-			
-			public void resize(int arg0, int arg1) {
-				arg1 = SCREENHEIGHT;
-				arg0 =  SCREENWIDTH;
-				
-			}
+			@Override
+			public void resize(int arg0, int arg1) {}
 		});
 		// Initialise camera
 		camera = new OrthographicCamera();
@@ -271,7 +280,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		blackBishop2 = blackBishop1;
 		blackKnight2 = blackKnight1;
 		blackRook2 = blackRook1;
-
 		whitePawn1 = whitePawn0;
 		whitePawn2 = whitePawn0;
 		whitePawn3 = whitePawn0;
@@ -287,14 +295,12 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		blackPawn6 = blackPawn0;
 		blackPawn7 = blackPawn0;
 
-
 		makeButtons();
 		replayHandler.startSession("chess", player.getUsername());
 		// Pause game and wait for connection if multiplayer is selected
-		if (Multiplayer) {
+		if (multiplayer) {
 			paused = true;
 		}
-	
 	}
 
 	
@@ -302,7 +308,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		return new ReplayEventListener() {
 			public void replayEventReceived(String eType, ReplayNode eData) {
 				System.out.println("Got event!");
-
 				// Built in event types
 				if (eType.equals("node_pushed")) {
 					System.out.println(eType);
@@ -324,7 +329,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 					int startx = eData.getItemForString("start_x").intVal();
 					int starty = eData.getItemForString("start_y").intVal();
 					System.out.println("Move from: " + startx + "," + starty);
-					for (Piece piece : board.findActivePieces()) {
+					List<Piece> activePieces = board.findActivePieces(true);
+					activePieces.addAll(board.findActivePieces(false));
+					for (Piece piece : activePieces) {
 						if (board.findPiece(piece)[0] == startx
 								&& board.findPiece(piece)[1] == starty) {
 							int[] movement = {
@@ -367,6 +374,16 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			teamCheck = "White team in check";
 			gameInfo.draw(batch, teamCheck, 600, 50);
 		}
+		Highscore b = hs.get(0);
+		Highscore a = hs.get(1);
+		int  c = a.score;
+		int d = b.score;
+		String player = players[0];
+		String wins = Integer.toString(d) + " win(s)";
+		String losses = Integer.toString(c) + " loss(es)";
+		gameInfo.draw(batch, player, 400, 80);
+		gameInfo.draw(batch, wins, 400, 60);
+		gameInfo.draw(batch, losses, 400, 40);
 		//Camera updating options
 		gameInfo.draw(batch, info, 600, 70);
 		batch.end();
@@ -394,24 +411,46 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		drawButton();
 	}
 
-
-	@Override
-	public void resume() {
-		super.resume();
-	}
-
 	/**
 	 * Ends the game and allows replay if the last game was recorded
 	 */
 	private void finishGame(boolean loser, boolean stalemate) {
 		System.err.println("GAME OVER");
-	
-		// loser was black i.e. not this player, increment achievement
-		// if ((loser == true) && (!stalemate)) {
-		// this.incrementAchievement("chess.winGame");
-		// }
-
-		player1.logWin();
+		System.out.println("multiplayer: " + multiplayer);
+		if (!easyComputerOpponent) {
+			if ((!stalemate) && (loser)) {
+				player1.logWin();
+				this.incrementAchievement("chess.winGame");
+				rowWins += 1;
+				System.out.println("rowWins: " + rowWins);
+				hs = player1.getWinLoss();
+			}
+			if(rowWins == 2) {
+				this.incrementAchievement("chess.chessinarow5");
+			} else if(rowWins == 10) {
+				this.incrementAchievement("chess.chessinarow10");
+			}
+			if ((!stalemate) && (!loser)) {
+				player1.logLoss();
+				rowWins = 0;
+				hs = player1.getWinLoss();
+			}
+		} else {
+			if(board.whoseTurn()) {
+				if ((!stalemate)) {
+					player1.logWin();
+					this.incrementAchievement("chess.winGame");
+					rowWins += 1;
+					System.out.println("rowWins: " + rowWins);
+					hs = player1.getWinLoss();
+				}
+				if(rowWins == 2) {
+					this.incrementAchievement("chess.chessinarow5");
+				} else if(rowWins == 10) {
+					this.incrementAchievement("chess.chessinarow10");
+				}
+			}
+		}
 		System.err.println("wins" + " " +player1.getWin().toString());
 		if (recording) {
 			drawButton();
@@ -423,11 +462,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			replayButton.setVisible(true);
 			recording = false;
 		} else {
-			// reset board
-			board = new Board();
-			movePieceGraphic();
-			drawButton();
+			reset();
 		}
+		
 		return;
 	}
 
@@ -437,8 +474,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		return null;
 	}
 
-	public void paint(Graphics g) {
-	}
+	public void paint(Graphics g) {}
 
 	public void startReplay(int num) {
 		replayHandler.playbackLastSession();
@@ -453,7 +489,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			} else {
 				loadedStyle++;
 			}
-
 			setPiecePics();
 			drawPieces();
 		}
@@ -512,7 +547,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 					// Push the move that was just performed
 					moving = false;
-					System.out.println(7);
 					// if team in checkmate, gameover, log win/loss
 					if (board.checkForCheckmate(board.whoseTurn())) {
 						if (recording) {
@@ -522,27 +556,21 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 						}
 						this.finishGame(board.whoseTurn(), false);
 					}
+					// if team in checkmate, gameover, log win/loss
+					if (board.checkForCheckmate(board.whoseTurn())) {
+						this.finishGame(board.whoseTurn(), false);
+						return true;
+					}
+					if (board.checkForStaleMate(board.whoseTurn())) {
+						this.finishGame(board.whoseTurn(), true);
+						return true;
+					}
 					/*
 					 * If the easy computer opponent is playing, and black teams
 					 * turn (computer controlled team)
 					 */
-					if (EasyComputerOpponent && board.whoseTurn()) {
+					if (easyComputerOpponent && board.whoseTurn()) {
 						Piece AIPiece = board.chooseAIPiece();
-						List<int[]> allowed = board.allowedMoves(AIPiece);
-						System.out.println("AI is: " + AIPiece);
-						System.out.println("Allowed Moves: ");
-						for (int[] move : allowed) {
-							System.out.print("[" + move[0] + ", " + move[1]
-									+ "], ");
-						}
-						System.out.println("");
-						List<int[]> removed = board.removeCheckMoves(AIPiece);
-						System.out.println("Allowed Moves check removed: ");
-						for (int[] move : removed) {
-							System.out.print("[" + move[0] + ", " + move[1]
-									+ "], ");
-						}
-						System.out.println("");
 						int[] prevAI = board.findPiece(AIPiece);
 						board.moveAIPieceEasy(AIPiece);
 						int[] newAI = board.findPiece(AIPiece);
@@ -554,35 +582,26 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 						movePieceGraphic();
 
 					}
-					// if team in checkmate, gameover, log win/loss
-					if (board.checkForCheckmate(board.whoseTurn())) {
-						this.finishGame(board.whoseTurn(), false);
-					}
-					if (board.checkForStaleMate(board.whoseTurn())) {
-						this.finishGame(board.whoseTurn(), true);
-					}
 					return true;
 				}
-
+				movingPiece.hasMoved();
 				movingPiece = board.nullPiece;
 				moving = false;
 				return false;
-
 			}
 		}
+		
+		
 		return true;
-
 	}
 
 	@Override
 	public boolean touchDragged(int arg0, int arg1, int arg2) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -688,7 +707,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		Sprite allowedSquare = new Sprite(new Texture(
 				Gdx.files.classpath("imgs/spot2.png")));
 		List<Sprite> neededPics = new ArrayList<Sprite>();
-
+		
 		for (int i = 0; i < possibleMoves.size(); i++) {
 			neededPics.add(allowedSquare);
 			int xcoord = pieceHorizOff + horizOff + (59)
@@ -699,7 +718,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			batch.draw(neededPics.get(i), xcoord, ycoord);
 			batch.end();
 		}
-
 	}
 
 	/**
@@ -781,8 +799,11 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	 * Moves all the pieces to their correct places on the board
 	 */
 	void movePieceGraphic() {
+		
+		List<Piece> whiteGraveyard = board.getGraveyard(false);
+		List<Piece> blackGraveyard = board.getGraveyard(true);
 
-		for (FixedSizeList<Piece> row : board.Board_State) {
+		for (FixedSizeList<Piece> row : board.getBoardState()) {
 			for (Piece piece : row) {
 				if (piece.equals(board.whiteRook1)) {
 					int[] correctPos = board.findPiece(board.whiteRook1);
@@ -919,7 +940,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		}
 
 		int blackCount = 0;
-		for (Piece piece : board.blackGraveyard) {
+		for (Piece piece : blackGraveyard) {
 			if (piece.equals(board.blackRook1)) {
 				blackCount++;
 				blackRook1Pos[0] = (horizOff - 59);
@@ -928,7 +949,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackRook1Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackRook1)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackRook1)) % (59 * 8));
 			} else if (piece.equals(board.blackKnight1)) {
 				blackCount++;
 				blackKnight1Pos[0] = (horizOff - 59);
@@ -937,7 +958,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackKnight1Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard
+						+ ((59 * blackGraveyard
 								.indexOf(board.blackKnight1)) % (59 * 8));
 			} else if (piece.equals(board.blackBishop1)) {
 				blackCount++;
@@ -947,7 +968,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackBishop1Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard
+						+ ((59 * blackGraveyard
 								.indexOf(board.blackBishop1)) % (59 * 8));
 			} else if (piece.equals(board.blackQueen)) {
 				blackCount++;
@@ -957,7 +978,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackQueenPos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackQueen)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackQueen)) % (59 * 8));
 			} else if (piece.equals(board.blackKing)) {
 				blackCount++;
 				blackKingPos[0] = (horizOff - 59);
@@ -966,7 +987,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackKingPos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackKing)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackKing)) % (59 * 8));
 			} else if (piece.equals(board.blackBishop2)) {
 				blackCount++;
 				blackBishop2Pos[0] = (horizOff - 59);
@@ -975,7 +996,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackBishop2Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard
+						+ ((59 * blackGraveyard
 								.indexOf(board.blackBishop2)) % (59 * 8));
 			} else if (piece.equals(board.blackKnight2)) {
 				blackCount++;
@@ -985,7 +1006,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackKnight2Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard
+						+ ((59 * blackGraveyard
 								.indexOf(board.blackKnight2)) % (59 * 8));
 			} else if (piece.equals(board.blackRook2)) {
 				blackCount++;
@@ -995,7 +1016,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackRook2Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackRook2)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackRook2)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn1)) {
 				blackCount++;
 				blackPawn0Pos[0] = (horizOff - 59);
@@ -1004,7 +1025,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackPawn0Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn1)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackPawn1)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn2)) {
 				blackCount++;
 				blackPawn1Pos[0] = (horizOff - 59);
@@ -1013,7 +1034,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackPawn1Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn2)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackPawn2)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn3)) {
 				blackCount++;
 				blackPawn2Pos[0] = (horizOff - 59);
@@ -1022,7 +1043,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackPawn2Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn3)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackPawn3)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn4)) {
 				blackCount++;
 				blackPawn3Pos[0] = (horizOff - 59);
@@ -1031,7 +1052,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackPawn3Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn4)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackPawn4)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn5)) {
 				blackCount++;
 				blackPawn4Pos[0] = (horizOff - 59);
@@ -1040,7 +1061,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackPawn4Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn5)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackPawn5)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn6)) {
 				blackCount++;
 				blackPawn5Pos[0] = (horizOff - 59);
@@ -1049,7 +1070,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackPawn5Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn6)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackPawn6)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn7)) {
 				blackCount++;
 				blackPawn6Pos[0] = (horizOff - 59);
@@ -1058,7 +1079,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackPawn6Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn7)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackPawn7)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn8)) {
 				blackCount++;
 				blackPawn7Pos[0] = (horizOff - 59);
@@ -1067,11 +1088,11 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				blackPawn7Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn8)) % (59 * 8));
+						+ ((59 * blackGraveyard.indexOf(board.blackPawn8)) % (59 * 8));
 			}
 		}
 		int whiteCount = 0;
-		for (Piece piece : board.whiteGraveyard) {
+		for (Piece piece : whiteGraveyard) {
 			if (piece.equals(board.whiteRook1)) {
 				whiteCount++;
 				whiteRook1Pos[0] = (horizOff + 512);
@@ -1080,7 +1101,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whiteRook1Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whiteRook1)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whiteRook1)) % (59 * 8));
 			} else if (piece.equals(board.whiteKnight1)) {
 				whiteCount++;
 				whiteKnight1Pos[0] = (horizOff + 512);
@@ -1089,7 +1110,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whiteKnight1Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard
+						+ ((59 * whiteGraveyard
 								.indexOf(board.whiteKnight1)) % (59 * 8));
 			} else if (piece.equals(board.whiteBishop1)) {
 				whiteCount++;
@@ -1099,7 +1120,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whiteBishop1Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard
+						+ ((59 * whiteGraveyard
 								.indexOf(board.whiteBishop1)) % (59 * 8));
 			} else if (piece.equals(board.whiteQueen)) {
 				whiteCount++;
@@ -1109,7 +1130,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whiteQueenPos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whiteQueen)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whiteQueen)) % (59 * 8));
 			} else if (piece.equals(board.whiteKing)) {
 				whiteCount++;
 				whiteKingPos[0] = (horizOff + 512);
@@ -1118,7 +1139,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whiteKingPos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whiteKing)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whiteKing)) % (59 * 8));
 			} else if (piece.equals(board.whiteBishop2)) {
 				whiteCount++;
 				whiteBishop2Pos[0] = (horizOff + 512);
@@ -1127,7 +1148,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whiteBishop2Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard
+						+ ((59 * whiteGraveyard
 								.indexOf(board.whiteBishop2)) % (59 * 8));
 			} else if (piece.equals(board.whiteKnight2)) {
 				whiteCount++;
@@ -1137,7 +1158,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whiteKnight2Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard
+						+ ((59 * whiteGraveyard
 								.indexOf(board.whiteKnight2)) % (59 * 8));
 			} else if (piece.equals(board.whiteRook2)) {
 				whiteCount++;
@@ -1147,7 +1168,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whiteRook2Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whiteRook2)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whiteRook2)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn1)) {
 				whiteCount++;
 				whitePawn0Pos[0] = (horizOff + 512);
@@ -1156,7 +1177,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whitePawn0Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn1)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whitePawn1)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn2)) {
 				whiteCount++;
 				whitePawn1Pos[0] = (horizOff + 512);
@@ -1165,7 +1186,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whitePawn1Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn2)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whitePawn2)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn3)) {
 				whiteCount++;
 				whitePawn2Pos[0] = (horizOff + 512);
@@ -1174,7 +1195,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whitePawn2Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn3)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whitePawn3)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn4)) {
 				whiteCount++;
 				whitePawn3Pos[0] = (horizOff + 512);
@@ -1183,7 +1204,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whitePawn3Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn4)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whitePawn4)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn5)) {
 				whiteCount++;
 				whitePawn4Pos[0] = (horizOff + 512);
@@ -1192,7 +1213,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whitePawn4Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn5)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whitePawn5)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn6)) {
 				whiteCount++;
 				whitePawn5Pos[0] = (horizOff + 512);
@@ -1201,7 +1222,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whitePawn5Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn6)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whitePawn6)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn7)) {
 				whiteCount++;
 				whitePawn6Pos[0] = (horizOff + 512);
@@ -1210,7 +1231,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whitePawn6Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn7)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whitePawn7)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn8)) {
 				whiteCount++;
 				whitePawn7Pos[0] = (horizOff + 512);
@@ -1219,11 +1240,14 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				}
 				whitePawn7Pos[1] = pieceVerticOff
 						+ verticOff
-						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn8)) % (59 * 8));
+						+ ((59 * whiteGraveyard.indexOf(board.whitePawn8)) % (59 * 8));
 			}
 		}
 	}
 
+	/**
+	 * Draws the pieces on the board in correct positions
+	 */
 	void drawPieces() {
 		whiteRook2 = whiteRook1;
 		whiteBishop2 = whiteBishop1;
@@ -1253,7 +1277,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 		// Board - blue
 		batch.draw(chessBoard, horizOff, verticOff);
-
 		// black pieces - dark blue
 		batch.draw(blackRook1, blackRook1Pos[0], blackRook1Pos[1]);
 		batch.draw(blackKnight1, blackKnight1Pos[0], blackKnight1Pos[1]);
@@ -1291,7 +1314,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		batch.draw(blackPawn6, blackPawn6Pos[0], blackPawn6Pos[1]);
 		batch.draw(blackPawn7, blackPawn7Pos[0], blackPawn7Pos[1]);
 		batch.end();
-		// Im sorry i just made an even more awfulling long code longer
 
 	}
 
@@ -1325,23 +1347,21 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				+ styles.get(loadedStyle) + "/White P.png")));
 	}
 	@Override
-	public void hide() {
-
-	}
+	public void hide() {}
 
 	@Override
-	public void render(float arg0) {
-		// TODO Auto-generated method stub
-
-	}
+	public void render(float arg0) {}
 
 	@Override
 	public void show() {
 		drawButton();
 	}
-
+	
+    /**
+     * Defines button variables and colours so they can be drawn
+     */
 	public void makeButtons() {
-		splashTexture = new Texture(Gdx.files.internal("chessMenu.png"));
+		splashTexture = new Texture(Gdx.files.internal("chess.png"));
 		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		splashTexture2 = new Texture(Gdx.files.internal("chessTitle.png"));
 		splashTexture2.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -1355,7 +1375,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		map = new TextureAtlas("b.pack");
 		skin = new Skin();
 		skin.addRegions(map);
-		BmFontB = new BitmapFont(Gdx.files.internal("imgs/gameFont2.fnt"),
+		bmFontB = new BitmapFont(Gdx.files.internal("imgs/gameFont2.fnt"),
 				false);
 
 		int width = Chess.SCREENWIDTH;
@@ -1368,7 +1388,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = skin.getDrawable("buttonnormal");
 		style.down = skin.getDrawable("buttonpressed");
-		style.font = BmFontB;
+		style.font = bmFontB;
 
 		backButton = new TextButton("Quit to Menu", style);
 		backButton.setWidth(200);
@@ -1392,16 +1412,12 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		newGameButton.setWidth(200);
 		newGameButton.setHeight(50);
 		newGameButton.setX((float) (width * 0.78));
-		newGameButton.setY((float) (height * 0.28));
-
-		newGameButtonEasy = new TextButton("Easy Computer Game", style);
-		newGameButtonEasy.setWidth(300);
-		newGameButtonEasy.setHeight(50);
-		newGameButtonEasy.setX((float) (width * 0.02));
-		newGameButtonEasy.setY((float) (height * 0.70));
-
+		newGameButton.setY((float) (height * 0.78));
 	}
-
+ 
+	/**
+	 * Makes the buttons, adds the listeners and draws them on the screen
+	 */
 	public void drawButton() {
 		makeButtons();
 		backButton.addListener(new InputListener() {
@@ -1412,6 +1428,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
+				board = new Board();
+				movePieceGraphic();
 				setScreen(menuScreen);
 			}
 		});
@@ -1427,12 +1445,16 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				try {
 					board = new Board();
 					movePieceGraphic();
-					recording = false;
+					try{
 					replayHandler.playbackLastSession();
+					}
+					catch(NullPointerException e){
+						replayHandler.playbackCurrentSession();
+					}
+					recording = false;
 					isReplaying = true;
-
 				} catch (NullPointerException e) {
-					System.out.println("nothing to replay");
+					
 				}
 			}
 		});
@@ -1447,8 +1469,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				try {
 					recording = true;
 					replayHandler.startRecording();
+					startreplayButton.setVisible(false);
 				} catch (Exception e) {
-					System.out.println("Already Recording");
+				
 				}
 
 			}
@@ -1466,31 +1489,19 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 					replayHandler.finishRecording();
 					replayButton.setVisible(true);
 				}
-				EasyComputerOpponent = false;
-				HardComputerOpponent = false;
-				recording = false;
-				board = new Board();
-				movePieceGraphic();
-			}
-		});
-		newGameButtonEasy.addListener(new InputListener() {
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
-				return true;
-			}
-			public void touchUp(InputEvent event, float x, float y,
-					int pointer, int button) {
-				drawButton();
-				if (recording) {
-					replayHandler.endCurrentSession();
-					replayHandler.finishRecording();
-					replayButton.setVisible(true);
+				
+				if(easyComputerOpponent){
+					easyComputerOpponent = true;
+					recording = false;
+					board = new Board();
+					movePieceGraphic();
 				}
-				EasyComputerOpponent = true;
-				HardComputerOpponent = false;
+				else {
+				easyComputerOpponent = false;
 				recording = false;
 				board = new Board();
 				movePieceGraphic();
+				}
 			}
 		});
 		stage.addActor(replayButton);
@@ -1498,6 +1509,5 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		stage.addActor(backButton);
 		stage.addActor(startreplayButton);
 		stage.addActor(newGameButton);
-		stage.addActor(newGameButtonEasy);
 	}
 }

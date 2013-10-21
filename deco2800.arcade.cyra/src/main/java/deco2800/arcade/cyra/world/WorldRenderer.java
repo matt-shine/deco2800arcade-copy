@@ -4,9 +4,7 @@ import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.TextureAtlasLoader.TextureAtlasParameter;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL10;
@@ -23,21 +21,20 @@ import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.MathUtils;
-//import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
 import com.badlogic.gdx.utils.Array;
 import deco2800.arcade.cyra.model.*;
 import deco2800.arcade.cyra.model.SoldierBoss.State;
 
-/**World Renderer takes the object from the World class and draws them to the screen
+/** WorldRenderer describes the View component of the game's MVC model.
+ * This class draws the game based on the game's state described in World
+ * class. It will draw specific region of the level depending on the
+ * position of camera.
  * 
  * @author Game Over
- *
  */
 public class WorldRenderer {
 
@@ -50,52 +47,48 @@ public class WorldRenderer {
 	SpriteBatch batch;
 	SpriteBatch textBatch;
 	Player ship;
+	Sword sword;
 	//Follower follower;
-	Walker walker;
 	private ParallaxCamera cam;
 	Integer rightCyraCount, leftCyraCount, rightFrameCounter, leftFrameCounter;
 	private BitmapFont font, fontBig;
-	private Texture shipTexture, followerTexture, bulletTexture, walkerTexture, bg, heartsTexture, 
-	jumperBodyTexture, jumperFrontArmTexture, jumperFrontLegTexture, jumperFrontArmJumpingTexture,jumperFrontLegJumpingTexture;
-	private TextureRegion followerFrame, cyraFrame;
-	private TextureRegion walkerRegion;
+	private Texture shipTexture, followerTexture, bulletTexture, bg, heartsTexture, log,
+	jumperBodyTexture, jumperFrontArmTexture, jumperFrontLegTexture, jumperFrontArmJumpingTexture,jumperFrontLegJumpingTexture,
+	wallTexture, sword1, sword2, sword3;
+	private TextureRegion cyraFrame;
 	private TextureAtlas groundTextureAtlas, laserTextures, explosionTextures, boss1Atlas, bossRam, firestarter, myEnemy;
 	private TextureRegion boss1body, boss1head0, boss1head1, boss1arms;
-	private Array<AtlasRegion> walkerRegions;
-	private Animation followerAnimation, cyraRightAnimation, cyraLeftAnimation; 
+	private Animation cyraRightAnimation, cyraLeftAnimation; 
 	float width, height;
-	private Array<Bullet> bullets;
 	private Array<Enemy> enemies;
-	Iterator<Bullet> bItr;
 	Iterator<Enemy> eItr;
-	private Bullet b;
 	private Enemy e;
-	private Array<CutsceneObject> csObjects;
 	private Array<MovablePlatform> mvPlatforms;
 	private Array<BlockMaker> blockMakers;
-	//private float rotationArms;
 	private float sceneBarHeight;
 	private boolean enemyWithHealthOnScreen = false;
 	private float healthPercentage;
 	private String healthName;
 	private float redScreenAlpha;
+	private ParallaxLayer parallaxLayer;
 	
-	//attempting to use maps
 	TileMapRenderer tileMapRenderer;
-	//OrthogonalTiledMapRenderer oRenderer;
-	//TiledMap map;
-	//TileAtlas mapAtlas;
+	
 	
 	private boolean blinkShip;
 	
-	private static final int[] layersList = { 0 };
+	
 	
 	
 	//debug
-	private boolean debugMode = true;
+	private boolean debugMode = false;
 	ShapeRenderer sr;
 	TextureRegion testRegion;
 	private FPSLogger fpsLogger;
+	
+	/**
+	 * Initialize variables and update screen
+	 */
 	
 	public WorldRenderer(World world, ParallaxCamera cam) {
 		this.world = world;
@@ -107,197 +100,165 @@ public class WorldRenderer {
 		cam.update();
 		
 		
-		//not good
-		//world.setRenderer(this);
-		
-		//make the map NOT SURE IF GOOD
-		/*map = TiledLoader.createMap(Gdx.files.internal("level.tmx"));
-		mapAtlas = new TileAtlas(map, Gdx.files.internal("level1"));
-		
-		tileMapRenderer = new TileMapRenderer(map, mapAtlas, 32, 32, 1, 1);*/
-		
-		
-		
-		
-		
-		//was using number of tiles to show each direction
-		
-		/*width = 24;
-		height = 15;*/
-		
-		//this is important for different phone sizes. about cutting off stuff on smaller screens etc
-		//cam.setToOrtho(false, width, height);
-		
-		
+
 		init();
 	}
 	
+	/**
+	 * Call draw functions
+	 */
+	
 	public void render() {
 		ship = world.getShip();
-		//follower = world.getFollower();
+		sword = world.getSword();
 		enemies = world.getEnemies();
-		bullets = world.getBullets();
-		csObjects = world.getCutsceneObjects();
 		mvPlatforms = world.getMovablePlatforms();
 		blockMakers = world.getBlockMakers();
 		
-		//System.out.println("Sxy: " + ship.getPosition().x+","+ship.getPosition().y+" Cwh: "+cam.viewportWidth+","+cam.viewportHeight);
-		/*if(ship.getPosition().x > cam.viewportWidth/2 && ship.getPosition().y > cam.viewportHeight/2) {
-			cam.position.set(ship.getPosition().x, ship.getPosition().y, 0);
-		}*/
-		//cam.position.x = ship.getPosition().x;
-		//cam.position.y = ship.getPosition().y;
-		
-		/* Camera code needs to be fixed later on. Currently it's set to always
-		 * follow the sprite so that camera's updated properly when reset*/
-		
+
 		
 		
 		cam.update();
 		
-		//batch.setProjectionMatrix(cam.combined);
 		
-		//ANIMATIONS
-		//followerFrame = followerAnimation.getKeyFrame(e.getStateTime(), true);
-		/*System.out.println(followerAnimation);
-		System.out.println(follower.getStateTime());
-		System.out.println(followerAnimation.getKeyFrame(follower.getStateTime(), true));
-		System.out.println(followerFrame);
-		System.out.println(testRegion);*/
-		
-		//tileMapRenderer.render(cam);
 		
 		drawLevel(batch);
 		drawGameObjects(batch);
-		if (ship.isOverForeground()) {
-			//tileMapRenderer.render(cam, new int[]{3,4,5}); // Don't know how to make this transparent
-			
-		}
+		drawForeground(batch);
 		drawHUD(batch);
 		if(debugMode) drawDebugAids();
 		
 		return;
 	}
-	
+	/**
+	 * Draw player character
+	 */
 	private void drawShip() {
 		
 		
 		if (ship.isFacingRight()) {
+			if(sword.getFrame() == 1){
+				batch.draw(sword1, (ship.getPosition().x)+.2f, (ship.getPosition().y) +1.44f, ship.getWidth() /2, ship.getHeight()/2,
+						ship.getWidth()*2, ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, sword1.getWidth(),
+						sword1.getHeight(), false, false);
+				
+			}
+			else if(sword.getFrame() == 2){
+				batch.draw(sword2, (ship.getPosition().x)+.4f, (ship.getPosition().y) +.55f, ship.getWidth() /2, ship.getHeight()/2,
+						ship.getWidth() * 4, ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, sword2.getWidth(),
+						sword2.getHeight(), false, false);
+				
+			}
+			else if(sword.getFrame() == 3){
+				batch.draw(sword3, (ship.getPosition().x)+.2f, (ship.getPosition().y) -.25f, ship.getWidth() /2, ship.getHeight()/2,
+						ship.getWidth()*2, ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, sword3.getWidth(),
+						sword3.getHeight(), false, false);
+				
+			}
 			leftCyraCount = 0;
 			leftFrameCounter = 0;
 			rightFrameCounter = (rightFrameCounter+1) %8;
 			if((rightFrameCounter == 0) && (ship.isWalking() == true)){
 				cyraFrame = cyraRightAnimation.getKeyFrame(rightCyraCount, true);
 					rightCyraCount = (rightCyraCount+1) % 5;
-					System.out.println("Cyra Frame count is " + rightCyraCount);
+					
 			}
 			
 			cyraFrame = cyraRightAnimation.getKeyFrame(rightCyraCount+1, true);
 			batch.draw(cyraFrame, ship.getPosition().x, ship.getPosition().y, ship.getWidth()/2,
 					ship.getHeight()/2, ship.getWidth(), ship.getHeight(), 1.8f, 1f, ship.getRotation());
 			
-			/*batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y+ship.getHeight()/2, ship.getWidth() /2, ship.getHeight()/2,
-					1f, 1f, 2, 2, ship.getRotation(), 0, 0, shipTexture.getWidth(),
-					shipTexture.getHeight(), false, false);*/
-		/*batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y, ship.getWidth() /2, ship.getHeight()/2,
-				ship.getWidth(), ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, shipTexture.getWidth(),
-				shipTexture.getHeight(), false, false);*/
 		} else {
-			/*rightFrameCounter = 0;
-			rightCyraCount = 0;
-			System.out.println("woop derit is");
-			leftFrameCounter = (leftFrameCounter+1) %10;
-			//cyraFrame = cyraAnimation.getKeyFrame(e.getStateTime(), true);
-			/*batch.draw(cyraFrame, ship.getPosition().x, ship.getPosition().y, ship.getWidth()/2,
-					ship.getHeight()/2, ship.getWidth(), ship.getHeight(), 1, 1, 0);
-			if((leftFrameCounter == 0) && (ship.isWalking() == true)){
-				cyraFrame = cyraLeftAnimation.getKeyFrame(leftCyraCount, true);
-					leftCyraCount = (leftCyraCount+1) % 5;
-					System.out.println("Cyra Frame count is " + leftCyraCount+1);
-					System.out.println("woop derit is");
+			if(sword.getFrame() == 1){
+				batch.draw(sword1, (ship.getPosition().x)-1.5f, (ship.getPosition().y) +1.4f, ship.getWidth() /2, ship.getHeight(),
+						ship.getWidth()*2, ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, sword1.getWidth(),
+						sword1.getHeight(), true, false);
+				
 			}
-			System.out.println("woop derit is");
-			cyraFrame = cyraLeftAnimation.getKeyFrame(leftCyraCount+1, true);
-			batch.draw(cyraFrame, ship.getPosition().x, ship.getPosition().y, ship.getWidth()/2,
-					ship.getHeight()/2, ship.getWidth(), ship.getHeight(), 1.5f, 1f, 0);
-			/*batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y+ship.getHeight()/2, ship.getWidth() /2, ship.getHeight()/2,
-					1f, 1f, 2, 2, ship.getRotation(), 0, 0, shipTexture.getWidth(),
-					shipTexture.getHeight(), true, false);*/
+			else if(sword.getFrame() == 2){
+				batch.draw(sword2, (ship.getPosition().x)-2.7f , (ship.getPosition().y) +.55f, ship.getWidth(), ship.getHeight(),
+						ship.getWidth()*4, ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, sword2.getWidth(),
+						sword2.getHeight(), true, false);
+				
+			}
+			else if(sword.getFrame() == 3){
+				batch.draw(sword3, (ship.getPosition().x)-1.5f, (ship.getPosition().y)-.25f,  ship.getWidth() /2, ship.getHeight()/2,
+						ship.getWidth()*2, ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, sword3.getWidth(),
+						sword3.getHeight(), true, false);
+				
+			}
 			leftCyraCount = 0;
 			leftFrameCounter = 0;
 			rightFrameCounter = (rightFrameCounter+1) %8;
 			if((rightFrameCounter == 0) && (ship.isWalking() == true)){
-				cyraFrame = cyraRightAnimation.getKeyFrame(rightCyraCount, true);
+				cyraFrame = cyraLeftAnimation.getKeyFrame(rightCyraCount, true);
 					rightCyraCount = (rightCyraCount+1) % 5;
-					System.out.println("Cyra Frame count is " + rightCyraCount);
+					
 			}
 			
-			cyraFrame = cyraRightAnimation.getKeyFrame(rightCyraCount+1, true);
+			cyraFrame = cyraLeftAnimation.getKeyFrame(rightCyraCount+1, true);
 			batch.draw(cyraFrame, ship.getPosition().x, ship.getPosition().y, ship.getWidth()/2,
 					ship.getHeight()/2, ship.getWidth(), ship.getHeight(), 1.8f, 1f, ship.getRotation());
 		}
 	}
 	
+	/**
+	 * Camera get method
+	 * @return cam
+	 */
 	public OrthographicCamera getCamera() {
 		return cam;
 	}
-	
+	/**
+	 * Visually draw level layers
+	 * @param batch
+	 */
 	private void drawLevel(SpriteBatch batch) {
 		/* Draw background layers */
-		batch.setProjectionMatrix(cam.calculateParallaxMatrix(0, 0));
+		batch.setProjectionMatrix(cam.calculateParallaxMatrix(0f, 0));
 		batch.begin();
 		batch.draw(bg, -cam.viewportWidth/2, -cam.viewportHeight/2, cam.viewportWidth, cam.viewportHeight);
 		batch.end();
+		batch.setProjectionMatrix(cam.calculateParallaxMatrix(0.4f, 1));
+		batch.begin();
+		Array<Vector2> positions = parallaxLayer.getAllDrawPositions();
+		Array<Texture> textures = parallaxLayer.getAllDrawTextures();
+		for (int i=0; i<textures.size; i++ ) {batch.draw(textures.get(i), positions.get(i).x, positions.get(i).y, textures.get(i).getWidth()/32f, textures.get(i).getHeight()/32f);
+
+		}
+		batch.end();
 		
 		/* Draw tiled layers */
-		/*tileMapRenderer.setView(cam.calculateParallaxMatrix(0.25f, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
+
 		
-		tileMapRenderer.render(new int[]{0});
-		tileMapRenderer.setView(cam.calculateParallaxMatrix(0.5f, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
-		tileMapRenderer.render(new int[]{1});
-		tileMapRenderer.setView(cam.calculateParallaxMatrix(1, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
-		tileMapRenderer.render(new int[]{2});*/
-		
-		//tileMapRenderer.getProjectionMatrix().set(cam.combined);
-		//tileMapRenderer.render(cam, new int[]{0, 1, 2});
-		//tileMapRenderer.render(cam.position.x-cam.viewportWidth/2, cam.position.y-cam.viewportHeight/2,
-			//	cam.viewportWidth, cam.viewportHeight);
-		//tileMapRenderer.render(cam.position.x, cam.position.y, cam.viewportWidth*2, cam.viewportHeight*2);
-		/*tileMapRenderer.getProjectionMatrix().set(cam.calculateParallaxMatrix(0.25f, 1));
-		tileMapRenderer.render(cam, new int[]{0});
-		tileMapRenderer.getProjectionMatrix().set(cam.calculateParallaxMatrix(0.5f, 1));
-		tileMapRenderer.render(cam, new int[]{1});*/
-		//tileMapRenderer.render(cam.);
 		tileMapRenderer.getProjectionMatrix().set(cam.calculateParallaxMatrix(1, 1));
-		//tileMapRenderer.getProjectionMatrix().set(cam.combined);
 		
-		/*Vector3 tmp = new Vector3();
-		tmp.set(0,0,0);
-		cam.unproject(tmp);
-		tileMapRenderer.render((int) tmp.x, (int) tmp.y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());*/
-		tileMapRenderer.render(cam, new int[]{3}); // THIS IS ONLY UNTIL layer 2's graphics are complete
-		tileMapRenderer.render(cam, new int[]{2});
-		tileMapRenderer.render(cam, new int[]{0,1,2});
-		if (!ship.isOverForeground()) {
-			tileMapRenderer.render(cam, new int[]{3,4,5});
-		}
+		tileMapRenderer.render(cam, new int[]{0,1});
 		
-		
-		//tileMapRenderer.render((int) cam.position.x-cam.viewportWidth/2, (int) cam.position.y-cam.viewportHeight/2, 999, 999,
-			//	new int[]{2});
+
 		
 		
 		
 		return;
 	}
-	
+	/**
+	 * Render the foreground layer
+	 * @param batch
+	 */
+	private void drawForeground(SpriteBatch batch) {
+		if (!ship.isOverForeground()) {
+			tileMapRenderer.render(cam, new int[]{2,3});
+		}
+		
+	}
+	/**
+	 * Draw objects (blocks, enemies, effects etc)
+	 * @param batch
+	 */
 	private void drawGameObjects(SpriteBatch batch) {
 		/* Draw game objects */
 		batch.setProjectionMatrix(cam.combined);
 		batch.begin();
-		//batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y);
-		
-		//0,0 origin will be offcenter
 		
 		/* Draw BlockMaker Blocks */
 		for (BlockMaker bm: blockMakers) {
@@ -325,7 +286,7 @@ public class WorldRenderer {
 			}
 		}
 		
-		if (ship.getState() == Player.State.DEATH) {
+		if (ship.hasDied()) {
 			
 			redScreenAlpha += Gdx.graphics.getDeltaTime() / 3;
 			if (redScreenAlpha > 1.0f) {
@@ -364,11 +325,21 @@ public class WorldRenderer {
 		eItr = enemies.iterator();
 		while (eItr.hasNext()) {
 			e = eItr.next();
-			if (e.getClass() == Follower.class) {
-				followerFrame = followerAnimation.getKeyFrame(e.getStateTime(), true);
-				batch.draw(followerFrame, e.getPosition().x, e.getPosition().y, e.getWidth()/2,
-						e.getHeight()/2, e.getWidth(), e.getHeight(), 1, 1, 0);
-			} else if (e.getClass() == SoldierEnemy.class){
+			if (e.getClass() == SoldierEnemy.class){
+				SoldierEnemy se = (SoldierEnemy)e;
+				
+				if (se.getState() == SoldierEnemy.State.RAM){
+					
+					TextureRegion region = myEnemy.findRegion("drill", se.getOtherAnimationFrame());
+					float drillRotation;
+					if (se.isFacingRight()) {
+						drillRotation = -90;
+					} else {
+						drillRotation = 90;
+					}
+					batch.draw(region, e.getPosition().x+e.getWidth()/2-region.getRegionWidth()/32f/2f, e.getPosition().y+e.getHeight()/2-region.getRegionHeight()/32f/2f,
+							region.getRegionWidth()/32f/2f,region.getRegionHeight()/32f/2f, region.getRegionWidth()/32f, region.getRegionHeight()/32f, 2,1.5f,drillRotation);
+				}
 				
 				if(e.isJumping() == true){
 				batch.draw(jumperFrontArmJumpingTexture, (e.getPosition().x)-.3f, (e.getPosition().y) +.55f, e.getWidth() /2, e.getHeight()/2,
@@ -412,17 +383,53 @@ public class WorldRenderer {
 							e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, jumperFrontLegTexture.getWidth(),
 							jumperFrontLegTexture.getHeight(), false, false);
 				}
-			}
-			else if (e.getClass() == Zombie.class){
-				batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
-						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
-						shipTexture.getHeight(), false, false);				
-			}
-			else if ((e.getClass() == EnemySpiderBossPopcorn.class)){
-				batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
-						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
-						shipTexture.getHeight(), false, false);
-			} else if (e.getClass() == Zombie.class){
+				
+				if (se.getState() == SoldierEnemy.State.SWORD) {
+					
+					float xPos;
+					if (se.isFacingRight()) {
+						xPos = e.getPosition().x+e.getWidth()-sword1.getWidth()/32f;
+					} else {
+						xPos = e.getPosition().x - sword1.getWidth()/32f;
+					}
+					
+					if (se.isPerformingTell()) {
+				
+						
+						batch.draw(sword1, xPos, (e.getPosition().y + 0.7f), e.getWidth()/2, e.getHeight()/2, sword1.getWidth()/32f, sword1.getHeight()/32f,1,1,0,
+								0,0,sword1.getWidth(), sword1.getHeight(), !se.isFacingRight(), false);
+						
+					} else {
+						Array<Rectangle> pdb = se.getPlayerDamageBounds();
+						if (pdb != null) {
+							if (pdb.size >= 1) {
+								Rectangle swordBounds = pdb.get(0);
+								batch.draw(sword2, swordBounds.x, swordBounds.y, 0, 0, swordBounds.width, swordBounds.height,1,1,0,
+										0,0,sword2.getWidth(), sword2.getHeight(), !se.isFacingRight(), false);
+							}
+						}
+					}
+				} else if (se.getState() == SoldierEnemy.State.AOE) {
+					if (se.isPerformingTell()) {
+						TextureRegion region = myEnemy.findRegion("pentagram", se.getOtherAnimationFrame());
+						batch.draw(region, e.getPosition().x+e.getWidth()/2-region.getRegionWidth()/32f/2f, e.getPosition().y,
+								region.getRegionWidth()/32f/2f,0, region.getRegionWidth()/32f, region.getRegionHeight()/32f, 0.8f, 0.8f,0);
+					} else {
+						TextureRegion region = laserTextures.findRegion("laser_charge");
+						batch.draw(region, e.getPosition().x+e.getWidth()/2-region.getRegionWidth()/32f/2f, e.getPosition().y+e.getHeight()/2-region.getRegionHeight()/32f/2,
+								region.getRegionWidth()/32f/2f,region.getRegionHeight()/32f/2, region.getRegionWidth()/32f, region.getRegionHeight()/32f, 4,4,0);
+					}
+				} else if (se.getState() == SoldierEnemy.State.SHOOT && se.isPerformingTell()) {
+					float xPos;
+					if (se.isFacingRight()) {
+						xPos = e.getPosition().x+e.getWidth()/2-2.5f;
+					} else {
+						xPos = e.getPosition().x +e.getWidth()/2-0.5f;
+					}
+					batch.draw(log, xPos, (e.getPosition().y + 0.6f), e.getWidth()/2, e.getHeight()/2, log.getWidth()/32f/2, log.getHeight()/32f/2,0.2f,0.2f,90,
+							0,0,log.getWidth(), log.getHeight(), se.isFacingRight(), false);
+				}
+			} else if ((e.getClass() == EnemySpiderBossPopcorn.class)){
 				batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
 						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
 						shipTexture.getHeight(), false, false);
@@ -436,17 +443,8 @@ public class WorldRenderer {
 					} else {
 						rotation = -90f;
 					}
-					//rotation = MathUtils.random(359f);
-					TextureRegion bossRamFrame = bossRam.findRegion("stephenram", esb.getRamFrame());
-					//bossRamFrame.flip(true, false);
-					//batch.draw(bossRamFrame, e.getPosition().x-15f, e.getPosition().y-2f, 0,
-						//	0, bossRamFrame.getRegionWidth()/32f, bossRamFrame.getRegionHeight()/32f, scale, scale, rotation);
-					//batch.draw(bossRamFrame, e.getPosition().x+e.getWidth()/2, e.getPosition().y+e.getHeight()/2, bossRamFrame.getRegionWidth()/32f-e.getWidth()/2,
-					batch.draw(bossRamFrame, e.getPosition().x-bossRamFrame.getRegionWidth()/32f/2f-3f, e.getPosition().y+e.getHeight()/2-bossRamFrame.getRegionHeight()/2f/32f, bossRamFrame.getRegionWidth()/32f-e.getWidth()/2,
+					TextureRegion bossRamFrame = bossRam.findRegion("stephenram", esb.getRamFrame());batch.draw(bossRamFrame, e.getPosition().x-bossRamFrame.getRegionWidth()/32f/2f-3f, e.getPosition().y+e.getHeight()/2-bossRamFrame.getRegionHeight()/2f/32f, bossRamFrame.getRegionWidth()/32f-e.getWidth()/2,
 								bossRamFrame.getRegionHeight()/32f/2f, bossRamFrame.getRegionWidth()/32f, bossRamFrame.getRegionHeight()/32f, scale, scale, rotation);
-					
-					//region, las.getOriginPosition().x-las.getCurrentWidth()/2-bufferWidth, las.getOriginPosition().y, las.getCurrentWidth()/2+2*bufferWidth, 0, las.getCurrentWidth()+2*bufferWidth, 
-					//LaserBeam.DEFAULT_LENGTH, 1f,1f, e.getRotation()-90f
 				}
 				if (!(esb.isInvincible() && esb.toggleFlash())) { 
 					
@@ -460,7 +458,6 @@ public class WorldRenderer {
 						b1head = boss1head1;
 					}
 					Vector2 posForOriginZeroZero = new Vector2(e.getPosition().x+(45f/32f)*scale, e.getPosition().y+(188f/32f)*scale);
-					//Vector2 origin = new Vector2(b1head.getRegionWidth()/32f, -5f);
 					Vector2 origin = new Vector2(0,0);
 					batch.draw(b1head, posForOriginZeroZero.x, posForOriginZeroZero.y, origin.x,
 							origin.y, b1head.getRegionWidth()/32f, b1head.getRegionHeight()/32f, scale, scale, e.getRotation());
@@ -469,8 +466,6 @@ public class WorldRenderer {
 				
 				EnemySpiderBossArms arms = ((EnemySpiderBoss)e).getArms();
 				float rotationArms = arms.getRotation();
-				System.out.println("scale*arms.getScale() = "+scale*arms.getScale());
-				//batch.draw(boss1arms, arms.getPosition().x, arms.getPosition().y+arms.getHeight()-2f, arms.getWidth()/2, arms.getHeight()/2, 
 				batch.draw(boss1arms, arms.getPosition().x, arms.getPosition().y+arms.getHeight()-1.5f, arms.getWidth()/2, arms.getHeight()/2,
 						boss1arms.getRegionWidth()/32f, boss1arms.getRegionHeight()/32f, scale*arms.getScale(), scale*arms.getScale(), e.getRotation() + rotationArms);
 				
@@ -491,18 +486,38 @@ public class WorldRenderer {
 				}
 			} else if (e.getClass() == SoldierBoss.class) {
 				SoldierBoss sb = (SoldierBoss)e;
-				//if (sb.getState() == 
-				
-				TextureRegion bossRegion = myEnemy.findRegion("myEnemy",sb.getAnimationFrame());
-				if ( (!sb.isFacingRight() && !bossRegion.isFlipX()) || (sb.isFacingRight() && bossRegion.isFlipX())) {
-					bossRegion.flip(true, false);
+					TextureRegion bossRegion = myEnemy.findRegion("myEnemy",sb.getAnimationFrame());
+					if ( (!sb.isFacingRight() && !bossRegion.isFlipX()) || (sb.isFacingRight() && bossRegion.isFlipX())) {
+						bossRegion.flip(true, false);
+					}
+					float bossRotation =0;
+					if (sb.getState() == SoldierBoss.State.RAM) {
+						if (sb.isFacingRight()) {
+							bossRotation=-90;
+						} else {
+							bossRotation =90;
+						}
+					}
+				if (!(e.isInvincible() && e.toggleFlash())) {
+					batch.draw(bossRegion, e.getPosition().x+e.getWidth()/2-bossRegion.getRegionWidth()/32f/2f, e.getPosition().y+e.getHeight()/2-bossRegion.getRegionHeight()/32f/2f,
+							 bossRegion.getRegionWidth()/32f/2, bossRegion.getRegionHeight()/32f/2, bossRegion.getRegionWidth()/32f, bossRegion.getRegionHeight()/32f, 2,2,bossRotation);
 				}
-				batch.draw(bossRegion, e.getPosition().x+e.getWidth()/2-bossRegion.getRegionWidth()/32f/2f, e.getPosition().y+e.getHeight()/2-bossRegion.getRegionHeight()/32f/2f,
-						0,0, bossRegion.getRegionWidth()/32f, bossRegion.getRegionHeight()/32f, 2,2,0);
 				if (sb.getState() == State.RAM && !sb.isPerformingTell()) {
 					bossRegion = myEnemy.findRegion("drill", sb.getOtherAnimationFrame());
+					float drillRotation;
+					if (sb.isFacingRight()) {
+						drillRotation = -90;
+					} else {
+						drillRotation = 90;
+					}
 					batch.draw(bossRegion, e.getPosition().x+e.getWidth()/2-bossRegion.getRegionWidth()/32f/2f, e.getPosition().y+e.getHeight()/2-bossRegion.getRegionHeight()/32f/2f,
-							0,0, bossRegion.getRegionWidth()/32f, bossRegion.getRegionHeight()/32f, 2,2,90);
+							bossRegion.getRegionWidth()/32f/2f,bossRegion.getRegionHeight()/32f/2f, bossRegion.getRegionWidth()/32f, bossRegion.getRegionHeight()/32f, 4,3,drillRotation);
+				}
+				if (sb.getState() == State.LASER) {
+					bossRegion = myEnemy.findRegion("pentagram", sb.getOtherAnimationFrame());
+					batch.draw(bossRegion, e.getPosition().x+e.getWidth()/2-bossRegion.getRegionWidth()/32f/2f, e.getPosition().y,
+							bossRegion.getRegionWidth()/32f/2f,0, bossRegion.getRegionWidth()/32f, bossRegion.getRegionHeight()/32f, 1,1,0);
+					
 				}
 			} else if (e.getClass() == Explosion.class) {
 				int frame = ((Explosion)e).getFrame();
@@ -542,56 +557,16 @@ public class WorldRenderer {
 					position2 = new Vector2(overlay.getPositionOnScreen(pixels).x+distanceApart, overlay.getPositionOnScreen(pixels).y);
 				}
 				
-				//font.scale(overlay.getScale());
 				fontBig.draw(textBatch, "WARNING", overlay.getPositionOnScreen(pixels).x, overlay.getPositionOnScreen(pixels).y);
 				fontBig.draw(textBatch, "WARNING", position2.x, position2.y);
 				
 				textBatch.end();
-				//font.scale(1/overlay.getScale());
-				/*batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, 0, 0,
-						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
-						shipTexture.getHeight(), false, false);*/
 				batch.begin();
-			} else if (e.getClass() == Walker.class){
-				//draw the parts in order
-				int i=7; 
-				while (i <8) {
-					MovableEntity mve = ((Walker)e).getPart(i);
-					
-					AtlasRegion ar = walkerRegions.get(i);
-					Texture tx = ar.getTexture();
-					tx.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-					batch.draw(tx, mve.getPosition().x, mve.getPosition().y, 0,
-							ar.getRegionHeight()/64f, ar.getRegionWidth()/64f, ar.getRegionHeight()/64f, 1, 1, mve.getRotation(), ar.getRegionX(), ar.getRegionY(),
-							ar.getRegionWidth(), ar.getRegionHeight(), false, false);
-					//batch.draw
-					switch(i) {
-						case 7:
-							i =3;
-							break;
-						case 3:
-							i=6;
-							break;
-						case 6:
-							i=5;
-							break;
-						case 5:
-							i=2;
-							break;
-						case 2:
-							i=1;
-							break;
-						case 1:
-							i=4;
-							break;
-						case 4:
-							i=0;
-							break;
-						case 0:
-						default:
-							i=8;
-							break;
-					}
+			} else if (e.getClass() == WallBoss.class) {
+				if (!(e.isInvincible() && e.toggleFlash())) {
+					batch.draw(wallTexture, e.getPosition().x, e.getPosition().y, 0, 0,
+							e.getWidth(), e.getHeight(), 2, 2, e.getRotation(), 0, 0, wallTexture.getWidth(),
+							wallTexture.getHeight(), false, false);
 				}
 			}
 			
@@ -602,21 +577,6 @@ public class WorldRenderer {
 				healthName = e.getHealthName();
 			}
 		}
-		bItr = bullets.iterator();
-		while(bItr.hasNext()) {
-			b = bItr.next();
-			batch.draw(bulletTexture, b.getPosition().x, b.getPosition().y, b.getWidth() /2, b.getHeight()/2,
-					b.getWidth(), b.getHeight(), 1, 1, b.getRotation(), 0, 0, bulletTexture.getWidth(),
-					bulletTexture.getHeight(), false, false);
-		}
-		
-		for (CutsceneObject csObj: csObjects) {
-			//System.out.println("Texture: "+csObj.getTexture());
-			//batch.draw(csObj.getTexture(), csObj.getPosition().x, csObj.getPosition().y);
-			batch.draw(csObj.getTexture(), csObj.getPosition().x, csObj.getPosition().y, csObj.getWidth() /2, csObj.getHeight()/2,
-					csObj.getWidth(),csObj.getHeight(), 1, 1, csObj.getRotation(), 0, 0, csObj.getTexture().getWidth(),
-					csObj.getTexture().getHeight(), false, false);
-		}
 		
 		
 		
@@ -624,6 +584,11 @@ public class WorldRenderer {
 		batch.end();
 		return;
 	}
+	
+	/**
+	 * Draw visual information (health, time, score, etc.) and death scene.
+	 * @param batch
+	 */
 	
 	private void drawHUD(SpriteBatch batch) {
 		batch.begin();
@@ -651,18 +616,14 @@ public class WorldRenderer {
 			float barHeight = 1.5f;
 			sr.begin(ShapeType.Rectangle);
 			sr.setColor(0f,0f,0f,1f);
-			sr.rect(cam.position.x - barWidth/2, cam.position.y-barHeight/2-8f, barWidth, barHeight);
+			float offCenterOffset = cam.viewportWidth/4;
+			sr.rect(cam.position.x+ offCenterOffset- barWidth/2, cam.position.y-barHeight/2-8f, barWidth, barHeight);
 			sr.end();
 			sr.begin(ShapeType.FilledRectangle);
 			sr.setColor(1f, 0f,0f,1f);
-			sr.filledRect(cam.position.x-barWidth/2+0.05f, cam.position.y-barHeight /2+0.05f-8f, barWidth * healthPercentage, barHeight-0.1f);
+			sr.filledRect(cam.position.x+offCenterOffset-barWidth/2+0.05f, cam.position.y-barHeight /2+0.05f-8f, barWidth * healthPercentage, barHeight-0.1f);
 			sr.end();
 			textBatch.begin();
-			//System.out.println(cam);
-			//System.out.println(font);
-			//System.out.println(textBatch);
-			//System.out.println(healthName);
-			//font.draw(textBatch, healthName, cam.position.x-cam.viewportWidth/2-4f, cam.position.y-cam.viewportHeight/2+4f);
 			font.draw(textBatch, healthName, 16f, 64f);
 			textBatch.end();
 		}
@@ -675,7 +636,7 @@ public class WorldRenderer {
 		font.draw(textBatch, str, strXPos, strYPos);
 		
 		str = "Score: " + (int)world.getScore();
-		strXPos = Gdx.graphics.getWidth() - 2*223;
+		strXPos = Gdx.graphics.getWidth() - 3*223;
 		strYPos = Gdx.graphics.getHeight() - 4; //Offset from top
 		font.draw(textBatch, str, strXPos, strYPos);
 		
@@ -720,21 +681,43 @@ public class WorldRenderer {
 			CharSequence timeText= "TIME BONUS: " + resultsScreen.getTimeBonus();
 			CharSequence healthText = "HEALTH BONUS: "+resultsScreen.getHealthBonus();
 			CharSequence scoreText = "TOTAL SCORE: "+ world.getScore();
+			CharSequence rankText = "DIFFICULTY MULTIPLIER: " + resultsScreen.getRankMultiplier();
 			font.draw(textBatch, timeText, cam.position.x-14f, Gdx.graphics.getHeight()-122);
 			font.draw(textBatch, healthText, cam.position.x-14f, Gdx.graphics.getHeight()-172);
-			font.draw(textBatch, scoreText, cam.position.x-14f, Gdx.graphics.getHeight()-272);
-			//System.out.println("Drawing TotalScore at "+ (cam.position.x-14f) + ","+ (Gdx.graphics.getHeight()-272));
+			font.draw(textBatch, rankText, cam.position.x-14f, Gdx.graphics.getHeight()-222);
+			font.draw(textBatch, scoreText, cam.position.x-14f, Gdx.graphics.getHeight()-322);
 			textBatch.end();
 			
 			
 		}
 		
+		if (world.getLevelScenes().isGameWon()) {
+			textBatch.begin();
+			Array<CharSequence> lines = new Array<CharSequence>(); 
+			lines.add("CONGRATULATIONS!");
+			lines.add("YOU HAVE COMPLETED YOUR QUEST TO STEAL");
+			lines.add("THE JEWEL OF POWER.");
+			lines.add("NOW YOU RULE THE WORLD!");
+			lines.add("HOW IS IT?");
+			for (int i=0; i<lines.size; i++) {
+				CharSequence line = lines.get(i);
+				font.draw(textBatch, line, 64f, Gdx.graphics.getHeight()-64f-64f*i);
+			}
+			textBatch.end();
+			
+		}
 
 		//If game is paused render pause overlay
 		if (world.isPaused()) {
 			
 		}
 	}
+	
+
+	/**
+	 * Draw visual aids for debugging
+	 */
+	
 	
 	private void drawDebugAids() {
 		/* ----- Debug stuff. Will slow game down!! ----- */
@@ -756,17 +739,7 @@ public class WorldRenderer {
 			for (Rectangle r: e.getPlayerDamageBounds()) {
 				sr.rect(r.x, r.y, r.width, r.height);
 			}
-			if (e.getClass() == Walker.class) {
-				for (int i=0; i<8; i++) {
-					WalkerPart wp = ((Walker)e).getPart(i);
-					//System.out.println("Id: " + wp.getId() + ", (x,y): " + wp.getPosition().x + ","+wp.getPosition().y+")");
-					//System.out.println("Bounds: "+wp.getBounds().x+","+wp.getBounds().y+","+wp.getBounds().width+","+wp.getBounds().height);
-					
-					sr.rect(wp.getBounds().x, wp.getBounds().y, wp.getBounds().width, wp.getBounds().height);
-					
-					
-				}
-			} 
+			
 			sr.end();
 			sr.begin(ShapeType.Line);
 			if (e.getClass() == LaserBeam.class) {
@@ -783,14 +756,6 @@ public class WorldRenderer {
 			
 		}
 		sr.begin(ShapeType.Rectangle);
-		for (CutsceneObject csObj: csObjects) {
-			sr.rect(csObj.getPosition().x, csObj.getPosition().y, csObj.getWidth(), csObj.getHeight());
-		}
-		bItr = bullets.iterator();
-		while(bItr.hasNext()) {
-			b = bItr.next();
-			sr.rect(b.getBounds().x, b.getBounds().y, b.getBounds().width, b.getBounds().height);
-		}
 		sr.rect(world.sRec.x, world.sRec.y, world.sRec.width, world.sRec.height);
 		
 		
@@ -812,9 +777,12 @@ public class WorldRenderer {
 		return;
 	}
 	
+	/**
+	 * Initialize level
+	 */
+	
 	private void init() {
-		csObjects = new Array<CutsceneObject>();
-
+		
 		textBatch = new SpriteBatch();
 		font = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);
 		fontBig = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);
@@ -828,9 +796,14 @@ public class WorldRenderer {
 		
 		if (debugMode) fpsLogger = new FPSLogger();
 		
+		
 		loadTextures();
 		return;
 	}
+	
+	/**
+	 * Load textures from resources so that they can be used in game
+	 */
 	
 	private void loadTextures() {
 		AssetManager manager = new AssetManager();
@@ -841,7 +814,7 @@ public class WorldRenderer {
 		manager.load("stephenram.txt", TextureAtlas.class);
 		manager.load("firestarter.txt", TextureAtlas.class);
 		manager.load("myEnemy.txt", TextureAtlas.class);
-		manager.load("bg2.png", Texture.class, linearFilteringParam);
+		manager.load("bg3.png", Texture.class, linearFilteringParam);
 		manager.load("ship.png", Texture.class, linearFilteringParam);
 		manager.load("cyra.png", Texture.class, linearFilteringParam);
 		manager.load("body-jumper.png", Texture.class, linearFilteringParam);
@@ -853,11 +826,15 @@ public class WorldRenderer {
 		manager.load("projectiles/lightningball.png", Texture.class, linearFilteringParam);
 		manager.load("projectiles/lasers.txt", TextureAtlas.class);
 		manager.load("projectiles/explosion.txt", TextureAtlas.class);
-		manager.load("follower.txt", TextureAtlas.class);
 		manager.load("cyraRightMovement.txt", TextureAtlas.class);
 		manager.load("cyraLeftMovement.txt", TextureAtlas.class);
-		manager.load("modular3.txt", TextureAtlas.class);
-		manager.load("level packfile", TextureAtlas.class);
+		manager.load("tiles/level packfile", TextureAtlas.class);
+		manager.load("wall.png",Texture.class,linearFilteringParam);
+		manager.load("frontbush1.png", Texture.class, linearFilteringParam);
+		manager.load("sword1.png", Texture.class, linearFilteringParam);
+		manager.load("sword2.png", Texture.class, linearFilteringParam);
+		manager.load("sword3.png", Texture.class, linearFilteringParam);
+		manager.load("log.png", Texture.class, linearFilteringParam);
 		manager.finishLoading();
 		
 		boss1Atlas = manager.get("stephen.txt", TextureAtlas.class);
@@ -889,7 +866,7 @@ public class WorldRenderer {
 		//bossRamAnimation = new Animation(FOLLOWER_FRAME_DURATION, bossRamFrames);
 		myEnemy = manager.get("myEnemy.txt", TextureAtlas.class);
 		
-		bg = manager.get("bg2.png", Texture.class);
+		bg = manager.get("bg3.png", Texture.class);
 		bg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
 		shipTexture = manager.get("ship.png", Texture.class);
@@ -903,12 +880,14 @@ public class WorldRenderer {
 		
 		laserTextures = manager.get("projectiles/lasers.txt");
 		explosionTextures = manager.get("projectiles/explosion.txt");
-		//laserTextures.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		wallTexture = manager.get("wall.png");
 		
 			/* Load follower texture */
-		//followerTexture = new Texture("follower.png");
 		followerTexture = manager.get("ship.png");
 		followerTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		log = manager.get("log.png");
+		log.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
 		jumperBodyTexture = manager.get("body-jumper.png");
 		jumperBodyTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
@@ -925,50 +904,46 @@ public class WorldRenderer {
 		jumperFrontArmJumpingTexture = manager.get("frontarm-jumping-jumper.png");
 		jumperFrontArmJumpingTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
+		sword1 = manager.get("sword1.png", Texture.class);
+		sword1.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
+		sword2 = manager.get("sword2.png", Texture.class);
+		sword2.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
+		sword3 = manager.get("sword3.png", Texture.class);
+		sword3.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
+		
+		
 		TextureAtlas cyraRightAtlas = manager.get("cyraRightMovement.txt", TextureAtlas.class);
-		TextureAtlas cyraLeftAtlas = manager.get("cyraRightMovement.txt", TextureAtlas.class);
+		TextureAtlas cyraLeftAtlas = manager.get("cyraLeftMovement.txt", TextureAtlas.class);
 		
 		
 		
-		TextureAtlas atlas = manager.get("follower.txt", TextureAtlas.class);
-		/*TextureRegion[] followerFrames = new TextureRegion[3];
-		for (int i=0; i<3;i++) {
-			followerFrames[i] = atlas.findRegion("follower_"+(i+1));
-		}*/
-		Array<AtlasRegion> followerFrames = atlas.findRegions("follower");
-		System.out.println("Found " + followerFrames.size + " follower frames");
-		for (int i=0; i<followerFrames.size; i++) 
-			followerFrames.get(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		followerAnimation = new Animation(FOLLOWER_FRAME_DURATION, followerFrames);
-			/* Load follower texture - END*/
-		
+			
 		
 		Array<AtlasRegion> cyraRightFrames = cyraRightAtlas.findRegions("cyra");
-		System.out.println("Found " + cyraRightFrames.size + " cyra frames");
 		for (int i=0; i<cyraRightFrames.size; i++) 
 			cyraRightFrames.get(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		cyraRightAnimation = new Animation(FOLLOWER_FRAME_DURATION, cyraRightFrames);
 		
 		Array<AtlasRegion> cyraLeftFrames = cyraLeftAtlas.findRegions("cyra");
-		System.out.println("Found " + cyraLeftFrames.size + " cyra frames");
 		for (int i=0; i<cyraLeftFrames.size; i++) 
 			cyraLeftFrames.get(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		cyraLeftAnimation = new Animation(FOLLOWER_FRAME_DURATION, cyraLeftFrames);
 		
 		
-			/* Load walker texture */
-		//walkerTexture = new Texture("walker.png");
-		TextureAtlas walkerAtlas = manager.get("modular3.txt", TextureAtlas.class);
-		walkerRegions = walkerAtlas.findRegions("a");
-				
-		for (int i=0; i<walkerRegions.size; i++) {
-			walkerRegions.get(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-					
-		}
-		System.out.println("Found " + walkerRegions.size + " walker parts");
+		groundTextureAtlas = manager.get("tiles/level packfile", TextureAtlas.class);
 		
-		groundTextureAtlas = manager.get("level packfile", TextureAtlas.class);
-			/* Load walker texture - END */
+		
+		Texture parallaxTex = manager.get("frontbush1.png", Texture.class);
+		Array<Texture> textures= new Array<Texture>();
+		textures.add(parallaxTex);
+		Array<Vector2> offsets =  new Array<Vector2>();
+		offsets.add(new Vector2(0,0));
+		parallaxLayer = new ParallaxLayer(textures,offsets, 1024/32,15, new Vector2(-40,0));
+		
+		
 		return;
 		
 		
@@ -977,6 +952,10 @@ public class WorldRenderer {
 		
 		
 	}
+	
+	/**
+	 * Dispose of batch
+	 */
 	
 	public void dispose() {
 		batch.dispose();

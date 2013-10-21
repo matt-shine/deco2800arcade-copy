@@ -1,32 +1,23 @@
 package deco2800.arcade.breakout;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Intersector;
 
+import deco2800.arcade.breakout.screens.GameScreen;
+import deco2800.arcade.breakout.screens.HelpScreen1;
+import deco2800.arcade.breakout.screens.HelpScreen2;
+import deco2800.arcade.breakout.screens.LevelScreen1;
+import deco2800.arcade.breakout.screens.LevelScreen2;
+import deco2800.arcade.breakout.screens.MenuScreen;
+import deco2800.arcade.breakout.screens.ModelScreen;
+import deco2800.arcade.breakout.screens.SplashScreen;
+import deco2800.arcade.client.AccoladeSystem;
+import deco2800.arcade.client.AchievementClient;
+import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.highscores.HighscoreClient;
+import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.breakout.screens.*;
-import deco2800.arcade.client.AchievementClient;
-import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.GameClient;
-import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.client.highscores.HighscoreClient;
-import deco2800.arcade.client.AccoladeSystem;
 
 /**
  * The game client
@@ -50,8 +41,10 @@ public class Breakout extends GameClient {
 	public String player;
 	private NetworkClient networkClient;
 	private AchievementClient achievementClient;
-	HighscoreClient highscoreUser;
+	private HighscoreClient highscoreUser;
 	private AccoladeSystem accolades;
+	private Double accoladeBumpCounter;
+	private Double accoladeBrickBreak;
 
 	// Screen Parameters
 	public static final int SCREENHEIGHT = 720;
@@ -69,9 +62,11 @@ public class Breakout extends GameClient {
 		this.player = player.getUsername();
 		this.networkClient = networkClient;
 		this.achievementClient = new AchievementClient(networkClient);
-		this.highscoreUser = new HighscoreClient(player.getUsername(),
-				"Breakout", networkClient);
+		this.highscoreUser = new HighscoreClient(this.player, "Breakout",
+				networkClient);
 		this.accolades = new AccoladeSystem();
+		//accoladeBumpCounter = accolades.fetchID("bumpCount");
+		//accoladeBrickBreak = accolades.fetchID("brickBreak");
 	}
 
 	/**
@@ -124,8 +119,6 @@ public class Breakout extends GameClient {
 		helpscreen2 = new HelpScreen2(this);
 		modelscreen = new ModelScreen(this);
 		setScreen(splashScreen);
-		HighscoreClient player1 = new HighscoreClient(player, "Breakout",
-				networkClient);
 	}
 
 	/**
@@ -194,7 +187,8 @@ public class Breakout extends GameClient {
 		game = new Game();
 		game.id = "breakout";
 		game.name = "Breakout";
-		game.description = "Bounce the ball off your paddle to keep it from falling off the bottom of the screen.";
+		game.description = "Bounce the ball off your paddle to keep it from" +
+				" falling off the bottom of the screen.";
 	}
 
 	/**
@@ -204,6 +198,33 @@ public class Breakout extends GameClient {
 	 */
 	public HighscoreClient getHighScoreClient() {
 		return this.highscoreUser;
+	}
+
+	/**
+	 * Returns the accolades for the user
+	 * 
+	 * @return AccoladeSystem accolades
+	 */
+	public AccoladeSystem getAccolade() {
+		return this.accolades;
+	}
+
+	/**
+	 * Returns the accoladeBumpCounter for the user
+	 * 
+	 * @return int accolades
+	 */
+	public Double getAccoladeBumpCounter() {
+		return accoladeBumpCounter;
+	}
+
+	/**
+	 * Returns the accoladeBrickBreak for the user
+	 * 
+	 * @return int accolades
+	 */
+	public Double getAccoladeBrickBreak() {
+		return accoladeBrickBreak;
 	}
 
 	/**

@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+import deco2800.arcade.cyra.model.EnemySpiderBoss.State;
+
 public class EnemySpiderBossArms extends Enemy {
 	
 	private static final float BASE_SPEED = 3f;
@@ -20,7 +22,7 @@ public class EnemySpiderBossArms extends Enemy {
 	private static final float PHASE2_OFFSET_Y = 4.35f;
 	private static final float PHASE3_OFFSET_X = 5f;
 	private static final float PHASE3_OFFSET_Y = 5f;
-	public static final float PHASE3_SCALE = 2.5f;
+	public static final float PHASE3_SCALE = 1.8f;
 	
 	
 	private boolean isAttacking;
@@ -123,7 +125,6 @@ public class EnemySpiderBossArms extends Enemy {
 				position.x -= (position.x - parent.position.x+PARENT_OFFSET_X) * delta;
 				position.y -= (position.y - parent.position.y+PARENT_OFFSET_Y) * delta * 1.5f;
 				if (position.x <= parent.position.x + PARENT_OFFSET_X) {
-					System.out.println("Arms: I'm back!");
 					isReturning = false;
 					isAttacking = false;
 				}
@@ -254,7 +255,8 @@ public class EnemySpiderBossArms extends Enemy {
 			}
 		} else if (phase == 3) {
 			//System.out.println(isAttacking + " "+moveRight + "  isReturning?="+isReturning);
-			float phase3SpeedIncrease = 5f+10f*rank;
+			//float phase3SpeedIncrease = 3f+6f*rank;
+			float phase3SpeedIncrease = -1.5f;
 			if (isAttacking) {
 				if (moveRight) {
 					velocity = new Vector2(thisMoveDelta / delta + phase3SpeedIncrease, 0);
@@ -264,7 +266,7 @@ public class EnemySpiderBossArms extends Enemy {
 					}
 				} else {
 					if (position.y >= 14f) {
-						velocity = new Vector2(parent.position.x + PHASE3_OFFSET_X - position.x, parent.position.y+PHASE3_OFFSET_Y-position.y).nor().mul(thisMoveDelta+phase3SpeedIncrease/delta/2f);
+						velocity = new Vector2(parent.position.x + PHASE3_OFFSET_X - position.x, parent.position.y+PHASE3_OFFSET_Y-position.y).nor().mul(thisMoveDelta/delta+phase3SpeedIncrease/(10f+2f*rank));
 						isAttacking = false;
 						isReturning = true;
 					}
@@ -283,6 +285,8 @@ public class EnemySpiderBossArms extends Enemy {
 		
 		if (isAttacking || isReturning) {
 			rotation += 600*delta;
+		} else if (phase == 3 && parent.getState() == State.THROW_ARMS) {
+			rotation -= 100*delta;
 		} else {
 			rotation = 0;
 		}

@@ -17,6 +17,7 @@ import deco2800.arcade.protocol.game.NewGameResponse;
 public class GameListener extends Listener {
 	
 	private Map<String, Map<String, Set<Connection>>> gameSessions;
+
 	
 	/**
 	 * Instantiates a HashMap of game sessions
@@ -76,6 +77,7 @@ public class GameListener extends Listener {
 				//Find the user sessions using the host username
 				if (userConnections.containsKey(username)){
 					//Get the set of connections for the game session
+
 					Set<Connection> connections = userConnections.get(username);
 					for (Connection connect : connections){
 						//Forward the update out to the connected clients
@@ -115,6 +117,5 @@ public class GameListener extends Listener {
 		connections.add(connection);
 		connection.sendTCP(NewGameResponse.OK);
 	}
-
 	
 }

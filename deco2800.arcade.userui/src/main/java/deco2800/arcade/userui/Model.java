@@ -1,14 +1,15 @@
 package deco2800.arcade.userui;
 
+import java.awt.Font;
+
 import javax.swing.ImageIcon;
 
 import deco2800.arcade.client.AchievementClient;
-import deco2800.arcade.client.Arcade;
 import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.GameClient;
 import deco2800.arcade.model.Friends;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.model.User;
 
 public class Model {
 		
@@ -31,13 +32,25 @@ public class Model {
 	public static final Game PACMAN;
 	
 	//Status Values
-	public String status = "online";
-	public ImageIcon statusIcon = new ImageIcon("assets/images/online.png");
+	private String status = "online";
 	
-	public Friends friends;
-	public AchievementClient achievements;
-	public ArcadeSystem arcadesystem;
-	public Player player;
+	private Friends friends;
+	private AchievementClient achievements;
+	private ArcadeSystem arcadesystem;
+	private Player player;
+	private User user;
+	
+	//Declare Fonts
+	public Font blackbold = new Font("Century Gothic", Font.BOLD, 20);
+	public Font blacknormal = new Font("Century Gothic", Font.PLAIN, 16);
+	public Font blacksmall = new Font("Century Gothic", Font.PLAIN, 13);
+	public Font blacklink = new Font("Century Gothic", Font.PLAIN, 16);
+	public Font linkbold = new Font("Century Gothic", Font.BOLD, 16);
+	public Font sidebold = new Font("Century Gothic", Font.BOLD, 15);
+	
+	//Declare ImageIcons
+	public ImageIcon statusIcon = new ImageIcon("assets/images/online.png");
+
 	
 	static {
 		
@@ -78,28 +91,108 @@ public class Model {
 	
 	}
 	
+	/**
+	 * Get the Player Status
+	 * @return String of status
+	 */
 	public String getStatus() {
 		return status;	
 	}
 
+	/**
+	 * Set the Player Status
+	 * @param status 
+	 */
 	public void setStatus(String status) {
 		this.status = status;
 	}
 
+	/**
+	 * Get the Status Icon
+	 * @return
+	 */
 	public ImageIcon getStatusIcon() {
 		return statusIcon;
 	}
 
+	/**
+	 * Set the Status Icon
+	 * @param statusIcon
+	 */
 	public void setStatusIcon(ImageIcon statusIcon) {
 		this.statusIcon = statusIcon;
 	}
 
+	/**
+	 * Get the Achievement Client
+	 * @return
+	 */
 	public AchievementClient getAchievements() {
 		return achievements;
 	}
 
+	/**
+	 * Set the Achievement Client
+	 * @param achievements
+	 */
 	public void setAchievements(AchievementClient achievements) {
 		this.achievements = achievements;
+	}
+
+	/**
+	 * Get the Arcade System
+	 * @return
+	 */
+	public ArcadeSystem getArcadesystem() {
+		return arcadesystem;
+	}
+
+	/**
+	 * Set the Arcade System
+	 * @param arcadesystem
+	 */
+	public void setArcadesystem(ArcadeSystem arcadesystem) {
+		this.arcadesystem = arcadesystem;
+	}
+
+	/**
+	 * Get the friends List
+	 * @return
+	 */
+	public Friends getFriends() {
+		return friends;
+	}
+
+	/**
+	 * Set the Friends List
+	 * @param friends
+	 */
+	public void setFriends(Friends friends) {
+		this.friends = friends;
+	}
+
+	/**
+	 * Get a instance of Player
+	 * @return
+	 */
+	public Player getPlayer() {
+		return player;
+	}
+
+	/**
+	 * Set values of Player
+	 * @param player
+	 */
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 }

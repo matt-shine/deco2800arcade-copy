@@ -29,6 +29,12 @@ public class AchievementClient {
 
 	/* ---------- PUBLIC API v2.0 - USE THIS! :) ---------- */
 
+        /**
+         * Constructs the achievement client that will communicate with the
+         * server using the given network client.
+         *
+         * @param networkClient The network client to use to communicate with the server.
+         */
 	public AchievementClient(NetworkClient networkClient) {
 		this.listeners = new HashSet<AchievementListener>();
 		if (achievementsCache == null)
@@ -43,6 +49,12 @@ public class AchievementClient {
 		setNetworkClient(networkClient);
 	}
 
+        /**
+         * Sets the client's NetworkClient, which it uses to communicate with
+         * the server.
+         *
+         * @param client The network client to use to communicate with the server
+         */
 	public void setNetworkClient(NetworkClient client) {
 		if (this.networkClient != null) {
 			this.networkClient.removeListener(listener);
@@ -58,9 +70,8 @@ public class AchievementClient {
 	 * Returns a future which will be provided with the Achievement
 	 * corresponding to the given achievement ID. If no such achievement exists,
 	 * the future will be cancelled.
-	 * 
-	 * @param achievementID
-	 *            The ID of the achievement to request.
+	 *
+	 * @param achievementID The ID of the achievement to request.
 	 * @return A future to be provided with the request's result.
 	 */
 	public AsyncFuture<Achievement> getAchievementForID(String achievementID) {
@@ -81,6 +92,14 @@ public class AchievementClient {
 		return future;
 	}
 
+        /**
+         * Returns a future which will be provided with an ArrayList of
+         * Achievements corresponding to the given list of achievement IDs.
+         * The future's list is in the same order as the provided ID list.
+         *
+         * @param achievementIDs The IDs of the achievements to get.
+         * @return A future to be provided with the achivements.
+         */
 	public AsyncFuture<ArrayList<Achievement>> getAchievementsForIDs(
 			final ArrayList<String> achievementIDs) {
 		final AsyncFuture<ArrayList<Achievement>> future = new AsyncFuture<ArrayList<Achievement>>();
@@ -131,6 +150,13 @@ public class AchievementClient {
 
 	}
 
+        /**
+         * Returns a future to a list of Achievements for a given game.
+         * The list has no particular order.
+         *
+         * @param game The game whose achievements should be retrieved.
+         * @return A future to a list of the game's achievements.
+         */
 	public AsyncFuture<ArrayList<Achievement>> getAchievementsForGame(Game game) {
 		final AsyncFuture<ArrayList<Achievement>> future = new AsyncFuture<ArrayList<Achievement>>();
 
@@ -149,6 +175,13 @@ public class AchievementClient {
 		return future;
 	}
 
+        /**
+         * Returns a future to an AchievementProgress instance representing
+         * the given player's progress in every achievement.
+         *
+         * @param player The player whose progress should be retrieved.
+         * @return A future to the player's progress.
+         */
 	public AsyncFuture<AchievementProgress> getProgressForPlayer(Player player) {
 		final AsyncFuture<AchievementProgress> future = new AsyncFuture<AchievementProgress>();
 		ProgressForPlayerRequest req = new ProgressForPlayerRequest();
@@ -167,7 +200,7 @@ public class AchievementClient {
 	/**
 	 * Increments the player's progress for the achievement with ID
 	 * `achievementID`.
-	 * 
+	 *
 	 * @param achievementID
 	 *            The ID of the achievement.
 	 * @param player
@@ -184,9 +217,9 @@ public class AchievementClient {
 	/**
 	 * Adds a listener to be notified of achievement events. The listener is
 	 * only notified of events after they've been confirmed by the server.
-	 * 
+	 *
 	 * (This is used to power GameClient's achievement overlay)
-	 * 
+	 *
 	 * @param listener
 	 *            The listener to add.
 	 */
@@ -197,7 +230,7 @@ public class AchievementClient {
 	/**
 	 * Removes an achievement listener. If the listener is null or wasn't added
 	 * in the first place, nothing happens.
-	 * 
+	 *
 	 * @param listener
 	 *            The listener to remove.
 	 */

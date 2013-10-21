@@ -13,9 +13,16 @@ public class EnemySpawner {
 	
 	private float count;
 	private Array<Enemy> enemies;
-	//private int enemyCount;
 	private int spawnCount;
 	
+	/**
+	 * An object that creates other Enemies at set intervals
+	 * @param objClass the class of Enemy to spawn. Must have a constructor with no parameters
+	 * @param pos Position to spawn Enemies at
+	 * @param rate how fast from one spawn time to the next
+	 * @param maxSpawn maximum Enemies to spawn over EnemySpawner lifespan
+	 * @param maxSpawnAtOnce maximum Enemies to spawn until some are cleared out
+	 */
 	public EnemySpawner(Class<? extends Enemy> objClass, Vector2 pos, int rate, int maxSpawn, int maxSpawnAtOnce) {
 		this.objClass = objClass;
 		this.pos = pos;
@@ -24,13 +31,15 @@ public class EnemySpawner {
 		this.maxSpawnAtOnce = maxSpawnAtOnce;
 		count = rate;
 		enemies = new Array<Enemy>();
-		//enemyCount = 0;
 		spawnCount = 0;
 	}
 	
+	/**
+	 * The update method to count down from the rate to next enemy spawn
+	 * @return is an enemy ready to spawn
+	 */
 	public boolean increment() {
 		count += Gdx.graphics.getDeltaTime();
-		//System.out.println("c" + count + " r" + rate+" es"+enemies.size+" msao"+maxSpawnAtOnce+ " sc"+spawnCount+ " ms"+maxSpawn);
 		if (count > rate && enemies.size < maxSpawnAtOnce && spawnCount < maxSpawn) {
 			return true;
 		} else {
@@ -38,36 +47,43 @@ public class EnemySpawner {
 		}
 	}
 	
+	/**
+	 * checks if it can spawn within the constructors constraints of maxSpawn and maxSpawnAtOnce
+	 * @return the new Enemy to spawn
+	 */
 	public Enemy spawnNewIfPossible() {
 		if (enemies.size < maxSpawnAtOnce && spawnCount < maxSpawn) {
 			return spawnNew();
 		} else {
-			System.out.println("Not spawned because "+enemies.size+", "+maxSpawnAtOnce+", "+spawnCount+", "+maxSpawn);
 			return null;
 		}
 	}
 	
+	/**
+	 * Spawn the Enemy of the constructor's class
+	 * @return Enemy to spawn
+	 */
 	public Enemy spawnNew() {
 		try {
 			Enemy e = (Enemy) objClass.newInstance();
 			e.setPosition(new Vector2(pos.x, pos.y));
 			enemies.add(e);
-			//enemyCount++;
 			spawnCount++;
 			count = 0;
-			System.out.println("Spawned enemy at " + pos.x+","+pos.y);
 			return e;
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}
 	}
 	
+	/**
+	 * Remove enemy from spawners list, freeing up another for the MaxSpawnAtOnce limit
+	 * @param e the enemy to remove
+	 */
 	public void removeEnemy(Enemy e) {
 		
 		for (int i=0; i< enemies.size; i++) {
@@ -78,15 +94,27 @@ public class EnemySpawner {
 	}
 	
 	
-	
+	/**
+	 * 
+	 * @return class of Enemy to spawn
+	 */
 	public Class<? extends Enemy> getObjectClass() {
 		return objClass;
 	}
 	
+	/**
+	 * 
+	 * @return position that enemies will be spawned at
+	 */
 	public Vector2 getPosition() {
 		return pos;
 	}
 	
+	
+	/**
+	 * Set the position to spawn enemies
+	 * @param pos Vector2 position
+	 */
 	public void setPosition(Vector2 pos) {
 		this.pos = pos;
 	}

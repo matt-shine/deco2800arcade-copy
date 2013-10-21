@@ -9,7 +9,13 @@ public abstract class Bullet {
 	public int width;
 	public int heigth;
 	
-	
+	/**
+	 * Constructor for bullet.
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param heigth
+	 */
 	public Bullet(int x, int y, int width, int heigth) {
 		super();
 		this.x = x;

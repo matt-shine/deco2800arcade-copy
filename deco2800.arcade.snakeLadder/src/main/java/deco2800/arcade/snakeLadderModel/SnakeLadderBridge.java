@@ -24,10 +24,16 @@ public class SnakeLadderBridge {
 		this.originPosition = originPosition;
 	}
 	
+	/**
+	 * @return the sprite for snake or ladder
+	 */
 	public Sprite getSprite() {
 		return sprite;
 	}
 
+	/**
+	 * @param sprite set the sprite for snake or ladder
+	 */
 	public void setSprite(Sprite sprite) {
 		this.sprite = sprite;
 	}

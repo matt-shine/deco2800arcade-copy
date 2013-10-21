@@ -18,6 +18,8 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.network.listener.ReplayListener;
+import deco2800.arcade.client.replay.*;
 /**
  * A Checkers game for testing replay feature
  * @author shewwiii
@@ -31,20 +33,22 @@ public class Checkers extends GameClient {
 	private int chosen = 50;
 	private float chosenx = 0;
 	private float choseny = 0;
-	private Square[][] squares;
-	private Pieces[] myPieces;
-	private Pieces[] theirPieces;
+	private static Square[][] squares;
+	private static Pieces[] myPieces;
+	private static Pieces[] theirPieces;
 	ClickListener pushed;
 	
 	private enum GameState {
 		READY,
 		AIGO,
 		USERGO,
+		REPLAY,
 		GAMEOVER
 	}
-	private GameState gameState;
+	private static GameState gameState;
 	private int[] scores = new int[2];
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
+	private static boolean isReplaying = false;
 
 	public static final int WINNINGSCORE = 4;
 	public static final int SCREENHEIGHT = 480;
@@ -55,6 +59,9 @@ public class Checkers extends GameClient {
 	private BitmapFont font;
 
 	private String statusMessage;
+	
+	//start code for replay API
+	private static ReplayHandler replayHandler;
 	
 	//Network client for communicating with the server.
 	//Should games reuse the client of the arcade somehow? Probably!
@@ -74,7 +81,72 @@ public class Checkers extends GameClient {
 		players[0] = player.getUsername();
 		players[1] = "Computer"; //TODO eventually the server may send back the opponent's actual username
         this.networkClient = networkClient; //this is a bit of a hack
+        
+        //start code for replay API
+        replayHandler = new ReplayHandler( this.networkClient );
+        
+        //Set up our listener on this end
+        ReplayListener replayListener = new ReplayListener(replayHandler);
+
+        //Our client needs to know about this listener
+        this.networkClient.addListener(replayListener);
+
+        //Declare an event to be registered in the factory, we can pass arrays.
+        ReplayNodeFactory.registerEvent("piece_move", new String[]{"piece", "move_x_val", "move_y_val"});
+        ReplayNodeFactory.registerEvent("select_piece", new String[]{"chosen", "array_i", "array_j"});
+
+		replayHandler.requestSessionList(getGame().id);
+      //Start session - tell the server we will be recording soon
+      		replayHandler.startSession( getGame().id, player.getUsername() );
+        //end code for replay API
 	}
+	
+	//start code for replay API
+	private static ReplayEventListener initReplayEventListener() {
+	    return new ReplayEventListener() {
+	        public void replayEventReceived( String eType, ReplayNode eData ) {
+	            //Built in event types
+	            if ( eType.equals( "node_pushed" ) ) {
+	                System.out.println( eType );
+	                System.out.println( eData );
+	            }
+	            if ( eType.equals( "event_pushed" ) ) {
+	                System.out.println( eType );
+	            }
+	            //If you request a list of session from the server, this event will return with the list
+	            if ( eType.equals( "session_list" ) ) {
+	                System.out.println( eData );
+	            }
+	            if ( eType.equals( "replay_reset" ) ) {
+	                System.out.println( "replay reset" );
+	            }
+	            if ( eType.equals( "playback_complete" ) ) {
+	                System.out.println( "playback finished" );
+	                isReplaying = false;
+	            }
+
+	            //Custom events
+	            if ( eType.equals( "piece_move" ) ) {
+                	if ( gameState == GameState.REPLAY ) {
+                		movePiece(eData.getItemForString("piece").intVal(), 
+                				eData.getItemForString("move_x_val").floatVal(), 
+                				eData.getItemForString("move_y_val").floatVal());
+                		System.out.println( "Move: " + eData );
+                	}
+                }
+	            
+	            if ( eType.equals( "select_piece" ) ) {
+                	if ( gameState == GameState.REPLAY ) {
+                		selectPiece(eData.getItemForString("chosen").intVal(), 
+                				eData.getItemForString("array_i").intVal(), 
+                				eData.getItemForString("array_j").intVal());
+                		System.out.println( "Move: " + eData );
+                	}
+                }
+	        }
+	    }; 
+	}
+	//end code for replay API
 	
 	/**
 	 * Creates the game
@@ -231,6 +303,10 @@ public class Checkers extends GameClient {
 	    
 	    case READY: //Ready to start a new point
 	    	if (Gdx.input.isTouched()) {
+	    		//start code for replay API
+	    		//Actually begin recording
+	    		replayHandler.startRecording();
+	    		//end code for replay API
 	    		gameState = GameState.AIGO;
 	    	}
 	    	break;
@@ -240,9 +316,17 @@ public class Checkers extends GameClient {
 	    	if (scores[1] == WINNINGSCORE) {
 				statusMessage = players[1] + " Wins " + scores[1] + " - " + scores[0] + "!";
 				gameState = GameState.GAMEOVER;
+				//start code for replay API
+				replayHandler.finishRecording();
+				replayHandler.endCurrentSession();
+				//end code for replay API
 			} else if (scores[0] == WINNINGSCORE) {
 				statusMessage = players[0] + " Wins " + scores[0] + " - " + scores[1] + "!";
 				gameState = GameState.GAMEOVER;
+				//start code for replay API
+				replayHandler.finishRecording();
+				replayHandler.endCurrentSession();
+				//end code for replay API
 			}
 	    	break;
 	    	
@@ -272,17 +356,50 @@ public class Checkers extends GameClient {
 			if (scores[1] == WINNINGSCORE) {
 				statusMessage = players[1] + " Wins " + scores[1] + " - " + scores[0] + "!";
 				gameState = GameState.GAMEOVER;
+				//start code for replay API
+				replayHandler.finishRecording();
+				replayHandler.endCurrentSession();
+				//end code for replay API
 			} else if (scores[0] == WINNINGSCORE) {
 				statusMessage = players[0] + " Wins " + scores[0] + " - " + scores[1] + "!";
 				gameState = GameState.GAMEOVER;
+				//start code for replay API
+				replayHandler.finishRecording();
+				replayHandler.endCurrentSession();
+				//end code for replay API
 			}
 			
 	    	break;
+	    	
 	    case GAMEOVER: //The game has been won, wait to exit
 	    	if (Gdx.input.isTouched()) {
-	    		gameOver();
-	    		ArcadeSystem.goToGame(ArcadeSystem.UI);
+	    		//start code for replay API
+	    		for (int i=0; i<4; i++) {
+	    			myPieces[i].bounds.set(squares[2][i].bounds.x + 10, squares[2][i].bounds.y +10, 30, 30);
+	    			theirPieces[i].bounds.set(squares[0][i].bounds.x + 10, squares[0][i].bounds.y +10, 30, 30);
+
+	    		}
+	    		
+	    		gameState = GameState.REPLAY;
+		    	//Start replay of last session
+		    	replayHandler.playbackLastSession();
+		    	
+		    	isReplaying = true;
+		    	//end code for replay API
+	    		//gameOver();
+	    		//ArcadeSystem.goToGame(ArcadeSystem.UI);
 	    	}
+	    	break;
+	    
+	    case REPLAY:
+	    	if (isReplaying) {
+	    		statusMessage = "REPLAYING";
+	    	} else {
+	    		statusMessage = "Replay over";
+	    		gameState = GameState.GAMEOVER;
+	    	}
+	    	//Start running the replay
+    		replayHandler.runLoop();
 	    	break;
 	    }
 	    
@@ -367,7 +484,10 @@ public class Checkers extends GameClient {
 								continue outerloop;
 							}
 						}
-						toMove.move(100f, -100f);
+						movePiece(toMoveNum, 100f, -100f);
+						//start code for replay API
+						replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, 100f, -100f));
+						//end code for replay API
 						myPieces[p].bounds.y = -90;
 						System.out.println("moved 465");
 
@@ -398,7 +518,10 @@ public class Checkers extends GameClient {
 								continue outerloop;
 							}
 						}
-						toMove.move(100f, -100f);
+						movePiece(toMoveNum, 100f, -100f);
+						//start code for replay API
+						replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, 100f, -100f));
+						//end code for replay API
 						myPieces[p].bounds.y = -90;
 						System.out.println("moved 465");
 
@@ -438,7 +561,10 @@ public class Checkers extends GameClient {
 									}
 								}
 								// edible, has free space after
-								toMove.move(-100f, -100f);
+								movePiece(toMoveNum, -100f, -100f);
+								//start code for replay API
+								replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, 100f, -100f));
+								//end code for replay API
 								myPieces[r].bounds.y = -90;
 								System.out.println("moved 457");
 								if (toMove.bounds.y == 110) { //last row
@@ -481,7 +607,10 @@ public class Checkers extends GameClient {
 										}
 									}
 									// edible, has free space after
-									toMove.move(-100f, -100f);
+									movePiece(toMoveNum, -100f, -100f);
+									//start code for replay API
+									replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, -100f, -100f));
+									//end code for replay API
 									myPieces[t].bounds.y = -90;
 									System.out.println("moved 417");
 									scores[1] += 1;
@@ -526,7 +655,10 @@ public class Checkers extends GameClient {
 											}
 										}
 										// edible, has free space after
-										toMove.move(-100f, -100f);
+										movePiece(toMoveNum, -100f, -100f);
+										//start code for replay API
+										replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, -100f, -100f));
+										//end code for replay API
 										myPieces[t].bounds.y = -90;
 										System.out.println("moved 457");
 										if (toMove.bounds.y == 110) { //last row
@@ -541,7 +673,10 @@ public class Checkers extends GameClient {
 									}
 								}
 							} else {
-								toMove.move(100f, -100f);
+								movePiece(toMoveNum, 100f, -100f);
+								//start code for replay API
+								replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, 100f, -100f));
+								//end code for replay API
 								myPieces[r].bounds.y = -90;
 								System.out.println("moved 465");
 
@@ -563,7 +698,10 @@ public class Checkers extends GameClient {
 			// move
 			if (toMove.bounds.x == 80) { // is far left
 				// advance right
-				toMove.move(50f, -50f);
+				movePiece(toMoveNum, 50f, -50f);
+				//start code for replay API
+				replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, 50f, -50f));
+				//end code for replay API
 				System.out.println("moved 4" + toMoveNum);
 
 				if (toMove.bounds.y == 110) { //last row
@@ -576,7 +714,10 @@ public class Checkers extends GameClient {
 				break outerloop;
 			} else if (toMove.bounds.x == 230) {
 				// advance left
-				toMove.move(-50f, -50f);
+				movePiece(toMoveNum, -50f, -50f);
+				//start code for replay API
+				replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, -50f, -50f));
+				//end code for replay API
 				System.out.println("moved 5");
 
 				if (toMove.bounds.y == 110) { //last row
@@ -590,7 +731,10 @@ public class Checkers extends GameClient {
 			} else {
 				for (int q = 0; q < 4; q++) { 
 					if (toMove.bounds.y - 50 == myPieces[q].bounds.y && toMove.bounds.x + 50 == myPieces[q].bounds.x) {
-						toMove.move(-50f, -50f);
+						movePiece(toMoveNum, -50f, -50f);
+						//start code for replay API
+						replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, -50f, -50f));
+						//end code for replay API
 						System.out.println("moved 6");
 
 						if (toMove.bounds.y == 110) { //last row
@@ -602,7 +746,10 @@ public class Checkers extends GameClient {
 						toMoveNum = 5;
 						break outerloop;
 					} else if (toMove.bounds.y - 50 == theirPieces[q].bounds.y && toMove.bounds.x + 50 == theirPieces[q].bounds.x) {
-						toMove.move(-50f, -50f);
+						movePiece(toMoveNum, -50f, -50f);
+						//start code for replay API
+						replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, -50f, -50f));
+						//end code for replay API
 						System.out.println("moved 6");
 
 						if (toMove.bounds.y == 110) { //last row
@@ -615,7 +762,10 @@ public class Checkers extends GameClient {
 						break outerloop;
 					}
 				}
-				toMove.move(50f, -50f);
+				movePiece(toMoveNum, 50f, -50f);
+				//start code for replay API
+				replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("piece_move", toMoveNum, 50f, -50f));
+				//end code for replay API
 				System.out.println("moved 7");
 
 				if (toMove.bounds.y == 110) { //last row
@@ -627,200 +777,7 @@ public class Checkers extends GameClient {
 				toMoveNum = 5;
 				break outerloop;
 			}
-		}	
-		
-		
-	/*	int toMoveNum = 0;
-		int direction = 0;
-		int leftEdible = 0;
-		int rightEdible = 0;
-		Pieces toMove = theirPieces[toMoveNum];
-		//80 left, 230 right
-		for (int i=0; i<4; i++) {
-			if (toMove.bounds.y == 110) { //last row
-				toMoveNum += 1;
-				toMove = theirPieces[toMoveNum];
-				i = 0;
-				direction = 0;
-			} else if (toMove.bounds.y == -90) {
-				//piece already gone
-				toMoveNum += 1;
-				toMove = theirPieces[toMoveNum];
-				i = 0;
-				direction = 0;
-			} else if (rightEdible == 1) {
-				for (int j=0; j<4; j++) {
-			    	for (int k=0; k<3; k++) {
-			    		if (squares[k][j].bounds.contains(toMove.bounds.x + 100, toMove.bounds.y - 100)) {
-			    			//after position is a square
-			    			for (int m=0; m<4; m++) {
-								if (toMove.bounds.y - 100 == myPieces[m].bounds.y && toMove.bounds.x + 100 == myPieces[m].bounds.x) {
-									//blocked by user piece
-									if (toMove.bounds.x != 80) { //not furthest left
-										direction = 1;
-										i = 0;
-										rightEdible = 0;
-									} else {
-										toMoveNum += 1;
-										toMove = theirPieces[toMoveNum];
-										i = 0;
-										direction = 0;
-										rightEdible = 0;
-									}
-								} else if (toMove.bounds.y - 100 == theirPieces[m].bounds.y && toMove.bounds.x + 100 == theirPieces[m].bounds.x) {
-									//blocked by AI piece
-									if (toMove.bounds.x != 80) { //not furthest left
-										direction = 1;
-										i = 0;
-										rightEdible = 0;
-									} else {
-										toMoveNum += 1;
-										toMove = theirPieces[toMoveNum];
-										i = 0;
-										direction = 0;
-										rightEdible = 0;
-									}
-								} else {
-									// not blocked, free to eat
-									rightEdible = 2;
-									for (int a=0; a<4; a++) {
-										if (toMove.bounds.y - 50 == myPieces[a].bounds.y && toMove.bounds.x + 50 == myPieces[a].bounds.x) {
-											myPieces[a].bounds.y = -90;
-										}
-									}
-								}
-			    			}
-			    		}
-			    	}	
-				}// after position is not a square
-    			if (rightEdible == 1) {
-    				if (toMove.bounds.x != 80) { //not furthest left
-						direction = 1;
-						i = 0;
-						rightEdible = 0;
-					}
-    			}
-			} else if (leftEdible == 1) {
-				for (int j=0; j<4; j++) {
-			    	for (int k=0; k<3; k++) {
-			    		if (squares[k][j].bounds.contains(toMove.bounds.x - 100, toMove.bounds.y - 100)) {
-			    			//after position is a square
-			    			for (int m=0; m<4; m++) {
-								if (toMove.bounds.y - 100 == myPieces[m].bounds.y && toMove.bounds.x - 100 == myPieces[m].bounds.x) {
-									//blocked by user piece
-									toMoveNum += 1;
-									toMove = theirPieces[toMoveNum];
-									i = 0;
-									direction = 0;
-									leftEdible = 0;
-									break;
-								} else if (toMove.bounds.y - 100 == theirPieces[m].bounds.y && toMove.bounds.x - 100 == theirPieces[m].bounds.x) {
-									//blocked by AI piece
-									toMoveNum += 1;
-									toMove = theirPieces[toMoveNum];
-									i = 0;
-									direction = 0;
-									leftEdible = 0;
-									break;
-								} else {
-									// not blocked, free to eat
-									leftEdible = 2;
-									for (int a=0; a<4; a++) {
-										if (toMove.bounds.y - 50 == myPieces[a].bounds.y && toMove.bounds.x - 50 == myPieces[a].bounds.x) {
-											myPieces[a].bounds.y = -90;
-										}
-									}
-								}
-			    			}
-
-			    		}
-			    	}
-				}// after position not a square
-				if (leftEdible == 1) {
-    				toMoveNum += 1;
-    				toMove = theirPieces[toMoveNum];
-    				i = 0;
-    				direction = 0;
-    				leftEdible = 0;
-    			}
-			} else if (toMove.bounds.x == 80) { //furthest left
-				if (toMove.bounds.y - 50 == theirPieces[i].bounds.y && toMove.bounds.x + 50 == theirPieces[i].bounds.x) {
-					toMoveNum += 1;
-					toMove = theirPieces[toMoveNum];
-					i = 0;
-					direction = 0;
-				} else if (toMove.bounds.y - 50 == myPieces[i].bounds.y && toMove.bounds.x + 50 == myPieces[i].bounds.x) {
-					rightEdible = 1;
-					i = 0;
-				}
-			} else if (toMove.bounds.x == 230) { //furthest right
-				direction = 1;
-				if (toMove.bounds.y - 50 == theirPieces[i].bounds.y && toMove.bounds.x - 50 == theirPieces[i].bounds.x) {
-					toMoveNum += 1;
-					toMove = theirPieces[toMoveNum];
-					i = 0;
-					direction = 0;
-				} else if (toMove.bounds.y - 50 == myPieces[i].bounds.y && toMove.bounds.x - 50 == myPieces[i].bounds.x) {
-					leftEdible = 1;
-					i = 0;
-				}
-			} 
-			else { // not furthest left or right
-				if (direction == 1) {
-					//right diagonal is blocked already
-					if (toMove.bounds.y-50 == theirPieces[i].bounds.y && toMove.bounds.x-50 == theirPieces[i].bounds.x) {
-						//left diagonal is also blocked
-						toMoveNum += 1;
-						toMove = theirPieces[toMoveNum];
-						i = 0;
-						direction = 0;
-					} else if (toMove.bounds.y-50 == myPieces[i].bounds.y && toMove.bounds.x-50 == myPieces[i].bounds.x) {
-						leftEdible = 1;
-						i = 0;
-					}
-				} else if (toMove.bounds.y-50 == theirPieces[i].bounds.y && toMove.bounds.x+50 == theirPieces[i].bounds.x) {
-					//piece at right diagonal
-					direction = 1;
-					i = 0;
-				} else if (toMove.bounds.y-50 == myPieces[i].bounds.y && toMove.bounds.x+50 == myPieces[i].bounds.x && rightEdible != 2) {
-					//piece at right diagonal
-					rightEdible = 1;
-					i = 0;
-				}
-			}
 		}
-		try{
-    	    Thread.sleep(1500);
-    	}catch(InterruptedException e){
-    	    System.out.println("got interrupted!");
-    	}
-		if (leftEdible == 2){
-			toMove.move(-100f, -100f);
-			scores[1] += 1;
-		} else if (rightEdible == 2) {
-			toMove.move(100f, -100f);
-			scores[1] += 1;
-		} else if (direction == 1) { //left diagonal
-			toMove.move(-50f, -50f);
-		} else {
-			toMove.move(50f, -50f);
-		}
-		direction = 0;
-		leftEdible = 0;
-		for (int h=0; h<4; h++) {
-			if (toMove.bounds.y == 110) { //last row
-				try{
-		    	    Thread.sleep(1500);
-		    	}catch(InterruptedException e){
-		    	    System.out.println("got interrupted!");
-		    	}
-				scores[1] += 1;
-				toMove.bounds.y = -90;
-			}
-		}
-		
-		gameState = GameState.USERGO;
-		statusMessage = null;*/
 	}
 	
 	private void mouseReleased() {
@@ -844,8 +801,8 @@ public class Checkers extends GameClient {
 		    	for (int i=0; i<3; i++) {
 		    		if (squares[i][j].bounds.contains(realX, realY)) { //is a square
 		    			if (squares[i][j].bounds.contains(chosenx+50, choseny+50) || squares[i][j].bounds.contains(chosenx-50, choseny+50)) { //diagonal square
-		    					myPieces[chosen].bounds.set(squares[i][j].bounds.x + 10,
-				    					squares[i][j].bounds.y + 10, 30, 30);
+		    					selectPiece(chosen, i, j);
+		    					replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("select_piece", chosen, i, j));
 		    					if (squares[i][j].bounds.y == 350) {//reached end
 		    						try{
 		    				    	    Thread.sleep(1500);
@@ -864,8 +821,8 @@ public class Checkers extends GameClient {
 	    							//noms
 	    							scores[0] += 1;
 	    							theirPieces[k].bounds.y = -90;
-	    							myPieces[chosen].bounds.set(squares[i][j].bounds.x + 10,
-	    			    					squares[i][j].bounds.y + 10, 30, 30);
+	    							selectPiece(chosen, i, j);
+	    							replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("select_piece", chosen, i, j));
 	    							if (squares[i][j].bounds.y == 350) {//reached end
 			    						try{
 			    				    	    Thread.sleep(1500);
@@ -886,8 +843,8 @@ public class Checkers extends GameClient {
 	    							//noms
 	    							scores[0] += 1;
 	    							theirPieces[k].bounds.y = -90;
-	    							myPieces[chosen].bounds.set(squares[i][j].bounds.x + 10,
-	    			    					squares[i][j].bounds.y + 10, 30, 30);
+	    							selectPiece(chosen, i, j);
+	    							replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("select_piece", chosen, i, j));
 	    							if (squares[i][j].bounds.y == 350) {//reached end
 			    						try{
 			    				    	    Thread.sleep(1500);
@@ -904,8 +861,8 @@ public class Checkers extends GameClient {
 	    					}
 		    				
 		    			} else if (squares[i][j].bounds.contains(chosenx, choseny)) { //put back
-		    				myPieces[chosen].bounds.set(squares[i][j].bounds.x + 10,
-			    					squares[i][j].bounds.y + 10, 30, 30);
+		    				selectPiece(chosen, i, j);
+		    				replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("select_piece", chosen, i, j));
 			    			chosen = 50;
 			    			chosenx = choseny = 0;
 		    			}
@@ -913,6 +870,18 @@ public class Checkers extends GameClient {
 		    	}
 			}
 		}
+	}
+	
+	public static void movePiece(int toMoveNum, float moveValX, float moveValY) { //created for the replay API
+		//Pieces toMove = theirPieces[toMoveNum];
+		theirPieces[toMoveNum].move(moveValX, moveValY);
+	}
+	
+	public static void selectPiece(int chosen, int i, int j) { //created for the replay API
+		//Pieces toMove = myPiece[chosen];
+		//selectPiece(myPieces[chosen], squares, i, j);
+		myPieces[chosen].bounds.set(squares[i][j].bounds.x + 10,
+				squares[i][j].bounds.y + 10, 30, 30);
 	}
 	
 	private int clickToScreenX(int clickX) {

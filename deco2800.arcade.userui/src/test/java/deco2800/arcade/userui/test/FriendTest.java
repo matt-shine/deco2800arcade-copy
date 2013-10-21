@@ -9,14 +9,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import deco2800.arcade.model.FriendInvites;
-import deco2800.arcade.model.Friends;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.model.User;
-import deco2800.arcade.userui.Model;
-import deco2800.arcade.userui.view.AchievementScreen;
-import deco2800.arcade.userui.view.StatusScreen;
-import deco2800.arcade.userui.view.UserScreen;
 
 public class FriendTest {
 
@@ -35,7 +28,14 @@ public class FriendTest {
 		info.add("IT");
 		info.add("#Rickroll");
 		info.add("20");
-		boolean[] privset = { true, true, true, true, true, true, true };
+		ArrayList<Boolean> privset = new ArrayList<Boolean>();
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
+		privset.add(true);
 
 		player = new Player(123, "THIS IS NOT A VALID PATH.html", info, null,
 				null, null, null, privset);

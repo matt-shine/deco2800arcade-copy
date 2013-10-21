@@ -1,102 +1,145 @@
 package deco2800.arcade.model;
 
-import java.io.FileInputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-import javax.xml.stream.*;
 
 public class XMLReader {
-	
-	//TODO add in a general read xml file
-	
-	public AccoladeContainer getAccolades(String fileLocation){
+		
+	public static AccoladeContainer getAccolades(String fileLocation) 
+			throws NumberFormatException, IOException{
+		AccoladeContainer output = new AccoladeContainer();
 		Accolade tmpAccolade;
-		//Probably should test the file exists before this is ran
 		String tmpName = null, tmpMessage = null, tmpPopupMessage = null, tmpUnit = null, 
 				tmpTag = null, tmpImage = null;
-		//Supplying a value is for developers during alpha testing
-		//Supply an ID signifies an existing accolade is to be changed
-		//A missing ID signifies a new accolade must be created in the server
-		//the update image flag means the image should be forced to update
-		Integer tmpPopup =null, tmpValue = null, tmpID =null, tmpGameID = null;
+		Integer tmpPopup =null, tmpValue = null, tmpID =null;//, tmpGameID = null; //not assigned in here, assigned in accoladeSystem
 		Double tmpModifier = null;
-		AccoladeContainer accoladeContainer = new AccoladeContainer();
-		XMLStreamReader xmlFile = readXML(fileLocation);
-		try{	
-			while(xmlFile.hasNext()){
-				if(xmlFile.isStartElement()){
-					String tag = xmlFile.getLocalName(); //Assigned here so it only needs to be fetched once
-					if(tag.equals("id")){ 
-						tmpID = Integer.parseInt(xmlFile.getElementText());
-					} else if(tag.equals("name")){ 
-						tmpName = xmlFile.getElementText();
-					} else if (tag.equals("message")){
-						tmpMessage = xmlFile.getElementText();
-					} else if (tag.equals("modifier")){
-						tmpModifier = Double.parseDouble(xmlFile.getElementText());
-					} else if (tag.equals("popup")){
-						tmpPopup = Integer.parseInt(xmlFile.getElementText());
-					} else if (tag.equals("popupMessage")){
-						tmpPopupMessage = xmlFile.getElementText();
-					} else if (tag.equals("unit")){
-						tmpUnit = xmlFile.getElementText();
-					} else if (tag.equals("tag")){
-						tmpTag = xmlFile.getElementText();
-					} else if (tag.equals("image")){
-						tmpImage = xmlFile.getElementText();
-					} else if (tag.equals("value")){
-						tmpValue = Integer.parseInt(xmlFile.getElementText());
-					} else if (tag.equals("gameID")){
-						tmpGameID = Integer.parseInt(xmlFile.getElementText());
-					}//END OF PSUDEOSWITCH
-				} else if(xmlFile.isEndElement() && 
-						xmlFile.getLocalName().equals("accolade")){
-					if((tmpName!=null) && (tmpMessage!=null) && 
-							(tmpPopup!=-1) && (tmpPopupMessage!=null) && 
-							(tmpUnit!=null) && (tmpTag!=null) && (tmpImage!=null)){
-						tmpAccolade = new Accolade(tmpName, tmpMessage, 
-								tmpPopup, tmpPopupMessage, tmpModifier, 
-								tmpUnit, tmpTag, tmpImage);
-						//Give it an id if one exists
-						if(tmpID!=-1){
-							tmpAccolade.setID(tmpID);
-						}
-						//Give it a value if specified
-						if(tmpValue!=-1){
-							tmpAccolade.setValue(tmpValue);
-							//then remove value flag from the xml
-						}
-						accoladeContainer.add(tmpAccolade);
-						//Strings
-						tmpName = tmpMessage = tmpPopupMessage = tmpUnit = null; 
-						tmpTag = tmpImage = null;
-						//Double
-						tmpModifier = null;
-						//Integers
-						tmpPopup = tmpValue = tmpID = null;
-						//don't reset the gameID
-					} else {
-						//THROW AN ERROR HERE- the xml file must not contain all the right tags
-					}
-				}
-			}//END OF FILE              
-			if(tmpGameID!=-1){
-				accoladeContainer.setGameID(tmpGameID);
-			}else {
-				//GO NUTS MAYYYUNN. SOMETHINS IS WRONG
-				//TODO implement exception for missing gameID
+		String tag;
+		String line;
+		String data = "";
+		
+		BufferedReader xmlFile = new BufferedReader(new FileReader(fileLocation));
+		while((line = xmlFile.readLine()) != null){
+			//<name> "Grenades Exploded" </name>
+			tag = line.substring(line.indexOf("<")+1, line.indexOf(">"));
+			
+			// "Grenades Exploded" </name>
+			line = line.substring(line.indexOf(">")+1);
+			//Grenades Exploded
+			if(line.indexOf("<") != -1){
+				data = line.substring(0, line.indexOf("<"));
+				data = data.trim().replace("\"", "");
+			} 
+			
+			if(tag.equals("id")){ tmpID = Integer.parseInt(data);
+			} else if(tag.equals("name")){ tmpName = data;
+			} else if (tag.equals("message")){ tmpMessage = data;
+			} else if (tag.equals("modifier")){ tmpModifier = Double.parseDouble(data);
+			} else if (tag.equals("popup")){ tmpPopup = Integer.parseInt(data);
+			} else if (tag.equals("popupMessage")){ tmpPopupMessage = data;
+			} else if (tag.equals("unit")){	tmpUnit = data;
+			} else if (tag.equals("tag")){ tmpTag = data;
+			} else if (tag.equals("image")){ tmpImage = data;
+			} else if (tag.equals("value")){ tmpValue = Integer.parseInt(data);
+			//} else if (tag.equals("gameID")){ tmpGameID = Integer.parseInt(data);} //gameID is assigned in accolade System
+			//TODO might not need to store the gameID inside of the xml file. 
+			//Meh (could maybe include multiple games in the one xml)
+			
 			}
-		} catch(XMLStreamException xmlerror){
-			//TODO add in catch statements for each exception
-			//MAKE A MESSAGE ABOUT THE XMLFILE NOT BEING PROPERLY FORMATTED
-		}//END OF TRYCATCH
-		return accoladeContainer;
-	}//END OF GET ACCOLADES
+			if(tag.equals("/accolade")){
+				if((tmpName!=null) && (tmpMessage!=null) &&	(tmpPopup!=null) && (tmpPopupMessage!=null) && 
+						(tmpUnit!=null) && (tmpTag!=null) && (tmpImage!=null)){
+					tmpAccolade = new Accolade(tmpName, tmpMessage, 
+							tmpPopup, tmpPopupMessage, tmpModifier, 
+							tmpUnit, tmpTag, tmpImage);
+					
+					//Give it an id if one exists
+					
+					if(tmpID!=null){ tmpAccolade.setID(tmpID);
+					} 					
+					//Give it a value if specified
+					if(tmpValue!=null){ tmpAccolade.setValue(tmpValue);
+					} 
+					//possibly remove the value from the xml
+					output.add(tmpAccolade);
+				} else {
+					//THROW SOME ERROR SAYING NOT ALL REQUIRED ELMENTS ARE HERE AND TO CHECK THE XML
+				}//DONE CHECKING IF ALL FIELDS WERE CREATED
+			}//DONE CREATING AND APPENDING THE ACCOLADE				
+		}
+		
+		xmlFile.close();
+		return output;
+		
+	}
+	
+	public static void saveAccoladeContainer(AccoladeContainer accolades, String fileLocation) throws IOException{
+		Path path = Paths.get(fileLocation);
+		BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
+		
+		writer.write("<?xml version=\"1.0\"?>\n");
+		writer.write("<accolades>\n");
+		writer.write("<gameID>\"" + accolades.getGameID() + "\"</gameID>\n");
+		for(Accolade accolade : accolades){
+			writer.write("\t<accolade>\n"); 
+			writer.write("\t\t<id>\"" + accolade.getID().toString() + "\"</id>\n");
+			writer.write("\t\t<value>\"" + accolade.getValue().toString() + "\"</value>\n");
+			writer.write("\t\t<name>\"" + accolade.getName() + "\"</name>\n");
+			writer.write("\t\t<message>\"" + accolade.getRawString() + "\"</message>\n");
+			writer.write("\t\t<!-- When the value reaches a multiple of this, the popup occurs -->\n");
+			writer.write("\t\t<popup>\"" + accolade.getPopup().toString() + "\"</popup>\n");
+			writer.write("\t\t<!-- Message for ingame popup - contains an example of hardcoded $unit (use if different) -->\n");
+			writer.write("\t\t<popupMessage>\"" + accolade.getRawPopupMessage() + "\"</popupMessage>\n");
+			writer.write("\t\t<!-- This will multiplied against the value to produce the final value-->\n");
+			writer.write("\t\t<modifier>\"" + accolade.getModifier().toString() + "\"</modifier>\n");
+			writer.write("\t\t<unit>\"" + accolade.getUnit() + "\"</unit>\n");
+			writer.write("\t\t<tag>\"" + accolade.getTag() + "\"</tag>\n");
+			writer.write("\t\t<!-- This is the relative local file lovation - should be your server resources folder -->\n");
+			writer.write("\t\t<image>\"" + accolade.getImagePath() + "\"</image>\n");
+			writer.write("\t</accolade>\n");
+			writer.newLine(); 
+			}
+		writer.write("</accolades>");
+		writer.close();
+		
+	}
+	
+	public static String readXML(String fileLocation) throws FileNotFoundException{
+		String xml = "";
+		String line = null;
+		if(!(new File(fileLocation).exists())){
+			throw new FileNotFoundException("The files does not exist: " + fileLocation);		
+		}
+		
+		try {
+			BufferedReader xmlFile = new BufferedReader(new FileReader(fileLocation));	
+			while((line = xmlFile.readLine()) != null){
+				xml += line.trim();
+			}		
+			xmlFile.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		return xml;
+	}
 	
 	public boolean resetRequest(String fileLocation){
 		//implment resetRequest function
 		//checks the file for a reset flag and returns true or false.
+		//The reset flag would remove all entries from the table and then build
+		//jsut the ones in the xml file 
 		return false;
 	}
 	
@@ -105,22 +148,4 @@ public class XMLReader {
 		//exactly like resetRequest except it also removes the flag fromt he file once done
 		return false;
 	}
-	
-	public static XMLStreamReader readXML(String fileLocation){
-		//TODO Implent this and include it in the read to accolade
-		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-		XMLStreamReader xmlFile = null;
-		FileInputStream fileStream;
-		try{
-			fileStream = new FileInputStream(fileLocation);
-			xmlFile = inputFactory.createXMLStreamReader(fileStream);
-		} catch (XMLStreamException xmlError){
-			//TODO put some stuff here	
-		} catch (FileNotFoundException missingFile){
-			//TODO put some stuff here
-		}
-		return xmlFile;
-		
-	}
-	
 }

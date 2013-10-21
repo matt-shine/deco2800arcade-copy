@@ -20,6 +20,7 @@ public class BulletSimple extends Enemy {
 		this.graphic = graphic;
 		this.velocity = direction;
 		advanceDuringScenes=true;
+		score = 0;
 	}
 
 	

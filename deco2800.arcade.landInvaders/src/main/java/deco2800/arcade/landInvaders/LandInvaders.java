@@ -75,7 +75,7 @@ public class LandInvaders extends GameClient  {
 
 static {
         GAME = new Game();
-        GAME.id = "LandInvaders";
+        GAME.id = "landInvaders";
         GAME.name = "LandInvaders";
         GAME.description = "funny game!";
 }

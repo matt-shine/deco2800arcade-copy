@@ -82,7 +82,7 @@ public class GameStorage {
                 "INSERT INTO GAMES values (5, 'Checkers', 'Checkers', 0, 'It is checkers', '');" +
                 "INSERT INTO GAMES values (6, 'chess', 'Chess', 0, 'A game of Chess, where 2 players, dubbed white or black, aim to CheckMate their opponent before being CheckMated themselves.', '');" +
                 "INSERT INTO GAMES values (7, 'Connect4', 'Connect4', 0, 'Fun old connect 4!', '');" +
-                "INSERT INTO GAMES values (8, 'LandInvaders', 'LandInvaders', 0, 'funny game!', '');" +
+                "INSERT INTO GAMES values (8, 'landInvaders', 'LandInvaders', 0, 'funny game!', '');" +
                 "INSERT INTO GAMES values (9, 'Pacman', 'Pac man', 0, 'An implementation of the classic arcade game PacMan', '');" +
                 "INSERT INTO GAMES values (10, 'Raiden', 'Raiden', 0, 'A Space Flight fighter', '');" +
                 "INSERT INTO GAMES values (11, 'towerdefence', 'Tower Defence', 0, 'Defend your towers with wit and strategy. Endless, fun, fast paced gameplay!', '');" +

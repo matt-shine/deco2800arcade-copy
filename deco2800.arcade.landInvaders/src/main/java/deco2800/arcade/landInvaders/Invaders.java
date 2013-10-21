@@ -155,7 +155,7 @@ public class Invaders extends JFrame implements Runnable {
 
 		mains.drawString(score + "", 420, 54);
 		mains.drawString(healthBar + "", 150, 659);
-		mains.drawString(totalLevel + "", 580, 54);
+		mains.drawString(totalLevel + "", 720, 54);
 		for (int i = 0; i < shots.size(); i++) {
 			shots.get(i).drawshot(mains);
 

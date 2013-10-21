@@ -78,8 +78,8 @@ public class Model {
 		MIXMAZE.description = "See for yourself!";
 		
 		LANDINVADERS = new Game();
-		LANDINVADERS.id = "landinvaders";
-		LANDINVADERS.name = "Land Invaders";
+		LANDINVADERS.id = "landInvaders";
+		LANDINVADERS.name = "LandInvaders";
 		LANDINVADERS.description = "Space Invaders but better";
 		
 		PACMAN = new Game();

@@ -65,9 +65,6 @@ public class FrontPage implements Screen {
     
         public FrontPage(ArcadeUI ui) {
         	
-        	
-            //FIXME big method
-            
             /*
              * Creating Skin and Textures
              */	
@@ -102,9 +99,6 @@ public class FrontPage implements Screen {
             table.setFillParent(true);
             table.setBackground(skin.getDrawable("background"));
             stage.addActor(table);
-            
-          
-            
             
             //Text Buttons
             final TextButton storeButton = new TextButton("Store", skin, "green");
@@ -151,7 +145,6 @@ public class FrontPage implements Screen {
             stage.addActor(libraryButton);
             stage.addActor(storeButton);
            // stage.addActor(lobbyButton);
-            
             
             //Creating Game Icons
             for (Game game : games) {

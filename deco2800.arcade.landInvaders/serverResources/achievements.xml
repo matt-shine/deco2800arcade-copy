@@ -3,20 +3,31 @@
         <name>Virgin Winner</name>
         <description>Win first game of LandInvaders.</description>
         <awardThreshold>1</awardThreshold>
+        <icon>Cup1.png</icon>
+    </achievement>
+    
+    <achievement id="LandInvaders.startFirstGame">
+        <name>Virgin Winner</name>
+        <description>Start first game of LandInvaders.</description>
+        <awardThreshold>1</awardThreshold>
+        <icon>Cup1.png</icon>
     </achievement>
     
     <achievement id="LandInvaders.perfect">
         <name>Perfect!</name>
         <description>Won the game without losing any life</description>
+        <icon>Cup1.png</icon>
      </achievement>
      
     <achievement id="LandInvaders.luckyten">
         <name>Lucky 10</name>
         <description>Won 10 games</description>
+        <icon>Cup1.png</icon>
      </achievement>
     
     <achievement id="LandInvaders.conqueror">
         <name>Land Conqueror</name>
         <description>Won 50 games</description>
+        <icon>Cup1.png</icon>
      </achievement>
 </achievements>

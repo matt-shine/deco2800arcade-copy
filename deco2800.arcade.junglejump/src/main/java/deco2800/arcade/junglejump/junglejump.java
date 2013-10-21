@@ -76,7 +76,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	/* Game Sate Enum - Used for Menu Handling */
 	private enum GameState {
 		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS, CONTINUE, PAUSE, OPTIONS,
-		SELECT_LEVEL, IN_SPLASH
+		SELECT_LEVEL
 	}
 	private GameState gameState;
 	
@@ -286,27 +286,6 @@ public class junglejump extends GameClient implements InputProcessor {
 			camera.update();
 			super.render();
 			break;
-			
-		case IN_SPLASH:
-			// Clears stage and colour buffers
-			Gdx.gl.glClearColor(0f, 1f, 0f, 1f);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			batch.setProjectionMatrix(camera.combined);
-			shapeRenderer.setProjectionMatrix(camera.combined);
-			batch.begin();
-			batch.draw(texture, 0, 0, 800, 480);
-			batch.end();
-			Gdx.gl.glEnable(GL10.GL_BLEND);
-			Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-			shapeRenderer.begin(ShapeType.FilledRectangle);
-			shapeRenderer.filledRect(butX, butY, 232, 30, Color.CLEAR,
-					Color.RED, Color.CLEAR, Color.RED);
-			shapeRenderer.end();
-			Gdx.gl.glDisable(GL10.GL_BLEND);
-			camera.update();
-			super.render();
-			break;
-			
 		/* Playing the Game */
 		case INPROGRESS:
 			// Clears stage and colour buffers
@@ -399,13 +378,20 @@ public class junglejump extends GameClient implements InputProcessor {
 					level), SCREENWIDTH-750, SCREENHEIGHT-10);
 			
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 			if(currentCont.getCurrentLevel() == 0) {
+=======
+			if(LevelContainer.getCurrentLevel() == 0 && LevelContainer.getCurrentWorld() == 0) {
+>>>>>>> parent of 6ac6472... changed audio, hud, other fixes
 				achievementTitleFont.draw(batch, "Use arrow keys to move", SCREENWIDTH-750, SCREENHEIGHT-150);
 				achievementTitleFont.draw(batch, "Use Spacebar to jump", SCREENWIDTH-750, SCREENHEIGHT-200);
 			}
 			
+<<<<<<< HEAD
 >>>>>>> parent of 0ab4b6e... changed audio, hud, other fixes
+=======
+>>>>>>> parent of 6ac6472... changed audio, hud, other fixes
 			batch.end();
 			
 			camera.update();

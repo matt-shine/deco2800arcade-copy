@@ -21,11 +21,10 @@ public class LandInvaders extends GameClient  {
 
 	public LandInvaders(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		MenuScreen w = new MenuScreen();
-		//this.networkClient = networkClient;
-		//HighscoreClient player1 = new HighscoreClient(player.getUsername(), GAME.id, networkClient);
-		//player1.storeScore("points", invader.getHighScore());
-		
+		this.networkClient = networkClient;
+		HighscoreClient players = new HighscoreClient(player.getUsername(), GAME.id, networkClient);
+		MenuScreen w = new MenuScreen(players);
+
 	}
 	
 	@Override

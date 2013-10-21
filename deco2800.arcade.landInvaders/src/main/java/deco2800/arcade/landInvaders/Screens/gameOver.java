@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.landInvaders.Invaders;
 
 public class gameOver extends JFrame{
@@ -24,10 +25,12 @@ public class gameOver extends JFrame{
 	private JButton next = new JButton();
 	private JFrame s = this;
 	private Invaders i;
+	private HighscoreClient player;
  
-	public gameOver(int score){
+	public gameOver(int score,HighscoreClient player){
 		super("Game Over");
 		this.add(p);
+		this.player =player;
 		p.add(t);
 		t.setIcon(new ImageIcon(
 				((new ImageIcon(this.getClass().getResource("/image/GOver.png"))).getImage()).getScaledInstance(
@@ -80,7 +83,7 @@ JLabel l = new JLabel();
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			Invaders i = new Invaders();
+			Invaders i = new Invaders(player);
 			s.dispose();
 
 		}

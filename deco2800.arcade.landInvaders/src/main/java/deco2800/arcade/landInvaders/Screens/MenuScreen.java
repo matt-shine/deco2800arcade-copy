@@ -24,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.landInvaders.Invaders;
 import deco2800.arcade.landInvaders.Screens.InstructionScreen.btnClick1;
 import deco2800.arcade.landInvaders.Screens.InstructionScreen.mouse1;
@@ -39,10 +40,12 @@ public class MenuScreen extends JFrame{
 	private JFrame s = this;
 	private JButton backBtn = new JButton();
 	private JButton HSbackBtn = new JButton();
+	private HighscoreClient player;
 
-	public MenuScreen(){
+	public MenuScreen(HighscoreClient player){
 		super("LandInvaders");
 		this.add(mainPanel);
+		this.player = player;
 		
 		mainPanel.add(mainLabelContainer);
 		//set background
@@ -166,7 +169,7 @@ public class MenuScreen extends JFrame{
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			Invaders m = new Invaders();
+			Invaders m = new Invaders(player);
 			s.dispose();
 
 		}
@@ -312,9 +315,6 @@ public class MenuScreen extends JFrame{
 		}
 	}
 	
-	public static void main (String args[]) throws IOException {
-		MenuScreen w = new MenuScreen();
-	}
 	
 	public class HSmouse3 implements MouseListener {
 

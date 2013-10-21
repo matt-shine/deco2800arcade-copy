@@ -1,5 +1,7 @@
 package deco2800.arcade.landInvaders.Screens;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -12,10 +14,16 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
+import com.sun.tools.javac.util.List;
+
+import deco2800.arcade.client.highscores.Highscore;
+import deco2800.arcade.client.highscores.HighscoreClient;
+
 public class HighScoreScreen extends JLabel {
 	private JButton backBtn = new JButton();
+	private List<Highscore>  l;
 
-	public HighScoreScreen() {
+	public HighScoreScreen(HighscoreClient player) {
 		//Background
 		setIcon(new ImageIcon(((new ImageIcon(this.getClass().getResource("/image/HScore.png"))).getImage()).getScaledInstance(800, 500, java.awt.Image.SCALE_SMOOTH)));
 		setLayout(new GridBagLayout());
@@ -36,7 +44,26 @@ public class HighScoreScreen extends JLabel {
 		backBtn.addMouseListener(new mouse1());
 		backBtn.addActionListener(new btnClick1());
 		add(backBtn, gbc);
+		l = (List<Highscore>) player.getGameTopPlayers(10, true, "score");
+		String dis="";
+		for(int i =0; i<l.size(); i ++){
+			dis  = dis + l.get(i).playerName +"-------" + l.get(i).score+ "\n"; 
+		}
+		
+        JLabel e = new JLabel();
+		
+		GridBagConstraints gbd = new GridBagConstraints();
+		gbd.anchor = GridBagConstraints.CENTER;
+		gbd.insets = new Insets(0,150,60,0);
+		gbd.gridx = 0;
+		gbd.gridy = 0;
+		this.add(e,gbd);
+		e.setForeground(Color.black);
+		e.setFont(new Font("Algerian",1, 40));
+		e.setText(dis);
+
 	}
+	
 
 	public class mouse1 implements MouseListener {
 		public void mouseEntered(MouseEvent evt) {

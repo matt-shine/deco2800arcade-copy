@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 
+import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.landInvaders.Screens.gameOver;
 import deco2800.arcade.landInvaders.Screens.stageClear;
 
@@ -38,14 +39,15 @@ public class Invaders extends JFrame implements Runnable {
 	private ArrayList<blockWall> WallList;
 	private ArrayList<tankshot> shots;
 	private ArrayList<enemyShot> Eshots;
-
+	private HighscoreClient player;
 	/**
 	 * Initialize objects in the game and allocate values to player, score and
 	 * level
 	 */
-	public Invaders() {
+	public Invaders(HighscoreClient player) {
 
 		super("Land Invaders");
+		this.player =player;
 		bglevel = 1;
 		WallList = new ArrayList<blockWall>();
 
@@ -372,8 +374,10 @@ public class Invaders extends JFrame implements Runnable {
 				healthBar--;
 				if(healthBar == 0){
 					highScore = score;
-					gameOver a = new gameOver(score);
+					gameOver a = new gameOver(score,player);
 					this.dispose();
+					player.storeScore("score", score);
+
 				}
 
 			}

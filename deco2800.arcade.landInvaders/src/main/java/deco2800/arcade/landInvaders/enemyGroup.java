@@ -12,24 +12,46 @@ public class enemyGroup {
 	private enemy[] temp;
 	private enemy[][] lists;
 	private int shotRow;
+	private boolean enemyGroupState = false;
 
-	public enemyGroup(int rowNum, int rowEnemyNum) {
+	/**
+	 * @param rowNum number of enemy rows
+	 * @param rowEnemyNum create number of enemies per row
+	 * @param EsizeW width of a single enemy sprite
+	 * @param EsizeH height of a single enemy sprite
+	 * @param img set the name of the image of the enemy sprite
+	 */
+	public enemyGroup(int rowNum, int rowEnemyNum, int EsizeW, int EsizeH, String img) {
 
 		this.rowNum = rowNum;
 		this.rowEnemyNum = rowEnemyNum;
 		shotRow= 1;
 		lists = new enemy[rowNum][rowEnemyNum];
-
-		createGroup();
-
+		createGroup(img, EsizeW, EsizeH);
+		enemyGroupState = true;
+	}
+	
+	public enemy[][] checkList()
+	{
+		return lists;
+	}
+	
+	public boolean getEnemyGroupState()
+	{
+		return enemyGroupState;
 	}
 
-	public void createGroup() {
+	/**
+	 * @param img set the name of the image of the enemy sprite
+	 * @param EsizeW width of a single enemy sprite
+	 * @param EsizeH height of a single enemy sprite
+	 */
+	public void createGroup(String img ,int EsizeW, int EsizeH) {
 
 		for (int n = 0; n < rowNum; n++) {
 			temp = new enemy[rowEnemyNum];
 			for (int i = 0; i < rowEnemyNum; i++) {
-				temp[i] = new enemy(100 + i * 100, 100 + n * 40, 30, 30,"/image/flies.png");
+				temp[i] = new enemy(100 + i * 100, 100 + n * 90, EsizeW, EsizeH, img);
 
 			}
 			lists[n] = temp;
@@ -37,6 +59,10 @@ public class enemyGroup {
 
 	}
 
+	/**
+	 * @param g the graphic of the enemy group
+	 * @param p the main frame of the game
+	 */
 	public void drawGroup(Graphics g,JFrame p) {
 
 		for (int n = 0; n < rowNum; n++) {
@@ -50,6 +76,10 @@ public class enemyGroup {
 
 	}
 	
+	/**
+	 * @param move distance enemy group will travel
+	 * @param moveDown direction of enemy group movement
+	 */
 	public void moveUpdate(int move, boolean moveDown){
 		for (int n = 0; n < rowNum; n++) {
 			for (int i = 0; i < rowEnemyNum; i++) {
@@ -63,6 +93,10 @@ public class enemyGroup {
 		
 	}
 
+	/**
+	 * @param shot determine if shot of player(tank) has hit a single enemy sprite
+	 * @return true if player shot has hit enemy, false otherwise
+	 */
 	public boolean checkHit(tankshot shot) {
 
 		for (int n = 0; n < rowNum; n++) {
@@ -76,20 +110,17 @@ public class enemyGroup {
 
 						lists[n][i] = null;
 						return true;
-
 					}
-					
-					
-					
 				}
 			}
 		}
 		return false;
 	}
 	
-	
-	
-	
+	/**
+	 * @param count controls the rate of shots fired by enemy sprites
+	 * @return arraylist of enemy shots
+	 */
 	public ArrayList<enemyShot> enemyShot(int count){
 		ArrayList<enemyShot> shots =new ArrayList<enemyShot>();
 		if(count%50==0){
@@ -97,10 +128,7 @@ public class enemyGroup {
 			for (int i = 0; i < rowEnemyNum; i++) {
 				if (lists[shotRow-1][i] != null) {
 					shots.add(new enemyShot(lists[shotRow-1][i].positionX(),lists[shotRow-1][i].positionY()));
-					
-				}
-				
-
+				}		
 			}
 			if(shotRow != 3){
 				shotRow ++;
@@ -111,6 +139,9 @@ public class enemyGroup {
 		return shots;
 	}
 	
+	/**
+	 * @return true if enemy group is empty, false otherwise
+	 */
 	public boolean isEmpty(){
 		
 		for (int n = 0; n < rowNum; n++) {

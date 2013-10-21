@@ -1,5 +1,6 @@
 package deco2800.arcade.landInvaders.Screens;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -28,17 +29,21 @@ public class InstructionScreen extends JLabel{
 	private JButton backBtn = new JButton();
     
 	public InstructionScreen() {
-    	setIcon(new ImageIcon(((new ImageIcon("rule.png")).getImage()).getScaledInstance(800, 500, java.awt.Image.SCALE_SMOOTH)));
+    	setIcon(new ImageIcon(((new ImageIcon(this.getClass().getResource("/image/rule.png"))).getImage()).getScaledInstance(800, 500, java.awt.Image.SCALE_SMOOTH)));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.weighty = 1;
+        gbc.gridx = 2; 
+        gbc.gridy = 2;
+        gbc.gridwidth = 1; 
+        gbc.gridheight = 1;
+        gbc.weighty = 0;
         gbc.weightx = 1;
-        gbc.insets = new Insets(10, 2, 2, 2);
+        gbc.insets = new Insets(300, 2, 2, 2);
         gbc.anchor = GridBagConstraints.SOUTHEAST;
 		backBtn.setOpaque(false);
 		backBtn.setContentAreaFilled(false);
 		backBtn.setBorderPainted(false);
-		backBtn.setIcon(new ImageIcon(((new ImageIcon("Button5.png")).getImage()).getScaledInstance(200, 50, java.awt.Image.SCALE_SMOOTH)));
+		backBtn.setIcon(new ImageIcon(((new ImageIcon(this.getClass().getResource("/image/Button5.png"))).getImage()).getScaledInstance(200, 50, java.awt.Image.SCALE_SMOOTH)));
 		backBtn.addMouseListener(new mouse1());
 		backBtn.addActionListener(new btnClick1());
         add(backBtn, gbc);
@@ -48,7 +53,7 @@ public class mouse1 implements MouseListener {
 		
 		public void mouseEntered(MouseEvent evt) {
 			
-			backBtn.setIcon(new ImageIcon(((new ImageIcon("Button6.png")).getImage()).getScaledInstance(200, 50, java.awt.Image.SCALE_SMOOTH)));
+			backBtn.setIcon(new ImageIcon(((new ImageIcon(this.getClass().getResource("/image/Button6.png"))).getImage()).getScaledInstance(200, 50, java.awt.Image.SCALE_SMOOTH)));
 	    }
 
 		@Override
@@ -59,7 +64,7 @@ public class mouse1 implements MouseListener {
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			backBtn.setIcon(new ImageIcon(((new ImageIcon("Button5.png")).getImage()).getScaledInstance(200, 50, java.awt.Image.SCALE_SMOOTH)));
+			backBtn.setIcon(new ImageIcon(((new ImageIcon(this.getClass().getResource("/image/Button5.png"))).getImage()).getScaledInstance(200, 50, java.awt.Image.SCALE_SMOOTH)));
 			
 		}
 

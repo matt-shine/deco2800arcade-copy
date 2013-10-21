@@ -11,24 +11,50 @@ public class blockWall {
 	private enemy[][] lists;
 	private int px;
 	private int py;
+	private boolean wallCondition = false;
 	
-	public blockWall(int px, int py, int rowNum, int rowEnemyNum) {
-		this.rowNum = rowNum;
-		this.rowEnemyNum = rowEnemyNum;
-		lists = new enemy[rowNum][rowEnemyNum];
+	/**
+	 * @param px define the x-coordinates of the wall
+	 * @param py define the y-coordinates of the wall
+	 * @param height define density(height) of the wall
+	 * @param width define the width of the wall
+	 * @param img set the name of the image of the wall
+	 */
+	public blockWall(int px, int py, int height, int width, String img) {
+		this.rowNum = height;
+		this.rowEnemyNum = width;
+		lists = new enemy[height][width];
 		this.px=px;
 		this.py=py;
-		createWall();
-		
-
+		createWall(img);
+		wallCondition = true;
+	}
+	
+	/**
+	 * @return True if wall is successfully constructed, false otherwise
+	 */
+	public boolean checkWallCondition()
+	{
+		return wallCondition;
+	}
+	
+	/**
+	 * @return list of wall sprites
+	 */
+	public enemy[][] checkList()
+	{
+		return lists;
 	}
 
-	public void createWall() {
+	/**
+	 * @param img set the name of the image of the wall
+	 */
+	public void createWall(String img) {
 
 		for (int n = 0; n < rowNum; n++) {
 			temp = new enemy[rowEnemyNum];
 			for (int i = 0; i < rowEnemyNum; i++) {
-				temp[i] = new enemy(px+i*10, py + n * 10, 10, 10,"/image/brick.jpg");
+				temp[i] = new enemy(px+i*10, py + n * 10, 10, 10,img);
 
 			}
 			lists[n] = temp;
@@ -36,6 +62,10 @@ public class blockWall {
 
 	}
 
+	/**
+	 * @param g the graphics of the game stage
+	 * @param p the main frame of the game
+	 */
 	public void drawWall(Graphics g,JFrame p) {
 
 		for (int n = 0; n < rowNum; n++) {
@@ -43,14 +73,17 @@ public class blockWall {
 				if (lists[n][i] != null) {
 					lists[n][i].drawEnemy(g,p);
 				}
-
 			}
 		}
-
 	}
 
 
 
+	/**
+	 * @param shot player(tank) shot
+	 * @return true if player shot hits the wall, false otherwise
+	 *
+	 */
 	public boolean checkHit(tankshot shot) {
 
 		for (int n = 0; n < rowNum; n++) {
@@ -78,6 +111,10 @@ public class blockWall {
 		return false;
 	}
 	
+	/**
+	 * @param shot enemy sprite shot
+	 * @return true if enemy shot hits the wall, false otherwise
+	 */
 	public boolean checkEnemyHit(enemyShot shot) {
 
 		for (int n = 0; n < rowNum; n++) {

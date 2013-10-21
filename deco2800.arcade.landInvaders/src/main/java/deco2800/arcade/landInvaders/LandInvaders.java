@@ -22,9 +22,9 @@ public class LandInvaders extends GameClient  {
 	public LandInvaders(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		this.networkClient = networkClient;
+		this.incrementAchievement("LandInvaders.startFirstGame");
 		HighscoreClient players = new HighscoreClient(player.getUsername(), GAME.id, networkClient);
 		MenuScreen w = new MenuScreen(players);
-
 	}
 	
 	@Override

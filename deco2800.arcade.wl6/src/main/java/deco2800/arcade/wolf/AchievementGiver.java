@@ -9,15 +9,12 @@ public class AchievementGiver {
 	public static GameClient g = null;
 	
 	public static void init(deco2800.arcade.model.Player pl, GameClient ga) {
-		System.out.println("ACHIEVEMENT" + pl + " " + ga);
 		p = pl;
 		g = ga;
 	}
 	
 	
 	public static void give(String a) {
-		System.out.println("ACHIEVEMENT" + p + " " + g + " " + a);
-		
 		if (g != null && p != null) {
 			
 			g.incrementAchievement(a);

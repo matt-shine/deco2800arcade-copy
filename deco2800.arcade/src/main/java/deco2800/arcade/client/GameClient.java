@@ -300,6 +300,9 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	
 	public void startMultiplayerGame() {
 	}
+
+	public void updateGameState(GameStateUpdateRequest request) {
+	}
 	
 	public void sendStateUpdate() {
 	}

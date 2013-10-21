@@ -12,7 +12,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 
-
 public class Platform {
 	
 	private int width, height, xPos, yPos;
@@ -223,7 +222,6 @@ public class Platform {
 				Gdx.app.log(junglejump.messages,
 						"Audio File for Banana Music Not Found");
 			}
-			junglejump.resetAudio();
 			LevelContainer.nextLevel();
 		}
 		if(this.platType == 'j') {
@@ -272,10 +270,6 @@ public class Platform {
 			if(inactive) {
 				moveCounter = 0;
 				this.yPos -= 2;
-				if(yPos < 0) {
-					LevelContainer.nextLevel();
-					// TODO win game
-				}
 			}
 		}
 	}

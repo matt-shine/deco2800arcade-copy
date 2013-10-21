@@ -111,11 +111,9 @@ public class LevelContainer {
 		System.out.println("loading next level");
 		clearCurrentLevel();
 		setCurrentLevel(getCurrentLevel() + 1);
-		
 		if(getCurrentLevel() > levelAmount-1) {
 			setCurrentLevel(0);
 			setCurrentWorld(getCurrentWorld() + 1);
-			
 			if(getCurrentWorld() > worldAmount-1) {
 				setCurrentWorld(0);
 			}

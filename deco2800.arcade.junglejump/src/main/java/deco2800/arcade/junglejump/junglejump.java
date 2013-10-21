@@ -93,13 +93,14 @@ public class junglejump extends GameClient implements InputProcessor {
 	float butX;
 	float butY;
 	Texture texture;
-	public static Clip clip;
+	Clip clip;
 	Texture monkeySit, monkeyRun1, monkeyRun2;
 	Texture monkeySitLEFT, monkeyRun1LEFT, monkeyRun2LEFT;
 	Texture monkeySitRIGHT, monkeyRun1RIGHT, monkeyRun2RIGHT;
 	public static Texture gameBackground;
 	public static Texture platform;
 	ShapeRenderer shapeRenderer;
+	Music themeMusic;
 	Clip menuSound, jump, die, levelup, loselife, collect;
 	private SpriteBatch batchContinue;
 	
@@ -162,7 +163,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		try {
 			String resource = path.toString().replace(".arcade/build/classes/main/", 
 					".arcade.junglejump/src/main/").replace("file:", "") + 
-					"resources/world1.wav";
+					"resources/soundtrack.wav";
 			System.out.println(resource);
 			File file = new File(resource);
 			new FileHandle(file);
@@ -188,7 +189,6 @@ public class junglejump extends GameClient implements InputProcessor {
 			// IO Exception or problem with sound format
 		}
 	}
-	
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -242,7 +242,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		shapeRenderer = new ShapeRenderer();
 
 		// Game begins at Main Menu
-		setGameState(GameState.AT_MENU);
+		gameState = GameState.AT_MENU;
 	}
 
 	@Override
@@ -265,7 +265,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	 * 
 	 */
 	public void render() {
-		switch (getGameState()) {
+		switch (gameState) {
 		/* At the Main Menu */
 		case AT_MENU:
 			// Clears stage and colour buffers
@@ -393,11 +393,19 @@ public class junglejump extends GameClient implements InputProcessor {
 			achievementTitleFont.draw(batch, "Press P to PAUSE", SCREENWIDTH-250, SCREENHEIGHT-10);
 			achievementTitleFont.draw(batch, "BACKSPACE for MENU", SCREENWIDTH-250, SCREENHEIGHT-30);
 			achievementTitleFont.draw(batch, ("Bananas remaining: " + (currentCont.TOTAL_BANANAS - bananasFound)), SCREENWIDTH-500, SCREENHEIGHT-10);
-			achievementTitleFont.draw(batch, ("Lives: " + lives), SCREENWIDTH-500, SCREENHEIGHT-30);
+			achievementTitleFont.draw(batch, ("Lives: " + lives), SCREENWIDTH-750, SCREENHEIGHT-30);
 			int level = (currentLevel.getIndex()%5)+1;
 			achievementTitleFont.draw(batch, ("Level " + (LevelContainer.getCurrentWorld()+1) + " - " + 
 					level), SCREENWIDTH-750, SCREENHEIGHT-10);
 			
+<<<<<<< HEAD
+=======
+			if(currentCont.getCurrentLevel() == 0) {
+				achievementTitleFont.draw(batch, "Use arrow keys to move", SCREENWIDTH-750, SCREENHEIGHT-150);
+				achievementTitleFont.draw(batch, "Use Spacebar to jump", SCREENWIDTH-750, SCREENHEIGHT-200);
+			}
+			
+>>>>>>> parent of 0ab4b6e... changed audio, hud, other fixes
 			batch.end();
 			
 			camera.update();
@@ -536,29 +544,6 @@ public class junglejump extends GameClient implements InputProcessor {
 			// TODO Change to gameover screen 
 			lives = 5;
 		}
-	}
-	
-	public static void resetAudio() {
-		clip.close();
-		String path = ("/");
-		try {
-			String resource = path.toString().replace(".arcade/build/classes/main/", 
-					".arcade.junglejump/src/main/").replace("file:", "") + 
-					"resources/world2.wav";
-			System.out.println(resource);
-			File file = new File(resource);
-			new FileHandle(file);
-			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
-			clip = AudioSystem.getClip();
-			clip.open(audioIn);
-			clip.start();
-			clip.loop(Clip.LOOP_CONTINUOUSLY);
-
-		} catch (Exception e) {
-			Gdx.app.log(junglejump.messages,
-					"Audio File for Theme Music Not Found");
-		}
-		
 	}
 	
 	public  void playPickupSound() {
@@ -762,28 +747,28 @@ public class junglejump extends GameClient implements InputProcessor {
 				getCurrentCont();
 				getCurrentCont();
 				currentLevel = LevelContainer.getLevel(LevelContainer.getCurrentLevel());
-				setGameState(GameState.INPROGRESS);
+				gameState = GameState.INPROGRESS;
 				butY = -1; // Should stop newgame from being accessed in game
 			}
 			if (butY == ACHIEVEMENTS) {
-				setGameState(GameState.ACHIEVEMENTS);
+				gameState = GameState.ACHIEVEMENTS;
 			}
 			if (butY == CONTINUE) {
-				setGameState(GameState.CONTINUE);
+				gameState = GameState.CONTINUE;
 			}
 			if (butY == OPTIONS) {
-				setGameState(GameState.OPTIONS);
+				gameState = GameState.OPTIONS;
 			}
 			if (butY == LEVEL_SELECT) {
 				levelSelectText = "Which world?";
-				setGameState(GameState.SELECT_LEVEL);
+				gameState = GameState.SELECT_LEVEL;
 			}
 		}
 		if (keycode == Keys.BACKSPACE) {
 			// pressed backspace
-			if (getGameState() == GameState.ACHIEVEMENTS || getGameState() == GameState.INPROGRESS) {
+			if (gameState == GameState.ACHIEVEMENTS || gameState == GameState.INPROGRESS) {
 				// load main menu
-				setGameState(GameState.AT_MENU);
+				gameState = GameState.AT_MENU;
 			}
 		}
 		if (keycode == Keys.RIGHT) {
@@ -802,7 +787,7 @@ public class junglejump extends GameClient implements InputProcessor {
 				getCurrentCont();
 				getCurrentCont();
 				currentLevel = LevelContainer.getLevel(LevelContainer.getCurrentLevel());
-				setGameState(GameState.INPROGRESS);
+				gameState = GameState.INPROGRESS;
 				butY = -1; // Should stop newgame from being accessed in game
 			}
 			// Jump
@@ -834,7 +819,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 		}
 		if (keycode == Keys.UP) {
-			if (getGameState() != GameState.INPROGRESS) {
+			if (gameState != GameState.INPROGRESS) {
 				if (butY < NEW_GAME) {
 					menuSound.start();
 					butY += 37.5;
@@ -845,14 +830,14 @@ public class junglejump extends GameClient implements InputProcessor {
 			// Climb
 		}
 		if (keycode == Keys.NUM_1) {
-			if (getGameState() == GameState.OPTIONS){
+			if (gameState == GameState.OPTIONS){
 				if (clip.isActive()) {
 					clip.stop();
 				} else {
 					URL path = this.getClass().getResource("/");
 					String resource = path.toString().replace(".arcade/build/classes/main/", 
 							".arcade.junglejump/src/main/").replace("file:", "") + 
-							"resources/world1.wav";
+							"resources/soundtrack.wav";
 					File file = new File(resource);
 					new FileHandle(file);
 					AudioInputStream audioIn;
@@ -869,7 +854,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					//clip.loop(Clip.LOOP_CONTINUOUSLY);
 				}
 			}
-			if (getGameState() == GameState.SELECT_LEVEL) {
+			if (gameState == GameState.SELECT_LEVEL) {
 				if (levelS > 0) {
 					worldS = 1;
 					monkeyX = monkeyDefaultX;
@@ -877,9 +862,9 @@ public class junglejump extends GameClient implements InputProcessor {
 					// Reset Bananas, Platforms and Level
 					currentCont = new LevelContainer();
 					currentLevel = LevelContainer.getLevel(levelS-1);
-					setGameState(GameState.INPROGRESS);
+					gameState = GameState.INPROGRESS;
 					levelS = 0;
-					setGameState(GameState.INPROGRESS);
+					gameState = GameState.INPROGRESS;
 				} else {
 					levelS = 1;
 					levelSelectText = "Which level?";
@@ -887,10 +872,10 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 		}
 		if (keycode == Keys.NUM_2) {
-			if (getGameState() == GameState.OPTIONS){
-				setGameState(GameState.AT_MENU);
+			if (gameState == GameState.OPTIONS){
+				gameState = GameState.AT_MENU;
 			}
-			if (getGameState() == GameState.SELECT_LEVEL) {
+			if (gameState == GameState.SELECT_LEVEL) {
 				if (levelS > 0) {
 					worldS = 2;
 					monkeyX = monkeyDefaultX;
@@ -899,9 +884,9 @@ public class junglejump extends GameClient implements InputProcessor {
 					currentCont = new LevelContainer();
 					LevelContainer.setCurrentWorld(worldS);
 					currentLevel = LevelContainer.getLevel(levelS-1);
-					setGameState(GameState.INPROGRESS);
+					gameState = GameState.INPROGRESS;
 					levelS = 0;
-					setGameState(GameState.INPROGRESS);
+					gameState = GameState.INPROGRESS;
 				} else {
 					levelS = 2;
 					levelSelectText = "Which level?";
@@ -909,7 +894,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 		}
 		if (keycode == Keys.NUM_3) {
-			if (getGameState() == GameState.SELECT_LEVEL) {
+			if (gameState == GameState.SELECT_LEVEL) {
 				if (levelS > 0) {
 					worldS = 3;
 					monkeyX = monkeyDefaultX;
@@ -918,9 +903,9 @@ public class junglejump extends GameClient implements InputProcessor {
 					currentCont = new LevelContainer();
 					LevelContainer.setCurrentWorld(worldS);
 					currentLevel = LevelContainer.getLevel(levelS-1);
-					setGameState(GameState.INPROGRESS);
+					gameState = GameState.INPROGRESS;
 					levelS = 0;
-					setGameState(GameState.INPROGRESS);
+					gameState = GameState.INPROGRESS;
 				} else {
 					levelS = 3;
 					levelSelectText = "Which level?";
@@ -928,7 +913,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 		}
 		if (keycode == Keys.NUM_4) {
-			if (getGameState() == GameState.SELECT_LEVEL) {
+			if (gameState == GameState.SELECT_LEVEL) {
 				if (levelS > 0) {
 					worldS = 4;
 					monkeyX = monkeyDefaultX;
@@ -937,9 +922,9 @@ public class junglejump extends GameClient implements InputProcessor {
 					currentCont = new LevelContainer();
 					LevelContainer.setCurrentWorld(worldS);
 					currentLevel = LevelContainer.getLevel(levelS-1);
-					setGameState(GameState.INPROGRESS);
+					gameState = GameState.INPROGRESS;
 					levelS = 0;
-					setGameState(GameState.INPROGRESS);
+					gameState = GameState.INPROGRESS;
 				} else {
 					levelS = 4;
 					levelSelectText = "Which level?";
@@ -947,7 +932,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 		}
 		if (keycode == Keys.NUM_5) {
-			if (getGameState() == GameState.SELECT_LEVEL) {
+			if (gameState == GameState.SELECT_LEVEL) {
 				if (levelS > 0) {
 					worldS = 5;
 					monkeyX = monkeyDefaultX;
@@ -956,9 +941,9 @@ public class junglejump extends GameClient implements InputProcessor {
 					currentCont = new LevelContainer();
 					LevelContainer.setCurrentWorld(worldS); 
 					currentLevel = LevelContainer.getLevel(levelS-1);
-					setGameState(GameState.INPROGRESS);
+					gameState = GameState.INPROGRESS;
 					levelS = 0;
-					setGameState(GameState.INPROGRESS);
+					gameState = GameState.INPROGRESS;
 				} else {
 					levelS = 5;
 					levelSelectText = "Which level?";
@@ -966,21 +951,21 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 		}
 		if (keycode == Keys.Y) {
-			if (getGameState() == GameState.CONTINUE) {
+			if (gameState == GameState.CONTINUE) {
 				if (monkeyX != monkeyDefaultX)
-				setGameState(GameState.INPROGRESS);
+				gameState = GameState.INPROGRESS;
 			} else {
-				setGameState(GameState.INPROGRESS);
+				gameState = GameState.INPROGRESS;
 			}
 		}
 		if (keycode == Keys.N) {
-			if (getGameState() == GameState.CONTINUE) {
-				setGameState(GameState.AT_MENU);
+			if (gameState == GameState.CONTINUE) {
+				gameState = GameState.AT_MENU;
 			}
 		}
 		if (keycode == Keys.DOWN) {
 			// Climb down
-			if (getGameState() != GameState.INPROGRESS) {
+			if (gameState != GameState.INPROGRESS) {
 				if (butY > QUIT) {
 					menuSound.start();
 					butY -= 37.5;
@@ -989,8 +974,8 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 		}
 		if (keycode == Keys.P) {
-			if (getGameState() == GameState.PAUSE || getGameState() == GameState.INPROGRESS) {
-				setGameState((getGameState() != GameState.PAUSE) ? GameState.PAUSE : GameState.INPROGRESS);
+			if (gameState == GameState.PAUSE || gameState == GameState.INPROGRESS) {
+				gameState = (gameState != GameState.PAUSE) ? GameState.PAUSE : GameState.INPROGRESS;
 			}
 		}
 		return true;
@@ -1059,12 +1044,6 @@ public class junglejump extends GameClient implements InputProcessor {
 
 	public static void setCurrentCont(LevelContainer currentCont) {
 		junglejump.currentCont = currentCont;
-	}
-	public GameState getGameState() {
-		return gameState;
-	}
-	public void setGameState(GameState gameState) {
-		this.gameState = gameState;
 	}
 
 }

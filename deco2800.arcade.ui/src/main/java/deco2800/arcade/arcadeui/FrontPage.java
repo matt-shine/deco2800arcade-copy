@@ -42,6 +42,7 @@ public class FrontPage implements Screen {
         private int nFriends = onlineFriends.length;
         private static Set<Game> games = ArcadeSystem.getArcadeGames();
         private static ArcadeUI arcadeUI;
+        private Player player;
 
         	
         Texture bg;
@@ -63,16 +64,14 @@ public class FrontPage implements Screen {
         static Table popUp = new Table();
         
     
-        public FrontPage(ArcadeUI ui) {
-        	
-        	
-            //FIXME big method
-            
+        public FrontPage(ArcadeUI ui, Player player) {
             /*
              * Creating Skin and Textures
              */	
         	
             arcadeUI = ui;
+            this.player = player;
+            
             skin = new Skin(Gdx.files.internal("loginSkin.json"));
             skin.add("background", new Texture("homescreen_bg.png"));
             skin.add("menuBar", new Texture("menuBar.png"));

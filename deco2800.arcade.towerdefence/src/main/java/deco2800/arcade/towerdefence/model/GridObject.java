@@ -19,9 +19,9 @@ public class GridObject {
 	// Fields
 	private UUID id;
 	// The grid this object is on.
-	protected Grid grid;
+	private Grid grid;
 	// The position of this object on the grid.
-	protected Vector2 position;
+	private Vector2 position;
 	// Whether the object is visible.
 	private boolean visible = true;
 	// The list of status effects this GridObject can apply.
@@ -33,9 +33,9 @@ public class GridObject {
 	// The direction the object is facing.
 	private Direction facing = Direction.S;
 	// The standing files this object uses.
-	protected List<String> fileStanding;
+	private List<String> fileStanding;
 	// The team this object belongs to.
-	protected Team team;
+	private Team team;
 	// The maximum number of effects that can be stacked on this GridObject.
 	private final static int effectStackingLimit = 15;
 	// The number of effects applied to this GridObject.
@@ -213,7 +213,7 @@ public class GridObject {
 	 * @param effects
 	 *            The new list of effects for the object
 	 */
-	public void effects(ArrayList<Effect> effects) {
+	public void effects(List<Effect> effects) {
 		this.effects = effects;
 	}
 
@@ -274,6 +274,7 @@ public class GridObject {
 		this.effectStacks = amount;
 	}
 	
+	
 	/**
 	 * Set the rotation for the sprites.
 	 */
@@ -312,11 +313,7 @@ public class GridObject {
 	 * @return Whether the object has status effects.
 	 */
 	public boolean canApplyStatusEffects() {
-		if (effects.size() == 0) {
-			return false;
-		} else {
-			return true;
-		}
+		return effects.size() != 0;
 	}
 
 	/**
@@ -379,12 +376,8 @@ public class GridObject {
 
 	@Override
 	public boolean equals(Object o) {
-		if (o.getClass() == this.getClass()
-				&& ((GridObject) o).getID() == this.id) {
-			return true;
-		} else {
-			return false;
-		}
+		return (o.getClass() == this.getClass()
+				&& ((GridObject) o).getID() == this.id);
 	}
 
 }

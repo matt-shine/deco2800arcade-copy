@@ -38,16 +38,6 @@ public class Barrier extends Mortal {
 		super(maxHealth, armour, x, y, grid, team, fileStanding, fileDeath);
 	}
 
-	// Getters
-	public List<String> fileStanding() {
-		return fileStanding;
-	}
-
-	// Setters
-	public void fileStanding(List<String> files) {
-		this.fileStanding = files;
-	}
-
 	// Methods
 	/**
 	 * Start the AI and animations.

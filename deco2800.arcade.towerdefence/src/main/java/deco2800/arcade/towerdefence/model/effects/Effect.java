@@ -26,13 +26,13 @@ import deco2800.arcade.towerdefence.model.GridObject;
 public class Effect {
 	// Fields
 	// the name of the effect
-	protected final String name;
+	private final String name;
 	// the amount of the effect as a float.
-	protected final double amount;
+	private final double amount;
 	// the duration of the effect in milliseconds.
 	// use this sparingly in actual effects as it could cause performance
 	// issues.
-	protected final int duration;
+	private final int duration;
 
 	// Constructor
 	/**

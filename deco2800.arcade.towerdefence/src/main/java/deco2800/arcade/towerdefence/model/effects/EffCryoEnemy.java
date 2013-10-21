@@ -28,11 +28,11 @@ public class EffCryoEnemy extends Effect {
 	 * @param target
 	 */
 	public void function(Enemy target) {
-		Effect SlowMS = new EffSlowEnemyMS("Cryo SlowEnemyMS", (int) amount,
-				duration);
-		Effect SlowAR = new EffSlowEnemyAR("Cryo SlowEnemyAR", (int) amount,
-				duration);
-		SlowMS.function(target);
-		SlowAR.function(target);
+		Effect slowMS = new EffSlowEnemyMS("Cryo SlowEnemyMS", (int) amount(),
+				duration());
+		Effect slowAR = new EffSlowEnemyAR("Cryo SlowEnemyAR", (int) amount(),
+				duration());
+		slowMS.function(target);
+		slowAR.function(target);
 	}
 }

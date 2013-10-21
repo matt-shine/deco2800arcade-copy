@@ -296,7 +296,7 @@ public class Tower extends Mortal implements Ranged {
 		Vector2 projVector = projectile.speed().cpy();
 		projVector.setAngle(angle);
 		// Fire
-		Projectile shot = new Projectile(projectile, projVector, position);
+		Projectile shot = new Projectile(projectile, projVector, position());
 		shot.move();
 	}
 
@@ -313,12 +313,12 @@ public class Tower extends Mortal implements Ranged {
 				for (int k = -i; k <= i; k++) {
 					checkVector = positionInTiles().add(j, k);
 					// Check that grid for a valid target
-					iterator = grid.getGridContents((int) checkVector.x,
+					iterator = grid().getGridContents((int) checkVector.x,
 							(int) checkVector.y).iterator();
 					while (iterator.hasNext()) {
 						current = iterator.next();
 						if (current instanceof Mortal
-								&& current.team() != this.team) {
+								&& current.team() != this.team()) {
 							target = current;
 							return;
 						}

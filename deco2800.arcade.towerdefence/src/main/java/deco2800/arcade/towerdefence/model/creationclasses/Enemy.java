@@ -80,9 +80,10 @@ public class Enemy extends Mobile implements Melee {
 	 */
 	public Enemy(int maxHealth, int armour, int x, int y, double speed,
 			Grid grid, Team team, double attackRate, int damage,
-			int penetration, double anger, int bounty, List<String> fileStanding,
-			List<String> fileMoving, List<String> fileDying,
-			List<String> fileDeath, List<String> fileAttacking) {
+			int penetration, double anger, int bounty,
+			List<String> fileStanding, List<String> fileMoving,
+			List<String> fileDying, List<String> fileDeath,
+			List<String> fileAttacking) {
 		super(maxHealth, armour, x, y, speed, grid, team, fileStanding,
 				fileMoving, fileDying, fileDeath);
 		this.fileAttacking = fileAttacking;
@@ -121,7 +122,7 @@ public class Enemy extends Mobile implements Melee {
 	public double anger() {
 		return anger;
 	}
-	
+
 	/**
 	 * Returns the bounty collection on the enemy.
 	 */
@@ -180,7 +181,7 @@ public class Enemy extends Mobile implements Melee {
 	public void anger(double anger) {
 		this.anger = anger;
 	}
-	
+
 	/**
 	 * Sets the bounty collected on this enemy.
 	 */
@@ -210,14 +211,19 @@ public class Enemy extends Mobile implements Melee {
 	 * Start the AI and animations.
 	 */
 	public void start() {
-	// Remember to adjust the rotation before building the sprite if necessary
-	this.rotation(0);
-	
-	// Build the idle sprite list
-	List<Sprite> sprList = (GameScreen.spriteBuild(this, fileStanding()));
-	
-	// Add the list of sprites to the currently animating model
-	TowerDefence.toRender.add(sprList);
+		// Remember to adjust the rotation before building the sprite if
+		// necessary
+		this.rotation(0);
+
+		if (fileStanding() != null) {
+			// Build the idle sprite list
+			List<Sprite> sprList = (GameScreen
+					.spriteBuild(this, fileStanding()));
+
+			// Add the list of sprites to the currently animating model
+			TowerDefence.toRender.add(sprList);
+		}
+
 	}
 
 }

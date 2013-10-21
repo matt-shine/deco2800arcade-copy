@@ -131,7 +131,7 @@ public class Mobile extends Mortal {
 				// position
 				if (!moving((new Vector2(current.getX(), current.getY())
 						.sub(positionInTiles())))) {
-					path = grid.pathfinder().findPath(this,
+					path = grid().pathfinder().findPath(this,
 							(int) this.positionInTiles().x,
 							(int) this.positionInTiles().y, 50, 50);
 					break;
@@ -151,7 +151,7 @@ public class Mobile extends Mortal {
 	 *            The relative position to move to.
 	 */
 	public void move(Vector2 vector) {
-		position.add(vector);
+		position().add(vector);
 	}
 
 	/**
@@ -163,18 +163,18 @@ public class Mobile extends Mortal {
 	 */
 	public boolean moving(Vector2 vector) {
 		// Check for block in given direction
-		if (grid.blocked(this, (int) positionInTiles().add(vector).x,
+		if (grid().blocked(this, (int) positionInTiles().add(vector).x,
 				(int) positionInTiles().add(vector).y)) {
 			// Grid is blocked return false to indicate a new path should be
 			// found
 			return false;
 		}
 		// Move it from this grid position to the next one
-		grid.moveObject(this, positionInTiles().add(vector));
+		grid().moveObject(this, positionInTiles().add(vector));
 
 		// Go into a wait-while loop changing the position 30 times per second
 		long t0, t1;
-		float distance = grid.getTileSize() * vector.len();
+		float distance = grid().getTileSize() * vector.len();
 		Vector2 addVector = vector.mul((float) speed / 33);
 		for (float i = 0; i < distance; i += addVector.len()) {
 			t0 = System.currentTimeMillis();

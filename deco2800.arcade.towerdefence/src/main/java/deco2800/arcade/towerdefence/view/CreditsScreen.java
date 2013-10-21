@@ -15,8 +15,8 @@ import deco2800.arcade.towerdefence.controller.TowerDefence;
 public class CreditsScreen implements Screen{
 	private static final String LOG = CreditsScreen.class.getSimpleName();
 	private final TowerDefence game;
-	SpriteBatch batch;
-	Texture texture;
+	private SpriteBatch batch;
+	private Texture texture;
 	private long startTime;
 
 	public CreditsScreen(final TowerDefence game) {
@@ -45,7 +45,7 @@ public class CreditsScreen implements Screen{
 		if (millis() - startTime > 500
 				&& (Gdx.input.isKeyPressed(ANY_KEY) || Gdx.input.isButtonPressed(LEFT))) {
 			Gdx.app.debug(LOG, "switching to menu screen");
-			game.setScreen(game.menuScreen);
+			game.setScreen(game.menuScreen());
 		}
 		Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
 		batch.begin();

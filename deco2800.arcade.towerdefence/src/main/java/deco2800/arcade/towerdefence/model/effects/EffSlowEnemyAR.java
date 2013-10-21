@@ -30,10 +30,10 @@ public class EffSlowEnemyAR extends Effect {
 		// Get the towers Attack Rate
 		double originalAR = target.attackRate();
 		// Lower the target's Attack Rate by amount
-		if (originalAR - amount <= 0) {
+		if (originalAR - amount() <= 0) {
 			target.attackRate(0);
 		} else {
-			target.attackRate(originalAR - amount);
+			target.attackRate(originalAR - amount());
 		}
 	}
 }

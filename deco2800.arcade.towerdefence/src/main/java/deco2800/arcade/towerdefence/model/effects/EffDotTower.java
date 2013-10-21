@@ -38,7 +38,7 @@ public class EffDotTower extends Effect {
 		// loop over it for duration truncated seconds
 		for (int i = 0; i < Math.floor(duration); i++) {
 			int currentHealth = target.health();
-			target.health((int) (currentHealth - amount));
+			target.health((int) (currentHealth - amount()));
 			// wait 1000ms
 			try {
 				TimeUnit.MILLISECONDS.sleep(1000);

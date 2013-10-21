@@ -187,7 +187,7 @@ public class Projectile extends GridObject {
 		while (moved < range) {
 			// Check for collisions
 			for (int i = 0; i < getCurrentGrid().size(); i++) {
-				if (getCurrentGrid().get(i).team() != this.team) {
+				if (getCurrentGrid().get(i).team() != this.team()) {
 					// Collision occurred
 					collide(getCurrentGrid().get(i));
 					return;
@@ -197,7 +197,7 @@ public class Projectile extends GridObject {
 			t0 = System.currentTimeMillis();
 			t1 = t0;
 			// Move
-			position.add(addVector);
+			position().add(addVector);
 			moved += addVector.len();
 			// Wait 1/30th of a second before moving again
 			while (t1 - t0 < 33) {
@@ -225,7 +225,7 @@ public class Projectile extends GridObject {
 		for (int i = 0; i <= r * 2; i++) {
 			for (int j = 0; j <= r * 2; j++) {
 				// make an iterator for the contents of each square
-				Iterator<GridObject> contents = grid.getGridContents(
+				Iterator<GridObject> contents = grid().getGridContents(
 						(int) (startingTile.x + i), (int) (startingTile.y - j))
 						.iterator();
 				// iterate through
@@ -245,7 +245,7 @@ public class Projectile extends GridObject {
 		if (!this.canApplyStatusEffects()) {
 			// iterate through hitList
 			for (int i = 0; i < hitList.size(); i++) {
-				((Mortal) hitList.get(i)).takeDamage(damage);
+				((Mortal) hitList.get(i)).takeDamage(damage, penetration);
 			}
 		} else {
 			// Get the list of effects

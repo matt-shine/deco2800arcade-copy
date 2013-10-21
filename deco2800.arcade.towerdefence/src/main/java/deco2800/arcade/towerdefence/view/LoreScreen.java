@@ -24,19 +24,19 @@ import deco2800.arcade.towerdefence.controller.TowerDefence;
 public class LoreScreen implements Screen {
 
 	private final TowerDefence game;
-	Stage stage;
-	Table table;
-	SpriteBatch batch;
-	TextureAtlas atlas;
-	Button backButton;
-	BitmapFont white;
-	Skin skin;
-	Label words;
-	TextButtonStyle style;
+	private Stage stage;
+	private Table table;
+	private SpriteBatch batch;
+	private TextureAtlas atlas;
+	private Button backButton;
+	private BitmapFont white;
+	private Skin skin;
+	private Label words;
+	private TextButtonStyle style;
 
-	float buttonSpacing = 10f;
-	float buttonHeight = 50f;
-	float buttonWidth = 200f;
+	private float buttonSpacing = 10f;
+	private float buttonHeight = 50f;
+	private float buttonWidth = 200f;
 
 	public LoreScreen(final TowerDefence game) {
 		this.game = game;
@@ -97,7 +97,7 @@ public class LoreScreen implements Screen {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				game.setScreen(game.menuScreen);
+				game.setScreen(game.menuScreen());
 			}
 
 		});

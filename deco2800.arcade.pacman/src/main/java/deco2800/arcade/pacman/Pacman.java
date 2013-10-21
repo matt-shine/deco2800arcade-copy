@@ -2,15 +2,12 @@ package deco2800.arcade.pacman;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Logger;
 
 import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.GameClient;
-import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.AchievementProgress;
@@ -107,11 +104,6 @@ public class Pacman extends GameClient {
 				new AchievementClient(networkClient);
 		AsyncFuture<ArrayList<Achievement>> achievements = achievementClient.getAchievementsForGame(game);
 		AsyncFuture<AchievementProgress> playerProgress = achievementClient.getProgressForPlayer(player);
-		
-		for (Achievement ach : achievements.get()) {
-			System.out.println(ach.toString());
-		}
-		
 	}
 	
 	/**

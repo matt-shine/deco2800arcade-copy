@@ -53,6 +53,7 @@ public class ChatNode {
 	 * @param playerId
 	 */
 	public void removeParticipant(int playerId) {
+		
 		participants.remove(participants.indexOf(playerId));
 	}
 

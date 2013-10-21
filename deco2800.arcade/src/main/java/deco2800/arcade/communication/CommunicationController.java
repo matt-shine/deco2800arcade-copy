@@ -16,6 +16,13 @@ import javax.swing.JLabel;
 import deco2800.arcade.model.ChatNode;
 import deco2800.arcade.protocol.communication.TextMessage;
 
+/**
+ * Controls what occurs in the view. When messages are received or sent
+ * through the communicationNetwork they are passed through the controller
+ * and displayed on the view. The controller also handles receiving messages
+ * from the view and passing them to the communicationNetwork.
+ * 
+ */
 public class CommunicationController {
 
 	private CommunicationView view;
@@ -72,29 +79,46 @@ public class CommunicationController {
 
 	}
 
+
 	/**
 	 * Creates a TextMessage from the text in the CommunicationView and sends it
 	 * to the participants of the current chat.
 	 */
 	private void send() {
 		ChatNode node = network.getCurrentChat();
+		String message = view.getMessage();
+		
+		if(message.startsWith("/?") || message.startsWith("/help")){
+			view.appendOutputArea("To add a user to the conversation, type /invite playerID\n");
+			view.appendOutputArea("To remove a user from the conversation, type /kick playerID\n");
+		} else if(message.startsWith("/invite")) {
+			String playerID = message.substring(8);
+			node.addParticipant(Integer.parseInt(playerID));
+			message = "Player " + playerID + " added.";
+			view.appendOutputArea(message);
+		} else if(message.startsWith("/kick")) {
+			String playerID = message.substring(6);
+			node.removeParticipant(Integer.parseInt(playerID));
+			message = "Player " + playerID + " removed.";
+			view.appendOutputArea(message);
+		}
 
 		// This should never be null, because the chat window won't be open
 		// if it leads to nowhere... but it is during testing
 		if (node != null) {
-			TextMessage message = new TextMessage();
-			message.setChatID(node.getID()); // Is this right?
-			message.setSenderID(network.getPlayer().getID());
-			message.setSenderUsername(network.getPlayer().getUsername());
-			message.setText(view.getMessage());
+			TextMessage textMessage = new TextMessage();
+			textMessage.setChatID(node.getID()); // Is this right?
+			textMessage.setSenderID(network.getPlayer().getID());
+			textMessage.setSenderUsername(network.getPlayer().getUsername());
+			textMessage.setText(message);
 
 			if (node.getParticipants() == null) {
 				System.out
 						.println("You are trying to send to nobody! This won't happen normally because a chat window will only be open if you have someone to talk to. "
 								+ "It will however, happen during testing because this chat window is open by default!");
 			} else {
-				message.setRecipients(node.getParticipants());
-				network.sendTextMessage(message);
+				textMessage.setRecipients(node.getParticipants());
+				network.sendTextMessage(textMessage);
 				view.clearInput();
 			}
 		}

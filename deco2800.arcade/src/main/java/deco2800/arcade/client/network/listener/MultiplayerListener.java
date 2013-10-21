@@ -43,10 +43,10 @@ public class MultiplayerListener extends NetworkListener {
 		//Otherwise send it to both
 		} else if (object instanceof GameStateUpdateRequest) {
 			if (!(((GameStateUpdateRequest) object).initial)) {
-				arcade.getCurrentGame().updateGameState((GameStateUpdateRequest) object);
+				//arcade.getCurrentGame().updateGameState((GameStateUpdateRequest) object);
 			} else {
-				arcade.getCurrentGame().startMultiplayerGame();
-				arcade.getCurrentGame().updateGameState((GameStateUpdateRequest) object);
+				//arcade.getCurrentGame().startMultiplayerGame();
+				//arcade.getCurrentGame().updateGameState((GameStateUpdateRequest) object);
 			}
 		//Update the list of current MultiplayerGames
 		} else if (object instanceof ActiveGameRequest) {

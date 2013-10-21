@@ -1,7 +1,5 @@
 package deco2800.arcade.model.test;
-import java.io.Console;
-import java.util.HashSet;
-import java.util.Set;
+
 
 import org.junit.Assert;
 import org.junit.Before;

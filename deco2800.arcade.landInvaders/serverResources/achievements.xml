@@ -6,6 +6,13 @@
         <icon>Cup1.png</icon>
     </achievement>
     
+    <achievement id="LandInvaders.startFirstGame">
+        <name>Virgin Winner</name>
+        <description>Start first game of LandInvaders.</description>
+        <awardThreshold>1</awardThreshold>
+        <icon>Cup1.png</icon>
+    </achievement>
+    
     <achievement id="LandInvaders.perfect">
         <name>Perfect!</name>
         <description>Won the game without losing any life</description>

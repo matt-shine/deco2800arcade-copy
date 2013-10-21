@@ -25,7 +25,6 @@ public class LandInvaders extends GameClient  {
 		//this.networkClient = networkClient;
 		//HighscoreClient player1 = new HighscoreClient(player.getUsername(), GAME.id, networkClient);
 		//player1.storeScore("points", invader.getHighScore());
-		
 	}
 	
 	@Override

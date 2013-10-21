@@ -24,8 +24,10 @@ import deco2800.server.listener.CasinoListener;
 import deco2800.server.listener.LobbyListener;
 import deco2800.server.listener.MultiplayerListener;
 import deco2800.server.listener.ReplayListener;
+import deco2800.server.database.ForumStorage;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
+import deco2800.server.listener.ForumListener;
 import deco2800.server.listener.GameListener;
 import deco2800.server.listener.PackmanListener;
 import deco2800.server.listener.HighscoreListener;
@@ -111,6 +113,9 @@ public class ArcadeServer {
 	// Highscore database storage service
 	private HighscoreDatabase highscoreDatabase;
 	
+	/* Forum storage service */
+	private ForumStorage forumStorage;
+	
 	/**
 	 * Access the server's credit storage facility
 	 * @return
@@ -170,6 +175,14 @@ public class ArcadeServer {
 	}
 	
 	/**
+	 * Get access to the forum storage.
+	 * @return ForumStorage instance
+	 */
+	public ForumStorage getForumStorage() {
+		return this.forumStorage;
+	}
+	
+	/**
 	 * Create a new Arcade Server.
 	 * This should generally not be called.
 	 * @see ArcadeServer.instance()
@@ -181,6 +194,7 @@ public class ArcadeServer {
         instance = this;
 
         this.gameStorage = new GameStorage();
+
         logger.debug("gameStorage added to ArcadeServer");
         
         try {
@@ -203,6 +217,12 @@ public class ArcadeServer {
         this.imageStorage = new ImageStorage();
         logger.debug("imageStorage added to ArcadeServer");
 
+		this.creditStorage = new CreditStorage();
+		this.replayStorage = new ReplayStorage();
+		this.playerStorage = new PlayerStorage();
+		this.friendStorage = new FriendStorage();
+		this.forumStorage = new ForumStorage();
+
 		//do achievement database initialisation
 		this.achievementStorage = new AchievementStorage(imageStorage);
 		logger.debug("achievementStorage added to ArcadeServer");
@@ -214,8 +234,6 @@ public class ArcadeServer {
 		logger.debug("PackageServer added to ArcadeServer");
 		
 		logger.info("Added all databases to Server, about to initialise them");
-
-
 		
 		//Init highscore database
 		try {
@@ -242,9 +260,13 @@ public class ArcadeServer {
             imageStorage.initialise();
             logger.debug("imageStorage initialised");
 			//playerStorage.initialise();
-            
 			achievementStorage.initialise();
 			logger.debug("achievementStorage initialised");
+
+			highscoreDatabase.initialise();          
+			achievementStorage.initialise();
+			this.forumStorage.initialise();
+
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -312,6 +334,7 @@ public class ArcadeServer {
         Protocol.register(server.getKryo());
         server.addListener(new FileServerListener());
     }
+
 
     /**
      * Return the packServ object.

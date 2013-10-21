@@ -26,6 +26,7 @@ import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceResponse;
+
 import deco2800.arcade.protocol.game.CasinoServerUpdate;
 import deco2800.arcade.protocol.game.GameLibraryRequest;
 import deco2800.arcade.protocol.game.GameLibraryResponse;
@@ -34,6 +35,7 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
+import deco2800.arcade.protocol.forum.*;
 import deco2800.arcade.protocol.highscore.AddScoreRequest;
 import deco2800.arcade.protocol.highscore.GetScoreRequest;
 import deco2800.arcade.protocol.highscore.GetScoreResponse;
@@ -78,16 +80,17 @@ import deco2800.arcade.protocol.replay.types.Session;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.AchievementProgress;
 
+
 public class Protocol {
 	
-	private static Kryo kryo;
+	private static Kryo Kryo;
 	
 	/**
 	 * Keeps the kryo instance for use with registerEncrypted()
 	 * @param kryo
 	 */
 	public static void setKryo(Kryo kryo) {
-		Protocol.kryo = kryo;
+		Protocol.Kryo = kryo;
 	}
 
 	/**
@@ -96,9 +99,9 @@ public class Protocol {
 	 * @param kryo
 	 */
 	public static void register(Kryo kryo) {
+		Protocol.setKryo(kryo);
 		//Connection messages
 		kryo.register(ConnectionRequest.class);
-		Protocol.setKryo(kryo);
 		
 		// Connection messages
 		kryo.register(ConnectionResponse.class);
@@ -203,6 +206,34 @@ public class Protocol {
         kryo.register(java.util.Set.class);
         kryo.register(java.util.HashSet.class);
         kryo.register(java.awt.image.BufferedImage.class);
+		
+		// Forum Protocols
+        kryo.register(String[].class);
+		//kryo.register(java.sql.Timestamp.class);
+        //kryo.register(java.util.Vector.class);
+        kryo.register(ForumUserProtocol.class);
+        kryo.register(ParentThreadProtocol.class);
+        kryo.register(ChildThreadProtocol.class);
+        kryo.register(ParentThreadProtocol[].class);
+        kryo.register(ChildThreadProtocol[].class);
+		kryo.register(ForumTestResponse.class);
+		kryo.register(ForumTestRequest.class);
+		kryo.register(GetForumUserRequest.class);
+		kryo.register(GetForumUserResponse.class);
+		kryo.register(InsertParentThreadRequest.class);
+		kryo.register(InsertParentThreadResponse.class);
+		kryo.register(TagsRequest.class);
+		kryo.register(TagsResponse.class);
+		kryo.register(GetParentThreadsRequest.class);
+		kryo.register(GetParentThreadsResponse.class);
+		kryo.register(GetChildThreadsRequest.class);
+		kryo.register(GetChildThreadsResponse.class);
+		kryo.register(UpdateParentThreadRequest.class);
+		kryo.register(UpdateParentThreadResponse.class);
+		kryo.register(InsertChildThreadRequest.class);
+		kryo.register(InsertChildThreadResponse.class);
+
+		
 	}
 	
 	/**
@@ -215,8 +246,8 @@ public class Protocol {
 		
 		// Ensures any ConnectionRequests are sent over the network using the 
 		// Blowfish encryption algorithm
-		kryo.register(ConnectionRequest.class, new BlowfishSerializer(
-				new FieldSerializer<Object>(kryo, ConnectionRequest.class), connectionRequest.key));
+		Kryo.register(ConnectionRequest.class, new BlowfishSerializer(
+				new FieldSerializer<Object>(Kryo, ConnectionRequest.class), connectionRequest.key));
 	}
 
 }

@@ -1,0 +1,12 @@
+
+dependencies {
+	compile project(":deco2800.arcade.protocol")
+	compile project(":deco2800.arcade.model")
+	
+	compile group: "com.esotericsoftware.kryonet", name: "kryonet", version: "2.18", classifier: "all", transitive: true
+}
+
+task (runForum, dependsOn: "classes", type: JavaExec) {
+	main = "deco2800.arcade.forum.ui.ForumSim.java"
+	classpath = sourceSets.main.runtimeClasspath
+}

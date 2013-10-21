@@ -230,7 +230,7 @@ public class TestForumStorage {
 	}
 	
 	private IDataSet getDataSet() throws DataSetException, IOException {
-		URL url = TestCreditStorage.class.getClassLoader().getResource("TestCreditStorage.xml");
+		URL url = TestCreditStorage.class.getClassLoader().getResource("TestForumStorage.xml");
 		FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
 		builder.setColumnSensing(true);
 		return builder.build(url);

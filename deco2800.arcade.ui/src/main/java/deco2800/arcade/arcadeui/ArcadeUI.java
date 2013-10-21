@@ -1,5 +1,7 @@
 package deco2800.arcade.arcadeui;
 
+import com.badlogic.gdx.Screen;
+
 import deco2800.arcade.arcadeui.store.StoreHome;
 import deco2800.arcade.arcadeui.store.StoreTransactions;
 import deco2800.arcade.arcadeui.store.StoreWishlist;

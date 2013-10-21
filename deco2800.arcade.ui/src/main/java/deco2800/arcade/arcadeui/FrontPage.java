@@ -283,7 +283,7 @@ public class FrontPage implements Screen {
             //Click Listener for Store Button
             storeButton.addListener((new ChangeListener() {	
                 public void changed (ChangeEvent event, Actor actor) {
-                	arcadeUI.setScreen(arcadeUI.store);
+                	arcadeUI.setScreen(arcadeUI.getStoreHome());
                 }
             })); 
               

@@ -21,7 +21,7 @@ public class FrontPageTest {
     private FrontPage myFrontPage;
     	@Before
 	public void Setup() {
-		myFrontPage = new FrontPage(arcadeUI);
+		//myFrontPage = new FrontPage(arcadeUI);
 		//myFrontPage.pName = "";
 		
 	}

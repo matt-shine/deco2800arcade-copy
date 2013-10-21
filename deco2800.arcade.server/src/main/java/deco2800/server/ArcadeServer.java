@@ -89,6 +89,7 @@ public class ArcadeServer {
 	 * Binds Ports
 	 * 
 	 * @param args
+	 * @throws DatabaseException 
 	 */
 	public static void main(String[] args) {
 		ArcadeServer server = new ArcadeServer();
@@ -105,8 +106,8 @@ public class ArcadeServer {
 	
 	// Credit storage service
 	private CreditStorage creditStorage;
-	//private PlayerStorage playerStorage;
-	//private FriendStorage friendStorage;
+	private PlayerStorage playerStorage;
+	private FriendStorage friendStorage;
 
     private ImageStorage imageStorage;
 	
@@ -185,6 +186,7 @@ public class ArcadeServer {
 	/**
 	 * Create a new Arcade Server.
 	 * This should generally not be called.
+	 * @throws DatabaseException 
 	 * @see ArcadeServer.instance()
 	 */
 	public ArcadeServer() {
@@ -209,19 +211,19 @@ public class ArcadeServer {
         //CODE SMELL
 		this.replayStorage = new ReplayStorage();
 		logger.debug("replayStorage added to ArcadeServer");
-		//this.playerStorage = new PlayerStorage();
-		//this.friendStorage = new FriendStorage();
+		this.playerStorage = new PlayerStorage();
+		this.friendStorage = new FriendStorage();
 		this.chatStorage = new ChatStorage();
 		logger.debug("chatStorage added to ArcadeServer");
 		
         this.imageStorage = new ImageStorage();
         logger.debug("imageStorage added to ArcadeServer");
 
-		this.creditStorage = new CreditStorage();
-		this.replayStorage = new ReplayStorage();
-		this.playerStorage = new PlayerStorage();
-		this.friendStorage = new FriendStorage();
-		this.forumStorage = new ForumStorage();
+		try {
+			this.forumStorage = new ForumStorage();
+		} catch (Exception e) {
+			// do nothing.
+		}
 
 		//do achievement database initialisation
 		this.achievementStorage = new AchievementStorage(imageStorage);
@@ -234,14 +236,6 @@ public class ArcadeServer {
 		logger.debug("PackageServer added to ArcadeServer");
 		
 		logger.info("Added all databases to Server, about to initialise them");
-		
-		//Init highscore database
-		try {
-			highscoreDatabase.initialise();
-			logger.debug("highscoreDatabase initialised");
-		} catch (DatabaseException e) {
-			e.printStackTrace();
-		}
 		
 		//init GamePath database
 		try {
@@ -263,9 +257,11 @@ public class ArcadeServer {
 			achievementStorage.initialise();
 			logger.debug("achievementStorage initialised");
 
-			highscoreDatabase.initialise();          
+			highscoreDatabase.initialise(); 
+			logger.debug("highscoreDatabase initialised");
 			achievementStorage.initialise();
 			this.forumStorage.initialise();
+			logger.debug("forumStorage initialized");
 
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block

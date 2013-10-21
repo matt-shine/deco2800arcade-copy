@@ -1,33 +1,20 @@
+<game>
+<title>Breakout</title>>
+<dblocation>game.breakout</dblocation>
 <accolades>
-<gameID>3</gameID>
-	<accolade>
-		<!-- NOTICE THERE IS NO <id> SET. THIS IS ADDED ON YOUR FIRST RUN -->
-		<name> "Paddle Bumps" </name>
-		<message> "The equivalent of $VALUE $UNIT Paddle Bumps" </message>
-		<!-- This will multiplied against the value to produce the final value-->
-		<modifier>1</modifier> 
-		<unit>"pushes"</unit>
-		<!-- When the value reaches a multiple of this, the popup occurs -->	
-		<popup>50 </popup>
-		<!-- Message for ingame popup - contains an example of hardcoded $unit (use if different) -->
-		<popupMessage>"You've bounced the ball back $VALUE times!"</popupMessage>
-		<tag>"bump"</tag>
-		<!-- This is the relative local file lovation - should be your server resources folder -->
-		<image>"\images\accolades\bump.jpg"</image>  
-	</accolade>
-	<accolade>
-		<!-- NOTICE THERE IS NO <id> SET. THIS IS ADDED ON YOUR FIRST RUN -->
-		<name> "Brick Break" </name>
-		<message> "You have broken $VALUE which is equivalent to breaking $UNIT" </message>
-		<!-- This will multiplied against the value to produce the final value-->
-		<modifier>10000</modifier> 
-		<unit>"House"</unit>
-		<!-- When the value reaches a multiple of this, the popup occurs -->	
-		<popup>50</popup>
-		<!-- Message for ingame popup - contains an example of hardcoded $unit (use if different) -->
-		<popupMessage>"You've broken $VALUE bricks!"</popupMessage>
-		<tag>"brick"</tag>
-		<!-- This is the relative local file location - should be your server resources folder -->
-		<image>"\images\accolades\break.jpg"</image>  
-	</accolade>
+    <accolade>
+        
+        <refcode>XXXX</refcode> 
+        <title>Paddle Bumps</title>
+        <string>The equivalent of $VALUE $UNIT Paddle Bumps </string>
+        <unit>"pushes"</unit>
+        <modifier> "$VALUE MOD(1)" </modifier> 
+            #this will be a relative location to both your game client and the serverresource
+        <image></image>   
+            #When the value reaches a multiple of this, the popup occurs
+        <popup>50</popup>
+        <accoladeString>"You've bounced the ball back $VALUE times!"</accoladeString>
+
+</accolade>
 </accolades>
+</game>

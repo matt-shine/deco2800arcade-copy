@@ -1,18 +1,13 @@
 package deco2800.arcade.raiden;
-import java.applet.Applet;
-import java.applet.AudioClip;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.net.URL;
 import java.util.Random;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
-
-
 
 
 public class Controller extends KeyAdapter{
@@ -25,17 +20,8 @@ public class Controller extends KeyAdapter{
 	private GamePanel gamePanel;
 	private Random random = new Random();
 	public static int DestoryNum;
-	//private Music bgm;
-	/**
-	 * Constructor of controller.
-	 * @param bang
-	 * @param ebullet
-	 * @param pbullet
-	 * @param eplane
-	 * @param pplane
-	 * @param gamePanel
-	 * 
-	 */
+	
+	
 	public Controller(Vector<Bang> bang,Vector<EBullet> ebullet,Vector<PBullet> 
 	pbullet, Vector<EPlane> eplane,PPlane pplane,GamePanel gamePanel) {
 		super();
@@ -45,8 +31,6 @@ public class Controller extends KeyAdapter{
 		Controller.eplanes = eplane; 
 		Controller.pplane = pplane;
 		this.gamePanel = gamePanel;
-		
-		//bgm = Gdx.audio.newMusic(Gdx.files.internal("/sounds/mbgm.m4a"));
 			Timer timer = new Timer(1000, new ActionListener() {		
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -62,9 +46,6 @@ public class Controller extends KeyAdapter{
 		}
 
 	@Override
-	/**
-	 * The interaction between user and keyboard
-	 */
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 		switch (e.getKeyCode()){
@@ -88,9 +69,6 @@ public class Controller extends KeyAdapter{
 
 	
 	@Override
-	/**
-	 * The interaction between player and keyboard.
-	 */
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 		switch (e.getKeyCode()){
@@ -108,11 +86,9 @@ public class Controller extends KeyAdapter{
 			break;
 		case KeyEvent.VK_X:
 			PPlane.isFired = false;
-		}
 	}
-	/**
-	 * Thread function when the game is running.
-	 */
+	}
+
 	public void StartRun(){
 		//FIXME big method
 		new Thread(){
@@ -120,38 +96,14 @@ public class Controller extends KeyAdapter{
 				int count = 0;      
 				while(true){
 					pplane.pplaneMove();
-					// Add bullet. Gun upgrade.
-					// bgm.play();
-					URL myMusic = this.getClass().getResource("/sounds/mbgm.mp3");
-					AudioClip audioClip = Applet.newAudioClip(myMusic);
-					audioClip.loop();
-					if(DestoryNum < 30){
-						if(PPlane.isFired && count % 5 == 0){
-							PBullet pbullet1 = new PBullet(pplane.x + 20, 
-											pplane.y + 50, 8, 15);
-							pbullets.add(pbullet1);
-						}
-					}else if(DestoryNum >= 30 && DestoryNum < 150){
-						if(PPlane.isFired && count % 5 == 0){
-							PBullet pbullet2 = new PBullet(pplane.x + 35, 
-											pplane.y + 50, 8, 15);
-							pbullets.add(pbullet2);
-							PBullet pbullet3 = new PBullet(pplane.x + 5, 
-											pplane.y + 50, 8, 15);
-							pbullets.add(pbullet3);	
-						}
-					}else if(DestoryNum >= 150){
-						if(PPlane.isFired && count % 5 == 0){
-							PBullet pbullet4 = new PBullet(pplane.x + 35, 
-											pplane.y + 50, 8, 15);
-							pbullets.add(pbullet4);
-							PBullet pbullet5 = new PBullet(pplane.x + 5, 
-											pplane.y + 50, 8, 15);
-							pbullets.add(pbullet5);
-							PBullet pbullet6 = new PBullet(pplane.x + 20, 
-											pplane.y + 50, 8, 15);
-							pbullets.add(pbullet6);
-						}
+					// add bullet.
+					if(PPlane.isFired && count % 5 == 0){
+						PBullet pbullet1 =
+							new PBullet(pplane.x + 35, pplane.y + 50, 8, 15);
+						pbullets.add(pbullet1);
+						PBullet pbullet2 =
+							new PBullet(pplane.x + 5, pplane.y + 50, 8, 15);
+						pbullets.add(pbullet2);	
 					}
 					count ++;
 					for(int i = 0; i < pbullets.size(); i++){
@@ -172,35 +124,11 @@ public class Controller extends KeyAdapter{
 							pbullets.remove(i);
 						}
 					}
-					//Set the number of enemy here.
-					if(DestoryNum < 30){
-						if(eplanes.size() < Global.ENEMY_NUMBER){
-							int x = random.nextInt(Global.FRAME_WIDTH);
-							int y = -30;
-							EPlane eplane = new EPlane(x, y, 30, 30);
-							eplanes.add(eplane);
-						}
-					}else if(DestoryNum >= 30 && DestoryNum < 70){
-						if(eplanes.size() < Global.ENEMY_NUMBER + 15){
-							int x = random.nextInt(Global.FRAME_WIDTH);
-							int y = -30;
-							EPlane eplane = new EPlane(x, y, 30, 30);
-							eplanes.add(eplane);
-						}
-					}else if(DestoryNum >= 70 && DestoryNum < 100){
-						if(eplanes.size() < Global.ENEMY_NUMBER + 30){
-							int x = random.nextInt(Global.FRAME_WIDTH);
-							int y = -30;
-							EPlane eplane = new EPlane(x, y, 30, 30);
-							eplanes.add(eplane);
-						}
-					}else if(DestoryNum >= 100){
-						if(eplanes.size() < Global.ENEMY_NUMBER + 50){
-							int x = random.nextInt(Global.FRAME_WIDTH);
-							int y = -30;
-							EPlane eplane = new EPlane(x, y, 30, 30);
-							eplanes.add(eplane);
-						}
+					if(eplanes.size() < Global.ENEMY_NUMBER){
+						int x = random.nextInt(Global.FRAME_WIDTH);
+						int y = -30;
+						EPlane eplane = new EPlane(x, y, 30, 30);
+						eplanes.add(eplane);
 					}
 					for(int i=0; i < eplanes.size(); i++){
 						eplanes.elementAt(i).eplaneMove();
@@ -239,26 +167,20 @@ public class Controller extends KeyAdapter{
 			}
 		}.start();
 	}
-	/**
-	 * To see if the game is over or not.
-	 * User could choose restart game.
-	 */
+	
 	public void JudgeLife(){
-	     if(!pplane.isAlive()){
-	    	 int result = JOptionPane.showConfirmDialog(gamePanel, 
-	          "Try again? :D","OK",JOptionPane.YES_OPTION);
-	    	 if(result == 0){
-	    		 newGame();
-	    		 }else{
-	    			 // bgm.stop();
-	    			 System.exit(0);
-	    			 }
-	    	 }
-	     }
-
-	/**
-	 * Reset the game.
-	 */
+		if(!pplane.isAlive()){
+			int result = JOptionPane.showConfirmDialog(gamePanel, 
+					"Try again? :D","OK",JOptionPane.YES_OPTION);
+			if(result == 0){
+				newGame();
+			}else{
+				System.exit(0);
+			}
+			
+		}
+	}
+	
 	public void newGame(){
 		bangs.clear();		   		
 		ebullets.clear();

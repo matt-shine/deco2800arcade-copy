@@ -48,7 +48,6 @@ import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.lobby.LobbyRequestType;
 import deco2800.arcade.protocol.lobby.NewLobbyRequest;
 import deco2800.arcade.protocol.lobby.RemovedMatchDetails;
-import deco2800.arcade.protocol.multiplayerGame.ActiveGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckResponse;
@@ -98,8 +97,6 @@ public class Arcade extends JFrame {
 	private static boolean bettingLobby;
 
 	private static ArrayList<ActiveMatchDetails> matches = new ArrayList<ActiveMatchDetails>();
-	
-	private static ArrayList<ArrayList<Object>> activeMatches = new ArrayList<ArrayList<Object>>();
 
 	// Width and height of the Arcade window
 	private static final int ARCADE_WIDTH = 1280;
@@ -256,7 +253,7 @@ public class Arcade extends JFrame {
 				.addListener(new CommunicationListener(communicationNetwork));
 		this.client.addListener(new PackmanListener());
 		this.client.addListener(new MultiplayerListener(this));
-		this.client.addListener(new LobbyListener(this));
+		this.client.addListener(new LobbyListener());
 		this.client.addListener(new LibraryResponseListener());
 	}
 	
@@ -384,17 +381,7 @@ public class Arcade extends JFrame {
 	/**
 	 * Fetch the JAR for a given game/version from the server
 	 * 
-	 * A thread is spawned to fetch the game.
-     *
-     * If you do not know which version you wish to fetch, pass in
-     * a null string for the version number and the server will return
-     * the latest version.
-     *
-     * NOTE the reason this method is in here is because it was impossible
-     * to abstract the network class from the deco2800.arcade.client package.
-     * In order to abstract the client side network classes it needed to be
-     * done before anyone had access to the repository. This basically
-     * rendered the entire deco2800.arcade.packman.PackageClient useless.
+	 * A thread is spawned to fetch the game
 	 * 
 	 * @param gameID
 	 * @param version
@@ -404,21 +391,6 @@ public class Arcade extends JFrame {
 		Thread t = new Thread(fc);
 		t.start();
 	}
-
-    /**
-     * Fetch the JAR for a given game from the server
-     *
-     * A thread is spawned to fetch the game.
-     *
-     * Fetches the latest version as per the DB.
-     *
-     * @param gameID
-     */
-    public void fetchGameJar(String gameID) {
-        FileClient fc = new FileClient(gameID, fileClient);
-        Thread t = new Thread(fc);
-        t.start();
-    }
 
 	/**
 	 * Ask the server to play a given game.
@@ -653,6 +625,7 @@ public class Arcade extends JFrame {
 	 * 
 	 * @param response: The match to add.
 	 */
+//>>>>>>> master
 	public static void addToMatchList(ActiveMatchDetails response) {
 		matches.add(response);
 	}
@@ -849,33 +822,4 @@ public class Arcade extends JFrame {
 		return bettingLobby;
 	}
 
-	/**
-	 * Sends a request to the server for the latest list of active games
-	 */
-	public void requestActiveGames() {
-		ActiveGameRequest request = new ActiveGameRequest();
-		client.sendNetworkObject(request);
-		long time = System.currentTimeMillis();
-		while (time + 300 > System.currentTimeMillis());
-	}
-	
-	/**
-	 * Sets the active game list to be the most recent update from the server
-	 * 
-	 * @param serverList The list of active games
-	 */
-	public void setActiveGames(ArrayList<ArrayList<Object>> serverList) {
-		activeMatches = serverList;		
-	}
-
-	/**
-	 * Returns the list of active multiplayer games
-	 * 
-	 * @return The list of active multiplayer games
-	 */
-	public static ArrayList<ArrayList<Object>> getActiveGames() {
-		return new ArrayList<ArrayList<Object>>(activeMatches);
-	}
-
-	
 }

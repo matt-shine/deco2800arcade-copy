@@ -16,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import deco2800.arcade.client.ArcadeInputMux;
 
 @SuppressWarnings("unused")
 public class MenuScreen implements Screen, InputProcessor {
@@ -133,8 +132,7 @@ public class MenuScreen implements Screen, InputProcessor {
 		}
 		stage.clear();
 		
-		//Gdx.input.setInputProcessor(stage);
-        ArcadeInputMux.getInstance().addProcessor(stage);
+		Gdx.input.setInputProcessor(stage);
 		
 		TextButtonStyle butStyle = new TextButtonStyle();
 		butStyle.up = butSkin.getDrawable("butdown");
@@ -197,8 +195,7 @@ public class MenuScreen implements Screen, InputProcessor {
 	
 	@Override 
 	public void dispose() { 
-		//Gdx.input.setInputProcessor(null);
-        ArcadeInputMux.getInstance().removeProcessor(stage);
+		Gdx.input.setInputProcessor(null);
 		
 		if (disposeCount == 1) return;
 		butBatch.dispose();

@@ -8,7 +8,12 @@ import deco2800.arcade.burningskies.entities.PlayerShip;
 import deco2800.arcade.burningskies.entities.Ship;
 
 public abstract class Bullet extends Entity {
-
+	
+	/*
+	 * TODO I often wonder about nested public classes. 
+	 * I tend to prefer to either define them as private, or define them in their own class
+	 * (just a thought)
+	 */
 	public enum Affinity {
 		PLAYER,
 		ENEMY
@@ -45,8 +50,6 @@ public abstract class Bullet extends Entity {
 		position.add(parent.getCenterX(), parent.getCenterY());
 		position.sub(getWidth()/2, getHeight()/2); // bullet has dimensions too
 		direction = initialDirection;
-		setPosition(position.x, position.y);
-		setRotation(direction);
 	}
 	
 	@Override
@@ -64,6 +67,7 @@ public abstract class Bullet extends Entity {
 	
 	/**
 	 * Checks whether the bullet is friend or foe.
+	 * 
 	 * @return true if an enemy bullet, false if a friendly bullet
 	 */
 	public Affinity getAffinity(){

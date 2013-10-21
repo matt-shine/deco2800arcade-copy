@@ -17,24 +17,11 @@ public class PlayerPattern extends BulletPattern {
 	};
 	private int upgrade = 0;
 	
-	/**
-	 * Initialise variables to default values
-	 * @param emitter
-	 * @param screen
-	 */	
 	public PlayerPattern(Ship emitter, PlayScreen screen) {
 		super(emitter, screen);
 		interval = (float) 0.03;
 	}
 	
-	/**
-	 * Shoots a bullet and compensates with a lag value due to high speed
-	 * also accounting for the current direction the player is currently
-	 * facing
-	 * @param lag
-	 * @param x
-	 * @param y
-	 */
 	public void fire(float lag, float x, float y) {
 		PlayerBullet bullet;
 		PlayerBullet bullet2;
@@ -61,9 +48,6 @@ public class PlayerPattern extends BulletPattern {
 		}
 	}
 	
-	/**
-	 * Increase the value of upgrade up to a limit of 5
-	 */
 	public void upgrade() {
 		upgrade++;
 		if(upgrade > 5) {

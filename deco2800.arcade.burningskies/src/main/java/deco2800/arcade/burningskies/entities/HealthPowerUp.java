@@ -13,6 +13,6 @@ public class HealthPowerUp extends PowerUp {
 	
 	@Override
 	public void powerOn(PlayerShip player) {
-		player.heal(100);
+		player.heal(30);
 	}
 }

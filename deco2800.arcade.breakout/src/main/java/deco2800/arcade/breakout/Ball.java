@@ -3,6 +3,7 @@ package deco2800.arcade.breakout;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Circle;
 
@@ -19,14 +20,14 @@ public class Ball {
 	// minimum velocity
 	public static final float INITIALSPEED = 400;
 	// maximum velocity
-	public static float MAXXVELOCITY = 800f;
+	public static float MAX_X_VELOCITY = 800f;
 	private float multiplier = 1;
 	
 	
 	// velocity of the ball
-	private Vector2 velocity = new Vector2();
+	Vector2 velocity = new Vector2();
 	// Circle representing ball
-	private Circle ballCirc = new Circle();
+	Circle ballCirc = new Circle();
 
 	// Variables to store the render colour
 	private float renderColourRed;
@@ -41,14 +42,7 @@ public class Ball {
 		ballCirc.x = Breakout.SCREENWIDTH / 2 - Ball.WIDTH / 2 + 64;
 		ballCirc.y = 35 + ballCirc.radius;
 		ballCirc.radius = WIDTH/2;
-		setColor(1f, 1f, 1f, 0.5f);
-	}
-	/**
-	 * 
-	 * @return ballCirc
-	 */
-	public Circle getBallCirc() {
-		return ballCirc;
+		setColor(0.7f, 0.7f, 0.7f, 0.5f);
 	}
 	
 	/**
@@ -82,12 +76,12 @@ public class Ball {
 	 * @param newVelocity - sets the x velocity of the ball
 	 */
 	public void setXVelocity(float newVelocity) {
-		if (newVelocity > MAXXVELOCITY) {
-			this.velocity.x = multiplier * MAXXVELOCITY;
+		if (newVelocity > MAX_X_VELOCITY) {
+			this.velocity.x = multiplier * MAX_X_VELOCITY;
 			return;
 		}
-		if (newVelocity < -MAXXVELOCITY) {
-			this.velocity.x = -MAXXVELOCITY * multiplier;
+		if (newVelocity < -MAX_X_VELOCITY) {
+			this.velocity.x = -MAX_X_VELOCITY * multiplier;
 			return;
 		}
 		this.velocity.x = newVelocity;

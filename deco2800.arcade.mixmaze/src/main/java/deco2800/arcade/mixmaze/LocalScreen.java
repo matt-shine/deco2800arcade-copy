@@ -1,6 +1,5 @@
 package deco2800.arcade.mixmaze;
 
-import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.mixmaze.domain.MixMazeModel;
 import deco2800.arcade.mixmaze.domain.PlayerModel;
 import deco2800.arcade.mixmaze.domain.TileModel;
@@ -57,11 +56,10 @@ class LocalScreen extends GameScreen {
 		TileViewModel tile;
 		int boardSize = model.getBoardSize();
 		int tileSize = 640 / boardSize;
-		String username = game.getPlayer().getUsername();
 
 		for (int j = 0; j < boardSize; j++) {
 			for (int i = 0; i < boardSize; i++) {
-				tile = new TileViewModel(tileSize, renderer);
+				tile = new TileViewModel(i, j, tileSize, renderer);
 				tileTable.add(tile).size(tileSize, tileSize);
 
 				TileModel tileModel = model.getBoardTile(i, j);
@@ -70,9 +68,8 @@ class LocalScreen extends GameScreen {
 					tile.watchWall(direction, tileModel.getWall(direction));
 				}
 			}
-			if (j < boardSize){
+			if (j < boardSize)
 				tileTable.row();
-			}
 		}
 
 		p1 = new PlayerViewModel(model, tileSize, 1, p1Controls, scorebar[0],
@@ -85,8 +82,8 @@ class LocalScreen extends GameScreen {
 		gameArea.addActor(p2);
 		scorebar[0].setBoxColor(p1.getColor());
 		scorebar[1].setBoxColor(p2.getColor());
-		left.setPlayerName(username);
-		right.setPlayerName(username + "'s friend");
+		left.setPlayerName("kate_is_kewl");
+		right.setPlayerName("mixMAZEr0x");
 	}
 
 	@Override
@@ -139,7 +136,7 @@ class LocalScreen extends GameScreen {
 	 * Starts the game.
 	 */
 	protected void startGame() {
-		ArcadeInputMux.getInstance().addProcessor(stage);
+		Gdx.input.setInputProcessor(stage);
 		stage.setKeyboardFocus(gameArea);
 		model.startGame();
 		logger.info("start game");

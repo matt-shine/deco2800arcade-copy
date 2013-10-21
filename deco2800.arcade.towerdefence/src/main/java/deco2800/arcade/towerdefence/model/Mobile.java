@@ -2,6 +2,7 @@ package deco2800.arcade.towerdefence.model;
 
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.towerdefence.model.pathfinding.Path;
@@ -18,10 +19,10 @@ public class Mobile extends Mortal {
 	// Fields
 	// The GridObject's speed in pixels per second.
 	private double speed;
-	// The GridObject's files to animate movement in any Direction.
-	private List<String> fileMoving;
-	// The The GridObject's files to animate dying.
-	private List<String> fileDying;
+	// The GridObject's sprites to animate movement in any Direction.
+	private List<Sprite> sprMoving;
+	// The The GridObject's sprites to animate dying.
+	private List<Sprite> sprDying;
 	// The path the object is following
 	private Path path;
 
@@ -43,31 +44,31 @@ public class Mobile extends Mortal {
 	 *            The grid the object belongs to
 	 */
 	public Mobile(int maxHealth, int armour, int x, int y, double speed,
-			Grid grid, Team team, List<String> fileStanding,
-			List<String> fileMoving, List<String> fileDying, List<String> fileDeath) {
-		super(maxHealth, armour, x, y, grid, team, fileStanding, fileDeath);
+			Grid grid, Team team, List<Sprite> sprStanding,
+			List<Sprite> sprMoving, List<Sprite> sprDying, List<Sprite> sprDeath) {
+		super(maxHealth, armour, x, y, grid, team, sprStanding, sprDeath);
 		this.speed = speed;
-		this.fileMoving = fileMoving;
-		this.fileDying = fileDying;
+		this.sprMoving = sprMoving;
+		this.sprDying = sprDying;
 	}
 
 	// Getters
 	/**
-	 * Returns the GridObject's files to animate movement in any Direction.
+	 * Returns the GridObject's sprites to animate movement in any Direction.
 	 * 
-	 * @return The files used in the moving animation
+	 * @return The sprites used in the moving animation
 	 */
-	public List<String> fileMoving() {
-		return fileMoving;
+	public List<Sprite> sprMoving() {
+		return sprMoving;
 	}
 
 	/**
-	 * Returns the GridObject's files to animate dying.
+	 * Returns the GridObject's sprites to animate dying.
 	 * 
-	 * @return The files used in the dying animation
+	 * @return The sprites used in the dying animation
 	 */
-	public List<String> fileDying() {
-		return fileDying;
+	public List<Sprite> sprDying() {
+		return sprDying;
 	}
 
 	/**
@@ -82,23 +83,23 @@ public class Mobile extends Mortal {
 
 	// Setters
 	/**
-	 * Sets the GridObject's files to animate movement in any Direction.
+	 * Sets the GridObject's sprites to animate movement in any Direction.
 	 * 
-	 * @param files
-	 *            The new list of files to use for the moving animation.
+	 * @param sprites
+	 *            The new list of sprites to use for the moving animation.
 	 */
-	public void fileMoving(List<String> files) {
-		this.fileMoving = files;
+	public void sprMoving(List<Sprite> sprites) {
+		this.sprMoving = sprites;
 	}
 
 	/**
-	 * Sets the GridObject's files to animate dying.
+	 * Sets the GridObject's sprites to animate dying.
 	 * 
-	 * @param files
-	 *            The new list of files to use for the dying animation.
+	 * @param sprites
+	 *            The new list of sprites to use for the dying animation.
 	 */
-	public void fileDying(List<String> files) {
-		this.fileDying = files;
+	public void sprDying(List<Sprite> sprites) {
+		this.sprDying = sprites;
 	}
 
 	/**

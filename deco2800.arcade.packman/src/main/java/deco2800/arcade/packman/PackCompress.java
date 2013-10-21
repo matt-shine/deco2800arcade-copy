@@ -12,6 +12,7 @@ import java.util.jar.Pack200.*;
 public class PackCompress {
 	
 	private Packer packer;
+	private Map<String, String> p;
 	
 	/**
 	 * Initialiser
@@ -21,12 +22,10 @@ public class PackCompress {
 	 */
 	public PackCompress() {
 		
-	    // Create the Packer object
-	    packer = Pack200.newPacker();
-	    
-	    Map<String, String> p;
+		// Create the Packer object
+		packer = Pack200.newPacker();
 		
-	    // Initialize the state by setting the desired properties
+		// Initialize the state by setting the desired properties
 	    p = packer.properties();
 	    // take more time choosing codings for better compression
 	    p.put(Packer.EFFORT, "9");  // default is "5"

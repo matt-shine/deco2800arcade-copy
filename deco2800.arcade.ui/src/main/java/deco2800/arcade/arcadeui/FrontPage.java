@@ -14,8 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import deco2800.arcade.client.ArcadeInputMux;
@@ -26,7 +26,7 @@ import deco2800.arcade.model.Game.ArcadeGame;
 public class FrontPage implements Screen {
         
         private static Stage stage = new Stage();
-        private static Skin skin = new Skin(Gdx.files.internal("frontPageSkin.json"));
+        private static Skin skin = new Skin(Gdx.files.internal("loginSkin.json"));
         private ArcadeUI arcadeUI;
         
         private static String[] friends = {"adeleen", "alina", "moji", "will"};
@@ -256,7 +256,6 @@ public class FrontPage implements Screen {
         public static String[] getFriends() {
                 return friends; // REALLY BAD. HOPEFULLY TEMPORARY.
         }
-        
         
         public static String[] getOnlineFriends() {
                 String[] onlineFriends = null;

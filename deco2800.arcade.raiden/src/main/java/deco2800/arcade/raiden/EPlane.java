@@ -8,45 +8,27 @@ public class EPlane extends Plane{
 
 	private Image img;
 	private JPanel jpanel;
-	/**
-	 * 
-	 * @return jpanel
-	 */
+	
 	public JPanel getJpanel() {
 		return jpanel;
 	}
-	/**
-	 * Set the jpanel
-	 * @param jpanel
-	 */
+
 	public void setJpanel(JPanel jpanel) {
 		this.jpanel = jpanel;
 	}
-	/**
-	 * The constructot of EPlane.
-	 * Load the image from source.
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 */
+
 	public EPlane(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		img = new javax.swing.ImageIcon(this.getClass().
-				getResource("/Image/enemy.png")).getImage();
+		img = new javax.swing.ImageIcon(this.getClass().getResource("/Image/enemy.png")).getImage();
 		// TODO Auto-generated constructor stub
 	}
-	/**
-	 * Draw the image on the panel.
-	 */
+
 	public void drawMe(Graphics g) {
 		// TODO Auto-generated method stub
 		
 		g.drawImage(img, this.x, this.y, this.w, this.h, jpanel);
 	}
-	/**
-	 * The move of eplane.
-	 */
+	
 	public void eplaneMove(){
 		this.y+=3;
 	}

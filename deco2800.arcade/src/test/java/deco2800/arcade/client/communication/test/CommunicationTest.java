@@ -27,14 +27,7 @@ public class CommunicationTest {
 
 	@Before
 	public void initialise() {
-		ArrayList<Boolean> privset = new ArrayList<Boolean>();
-		privset.add(true);
-		privset.add(true);
-		privset.add(true);
-		privset.add(true);
-		privset.add(true);
-		privset.add(true);
-		privset.add(true);
+		boolean[] privset = { true, true, true, true, true, true, true };
 
 		List<String> info = new ArrayList<String>();
 		info.add("Ricky");

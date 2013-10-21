@@ -31,7 +31,7 @@ public class PlayerObserver implements Observer {
 	/**
 	 * Initialises the Observer.
 	 * 
-	 * @param nc
+	 * @param networkClient
 	 *            The NetworkClient used to communicate with the server.
 	 */
 	public static void initialise(NetworkClient nc) {
@@ -157,8 +157,8 @@ public class PlayerObserver implements Observer {
                 LibraryStyle libraryStyle = (LibraryStyle) object;
 
                 libraryStyleUpdateRequest = new LibraryStyleUpdateRequest();
-                libraryStyleUpdateRequest.setColour(libraryStyle.getColourScheme());
-                libraryStyleUpdateRequest.setStyle(libraryStyle.getLayout());
+                libraryStyleUpdateRequest.view = libraryStyle.getLayout();
+                libraryStyleUpdateRequest.colour = libraryStyle.getColourScheme();
                 networkClient.sendNetworkObject(libraryStyleUpdateRequest);
 
             }

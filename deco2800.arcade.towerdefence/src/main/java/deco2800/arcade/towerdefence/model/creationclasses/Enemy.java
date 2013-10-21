@@ -4,13 +4,11 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import deco2800.arcade.towerdefence.controller.TowerDefence;
 import deco2800.arcade.towerdefence.model.Grid;
 import deco2800.arcade.towerdefence.model.GridObject;
 import deco2800.arcade.towerdefence.model.Melee;
 import deco2800.arcade.towerdefence.model.Mobile;
 import deco2800.arcade.towerdefence.model.Team;
-import deco2800.arcade.towerdefence.view.GameScreen;
 
 /**
  * The class for enemies invading the ship. Every enemy is able to use Melee,
@@ -30,8 +28,8 @@ public class Enemy extends Mobile implements Melee {
 	private int penetration;
 	// The current target.
 	private GridObject target;
-	// The files for the melee attacking animation.
-	private List<String> fileAttacking;
+	// The sprites for the melee attacking animation.
+	private List<Sprite> sprAttacking;
 	// The enemies anger statistic, for how likely it is to stop pathing and
 	// attack a different team object randomly.
 	private double anger;
@@ -62,16 +60,16 @@ public class Enemy extends Mobile implements Melee {
 	 *            The damage per attack
 	 * @param penetration
 	 *            The amount of armour the attack ignores
-	 * @param fileStanding
-	 *            The in order list of Standing files
-	 * @param fileMoving
-	 *            The in order list of Movement files
-	 * @param fileDying
-	 *            The in order list of Dying files
-	 * @param fileDeath
-	 *            The in order list of Death files
-	 * @param fileAttacking
-	 *            The in order list of Attacking files
+	 * @param sprStanding
+	 *            The in order list of Standing Sprites
+	 * @param sprMoving
+	 *            The in order list of Movement Sprites
+	 * @param sprDying
+	 *            The in order list of Dying Sprites
+	 * @param sprDeath
+	 *            The in order list of Death Sprites
+	 * @param sprAttacking
+	 *            The in order list of Attacking Sprites
 	 * @param anger
 	 *            How likely the enemy is to stop pathing and attack nearest
 	 *            other-team object.
@@ -80,12 +78,12 @@ public class Enemy extends Mobile implements Melee {
 	 */
 	public Enemy(int maxHealth, int armour, int x, int y, double speed,
 			Grid grid, Team team, double attackRate, int damage,
-			int penetration, double anger, int bounty, List<String> fileStanding,
-			List<String> fileMoving, List<String> fileDying,
-			List<String> fileDeath, List<String> fileAttacking) {
-		super(maxHealth, armour, x, y, speed, grid, team, fileStanding,
-				fileMoving, fileDying, fileDeath);
-		this.fileAttacking = fileAttacking;
+			int penetration, double anger, int bounty, List<Sprite> sprStanding,
+			List<Sprite> sprMoving, List<Sprite> sprDying,
+			List<Sprite> sprDeath, List<Sprite> sprAttacking) {
+		super(maxHealth, armour, x, y, speed, grid, team, sprStanding,
+				sprMoving, sprDying, sprDeath);
+		this.sprAttacking = sprAttacking;
 		this.attackRate = attackRate;
 		this.damage = damage;
 		this.penetration = penetration;
@@ -137,10 +135,10 @@ public class Enemy extends Mobile implements Melee {
 	}
 
 	/**
-	 * Return the files for melee attacking animation.
+	 * Return the sprites for melee attacking animation.
 	 */
-	public List<String> fileAttacking() {
-		return fileAttacking;
+	public List<Sprite> sprAttacking() {
+		return sprAttacking;
 	}
 
 	// Setters
@@ -199,25 +197,11 @@ public class Enemy extends Mobile implements Melee {
 	}
 
 	/**
-	 * Sets the files for melee attacking animation.
+	 * Sets the sprites for melee attacking animation.
 	 */
-	public void fileAttacking(List<String> files) {
-		this.fileAttacking = files;
+	public void sprAttacking(List<Sprite> sprites) {
+		this.sprAttacking = sprites;
 	}
 
 	// Methods
-	/**
-	 * Start the AI and animations.
-	 */
-	public void start() {
-	// Remember to adjust the rotation before building the sprite if necessary
-	this.rotation(0);
-	
-	// Build the idle sprite list
-	List<Sprite> sprList = (GameScreen.spriteBuild(this, fileStanding()));
-	
-	// Add the list of sprites to the currently animating model
-	TowerDefence.toRender.add(sprList);
-	}
-
 }

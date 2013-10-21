@@ -35,25 +35,19 @@ public class LocalPlayer extends Paddle {
 			Vector2 touchPos = new Vector2();
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY());
 
-			if (touchPos.x > Breakout.SCREENWIDTH / 2){
+			if (touchPos.x > Breakout.SCREENWIDTH / 2)
 				movement(PADDLESPEED * Gdx.graphics.getDeltaTime());
-			}
-				
-			if (touchPos.x < Breakout.SCREENWIDTH / 2){
+
+			if (touchPos.x < Breakout.SCREENWIDTH / 2)
 				movement(-PADDLESPEED * Gdx.graphics.getDeltaTime());
-			}		
 		}
 
 		if (Gdx.input.isKeyPressed(Keys.RIGHT)
-				|| Gdx.input.isKeyPressed(Keys.D)){
+				|| Gdx.input.isKeyPressed(Keys.D))
 			movement(PADDLESPEED * 1.15f * Gdx.graphics.getDeltaTime());
-		}
-			
 
-		if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A)){
+		if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A))
 			movement(-PADDLESPEED * 1.15f * Gdx.graphics.getDeltaTime());
-		}
-			
 
 	}
 }

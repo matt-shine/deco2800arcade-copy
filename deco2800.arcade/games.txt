@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 # Add games here in the following format
 # deco2800.arcade.gameName
 # Any lines in this file that start with a # will be ignored when
@@ -12,66 +9,6 @@ pong
 tictactoe
 ui
 breakout
-deerforest
-mixmaze
-chess
-landInvaders
-junglejump
-burningskies
-checkers
-landInvaders
-towerdefence
-pacman
-connect4
-raiden
-guesstheword
-=======
-=======
->>>>>>> master
-# Add games here in the following format
-# deco2800.arcade.gameName
-# Any lines in this file that start with a # will be ignored when
-# loading games into the classpath.
-# Incorrect formatting in this file will cause an error with gradle runArcade
-#
-# Games go here
-pong
-tictactoe
-ui
-breakout
-deerforest
-mixmaze
-chess
-landInvaders
-junglejump
-burningskies
-checkers
-landInvaders
-towerdefence
-pacman
-connect4
-raiden
-guesstheword
-<<<<<<< HEAD
-statistics
->>>>>>> master
-=======
-wl6
-statistics
->>>>>>> master
-=======
-# Add games here in the following format
-# deco2800.arcade.gameName
-# Any lines in this file that start with a # will be ignored when
-# loading games into the classpath.
-# Incorrect formatting in this file will cause an error with gradle runArcade
-#
-# Games go here
-pong
-tictactoe
-ui
-breakout
-blackjack
 deerforest
 mixmaze
 minigolf
@@ -79,7 +16,6 @@ chess
 landInvaders
 junglejump
 burningskies
-hunter
 checkers
 landInvaders
 towerdefence
@@ -89,9 +25,4 @@ raiden
 wl6
 statistics
 snakeLadder
-<<<<<<< HEAD
-guesstheword
->>>>>>> master
-=======
 cyra
->>>>>>> master

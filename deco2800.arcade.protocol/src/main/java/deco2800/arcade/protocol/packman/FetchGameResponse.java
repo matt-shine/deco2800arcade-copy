@@ -29,15 +29,12 @@ public class FetchGameResponse extends BlockingMessage {
     // -3   -> Error reading file
     public int status;
 
-    // MD5 sum of file. Used to verify file integrity
-    public String md5;
-
     @Override
     public String toString() {
         return "FetchGameResponse: <gameID=\"" + gameID + "\", version=\"" + version +
                 "\", totalBytes=" + totalBytes + ", byteCount=" + byteCount +
                 ", byteOffset=" + byteOffset + ", blockSize=" + blockSize +
-                ", status=" + status + ", md5=" + md5;
+                ", status=" + status;
     }
 	
 }

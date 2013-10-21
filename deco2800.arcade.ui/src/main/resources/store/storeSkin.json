@@ -39,7 +39,7 @@
     	icon: { font: default, fontColor: white, up: textField }
     },
     com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
-		default-horizontal: { background: slider_bg, knob: slider_knob }
+		default-horizontal: { background: textbox, knob: star1 }
 	},
     com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
     	default: { up: green_button, down: green_button, over: green_button_glow },

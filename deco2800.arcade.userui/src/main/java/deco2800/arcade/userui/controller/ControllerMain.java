@@ -91,7 +91,7 @@ public class ControllerMain {
 			
 			//Open the home page
 			System.out.println("this works");
-			System.out.println(theModel.getArcadesystem().getArcadeGames().toString());
+			System.out.println(theModel.arcadesystem.getArcadeGames().toString());
 			
 		}
 		

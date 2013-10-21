@@ -88,7 +88,7 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
-		splashTexture = new Texture(Gdx.files.internal("chess.png"));
+		splashTexture = new Texture(Gdx.files.internal("chessMenu.png"));
 		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		splashTexture2 = new Texture(Gdx.files.internal("chessTitle.png"));
 		splashTexture2.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -158,7 +158,7 @@ public class MenuScreen implements Screen {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				game.setScreen(game.SelectScreen);
+				game.setScreen(game);
 			}
 		});
 
@@ -184,7 +184,9 @@ public class MenuScreen implements Screen {
 					int pointer, int button) {
 				ArcadeInputMux.getInstance().removeProcessor(stage);
 				ArcadeInputMux.getInstance().removeProcessor(0);
-				ArcadeSystem.goToGame("arcadeui");				
+				ArcadeSystem.goToGame("arcadeui");
+				ArcadeInputMux.getInstance().removeProcessor(0);
+				ArcadeInputMux.getInstance().removeProcessor(stage);
 			}
 		});
 	}

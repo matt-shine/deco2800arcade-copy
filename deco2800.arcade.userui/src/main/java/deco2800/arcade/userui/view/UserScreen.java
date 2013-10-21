@@ -1,6 +1,7 @@
 package deco2800.arcade.userui.view;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
 
@@ -49,13 +50,21 @@ public class UserScreen extends JFrame{
 	private JLabel achievement1, achievement2, achievement3;
 	
 	//Declare Text Areas
-	private JTextArea historyarea, friendarea;
+	private JTextArea historyarea;
 	
 	//Declare Images 
 	private ImageIcon picavatar, pichistorybar, piclocked, picunlocked, piceditbutton,
 	piconline, picoffline;
 	private ImageIcon home, homehover, forum, forumhover, store, storehover,
 	library, libraryhover, profile, profilehover;
+	
+	//Declare Fonts
+	Font blackbold = new Font("Century Gothic", Font.BOLD, 20);
+	Font blacknormal = new Font("Century Gothic", Font.PLAIN, 14);
+	Font blacksmall = new Font("Century Gothic", Font.PLAIN, 12);
+	Font blacklink = new Font("Century Gothic", Font.PLAIN, 16);
+	Font linkbold = new Font("Century Gothic", Font.BOLD, 15);
+	Font sidebold = new Font("Century Gothic", Font.BOLD, 14);
 		
 	public UserScreen(Model model) throws HeadlessException{
 		
@@ -177,9 +186,9 @@ public class UserScreen extends JFrame{
         avatar.setIcon(picavatar);
         playername = new JLabel("Player");
         playername.setForeground(Color.white);
-        playername.setFont(model.blackbold);
+        playername.setFont(blackbold);
         playerlastonline = new JLabel("Last Login: 8/3/2013");
-        playerlastonline.setFont(model.blacksmall);
+        playerlastonline.setFont(blacksmall);
         playerlastonline.setForeground(Color.white);
         
 		//Add Elements to Panel
@@ -240,11 +249,11 @@ public class UserScreen extends JFrame{
 	 */
 	public void addfriendpanel(){
 		
-		friendarea = new JTextArea();
-		friendarea.setOpaque(false);
-		friendarea.setFont(model.blacknormal);
-		friendarea.setForeground(Color.white);
-		friendscroll = new JScrollPane(friendarea);
+		friendlist = new JPanel(new MigLayout());
+		friendlist.setOpaque(false);
+		friendlist.setBorder(BorderFactory.createEmptyBorder());
+		//ScrollPane
+		friendscroll = new JScrollPane(friendlist);
 		friendscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		friendscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		friendscroll.setOpaque(false);
@@ -253,43 +262,39 @@ public class UserScreen extends JFrame{
 		friendscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		//Label
 		friendbar = new JLabel("FRIEND LIST");
-	    friendbar.setFont(model.sidebold);
+	    friendbar.setFont(sidebold);
 	    friendbar.setForeground(Color.white);
 	    addfriendbutton = new JButton("+");
-	    addfriendbutton.setFont(model.blackbold);
+	    addfriendbutton.setFont(blackbold);
 	    addfriendbutton.setForeground(Color.GREEN);
 	    addfriendbutton.setBorder(BorderFactory.createEmptyBorder());
 	    addfriendbutton.setContentAreaFilled(false);
 	    removefriendbutton = new JButton("-");
-	    removefriendbutton.setFont(model.blackbold);
+	    removefriendbutton.setFont(blackbold);
 	    removefriendbutton.setForeground(Color.RED);
 	    removefriendbutton.setBorder(BorderFactory.createEmptyBorder());
 	    removefriendbutton.setContentAreaFilled(false);
 	    blockbutton = new JButton("Block List");
-	    blockbutton.setFont(model.blacksmall);
+	    blockbutton.setFont(blacksmall);
 	    blockbutton.setForeground(Color.white);
 	    blockbutton.setBorder(BorderFactory.createEmptyBorder());
 	    blockbutton.setContentAreaFilled(false);
 	    invitesbutton = new JButton("Invites");
-	    invitesbutton.setFont(model.blacksmall);
+	    invitesbutton.setFont(blacksmall);
 	    invitesbutton.setForeground(Color.white);
 	    invitesbutton.setBorder(BorderFactory.createEmptyBorder());
 	    invitesbutton.setContentAreaFilled(false);
-	    
-	    JPanel friendbuttons = new JPanel(new MigLayout());
-	    friendbuttons.setOpaque(false);
-	    friendbuttons.add(friendbar, "gap right");
-	    friendbuttons.add(addfriendbutton,"gap left 10px");
-	    friendbuttons.add(removefriendbutton,"gap left 10px");
-	    friendbuttons.add(invitesbutton,"gap left 50px");
-	    friendbuttons.add(blockbutton,"gap left 20px");
 	    
 		//Add Elements to Panel
 	    friendpanel = new ImagePanel(new ImageIcon("assets/images/Blue_Box.png").getImage());
         friendpanel.setLayout(new MigLayout());
 		friendpanel.setOpaque(false);
-		friendpanel.add(friendbuttons,"wrap,gap top -20px");
-        friendpanel.add(friendscroll, "width :400px, height :800px");    
+	    friendpanel.add(friendbar, "gap left 10px, gap bottom 110px");
+	    friendpanel.add(addfriendbutton,"gap left 10px");
+	    friendpanel.add(removefriendbutton,"gap left 10px");
+	    friendpanel.add(invitesbutton,"gap left 50px");
+	    friendpanel.add(blockbutton,"gap left 30px");
+        friendpanel.add(friendscroll, "width :500px, height :100px, gap top 30px");    
 		
 	}
 	
@@ -300,17 +305,17 @@ public class UserScreen extends JFrame{
 	public void addaboutpanel(){
 
 		realname = new JLabel("Name:");
-		realname.setFont(model.blacknormal);
+		realname.setFont(blacknormal);
 		realname.setForeground(Color.white);
 		program = new JLabel("Program:");
-		program.setFont(model.blacknormal);
+		program.setFont(blacknormal);
 		program.setForeground(Color.white);
 		description = new JLabel("Description:");
-		description.setFont(model.blacknormal);
+		description.setFont(blacknormal);
 		description.setForeground(Color.white);
 		
 		aboutbar = new JLabel("ABOUT ME");
-	    aboutbar.setFont(model.sidebold);
+	    aboutbar.setFont(sidebold);
 	    aboutbar.setForeground(Color.white);
 	    
 	    JPanel aboutlist = new JPanel(new MigLayout());
@@ -343,23 +348,23 @@ public class UserScreen extends JFrame{
 	    achievement3.setIcon(piclocked);
 	    
 	    JLabel achievement1name = new JLabel("Master of Paddle");
-	    achievement1name.setFont(model.linkbold);
+	    achievement1name.setFont(linkbold);
 	    achievement1name.setForeground(Color.white);
         JLabel achievement2name = new JLabel("Off the Wall");
-        achievement2name.setFont(model.linkbold);
+        achievement2name.setFont(linkbold);
         achievement2name.setForeground(Color.white);
         JLabel achievement3name = new JLabel("What a Rally");
-        achievement3name.setFont(model.linkbold);
+        achievement3name.setFont(linkbold);
         achievement3name.setForeground(Color.white);
         
         JLabel achievement1time = new JLabel("Score 5 Points");
-        achievement1time.setFont(model.blacknormal);
+        achievement1time.setFont(blacknormal);
         achievement1time.setForeground(Color.white);
         JLabel achievement2time = new JLabel("Win 3 games Straight");
-        achievement2time.setFont(model.blacknormal);
+        achievement2time.setFont(blacknormal);
         achievement2time.setForeground(Color.white);
         JLabel achievement3time = new JLabel("Over 20 hits");
-        achievement3time.setFont(model.blacknormal);
+        achievement3time.setFont(blacknormal);
         achievement3time.setForeground(Color.white);
 
         JPanel achievementtext1 = new JPanel(new MigLayout());
@@ -379,7 +384,7 @@ public class UserScreen extends JFrame{
 	    JPanel achievementlistpanel = new JPanel(new MigLayout());
 	    
 	    achievementbar = new JButton("Achievements");
-	    achievementbar.setFont(model.linkbold);
+	    achievementbar.setFont(linkbold);
 	    achievementbar.setForeground(Color.white);
 	    achievementbar.setBorder(BorderFactory.createEmptyBorder());
 	    achievementbar.setContentAreaFilled(false);
@@ -429,23 +434,23 @@ public class UserScreen extends JFrame{
         history3.setIcon(model.chessLogo);
         
         JLabel game1name = new JLabel("Burning Skies");
-        game1name.setFont(model.linkbold);
+        game1name.setFont(linkbold);
         game1name.setForeground(Color.white);
         JLabel game2name = new JLabel("Breakout");
-        game2name.setFont(model.linkbold);
+        game2name.setFont(linkbold);
         game2name.setForeground(Color.white);
         JLabel game3name = new JLabel("Chess");
-        game3name.setFont(model.linkbold);
+        game3name.setFont(linkbold);
         game3name.setForeground(Color.white);
         
         JLabel game1time = new JLabel("10:21 20/10/13");
-        game1time.setFont(model.blacknormal);
+        game1time.setFont(blacknormal);
         game1time.setForeground(Color.white);
         JLabel game2time = new JLabel("18:51 19/10/13");
-        game2time.setFont(model.blacknormal);
+        game2time.setFont(blacknormal);
         game2time.setForeground(Color.white);
         JLabel game3time = new JLabel("14:43 18/10/13");
-        game3time.setFont(model.blacknormal);
+        game3time.setFont(blacknormal);
         game3time.setForeground(Color.white);
 
         JPanel historytext1 = new JPanel(new MigLayout());
@@ -462,7 +467,7 @@ public class UserScreen extends JFrame{
         historytext3.add(game3time);
         
 	    historybar = new JLabel("Game History");
-	    historybar.setFont(model.linkbold);
+	    historybar.setFont(linkbold);
 	    historybar.setForeground(Color.white);
 	    
 	    JPanel historybarpanel = new JPanel(new MigLayout());

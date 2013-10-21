@@ -52,7 +52,7 @@ public abstract class Paddle {
 		float oldBounds = bounds.y;
 		bounds.y += y;
 		// If the paddle has moved inform the server
-		if (oldBounds != bounds.y && ArcadeSystem.isMultiplayerEnabled()) {
+		if (oldBounds != bounds.y) {
 			ArcadeSystem.getCurrentGame().sendStateUpdate();
 		}
 		direction = y;

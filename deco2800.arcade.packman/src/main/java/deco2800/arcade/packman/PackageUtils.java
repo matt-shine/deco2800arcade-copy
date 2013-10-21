@@ -2,25 +2,18 @@ package deco2800.arcade.packman;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public final class PackageUtils {
 	
 	private static final int CHUNK_SIZE = 1024;
 	private static final int UPPER_BYTE = 0xF0;
 	private static final int LOWER_BYTE = 0x0F;
-	private static final int NIBBLE_SHIFT = 4;
 	private static final int NO_DATA = -1;
-	
-	final static Logger LOGGER = LoggerFactory.getLogger(PackageUtils.class);
 	
 	/**
 	 * Do nothing. This should never be called.
@@ -42,8 +35,8 @@ public final class PackageUtils {
 		File releaseDir = new File(dirName);
 		
 		// Create the Release directory if it doesn't exist
-		if (!releaseDir.exists()) {
-			return releaseDir.mkdirs();
+		if (!releaseDir.exists() && releaseDir.mkdirs() == false) {
+			return false;
 		} 
 		
 		return true;
@@ -63,7 +56,7 @@ public final class PackageUtils {
 	    int j=0;
 	    
 	    for ( final byte b : bytes ) {
-	        hexChars[j * 2] = hexArray[(b & UPPER_BYTE) >> NIBBLE_SHIFT];
+	        hexChars[j * 2] = hexArray[(b & UPPER_BYTE) >> 4];
 	        hexChars[j * 2 + 1] = hexArray[b & LOWER_BYTE];
 	        j++;
 	    }
@@ -86,12 +79,12 @@ public final class PackageUtils {
 			md = MessageDigest.getInstance("MD5");
 			fis = new FileInputStream(fileName);
 		} catch (NoSuchAlgorithmException e1) {
-			LOGGER.error(e1.toString());
+			e1.printStackTrace();
 			return null;
-		} catch (FileNotFoundException e) {
-		        LOGGER.warn("No File Found for MD5 hashing");
-		        return null;
-		}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		} 
 		
 		DigestInputStream dis = new DigestInputStream(fis, md);
 		
@@ -105,7 +98,7 @@ public final class PackageUtils {
 			
 			dis.close();
 		} catch (IOException e) {
-			LOGGER.error(e.toString());
+			e.printStackTrace();
 			return null;
 		}
 		

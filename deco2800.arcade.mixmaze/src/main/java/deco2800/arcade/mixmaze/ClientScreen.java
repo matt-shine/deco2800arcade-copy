@@ -1,6 +1,5 @@
 package deco2800.arcade.mixmaze;
 
-import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.mixmaze.domain.IMixMazeModel;
 
 import com.badlogic.gdx.Gdx;
@@ -84,13 +83,12 @@ class ClientScreen extends GameScreen {
 
 		for (int j = 0; j < boardSize; j++) {
 			for (int i = 0; i < boardSize; i++) {
-				tile = new TileViewModel(tileSize, renderer);
+				tile = new TileViewModel(i, j, tileSize, renderer);
 				tileTable.add(tile).size(tileSize, tileSize);
 				os.register(1700 + j * 100 + i, tile);
 			}
-			if (j < boardSize){
+			if (j < boardSize)
 				tileTable.row();
-			}
 		}
 
 		p1 = new PlayerViewModel(model, tileSize, 1, p1Controls, scorebar[0],
@@ -131,9 +129,28 @@ class ClientScreen extends GameScreen {
 		}, 0, 1, timeLimit - 1);
 		Timer.schedule(new Timer.Task() {
 			public void run() {
+				// PlayerModel winner;
+
 				stage.setKeyboardFocus(null);
+
+				// winner = model.endGame();
+				// if (winner == null) {
+				// /* draw */
+				// resultLabel.setText("Draw");
+				// } else {
+				// /* winner */
+				// resultLabel.setText("Player "
+				// + winner.getId()
+				// + " win");
+				// }
+
 				endGameTable.setVisible(true);
 			}
+			/*
+			 * FIXME: this does not look like a good solution. It takes some
+			 * time for timerLabel to change text, and therefore, without the
+			 * extra 1, the game will end before the timer showing up 00:00.
+			 */
 		}, timeLimit);
 	}
 
@@ -149,7 +166,7 @@ class ClientScreen extends GameScreen {
 					((RemoteObject) model).setTransmitExceptions(false);
 				} else if ("signal: game started".equals(msg)) {
 					setupTimer(timeLimit);
-					ArcadeInputMux.getInstance().addProcessor(stage);
+					Gdx.input.setInputProcessor(stage);
 					stage.setKeyboardFocus(gameArea);
 				}
 			}

@@ -29,7 +29,7 @@ public class HashStorage {
 	/**
 	 * Close a database connection.
 	 * 
-	 * @throws DatabaseException
+	 * @throws DatabaseException 
 	 */
 	private void close(Connection c) {
 		try {
@@ -40,7 +40,7 @@ public class HashStorage {
 			e.printStackTrace();
 		}
 	}
-
+	
 	/**
 	 * Create the database.
 	 * 
@@ -76,17 +76,47 @@ public class HashStorage {
 			if (!tableData.next()) {
 				Statement statement = connection.createStatement();
 				statement.execute("CREATE TABLE AUTH(playerID INT PRIMARY KEY,"
-						+ "hash BLOB(64)," + "salt BLOB(8),"
-						+ "FOREIGN KEY (playerID)"
-						+ "REFERENCES PLAYERS (playerID))");
+								+ "hash BLOB(64),"
+								+ "salt BLOB(8),"
+								+ "FOREIGN KEY (playerID)"
+								+ "REFERENCES PLAYERS (playerID))");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new DatabaseException(
-					"Unable to create authentication table", e);
+			throw new DatabaseException("Unable to create authentication table", e);
 		} finally {
 			close(connection);
 		}
+		
+		Connection connection4 = Database.getConnection();
+		try {
+			PreparedStatement statement = null;
+			statement = connection4.prepareStatement("DELETE FROM AUTH "
+					+ "WHERE playerID = ?");
+			statement.setInt(1, 1337);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable register user", e);
+		} finally {
+			close(connection4);
+		}
+		
+		Connection connection3 = Database.getConnection();
+		try {
+			PreparedStatement statement = null;
+			statement = connection3.prepareStatement("DELETE FROM PLAYERS "
+					+ "WHERE playerID = ?");
+			statement.setInt(1, 1337);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable register user", e);
+		} finally {
+			close(connection3);
+		}
+		
+		registerUser("admin", "admin");
 	}
 
 	/**
@@ -101,7 +131,7 @@ public class HashStorage {
 	 */
 	public void registerPassword(String username, String password)
 			throws DatabaseException {
-
+		
 		byte[] salt = generateSalt();
 		byte[] hash = generateHash(password, salt);
 		// Get a connection to the database
@@ -153,7 +183,7 @@ public class HashStorage {
 		} finally {
 			close(connection1);
 		}
-
+		
 		Connection connection = Database.getConnection();
 		try {
 			PreparedStatement statement = null;
@@ -168,11 +198,11 @@ public class HashStorage {
 		} finally {
 			close(connection);
 		}
-
+		
 		registerPassword(username, password);
 		return id;
 	}
-
+	
 	/**
 	 * Update the password of an existing user.
 	 * 
@@ -189,36 +219,15 @@ public class HashStorage {
 		Connection connection = Database.getConnection();
 		try {
 			PreparedStatement statement = null;
-			statement = connection
-					.prepareStatement("UPDATE AUTH AU "
-							+ "SET AU.hash = ?, AU.salt = ? "
-							+ "WHERE EXISTS ( SELECT * "
-							+ "FROM PLAYERS "
-							+ "WHERE PLAYERS.username = ? AND AU.playerID = PLAYERS.playerID)");
+			statement = connection.prepareStatement("UPDATE AUTH AU "
+					+ "SET AU.hash = ?, AU.salt = ? "
+					+ "WHERE EXISTS ( SELECT * "
+					+ "FROM PLAYERS "
+					+ "WHERE PLAYERS.username = ? AND AU.playerID = PLAYERS.playerID)");
 			statement.setBytes(1, hash);
 			statement.setBytes(2, salt);
 			statement.setString(3, username);
 			statement.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Unable register password", e);
-		} finally {
-			close(connection);
-		}
-	}
-
-	/**
-	 * Drops the table (used for testing).
-	 * 
-	 * @throws DatabaseException
-	 */
-	public void drop() throws DatabaseException {
-		// Get a connection to the database
-		Connection connection = Database.getConnection();
-		try {
-			PreparedStatement statement = null;
-			statement = connection.prepareStatement("DROP TABLE AUTH");
-			statement.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Unable register password", e);
@@ -240,8 +249,7 @@ public class HashStorage {
 	public Boolean checkPassword(String username, String password)
 			throws DatabaseException {
 		byte[] salt = getSalt(username);
-		if (salt == null)
-			return false;
+		if (salt == null) return false;
 		byte[] hash = generateHash(password, salt);
 		return Arrays.equals(hash, getHash(username));
 	}
@@ -265,7 +273,7 @@ public class HashStorage {
 			ResultSet result = statement.executeQuery();
 			result.next();
 			return result.getBytes("hash");
-
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Unable to get hash", e);
@@ -302,7 +310,7 @@ public class HashStorage {
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Retrieve playerID from the database.
 	 * 
@@ -315,9 +323,8 @@ public class HashStorage {
 		Connection connection = Database.getConnection();
 		try {
 			PreparedStatement statement = null;
-			statement = connection
-					.prepareStatement("SELECT playerid FROM PLAYERS "
-							+ "WHERE PLAYERS.username = ?");
+			statement = connection.prepareStatement("SELECT playerid FROM PLAYERS " +
+					"WHERE PLAYERS.username = ?");
 			statement.setString(1, username);
 			ResultSet result = statement.executeQuery();
 			if (result.next()) {
@@ -345,6 +352,7 @@ public class HashStorage {
 			// This should never be thrown because SHA-512 is built into java
 			e.printStackTrace();
 		}
+
 
 		/* Prefix salt to digest */
 		sha512.update(salt);

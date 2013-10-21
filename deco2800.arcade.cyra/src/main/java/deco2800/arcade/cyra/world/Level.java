@@ -17,15 +17,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
-
-/** Level class describes various characteristics of a level. This class will
- * load a level file and store the level graphics as well as the collision
- * layer. The collision layer represents solid tiles which solid entities in
- * the game can stand on and cannot go through. This class also describes
- * the positions of different enemy spawners spread across the level.
- *
- * @author Game Over
- */
 public class Level {
 	private int levelNum;
 	private com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer renderer;
@@ -56,7 +47,7 @@ public class Level {
 		//map = TiledLoader.createMap(Gdx.files.internal("level"+levelNum+".tmx"));
 		//map = TiledLoader.createMap(Gdx.files.internal("levelOld.tmx"));
 		
-		collisionLayer = (TiledLayer) ( map.layers.get(1) );
+		collisionLayer = (TiledLayer) ( map.layers.get(2) );
 		
 
 		atlas = new TileAtlas(map, Gdx.files.internal("tiles/"));
@@ -65,7 +56,15 @@ public class Level {
 		
 		renderer = new com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer(map, atlas, 16,16, 1, 1);
 		
-		
+		//Debugging downgrade stuff
+		for (int x = 0; x<map.layers.size(); x++) {
+			//for (int i =0; i<map.layers.get(x).getWidth(); i++) {
+			for (int i =0; i<250; i++) {
+				for (int j = 0; j< 5; j++) {
+					//System.out.println("Lyar= "+x+ " ("+i+","+(map.height-j-1)+") = "+map.layers.get(x).tiles[j][i]);
+				}
+			}
+		}
 		
 		
 		
@@ -101,20 +100,20 @@ public class Level {
 			int spawnAtOnce;
 			if (rank > 0.9) {
 				spawnAtOnce = 3;
-			} else if (rank > 0.8f){
+			} else if (rank > 0.7f){
 				spawnAtOnce = 2;
 			} else {
 				spawnAtOnce = 1;
 			}
-			spawners.add(new EnemySpawner(c, new Vector2(0f, 3f), 4, 100, 1)); 
+			//spawners.add(new EnemySpawner(c, new Vector2(0f, 3f), 4, 100, 1)); 
 			spawners.add(new EnemySpawner(c, new Vector2(0f, 8f), 4, 100, spawnAtOnce)); 
-			spawners.add(new EnemySpawner(c, new Vector2(0f, 3f), 4, 100, 1)); 
+			//spawners.add(new EnemySpawner(c, new Vector2(0f, 3f), 4, 100, 1)); 
 			spawners.add(new EnemySpawner(c, new Vector2(0f, 8f), 4, 100, spawnAtOnce));
 			boolean[] sides = {true, true, true, false};
 			
 
 			RandomizedEnemySpawner res = new RandomizedEnemySpawner(spawners, sides, collisionLayer, 1.5f-rank, 0f, 200f);
-			RandomizedEnemySpawner res2 = new RandomizedEnemySpawner(spawners, sides, collisionLayer, 1.5f-rank, 353f, 600f);
+			RandomizedEnemySpawner res2 = new RandomizedEnemySpawner(spawners, sides, collisionLayer, 1.5f-rank, 300f, 600f);
 			res.setActive(true);
 			res2.setActive(true);
 			
@@ -143,7 +142,9 @@ public class Level {
 				randomEnemySpawners.add((RandomizedEnemySpawner) o);
 			}
 		}
-		
+		System.out.println("Found " + enemySpawners.size + " enemy spawners");
+		System.out.println("Found " + movablePlatformSpawners.size + " platform spawners");
+		System.out.println("Found " + randomEnemySpawners.size + " randomizd enemy spawners");
 	}
 	
 	public void reloadLevel() {

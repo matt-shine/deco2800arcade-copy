@@ -64,7 +64,7 @@ public class MovablePlatformSpawner {
 		//enemyCount++;
 		spawnCount++;
 		count = 0;
-		//System.out.println("Spawned platform at " + pos.x+","+pos.y);
+		System.out.println("Spawned platform at " + pos.x+","+pos.y);
 		return p;
 		
 	}

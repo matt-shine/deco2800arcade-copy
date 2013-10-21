@@ -1,12 +1,17 @@
 package deco2800.arcade.breakout.screens;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -28,6 +33,7 @@ import deco2800.arcade.breakout.Paddle;
 import deco2800.arcade.breakout.PauseState;
 import deco2800.arcade.breakout.ReadyState;
 import deco2800.arcade.breakout.powerup.PowerupManager;
+import deco2800.arcade.client.*;
 
 /**
  * Handles the current game screen and manages the game
@@ -43,7 +49,7 @@ public class GameScreen implements Screen {
 	/*
 	 * Creates private instance variables of basic game parts
 	 */
-	private String player;
+	public String player;
 	private Paddle paddle;
 	private Ball ball;
 	private Ball powerupBall;
@@ -57,12 +63,9 @@ public class GameScreen implements Screen {
 	private int pressed = 0;
 
 	// The counting of random statistics
-	private int highScore = 0;
-	private int bumpCount = 0;
-	private int brickBreak = 0;
-	//game.getAccolade().watch(game.getAccoladeBumpCounter(), bumpCount, 60000);
-	//game.getAccolade().watch(game.getAccoladeBrickBreak(), brickBreak, 90000);
-	
+	public int highScore = 0;
+	public int bumpCount = 0;
+	public int brickBreak = 0;
 
 	// GameOver status message constructor
 	private String gameoverstatus;
@@ -101,7 +104,11 @@ public class GameScreen implements Screen {
 	private float lastHitY;
 
 	// Array of Brick
-	private Brick bricks[];
+	Brick bricks[];
+
+	// variables for rendering colours
+	private int outer = 0;
+	private int inner = 0;
 
 	// Power up manager and details
 	private boolean powerupsOn = false;
@@ -144,13 +151,6 @@ public class GameScreen implements Screen {
 		music.setVolume(0.2f);
 		playMusic();
 
-		//TODO uncomment when functionality returns
-//		game.getAccolade().watch(game.getAccoladeBumpCounter(), bumpCount, 
-//				60000);
-//		game.getAccolade().watch(game.getAccoladeBrickBreak(), brickBreak, 
-//				90000);
-
-		//game.getAccolade().start();
 		// setting the ball and paddle
 		setPaddle(new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10)));
 		setBall(new Ball());
@@ -180,11 +180,12 @@ public class GameScreen implements Screen {
 
 		/*
 		 * Tries to read the Brick layout file and sets the BrickNum value. If
-		 * there is an issue then dispose all files and set the value of
+		 * there is an issue the can will dispose all files and set the value of
 		 * gameState to GameOverState.
 		 */
 		try {
-			bricks = levelSystem.readFile("levels/level" + getLevel() + ".txt");
+			bricks = levelSystem.readFile("levels/level" + getLevel() + ".txt",
+					bricks, this);
 			setBrickNum(bricks.length);
 		} catch (Exception e) {
 			System.err.println("Error is: " + e);
@@ -219,6 +220,7 @@ public class GameScreen implements Screen {
 			Rectangle r = b.getShape();
 			getPowerupManager().handlePowerup(r.x + r.width / 2, r.y);
 		}
+
 	}
 
 	/**
@@ -258,15 +260,13 @@ public class GameScreen implements Screen {
 				setLastHitY(getBall().getY());
 			}
 		}
-		if (breaking != null) {
-			breaking.play();
-		}
+		breaking.play();
 		brickBreak++;
 		incrementScore(this.getLevel() * 2);
 		setBrickNum(getBrickNum() - 1);
 		powerupCheck(b);
 		try {
-			Thread.sleep(35);
+			Thread.currentThread().sleep(35);
 		} catch (Exception e) {
 		}
 	}
@@ -384,8 +384,10 @@ public class GameScreen implements Screen {
 			game.incrementAchievement("breakout.noob");
 			gameState = new GameOverState();
 		}
+
 		game.incrementAchievement("breakout.winGame");
 		gameState = new GameOverState();
+
 	}
 
 	/**
@@ -406,7 +408,7 @@ public class GameScreen implements Screen {
 	public void roundOver() {
 		/*
 		 * Checks whether the lives have fallen below 0 If true then the
-		 * gameState is set to GAMEOVER, Otherwise lives is decremented and
+		 * gameState is set to GAMEOVER, Otherwise a lives is decremented and
 		 * gameState is set to READY
 		 */
 		if (getLives() > 0) {
@@ -417,7 +419,7 @@ public class GameScreen implements Screen {
 					new Vector2(getPaddle().getPaddleX(), getPaddle()
 							.getPaddleY()));
 			setNumBalls(1);
-			resetSlowBallsActivated();
+			slowBallsActivated = 0;
 			destroyPowerupBall();
 			decrementLives(1);
 			decrementScore(5);
@@ -426,7 +428,6 @@ public class GameScreen implements Screen {
 
 			gameoverstatus = "Bad luck " + player + " your final score is: "
 					+ getScore();
-			//game.getAccolade().stop();
 			gameState = new GameOverState();
 		}
 
@@ -468,18 +469,21 @@ public class GameScreen implements Screen {
 	}
 
 	/**
-	 * does nothing
+	 * 
 	 */
 	@Override
 	public void hide() {
+		// TODO Auto-generated method stub
+
 	}
 
 	/**
-	 * Pauses the game before the window is closed
+	 * Pauses the game
 	 */
 	@Override
 	public void pause() {
 		game.pause();
+
 	}
 
 	/**
@@ -534,10 +538,12 @@ public class GameScreen implements Screen {
 	 */
 	@Override
 	public void resize(int width, int height) {
+		// TODO Auto-generated method stub
+
 	}
 
 	/**
-	 * Resume game, only works on android devices
+	 * 
 	 */
 	@Override
 	public void resume() {
@@ -545,10 +551,12 @@ public class GameScreen implements Screen {
 	}
 
 	/**
-	 * does nothing
+	 * 
 	 */
 	@Override
 	public void show() {
+		// TODO Auto-generated method stub
+
 	}
 
 	/**
@@ -580,6 +588,9 @@ public class GameScreen implements Screen {
 
 	/**
 	 * Sets the sequence to be null
+	 * 
+	 * @param sequence
+	 * 
 	 */
 	public void setSequence() {
 		this.sequence = null;
@@ -598,7 +609,7 @@ public class GameScreen implements Screen {
 	 * 
 	 * Sets the currentButton
 	 * 
-	 * @param currentButton
+	 * @param int currentButton
 	 */
 	public void setCurrentButton(int currentButton) {
 		this.currentButton = currentButton;
@@ -607,7 +618,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns the pressed variable
 	 * 
-	 * @return pressed
+	 * @return int pressed
 	 */
 	public int getPressed() {
 		return pressed;
@@ -616,7 +627,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the pressed button
 	 * 
-	 * @param pressed
+	 * @param int pressed
 	 */
 	public void setPressed(int pressed) {
 		this.pressed = pressed;
@@ -626,7 +637,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns the Paddle
 	 * 
-	 * @return paddle
+	 * @return Paddle paddle
 	 */
 	public Paddle getPaddle() {
 		return paddle;
@@ -635,7 +646,8 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the Paddle
 	 * 
-	 * @param paddle
+	 * @param Paddle
+	 *            paddle
 	 */
 	public void setPaddle(Paddle paddle) {
 		this.paddle = paddle;
@@ -644,7 +656,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns the ball
 	 * 
-	 * @return ball
+	 * @return Ball ball
 	 */
 	public Ball getBall() {
 		return ball;
@@ -653,7 +665,8 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the Ball
 	 * 
-	 * @param ball
+	 * @param Ball
+	 *            ball
 	 */
 	public void setBall(Ball ball) {
 		this.ball = ball;
@@ -684,7 +697,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns the Number of Bricks
 	 * 
-	 * @return brickNum
+	 * @return int brickNum
 	 */
 	public int getBrickNum() {
 		return brickNum;
@@ -693,7 +706,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the number of Bricks
 	 * 
-	 * @param brickNum
+	 * @param int brickNum
 	 */
 	public void setBrickNum(int brickNum) {
 		this.brickNum = brickNum;
@@ -702,7 +715,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns the Level number
 	 * 
-	 * @return level
+	 * @return int level
 	 */
 	public int getLevel() {
 		return level;
@@ -711,7 +724,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the level number
 	 * 
-	 * @param level
+	 * @param int level
 	 * 
 	 */
 	public void setLevel(int level) {
@@ -721,7 +734,7 @@ public class GameScreen implements Screen {
 	/**
 	 * returns the last hit x variable of the ball
 	 * 
-	 * @return lastHitX
+	 * @return float lastHitX
 	 */
 	public float getLastHitX() {
 		return lastHitX;
@@ -730,7 +743,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the last hit x variable of the ball
 	 * 
-	 * @param lastHitX
+	 * @param int lastHitX
 	 */
 	public void setLastHitX(float lastHitX) {
 		this.lastHitX = lastHitX;
@@ -739,7 +752,7 @@ public class GameScreen implements Screen {
 	/**
 	 * returns the last hit y variable of the ball
 	 * 
-	 * @return lastHitY
+	 * @return float lastHitY
 	 */
 	public float getLastHitY() {
 		return lastHitY;
@@ -748,16 +761,34 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the last hit y variable of the ball
 	 * 
-	 * @param lastHitY
+	 * @param int lastHity
 	 */
 	public void setLastHitY(float lastHitY) {
 		this.lastHitY = lastHitY;
 	}
 
 	/**
+	 * Set the inner
+	 * 
+	 * @param inner
+	 */
+	public void setInner(int inner) {
+		this.inner = inner;
+	}
+
+	/**
+	 * Sets the outer
+	 * 
+	 * @param outer
+	 */
+	public void setOuter(int outer) {
+		this.outer = outer;
+	}
+
+	/**
 	 * Returns the number of ball that are currently in play
 	 * 
-	 * @return numBalls
+	 * @return int numBalls
 	 */
 	public int getNumBalls() {
 		return this.numBalls;
@@ -766,7 +797,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the number of plays in play
 	 * 
-	 * @param newNum
+	 * @param int newNum
 	 */
 	public void setNumBalls(int newNum) {
 		this.numBalls = newNum;
@@ -775,7 +806,7 @@ public class GameScreen implements Screen {
 	/**
 	 * returns the powerupManager
 	 * 
-	 * @return powerupManager
+	 * @return PowerupManager powerupManager
 	 */
 	public PowerupManager getPowerupManager() {
 		return powerupManager;
@@ -784,7 +815,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns true if powerups are turned on
 	 * 
-	 * @return powerupsOn
+	 * @return boolean powerupsOn
 	 */
 	public boolean isPowerupOn() {
 		return this.powerupsOn;
@@ -793,7 +824,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the powerup mode. True means that enchanced mode is on
 	 * 
-	 * @param mode
+	 * @param boolean mode
 	 */
 	public void switchGameMode(boolean mode) {
 		this.powerupsOn = mode;
@@ -802,7 +833,7 @@ public class GameScreen implements Screen {
 	/**
 	 * returns the PowerUpBall
 	 * 
-	 * @return powerupBall
+	 * @return Ball powerupBall
 	 */
 	public Ball getPowerupBall() {
 		return this.powerupBall;
@@ -819,7 +850,7 @@ public class GameScreen implements Screen {
 	}
 
 	/**
-	 * Destroys the Ball
+	 * Destorys the Ball
 	 */
 	public void destroyBall() {
 		if (ball != null) {
@@ -830,7 +861,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Return the remaining number of lives
 	 * 
-	 * @return lives
+	 * @return int lives
 	 */
 	public int getLives() {
 		return lives;
@@ -839,7 +870,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Sets the number of Lives
 	 * 
-	 * @param lives
+	 * @param int lives
 	 */
 	public void setLives(int lives) {
 
@@ -849,7 +880,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Increases the number of Lives by desired value
 	 * 
-	 * @param value
+	 * @param int value
 	 */
 	public void incrementLives(int value) {
 		this.lives = this.lives + value;
@@ -858,7 +889,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Decreases the number of Lives by desired value
 	 * 
-	 * @param value
+	 * @param int value
 	 */
 	public void decrementLives(int value) {
 		this.lives = this.lives - value;
@@ -867,7 +898,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Return the score
 	 * 
-	 * @return score
+	 * @return int score
 	 */
 	public int getScore() {
 		return score;
@@ -883,7 +914,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Increases the score by desired value
 	 * 
-	 * @param value
+	 * @param int value
 	 */
 	public void incrementScore(int value) {
 		this.score = this.score + value;
@@ -892,7 +923,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Decreases the score by desired value
 	 * 
-	 * @param value
+	 * @param int value
 	 */
 	public void decrementScore(int value) {
 		this.score = this.score - value;
@@ -901,7 +932,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Set the value of Highscore
 	 * 
-	 * @param score
+	 * @param int score
 	 */
 	public void setHighScore(int score) {
 		if (score > 0) {
@@ -915,7 +946,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns the value of Highscore
 	 * 
-	 * @return highScore
+	 * @return int highScore
 	 */
 	public int getHighScore() {
 		return highScore;
@@ -941,18 +972,11 @@ public class GameScreen implements Screen {
 	public void incrementNumSlowBallsActivated() {
 		slowBallsActivated++;
 	}
-	
-	/**
-	 * Set the number of slow balls activated to be 0
-	 */
-	public void resetSlowBallsActivated() {
-		this.slowBallsActivated = 0;
-	}
 
 	/**
 	 * Returns the number of slow balls activated
 	 * 
-	 * @return slowBallsActivated
+	 * @return int slowBallsActivated
 	 */
 	public int getNumSlowBallsActivated() {
 		return slowBallsActivated;
@@ -968,7 +992,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns the Bump Counter
 	 * 
-	 * @return bumpCount
+	 * @return int bumpCount
 	 */
 	public int getBumpCount() {
 		return bumpCount;
@@ -984,7 +1008,7 @@ public class GameScreen implements Screen {
 	/**
 	 * Returns the Brick break counter
 	 * 
-	 * @return brickBreak
+	 * @return int brickBreak
 	 */
 	public int getBrickBreak() {
 		return brickBreak;
@@ -993,13 +1017,9 @@ public class GameScreen implements Screen {
 	/**
 	 * Return the Brick array
 	 * 
-	 * @return bricks
+	 * @return Brick[] bricks
 	 */
 	public Brick[] getBrickArray() {
 		return this.bricks;
-	}
-	
-	public Level getLevelSystem() {
-		return this.levelSystem;
 	}
 }

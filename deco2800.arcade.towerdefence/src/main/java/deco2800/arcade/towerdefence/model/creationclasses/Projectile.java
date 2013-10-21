@@ -7,13 +7,11 @@ import java.util.List;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
-import deco2800.arcade.towerdefence.controller.TowerDefence;
 import deco2800.arcade.towerdefence.model.Grid;
 import deco2800.arcade.towerdefence.model.GridObject;
 import deco2800.arcade.towerdefence.model.Mortal;
 import deco2800.arcade.towerdefence.model.Team;
 import deco2800.arcade.towerdefence.model.effects.Effect;
-import deco2800.arcade.towerdefence.view.GameScreen;
 
 /**
  * The class for GridObjects that can fly on any angle from a source GridObject
@@ -51,45 +49,20 @@ public class Projectile extends GridObject {
 	 *            The speed and direction of the object in pixels per second,
 	 *            represented as a vector
 	 * @param range
-	 *            The maximum distance the projectile can travel.
 	 * @param team
-	 *            The team the projectile belongs to.
-	 * @param fileStanding
-	 *            The file used by the projectile.
+	 * @param sprStanding
 	 * @param damage
-	 *            The damage the projectile deals on impact.
 	 * @param penetration
-	 *            The penetration of the projectile against armoured targets.
-	 * @param explosionRadius
-	 *            The explosion radius of the projectile.
 	 */
 	public Projectile(int x, int y, Grid grid, Vector2 speed, float range,
-			Team team, List<String> fileStanding, int damage, int penetration,
+			Team team, List<Sprite> sprStanding, int damage, int penetration,
 			int explosionRadius) {
-		super(x, y, grid, team, fileStanding);
+		super(x, y, grid, team, sprStanding);
 		this.speed = speed;
 		this.range = range;
 		this.damage = damage;
 		this.penetration = penetration;
 		this.explosionRadius = explosionRadius;
-	}
-
-	/**
-	 * Constructor used by towers when shooting.
-	 * 
-	 * @param other
-	 *            The Projectile given by the tower to copy.
-	 * @param speed
-	 *            The speed and direction of this projectile.
-	 */
-	public Projectile(Projectile other, Vector2 speed, Vector2 position) {
-		super((int) position.x, (int) position.y, other.grid(), other.team(),
-				other.fileStanding());
-		this.speed = speed;
-		this.range = other.range;
-		this.damage = other.damage;
-		this.penetration = other.penetration;
-		this.explosionRadius = other.explosionRadius;
 	}
 
 	// Getters
@@ -118,15 +91,6 @@ public class Projectile extends GridObject {
 	 */
 	public int explosionRadius() {
 		return explosionRadius;
-	}
-
-	/**
-	 * Return a copy of this projectile's speed/direction vector.
-	 * 
-	 * @return A vector representing the speed and direction of this projectile.
-	 */
-	public Vector2 speed() {
-		return speed.cpy();
 	}
 
 	// Setters
@@ -160,45 +124,20 @@ public class Projectile extends GridObject {
 
 	// Methods
 	/**
-	 * Start the AI and animations.
-	 */
-	public void start() {
-	// Remember to adjust the rotation before building the sprite if necessary
-	this.rotation(0);
-	
-	// Build the idle sprite list
-	List<Sprite> sprList = (GameScreen.spriteBuild(this, fileStanding()));
-	
-	// Add the list of sprites to the currently animating model
-	TowerDefence.toRender.add(sprList);
-	}
-	
-	/**
 	 * Continually move in the given vector until a collision, or the maximum
 	 * range is reached.
 	 */
-	public void move() {
+	private void move() {
 		// Move at speed in the object's direction until it collides with
 		// something
 		float moved = 0;
 		long t0, t1;
-		Vector2 addVector = speed.cpy();
-		addVector.mul((float) 1 / 30);
 		while (moved < range) {
-			// Check for collisions
-			for (int i = 0; i < getCurrentGrid().size(); i++) {
-				if (getCurrentGrid().get(i).team() != this.team) {
-					// Collision occurred
-					collide(getCurrentGrid().get(i));
-					return;
-				}
-			}
-
 			t0 = System.currentTimeMillis();
 			t1 = t0;
 			// Move
-			position.add(addVector);
-			moved += addVector.len();
+			position.add(speed.mul(1 / 30));
+			moved += speed.mul(1 / 30).len();
 			// Wait 1/30th of a second before moving again
 			while (t1 - t0 < 33) {
 				t1 = System.currentTimeMillis();
@@ -220,13 +159,13 @@ public class Projectile extends GridObject {
 		// find the tile the colldingObject is sitting on.
 		Vector2 centreTile = collidingObject.positionInTiles();
 		// find the top left square of the area to hit.
-		Vector2 startingTile = new Vector2(centreTile.x - r, centreTile.y + r);
+		Vector2 startingTile = new Vector2(centreTile.x - r, centreTile.y - r);
 		// iterate through squares r away from centre tile in a square
-		for (int i = 0; i <= r * 2; i++) {
-			for (int j = 0; j <= r * 2; j++) {
+		for (int i = 0; i <= r; i++) {
+			for (int j = 0; j <= r; j++) {
 				// make an iterator for the contents of each square
 				Iterator<GridObject> contents = grid.getGridContents(
-						(int) (startingTile.x + i), (int) (startingTile.y - j))
+						(int) (startingTile.x + i), (int) (startingTile.y + j))
 						.iterator();
 				// iterate through
 				while (contents.hasNext()) {

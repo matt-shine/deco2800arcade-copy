@@ -12,27 +12,16 @@ import java.util.List;
 
 import deco2800.arcade.protocol.highscore.GetScoreRequest;
 
-/**
- * HighscoreDatabase sits on the server-side of the systeam and contains a 
- * number of queries that are run in order to fetch data from and add data
- * to the database.
- * 
- * This class is not directly accessed by games. In order ot utilise this
- * class, game designers must use the HighscoreClient class, that sits on the
- * client-side of the system.
- * 
- * @author TeamA
- */
 public class HighscoreDatabase {
 	private boolean initialised = false;
 	
 	
-	//====================================
+	//======================
 	//Database Setup Methods
-	//====================================
+	//======================
 	
 	/**
-	 * Creates the highscore databases if they do not already exist.
+	 * Creates a new highscore database if one does not already exist.
 	 * 
 	 * @throws DatabaseException If the database can't be initialised.
 	 */
@@ -88,7 +77,8 @@ public class HighscoreDatabase {
 	 * The first value is the number of columns that are bring returned.
 	 */
 	public List<String> fetchData(GetScoreRequest gsReq) {
-		//Run the query corresponding to the requestID.
+		//Run the query corresponding to the requestID. This switch statement is probably going to get pretty big.
+		//System.out.println("adding a score should not get here.");
 		try {
 		switch (gsReq.requestID) {
 			case 1: return getGameTopPlayers(gsReq.game_ID, gsReq.limit, gsReq.type, gsReq.highestIsBest); //Return value of query with requestID 1
@@ -99,10 +89,10 @@ public class HighscoreDatabase {
 
 			}
 		} catch (DatabaseException e) {
-			//catch exception
+			//bad
 		}
 		
-		//This should never be reached, as all requestIDs should be covered in the switch
+		/*This should never be reached, as all requestIDs should be covered in the switch*/
 		return null;
 	}
 	
@@ -116,11 +106,8 @@ public class HighscoreDatabase {
 	 * @throws DatabaseException 
 	 */
 	public List<String> getGameTopPlayers(String Game_ID, int top, String type, boolean highestIsBest) throws DatabaseException{
-		//Array list to store the data returned from query
 		List<String> data = new ArrayList<String>();
-		//topCount keeps track of the number of rows return
 		int topCount = 0;
-		//used in the query to order the results returned. 
 		String order;
 		
 		if (!initialised) {
@@ -171,9 +158,7 @@ public class HighscoreDatabase {
 	 * @throws DatabaseException 
 	 */
 	public List<String> getUserHighScore(String Username, String Game_ID, String type, boolean highestIsBest) throws DatabaseException{
-		//Array list to store the data returned from query
 		List<String> data = new ArrayList<String>();
-		//used in the query to order the results returned. 
 		String order;
 		
 		if (!initialised) {
@@ -188,6 +173,7 @@ public class HighscoreDatabase {
 		
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
+
 		Statement statement = null;
 		ResultSet resultSet = null;
 		try {
@@ -208,97 +194,15 @@ public class HighscoreDatabase {
 			throw new DatabaseException(
 					"Unable to get player information from database", e);
 		} finally {
+			System.out.println("getUserhighscore executed correctly.");
 			connectionCleanup(connection, statement, resultSet);
 		}
 	}
 	
-	/**
-	 * Request ID: 3
-	 * Displays the users ranking in the highscores for the specified game and score type
-	 * Returns -1 as the ranking (score) if the player cannot be found
-	 * 
-	 * @param User_ID - users id to query against
-	 * @param Game_ID
-	 * @param type - type of score that needs to be retrieved
-	 * @throws DatabaseException 
-	 */
-	public List<String> getUserRanking(String Username, String Game_ID, String type, boolean highestIsBest) throws DatabaseException{
-		//Array list to store the data returned from query
-		List<String> data = new ArrayList<String>();
-		//first ranking initialised to 1
-		int ranking = 1;
-		//used in the query to order the results returned. 
-		String order;
-		//used to break the loop when the user is found.
-		boolean userFound = false;
-		
-		if (!initialised) {
-			initialise();
-		}
-
-		if (highestIsBest) {
-			order = "DESC";
-		} else {
-			order = "ASC";
-		}
-		
-		// Get a connection to the database
-		Connection connection = Database.getConnection();
-
-		Statement statement = null;
-		ResultSet resultSet = null;
-		try {
-			statement = connection.createStatement();
-			String select = "SELECT DISTINCT H.Player, Score FROM PLAYER_HIGHSCORES AS H, PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID='" + Game_ID + "' AND D.Score_Type='" + type + "' ORDER BY D.Score " + order;
-			resultSet = statement.executeQuery(select);
-			//stores all found users so that if the top 2 scores are from the same person the third
-			//scorer (if different) will be ranked second
-			LinkedList<String> foundUsers = new LinkedList<String>();
-			
-			while (resultSet.next()) {
-				String user = resultSet.getString("Player");
-				if (user.equals(Username)) {
-					userFound = true;
-					break;
-				} else {
-					if (!foundUsers.contains(user)) {
-						foundUsers.add(user);
-						ranking++;
-					}
-				}
-			}
-			//set up data to be sent back to client side
-			data.add(Username);
-			if(userFound){
-				data.add(String.valueOf(ranking));
-			} else {
-				data.add("-1");
-			}
-			data.add("");
-			data.add("rank");
-			return data;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException(
-					"Unable to get player information from database", e);
-		} finally {
-			connectionCleanup(connection, statement, resultSet);
-		}
-	}
 	
-	/**
-	 * requestID: 4
-	 * 
-	 * Returns a list of 8 strings. The first four represent the wins score and 
-	 * last 4 represent the number of losses for the player and game.
-	 * 
-	 * @param User_ID - users id to query against
-	 * @param Game_ID - game id to query against
-	 * @param type - type of score that needs to be retrieved
-	 * @throws DatabaseException 
-	 */
+	
 	public List<String> getWinsGetLosses(String Username, String Game_ID) throws DatabaseException {
-		//Array list to store the data returned from query
+		System.out.println("Getting the wins and losses");
 		List<String> data = new ArrayList<String>();
 		
 		if (!initialised) {
@@ -307,6 +211,7 @@ public class HighscoreDatabase {
 		
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
+
 		Statement statement = null;
 		ResultSet resultSet = null;
 	
@@ -315,6 +220,7 @@ public class HighscoreDatabase {
 			statement = connection.createStatement();
 			String getWins = "SELECT COUNT(*) AS WINS FROM PLAYER_HIGHSCORES AS H, PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID = '" + Game_ID + "' AND H.Player = '" + Username + "' AND D.Score = 1 AND D.Score_Type = 'WinLoss'";
 			resultSet = statement.executeQuery(getWins);
+			System.out.println("query: " + getWins);
 			while(resultSet.next()) {
 				data.add(Username);
 				data.add(String.valueOf(resultSet.getInt("WINS")));
@@ -336,11 +242,133 @@ public class HighscoreDatabase {
 			throw new DatabaseException(
 					"Unable to get player information from database", e);
 		} finally {
+			System.out.println("get win/loss success.");
 			connectionCleanup(connection, statement, resultSet);
 		}
 		
 	}
 	
+	
+	/**
+	 * Displays the users ranking in the highscores for the specified game and score type
+	 * @param User_ID - users id to query against
+	 * @param Game_ID
+	 * @param type - type of score that needs to be retrieved
+	 * @throws DatabaseException 
+	 */
+	public List<String> getUserRanking(String Username, String Game_ID, String type, boolean highestIsBest) throws DatabaseException{
+		System.out.println("get user ranking");
+		List<String> data = new ArrayList<String>();
+		int ranking = 1;
+		String order;
+		boolean userFound = false;
+		
+		if (!initialised) {
+			initialise();
+		}
+
+		if (highestIsBest) {
+			order = "DESC";
+		} else {
+			order = "ASC";
+		}
+		
+		// Get a connection to the database
+		Connection connection = Database.getConnection();
+
+		Statement statement = null;
+		ResultSet resultSet = null;
+		try {
+			statement = connection.createStatement();
+			String select = "SELECT DISTINCT H.Player, Score FROM PLAYER_HIGHSCORES AS H, PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID='" + Game_ID + "' AND D.Score_Type='" + type + "' ORDER BY D.Score " + order;
+			resultSet = statement.executeQuery(select);
+			
+			LinkedList<String> foundUsers = new LinkedList<String>();
+			
+			while (resultSet.next()) {
+				String user = resultSet.getString("Player");
+				
+				if (user.equals(Username)) {
+					userFound = true;
+					break;
+				} else {
+					if (!foundUsers.contains(user)) {
+						foundUsers.add(user);
+						ranking++;
+					}
+				}
+			}
+			
+			data.add(Username);
+			if(userFound){
+				data.add(String.valueOf(ranking));
+			} else {
+				data.add("-1");
+			}
+			data.add("");
+			data.add("rank");
+			return data;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException(
+					"Unable to get player information from database", e);
+		} finally {
+			connectionCleanup(connection, statement, resultSet);
+		}
+	}
+	
+	
+	/**
+	 * Displays a string representation of all the users highscores aggregated into an average. This could be used by the games
+	 * if they wish to display this as a way of comparing the users score against the average player
+	 * @param Game_ID - game id to query against
+	 * @param type - type of score that needs to be retrieved
+	 * @throws DatabaseException 
+	 */
+	public String getAvgUserHighScore(String Game_ID, String type) throws DatabaseException{
+		/*String data = null;
+
+		if (!initialised) {
+			initialise();
+		}
+		
+		// Get a connection to the database
+		Connection connection = Database.getConnection();
+
+		Statement statement = null;
+		ResultSet resultSet = null;
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SELECT AVG(s.SCORE) as SCORE from HIGHSCORES_PLAYER h INNER JOIN " +
+					"HIGHSCORES_DATA s on h.HID = s.HID WHERE h.GameId='" + Game_ID + "' AND Score_type='" + 
+					type + "';");
+			while(resultSet.next())
+			{
+				data = resultSet.getString("SCORE");
+			}
+
+			return data;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException(
+					"Unable to get player information from database", e);
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} */
+		return null;
+	}
 		
 	//======================
 	//Adding Score Methods
@@ -400,13 +428,12 @@ public class HighscoreDatabase {
 	 * @throws SQLException 
 	 */
 	public void updateScore(String game_ID, String username, LinkedList<Integer> scores, LinkedList<String> types) throws DatabaseException, SQLException{
-		//insert a new highscore instance and get the generate key
 		int hid = addHighscore(game_ID, username);
 		
 		if (!initialised) {
 			initialise();
 		}
-		//store all scores (single and multiple)
+		
 		for(int i = 0; i < scores.size(); i++){
 			//Get a connection to the database
 			Connection connection = Database.getConnection();

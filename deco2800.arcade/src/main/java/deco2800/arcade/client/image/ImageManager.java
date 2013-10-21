@@ -14,7 +14,7 @@ import deco2800.arcade.model.EncodedImage;
  * Manages images provided by an EncodedImageProvider (effectively ImageClient).
  * This class handles the memory management (i.e calling dispose() on Pixmaps and
  * Textures) involved with images and can request encoded versions of those images.
- *
+ * 
  * When used in conjunction with ImageClient, this allows images from the server to
  * be displayed.
  */
@@ -23,15 +23,9 @@ public class ImageManager {
     private HashMap<String, Texture> textureCache;
     private EncodedImageProvider provider;
 
-    /**
-     * Initialises the image manager with an encoded image provider to be used
-     * to get images.
-     *
-     * @param provider The provider to get encoded images from.
-     */
     public ImageManager(EncodedImageProvider provider) {
 	this.provider = provider;
-	this.textureCache = new HashMap<String, Texture>();
+	this.textureCache = new HashMap<String, Texture>();       
 	this.pixmapCache = new HashMap<String, Pixmap>();
     }
 
@@ -46,7 +40,7 @@ public class ImageManager {
 	}
 
 	textureCache.clear();
-    }
+    }   
 
     /**
      * Returns a future to a Pixmap representing the image whose ID is imageID.
@@ -56,18 +50,15 @@ public class ImageManager {
      * Note that if you're wanting to draw an image, you should call getTexture()
      * with the same imageID instead, as it caches textures and so doesn't have
      * the overhead of needing to create a new Texture for display.
-     *
-     * @param imageID The id of the image to get a Pixmap for.
-     * @return A future to the image's Pixmap.
      */
     public AsyncFuture<Pixmap> getPixmap(final String imageID) {
 	final AsyncFuture<Pixmap> future = new AsyncFuture<Pixmap>();
-
+	
 	// See if we've got the pixmap, otherwise we'll need to ask our provider for
 	// the image's encoded version. We'll ask for the provider's cached version
 	// to avoid network access where possible.
 	if (pixmapCache.containsKey(imageID)) {
-	    future.provide(pixmapCache.get(imageID));
+	    future.provide(pixmapCache.get(imageID)); 
 	} else {
 	    provider.get(imageID, true).setHandler(new Handler<EncodedImage>() {
 		public void handle(EncodedImage img) {
@@ -89,20 +80,17 @@ public class ImageManager {
      *
      * If you're calling .get() on the future then you'll need to make
      * sure that sure you're in the correct thread to use it.
-     *
-     * @param imageID The id of the image to get a Texture for.
-     * @return A future to the image's Texture.
      */
     public AsyncFuture<Texture> getTexture(final String imageID) {
 	final AsyncFuture<Texture> future = new AsyncFuture<Texture>();
-
+	
 	// If we've already got that texture then we can just provide immediately,
 	// otherwise we'll need to get its pixmap, build a texture and cache it.
 	// Then we can provide the future.
 	if (textureCache.containsKey(imageID)) {
 	    Gdx.app.postRunnable(new Runnable() {
 		@Override
-		public void run() {
+		public void run() {	
 		    future.provide(textureCache.get(imageID));
 		}
 	    });
@@ -111,13 +99,13 @@ public class ImageManager {
 		public void handle(final Pixmap pixmap) {
 		    Gdx.app.postRunnable(new Runnable() {
 			@Override
-			public void run() {
+			public void run() {	
 			    Texture tex = new Texture(pixmap);
-			    textureCache.put(imageID, tex);
+			    textureCache.put(imageID, tex);		    		    
 			    future.provide(tex);
 			}
 		    });
-
+		    
 		}
 	    });
 	}

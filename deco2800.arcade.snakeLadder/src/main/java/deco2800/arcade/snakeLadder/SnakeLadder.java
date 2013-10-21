@@ -37,7 +37,6 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
 import deco2800.arcade.client.AchievementClient;
-import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.highscores.Highscore;
@@ -126,9 +125,6 @@ public class SnakeLadder extends GameClient {
 		}
 	}
 
-	/**
-	 * @return the turn number which is cooresponding to player's index
-	 */
 	public int getturns() {
 		return this.turn;
 	}
@@ -143,39 +139,6 @@ public class SnakeLadder extends GameClient {
 	@Override
 	public void create() {        
 		super.create();
-
-        //add the overlay listeners
-        this.getOverlay().setListeners(new Screen() {
-
-            @Override
-            public void render(float arg0) {
-            }
-
-            @Override
-            public void resize(int width, int height) {
-            }
-
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void hide() {
-            }
-
-            @Override
-            public void pause() {
-            }
-
-            @Override
-            public void resume() {
-            }
-
-            @Override
-            public void dispose() {
-            }
-
-        });
 		
 		//Initialise camera
 		camera = new OrthographicCamera();
@@ -203,8 +166,7 @@ public class SnakeLadder extends GameClient {
         
 		//creating the stage
         stage = new Stage();
-        //Gdx.input.setInputProcessor(stage);
-        ArcadeInputMux.getInstance().addProcessor(stage);
+        Gdx.input.setInputProcessor(stage);
         
         //rendering scoreboard UI
   		renderScoreBoard();
@@ -219,7 +181,6 @@ public class SnakeLadder extends GameClient {
 	@Override
 	public void dispose() {
 		super.dispose();
-        ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override
@@ -285,9 +246,6 @@ public class SnakeLadder extends GameClient {
 	}
 	
 
-	/**
-	 * Update the turn number when transit to next player's round
-	 */
 	public void taketurns() {
 		turn++;
 		turn = turn%this.gamePlayers.length;
@@ -309,33 +267,19 @@ public class SnakeLadder extends GameClient {
 		super.resume();
 	}
 	
-	/**
-	 * @param num dice number after throw
-	 * @return Dice object according to the number thrown passed in
-	 */
 	public Dice getDice(int num){
 		return dices.get(num);
 	}
 	
-	/**
-	 * @param dice dice object
-	 * @param num dice number
-	 */
 	public void setDice(Dice dice, int num){
 		dices.set(num, dice);
 	}
 
 	
-	/**
-	 * @return the game map instance
-	 */
 	public GameMap getMap() {
 		return map;
 	}
 
-	/**
-	 * @param map set game map instance
-	 */
 	public void setMap(GameMap map) {
 		this.map = map;
 	}
@@ -419,11 +363,12 @@ public class SnakeLadder extends GameClient {
         }
 	}
 	
-	/**
-	 * @return the ruleMapping which is populated after reading xml config file
-	 */
 	public HashMap<String,RuleMapping> getRuleMapping() {
 		return ruleMapping;
+	}
+
+	public void setRuleMapping(HashMap<String,RuleMapping> ruleMapping) {
+		this.ruleMapping = ruleMapping;
 	}
 	
 	private void dumpingScores(){

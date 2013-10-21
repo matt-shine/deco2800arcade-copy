@@ -33,6 +33,7 @@ public class WarningOverlay extends Enemy {
 	@Override
 	public Array<Enemy> advance(float delta, Player ship, float rank,
 			OrthographicCamera cam) {
+		System.out.println("--------"+position + " : "+(initPos.x - wrapLength)+" : " + (initPos.x - wrapLength - 10f)+" : " + leftRepeat + "----------");
 		position.x -= delta * 50f;
 		if (leftRepeat && position.x < initPos.x - wrapLength) {
 			leftRepeat = false;
@@ -54,6 +55,7 @@ public class WarningOverlay extends Enemy {
 
 	public Vector2 getPositionOnScreen(float pixelsPerUnit) {
 		Vector2 out = new Vector2(Gdx.graphics.getWidth()-pixelsPerUnit*(initPos.x-position.x), Gdx.graphics.getHeight()/2);
+		System.out.println("Drawing TEXT at " + out + " but position is "+position +" also " + (initPos.x-position.x)+" and "+pixelsPerUnit*(initPos.x-position.x));
 		return out;
 	}
 	
@@ -67,12 +69,13 @@ public class WarningOverlay extends Enemy {
 	
 	@Override
 	public boolean isSolid() {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void handleNoTileUnderneath() {
-		;
+		// TODO Auto-generated method stub
 		
 	}
 	

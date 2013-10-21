@@ -9,9 +9,6 @@ public abstract class Ship extends Entity {
 	protected Vector2 velocity;
 	protected Vector2 position;
 	protected float flash = 0f;
-	private boolean godMode;
-	private float gModeTimer;
-	private final float gModeLimit = 5;
 	
 	/**
 	 * Basic constructor for a ship.
@@ -22,8 +19,6 @@ public abstract class Ship extends Entity {
 		this.health = health;
 		this.position = position;
 		velocity = new Vector2(0,0);
-		godMode = false;
-		gModeTimer = 0f;
 	}
 	/**
 	 * Checks if the current ship is alive.
@@ -34,52 +29,33 @@ public abstract class Ship extends Entity {
 		} else return true;
 	}
 	
-	/**
-	 * Returns the health value
-	 * @return health
-	 */
 	public float getHealth() {
 		return health;
 	}
 	
-	/**
-	 * Renders the movement of the ship
-	 */
 	@Override
     public void act(float delta) {
 		onRender(delta);
         super.act(delta);
 	}
 	
-	/**
-	 * Calls super.remove()
-	 */
 	@Override
 	public boolean remove() {
 		return super.remove();
 	}
 	
 	/**
-	 * Damages the ship if not in the godMode state.
-	 * @ensure healthchange > 0
+	 * Damages the ship
 	 */
 	public void damage(float healthchange) {
-		if(!godMode)
-			this.health -= healthchange;
+		this.health -= healthchange;
 		flash = 1f;
 	}
 
-	/**
-	 *  Heals the ship.
-	 *  @ensure healthchange > 0
-	 */
 	public void heal(int healthchange) {
 		this.health += healthchange;
 	}
 	
-	/**
-	 * Checks where the ship is still within the bounds of the playing screen.
-	 */
 	public boolean inBounds() {
 		float left = getX() + getWidth();
 		float right = getY() + getHeight();
@@ -89,38 +65,16 @@ public abstract class Ship extends Entity {
 	}
 	
 	/**
-	 * What to do every frame.
+	 * What to do every frame. Perhaps bounds checking etc.
 	 * Make sure to super.onRender so you implement damage flashes
 	 */
-	public void onRender(float delta) {
-		if(godMode) {
-			setColor(0, 1, 0, 1);
-			
-			if(gModeTimer >= gModeLimit) {
-				godMode = false;
-				gModeTimer = 0;
-			}
-
-			gModeTimer += delta;
-			return;
-		}
-		
+	void onRender(float delta) {
 		if(flash > 0) {
 			setColor(1, 1-flash, 1-flash, 1);
 			flash -= delta*25;
-		} else {
-			setColor(1, 1, 1, 1);
+			if(flash <= 0) {
+				setColor(1, 1, 1, 1);
+			}
 		}
-		
-		
 	}
-	
-	/**
-	 * Sets the ships state to be invulnerable to damage.
-	 */
-	public void setGodMode(boolean b) {
-		godMode = b;
-		gModeTimer = 0;
-	}
-	
 }

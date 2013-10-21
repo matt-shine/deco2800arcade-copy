@@ -53,7 +53,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	/* Player Stats */
 	public int bananasFound = 0;
 	public static int deaths = 0;
-	int SPEED_MULTIPLIER = 1;
+	int SPEED_MULTIPLIER = 3;
 	int monkeyLength = 35;
 	int monkeyHeight = 40;
 	public static float monkeyX;
@@ -361,12 +361,9 @@ public class junglejump extends GameClient implements InputProcessor {
 			int level = (currentLevel.getIndex()%5)+1;
 			achievementTitleFont.draw(batch, ("Level " + (LevelContainer.getCurrentWorld()+1) + " - " + 
 					level), SCREENWIDTH-750, SCREENHEIGHT-10);
+
+
 			batch.end();
-			
-			if(monkeyY > SCREENHEIGHT) {
-				this.incrementAchievement("junglejump.hax");
-			}
-			
 			camera.update();
 			super.render();
 			break;
@@ -926,9 +923,9 @@ public class junglejump extends GameClient implements InputProcessor {
 			// Climb down
 			if (gameState != GameState.INPROGRESS) {
 				if (butY > QUIT) {
-					//menuSound.start();
+					menuSound.start();
 					butY -= 37.5;
-					//menuSound.stop();
+					menuSound.stop();
 				}
 			}
 		}

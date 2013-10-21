@@ -183,20 +183,4 @@ public class PowerupManager {
 		powerups.clear();
 		resetNumPowerups();
 	}
-	
-	/**
-	 * 
-	 * @return - the number of active powerups
-	 */
-	public int getPowerupArrayLength() {
-		return powerups.size();
-	}
-	
-	/**
-	 * 
-	 * @return - return the array for counting number of powerups
-	 */
-	public ArrayList<Integer> getNumArray() {
-		return numPowerups;
-	}
 }

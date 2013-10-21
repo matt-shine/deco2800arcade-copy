@@ -1,6 +1,7 @@
 package deco2800.arcade.towerdefence.model.pathfinding;
 
 import deco2800.arcade.towerdefence.model.Mobile;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -12,7 +13,7 @@ import java.util.Collections;
  */
 public class AStarPathFinder implements PathFinder {
 	/** The set of nodes that have been searched through */
-	private ArrayList<Node> closed = new ArrayList<Node>();
+	private ArrayList closed = new ArrayList();
 	/** The set of nodes that we do not yet consider fully searched */
 	private SortedList open = new SortedList();
 	
@@ -23,7 +24,7 @@ public class AStarPathFinder implements PathFinder {
 	
 	/** The complete set of nodes across the map */
 	private Node[][] nodes;
-	/** True if we allow diagonal movement */
+	/** True if we allow diaganol movement */
 	private boolean allowDiagMovement;
 	/** The heuristic we're applying to determine which nodes to search first */
 	private AStarHeuristic heuristic;
@@ -33,7 +34,7 @@ public class AStarPathFinder implements PathFinder {
 	 * 
 	 * @param map The map to be searched
 	 * @param maxSearchDistance The maximum depth we'll search before giving up
-	 * @param allowDiagMovement True if the search should try diagonal movement
+	 * @param allowDiagMovement True if the search should try diaganol movement
 	 */
 	public AStarPathFinder(TileBasedMap map, int maxSearchDistance, boolean allowDiagMovement) {
 		this(map, maxSearchDistance, allowDiagMovement, new ClosestHeuristic());
@@ -45,7 +46,7 @@ public class AStarPathFinder implements PathFinder {
 	 * @param heuristic The heuristic used to determine the search order of the map
 	 * @param map The map to be searched
 	 * @param maxSearchDistance The maximum depth we'll search before giving up
-	 * @param allowDiagMovement True if the search should try diagonal movement
+	 * @param allowDiagMovement True if the search should try diaganol movement
 	 */
 	public AStarPathFinder(TileBasedMap map, int maxSearchDistance, 
 						   boolean allowDiagMovement, AStarHeuristic heuristic) {
@@ -103,7 +104,7 @@ public class AStarPathFinder implements PathFinder {
 						continue;
 					}
 					
-					// if we're not allowing diagonal movement then only 
+					// if we're not allowing diaganol movement then only 
 					// one of x or y can be set
 					if (!allowDiagMovement) {
 						if ((x != 0) && (y != 0)) {
@@ -117,7 +118,7 @@ public class AStarPathFinder implements PathFinder {
 					
 					if (isValidLocation(mover,sx,sy,xp,yp)) {
 						// the cost to get to this node is cost the current plus the movement
-						// cost to reach this node. Note that the heuristic value is only used
+						// cost to reach this node. Note that the heursitic value is only used
 						// in the sorted open list
 						float nextStepCost = current.cost + getMovementCost(mover, current.x, current.y, xp, yp);
 						Node neighbour = nodes[xp][yp];
@@ -262,7 +263,7 @@ public class AStarPathFinder implements PathFinder {
 	 * 
 	 * @param mover The entity that is being moved
 	 * @param sx The x coordinate of the tile whose cost is being determined
-	 * @param sy The y coordinate of the tile whose cost is being determined
+	 * @param sy The y coordiante of the tile whose cost is being determined
 	 * @param tx The x coordinate of the target location
 	 * @param ty The y coordinate of the target location
 	 * @return The cost of movement through the given tile
@@ -293,7 +294,7 @@ public class AStarPathFinder implements PathFinder {
 	 */
 	private class SortedList {
 		/** The list of elements */
-		private ArrayList<Node> list = new ArrayList<Node>();
+		private ArrayList list = new ArrayList();
 		
 		/**
 		 * Retrieve the first element from the list
@@ -316,8 +317,8 @@ public class AStarPathFinder implements PathFinder {
 		 * 
 		 * @param o The element to add
 		 */
-		public void add(Node node) {
-			list.add(node);
+		public void add(Object o) {
+			list.add(o);
 			Collections.sort(list);
 		}
 		
@@ -353,7 +354,7 @@ public class AStarPathFinder implements PathFinder {
 	/**
 	 * A single node in the search graph
 	 */
-	protected class Node implements Comparable<Object> {
+	private class Node implements Comparable {
 		/** The x coordinate of the node */
 		private int x;
 		/** The y coordinate of the node */

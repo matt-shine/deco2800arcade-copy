@@ -4,10 +4,6 @@ package deco2800.arcade.pacman;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.Task;
-
-import deco2800.arcade.pacman.Ghost.GhostState;
 
 public final class PacChar extends Mover{
 	
@@ -20,6 +16,7 @@ public final class PacChar extends Mover{
 	private static int widthVal = 26;
 	private static int heightVal = 26;
 
+
 	private Animation walkAnimation;
 	
 	public PacChar(GameMap gameMap) {
@@ -30,14 +27,13 @@ public final class PacChar extends Mover{
 		drawY = gameMap.getTileCoords(currentTile).getY() - 4;
 		// initialise some variables
 		currentState = PacState.IDLE;
-		facing = Dir.DOWN; // the way he'll turn at the next intersection if possible
-		drawFacing = Dir.DOWN; // the way pacman appears
+		facing = Dir.LEFT;
+		drawFacing = Dir.LEFT;
 		width = widthVal;
 		height = heightVal;
-		spritePos = 3;
-		currentTile.addMover(this);
 		updatePosition();
-		moveDist = 2;
+		moveDist = 1;
+		currentTile.addMover(this);
 		//System.out.println(this);
 //		animation not necessary unless Pacman moving		
 //		walkAnimation = new Animation(0.025f, pacmanFrames);
@@ -50,31 +46,28 @@ public final class PacChar extends Mover{
 	public void prepareDraw() {
 		
 		// Update pacman's facing dir
-		if (currentState == PacState.DEAD) {
-			spritePos = 0;
+		spritePos = 3;
+		if (drawFacing == Dir.RIGHT) {
+			spritePos = 1;
+		} else if (drawFacing == Dir.UP) {
+			spritePos = 5;
+		} else if (drawFacing == Dir.DOWN){ 
+			spritePos = 7;
 		} else {
-			spritePos = 3;
-			if (drawFacing == Dir.RIGHT) {
-				spritePos = 1;
-			} else if (drawFacing == Dir.UP) {
-				spritePos = 5;
-			} else if (drawFacing == Dir.DOWN) {
-				spritePos = 7;
-			} else {
-				drawFacing = Dir.LEFT;
-			}
+			drawFacing = Dir.LEFT;
 		}
-		if (!(currentState == PacState.DEAD)){
-			// If pacman is able to turn, update drawFacing
-			if (canTurn()) {
-				drawFacing = facing;
-				this.setCurrentState(PacState.MOVING);
-			}
-			
-			if (!this.checkNoWallCollision()){
-				this.setCurrentState(PacState.IDLE);
-			}
+		
+	
+		// If pacman is able to turn, update drawFacing
+		if (canTurn(this.getTile())) {
+			drawFacing = facing;
+			this.setCurrentState(PacState.MOVING);
 		}
+		
+		if (!this.checkNoWallCollision(this.getTile())){
+			this.setCurrentState(PacState.IDLE);
+		}
+		
 		
 		// checks if pacman is moving, and if so keeps him moving in that direction
 		if (currentState == PacState.MOVING) {
@@ -101,58 +94,19 @@ public final class PacChar extends Mover{
 		checkGhostCollision(currentTile);
 	}
 	
-	/**
-	 * Checks whether pac man can turn
-	 */
-	public boolean canTurn(){
-		int x = gameMap.getTilePos(currentTile).getX();
-		int y = gameMap.getTilePos(currentTile).getY();
-		Tile[][] grid = gameMap.getGrid();
-		switch(facing) {
-		case LEFT: x -= 1; break;
-		case RIGHT: x += 1; break;
-		case UP: y += 1; break;
-		case DOWN: y -= 1; break;
-		}
-		return grid[x][y].getClass() != WallTile.class;
-	}
 	
-	private void checkGhostCollision(Tile pTile) {
+	private void checkGhostCollision(Tile pTile) {	
 		List<Mover> colList = pTile.getMovers();
 		if (colList.size() > 1) {
-			for (int i = 0; i < colList.size(); i++) {
+			for (int i=0; i < colList.size(); i++) {
 				if (colList.get(i).getClass() == Ghost.class) {
-					if (((Ghost) colList.get(i)).getCurrentState() == GhostState.SCATTER
-							|| ((Ghost) colList.get(i)).getCurrentState() == GhostState.FRIGHT) {
-						// Ghost is scared! Time to feast :>
-						((Ghost) colList.get(i))
-								.setCurrentState(GhostState.DEAD);
-						gameMap.setGhostsEaten(gameMap.getGhostsEaten() + 1);
-						this.setScore(this.getScore() + getGhostScore());
-						setGhostScore(getGhostScore() * 2);
-					} else if (((Ghost) colList.get(i)).getCurrentState() == GhostState.CHASE
-							&& (currentState == PacState.MOVING ||
-									currentState == PacState.IDLE)) {
-						// Pacman has been hit!
-						currentState = PacState.DEAD;
-						Timer.schedule(new Task() { // Game's not over! Revive in 3
-							public void run() {
-								currentState = PacState.MOVING;
-							}
-						}, 3);
-						System.out.println(currentState);
-						setLives(getLives() - 1);
-						// Is it game over?
-						if (getLives() <= 0) {
-							this.setCurrentState(PacState.DEAD);
-							// gamePaused = true;
-							gameMap.setGameOver(true);
-							// Do gameover stuff
-						}
-					}
+					System.out.println("(*&(*&Pacman hit a ghost!");
+					//TODO some death thing
+					this.setCurrentState(PacState.DEAD);
 				}
 			}
 		}
+		
 	}
 	
 	public void setFacing(Dir facing) {

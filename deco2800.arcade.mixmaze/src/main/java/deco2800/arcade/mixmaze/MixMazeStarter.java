@@ -7,7 +7,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import org.apache.log4j.BasicConfigurator;
 
-public final class MixMazeStarter {
+public class MixMazeStarter {
 	public static void main(String[] args) {
 		BasicConfigurator.configure();
 
@@ -19,9 +19,5 @@ public final class MixMazeStarter {
 		cfg.height = 720;
 
 		new LwjglApplication(new MixMaze(null, null), cfg);
-	}
-	
-	private MixMazeStarter(){
-		
 	}
 }

@@ -1,20 +1,26 @@
 package deco2800.server;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.UUID;
 
 import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.ClearListRequest;
 import deco2800.arcade.protocol.lobby.CreateMatchResponse;
+import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponse;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponseType;
 import deco2800.arcade.protocol.lobby.LobbyMessageRequest;
 import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 
 /**
  * The Lobby class - Singleton Pattern.
@@ -83,8 +89,11 @@ public class Lobby {
 					this.matchIdCounter);
 			this.matchIdCounter++;
 			lobbyGames.add(match);
-			this.sendGamesToLobbyUsers();
+			CreateMatchResponse response = new CreateMatchResponse();
+			response.matchId = match.getMatchId();
+			connection.sendTCP(response);
 
+			this.sendGamesToLobbyUsers();
 		}
 	}
 
@@ -97,21 +106,13 @@ public class Lobby {
 			connection.sendTCP(response);
 		} else {
 			/* Match found */
-			int sessionID = MatchmakerQueue.instance().addLobbyGame(playerId,
-					match.getHostPlayerId(), connection, match.getHostConnection(),
+			MatchmakerQueue.instance().addLobbyGame(match.getHostPlayerId(),
+					playerId, match.getHostConnection(), connection,
 					match.getGameId());
 			this.lobbyGames.remove(match);
-			this.connectedPlayers.remove(playerId);
-			this.connectedPlayers.remove(match.getHostPlayerId());
-			this.sendGamesToLobbyUsers();
 			JoinLobbyMatchResponse response = new JoinLobbyMatchResponse();
 			response.responseType = JoinLobbyMatchResponseType.OK;
-			response.session = sessionID;
-			response.host = true;
 			connection.sendTCP(response);
-			response.host = false;
-			match.getHostConnection().sendTCP(response);
-			
 		}
 	}
 
@@ -217,6 +218,7 @@ public class Lobby {
 	 * @param request the chat request to forward
 	 */
 	public void sendChat(LobbyMessageRequest request) {
+		int playerID = request.playerID;
 		String message = request.message;
 		String username = request.user;
 		LobbyMessageResponse response = new LobbyMessageResponse();
@@ -276,16 +278,8 @@ public class Lobby {
 	public Map<Integer, Connection> getConnectedPlayers() {
 		return connectedPlayers;
 	}
-	/* Test Helper methods */
+
 	public int getMatchIdCounter() {
 		return this.matchIdCounter;
 	}
-	
-	public void resetLobby() {
-		this.lobbyGames = new ArrayList<LobbyMatch>();
-		this.connectedPlayers = new HashMap<Integer, Connection>();
-		this.matchIdCounter = 0;
-	}
-	
-	
 }

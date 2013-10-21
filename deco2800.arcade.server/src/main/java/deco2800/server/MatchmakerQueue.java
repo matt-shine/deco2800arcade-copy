@@ -1,14 +1,10 @@
 package deco2800.server;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Map.Entry;
 
 import com.esotericsoftware.kryonet.Connection;
 
@@ -30,7 +26,7 @@ public class MatchmakerQueue {
 	// Servers currently hosting games
 	private Map<Integer, MultiplayerServer> activeServers;
 	// The PlayerGameStorage database
-	private PlayerGameStorage database;
+	PlayerGameStorage database;
 	// The current number of servers started since the last restart
 	private int serverNumber;
 	// A timer to control the queue
@@ -45,14 +41,14 @@ public class MatchmakerQueue {
 	private MatchmakerQueue() {
 		this.queuedUsers = new ArrayList<ArrayList<Object>>();
 		this.activeServers = new HashMap<Integer, MultiplayerServer>();
-		this.setDatabase(new PlayerGameStorage());
+		this.database = new PlayerGameStorage();
 		this.serverNumber = 0;
 		this.timer = new Timer();
 		class ListTask extends TimerTask {
 			public void run() {
 				// Checks the queued players list to see if any games have
 				// become available
-				checkList(null);
+				checkList();
 			}
 		}
 		timer.schedule(new ListTask(), 0, 10000);
@@ -79,8 +75,8 @@ public class MatchmakerQueue {
 		ArrayList<ArrayList<Object>> map = new ArrayList<ArrayList<Object>>(
 				queuedUsers);
 		return map;
-	}	
-	
+	}
+
 	/**
 	 * Returns a copy of the current server list
 	 * 
@@ -91,29 +87,7 @@ public class MatchmakerQueue {
 				activeServers);
 		return map;
 	}
-	
-	/**
-	 * Returns a copy of the current server list as an ArrayList for sending over
-	 * the network
-	 * 
-	 * @return A copy of the current server list as an ArrayList
-	 */
-	public ArrayList<ArrayList<Object>> getServerListAsList() {
-		ArrayList<ArrayList<Object>> list = new ArrayList<ArrayList<Object>>();
-		for (Map.Entry<Integer, MultiplayerServer> entry : activeServers.entrySet()) {
-			ArrayList<Object> server = new ArrayList<Object>();
-			server.add(entry.getKey());
-			server.add(entry.getValue().getPlayer1());
-			server.add(entry.getValue().getPlayer1Rating());
-			server.add(entry.getValue().getPlayer2());
-			server.add(entry.getValue().getPlayer2Rating());
-			server.add(entry.getValue().getSessionId());
-			server.add(entry.getValue().getServerType());
-			list.add(server);
-		}
-		return list;
-	}
-	
+
 	/**
 	 * Add a user to the matchmaking queue.
 	 * 
@@ -158,6 +132,12 @@ public class MatchmakerQueue {
 	public void checkForGame(NewMultiGameRequest request, Connection connection) {
 		int playerID = request.playerID;
 		String gameId = request.gameId;
+		try {
+			System.out.println("Rating: "
+					+ database.getPlayerRating(playerID, gameId));
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
 		// Search for an appropriate game for the user to join
 		for (int i = 0; i < queuedUsers.size(); i++) {
 			if (!gameId.equals(queuedUsers.get(i).get(0))) {
@@ -169,7 +149,7 @@ public class MatchmakerQueue {
 			player1.add(playerID);
 			player1.add(connection);
 			ArrayList<Object> player2 = queuedUsers.get(i);
-			if (goodGame(player1, player2,  null)) {
+			if (goodGame(player1, player2)) {
 				launchGame(player1, player2);
 				queuedUsers.remove(i);
 				return;
@@ -192,17 +172,19 @@ public class MatchmakerQueue {
 	 * 
 	 * @param gameId: The ID of the game to be played
 	 */
-	public int addLobbyGame(int player1Id, int player2Id,
+	public void addLobbyGame(int player1Id, int player2Id,
 			Connection player1Connection, Connection player2Connection,
 			String gameId) {
 		MultiplayerServer gameServer = new MultiplayerServer(player1Id,
 				player2Id, player1Connection, player2Connection, gameId,
 				serverNumber);
 		activeServers.put(serverNumber, gameServer);
+		NewMultiSessionResponse session = new NewMultiSessionResponse();
+		session.sessionId = serverNumber;
 		serverNumber++;
-		return serverNumber - 1;
-		//player1Connection.sendTCP(session);
-		//player2Connection.sendTCP(session);
+		session.gameId = gameId;
+		player1Connection.sendTCP(session);
+		player2Connection.sendTCP(session);
 	}
 
 	/**
@@ -217,10 +199,7 @@ public class MatchmakerQueue {
 	 * @return True if a game can be started between the two players
 	 */
 	private boolean goodGame(ArrayList<Object> player1,
-			ArrayList<Object> player2, Long systime) {
-		if (systime == null) {
-			systime = System.currentTimeMillis();
-		}
+			ArrayList<Object> player2) {
 		int p1Rating = 0, p2Rating = 0, ratingDiff;
 		long timeAllowance;
 		int p1ID = (Integer) player1.get(2);
@@ -228,8 +207,8 @@ public class MatchmakerQueue {
 		String gameID = (String) player1.get(0);
 		// Get the player's rankings
 		try {
-			p1Rating = getDatabase().getPlayerRating(p1ID, gameID);
-			p2Rating = getDatabase().getPlayerRating(p2ID, gameID);
+			p1Rating = database.getPlayerRating(p1ID, gameID);
+			p2Rating = database.getPlayerRating(p2ID, gameID);
 		} catch (DatabaseException e) {
 			e.printStackTrace();
 		}
@@ -238,7 +217,7 @@ public class MatchmakerQueue {
 		if (p1Rating == 0) {
 			p1Rating = 1500;
 			try {
-				getDatabase().updatePlayerRating(p1ID, gameID, 1500);
+				database.updatePlayerRating(p1ID, gameID, 1500);
 			} catch (DatabaseException e) {
 				e.printStackTrace();
 			}
@@ -246,7 +225,7 @@ public class MatchmakerQueue {
 		if (p2Rating == 0) {
 			p2Rating = 1500;
 			try {
-				getDatabase().updatePlayerRating(p2ID, gameID, 1500);
+				database.updatePlayerRating(p2ID, gameID, 1500);
 			} catch (DatabaseException e) {
 				e.printStackTrace();
 			}
@@ -256,13 +235,17 @@ public class MatchmakerQueue {
 		// quality
 		// game in favour of finding one immediately
 		long time = (Long) player2.get(1);
-		timeAllowance = (((systime - time) / 60000) + 1) * 100;
+		timeAllowance = (((System.currentTimeMillis() - time) / 60000) + 1) * 100;
 		if (p1Rating >= p2Rating) {
 			ratingDiff = p1Rating - p2Rating;
 		} else {
 			ratingDiff = p2Rating - p1Rating;
 		}
-		return (!(ratingDiff > timeAllowance && timeAllowance < 500));
+		if (ratingDiff > timeAllowance && timeAllowance < 500) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	/**
@@ -281,9 +264,10 @@ public class MatchmakerQueue {
 		Connection player2Conn = (Connection) player2.get(3);
 		String game = (String) player1.get(0);
 		try {
-			p1Rating = getDatabase().getPlayerRating(player1ID, game);
-			p2Rating = getDatabase().getPlayerRating(player2ID, game);
+			p1Rating = database.getPlayerRating(player1ID, game);
+			p2Rating = database.getPlayerRating(player2ID, game);
 		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		MultiplayerServer gameServer = new MultiplayerServer(player1ID,
@@ -305,10 +289,7 @@ public class MatchmakerQueue {
 	 * Checks the queued user list to see if games may be formed between users
 	 * due to relaxed rank settings due to extra time in the queue
 	 */
-	private void checkList(Long systime) {
-		if (systime == null) {
-			systime = System.currentTimeMillis();
-		}
+	private void checkList() {
 		if (queuedUsers.size() < 2) {
 			return;
 		}
@@ -316,7 +297,7 @@ public class MatchmakerQueue {
 			for (int j = i + 1; j < queuedUsers.size(); j++) {
 				if (((String) queuedUsers.get(i).get(0))
 						.equals(((String) queuedUsers.get(j).get(0)))) {
-					if (goodGame(queuedUsers.get(i), queuedUsers.get(j), systime)) {
+					if (goodGame(queuedUsers.get(i), queuedUsers.get(j))) {
 						ArrayList<Object> player1 = new ArrayList<Object>(
 								queuedUsers.get(i));
 						ArrayList<Object> player2 = new ArrayList<Object>(
@@ -351,20 +332,20 @@ public class MatchmakerQueue {
 		int player1Rating = 0;
 		int player2Rating = 0;
 		try {
-			player1Rating = getDatabase().getPlayerRating(player1ID, gameID);
-			player2Rating = getDatabase().getPlayerRating(player2ID, gameID);
+			player1Rating = database.getPlayerRating(player1ID, gameID);
+			player2Rating = database.getPlayerRating(player2ID, gameID);
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e);
 		}
 		// Find the new ratings of each player based off the finished game
 		int[] newScore = elo(player1ID, player1Rating, player2ID,
 				player2Rating, winner);
 		// Update the rating in the database
 		try {
-			getDatabase().updatePlayerRating(player1ID, gameID, newScore[0]);
-			getDatabase().updatePlayerRating(player2ID, gameID, newScore[1]);
+			database.updatePlayerRating(player1ID, gameID, newScore[0]);
+			database.updatePlayerRating(player2ID, gameID, newScore[1]);
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println(e);
 		}
 		// Remove the server from the active list
 		dropServer(session);
@@ -402,8 +383,6 @@ public class MatchmakerQueue {
 		// lost per game)
 		int k = 32;
 		int[] newElo = new int[2];
-		double player1Rating = (double) p1Rating;
-		double player2Rating = (double) p2Rating;
 		if (p1Rating < 2100 || p2Rating < 2100) {
 			k = 32;
 		} else if ((p1Rating < 2401 && p1Rating >= 2100)
@@ -421,59 +400,21 @@ public class MatchmakerQueue {
 			double diff = p1Rating - p2Rating;
 			double change = (1 - (1.0f / (Math.pow(10, ((-diff / 400) + 1)))));
 			score = k * change;
-			player1Rating += score;
-			newElo[0] = (int) Math.floor(player1Rating);
+			newElo[0] = (int) Math.floor(p1Rating += score);
 			score = -k * change;
-			player2Rating += score;
-			newElo[1] = (int) Math.floor(player2Rating);
+			newElo[1] = (int) Math.floor(p2Rating += score);
 		} else if (winner == p2ID) {
 			double score;
 			double diff = p2Rating - p1Rating;
 			double change = (1 - (1.0f / (Math.pow(10, ((-diff / 400) + 1)))));
 			score = -k * change;
-			player1Rating += score;
-			newElo[0] = (int) Math.floor(player1Rating);
+			newElo[0] = (int) Math.floor(p1Rating += score);
 			score = k * change;
-			player2Rating += score;
-			newElo[1] = (int) Math.floor(player2Rating);
+			newElo[1] = (int) Math.floor(p2Rating += score);
 		} else {
 			newElo[0] = p1Rating;
 			newElo[1] = p2Rating;
 		}
 		return newElo;
 	}
-	
-	
-	/* TEST HELPER METHODS */
-	
-	/**
-	 * For testing purposes
-	 * @return - The database instance
-	 */
-	public PlayerGameStorage getDatabase() {
-		return database;
-	}
-
-	/**
-	 * Set the database instance
-	 * @param database
-	 */
-	public void setDatabase(PlayerGameStorage database) {
-		this.database = database;
-	}
-	
-	public void resetQueuedUsers() {
-		this.queuedUsers = new ArrayList<ArrayList<Object>>();
-	}
-	
-	public void resetActiveServers() {
-		this.activeServers = new HashMap<Integer, MultiplayerServer>();
-		this.serverNumber = 0;
-	}
-	
-	public void callCheckList(Long systime) {
-		this.checkList(systime);
-	}
-	
-	/* END TEST HELPER METHODS */
 }

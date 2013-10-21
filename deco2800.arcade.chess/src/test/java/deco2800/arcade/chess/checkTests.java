@@ -1,6 +1,9 @@
 package deco2800.arcade.chess;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 import deco2800.arcade.chess.pieces.Piece;

@@ -43,7 +43,7 @@ public class BulletHomingDestructible extends BulletSimple {
 			float currentAngle = velocity.angle();
 			float angleDifference = intendedAngle - currentAngle;
 			if (Math.abs(angleDifference) > 180) {
-				//System.out.println("OVER 180!!!!!!!!!!!!!!!!");
+				System.out.println("OVER 180!!!!!!!!!!!!!!!!");
 				angleDifference = -angleDifference/Math.abs(angleDifference) * Math.abs(180-angleDifference);
 			}
 			float maxRotation;
@@ -70,7 +70,7 @@ public class BulletHomingDestructible extends BulletSimple {
 				//}
 				rotation += angleDifference;
 			}
-			//System.out.println("Rotation now " + rotation);
+			System.out.println("Rotation now " + rotation);
 			homedCount++;
 			count = 0;
 		}

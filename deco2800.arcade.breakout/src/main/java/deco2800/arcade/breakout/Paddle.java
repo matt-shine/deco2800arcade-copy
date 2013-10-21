@@ -1,5 +1,6 @@
 package deco2800.arcade.breakout;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -19,7 +20,7 @@ public abstract class Paddle {
 	private static final float HEIGHT = 20f;
 	private static final float STANDARDWIDTH = 128f;
 
-	private Rectangle paddleShape = new Rectangle();
+	Rectangle paddleShape = new Rectangle();
 
 	/**
 	 * Create a new paddle at a given vector position.
@@ -40,14 +41,6 @@ public abstract class Paddle {
 	 */
 	public float getStandardWidth() {
 		return STANDARDWIDTH;
-	}
-	
-	/**
-	 * Returns the rectangle paddleshape
-	 * @return Rectangle paddleShape
-	 */
-	public Rectangle getPaddleShape(){
-		return paddleShape;
 	}
 
 	/**
@@ -153,11 +146,9 @@ public abstract class Paddle {
 	 * @param ball
 	 */
 	public void update(Ball ball) {
-		if (paddleShape.x > Breakout.SCREENWIDTH - paddleShape.width){
+		if (paddleShape.x > Breakout.SCREENWIDTH - paddleShape.width)
 			paddleShape.x = Breakout.SCREENWIDTH - paddleShape.width;
-		}
-		else if (paddleShape.x < 0){
+		else if (paddleShape.x < 0)
 			paddleShape.x = 0;
-		}
 	}
 }

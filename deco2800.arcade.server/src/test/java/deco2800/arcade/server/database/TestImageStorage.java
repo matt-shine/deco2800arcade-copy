@@ -50,46 +50,46 @@ public class TestImageStorage {
 	databaseTester.onTearDown();
     }
 
-//    @Test
-//    public void testInsertRetrieve() throws Exception {
-//        URL url = TestImageStorage.class.getClassLoader().getResource("image.png");
-//        File f = new File(url.toURI());
-//        EncodedImage image = new EncodedImage(f);
-//        imageStorage.set("foo", image);
-//        
-//        EncodedImage retrievedImage = imageStorage.get("foo");
-//        int src = 0;
-//        int ret = 0;
-//        InputStream srcStream = image.getInputStream();
-//        InputStream retStream = retrievedImage.getInputStream();
-//
-//        while (src != -1 && ret != -1) {
-//            src = srcStream.read();
-//            ret = retStream.read();
-//
-//            assertEquals(src, ret);
-//        }
-//
-//        assertEquals(src, ret);
-//    }
+    @Test
+    public void testInsertRetrieve() throws Exception {
+        URL url = TestImageStorage.class.getClassLoader().getResource("image.png");
+        File f = new File(url.toURI());
+        EncodedImage image = new EncodedImage(f);
+        imageStorage.set("foo", image);
+        
+        EncodedImage retrievedImage = imageStorage.get("foo");
+        int src = 0;
+        int ret = 0;
+        InputStream srcStream = image.getInputStream();
+        InputStream retStream = retrievedImage.getInputStream();
 
-//    @Test
-//    public void testGetFallback() throws Exception {
-//	EncodedImage unknownImage = imageStorage.get(ImageStorage.UNKNOWN_IMAGE_ID);
-//	EncodedImage retrievedImage = imageStorage.get("asdfghjkl;");
-//        int src = 0;
-//        int ret = 0;
-//        InputStream srcStream = unknownImage.getInputStream();
-//        InputStream retStream = retrievedImage.getInputStream();
-//
-//        while (src != -1 && ret != -1) {
-//            src = srcStream.read();
-//            ret = retStream.read();
-//
-//            assertEquals(src, ret);
-//        }
-//
-//        assertEquals(src, ret);	
-//    }
+        while (src != -1 && ret != -1) {
+            src = srcStream.read();
+            ret = retStream.read();
+
+            assertEquals(src, ret);
+        }
+
+        assertEquals(src, ret);
+    }
+
+    @Test
+    public void testGetFallback() throws Exception {
+	EncodedImage unknownImage = imageStorage.get(ImageStorage.UNKNOWN_IMAGE_ID);
+	EncodedImage retrievedImage = imageStorage.get("asdfghjkl;");
+        int src = 0;
+        int ret = 0;
+        InputStream srcStream = unknownImage.getInputStream();
+        InputStream retStream = retrievedImage.getInputStream();
+
+        while (src != -1 && ret != -1) {
+            src = srcStream.read();
+            ret = retStream.read();
+
+            assertEquals(src, ret);
+        }
+
+        assertEquals(src, ret);	
+    }
 }
 

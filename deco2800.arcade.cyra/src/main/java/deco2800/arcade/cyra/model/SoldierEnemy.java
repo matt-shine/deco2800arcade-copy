@@ -19,21 +19,20 @@ public class SoldierEnemy extends Enemy {
 	public static final float JUMP_TIME = 0.4f;
 	public static final float JUMP_VELOCITY = 14f;
 	
-	boolean facingRight; // true if facing right
-	boolean startOnRight; // true if spawns to right of player
-	boolean notYetDeterminedStartOnRight; // true if has not yet determined location of player
-	private State state; //state of attack currently in
-	private Boolean performingTell; // if the action has not actually taken place yet
-	private float stateTime; // time/count to do action
-	private float jumpTime; // time/count for jumping
-	private float swordTime; // time/count for sword swiping
-	private int deathType; // 4 different death types when State is DEATH
-	private boolean deathFromRight; // true if was defeated by a Sword to right of SoldierEnemy
-	private float deathCount; //the timer for death
-	private float deathRotation; // the rotation of the death
-	private int otherAnimationFrame; // the animationFrame for special effects
+	boolean facingRight;
+	boolean startOnRight;
+	boolean notYetDeterminedStartOnRight;
+	private State state;
+	private Boolean performingTell;
+	private float stateTime;
+	private float jumpTime;
+	private float swordTime;
+	private int deathType;
+	private boolean deathFromRight;
+	private float deathCount;
+	private float deathRotation;
 	
-	public enum State {
+	private enum State {
 		INIT, WALK, WAIT, JUMP, SHOOT, AOE, RAM, SWORD, GRENADE, DEATH
 	}
 	
@@ -42,11 +41,6 @@ public class SoldierEnemy extends Enemy {
 		notYetDeterminedStartOnRight = true;
 	}
 	
-	/**
-	 * SoldierEnemy is the basic enemy in the game
-	 * @param pos the position to start
-	 * @param startOnRight true if starting to the right of the player
-	 */
 	public SoldierEnemy (Vector2 pos, boolean startOnRight) {
 		super(SPEED, 0, pos, WIDTH, HEIGHT);
 		this.startOnRight= startOnRight;
@@ -57,8 +51,6 @@ public class SoldierEnemy extends Enemy {
 		stateTime = 0.1f;
 		jumpTime = 0;
 		swordTime = 0;
-		score = 100;
-		otherAnimationFrame = 0;
 		
 		if (startOnRight) {
 			velocity.x = -SPEED;
@@ -66,7 +58,6 @@ public class SoldierEnemy extends Enemy {
 			velocity.x = SPEED;
 		}
 	}
-
 
 	@Override
 	public Array<Enemy> advance(float delta, Player ship, float rank, OrthographicCamera cam) {
@@ -86,7 +77,7 @@ public class SoldierEnemy extends Enemy {
 				} else {
 					velocity.x = -SPEED * 1.8f;
 				}
-				
+				//System.out.println("Determined to start on right");
 			} else {
 				startOnRight = false;
 				if (ship.getVelocity().x <= 0) {
@@ -94,15 +85,18 @@ public class SoldierEnemy extends Enemy {
 				} else {
 					velocity.x = SPEED * 1.8f;
 				}
-				
+				//System.out.println("Determined to NOT start on right");
 			}
 		}
 		
 		position.add(velocity.mul(delta));
+		//System.out.println("Velocity after scl " + velocity.x+","+velocity.y);
+		//tmp1.scl(Gdx.graphics.getDeltaTime());
 		velocity.mul(1/delta);
 		velocity.add(0, GRAVITY);
 		
 		if (state == State.INIT && (ship.getPosition().x > position.x - 10f || ship.getPosition().x < position.x +10f)) {
+			//System.out.println("cancelled init at ship"+ship.getPosition()+" and enemy"+position);
 			stateTime = 0f;
 		}
 		
@@ -120,7 +114,7 @@ public class SoldierEnemy extends Enemy {
 						velocity.x = -SPEED * 1.5f;
 					}
 					jumpTime = JUMP_TIME;
-					stateTime = 4f-rank;
+					stateTime = 3f;
 					break;
 				
 				case SHOOT:
@@ -140,10 +134,10 @@ public class SoldierEnemy extends Enemy {
 								position.y + height/2), 1f, 1f, direction, BulletSimple.Graphic.FIRE));
 						Sounds.playShootSound(0.5f);
 					}
-					stateTime = 3f-2.5f*rank;
+					stateTime = 1f;
 					break;
 				case AOE:
-					stateTime = 3f-rank;
+					stateTime = 2f;
 					velocity.x = 0f;
 					break;
 				case RAM:
@@ -151,13 +145,14 @@ public class SoldierEnemy extends Enemy {
 					if (!facingRight) {
 						velocity.x = -velocity.x;
 					}
-					stateTime = 2f-rank;
+					stateTime = 1f;
 					break;
 				case SWORD:
-					stateTime = 3f-rank;
+					stateTime = 2f;
 					swordTime = 1.5f;
 					break;
 				case GRENADE:
+					//newEnemies.add(new Grendae);
 					stateTime = 1f;
 					break;
 				case DEATH:
@@ -174,10 +169,15 @@ public class SoldierEnemy extends Enemy {
 				pickNewState(ship, rank);
 			}
 		}
+		//System.out.println("Velocity after soldier advance = "+velocity+ "    Position after soldier advance ="+position);
+		
 		if (state == State.JUMP && !performingTell) {
 			jumpTime -= delta;
-			if (jumpTime >= 0) {
-				
+			//System.out.println("jumpTime= "+jumpTime);
+			if (jumpTime < 0) {
+				//state = State.WAIT;
+				//velocity.x = 0;
+			} else {
 				velocity.y = JUMP_VELOCITY;
 			}
 		}
@@ -345,6 +345,7 @@ public class SoldierEnemy extends Enemy {
 			velocity.x = 0;
 			stateTime = 1.5f-1.35f * rank;
 		
+		//} else if (rand < grenadeChance) {
 		} else {
 			state = State.GRENADE;
 			if (ship.position.x > position.x) {
@@ -357,7 +358,7 @@ public class SoldierEnemy extends Enemy {
 		
 		}
 		
-		
+		System.out.println("Picked new state: "+ state);
 	}
 	
 	
@@ -377,13 +378,28 @@ public class SoldierEnemy extends Enemy {
 		if (velocity.y < 0 && state == State.JUMP && !performingTell) {
 			state = State.WAIT;
 			velocity.x = 0;
-			
+			System.out.println("hit ground");
 		}
 		super.handleYCollision(tile, onMovablePlatform, movablePlatform);
 		
 	}
 
-	
+	@Override
+	public void handleNoTileUnderneath() {
+		/*if (state != State.JUMP) {
+			//velocity.y = 14f;
+			state = State.JUMP;
+			performingTell = true;
+			if (velocity.x > 0) {
+				position.x -= 0.2f;
+			} else {
+				position.x += 0.2f;
+			}
+			velocity.x = 0;
+			stateTime = 1f;
+		}*/
+		
+	}
 	@Override
 	public boolean isJumping(){
 		if(state == State.JUMP){
@@ -427,32 +443,7 @@ public class SoldierEnemy extends Enemy {
 			performingTell = true;
 			deathCount = 0f;
 			deathRotation = 0f;
-			Sounds.playHurtSound(0.5f);
 		}
 	}
 
-	public State getState() {
-		return state;
-	}
-	
-	public boolean isPerformingTell() {
-		return performingTell;
-	}
-	
-	public boolean isFacingRight() {
-		return facingRight;
-	}
-	
-	public int getOtherAnimationFrame() {
-		if (++otherAnimationFrame == 4) {
-			otherAnimationFrame = 0;
-		}
-		return otherAnimationFrame;
-	}
-
-	@Override
-	public void handleNoTileUnderneath() {
-		
-		
-	}
 }

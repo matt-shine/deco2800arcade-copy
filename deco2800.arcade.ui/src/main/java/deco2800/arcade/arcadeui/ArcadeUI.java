@@ -28,8 +28,9 @@ public class ArcadeUI extends GameClient {
 	RegisterScreen register = null;
 	MultiplayerLobby lobby = null;
 	BettingWindow betting = null;
-	JoinMatchList multigame = null;
-	CreateMatchList multigame2 = null;
+	MultiGamelist multigame = null;
+	Gamewaiting wait = null;
+	MultiGamelist2 multigame2 = null;
 	BettingLobby bettingLobby = null;
 	private StoreHome storeHome = null;
 	private StoreTransactions storeTransactions = null;
@@ -53,11 +54,13 @@ public class ArcadeUI extends GameClient {
 		register = new RegisterScreen(this);
 		home = new HomeScreen(this);
 		main = new FrontPage(this);
-		register = new RegisterScreen(this);
+		
+		System.out.println("PLAYER: " + player);
 		lobby = new MultiplayerLobby(this, player);
 		betting = new BettingWindow(this);
-		multigame = new JoinMatchList(this);
-		multigame2 = new CreateMatchList(this);
+		multigame = new MultiGamelist(this);
+		wait = new Gamewaiting(this);
+		multigame2 = new MultiGamelist2(this);
 		bettingLobby = new BettingLobby(this);
 		
 		storeHome = new StoreHome(this, player);
@@ -112,9 +115,6 @@ public class ArcadeUI extends GameClient {
 	public HomeScreen getHome() {
 		return home;
 	}
-	public FrontPage getMain() {
-		return main;
-	}
 
 	public StoreHome getStoreHome() {
 		storeHome.show();
@@ -139,11 +139,15 @@ public class ArcadeUI extends GameClient {
 		return betting;
 	}
 
-	public JoinMatchList getMultigame() {
+	public MultiGamelist getMultigame() {
 		return multigame;
 	}
 
-	public CreateMatchList getMultigame2() {
+	public Gamewaiting getWait() {
+		return wait;
+	}
+
+	public MultiGamelist2 getMultigame2() {
 		return multigame2;
 	}
 

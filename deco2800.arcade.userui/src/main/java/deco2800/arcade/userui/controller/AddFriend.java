@@ -3,7 +3,6 @@ package deco2800.arcade.userui.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import deco2800.arcade.model.Player;
 import deco2800.arcade.userui.Model;
 import deco2800.arcade.userui.view.AchievementScreen;
 import deco2800.arcade.userui.view.AddFriendScreen;
@@ -43,7 +42,6 @@ public class AddFriend {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
-			theModel.getPlayer().acceptFriendInvite(theModel.getUser());
 			friendView.dispose();
 			userView.setEnabled(true);
 			

@@ -31,15 +31,7 @@ public class EditTest {
 		info.add("IT");
 		info.add("#Rickroll");
 		info.add("20");
-		
-		ArrayList<Boolean> privset = new ArrayList<Boolean>();
-		privset.add(true);
-		privset.add(true);
-		privset.add(true);
-		privset.add(true);
-		privset.add(true);
-		privset.add(true);
-		privset.add(true);
+		boolean[] privset = { true, true, true, true, true, true, true };
 
 		player = new Player(123, "THIS IS NOT A VALID PATH.html", info, null,
 				null, null, null, privset);

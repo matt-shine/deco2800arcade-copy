@@ -1,9 +1,16 @@
 package deco2800.arcade.model;
+import java.text.DecimalFormat;
 import java.util.NoSuchElementException;
 //TODO Add in a popup string method
 
 //THE ACCOLADE ID WILL NO LONGER BE AN AUTO INCRMENT - instead it will be the gameID.xx ie, 1.01, 1.02 
 //(either assigned by gamedev or automatically through our code)
+
+
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
+
 public class Accolade {
 	//TODO move the container specific overrides to the AccoladeContainer class	
 	
@@ -32,13 +39,13 @@ public class Accolade {
 	 * @param image The location of the associated accolade image.
 	 */
 	public Accolade(String name, String message, int popup, String popupMessage, 
-			Double modifier, String unit, String tag, String imagePath){
+			Double f, String unit, String tag, String imagePath){
 		this.name = name;
 		this.message = message;
 		this.popup = popup;
 		this.popupMessage = popupMessage;
 		//.replace("%VALUE", "{0}").replace("%%UNIT", "{1}")
-		this.modifier = modifier;
+		this.modifier = f;
 		this.unit = unit;
 		this.tag = tag; 
 		this.imagePath = imagePath; //this might end up being stored as a directory type.
@@ -81,14 +88,11 @@ public class Accolade {
 		return this.message;
 		}
 	
-	public Integer getValue(){
+	public int getValue(){
 		return this.value;
 		}
-	public Integer getPopup(){
-		return this.popup;
-	}
 	
-	public Integer getGameID(){
+	public int getGameID(){
 		//TODO add in error throwing for a nullpointer exception
 		return this.gameID;
 		}
@@ -115,12 +119,9 @@ public class Accolade {
 		return parseString(this.message);
 		}
 	
-	public String toPopupMessage(){
+	public String getPopup(){
 		return parseString(this.popupMessage);
 		}
-	public String getRawPopupMessage(){
-		return this.popupMessage;
-	}
 	
 	//HAS STUFF
 	
@@ -135,6 +136,7 @@ public class Accolade {
 	private String parseString(String message){
 		String s = message.replace("%VALUE", "%s").replace("%UNIT", "%s");
 		String firstReplace, secondReplace;
+		String sValue;
 		Long value = (long) (this.value*this.modifier);
 
 		
@@ -179,7 +181,6 @@ public class Accolade {
 		return prev;
 	}
 	
-	@SuppressWarnings("unused") //Used externallally
 	private boolean hasNext(){
 		return next==null;
 	}

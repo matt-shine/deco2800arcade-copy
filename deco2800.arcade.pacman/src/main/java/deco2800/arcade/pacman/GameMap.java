@@ -3,7 +3,6 @@ package deco2800.arcade.pacman;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.lwjgl.util.Point;
 
@@ -22,18 +21,13 @@ public class GameMap {
 	private Tile[] ghostStarts; //starting positions for ghosts
 	private Tile blinkyStart;
 	private Tile fruitRight; // the right tile that fruit appears on
-	private int dotsEaten;
-	private int ghostsEaten;
-	private boolean energized;
-	private boolean gameOver;
 	private int hOffset;
 	private int vOffset;
 	private final int tileSideLength; // length of side of square- should be
 	// same for all tiles in a GameMap
 	public final int SCREEN_HEIGHT;
 	public final int SCREEN_WIDTH;
-	private final int NUM_BUFFER_TILES; //the number of buffer tiles around the edge of the map on each side
-	private List<Tile> afterTeleports;
+	
 	
 	public GameMap(int SCREEN_WIDTH, int SCREEN_HEIGHT, int numGhosts) {
 		vsym = false;
@@ -42,8 +36,6 @@ public class GameMap {
 		this.SCREEN_WIDTH = SCREEN_WIDTH;
 		ghostStarts = new Tile[numGhosts];
 		tileSideLength = 16;
-		NUM_BUFFER_TILES = 4;
-		afterTeleports = new ArrayList<Tile>();
 	}
 	
 
@@ -140,29 +132,26 @@ public class GameMap {
 	 */
 	public void createTiles(ArrayList<char[]> map) {
 		//initialise size of map grid
-		int mapSize = map.size();
-		int lineSize = map.get(0).length;
-		int ySize = mapSize + NUM_BUFFER_TILES*2; // number of lines + buffer tiles
-		int xSize = lineSize + NUM_BUFFER_TILES*2; //length of each line + buffer tiles
+		int ySize = map.size(); // number of lines
+		int xSize = map.get(0).length; //length of each line
 		hOffset = (SCREEN_WIDTH - xSize * tileSideLength) /2;
 		vOffset = (SCREEN_HEIGHT - ySize * tileSideLength) /2;
 		grid = new Tile[xSize][ySize];
 		//set up teleport target making- currently supports any even number 
 		//of teleporters, each targeting the next one which appears in the list
 		Tile target = null;
-		Tile square;
-		List<Point> afterTeleportsSetup = new ArrayList<Point>();
 		//create tiles
 		for (int lineNum = 0; lineNum < map.size(); lineNum++) {
 			char[] line = map.get(lineNum);
 			for (int i = 0; i < line.length; i++) {
+				Tile square;
 				char type = line[i];
 				if (type == 'p' || type == 'P') {
 					square = new DotTile(this, type);
 				} else if (type == 'T') {
 					square = new TeleportTile(this);
 					//set up teleport targeting between two most recently
-					//made teleporttiles
+					//made tiles
 					if (target != null) {
 						((TeleportTile) square).setTarget(target);
 						((TeleportTile) target).setTarget(square);
@@ -180,35 +169,29 @@ public class GameMap {
 					case '@': ghostStarts[1] = square; break;
 					case '#': ghostStarts[2] = square; break;
 					case '$': ghostStarts[3] = square; break;
- 					}
- 				} else {
+					}
+				} else {
 					square = new WallTile(this, type);
 					// if it's a ghost door, add it to the list
 					if (type == 'Q') {
 						ghostDoors.add((WallTile) square);
 					}
- 				}
-				grid[i+NUM_BUFFER_TILES][lineNum+NUM_BUFFER_TILES] = square;
-				if (square.getClass() == TeleportTile.class) {
-					if (afterTeleportsSetup.size() % 2 == 0) {						
-						afterTeleportsSetup.add(new Point(i+NUM_BUFFER_TILES - 1,lineNum+NUM_BUFFER_TILES));
-					} else {
-						afterTeleportsSetup.add(new Point(i+NUM_BUFFER_TILES + 1,lineNum+NUM_BUFFER_TILES));
-					}
 				}
+				grid[i][lineNum] = square;
 			}
 		}
-		//sets up buffer tiles
-		for (int x = 0; x < xSize; x++) {
-			for (int y = 0; y < ySize; y++) {
-				if (grid[x][y] == null) {
-					grid[x][y] = new Tile(this);
-				}
-			}
-		}
-		for (Point p: afterTeleportsSetup) {
-			afterTeleports.add(grid[p.getX()][p.getY()]);
-		}
+	}
+	
+	public List<WallTile> getGhostDoors() {
+		return ghostDoors;
+	}
+
+	public Tile getPacStart() {
+		return pacStart;
+	}
+
+	public Tile getFruitRight() {
+		return fruitRight;
 	}
 	
 	/**
@@ -218,10 +201,10 @@ public class GameMap {
 	public Tile findMoverTile(Mover mover) {
 		int x = mover.getMidX();
 		int y = mover.getMidY();
-		for (int i = NUM_BUFFER_TILES; i < grid.length-NUM_BUFFER_TILES; i++) {
+		for (int i = 0; i < grid.length; i++) {
 			int tileX = getTileCoords(grid[i][0]).getX();
 			if (x > tileX && x <= tileX + tileSideLength) {
-				for (int j = NUM_BUFFER_TILES; j < grid[i].length-NUM_BUFFER_TILES; j++) {
+				for (int j = 0; j < grid[i].length; j++) {
 					int tileY = getTileCoords(grid[i][j]).getY(); 
 					if (y > tileY && y <= tileY + tileSideLength) {
 						return grid[i][j];
@@ -277,61 +260,5 @@ public class GameMap {
 
 	public Tile[] getGhostStarts() {
 		return ghostStarts;
-	}
-
-
-	public int getDotsEaten() {
-		return dotsEaten;
-	}
-
-
-	public void setDotsEaten(int dotsEaten) {
-		this.dotsEaten = dotsEaten;
-	}
-
-
-	public boolean isEnergized() {
-		return energized;
-	}
-
-
-	public void setEnergized(boolean energized) {
-		this.energized = energized;
-	}
-
-
-	public int getGhostsEaten() {
-		return ghostsEaten;
-	}
-
-
-	public void setGhostsEaten(int ghostsEaten) {
-		this.ghostsEaten = ghostsEaten;
-	}
-	
-	public List<WallTile> getGhostDoors() {
-		return ghostDoors;
-	}
-
-	public Tile getPacStart() {
-		return pacStart;
-	}
-
-	public Tile getFruitRight() {
-		return fruitRight;
-	}
-
-	public List<Tile> getAfterTeleports() {
-		return afterTeleports;
-	}
-
-
-	public boolean isGameOver() {
-		return gameOver;
-	}
-
-
-	public void setGameOver(boolean gameOver) {
-		this.gameOver = gameOver;
 	}
 }

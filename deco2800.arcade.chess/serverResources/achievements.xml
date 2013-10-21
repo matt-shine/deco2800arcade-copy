@@ -1,80 +1,18 @@
 <achievements>
-    
 	<achievement id="chess.winGame">
 		  <name>Winner!</name>
 		  <description>Win</description>
 		  <awardThreshold>1</awardThreshold>
 		  <icon>winner.png</icon>
 	</achievement>
-	
 	<achievement id="chess.start">
 		<name>start</name>
-		<description>start the program chess!</description>
+		<description>start a game of chess</description>
 		<awardThreshold>1</awardThreshold>
 		<icon>chessMenu.png</icon></achievement>
-		
 	<achievement id="chess.360">
 		<name>360 overlay check</name>
 		<description>checking</description>
 		<awardThreshold>1</awardThreshold>
 		<icon>youwon</icon></achievement>
-		
-	<achievement id="chess.youwon5">
-		  <name>You won 5 games!</name>
-		  <description>Win 5 games</description>
-		  <awardThreshold>5</awardThreshold>
-		  <icon>youwon5.png</icon>
-		  
-		  <components>
-		      <component id="chess.youwon5.won1" awardThreshold="0" />
-		      <component id="chess.youwon5.won2" awardThreshold="0" />
-		      <component id="chess.youwon5.won3" awardThreshold="0" />
-		      <component id="chess.youwon5.won4" awardThreshold="0" />
-		      <component id="chess.youwon5.won5" awardThreshold="0" />
-		  </components>
-	</achievement>
-	
-	<achievement id="chess.youwon">
-		  <name>Winner!</name>
-		  <description>win one game</description>
-		  <awardThreshold>1</awardThreshold>
-		  <icon>youwon.png</icon>
-	</achievement>
-	
-	<achievement id="chess.youwon10">
-		  <name>Win 10 games!</name>
-		  <description>win ten game</description>
-		  <awardThreshold>10</awardThreshold>
-		  <icon>youwon10.png</icon>
-	</achievement>
-	
-	<achievement id="chess.youwon25">
-		  <name>Win 25 games!</name>
-		  <description>win 25 games</description>
-		  <awardThreshold>25</awardThreshold>
-		  <icon>youwon25.png</icon>
-	</achievement>
-	
-	<achievement id="chess.chessmaster">
-		  <name>Chess Master!</name>
-		  <description>win 50 games</description>
-		  <awardThreshold>50</awardThreshold>
-		  <icon>chessmaster.png</icon>
-	</achievement>
-	
-	<achievement id="chess.chessinarow5">
-		  <name>Win 5 games in a row!</name>
-		  <description>win 5 games in a row</description>
-		  <awardThreshold>1</awardThreshold>
-		  <icon>chessinarow5.png</icon>
-	</achievement>
-	
-		<achievement id="chess.chessinarow10">
-		  <name>Win 10 games in a row!</name>
-		  <description>win 10 games in a row</description>
-		  <awardThreshold>1</awardThreshold>
-		  <icon>chessinarow10.png</icon>
-	</achievement>
-	
-	
 </achievements>

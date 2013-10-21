@@ -5,37 +5,29 @@ import java.util.*;
 
 public class ReplayStorage {
 	
-    private static final String SESSIONS_TABLE = "REPLAY_SESSIONS";
-    private static final String EVENTS_TABLE = "REPLAY_EVENTS";
-    
-    public static final int SESSION_ID_INDEX = 0;
-    public static final int RECORDING_INDEX = 1;
-    public static final int USER_INDEX = 2;
-    public static final int DATE_INDEX = 3;
-    public static final int COMMENT_INDEX = 4;
+    private final String sessions = "REPLAY_SESSIONS";
+    private final String events = "REPLAY_EVENTS";
     
 	public void initialise() throws DatabaseException {
 		
 		Connection connection = Database.getConnection();
 		Statement sessionsState = null;
 		Statement eventsState = null;
-		ResultSet sessionsTable = null;
-		ResultSet eventsTable = null;
 		try{
 			
 			sessionsState = connection.createStatement();
 			try {
-				sessionsState.execute( "DROP TABLE " + SESSIONS_TABLE );
+				sessionsState.execute( "DROP TABLE " + sessions );
 			} catch ( Exception e ) { }
 			
 			try {
-				sessionsState.execute( "DROP TABLE " + EVENTS_TABLE );
+				sessionsState.execute( "DROP TABLE " + events );
 			} catch ( Exception e ) { }
 			
-			sessionsTable = connection.getMetaData().getTables(null, null, SESSIONS_TABLE, null);
+			ResultSet sessionsTable = connection.getMetaData().getTables(null, null, sessions, null);
 			if ( !sessionsTable.next() ){
 				sessionsState = connection.createStatement();
-				sessionsState.execute( "CREATE TABLE " + SESSIONS_TABLE + "(SessionID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+				sessionsState.execute( "CREATE TABLE " + sessions + "(SessionID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
 						+ "GameID VARCHAR(255) NOT NULL,"
 						+ "Recording BOOLEAN NOT NULL, "
 						+ "UserName VARCHAR(30) NOT NULL,"
@@ -43,24 +35,23 @@ public class ReplayStorage {
 						+ "Comments VARCHAR(255) NOT NULL)");
 			}
 			
-			eventsTable = connection.getMetaData().getTables(null, null, EVENTS_TABLE, null);
+			ResultSet eventsTable = connection.getMetaData().getTables(null, null, events, null);
 			if ( !eventsTable.next() ){
 				eventsState = connection.createStatement();
-				eventsState.execute("CREATE TABLE " + EVENTS_TABLE + "(EventID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+				eventsState.execute("CREATE TABLE " + events + "(EventID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
 							+ "SessionID INT NOT NULL,"
 							+ "EventIndex INT NOT NULL," 	//Index of the most recent event
 						    + "Event VARCHAR(255) NOT NULL)");
 			}
 			
-		} catch( Exception e ) {
-			throw new DatabaseException( "Unable to create table", e );
-		} finally {
-		    close( connection );
-            close( sessionsState );     
-            close( eventsState );     
-            close( sessionsTable );
-            close( eventsTable );
-		}
+		}catch( Exception e ){
+			e.printStackTrace();
+			throw new DatabaseException("Unable to create table", e);
+		}finally{
+			//free resources
+			cleanUp(connection, sessionsState);
+			cleanUp(connection, eventsState);
+		}	
 	}
 	
 	/**
@@ -73,18 +64,19 @@ public class ReplayStorage {
 		Connection connection = null;
 		Statement state = null;
 
-		try {
+		try{
 			connection = Database.getConnection();
 			state = connection.createStatement();
-			state.executeUpdate("UPDATE " + SESSIONS_TABLE +  " "
+			state.executeUpdate("UPDATE " + sessions +  " "
 					  + "SET Recording = false "
 					  + "WHERE SessionID = " + sessionID);
 			
-		} catch( Exception e ) {
-			throw new DatabaseException( "Unable to update.", e );
-		} finally {
-		    close( connection );
-            close( state );     	
+		}catch( Exception e ){
+			e.printStackTrace();
+			throw new DatabaseException("Unable to update.", e);
+		}finally{
+			//free resources
+			cleanUp(connection,state);		
 		}	
 	}
 	
@@ -94,30 +86,29 @@ public class ReplayStorage {
 	 * @return a List of Strings, where each string is the id of a game with replays
 	 * @throws DatabaseException
 	 */
-	public List<String> getGameIds() throws DatabaseException {
+	public List<String> getGameIds() throws DatabaseException{
 		//return list of everything from sessions table for that ID
 		
 		List<String> gamesList = new ArrayList <String>();
 		Connection connection = null;
 		Statement state = null;
-		ResultSet results = null;
 
-		try {
+		try{
 			connection = Database.getConnection();
 			state = connection.createStatement();
 
-			results = state.executeQuery( "SELECT DISTINCT GameId FROM " + SESSIONS_TABLE );
+			ResultSet results = state.executeQuery( "SELECT DISTINCT GameId FROM " + sessions );
 			
-			while ( results.next() ) {
+			while ( results.next() ){
 				gamesList.add( results.getString( "GameId" ) );
 			}
 			
-		} catch( Exception e ) {
-			throw new DatabaseException( "Failed to retrieve sessions.", e );
-		} finally {
-		    close( connection );
-            close( state ); 	
-            close( results ); 	
+		}catch( Exception e ){
+			e.printStackTrace();
+			throw new DatabaseException("Failed to retrieve sessions.", e);
+		}finally{
+			//free resources
+			cleanUp(connection,state);		
 		}	
 		
 		return gamesList;	
@@ -125,25 +116,24 @@ public class ReplayStorage {
 	
 	/**
 	 * Gets all of the replay sessions corresponding to a particular game, stored
-	 * as a List of Strings. Each String represents a single replay session.
+	 * as an ArrayList of Strings. Each String represents a single replay session.
 	 * 
 	 * @param gameID, the string ID of the game to get the sessions for
-	 * @return a List of all information pertaining to specific gameID
+	 * @return an ArrayList of all information pertaining to specific gameID
 	 */
-	public List<String> getSessionsForGame( String gameID ) throws DatabaseException{
+	public ArrayList<String> getSessionsForGame( String gameID ) throws DatabaseException{
 		
 		ArrayList<String> sessionsList = new ArrayList <String>();
 		Connection connection = null;
 		Statement state = null;
-		ResultSet results = null;
 		String concat;
 
 		try{
 			connection = Database.getConnection();
 			state = connection.createStatement();
 
-			results = state.executeQuery( "SELECT SessionID, "
-					+ "Recording, UserName, DateTime, Comments FROM " + SESSIONS_TABLE + " WHERE"
+			ResultSet results = state.executeQuery( "SELECT SessionID, "
+					+ "Recording, UserName, DateTime, Comments FROM " + sessions + " WHERE"
 					+ " GameID = '" + gameID + "'");
 			
 			while ( results.next() ){
@@ -160,12 +150,12 @@ public class ReplayStorage {
 				concat = "";
 			}
 			
-		} catch( Exception e ) {
-			throw new DatabaseException( "Failed to retrieve sessions.", e );
-		} finally {
-		    close( connection );
-            close( state ); 
-			close( results );
+		}catch( Exception e ){
+			e.printStackTrace();
+			throw new DatabaseException("Failed to retrieve sessions.", e);
+		}finally{
+			//free resources
+			cleanUp(connection,state);		
 		}	
 		
 		return sessionsList;	
@@ -179,34 +169,31 @@ public class ReplayStorage {
 	 * @param sessionID, the integer ID of the session to get replay data for
 	 * @return a List of Strings, with each item being an Event in the given Session
 	 */
-	public List<String> getReplay( int sessionID ) throws DatabaseException { 
+	public List<String> getReplay( int sessionID ) throws DatabaseException{ 
 		
 		Connection connection = null;
 		Statement state = null;
-		ResultSet results = null;
 
 		List<String> eventList = new ArrayList<String>();
 		
 		try{
 			connection = Database.getConnection();
 			state = connection.createStatement();
+
 			
-			results = state.executeQuery( "SELECT Event FROM " +
-			                              EVENTS_TABLE +
-			                              " WHERE SessionID =" +
-			                              sessionID +
-			                              " ORDER BY EventIndex" );
+			ResultSet results = state.executeQuery
+					("SELECT Event FROM " + events + " WHERE SessionID =" + sessionID + " ORDER BY EventIndex");
 			
-			while( results.next() ) {
-				String event = results.getString( "Event" );
+			while( results.next() ){
+				String event = results.getString("Event");
 				eventList.add( event);
 			}
-		} catch( Exception e ) {
-			throw new DatabaseException( "Failed to retrieve events.", e );
-		} finally {
-		    close( connection );
-            close( state ); 	
-            close( results );
+		}catch( Exception e ){
+			e.printStackTrace();
+			throw new DatabaseException("Failed to retrieve events.", e);
+		}finally{
+			//free resources
+			cleanUp(connection,state);		
 		}	
 		
 		return eventList;	
@@ -223,40 +210,39 @@ public class ReplayStorage {
 	 * @return the ID of the session that was just created
 	 * @throws DatabaseException
 	 */
-	public int insertSession( String gameID, String userName, long dateTime,
-	                          String comment ) throws DatabaseException {
+	public int insertSession( String gameID, 
+			String userName, long dateTime, String comment ) throws DatabaseException{
 		
 		Connection connection = null;
 		Statement state = null;
-		ResultSet results = null;
 		int sessionID = -1;
 		
-		try {
+		try{
 			connection = Database.getConnection();
 			
 			state = connection.createStatement();
-			String insert = "INSERT INTO " + SESSIONS_TABLE + " (GameID, Recording, UserName, DateTime, Comments) " 
+			String insert = "INSERT INTO " + sessions + " (GameID, Recording, UserName, DateTime, Comments) " 
 							+ "VALUES ('" + gameID + "', true, '" 
 							+ userName + "', " + dateTime + ", '" + comment 
 							+ "')";
 			state.executeUpdate(insert);
 			
 			state = connection.createStatement();
-			String getSession = "SELECT MAX(SessionID) AS SID FROM " + SESSIONS_TABLE;
-			results = state.executeQuery(getSession);
+			String getSession = "SELECT MAX(SessionID) AS SID FROM " + sessions;
+			ResultSet results = state.executeQuery(getSession);
 			
 			if( results.next() ){
 				sessionID = results.getInt("SID");
 			} else {
-			    throw new DatabaseException("Failed to get new Session ID");
+				// something's pretty wrong here, couldn't get the new session ID
 			}
 			
-		} catch ( Exception e ) {
-			throw new DatabaseException("Failed to insert into " + SESSIONS_TABLE, e);
-		} finally {
-		    close( connection );
-            close( state ); 
-            close( results );
+		}catch( Exception e ){
+			e.printStackTrace();
+			throw new DatabaseException("Failed to insert into " + sessions, e);
+		}finally{
+			//free resources
+			cleanUp(connection,state);		
 		}	
 		
 		return sessionID;
@@ -271,8 +257,7 @@ public class ReplayStorage {
 	 * @param event, the flattened string representing the event
 	 * @throws DatabaseException
 	 */
-	public void insertEvent( int sessionID, int eventIndex, String event )
-	                         throws DatabaseException {
+	public void insertEvent( int sessionID, int eventIndex, String event ) throws DatabaseException{
 		Statement state = null;
 		Connection connection = null;
 		
@@ -280,18 +265,19 @@ public class ReplayStorage {
 			connection = Database.getConnection();
 			state = connection.createStatement();
 			
-			String insert = "INSERT INTO " + EVENTS_TABLE + " (SessionID, EventIndex, Event) " 
+			String insert = "INSERT INTO " + events + " (SessionID, EventIndex, Event) " 
 						+ "VALUES (" + sessionID 
 							+ ", " + eventIndex 
 							+ ", '" + event + "')";
 					
-			state.executeUpdate( insert );
+			state.executeUpdate(insert);
 		
-		} catch( Exception e ) {
-			throw new DatabaseException( "Failed to insert into " + EVENTS_TABLE, e );
-		} finally {
-			close( connection );
-			close( state );		
+		}catch( Exception e ){
+			e.printStackTrace();
+			throw new DatabaseException("Failed to insert into " + events, e);
+		}finally{
+			//free resources
+			cleanUp(connection,state);		
 		}	
 	}
 	
@@ -301,88 +287,97 @@ public class ReplayStorage {
 	 * @param sessionID, the ID of the session to remove
 	 * @throws DatabaseException
 	 */
-	public void remove( int sessionID ) throws DatabaseException {
+	public void remove( int sessionID ) throws DatabaseException{
 		Statement state = null;
 		Connection connection = null;
 		
-		try {
+		try{
 			connection = Database.getConnection();
 			state = connection.createStatement();
 			
 			
-			String insert = "DELETE FROM " + SESSIONS_TABLE + " "
+			String insert = "DELETE FROM " + sessions + " "
 					      + "WHERE SessionID =" + sessionID;
-			state.executeUpdate( insert );
+			state.executeUpdate(insert);
 			
-			insert = "DELETE FROM " + EVENTS_TABLE + " " 
+			insert = "DELETE FROM " + events + " " 
 				   + "WHERE SessionID =" + sessionID;
-			state.executeUpdate( insert );
+			state.executeUpdate(insert);
 			
-		} catch( Exception e ) {
-			throw new DatabaseException( "Failed to remove.", e );
-		} finally {
-		    close( connection );
-            close( state ); 	
+		}catch( Exception e ){
+			e.printStackTrace();
+			throw new DatabaseException("Failed to remove.", e);
+		}finally{
+			//free resources
+			cleanUp(connection,state);		
 		}	
 	}
 	
-	
 	/**
-	 * Handles the closing of a database connection.
-	 * 
-	 * @param connection the database connection to close
-	 * @throws DatabaseException
+	 * Retrieves all the events that have been missed between time of game start &
+	 *  the time at which the spectator began viewing.
+	 *  
+	 * @param sessionID - SessionID of game being viewed.
+	 * @param dateTime - Time at which spectator began viewing.
+	 * @return a HashMap<Integer, String>, where the key is the index of the event and 
+	 * 			the string is the serialized event data.
+	 * @throws DatabaseException 
 	 */
-	private void close(Connection connection) throws DatabaseException {
+	//for spectator mode
+	public HashMap<Integer, String> getMissedEvents( int sessionID, long dateTime ) throws DatabaseException{ 
+		Statement state = null;
+		Connection connection = null;
+		HashMap <Integer, String> events = new HashMap<Integer, String>();
 		
-		try {
+		try{
+			connection = Database.getConnection();
+			state = connection.createStatement();
 			
-			if ( connection != null ) {
+			String insert = 
+					"SELECT " + events + ".EventIndex, " + sessions + ".SessionID " + events + ".Event, " + sessions + ".DateTime"
+					+ "FROM " + events
+					+ "INNER JOIN " + sessions 
+					+ "ON " + events + ".SessionID = " + sessions + ".SessionID"
+					+ "WHERE SessionID = "+ sessionID
+					+ "AND DateTime <=" + dateTime
+					+ ")";
+
+			ResultSet results = state.executeQuery(insert);
+			
+			while( results.next() ){
+				String event = results.getString("Event");
+				int eventIndex = results.getInt("EventIndex");
+				events.put(eventIndex, event);
+			}
+			
+		}catch( Exception e ){
+			e.printStackTrace();
+			throw new DatabaseException("Failed to retrieve.", e);
+		}finally{
+			//free resources
+			cleanUp(connection,state);		
+		}	
+		return events;
+	}	
+	
+	
+	private void cleanUp (Connection connection, Statement state) throws DatabaseException {
+		
+		try{
+			if ( state != null ){
+				state.close();
+			}
+			if ( connection != null ){
 				connection.close();
 			}
 			
-		} catch ( SQLException e ) {
-			throw new DatabaseException("Could not close the resources.", e);
+		}catch ( Exception e ){
+			//Shouldn't occur
+			e.printStackTrace();
+			throw new DatabaseException("Insertion went awry.", e);
 		}	
+		
 	}
-	
-	   /**
-     * Handles the closing of a database statement.
-     * 
-     * @param statement the database statement to close
-     * @throws DatabaseException
-     */
-    private void close(Statement statement) throws DatabaseException {
-        
-        try {
-            
-            if ( statement != null ) {
-                statement.close();
-            }
-            
-        } catch ( SQLException e ) {
-            throw new DatabaseException("Could not close the resources.", e);
-        }   
-    }
-    
-    /**
-     * Handles the closing of a database result set.
-     * 
-     * @param results the database result set to close
-     * @throws DatabaseException
-     */
-    private void close(ResultSet results) throws DatabaseException {
-        
-        try {
-            
-            if ( results != null ) {
-                results.close();
-            }
-            
-        } catch ( SQLException e ) {
-            throw new DatabaseException("Could not close the resources.", e);
-        }   
-    }
 }
 	
 	

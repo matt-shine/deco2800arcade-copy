@@ -18,9 +18,6 @@ public class LogoResponder implements WebResponder {
     	// Specify that we will be returning a png image
         ArcadeWebserver.setResponseValues(response, "image/png");
         
-        //Match the storage convention
-        param = param.toLowerCase().replace("\\s", "");
-        
         /*
          * Attempt to serve the image file from the logo resources folder, 
          * serving the default image if this fails.

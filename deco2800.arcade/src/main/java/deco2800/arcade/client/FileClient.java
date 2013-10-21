@@ -6,8 +6,6 @@ import java.io.IOException;
 
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.packman.PackCompress;
-import deco2800.arcade.packman.PackageUtils;
-import deco2800.arcade.packman.PackageClient;
 import deco2800.arcade.protocol.BlockingMessage;
 import deco2800.arcade.protocol.packman.FetchGameRequest;
 import deco2800.arcade.protocol.packman.FetchGameResponse;
@@ -28,16 +26,8 @@ public class FileClient implements Runnable {
         this.client = client;
     }
 
-    public FileClient(String gameID, NetworkClient client) {
-        this.gameID = gameID;
-        this.version = null;
-        this.client = client;
-    }
-
     @Override
     public void run() {
-        String filebase = null;
-
         FetchGameResponse resp = null;
 
         FetchGameRequest fetchGameRequest = new
@@ -49,19 +39,19 @@ public class FileClient implements Runnable {
 
         int bytesReceived = 0;
 
+        String filebase = "../games/" + gameID + "-" + version;
+
         // Get the file
         try {
-
-            BlockingMessage r = BlockingMessage.request(client.kryoClient(),
-                    fetchGameRequest);
-            resp = (FetchGameResponse) r;
-
-            filebase = "../games/" + resp.gameID + "-" + resp.version;
-
             FileOutputStream fout = new FileOutputStream(filebase + ".tar.gz");
 
             // Fetch the file
             do {
+                BlockingMessage r = BlockingMessage.request(client.kryoClient(),
+                        fetchGameRequest);
+
+                resp = (FetchGameResponse) r;
+
                 //stops the file server from crashing every two seconds.
                 if (resp.data == null) return;
                 
@@ -72,10 +62,6 @@ public class FileClient implements Runnable {
 
                 bytesReceived = bytesReceived + resp.byteCount;
 
-                r = BlockingMessage.request(client.kryoClient(),
-                        fetchGameRequest);
-                resp = (FetchGameResponse) r;
-
             } while (resp.status == 1 && bytesReceived < resp.totalBytes);
 
             fout.close();
@@ -85,22 +71,11 @@ public class FileClient implements Runnable {
         }
 
         try {
-            // Verify MD5 signature
-            String md5 = PackageUtils.genMD5(filebase + ".tar.gz");
-            if (!md5.equals(resp.md5)) {
-                System.out.println("[FILE CLIENT] Error transferring file. MD5 checksum failed.");
-            } else {
-                // Extract the JAR
-                PackCompress unpack = new PackCompress();
-                unpack.expand(filebase + ".tar.gz", filebase + ".jar");
+            // Extract the JAR
+            PackCompress unpack = new PackCompress();
+            unpack.expand(filebase + ".tar.gz", filebase + ".jar");
 
-                // Add the new JAR to the classpath
-                if (!PackageClient.addJar(filebase + ".jar")) {
-                    System.out.println("[FILE CLIENT] Error adding downloaded JAR to classpath.");
-                }
-            }
-
-            // Delete the .tar.gz file regardless of whether it was ok or not
+            // Delete the .tar.gz file
             File del = new File(filebase + ".tar.gz");
             del.delete();
         } catch (IOException e) {

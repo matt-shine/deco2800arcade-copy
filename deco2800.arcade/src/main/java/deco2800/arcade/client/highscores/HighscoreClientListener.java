@@ -4,13 +4,6 @@ import deco2800.arcade.client.network.listener.NetworkListener;
 import deco2800.arcade.protocol.highscore.*;
 import com.esotericsoftware.kryonet.Connection;
 
-/**
- * Sitting on the client-side of the Arcade, the HighscoreClientListener
- * listens for incoming GetScoreResponses from the server, sending a message
- * to the HighscoreClient when they arrive.
- * 
- * @author TeamA
- */
 public class HighscoreClientListener extends NetworkListener {
 	
 	private HighscoreClient hsClient;
@@ -30,9 +23,8 @@ public class HighscoreClientListener extends NetworkListener {
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
 		
-		if (object instanceof GetScoreResponse) {
-			//Send the response back to the highscore client
-			hsClient.responseRecieved((GetScoreResponse)object);
+		if (object instanceof GetScoreResponse){
+			hsClient.responseRecieved((GetScoreResponse)object); //Send the response back to the highscore client
 		}
 	}
 }

@@ -1,9 +1,12 @@
 package deco2800.arcade.breakout;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import deco2800.arcade.breakout.screens.GameScreen;
 /**
@@ -13,54 +16,49 @@ import deco2800.arcade.breakout.screens.GameScreen;
  */
 public class Level {
 	
+	private final int SCREENHEIGHT = 720;
+	private final int SCREENWIDTH = 1280;
+	
 	public Level() {
 		
 	}
 	/**
-	 * Read each line of the input file and store it in a string to use in
-	 * initialising the brick array
-	 * @param inputFileName - the name of the file being accessed
-	 * @return - the bricks from the input 
-	 * @throws IOException - when the file is in an incorrect format
-	 */
-	public Brick [] readFile(String inputFileName) throws IOException {
-		String fileContents = Gdx.files.classpath(inputFileName).readString();
-		return initialiseBrickArray (fileContents);
-	}
-	/**
 	 * Obtains the bricks coordinates and sizing based on the file being
 	 * read
-	 * @param fileContents - the whole contents of the level file
+	 * @param inputFileName - the name of the file being accessed
+	 * @param bricks - an array of rectangular forms with a given
+	 * size and coordinate
+	 * @param context - the current game screen
 	 * @return - the bricks from the input
 	 * @throws IOException - called when the file is in an incorrect format
 	 */
-	public Brick [] initialiseBrickArray (String fileContents) 
-			throws IOException {
-		String[] contentsArr = fileContents.split("\n");
+	public Brick [] readFile(String inputFileName, Brick[] bricks, 
+			GameScreen context) throws IOException {
+		BufferedReader input = new BufferedReader(Gdx.files.classpath(inputFileName).reader());
 		int numBricks = 0;
 		try {
-			numBricks = Integer.valueOf(contentsArr[0].trim());
+			numBricks = Integer.valueOf(input.readLine().trim());
 		} catch (Exception e) {
-			return null;
+			input.close();
 		}
-		Brick[] bricks = new Brick[numBricks];
+		bricks = new Brick[numBricks];
 		
-		for (int i = 1; i < contentsArr.length; i++) {
-			String s = contentsArr[i].trim();
+		for (int i = 0; i < numBricks; i++) {
+			String s = input.readLine();
 			String [] brickDetails = s.split(",");
 			if (brickDetails.length == 2) {
-				bricks[i-1] = new Brick(Float.parseFloat(brickDetails[0]), 
+				bricks[i] = new Brick(Float.parseFloat(brickDetails[0]), 
 						Float.parseFloat(brickDetails[1]));
 			} else if (brickDetails.length == 4) {
-				bricks[i-1] = new Brick(Float.parseFloat(brickDetails[0]), 
-						Float.parseFloat(brickDetails[1]), 
-						Float.parseFloat(brickDetails[2]), 
+				bricks[i] = new Brick(Float.parseFloat(brickDetails[0]), 
+						Float.parseFloat(brickDetails[1]), Float.parseFloat(brickDetails[2]), 
 						Float.parseFloat(brickDetails[3]));
 			} else {
-				throw new IOException("File not in correct format. Brick " +
-						"should be x,y or x,y,width,height");
+				input.close();
+				throw new IOException("File not in correct format. Brick should be x,y or x,y,width,height");
 			}
 		}
+		input.close();
 		return bricks;
 	}
 	

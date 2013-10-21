@@ -1,7 +1,6 @@
 package deco2800.arcade.packman;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,7 +15,7 @@ import deco2800.arcade.packman.PackageUtils;
  * Client for package manager
  */
 public class PackageClient {
-	final static Logger LOGGER = LoggerFactory.getLogger(PackageClient.class);
+	final static Logger logger = LoggerFactory.getLogger(PackageClient.class);
 	
 	private static final String SP = File.separator;
 	private static final String GAME_FOLDER = ".." + SP + "games";
@@ -30,11 +29,11 @@ public class PackageClient {
 	public PackageClient() {
 		
 		// Create the games folder
-		LOGGER.debug("Creating directory: {}", GAME_FOLDER);
+		logger.debug("Creating directory: {}", GAME_FOLDER);
 		if (PackageUtils.createDirectory(GAME_FOLDER)) {
-			LOGGER.debug("Created: {}", GAME_FOLDER);
+			logger.debug("Created: {}", GAME_FOLDER);
 		} else {
-			LOGGER.debug("Failed creating: {}", GAME_FOLDER);
+			logger.debug("Failed creating: {}", GAME_FOLDER);
 		}
 			
 		// Get a list of files in the game folder
@@ -60,7 +59,7 @@ public class PackageClient {
 	 * @param jarPath
 	 * @return true for success, false for failed
 	 */
-	public static Boolean addJar(String jarPath) {
+	private Boolean addJar(String jarPath) {
 		
 		URL jarURL;
 		
@@ -68,7 +67,7 @@ public class PackageClient {
 		try {
 			jarURL = new File(jarPath).toURI().toURL();
 		} catch (MalformedURLException e) {
-			LOGGER.error(e.toString());
+			e.printStackTrace();
 			return false;
 		}
 		
@@ -77,20 +76,14 @@ public class PackageClient {
 		Class<URLClassLoader> sysclass = URLClassLoader.class;
 		
 		// Try and add the file URL to the classloader
-		try {
-                    Method method = sysclass.getDeclaredMethod("addURL", PARAMS);
-                    method.setAccessible(true);
-                    method.invoke(sysloader, new Object[] {jarURL});
-		} catch (NoSuchMethodException e) {
-		    LOGGER.error(e.toString());
-		    return false;
-		} catch (InvocationTargetException e) {
-	            LOGGER.error(e.toString());
-	            return false; 
-		} catch (IllegalAccessException e) {
-	            LOGGER.error(e.toString());
-	            return false;
-		}
+        try {
+            Method method = sysclass.getDeclaredMethod("addURL", PARAMS);
+            method.setAccessible(true);
+            method.invoke(sysloader, new Object[] {jarURL});
+        } catch (Throwable t) {
+            t.printStackTrace();
+            return false;
+        }
 		
 		return true;
 	}

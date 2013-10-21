@@ -49,7 +49,7 @@ public class Sidebar extends Group {
         avatar.setPosition(0, overlay.getHeight() - 200);
         this.addActor(avatar);
 
-        String[] buttonText = new String[]{"Achievements", "Chat", "Item3", "Quit Game"};
+        String[] buttonText = new String[]{"Achievements", "Item2", "Item3", "Quit Game"};
 
         int numItems = buttonText.length;
         for (int i = 0; i < numItems; i++) {

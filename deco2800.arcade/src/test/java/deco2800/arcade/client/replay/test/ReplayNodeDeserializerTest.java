@@ -12,14 +12,9 @@ import com.google.gson.GsonBuilder;
 import deco2800.arcade.client.replay.ReplayItem;
 import deco2800.arcade.client.replay.ReplayNode;
 import deco2800.arcade.client.replay.ReplayNodeDeserializer;
-import deco2800.arcade.client.replay.exception.BadReplayItemCastException;
-
 
 public class ReplayNodeDeserializerTest {
 
-	/**
-	 * Test a typical serialisation and deserialisation
-	 */
     @Test
     public void testDeserialization()
     {
@@ -45,22 +40,6 @@ public class ReplayNodeDeserializerTest {
         Assert.assertEquals(rn.getItemForString("param1").intVal(), recreated.getItemForString("param1").intVal());
         Assert.assertEquals(rn.getItemForString("param2").floatVal(), recreated.getItemForString("param2").floatVal());
         Assert.assertEquals(rn.getItemForString("param3").stringVal(), recreated.getItemForString("param3").stringVal());
-        
-    }
-    
-    
-    @Test(expected = BadReplayItemCastException.class)
-    public void testBadDeserialisation()
-    {
-        String serialized = "{\"nodeTime\":0,\"type\":\"event_name\",\"items\":{\"param1\":{\"type\":5,\"data\":123},\"param2\":{\"type\":2,\"data\":5.234},\"param3\":{\"type\":3,\"data\":\"Hello World!\"}}}";
-
-        Gson deserializer;
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
-        gsonBuilder.registerTypeAdapter(ReplayNode.class, new ReplayNodeDeserializer());
-        deserializer = gsonBuilder.create();
-        
-        ReplayNode recreated = deserializer.fromJson(serialized, ReplayNode.class);
         
     }
 

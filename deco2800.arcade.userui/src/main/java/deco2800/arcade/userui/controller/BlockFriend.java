@@ -36,7 +36,7 @@ public class BlockFriend {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
-			blockView.updateblocklist(blockView.getinput());
+			blockView.dispose();
 			userView.setEnabled(true);
 			
 		}
@@ -49,7 +49,6 @@ public class BlockFriend {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
-			blockView.removeblocklist();
 			blockView.dispose();
 			userView.setEnabled(true);
 			

@@ -1,8 +1,7 @@
 package deco2800.arcade.model;
 import java.util.*;
 
-//TODO extend the accolade.setID function to add the accolade to a hash list
-//Should make .get a lot faster.
+import javax.sql.rowset.*;
  
 public class AccoladeContainer implements Iterable<Accolade> {
  
@@ -28,6 +27,7 @@ public class AccoladeContainer implements Iterable<Accolade> {
     public void populateAccoladesPlayer(int playerID){
     	//TODO implement populateAccoladesPlayer
     	this.playerID = playerID;
+    	BUILDDUMMYDATA();
     }
     
     /**Retrieves all accolades totals for game with gameID
@@ -36,6 +36,7 @@ public class AccoladeContainer implements Iterable<Accolade> {
     public void populateAccoladesGame(int gameID){
     	//TODO implement the populateAccoldesGame
     	this.gameID = gameID;
+    	BUILDDUMMYDATA();
     }
     
     public AccoladeContainer setGameID(int gameID){
@@ -123,6 +124,7 @@ public class AccoladeContainer implements Iterable<Accolade> {
     	//TODO Add in the dumb data stuff
     }
     
+    
  
     public int size() {
         return this.size;
@@ -142,24 +144,6 @@ public class AccoladeContainer implements Iterable<Accolade> {
  
     public Iterator<Accolade> iterator() {
         return new Iterable();
-    }
-    
-    public Accolade get(Double accoladeID) throws NoSuchElementException {
-    	for (Accolade accolade:this){
-    		if(accolade.getID()==accoladeID){
-    			return accolade;
-    		}
-    	}
-    	throw new NoSuchElementException("There was no accolade found with that ID");
-    }
-    
-    public Accolade get(String accoladeName) throws NoSuchElementException {
-    	for (Accolade accolade:this){
-    		if(accolade.getName().equalsIgnoreCase(accoladeName)){
-    			return accolade;
-    		}
-    	}
-    	throw new NoSuchElementException("There was no accolade found with that ID");
     }
  
     public class Iterable implements Iterator<Accolade> {

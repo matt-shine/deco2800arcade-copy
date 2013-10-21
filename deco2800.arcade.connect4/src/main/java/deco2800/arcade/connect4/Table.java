@@ -14,9 +14,9 @@ public class Table {
 	public static final int TABLECOLS = 7; //Number of columns for discs in the table
 	public static final int TABLEROWS = 6; //Number of rows for dics in the table
 	
-	private Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the tablebg
+	Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the tablebg
 	
-	private List<List<Disc>> discArray = new ArrayList<List<Disc>>(6);
+	private ArrayList<ArrayList<Disc>> discArray = new ArrayList<ArrayList<Disc>>(6);
 	
 	
 	private float renderColourRed;
@@ -38,19 +38,14 @@ public class Table {
 		
 		for ( int i = 0; i<Table.TABLEROWS; i++ ) {
 			ArrayList<Disc> internal = new ArrayList<Disc>(Table.TABLECOLS);
-			for ( int j = 0; j < Table.TABLECOLS; j++ ) {
+			for ( int j=0; j<Table.TABLECOLS; j++ ) {
 				internal.add( new Disc() );
 			}
 			discArray.add(internal);
 		}
 	}
 	
-	public Rectangle getBounds()
-	{
-	    return bounds;
-	}
-	
-	public void setupDiscs(){
+	public void SetupDiscs(){
 		for(int i=0; i < Table.TABLEROWS; i++) {
 			for(int j=0;j < Table.TABLECOLS; j++){
 				discArray.get(i).get(j).setColor(0, 0, 0, 1);

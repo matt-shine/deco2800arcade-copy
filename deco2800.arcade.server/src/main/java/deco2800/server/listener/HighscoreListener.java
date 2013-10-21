@@ -11,13 +11,6 @@ import deco2800.arcade.protocol.highscore.*;
 import deco2800.server.ArcadeServer;
 import deco2800.server.database.HighscoreDatabase;
 
-/**
- * HighscoreListener sits on the server and listens for incoming 
- * AddScoreRequests and GetScoreRequests, processing them and responsing as
- * necessary.
- * 
- * @author TeamA
- */
 public class HighscoreListener extends Listener {
 	
 	/*hsDatabase is used to insert, fetch and delete data from the database.*/
@@ -92,7 +85,7 @@ public class HighscoreListener extends Listener {
 			 try {
 				 hsDatabase.updateScore(asr.game_ID, asr.username, scores, types);
 			 } catch (Exception e) {
-				 //Silently fail
+				 e.printStackTrace();
 			 }
 			 
 		 

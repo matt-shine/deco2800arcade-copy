@@ -14,9 +14,7 @@ public class GamePanel extends JPanel{
 	private Vector<PBullet> pbullet = new Vector<PBullet>();
 	private Vector<EPlane> eplane = new Vector<EPlane>();
 	private PPlane pplane = new PPlane(250, 400, 50, 50);
-	/**
-	 * The constructor for game panel.
-	 */
+	
 	public GamePanel(){
 		Controller controller = 
 				new Controller(bang, ebullet, pbullet, eplane, pplane, this);
@@ -24,14 +22,7 @@ public class GamePanel extends JPanel{
 		controller.StartRun();                
 	}
 	
-	/**
-	 * 
-	 * @param bang
-	 * @param ebullet
-	 * @param pbullet
-	 * @param eplane
-	 * @param pplane
-	 */
+	
 	public void display(Vector<Bang> bang, Vector<EBullet> ebullet, 
 			Vector<PBullet> pbullet, Vector<EPlane> eplane,PPlane pplane){
 		this.bang = bang;
@@ -43,9 +34,6 @@ public class GamePanel extends JPanel{
 	}
 
 	@Override
-	/**
-	 * Draw the object in the panel.
-	 */
 	public void paint(Graphics g) {
 		// TODO Auto-generated method stub
 		super.paint(g);
@@ -72,25 +60,10 @@ public class GamePanel extends JPanel{
 		}
 		
 	}
-	/**
-	 * Show the score on the top of panel
-	 * @param g
-	 */
 	public void showScore(Graphics g){
 		g.setColor(Color.green);
 		g.drawString("Score: " + Controller.DestoryNum, 30, 30);
 	}
-	/**
-	 * 
-	 * @return the score
-	 */
-	public int getScore(){
-		return Controller.DestoryNum;
-	}
-	/**
-	 * Show the life on the top the panel
-	 * @param g
-	 */
 	public void showLife(Graphics g){
 		g.setColor(Color.red);
 		g.drawString("HP: " + PPlane.life, 320, 30);

@@ -2,6 +2,8 @@ package deco2800.arcade.towerdefence.model;
 
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
 /**
  * The class for mortal objects. Will be the majority of interesting objects.
  * Can die through game mechanics and have curious attributes such as health.
@@ -17,8 +19,8 @@ public class Mortal extends GridObject {
 	private int health;
 	// The armour the GridObject has.
 	private int armour;
-	// The death files this object uses.
-	private List<String> fileDeath;
+	// The death sprites this object uses.
+	private List<Sprite> sprDeath;
 
 	// Constructor
 	/**
@@ -36,12 +38,12 @@ public class Mortal extends GridObject {
 	 *            The grid the object belongs to
 	 */
 	public Mortal(int maxHealth, int armour, int x, int y, Grid grid,
-			Team team, List<String> fileStanding, List<String> fileDeath) {
-		super(x, y, grid, team, fileStanding);
+			Team team, List<Sprite> sprStanding, List<Sprite> sprDeath) {
+		super(x, y, grid, team, sprStanding);
 		this.maxHealth = maxHealth;
 		this.health = maxHealth;
 		this.armour = armour;
-		this.fileDeath(fileDeath);
+		this.sprDeath = sprDeath;
 	}
 
 	// Getters
@@ -73,12 +75,12 @@ public class Mortal extends GridObject {
 	}
 
 	/**
-	 * Return the death files of the mortal.
+	 * Return the death sprites of the mortal.
 	 * 
-	 * @return The death files of the object.
+	 * @return The death sprites of the object.
 	 */
-	public List<String> fileDeath() {
-		return fileDeath;
+	public List<Sprite> sprDeath() {
+		return sprDeath;
 	}
 
 	// Setters
@@ -117,13 +119,13 @@ public class Mortal extends GridObject {
 	}
 
 	/**
-	 * Sets the death files of the Mortal.
+	 * Sets the death sprites of the Mortal.
 	 * 
-	 * @param files
-	 *            The new file list.
+	 * @param sprites
+	 *            The new sprite list.
 	 */
-	public void fileDeath(List<String> files) {
-		this.fileDeath = files;
+	public void sprDeath(List<Sprite> sprites) {
+		this.sprDeath = sprites;
 	}
 
 	// Methods

@@ -75,6 +75,7 @@ public class OverlayScreen implements Screen {
 
             stage.act();
             stage.draw();
+            Table.drawDebug(stage);
 
             if (callbacks != null) {
                 callbacks.render(d);

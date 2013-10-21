@@ -1,9 +1,9 @@
 package deco2800.arcade.mixmaze.domain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import deco2800.arcade.mixmaze.Achievements;
 import static deco2800.arcade.mixmaze.domain.Direction.*;
 
 /**
@@ -41,16 +41,17 @@ public class TileModel {
 	 *            the column number (origin at top left)
 	 * @param y
 	 *            the row number (origin at top left)
-	 * @param newAdjacentTiles
+	 * @param adjacentTiles
 	 *            the tiles adjacent to this tile
 	 */
-	public TileModel(int x, int y, TileModel[] newAdjacentTiles) {
+	public TileModel(int x, int y, TileModel[] adjacentTiles) {
 		this.x = x;
 		this.y = y;
-		if (newAdjacentTiles == null) {
+		if (adjacentTiles == null) {
 			this.adjacentTiles = new TileModel[0];
 		} else {
-			this.adjacentTiles = newAdjacentTiles;
+			this.adjacentTiles = Arrays.copyOf(adjacentTiles,
+					adjacentTiles.length);
 		}
 		initializeWalls();
 	}
@@ -257,14 +258,6 @@ public class TileModel {
 			if (findBoxes(this, boxes) != null) {
 				for (TileModel box : boxes) {
 					box.validateBox(player, true, true);
-				}
-				
-				if(player.getId() == 1 && boxes.size() >= 5) {
-					Achievements.incrementAchievement(Achievements.AchievementType.BuildBig);
-				}
-				
-				if(player.getId() == 1 && boxes.size() >= 10) {
-					Achievements.incrementAchievement(Achievements.AchievementType.Strategist);
 				}
 				return;
 			} else if (findBuiltBoxes(this, builtBoxes) != null) {

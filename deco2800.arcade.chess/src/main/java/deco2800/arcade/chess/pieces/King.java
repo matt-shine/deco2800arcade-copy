@@ -42,11 +42,11 @@ public class King extends Piece {
 		moves.add(h);
 		moves.add(f);
 
-		if (!firstMove) {
+		if (firstMove) {
 			int[] castle = { x, y + 2 };
 			moves.add(castle);
 
-			if (firstMove) {
+			if (!firstMove) {
 				moves.remove(castle);
 			}
 		}
@@ -97,17 +97,8 @@ public class King extends Piece {
 			}
 		}
 		
-		List<int[]> movesToReturn = new ArrayList<int[]>();
-		//Check for and remove moves not on the board
-		for(int i=0; i<allowableMoves.size(); i++) {
-			int[] move = allowableMoves.get(i);
-			if((0 <= move[0] && move[0] <= 7) && (0 <= move[1] && move[1] <= 7)) {
-				movesToReturn.add(allowableMoves.get(i));	
-			}
-		}
 		
-		
-		return movesToReturn;
+		return allowableMoves;
 	}
 
 	public boolean isChecked() {
@@ -131,9 +122,6 @@ public class King extends Piece {
 				isChecked = false;
 			}
 		}
-	}
-	public void setMove(){
-		this.firstMove = false;
 	}
 	
 	public String toString() {

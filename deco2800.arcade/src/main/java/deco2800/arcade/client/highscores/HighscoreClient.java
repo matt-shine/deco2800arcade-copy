@@ -8,13 +8,6 @@ import java.util.List;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.protocol.highscore.*;
 
-/**
- * This class is designed to be used by game designers in order to allow access
- * to the Highscore Database. It has a number of methods that allow scores
- * to be added to and fetched from the database.
- * 
- * @author TeamA
- */
 public class HighscoreClient {
 	private String Username;
 	private String Game_ID;
@@ -65,18 +58,6 @@ public class HighscoreClient {
 		} else {
 			throw new NullPointerException("Game_ID and client can't be null");
 		}
-	}
-	
-	/**
-	 * THIS IS FOR TESTING ONLY
-	 */
-	public HighscoreClient(String user, String game) {
-			this.Username = user;
-			this.Game_ID = game;
-			this.client = null;
-
-			//Init the score list that is used for sending scores
-			scoreQueue = new LinkedList<String>();
 	}
 
 	/**
@@ -297,6 +278,7 @@ public class HighscoreClient {
 	 * 
 	 * @return A list of Highscore objects 
 	 */
+
 	public List<Highscore> getWinLoss() {
 		GetScoreRequest gsReq = new GetScoreRequest();
 		gsReq.requestID = 4;
@@ -447,13 +429,6 @@ public class HighscoreClient {
 		 * lists.*/
 		this.scoreQueue = new LinkedList<String>();
 		this.queuedScoresCount = 0;
-	}
-	
-	/**
-	 * Get scores currently stored in the queue.
-	 */
-	public LinkedList<String> getMultiScoreQueue() {
-		return this.scoreQueue;
 	}
 	
 	/**

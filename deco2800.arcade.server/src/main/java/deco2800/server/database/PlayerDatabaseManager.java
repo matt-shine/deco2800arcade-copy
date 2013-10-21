@@ -1,6 +1,5 @@
  package deco2800.server.database;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,23 +41,6 @@ public class PlayerDatabaseManager {
 	public void updateUsername(int playerID, String username) {
 		try {
 			playerStorage.updateUsername(playerID, username);
-		} catch (DatabaseException e) {
-			// TODO Error catch?
-		}
-	}
-    /**
-	 * Updates the players library to that provided.
-	 *
-	 * @param playerID
-	 *            The Player's playerID.
-	 * @param style
-	 *            The player's library style.
-	 * @require Username is valid, that is it obeys all restrictions imposed by
-	 *          the Player class. Player with playerID exists.
-	 */
-	public void updateStyle(int playerID, int style) {
-		try {
-			playerStorage.updateStyle(playerID, style);
 		} catch (DatabaseException e) {
 			// TODO Error catch?
 		}
@@ -396,21 +378,13 @@ public class PlayerDatabaseManager {
 		List<Integer> blocked = friendStorage.getBlockedList(playerID);
 		List<Integer> privacyData = playerPrivacy.getPlayerData(playerID);
 		Set<String> gameData = playerGameStorage.getPlayerGames(playerID);
-        int style = playerStorage.getStyle(playerID);
 
 		Set<User> friendsSet = new HashSet<User>();
 		Set<User> invitesSet = new HashSet<User>();
 		Set<User> blockedSet = new HashSet<User>();
 		Set<Game> gameSet = new HashSet<Game>();
-		ArrayList<Boolean> privacy = new ArrayList<Boolean>();
-		privacy.add(false);
-		privacy.add(false);
-		privacy.add(false);
-		privacy.add(false);
-		privacy.add(false);
-		privacy.add(false);
-		privacy.add(false);
-
+		boolean[] privacy = {false, false, false, false, false, false, false};
+		privacy[0] = false;
 
 		for (int i : friends) {
 			friendsSet.add(new User(i));
@@ -430,15 +404,14 @@ public class PlayerDatabaseManager {
 
 		for (int i = 0; i < privacyData.size(); i++) {
 			if (privacyData.get(i) == 1) {
-				privacy.set(i, true);
+				privacy[i] = true;
 			} else {
-				privacy.set(i, false);
+				privacy[i] = false;
 			}
 		}
 
 		Player player = new Player(playerID, null, playerData, friendsSet,
 				invitesSet, blockedSet, gameSet, privacy);
-        player.setLibraryStyle(style);
 
 		return player;
 	}

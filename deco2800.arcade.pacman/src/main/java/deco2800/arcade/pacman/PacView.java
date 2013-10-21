@@ -3,19 +3,12 @@ package deco2800.arcade.pacman;
 import org.lwjgl.util.Point;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.Task;
-
-import deco2800.arcade.pacman.Ghost.GhostState;
-import deco2800.arcade.pacman.PacChar.PacState;
 
 
 /**
@@ -29,8 +22,6 @@ public class PacView {
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private BitmapFont scoreText; 
-	private BitmapFont gameOverText; 
-	private BitmapFont gameOverText2; 
 	
 	// sprite sheet, divided into array of arrays of 8x8 tile images
 	private final TextureRegion[][] tileSprites;
@@ -40,32 +31,24 @@ public class PacView {
 	private static final int GHOST_SIDE_PIX = 14;
 	private TextureRegion[] pacmanFrames = new TextureRegion[MOVER_SPRITE_NUM];
 	private TextureRegion currentFrame; // for pacman animation
-	private static final int NUM_GHOSTS = 5;
+	private static final int NUM_GHOSTS = 4;
 	private TextureRegion[][] ghostFrames = new TextureRegion[NUM_GHOSTS][MOVER_SPRITE_NUM];
-	private static int SCREEN_WIDTH;
-	private static int SCREEN_HEIGHT;
-	Sound waka = Gdx.audio.newSound(Gdx.files.internal("Chomping.mp3"));
 	
 	private GameMap gameMap;
 	private PacChar player;
 	private Ghost blinky;
-	private Ghost pinky;
 	
 	
 	/** TODO make the gameMap the model and have them added on to that in 
 	 * the main Pacman class, then just pass the gameMap here like it currently is.
 	 */
 	public PacView(PacModel model) {
-		SCREEN_WIDTH = model.getSCREENWIDTH();
-		SCREEN_HEIGHT = model.getSCREENHEIGHT();
 		//Initialize camera
 		camera = new OrthographicCamera();
 		// set resolution
-		camera.setToOrtho(false, SCREEN_WIDTH, SCREEN_HEIGHT);
+		camera.setToOrtho(false, model.getSCREENWIDTH(), model.getSCREENHEIGHT());
 		// initialise spriteBatch for drawing things
 		batch = new SpriteBatch();		
-		// Sound!
-		
 		//get tile sprites
 			tileSprites = TextureRegion.split(
 				new Texture(Gdx.files.internal("wallsAndPellets.png")), 8, 8);		
@@ -80,32 +63,24 @@ public class PacView {
 			}
 		}
 		//for ghosts
-		String colour;
-		for (int i=0; i<5; i++) {
+		String colour;		
+		for (int i=0; i<4; i++) {
 			switch(i) {
 			case 1: colour = "pink"; break;
 			case 2: colour = "teal"; break;
 			case 3: colour = "orange"; break;
-			case 4: colour = "scared"; break;
 			default: colour = "red"; break;
 			}
-			spriteSheet = new Texture(Gdx.files.internal(colour + "ghostmove_tran.png"));
+			spriteSheet = new Texture(Gdx.files.internal(colour + "ghostmove.png"));
 			// splits into columns and rows then puts them into one array in order
 			tmp = TextureRegion.split(spriteSheet, GHOST_SIDE_PIX, GHOST_SIDE_PIX);
 			for (int j = 0; j < MOVER_SPRITE_NUM; j++) {
 				ghostFrames[i][j] = tmp[0][j];
 			}			
 		}
-		scoreText = new BitmapFont(Gdx.files.internal("pacfont2.fnt"),
-		         Gdx.files.internal("pacfont2.png"), false);
-		gameOverText = new BitmapFont(Gdx.files.internal("pacfont.fnt"),
-		         Gdx.files.internal("pacfont1.png"), false);
-		gameOverText2 = new BitmapFont(Gdx.files.internal("pacfont.fnt"),
-				Gdx.files.internal("pacfont1.png"), false);
 		this.gameMap = model.getGameMap();
 		this.player = model.getPlayer();
 		this.blinky = model.getBlinky();
-		this.pinky = model.getPinky();
 	}
 	
 	/**
@@ -122,10 +97,20 @@ public class PacView {
 	    batch.setProjectionMatrix(camera.combined);	    
 	    // start the drawing
 	    batch.begin();
-	    displayScore(player);
 	    drawGameMap();
 	    drawPacman();
 	    drawGhost();
+	    
+	    //testing bitmap text print
+//	    scoreText.setColor(Color.WHITE);
+//	    scoreText.draw(batch, "Pacman!", 10, 10);
+	    
+	    // TODO move this check elsewhere check if pacman is trying to move into a wall
+	    // this stops him even if no key is pressed
+//	    if (!player.checkNoWallCollision(player.getTile())) {
+//			player.setCurrentState(PacState.IDLE);
+//		}
+	    
 	    //end the drawing
 	    batch.end();
 	}
@@ -212,71 +197,28 @@ public class PacView {
 	 * Draws the Ghost
 	 */
 	private void drawGhost() {
-		// draw ghost facing the appropriate direction
-		if (blinky.getCurrentState() == GhostState.DEAD
-				|| blinky.getCurrentState() == GhostState.SCATTER) {
-			batch.draw(ghostFrames[4][blinky.getSpritePos()],
-					blinky.getDrawX(), blinky.getDrawY(), blinky.getWidth(),
-					blinky.getHeight());
-		} else {
-			batch.draw(ghostFrames[0][blinky.getSpritePos()],
-					blinky.getDrawX(), blinky.getDrawY(), blinky.getWidth(),
-					blinky.getHeight());
-		}
-
-		if (pinky.getCurrentState() == GhostState.DEAD
-				|| pinky.getCurrentState() == GhostState.SCATTER) {
-			batch.draw(ghostFrames[4][pinky.getSpritePos()], pinky.getDrawX(),
-					pinky.getDrawY(), pinky.getWidth(), pinky.getHeight());
-		} else {
-			batch.draw(ghostFrames[1][pinky.getSpritePos()], pinky.getDrawX(),
-					pinky.getDrawY(), pinky.getWidth(), pinky.getHeight());
-		}
+		//draw ghost facing the appropriate direction
+		// TODO NOTE CURRENTLY ONLY DRAWS RED GHOST WHICHEVER GHOST IT IS
+		batch.draw(ghostFrames[0][blinky.getSpritePos()], blinky.getDrawX(), 
+				blinky.getDrawY(), blinky.getWidth(), blinky.getHeight());
 	}
 	
 	private void drawPacman() {
-		// draw pacman facing the appropriate direction
-		if (player.getCurrentState() == PacState.DEAD) {
-			batch.draw(pacmanFrames[player.getSpritePos()], player.getDrawX(),
-					player.getDrawY(), player.getWidth(), player.getHeight());
-		} else {
-			batch.draw(pacmanFrames[player.getSpritePos()], player.getDrawX(),
-					player.getDrawY(), player.getWidth(), player.getHeight());
-		}
-
-		// Play sound if moving
-		if (player.getCurrentState() != PacState.MOVING) {
-			waka.stop();
-			waka.setLooping(waka.play(), false);
-			// Timer.schedule(new Task() { // Play waka on a 1 sec loop
-			// public void run() {
-			// waka.dispose();
-			// }
-			// }, 1);
-		}
+		//draw pacman facing the appropriate direction
+		batch.draw(pacmanFrames[player.getSpritePos()], player.getDrawX(), 
+				player.getDrawY(), player.getWidth(), player.getHeight());
 	}
-
+	
 	/**
 	 * Displays the score of the current Mover.
 	 * When support for multiple player-controlled movers is implemented, printing
 	 * will have to occur in different positions.
 	 */
-	public void displayScore(Mover mover) {
-		// Set score text
-		CharSequence str = "Score: " + mover.getScore();
-		CharSequence str2 = "";	
-		CharSequence str3 = "";	
-		
-		scoreText.setColor(Color.WHITE);
-		scoreText.draw(batch, str, 50, 50);
-		if (gameMap.isGameOver()){
-			str2 = "Game";
-			str3 = "over";
-		}
-		gameOverText.setColor(Color.WHITE);
-		gameOverText.draw(batch, str2, 170, 170);
-		gameOverText2.setColor(Color.WHITE);
-		gameOverText2.draw(batch, str3, 180, 130);
-	}
+//	public void displayScore(Mover mover) {
+//		batch.begin();
+//		scoreText.setColor(Color.WHITE);
+//		scoreText.draw(batch, "Score:" + mover.getScore(), 50, 50);
+//		batch.end();
+//	}
 	
 }

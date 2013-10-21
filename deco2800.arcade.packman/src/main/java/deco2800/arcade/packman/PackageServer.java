@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class PackageServer {
-	final static Logger LOGGER = LoggerFactory.getLogger(PackageServer.class);
+	final static Logger logger = LoggerFactory.getLogger(PackageServer.class);
 	
 	private static final String RELEASE_FOLDER = "Release";
 	
@@ -18,11 +18,11 @@ public class PackageServer {
 	public PackageServer() {
 		
 		// Create the release folder
-		LOGGER.debug("Creating directory: {}", RELEASE_FOLDER);
+		logger.debug("Creating directory: {}", RELEASE_FOLDER);
 		if (PackageUtils.createDirectory(RELEASE_FOLDER)) {
-			LOGGER.debug("Created: {}", RELEASE_FOLDER);
+			logger.debug("Created: {}", RELEASE_FOLDER);
 		} else {
-			LOGGER.debug("Failed creating: {}", RELEASE_FOLDER);
+			logger.debug("Failed creating: {}", RELEASE_FOLDER);
 		}
 	}
 
@@ -30,7 +30,7 @@ public class PackageServer {
      * Print confirmation of successful connection by client to package server
      */
     public void printSuccess() {
-        LOGGER.info("PACKMAN: Client connection success");
+        logger.info("PACKMAN: Client connection success");
     }
 
     /**

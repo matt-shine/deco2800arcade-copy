@@ -46,7 +46,6 @@ public class PlayerStorage {
 								+ "username VARCHAR(30) NOT NULL,"
 								+ "name VARCHAR(30),"
 								+ "email VARCHAR(30),"
-								+ "style INT,"
 								+ "program VARCHAR(30)," + "bio VARCHAR(200))");
 			}
 		} catch (SQLException e) {
@@ -269,120 +268,9 @@ public class PlayerStorage {
 		}
 	}
 
-    /**
-     * Update an integer Field
-     * @param playerID The Player's ID
-     * @param newValue New value
-     * @param field Field Name
-     */
-    private void updateField(int playerID, int newValue, String field)
-            throws DatabaseException {
-        if (!initialised) {
-            initialise();
-        }
-
-        // Get a connection to the database
-        Connection connection = Database.getConnection();
-
-        Statement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery("UPDATE PLAYER SET " + field
-                    + " = " + newValue + " WHERE playerID = " + playerID + ";");
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new DatabaseException(
-                    "Unable to update player username in database", e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
 	public void addPlayer(int parseInt, String string, String string2,
 			String string3, String string4, String string5, String string6) {
 		// TODO Auto-generated method stub
 		
 	}
-
-    /**
-     * Get the Player's style
-     * @param playerID playerID
-     * @return library style
-     * @throws DatabaseException
-     */
-    public int getStyle(int playerID) throws DatabaseException{
-        if (!initialised) {
-            initialise();
-        }
-
-        // Get a connection to the database
-        Connection connection = Database.getConnection();
-
-        Statement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * from PLAYERS;");
-            return findPlayerStyleInfo(playerID, resultSet, "colour");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new DatabaseException(
-                    "Unable to get player informtion from database", e);
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * Find player Style info
-     * @param playerID player ID
-     * @param results results set
-     * @param field column name
-     * @return int of style
-     * @throws SQLException
-     */
-    private int findPlayerStyleInfo(int playerID, ResultSet results, String field) throws SQLException {
-        while (results.next()) {
-            String user = results.getString("playerID");
-            if (user.equals(playerID)) {
-                return results.getInt(field);
-            }
-        }
-        return 0;
-    }
-
-    /**
-     * Update Player's library colour
-     * @param playerID Player ID
-     * @param style style
-     */
-    public void updateStyle(int playerID, int style) throws DatabaseException {
-        updateField(playerID, style, "style");
-    }
 }

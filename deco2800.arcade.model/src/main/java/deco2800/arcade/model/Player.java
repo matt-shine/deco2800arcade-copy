@@ -1,7 +1,5 @@
 package deco2800.arcade.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -142,7 +140,7 @@ public class Player extends User {
 	 */
 	public Player(int playerID, String filepath, List<String> details,
 			Set<User> friendsList, Set<User> friendRequestsList,
-			Set<User> blockedList, Set<Game> gamesList, ArrayList<Boolean> privacy) {
+			Set<User> blockedList, Set<Game> gamesList, boolean[] privacy) {
 		super(playerID);
 		this.username = new Field(USERNAME_ID, details.get(0));
 		this.name = new Field(NAME_ID, details.get(1));
@@ -715,17 +713,18 @@ public class Player extends User {
 		clearChanged();
 	}
 
-    /**
-	 * Update Player's library style
-	 *
-	 * @param style
-	 *            Library Style
+	/**
+	 * Update Player's library colour
+	 * 
+	 * @param colour
+	 *            Colour Scheme
 	 */
-	public void setLibraryStyle(int style) {
-		libraryStyle.setLayout(style);
+	public void updateLibraryColour(int colour) {
+		libraryStyle.setColourScheme(colour);
+		setChanged();
+		notifyObservers(libraryStyle);
+		clearChanged();
 	}
-
-
 
 	/**
 	 * Get Player's Library Style

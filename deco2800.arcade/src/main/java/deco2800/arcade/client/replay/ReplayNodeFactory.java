@@ -5,7 +5,7 @@ import java.util.Map;
 
 import deco2800.arcade.client.replay.exception.ReplayItemDataInvalidException;
 
-public final class ReplayNodeFactory {
+public class ReplayNodeFactory {
     
     private static Map<String, String[]> lookupEvents = new HashMap<String, String[]>();
 

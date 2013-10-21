@@ -12,7 +12,7 @@ public class Configuration {
 	private static int effectsVolume = 50;
 	private static int backgroundVolume = 50;
 	// Difficulty stored as integer from 0 to 4, with 4 being insane mode
-	private static int difficulty = 0;
+	private static int difficulty = 2;
 	private static Map<Long, String> highScoresMap = new TreeMap<Long, String>();
 	
 	/* 
@@ -25,12 +25,6 @@ public class Configuration {
 			writeConfig();
 		} else {
 			readConfig();
-		}
-		
-		if (!Gdx.files.external("BurningSkies/high_scores.txt").exists()) {
-			writeLocalHighScores();
-		} else {
-			readLocalHighScores();
 		}
 	}
 	
@@ -109,35 +103,25 @@ public class Configuration {
 	public static void writeLocalHighScores() {
 		FileHandle scoresFile = Gdx.files.external("BurningSkies/high_scores.txt");
 		StringBuilder toWriteStrings = new StringBuilder();
-		int limit = 0;
 		
 		for (Map.Entry<Long, String> entry : highScoresMap.entrySet()) {
-			//We only care about the top five scores
-			if (limit < 5) {
-				toWriteStrings.append(entry.getValue() + ":" + entry.getKey() + System.getProperty("line.separator"));
-				limit++;
-			} else {
-				break;
-			}
+			toWriteStrings.append(entry.getValue() + ":" + entry.getKey() + System.getProperty("line.separator"));
 		}
+		
 		scoresFile.writeString(toWriteStrings.toString(), false);
 	}
 	
 	public static void readLocalHighScores() {
 		FileHandle scoresFile = Gdx.files.external("BurningSkies/high_scores.txt");
-		if (scoresFile.exists()) {
-			String scores = scoresFile.readString();
-			
-			highScoresMap = new TreeMap<Long, String>();
-			
-			String[] scoresArray = scores.split(System.getProperty("line.separator"));
-			
-			for (int i = 0; i < scoresArray.length && i < 5; i++) {
-				String[] currentScore = scoresArray[i].split(":");
-				highScoresMap.put(Long.parseLong(currentScore[1]), currentScore[0]);
-			}
-		} else {
-			System.out.println("No scores exist.");
+		String scores = scoresFile.readString();
+		
+		highScoresMap = new TreeMap<Long, String>();
+		
+		String[] scoresArray = scores.split(System.getProperty("line.separator"));
+		
+		for (int i = 0; i < scoresArray.length && i < 5; i++) {
+			String[] currentScore = scoresArray[i].split(":");
+			highScoresMap.put(Long.parseLong(currentScore[1]), currentScore[0]);
 		}
 	}
 		
@@ -183,11 +167,7 @@ public class Configuration {
 	
 	public static void addScore(String name, long score) {
 		long inverseScore = score * -1;
-		while (highScoresMap.containsKey(inverseScore)) {
-			inverseScore += 1;
-		}
 		highScoresMap.put(new Long(inverseScore), name);
-		writeLocalHighScores();
 	}
 	
 	public static Map<Long, String> getScores() {

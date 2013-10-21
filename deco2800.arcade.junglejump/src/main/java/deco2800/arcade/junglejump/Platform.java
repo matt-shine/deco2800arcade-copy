@@ -232,44 +232,36 @@ public class Platform {
 		}
 	}
 	
-	/**
-	 * Run a platforms special ability
-	 * every frame
-	 */
 	public void onActive() {
-		// If platform is Jim
+		int moveSpeed = 2;
 		if(this.platType == 'J') {
-			int moveSpeed = 2;
 			
-			if(this.xPos > junglejump.SCREENWIDTH) {
-				this.inactive = true;
-			}
-			
-			// Move right
-			if(moveRight) {
-				this.xPos += moveSpeed;
-				moveCounter += moveSpeed;
-				// stop moving when leaving screen
-			} else {
-				this.xPos -= moveSpeed;
-				moveCounter += moveSpeed;
-			}
-			
-			if(moveCounter > 500) {
-				moveCounter = 0;
-				moveRight = !moveRight;
 				if(moveRight) {
-					this.platText = new Texture(Gdx.files.internal(
-							"world1/jimboRight.png"));
+					this.xPos += moveSpeed;
+					moveCounter += moveSpeed;
+					if(this.xPos > junglejump.SCREENWIDTH) {
+						this.inactive = true;
+					}
 				} else {
-					this.platText = new Texture(Gdx.files.internal(
-							"world1/jimbo.png"));
+					this.xPos -= moveSpeed;
+					moveCounter += moveSpeed;
 				}
-			}
+				
+				if(moveCounter > 500) {
+					moveCounter = 0;
+					moveRight = !moveRight;
+					if(moveRight) {
+						this.platText = new Texture(Gdx.files.internal(
+								"world1/jimboRight.png"));
+					} else {
+						this.platText = new Texture(Gdx.files.internal(
+								"world1/jimbo.png"));
+					}
+				}
 			
 			if(inactive) {
 				moveCounter = 0;
-				this.yPos -= 2;
+				this.yPos -= 5;
 			}
 		}
 	}

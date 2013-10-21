@@ -1,15 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <dataset>
-<AWARDED_ACHIEVEMENT playerID='1' achievementID='test.test1' />
-<AWARDED_ACHIEVEMENT playerID='2' achievementID='test.test1' />
-<AWARDED_ACHIEVEMENT playerID='3' achievementID='test.test1' />
-<ACHIEVEMENTS id='test.test1' NAME='Test 1' DESCRIPTION='This is a test.' ICON='' THRESHOLD='5' />
-<ACHIEVEMENTS id='test.test2' NAME='Test 2' DESCRIPTION='This is a test' ICON='' THRESHOLD='3' />
-<ACHIEVEMENTS id='test.test3' NAME='Test 3' DESCRIPTION='This is a test' ICON='' THRESHOLD='2' />
-<PLAYER_ACHIEVEMENT playerID='1' achievementID='test.test1' PROGRESS='1' />
-<PLAYER_ACHIEVEMENT playerID='2' achievementID='test.test1' PROGRESS='2' />
-<PLAYER_ACHIEVEMENT playerID='3' achievementID='test.test1' PROGRESS='5' />
-<PLAYER_ACHIEVEMENT playerID='1' achievementID='test.test2' PROGRESS='4' />
-<PLAYER_ACHIEVEMENT playerID='1' achievementID='test.test3' PROGRESS='2' />
+<ACHIEVEMENTS id='pong.winfivegames' NAME='5 Times Down' DESCRIPTION='Win 5 games of Pong' ICON='master.png' THRESHOLD='5' />
+<ACHIEVEMENTS id='pong.winthreegames' NAME='3 Times Down' DESCRIPTION='Win 3 games of Pong' ICON='master.png' THRESHOLD='3' />
+<PLAYER_ACHIEVEMENT playerID='1' achievementID='pong.winthreegames' PROGRESS='1' />
+<!-- <PLAYER_ACHIEVEMENT playerID='2' achievementID='pong.winthreegames' PROGRESS='1' /> -->
+<PLAYER_ACHIEVEMENT playerID='1' achievementID='pong.winfivegames' PROGRESS='4' />
 </dataset>
+
+
+
+<!-- <dataset>
+	<ACHIEVEMENTS id='pong.winthreegames'>
+		<NAME>3 Times Down</NAME>
+		<DESCRIPTION>Win 3 games of Pong</DESCRIPTION>
+		<ICON>master.png</ICON>
+		<THRESHOLD>3</THRESHOLD>
+	</ACHIEVEMENTS>
+</dataset> -->

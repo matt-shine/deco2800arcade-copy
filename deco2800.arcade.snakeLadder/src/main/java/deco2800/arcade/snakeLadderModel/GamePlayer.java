@@ -39,16 +39,10 @@ public class GamePlayer {
 		this.isAI = isAI;
 	}
 
-	/**
-	 * @return bounding rectangle for game player
-	 */
 	public Rectangle getBounds() {
 		return bounds;
 	}
 
-	/**
-	 * @param bounds set the bounds for game player
-	 */
 	public void setBounds(Rectangle bounds) {
 		this.bounds = bounds;
 	}
@@ -108,9 +102,6 @@ public class GamePlayer {
     	batch.draw(this.getPlayerTexture(),getBounds().x,getBounds().y);   	
     }
     
-    /**
-     * initialize the gameplayer's velocity. +1 when player is at even row -1 when player is at odd row
-     */
     public void initializeVelocity() {  	
 		// if it is even row
 		if (((this.positionIndex)/10)%2 == 0)
@@ -126,11 +117,7 @@ public class GamePlayer {
 		}
 	}
     
-   /**
- * @param diceNumber
- * @return the position index after dice throw
- */
-public int getDnumber(int diceNumber){
+   public int getDnumber(int diceNumber){
     	positionIndex+=diceNumber;
     	if(positionIndex>=99)
     	{
@@ -139,17 +126,10 @@ public int getDnumber(int diceNumber){
     	return positionIndex;
     }
    
-   /**
- * @return current position number
- */
    public int newposition()
    {
 	   return positionIndex;
    }
-   /**
- * @param newpoint set new position number
- * @return the new position number
- */
    public int setNewPosition(int newpoint)
    {
 	   positionIndex=newpoint;

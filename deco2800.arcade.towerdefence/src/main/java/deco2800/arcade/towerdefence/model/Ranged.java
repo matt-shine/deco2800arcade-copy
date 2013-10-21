@@ -2,6 +2,8 @@ package deco2800.arcade.towerdefence.model;
 
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
 import deco2800.arcade.towerdefence.model.creationclasses.Projectile;
 
 /**
@@ -49,9 +51,9 @@ public interface Ranged {
 	public GridObject target();
 
 	/**
-	 * Returns the array of files to animate shooting.
+	 * Returns the array of sprites to animate shooting.
 	 * 
-	 * @return A list of files for the shooting animation.
+	 * @return A list of sprites for the shooting animation.
 	 */
-	public List<String> fileShooting();
+	public List<Sprite> shootingSprites();
 }

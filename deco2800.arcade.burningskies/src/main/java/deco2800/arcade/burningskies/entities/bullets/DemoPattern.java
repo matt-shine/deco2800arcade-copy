@@ -20,10 +20,7 @@ public class DemoPattern extends BulletPattern {
 		super(emitter, screen);
 		interval = (float) 0.01;
 	}
-
-	/**
-	 * Fires bullets in a spiral pattern
-	 */
+	
 	public void fire(float lag, float x, float y) {
 		SpiralBullet bullet = new SpiralBullet(Affinity.PLAYER, 10, emitter, (PlayerShip) emitter, new Vector2(x,y), angle, 1,  image);
 		screen.addBullet(bullet);

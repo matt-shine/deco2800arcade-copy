@@ -54,72 +54,7 @@ public final class MixMaze extends GameClient {
 	@Override
 	public void create() {
 		super.create();
-
-        //add the overlay listeners
-        this.getOverlay().setListeners(new Screen() {
-
-            @Override
-            public void render(float arg0) {
-            }
-
-            @Override
-            public void resize(int width, int height) {
-            }
-
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void hide() {
-            }
-
-            @Override
-            public void pause() {
-            }
-
-            @Override
-            public void resume() {
-            }
-
-            @Override
-            public void dispose() {
-            }
-
-        });
 		
-		/* overlay */
-		this.getOverlay().setListeners(new Screen() {
-
-			@Override
-			public void dispose() {				
-			}
-
-			@Override
-			public void hide() {	
-			}
-
-			@Override
-			public void pause() {	
-			}
-
-			@Override
-			public void render(float arg0) {
-			}
-
-			@Override
-			public void resize(int arg0, int arg1) {
-			}
-
-			@Override
-			public void resume() {	
-			}
-
-			@Override
-			public void show() {
-			}
-		});
-
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);

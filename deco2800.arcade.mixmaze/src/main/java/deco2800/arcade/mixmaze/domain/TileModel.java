@@ -1,7 +1,6 @@
 package deco2800.arcade.mixmaze.domain;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import deco2800.arcade.mixmaze.Achievements;

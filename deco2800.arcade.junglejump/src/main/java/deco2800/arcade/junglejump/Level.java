@@ -11,8 +11,6 @@ import java.util.*;
  *
  */
 public class Level {
-	private int length;
-	private int height;
 	private ArrayList<Platform> platforms; // list of all objects available to be rendered
 	private ArrayList<Boolean> bananas;
 	

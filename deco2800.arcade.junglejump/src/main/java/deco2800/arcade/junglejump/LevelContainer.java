@@ -7,8 +7,6 @@ import java.util.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
-import deco2800.arcade.junglejump.GUI.junglejump;
-
 
 /**
  * Class holding a list of all the levels in the game
@@ -19,9 +17,10 @@ import deco2800.arcade.junglejump.GUI.junglejump;
 public class LevelContainer {
 	static ArrayList<Level> levels;
 	private static int currentLevel;
-	public static int currentWorld;
+	private static int currentWorld;
 	private static int levelAmount;
 	private static int worldAmount;
+	public int TOTAL_BANANAS;
 	
 	/**
 	 * Constructor where levels are created and placed
@@ -30,7 +29,7 @@ public class LevelContainer {
 	public LevelContainer() {
 		levels = new ArrayList<Level>();
 		setCurrentLevel(0);
-		currentWorld = 0;
+		setCurrentWorld(0);
 		levelAmount = 5;
 		worldAmount = 5;
 		
@@ -51,7 +50,6 @@ public class LevelContainer {
 	 */
 	public void addLevel(int worldNum, int levelNum) {
 		BufferedReader br;
-		int bananaCounter = 0;
 		Level level = new Level(); // Creating and adding to a level
 		
 		URL path = this.getClass().getResource("/");
@@ -80,10 +78,10 @@ public class LevelContainer {
 	        		char c = line.charAt(x);
 	        		Platform p;
 	        		if(c == 'b') {
+	        				TOTAL_BANANAS++;
 	        				level.addBanana(); // false means not found
 	        				p = new Platform(c, (x*xLength), (y*xLength), xLength, yLength);
 		        			level.addPlatform(p);
-		        			bananaCounter++;
 	        		} else if(c!='*' && c!= '.') {
 	        			p = new Platform(c, (x*xLength), (y*xLength), xLength, yLength);
 	        			level.addPlatform(p);
@@ -113,21 +111,32 @@ public class LevelContainer {
 		System.out.println("loading next level");
 		clearCurrentLevel();
 		setCurrentLevel(getCurrentLevel() + 1);
+		
 		if(getCurrentLevel() > levelAmount-1) {
 			setCurrentLevel(0);
-			currentWorld++;
-			if(currentWorld > worldAmount-1) {
-				currentWorld = 0;
+			setCurrentWorld(getCurrentWorld() + 1);
+			
+			if(getCurrentWorld() > worldAmount-1) {
+				setCurrentWorld(0);
 			}
-			junglejump.world = currentWorld;
-			junglejump.gameBackground = new Texture(Gdx.files.internal("world" + (currentWorld+1) + "/background.png"));
-			junglejump.worldNumText = new Texture(Gdx.files.internal((currentWorld + 1) + ".png"));
+			junglejump.world = getCurrentWorld();
+			junglejump.gameBackground = new Texture(Gdx.files.internal("world" + (getCurrentWorld()+1) + "/background.png"));
 		}
 		junglejump.currentLevel = getLevel(getCurrentLevel());
 		//currentLevel = newLevel;
-		junglejump.levelNumText = new Texture(Gdx.files.internal((getCurrentLevel() + 1) + ".png"));
 		junglejump.monkeyX = junglejump.monkeyDefaultX;
 		junglejump.monkeyY = junglejump.monkeyDefaultY;
+		junglejump.isFalling = true;
+		
+		int size = junglejump.currentLevel.platformAmount();
+		for (int i = 0; i < size; i++) {
+			Platform p = junglejump.currentLevel.getPlatforms().get(i);
+			// Place platform onto screen
+			p.refreshTexture(); // Make sure texture has changed to current world
+			if(p.getX() >= 1000) {
+				p.setX(p.getX()-1000);
+			}
+		}
 		return;
 	}
 	
@@ -140,7 +149,7 @@ public class LevelContainer {
 	}
 	
 	public static Level getLevel(int currentLevel) {
-		return levels.get((currentWorld * levelAmount) + currentLevel);
+		return levels.get((getCurrentWorld() * levelAmount) + currentLevel);
 	}
 	
 	/**
@@ -164,6 +173,14 @@ public class LevelContainer {
 
 	public static void setCurrentLevel(int currentLevel) {
 		LevelContainer.currentLevel = currentLevel;
+	}
+
+	public static int getCurrentWorld() {
+		return currentWorld;
+	}
+
+	public static void setCurrentWorld(int currentWorld) {
+		LevelContainer.currentWorld = currentWorld;
 	}
 	
 

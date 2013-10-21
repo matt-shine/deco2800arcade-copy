@@ -2,12 +2,18 @@
   <achievement id="junglejump.bananaking">
     <name>Banana King</name>
     <description>Collect all of the bananas in all of the worlds.</description>
-    <awardThreshold>150</awardThreshold>
+    <awardThreshold>50</awardThreshold>
     <icon>banana_king.png</icon>
   </achievement>
+    <achievement id="junglejump.monkey">
+        <name>Monkey</name>
+        <description>Collect 10 bananas.</description>
+        <awardThreshold>10</awardThreshold>
+        <icon>banana_king.png</icon>
+    </achievement>
   <achievement id="junglejump.worldchampion">
     <name>World Champion</name>
-    <description>Get through all of the worlds and defeat Gyms Steels leader.</description>
+    <description>Get through all of the worlds and defeat Jim Steel.</description>
     <icon>world_champion.png</icon>
     <components>
       <component id="junglejump.worldchampion.finishWorld1" awardThreshold="1" />
@@ -29,4 +35,10 @@
     <awardThreshold>200</awardThreshold>
     <icon>zombie_monkey.png</icon>
   </achievement>
+    <achievement id="junglejump.firststeps">
+        <name>First Steps</name>
+        <description>Complete a level.</description>
+        <awardThreshold>1</awardThreshold>
+        <icon>world_champion.png</icon>
+    </achievement>
 </achievements>

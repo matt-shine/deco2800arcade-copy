@@ -4,8 +4,6 @@ package deco2800.arcade.junglejump;
 import java.io.File;
 import java.net.URL;
 
-import com.badlogic.gdx.*;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -14,18 +12,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 
-import deco2800.arcade.junglejump.GUI.junglejump;
 
 public class Platform {
 	
 	private int width, height, xPos, yPos;
-	private boolean active;
 	public boolean climbable = false;
 	private Texture platText;
 	public boolean visible = true;
-	private boolean inverted;
 	public char platType;
 	public String platformType = "";
+	public boolean inactive;
+	private boolean moveRight;
+	private int moveCounter = 250;
 	
 	/**
 	 * Platform constructor
@@ -36,7 +34,8 @@ public class Platform {
 		this.height = pHeight;
 		this.xPos = pX;
 		this.yPos = pY;
-		this.active = false;
+		inactive = false;
+		moveRight = false;
 		platType = type;
 		setTexture(type);
 	}
@@ -66,9 +65,9 @@ public class Platform {
 			break;
 		case 'j': // Vine
 			platformType = "vine_short";
-			this.width = 40;
+			this.width = 20;
 			this.height = 80;
-			this.xPos -= 10;
+			this.xPos -= 5;
 			break;
 		case 't': // short tree
 			platformType = "treetop_short";
@@ -94,30 +93,26 @@ public class Platform {
 			this.height = 30;
 			break;
 		case 'x': // Spike
-			platformType = "banana";
+			platformType = "spike";
 			this.width = 20;
 			this.height = 20;
 			this.yPos -= 20;
 			break;
 		case '~': // Tunnel floor
-			platformType = "banana";
+			platformType = "floor";
 			this.width = 40;
 			this.height = 20;
 			break;
 		case '=': // Tunnel
-			platformType = "banana";
+			platformType = "tunnel";
 			this.width = 40;
-			this.height = 40;
+			this.height = 60;
+			this.yPos -= 20;
 			break;
 		case 'J': // Jim
-			platformType = "banana";
+			platformType = "jimbo";
 			this.width = 80;
 			this.height = 60;
-			break;
-		case 'Z': // Princess monkey
-			platformType = "banana";
-			this.width = 50;
-			this.height = 50;
 			break;
 		case '_': // Building roof
 			platformType = "roof";
@@ -142,8 +137,11 @@ public class Platform {
 	
 	public Texture getTexture() {
 		// Texture changes depending on world
-		platText = new Texture(Gdx.files.internal("world" + (junglejump.world + 1) + "/" + platformType + ".png"));
 		return this.platText;
+	}
+	
+	public void refreshTexture() {
+		platText = new Texture(Gdx.files.internal("world" + (junglejump.world + 1) + "/" + platformType + ".png"));
 	}
 	
 	/**
@@ -209,14 +207,14 @@ public class Platform {
 	public void setActive() {
 		if(this.platType == '^') {
 			// Play banana sound
-			/*URL path = this.getClass().getResource("/");
+			URL path = this.getClass().getResource("/");
 			try{ 
 				String resource = path.toString().replace(".arcade/build/classes/main/", 
 						".arcade.junglejump/src/main/").replace("file:", "") + 
 						"resources/pickup.wav";
 				System.out.println(resource);
 				File file = new File(resource);
-				FileHandle fileh = new FileHandle(file);
+				new FileHandle(file);
 				AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 				Clip clip = AudioSystem.getClip();
 				clip.open(audioIn);
@@ -224,7 +222,8 @@ public class Platform {
 			} catch (Exception e) {
 				Gdx.app.log(junglejump.messages,
 						"Audio File for Banana Music Not Found");
-			}*/
+			}
+			junglejump.resetAudio();
 			LevelContainer.nextLevel();
 		}
 		if(this.platType == 'j') {
@@ -233,7 +232,51 @@ public class Platform {
 		if(this.platType == 'x') {
 			junglejump.killMonkey();
 		}
-		this.active = true;
 	}
 	
+	/**
+	 * Run a platforms special ability
+	 * every frame
+	 */
+	public void onActive() {
+		// If platform is Jim
+		if(this.platType == 'J') {
+			int moveSpeed = 2;
+			
+			if(this.xPos > junglejump.SCREENWIDTH) {
+				this.inactive = true;
+			}
+			
+			// Move right
+			if(moveRight) {
+				this.xPos += moveSpeed;
+				moveCounter += moveSpeed;
+				// stop moving when leaving screen
+			} else {
+				this.xPos -= moveSpeed;
+				moveCounter += moveSpeed;
+			}
+			
+			if(moveCounter > 500) {
+				moveCounter = 0;
+				moveRight = !moveRight;
+				if(moveRight) {
+					this.platText = new Texture(Gdx.files.internal(
+							"world1/jimboRight.png"));
+				} else {
+					this.platText = new Texture(Gdx.files.internal(
+							"world1/jimbo.png"));
+				}
+			}
+			
+			if(inactive) {
+				moveCounter = 0;
+				this.yPos -= 2;
+				if(yPos < 0) {
+					LevelContainer.nextLevel();
+					// TODO win game
+				}
+			}
+		}
+	}
 }

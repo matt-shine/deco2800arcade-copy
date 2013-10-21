@@ -21,7 +21,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.model.Game;
+
+import deco2800.arcade.model.Player;
+
+
+
+
 import deco2800.arcade.model.Game.ArcadeGame;
+
 @ArcadeGame(id="frontpage")
 public class FrontPage implements Screen {
         

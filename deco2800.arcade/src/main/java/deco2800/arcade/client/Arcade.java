@@ -1,6 +1,5 @@
 package deco2800.arcade.client;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -18,16 +17,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
 import org.reflections.Reflections;
-
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
-
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.NetworkException;
 import deco2800.arcade.client.network.listener.CommunicationListener;
@@ -42,11 +34,8 @@ import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.communication.CommunicationView;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
-import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.model.User;
 import deco2800.arcade.packman.PackageClient;
-import deco2800.arcade.protocol.BlockingMessage;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
@@ -60,9 +49,6 @@ import deco2800.arcade.protocol.lobby.NewLobbyRequest;
 import deco2800.arcade.protocol.lobby.RemovedMatchDetails;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
-import deco2800.arcade.protocol.packman.GameUpdateCheckResponse;
-import deco2800.arcade.protocol.player.FriendInvitesUpdateRequest;
-import deco2800.arcade.protocol.player.FriendsUpdateRequest;
 
 /**
  * The client application for running arcade games.
@@ -227,13 +213,8 @@ public class Arcade extends JFrame {
 	 */
 	public void connectToServer() throws ArcadeException {
 		try {
-			// TODO allow server/port as optional runtime arguments or user
-			// inputs.
-			System.out.println("connecting to server");
 			client = new NetworkClient(serverIPAddress, TCP_PORT, UDP_PORT);
-
 			client.sendNetworkObject(new GameLibraryRequest());
-
 			communicationNetwork = new CommunicationNetwork(player, client);
 			addListeners();
 		} catch (NetworkException e) {
@@ -250,8 +231,6 @@ public class Arcade extends JFrame {
 	    */
 	  public void connectToFileServer() throws ArcadeException {
 	      try {
-	          // TODO allow server/port as optional runtime arguments xor user inputs.
-	          System.out.println("connecting to file server");
 	          fileClient = new NetworkClient(serverIPAddress, FILE_TCP_PORT);
 	          addFileClientListeners();
 	      } catch (NetworkException e) {
@@ -300,33 +279,6 @@ public class Arcade extends JFrame {
     	this.player = myPlayer;
     	int myID = this.player.getID();
     	String myUsername = this.player.getUsername();
-    	
-    	/*
-    	 * Unfortunately this doesn't seem to do anything at the moment
-    	 * 
-    	//Friend adding for debugChats:
-    	if (myID == 1601){
-    		player.addInvite(1600); //debugChat1 is adding debugChat
-    		FriendInvitesUpdateRequest request = new FriendInvitesUpdateRequest();
-    		request.setAdd(true);
-    		request.setPlayerID(1601);
-    		request.setFriendID(1600);
-    		this.client.sendNetworkObject(request);
-    	}
-    	if (myID == 1600){
-    		player.acceptFriendInvite(1601);
-    		FriendsUpdateRequest request = new FriendsUpdateRequest();
-    		request.setAdd(true);
-    		request.setPlayerID(1600);
-    		request.setFriendID(1601);
-    		this.client.sendNetworkObject(request);
-    	}
-    	    	
-    	//Test blocking debugChat1 from sending you messages (you are debugChat)
-    	if (myID == 1600){
-    		player.blockPlayer(1601); //debugChat1
-    	}
-    	*/
 
 		this.communicationNetwork.loggedIn(this.player, this.communicationView);
 		
@@ -365,10 +317,6 @@ public class Arcade extends JFrame {
 		GameUpdateCheckRequest gameUpdateCheckRequest = new GameUpdateCheckRequest();
 		gameUpdateCheckRequest.gameID = "pong";
 
-		//These blocking messages freeze the client???
-		//BlockingMessage r = BlockingMessage.request(client.kryoClient(), gameUpdateCheckRequest);
-		//GameUpdateCheckResponse resp = (GameUpdateCheckResponse) r;
-
 		if (getCurrentGame() != null) {
 			getCurrentGame().setPlayer(this.player);
 			getCurrentGame().setThisNetworkClient(this.client);
@@ -379,11 +327,6 @@ public class Arcade extends JFrame {
             getCurrentGame().setThisNetworkClient(this.client);
             
         }
-
-        // This is how you fetch game JARs
-        //fetchGameJar("pong", "1.0");
-
-        //System.out.println("[CLIENT] GameUpdateCheckResponse received: " + resp.md5);
 
 	}
 

@@ -187,7 +187,7 @@ public class CommunicationController {
 			}
 
 			/**
-			 * Changes the colour of the label when Mouse hovers over it
+			 * Changes the colour of the label when the Mouse hovers over it
 			 */
 			public void mouseEntered(MouseEvent e) {
 				JLabel label = (JLabel) e.getSource();

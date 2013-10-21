@@ -29,7 +29,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 /**
- * Handles the appearance of the chat sidebar
+ * Handles the appearance of the chat side bar. Creates a card Layout that
+ * lets the user switch between a list of current chats and being able to
+ * participant in a chat.
  */
 public class CommunicationView extends JPanel {
 
@@ -47,10 +49,10 @@ public class CommunicationView extends JPanel {
 	private CommunicationNetwork communicationNetwork;
 
 	/**
-	 * Creates a new sidebar
+	 * Creates a new side bar
 	 * 
 	 * @param height
-	 *            the height of the sidebar
+	 *            the height of the side bar
 	 */
 	public CommunicationView(int height) {
 
@@ -76,6 +78,10 @@ public class CommunicationView extends JPanel {
 		scrollablePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 1)) {
 			private static final long serialVersionUID = 1L;
 
+			/* Overrides the paintComponent to give the panel a gradient background.
+			 * Due to swings lack of visual theme we are trying to make the chat bar
+			 * blend in with the arcade.
+			 */
 			@Override
 			protected void paintComponent(Graphics grphcs) {
 				super.paintComponent(grphcs);
@@ -105,7 +111,7 @@ public class CommunicationView extends JPanel {
 	/**
 	 * Creates the second view of the sidebar. This is where the input and
 	 * output textAreas are located and where the player can type/send and
-	 * recieve messages.
+	 * receive messages.
 	 */
 	private void createViewTwo() {
 
@@ -260,7 +266,7 @@ public class CommunicationView extends JPanel {
 	}
 
 	/**
-	 * Adds keyboardlistener to the view
+	 * Adds keyboardlistener to the view.
 	 * 
 	 * @param listener
 	 *            to be used

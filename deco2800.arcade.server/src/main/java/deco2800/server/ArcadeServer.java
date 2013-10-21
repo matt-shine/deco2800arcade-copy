@@ -307,6 +307,7 @@ public class ArcadeServer {
         server.addListener(new LibraryListener());
         server.addListener(new PlayerListener());
         server.addListener(new ImageListener());
+        server.addListener(new ForumListener());
 
     }
 

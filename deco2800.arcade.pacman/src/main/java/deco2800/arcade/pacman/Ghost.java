@@ -251,6 +251,9 @@ public final class Ghost extends Mover {
 		return currentState;
 	}
 
+	public GhostName getGhostName(){
+		return ghostName;
+	}
 	public void setCurrentState(GhostState currentState) {
 		this.currentState = currentState;
 	}

@@ -31,7 +31,6 @@ public class Pacman extends GameClient {
 	public final int SCREEN_WIDTH = 1280;	
 	private final int NUM_GHOSTS = 4;
 	public boolean gamePaused;
-	private Sound waka;
 	
 	
 	private PacModel model; // model for Pacman	
@@ -121,7 +120,6 @@ public class Pacman extends GameClient {
 	@Override
 	public void dispose() {
 		super.dispose();
-		waka.dispose();
 		ArcadeInputMux.getInstance().removeProcessor(controller);
 		
 		//TODO dispose more stuff here? Perhaps the view things?
@@ -137,10 +135,9 @@ public class Pacman extends GameClient {
 	 */
 	@Override
 	public void render() {	
-		// makes sure view and sound is only set up once
+		// makes sure view is only set up once
 		if (setUpNotDone) {
 			view = new PacView(model);
-			waka = Gdx.audio.newSound(Gdx.files.internal("Chomping.mp3"));
 			setUpNotDone = false;
 		}		
 		updateAchievements();		

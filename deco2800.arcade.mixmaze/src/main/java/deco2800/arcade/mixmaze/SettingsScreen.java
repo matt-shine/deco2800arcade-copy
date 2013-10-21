@@ -307,10 +307,10 @@ public class SettingsScreen implements Screen {
 		float textWidth = (float) (Gdx.graphics.getWidth() / 5.12);
 		float playerWidth = (float) (Gdx.graphics.getWidth() / 4.8301); // 256
 		Drawable background = new TextureRegionDrawable(
-				new TextureRegion(new Texture(Gdx.files.internal("settings.png"))));
+				new TextureRegion(new Texture(Gdx.files.internal("settingsNew.png"))));
 
 		rootTable.setFillParent(true);
-		//rootTable.setBackground(background);
+		rootTable.setBackground(background);
 		rootTable.top().left(); // so that cells are added from the top instead
 								// of center
 		rootTable.add(settingsPanel).width(settingsWidth).height(celHeight)

@@ -40,7 +40,7 @@ public class ReplyThreadView {
 		   this.f.getContentPane().setLayout(null);
 	      
 		   this.textPane = new JTextPane();
-		   this.textPane.setBounds(42, 97, 848, 190);
+		   this.textPane.setBounds(65, 97, 848, 190);
 		   this.f.getContentPane().add(this.textPane);
 	      
 		   this.submitBtn = new JButton("Submit Thread");
@@ -55,13 +55,23 @@ public class ReplyThreadView {
 		   
 	      
 		   JLabel lblTitle = new JLabel("Title: RE: " + title);
-		   lblTitle.setBounds(40, 13, 150, 16);
+		   lblTitle.setBounds(43, 13, 150, 16);
 		   this.f.getContentPane().add(lblTitle);
 	      
 		   JLabel lblMessage = new JLabel("Message:");
-		   lblMessage.setBounds(42, 79, 56, 16);
+		   lblMessage.setBounds(46, 79, 56, 16);
 		   this.f.getContentPane().add(lblMessage);
 		   
+		   JPanel panelTitle = new JPanel();
+		   panelTitle.setBackground(Color.ORANGE);
+		   panelTitle.setBounds(42, 0, 888, 41);
+		   f.getContentPane().add(panelTitle);
+		   
+		   JPanel panel_Background = new JPanel();
+		   panel_Background.setBackground(new Color(210, 105, 30));
+		   panel_Background.setBounds(0, 0, 1016, 721);
+		   f.getContentPane().add(panel_Background);
+		      
 		   this.f.setVisible(true);
 		   
 		   

@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 public class junglejumpTEST {
-	LevelContainer container;
+	/*LevelContainer container;
 	Level level;
 	
 	@Rule 
@@ -38,7 +38,7 @@ public class junglejumpTEST {
 		container.clearCurrentLevel();
 		assertEquals(true, bananas > container.TOTAL_BANANAS);
 	}
-	
+	*/
 	
 	
 }

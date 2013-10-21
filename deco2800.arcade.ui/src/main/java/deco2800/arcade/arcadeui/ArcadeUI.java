@@ -52,7 +52,7 @@ public class ArcadeUI extends GameClient {
 		login = new LoginScreen(this);
 		register = new RegisterScreen(this);
 		home = new HomeScreen(this);
-		main = new FrontPage(this);
+		main = new FrontPage(this, player);
 		register = new RegisterScreen(this);
 		lobby = new MultiplayerLobby(this, player);
 		betting = new BettingWindow(this);

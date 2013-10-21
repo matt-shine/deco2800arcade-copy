@@ -5,11 +5,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 
 
 public class XMLReader {
@@ -82,8 +80,8 @@ public class XMLReader {
 	}
 	
 	public static void saveAccoladeContainer(AccoladeContainer accolades, String fileLocation) throws IOException{
-		Path path = Paths.get(fileLocation);
-		BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
+		FileWriter fileWriter = new FileWriter(fileLocation);
+		BufferedWriter writer = new BufferedWriter(fileWriter);
 		
 		writer.write("<?xml version=\"1.0\"?>\n");
 		writer.write("<accolades>\n");

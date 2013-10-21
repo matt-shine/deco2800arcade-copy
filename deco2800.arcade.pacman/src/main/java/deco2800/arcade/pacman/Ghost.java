@@ -5,8 +5,6 @@ import java.util.List;
 
 import org.lwjgl.util.Point;
 
-import deco2800.arcade.pacman.Mover.Dir;
-
 public final class Ghost extends Mover {
 
 	public enum GhostState {
@@ -45,23 +43,15 @@ public final class Ghost extends Mover {
 		currentState = GhostState.PENNED;
 		targetTile = currentTile = gameMap.getGhostStarts()[num];  //This is the actual starting positon in pen
 //		currentTile = gameMap.getFruitRight(); // For testing purposes
-		// makes the previous tile the one to right, since he's facing left
 		Point current = gameMap.getTilePos(currentTile);
 		previousTile = gameMap.getGrid()[current.getX() + 1][current.getY()];
 		drawX = gameMap.getTileCoords(currentTile).getX(); 
 		drawY = gameMap.getTileCoords(currentTile).getY(); 
-		// DEBUGGING PRINT
-//		System.out.println("drawX % 16 is: " + (drawX % 16)
-//				+ ", drawY % 16 is: " + (drawY % 16));		
 		width = widthVal;
 		height = heightVal;
 		moveDist = 1;
 		currentTile.addMover(this);
 		updatePosition();
-		// System.out.println(this);
-		// animation not necessary unless Pacman moving
-		// walkAnimation = new Animation(0.025f, pacmanFrames);
-		// stateTime = 0f;
 	}
 
 	/**
@@ -98,11 +88,9 @@ public final class Ghost extends Mover {
 		
 		// Check whether energised
 		if (gameMap.isEnergized() && currentState == GhostState.CHASE){
-			System.out.println("Ghosts scatter!");
 			currentState = GhostState.SCATTER;
 			// TODO: more stuff
 		} else if (!gameMap.isEnergized() && currentState == GhostState.SCATTER) {
-			System.out.println("Ghosts back to the chase!");
 			currentState = GhostState.CHASE;
 		}
 		

@@ -8,17 +8,10 @@ import deco2800.arcade.pacman.Ghost.GhostName;
  *
  */
 public class PacModel {
-
-	private enum GameState {
-		READY,
-		RUNNING,
-		GAMEOVER
-	}
  
 	private final int SCREEN_HEIGHT;
 	private final int SCREEN_WIDTH;
 	
-	private GameState gameState;
 	private PacChar player;
 	private Ghost blinky;
 	private Ghost pinky;
@@ -37,8 +30,6 @@ public class PacModel {
 		player = new PacChar(gameMap);
 		blinky = new Ghost(gameMap, GhostName.BLINKY, player);
 		pinky = new Ghost(gameMap, GhostName.PINKY, player);
-		//Initialise game state
-		gameState = GameState.READY;	
 	}
 
 	public void prepareDraw() {
@@ -46,16 +37,7 @@ public class PacModel {
 		blinky.prepareDraw();
 		pinky.prepareDraw();
 	}
-	
-	
-	public GameState getGameState() {
-		return gameState;
-	}
-
-	public void setGameState(GameState gameState) {
-		this.gameState = gameState;
-	}
-	
+		
 	//Getters added for testing
 	public String getMapName() {
 		return mapName;

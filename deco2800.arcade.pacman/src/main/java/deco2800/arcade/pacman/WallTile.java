@@ -13,13 +13,6 @@ public final class WallTile extends Tile {
 		super(gameMap);
 		this.type = type;
 		this.setMovers(new ArrayList<Mover>());
-//		if (type == 'Q') {0.
-		
-		
-//			this.setMovers(new ArrayList<Mover>());
-//		} else {
-//			this.setMovers(null);
-//		}
 	}	
 		
 	public String toString() {

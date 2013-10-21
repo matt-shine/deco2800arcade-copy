@@ -3,7 +3,6 @@ package deco2800.arcade.pacman;
 
 import java.util.List;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
@@ -20,8 +19,6 @@ public final class PacChar extends Mover{
 	private static int widthVal = 26;
 	private static int heightVal = 26;
 
-	private Animation walkAnimation;
-	
 	public PacChar(GameMap gameMap) {
 		super(gameMap);
 		currentTile = gameMap.getPacStart();
@@ -38,10 +35,6 @@ public final class PacChar extends Mover{
 		currentTile.addMover(this);
 		updatePosition();
 		moveDist = 2;
-		//System.out.println(this);
-//		animation not necessary unless Pacman moving		
-//		walkAnimation = new Animation(0.025f, pacmanFrames);
-//		stateTime = 0f;	
 	}
 	
 	/**
@@ -63,16 +56,14 @@ public final class PacChar extends Mover{
 			} else {
 				drawFacing = Dir.LEFT;
 			}
-		}
-		if (!(currentState == PacState.DEAD)){
 			// If pacman is able to turn, update drawFacing
 			if (canTurn()) {
 				drawFacing = facing;
-				this.setCurrentState(PacState.MOVING);
+				currentState = PacState.MOVING;
 			}
 			
 			if (!this.checkNoWallCollision()){
-				this.setCurrentState(PacState.IDLE);
+				currentState = PacState.IDLE;
 			}
 		}
 		
@@ -140,7 +131,6 @@ public final class PacChar extends Mover{
 								currentState = PacState.MOVING;
 							}
 						}, 3);
-						System.out.println(currentState);
 						setLives(getLives() - 1);
 						// Is it game over?
 						if (getLives() <= 0) {

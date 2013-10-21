@@ -2,15 +2,12 @@ package deco2800.arcade.pacman;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Logger;
 
 import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.GameClient;
-import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.AchievementProgress;
@@ -40,7 +37,7 @@ public class Pacman extends GameClient {
 	/** Checks to make sure View isn't set up more than once
 	 * View can't be set up normally until the rendering starts because
 	 *  it causes NullPointers for the tests when it tries to load Textures */
-	private boolean viewNotSetUp; 
+	private boolean setUpNotDone; 
 	
     private NetworkClient networkClient;
     private AchievementClient achievementClient;
@@ -95,7 +92,7 @@ public class Pacman extends GameClient {
 			}
         });           
 		super.create();		
-		viewNotSetUp = true;		
+		setUpNotDone = true;		
 		model = new PacModel(SCREEN_WIDTH, SCREEN_HEIGHT, NUM_GHOSTS);		
 		//initialise receiver for input- use the Arcade Multiplexer
 		controller = new PacController(model);
@@ -107,11 +104,6 @@ public class Pacman extends GameClient {
 				new AchievementClient(networkClient);
 		AsyncFuture<ArrayList<Achievement>> achievements = achievementClient.getAchievementsForGame(game);
 		AsyncFuture<AchievementProgress> playerProgress = achievementClient.getProgressForPlayer(player);
-		
-		for (Achievement ach : achievements.get()) {
-			System.out.println(ach.toString());
-		}
-		
 	}
 	
 	/**
@@ -136,9 +128,9 @@ public class Pacman extends GameClient {
 	@Override
 	public void render() {	
 		// makes sure view is only set up once
-		if (viewNotSetUp) {
+		if (setUpNotDone) {
 			view = new PacView(model);
-			viewNotSetUp = false;
+			setUpNotDone = false;
 		}		
 		updateAchievements();		
 		// make changes in the model to prepare for rendering if overlay

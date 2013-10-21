@@ -48,7 +48,6 @@ public class GameMapTest {
 		pacGame.addOverlayBridge(Mockito.mock(UIOverlay.class));
 		model = new PacModel(1280, 720, 4);
 		gameMap = model.getGameMap();
-		pacGame.dispose();
 	}
 	
 	/** Disposes of things. Apparently no longer necessary */

@@ -27,13 +27,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Frustum;
 
-<<<<<<< HEAD:deco2800.arcade.junglejump/src/main/java/deco2800/arcade/junglejump/junglejump.java
-=======
-import deco2800.arcade.client.ArcadeInputMux;
-import deco2800.arcade.junglejump.Level;
-import deco2800.arcade.junglejump.LevelContainer;
-import deco2800.arcade.junglejump.Platform;
->>>>>>> master:deco2800.arcade.junglejump/src/main/java/deco2800/arcade/junglejump/GUI/junglejump.java
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -140,16 +133,9 @@ public class junglejump extends GameClient implements InputProcessor {
 	public junglejump(Player player, NetworkClient networkClient) {
 		/* Initialize Variables */
 		super(player, networkClient);
-<<<<<<< HEAD:deco2800.arcade.junglejump/src/main/java/deco2800/arcade/junglejump/junglejump.java
 		this.networkClient = networkClient; 
 		Gdx.input.setCatchBackKey(true);
 		Gdx.input.setInputProcessor(this);
-=======
-		this.networkClient = networkClient; // this is a bit of a hack
-		Gdx.input.setCatchBackKey(true);  // According to documentation, this only has effect on Android, not desktop
-		//Gdx.input.setInputProcessor(this);
-        ArcadeInputMux.getInstance().addProcessor(this);
->>>>>>> master:deco2800.arcade.junglejump/src/main/java/deco2800/arcade/junglejump/GUI/junglejump.java
 		butX = 488f;
 		butY = 242f;
 		monkeyDefaultX = 80f;
@@ -248,7 +234,6 @@ public class junglejump extends GameClient implements InputProcessor {
 	@Override
 	public void dispose() {
 		super.dispose();
-        ArcadeInputMux.getInstance().removeProcessor(this);
 	}
 	
 	/**
@@ -376,23 +361,11 @@ public class junglejump extends GameClient implements InputProcessor {
 			int level = (currentLevel.getIndex()%5)+1;
 			achievementTitleFont.draw(batch, ("Level " + (LevelContainer.getCurrentWorld()+1) + " - " + 
 					level), SCREENWIDTH-750, SCREENHEIGHT-10);
-			
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-			if(currentCont.getCurrentLevel() == 0) {
-=======
-			if(LevelContainer.getCurrentLevel() == 0 && LevelContainer.getCurrentWorld() == 0) {
->>>>>>> parent of 6ac6472... changed audio, hud, other fixes
-				achievementTitleFont.draw(batch, "Use arrow keys to move", SCREENWIDTH-750, SCREENHEIGHT-150);
-				achievementTitleFont.draw(batch, "Use Spacebar to jump", SCREENWIDTH-750, SCREENHEIGHT-200);
-			}
-			
-<<<<<<< HEAD
->>>>>>> parent of 0ab4b6e... changed audio, hud, other fixes
-=======
->>>>>>> parent of 6ac6472... changed audio, hud, other fixes
 			batch.end();
+			
+			if(monkeyY > SCREENHEIGHT) {
+				this.incrementAchievement("junglejump.hax");
+			}
 			
 			camera.update();
 			super.render();

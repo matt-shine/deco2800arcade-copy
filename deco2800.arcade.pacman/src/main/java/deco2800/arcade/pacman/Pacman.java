@@ -37,7 +37,7 @@ public class Pacman extends GameClient {
 	/** Checks to make sure View isn't set up more than once
 	 * View can't be set up normally until the rendering starts because
 	 *  it causes NullPointers for the tests when it tries to load Textures */
-	private boolean viewNotSetUp; 
+	private boolean setUpNotDone; 
 	
     private NetworkClient networkClient;
     private AchievementClient achievementClient;
@@ -92,7 +92,7 @@ public class Pacman extends GameClient {
 			}
         });           
 		super.create();		
-		viewNotSetUp = true;		
+		setUpNotDone = true;		
 		model = new PacModel(SCREEN_WIDTH, SCREEN_HEIGHT, NUM_GHOSTS);		
 		//initialise receiver for input- use the Arcade Multiplexer
 		controller = new PacController(model);
@@ -128,9 +128,9 @@ public class Pacman extends GameClient {
 	@Override
 	public void render() {	
 		// makes sure view is only set up once
-		if (viewNotSetUp) {
+		if (setUpNotDone) {
 			view = new PacView(model);
-			viewNotSetUp = false;
+			setUpNotDone = false;
 		}		
 		updateAchievements();		
 		// make changes in the model to prepare for rendering if overlay

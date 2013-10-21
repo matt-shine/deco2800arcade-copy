@@ -41,8 +41,7 @@ public class PacView {
 	private TextureRegion[][] ghostFrames = new TextureRegion[NUM_GHOSTS][MOVER_SPRITE_NUM];
 	private static int SCREEN_WIDTH;
 	private static int SCREEN_HEIGHT;
-	Sound waka = Gdx.audio.newSound(Gdx.files.internal("Chomping.mp3"));
-	
+	private Sound waka;
 	private GameMap gameMap;
 	private PacChar player;
 	private Ghost blinky;
@@ -103,6 +102,7 @@ public class PacView {
 		this.player = model.getPlayer();
 		this.blinky = model.getBlinky();
 		this.pinky = model.getPinky();
+		waka = Gdx.audio.newSound(Gdx.files.internal("Chomping.mp3"));
 	}
 	
 	/**

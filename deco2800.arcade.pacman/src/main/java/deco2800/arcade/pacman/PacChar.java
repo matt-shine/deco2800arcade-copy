@@ -56,16 +56,14 @@ public final class PacChar extends Mover{
 			} else {
 				drawFacing = Dir.LEFT;
 			}
-		}
-		if (!(currentState == PacState.DEAD)){
 			// If pacman is able to turn, update drawFacing
 			if (canTurn()) {
 				drawFacing = facing;
-				this.setCurrentState(PacState.MOVING);
+				currentState = PacState.MOVING;
 			}
 			
 			if (!this.checkNoWallCollision()){
-				this.setCurrentState(PacState.IDLE);
+				currentState = PacState.IDLE;
 			}
 		}
 		

@@ -34,7 +34,7 @@ public final class PacChar extends Mover{
 		spritePos = 3;
 		currentTile.addMover(this);
 		updatePosition();
-		moveDist = 2;
+		moveDist = 1;
 	}
 	
 	/**

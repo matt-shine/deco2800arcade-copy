@@ -85,13 +85,5 @@ public class TestGamePath {
 		assertEquals(PackageUtils.genMD5("test.txt"), gamePath.getMD5("1"));
 	}
 	
-	/**
-	 * Test for AchievementsForIDs method
-	 * @throws DatabaseException
-	 */
-	/*@Test
-	public void testInsert() throws DatabaseException {
-		
-	}*/
 	
 }
